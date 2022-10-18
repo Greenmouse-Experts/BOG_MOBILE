@@ -101,16 +101,7 @@ class SignUp extends GetView<AuthController> {
                           fontSize: 14,
                         ),
                       ],
-                      activeBorders: [
-                        Border.all(
-                          color: AppColors.primary,
-                          width: 3.0,
-                        ),
-                        Border.all(
-                          color: AppColors.primary,
-                          width: 3.0,
-                        ),
-                      ],
+                      cornerRadius: 0,
                       onToggle: (index) {
                         controller.toggleBusiness(index!);
                         if (index == 0) {
