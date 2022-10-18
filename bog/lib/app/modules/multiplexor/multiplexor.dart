@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
@@ -17,199 +18,237 @@ class Multiplexor extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        color: AppColors.background,
-        child: Padding(
-          padding: const EdgeInsets.all(AppThemes.appPaddingVal),
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: const SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+          statusBarIconBrightness: Brightness.dark,
+          statusBarBrightness: Brightness.dark,
+          systemNavigationBarColor: Colors.white,
+          systemNavigationBarIconBrightness: Brightness.dark
+      ),
+      child: Scaffold(
+        body: Container(
+          color: AppColors.backgroundVariant1,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
-                height: Get.height * 0.05,
+                height: Get.height * 0.025,
               ),
-              SvgPicture.asset(
-                'assets/images/wayagram2.svg',
-                color: AppColors.background,
-              ),
-              SizedBox(
-                height: Get.height * 0.1,
-              ),
-              Image.asset(
-                'assets/images/boglogo.png',
-                width: Get.width,
-                height: Get.height * 0.2,
-              ),
-              Text(
-                'Select the type of account you would like to create',
-                style: AppTextStyle.headline4.copyWith(
-                  color: Colors.black,
-                  fontWeight: FontWeight.normal,
+              Center(
+                child: Image.asset(
+                  'assets/images/boglogo.png',
+                  width: Get.width * 0.4,
+                  height: Get.height * 0.2,
                 ),
               ),
-              SizedBox(
-                height: Get.height * 0.04,
-              ),
-              InkWell(
-                onTap: () {
-                  Get.toNamed(ServiceProviderSignUp.route);
-                },
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Image.asset(
-                      'assets/images/multiplexorBG.png',
-                    ),
-                    Row(
-                      mainAxisAlignment:MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
+              Expanded(
+                child: Container(
+                  color: Colors.white,
+                  child: Padding(
+                    padding: const EdgeInsets.all(AppThemes.appPaddingVal),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SizedBox(
-                          width: Get.width * 0.05,
+                          height: Get.height * 0.015,
                         ),
-                        Image.asset(
-                          'assets/images/m1.png',
-                          width: Get.width*0.15,
-                          height: Get.width*0.15,
+                        Text(
+                          'Sign Up as :',
+                          style: AppTextStyle.headline4.copyWith(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 24
+                          ),
                         ),
                         SizedBox(
-                          width: Get.width * 0.02,
+                          height: Get.height * 0.018,
                         ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Service Provider',
-                              style: AppTextStyle.headline4.copyWith(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
+                        Text(
+                          'Select the type of account you would like \nto create',
+                          style: AppTextStyle.headline4.copyWith(
+                            color: Colors.black.withOpacity(.5),
+                            fontWeight: FontWeight.normal,
+                          ),
+                        ),
+                        SizedBox(
+                          height: Get.height * 0.04,
+                        ),
+                        InkWell(
+                          onTap: () {
+                            Get.toNamed(SignUp.route);
+                          },
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              Image.asset(
+                                'assets/images/client_bg.png',
                               ),
-                            ),
-                            Text(
-                              'Monetize your knowledge',
-                              style: AppTextStyle.headline4.copyWith(
-                                color: Colors.black,
-                                fontWeight: FontWeight.normal,
-                                fontSize: 14,
+                              Row(
+                                mainAxisAlignment:MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  SizedBox(
+                                    width: Get.width * 0.05,
+                                  ),
+                                  Image.asset(
+                                    'assets/images/m2.png',
+                                    width: Get.width*0.15,
+                                    height: Get.width*0.15,
+                                  ),
+                                  SizedBox(
+                                    width: Get.width * 0.02,
+                                  ),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Client',
+                                        style: AppTextStyle.headline4.copyWith(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 20,
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      Text(
+                                        'Access services and products',
+                                        style: AppTextStyle.headline4.copyWith(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.normal,
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: Get.height * 0.02,
+                        ),
+                        InkWell(
+                          onTap: () {
+                            Get.toNamed(ServiceProviderSignUp.route);
+                          },
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              Image.asset(
+                                'assets/images/service_provider.png',
                               ),
-                            ),
-                          ],
-                        )
+                              Row(
+                                mainAxisAlignment:MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  SizedBox(
+                                    width: Get.width * 0.05,
+                                  ),
+                                  Image.asset(
+                                    'assets/images/m1.png',
+                                    width: Get.width*0.15,
+                                    height: Get.width*0.15,
+                                  ),
+                                  SizedBox(
+                                    width: Get.width * 0.02,
+                                  ),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Service Provider',
+                                        style: AppTextStyle.headline4.copyWith(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 20,
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      Text(
+                                        'Render services to users in need ',
+                                        style: AppTextStyle.headline4.copyWith(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.normal,
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: Get.height * 0.02,
+                        ),
+                        InkWell(
+                          onTap: () {
+                            Get.toNamed(SupplierSignUp.route);
+                          },
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              Image.asset(
+                                'assets/images/service_provider.png',
+                              ),
+                              Row(
+                                mainAxisAlignment:MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  SizedBox(
+                                    width: Get.width * 0.05,
+                                  ),
+                                  Image.asset(
+                                    'assets/images/m3.png',
+                                    width: Get.width*0.15,
+                                    height: Get.width*0.15,
+                                  ),
+                                  SizedBox(
+                                    width: Get.width * 0.02,
+                                  ),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Vendor',
+                                        style: AppTextStyle.headline4.copyWith(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 20,
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      Text(
+                                        'Sell your products online ',
+                                        style: AppTextStyle.headline4.copyWith(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.normal,
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
                       ],
-                    )
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: Get.height * 0.02,
-              ),
-              InkWell(
-                onTap: () {
-                  Get.toNamed(SignUp.route);
-                },
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Image.asset(
-                      'assets/images/multiplexorBG.png',
                     ),
-                    Row(
-                      mainAxisAlignment:MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          width: Get.width * 0.05,
-                        ),
-                        Image.asset(
-                          'assets/images/m2.png',
-                          width: Get.width*0.15,
-                          height: Get.width*0.15,
-                        ),
-                        SizedBox(
-                          width: Get.width * 0.02,
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Client',
-                              style: AppTextStyle.headline4.copyWith(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                              ),
-                            ),
-                            Text(
-                              'Accelerate your career',
-                              style: AppTextStyle.headline4.copyWith(
-                                color: Colors.black,
-                                fontWeight: FontWeight.normal,
-                                fontSize: 14,
-                              ),
-                            ),
-                          ],
-                        )
-                      ],
-                    )
-                  ],
+                  ),
                 ),
-              ),
-              SizedBox(
-                height: Get.height * 0.02,
-              ),
-              InkWell(
-                onTap: () {
-                  Get.toNamed(SupplierSignUp.route);
-                },
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Image.asset(
-                      'assets/images/multiplexorBG.png',
-                    ),
-                    Row(
-                      mainAxisAlignment:MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          width: Get.width * 0.05,
-                        ),
-                        Image.asset(
-                          'assets/images/m3.png',
-                          width: Get.width*0.15,
-                          height: Get.width*0.15,
-                        ),
-                        SizedBox(
-                          width: Get.width * 0.02,
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Supplier',
-                              style: AppTextStyle.headline4.copyWith(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                              ),
-                            ),
-                            Text(
-                              'Sell and supply goods to clients',
-                              style: AppTextStyle.headline4.copyWith(
-                                color: Colors.black,
-                                fontWeight: FontWeight.normal,
-                                fontSize: 14,
-                              ),
-                            ),
-                          ],
-                        )
-                      ],
-                    )
-                  ],
-                ),
-              ),
+              )
             ],
           ),
         ),

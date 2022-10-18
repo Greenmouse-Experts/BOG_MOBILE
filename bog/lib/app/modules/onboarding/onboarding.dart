@@ -34,6 +34,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
             systemNavigationBarIconBrightness: Brightness.dark
         ),
         child: Scaffold(
+          backgroundColor: AppColors.background,
           body: Stack(
             children: [
               if(currentIndex == 0)
