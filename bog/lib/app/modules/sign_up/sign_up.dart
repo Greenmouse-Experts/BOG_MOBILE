@@ -40,21 +40,23 @@ class SignUp extends GetView<AuthController> {
           ),
           title: Image.asset(
             'assets/images/boglogo.png',
-            width: Get.width * 0.25,
+            width: Get.width * 0.23,
           ),
+          backgroundColor: AppColors.backgroundVariant1,
         ),
         body: GetBuilder<AuthController>(builder: (controller) {
-          return SizedBox(
+          return Container(
+            color: AppColors.backgroundVariant1,
             width: Get.width,
             child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(AppThemes.appPaddingVal),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SizedBox(height: Get.height * 0.01),
-                    Text(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: Get.height * 0.025),
+                  Padding(
+                    padding: const EdgeInsets.only(left: AppThemes.appPaddingVal),
+                    child: Text(
                       'Sign Up As A Client',
                       style: AppTextStyle.headline4.copyWith(
                         color: Colors.black,
@@ -63,36 +65,50 @@ class SignUp extends GetView<AuthController> {
                       ),
                       textAlign: TextAlign.center,
                     ),
-                    SizedBox(height: Get.height * 0.02),
-                    ToggleSwitch(
+                  ),
+                  SizedBox(
+                    height: Get.height * 0.010,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: AppThemes.appPaddingVal),
+                    child: Text(
+                      'Get access to goods and services online',
+                      style: AppTextStyle.headline4.copyWith(
+                        color: Colors.black.withOpacity(.5),
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: Get.height * 0.04),
+                  Padding(
+                    padding: const EdgeInsets.only(left: AppThemes.appPaddingVal),
+                    child: ToggleSwitch(
                       minWidth: Get.width * 0.4,
                       initialLabelIndex: controller.isCorporate ? 1 : 0,
                       totalSwitches: 2,
-                      inactiveBgColor: const Color(0xffbdbdbd).withOpacity(.3),
-                      activeBgColor: const [Colors.white, Colors.white],
-                      activeBorders: [
-                        Border.all(
-                          color: const Color(0xffbdbdbd).withOpacity(.3),
-                          width: 3.0,
-                        ),
-                        Border.all(
-                          color: const Color(0xffbdbdbd).withOpacity(.3),
-                          width: 3.0,
-                        ),
-                      ],
-                      radiusStyle: true,
-                      cornerRadius: 10.0,
+                      inactiveBgColor: AppColors.backgroundVariant1,
+                      activeBgColor: const [AppColors.primary, AppColors.primary],
                       labels: const ['Private Client', 'Corporate Client'],
                       customTextStyles: [
                         AppTextStyle.bodyText1.copyWith(
-                          color: const Color(0xff064A72),
+                          color: controller.isCorporate ? Color(0xff064A72) : Colors.white,
                           fontWeight: FontWeight.w500,
                           fontSize: 14,
                         ),
                         AppTextStyle.bodyText1.copyWith(
-                          color: const Color(0xff064A72),
+                          color: controller.isCorporate ? Colors.white : Color(0xff064A72),
                           fontWeight: FontWeight.w500,
                           fontSize: 14,
+                        ),
+                      ],
+                      activeBorders: [
+                        Border.all(
+                          color: AppColors.primary,
+                          width: 3.0,
+                        ),
+                        Border.all(
+                          color: AppColors.primary,
+                          width: 3.0,
                         ),
                       ],
                       onToggle: (index) {
@@ -104,143 +120,173 @@ class SignUp extends GetView<AuthController> {
                         }
                       },
                     ),
-                    SizedBox(height: Get.height * 0.03),
-                    SizedBox(
-                      height: Get.height ,
-                      child: PageView(
-                        controller: controller.pageController,
-                        physics: const NeverScrollableScrollPhysics(),
-                        children: [
-                          //Business
-                          Form(
-                            key: _formKey,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                PageInput(
-                                  hint: '',
-                                  label: 'Full Name',
-                                  validator: Validator.fullnameValidation,
-                                  isCompulsory: true,
-                                  controller: controller.fullName,
-                                ),
-                                SizedBox(height: Get.height * 0.025),
-                                PageInput(
-                                  hint: '',
-                                  label: 'Phone Number',
-                                  validator: Validator.phoneNumValidation,
-                                  isCompulsory: true,
-                                  isPhoneNumber: true,
-                                  controller: controller.phone,
-                                ),
-                                SizedBox(height: Get.height * 0.025),
-                                PageInput(
-                                  hint: '',
-                                  label: 'Email Address',
-                                  validator: Validator.emailValidation,
-                                  isCompulsory: true,
-                                  controller: controller.email,
-                                ),
-                                SizedBox(height: Get.height * 0.025),
-                                PageInput(
-                                  hint: '',
-                                  label: 'Password',
-                                  validator: Validator.passwordValidation,
-                                  isCompulsory: true,
-                                  obscureText: true,
-                                  controller: controller.password,
-                                ),
-                                SizedBox(height: Get.height * 0.050),
-                                AppButton(
-                                  title: 'Sign Up',
-                                  onPressed: () async => await controller.signupClient(_formKey),
-                                  borderRadius: 10,
-                                ),
-                                AppButton(
-                                  title:
-                                  'Already have a professional account?  Log In',
-                                  onPressed: () {
-                                    Get.toNamed(SignIn.route);
-                                  },
-                                  borderRadius: 10,
-                                  bckgrndColor: AppColors.background,
-                                  fontColor: AppColors.primary,
-                                ),
-                              ],
+                  ),
+                  SizedBox(height: Get.height * 0.03),
+                  Container(
+                    color: Colors.white,
+                    child: Padding(
+                      padding: const EdgeInsets.all(AppThemes.appPaddingVal),
+                      child: SizedBox(
+                        height: Get.height ,
+                        child: PageView(
+                          controller: controller.pageController,
+                          physics: const NeverScrollableScrollPhysics(),
+                          children: [
+                            //Business
+                            Form(
+                              key: _formKey,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  PageInput(
+                                    hint: '',
+                                    label: 'Full Name',
+                                    validator: Validator.fullnameValidation,
+                                    isCompulsory: true,
+                                    controller: controller.fullName,
+                                  ),
+                                  SizedBox(height: Get.height * 0.025),
+                                  PageInput(
+                                    hint: '',
+                                    label: 'Email Address',
+                                    validator: Validator.emailValidation,
+                                    isCompulsory: true,
+                                    controller: controller.email,
+                                  ),
+                                  SizedBox(height: Get.height * 0.025),
+                                  PageInput(
+                                    hint: '',
+                                    label: 'Phone Number',
+                                    validator: Validator.phoneNumValidation,
+                                    isCompulsory: true,
+                                    isPhoneNumber: true,
+                                    controller: controller.phone,
+                                  ),
+                                  SizedBox(height: Get.height * 0.025),
+                                  PageInput(
+                                    hint: '',
+                                    label: 'Password',
+                                    validator: Validator.passwordValidation,
+                                    isCompulsory: true,
+                                    obscureText: true,
+                                    controller: controller.password,
+                                  ),
+                                  SizedBox(height: Get.height * 0.025),
+                                  PageInput(
+                                    hint: '',
+                                    label: 'Confirm Password',
+                                    validator: (val) {
+                                      if (val!.isEmpty) {
+                                        return 'Please confirm your password';
+                                      } else if (val.toString() != controller.password.text) {
+                                        return 'Passwords do not match';
+                                      }
+                                      return null;
+                                    },
+                                    isCompulsory: true,
+                                    obscureText: true,
+                                    controller: controller.password,
+                                  ),
+                                  SizedBox(height: Get.height * 0.050),
+                                  AppButton(
+                                    title: 'Sign Up',
+                                    onPressed: () async => await controller.signupClient(_formKey),
+                                    borderRadius: 10,
+                                  ),
+                                  AppButton(
+                                    title:
+                                    'Already have a account?  Log In',
+                                    onPressed: () {
+                                      Get.toNamed(SignIn.route);
+                                    },
+                                    borderRadius: 10,
+                                    bckgrndColor: Colors.white,
+                                    fontColor: AppColors.primary,
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                          //Personal
-                          Form(
-                            key: _formKey1,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                PageInput(
-                                  hint: '',
-                                  label: 'Full Name',
-                                  validator: Validator.fullnameValidation,
-                                  isCompulsory: true,
-                                  controller: controller.fullName,
-                                ),
-                                SizedBox(height: Get.height * 0.025),
-                                PageInput(
-                                  hint: '',
-                                  label: 'Company Name',
-                                  validator: Validator.fullnameValidation,
-                                  isCompulsory: true,
-                                  controller: controller.companyName,
-                                ),
-                                SizedBox(height: Get.height * 0.025),
-                                PageInput(
-                                  hint: '',
-                                  label: 'Phone Number',
-                                  validator: Validator.phoneNumValidation,
-                                  isCompulsory: true,
-                                  isPhoneNumber: true,
-                                  controller: controller.phone,
-                                ),
-                                SizedBox(height: Get.height * 0.025),
-                                PageInput(
-                                  hint: '',
-                                  label: 'Email Address',
-                                  validator: Validator.emailValidation,
-                                  isCompulsory: true,
-                                  controller: controller.email,
-                                ),
-                                SizedBox(height: Get.height * 0.025),
-                                PageInput(
-                                  hint: '',
-                                  label: 'Create Password',
-                                  validator: Validator.passwordValidation,
-                                  isCompulsory: true,
-                                  obscureText: true,
-                                  controller: controller.password,
-                                ),
-                                SizedBox(height: Get.height * 0.050),
-                                AppButton(
-                                  title: 'Sign Up',
-                                  onPressed: () async => await controller.signupCorporate(_formKey1),
-                                  borderRadius: 10,
-                                ),
-                                AppButton(
-                                  title: 'Already have a professional account?  Log In',
-                                  onPressed: () {
-                                    Get.toNamed(SignIn.route);
-                                  },
-                                  borderRadius: 10,
-                                  bckgrndColor: AppColors.background,
-                                  fontColor: AppColors.primary,
-                                ),
-                              ],
+                            //Personal
+                            Form(
+                              key: _formKey1,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  PageInput(
+                                    hint: '',
+                                    label: 'Company Name',
+                                    validator: Validator.fullnameValidation,
+                                    isCompulsory: true,
+                                    controller: controller.companyName,
+                                  ),
+                                  SizedBox(height: Get.height * 0.025),
+                                  PageInput(
+                                    hint: '',
+                                    label: 'Email Address',
+                                    validator: Validator.emailValidation,
+                                    isCompulsory: true,
+                                    controller: controller.email,
+                                  ),
+                                  SizedBox(height: Get.height * 0.025),
+                                  PageInput(
+                                    hint: '',
+                                    label: 'Phone Number',
+                                    validator: Validator.phoneNumValidation,
+                                    isCompulsory: true,
+                                    isPhoneNumber: true,
+                                    controller: controller.phone,
+                                  ),
+                                  SizedBox(height: Get.height * 0.025),
+                                  PageInput(
+                                    hint: '',
+                                    label: 'Create Password',
+                                    validator: Validator.passwordValidation,
+                                    isCompulsory: true,
+                                    obscureText: true,
+                                    controller: controller.password,
+                                  ),
+                                  SizedBox(height: Get.height * 0.025),
+                                  PageInput(
+                                    hint: '',
+                                    label: 'Confirm Password',
+                                    validator: (val) {
+                                      if (val!.isEmpty) {
+                                        return 'Please confirm your password';
+                                      } else if (val.toString() != controller.password.text) {
+                                        return 'Passwords do not match';
+                                      }
+                                      return null;
+                                    },
+                                    isCompulsory: true,
+                                    obscureText: true,
+                                    controller: controller.password,
+                                  ),
+                                  SizedBox(height: Get.height * 0.050),
+                                  AppButton(
+                                    title: 'Sign Up',
+                                    onPressed: () async => await controller.signupCorporate(_formKey1),
+                                    borderRadius: 10,
+                                  ),
+                                  AppButton(
+                                    title: 'Already have a account?  Log In',
+                                    onPressed: () {
+                                      Get.toNamed(SignIn.route);
+                                    },
+                                    borderRadius: 10,
+                                    bckgrndColor: Colors.white,
+                                    fontColor: AppColors.primary,
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           );

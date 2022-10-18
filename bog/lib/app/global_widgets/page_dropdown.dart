@@ -49,9 +49,9 @@ class PageDropButton extends StatelessWidget {
           value: value,
           borderRadius: 10,
           hint: hint,
-          borderSide: const BorderSide(
+          borderSide: BorderSide(
             width: 1,
-            color: Color(0xFF828282),
+            color: const Color(0xFF828282).withOpacity(.3),
           ),
           validator: validator,
           padding: padding,

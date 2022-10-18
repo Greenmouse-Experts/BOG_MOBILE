@@ -21,7 +21,7 @@ class AppInput extends StatefulWidget {
     this.isRounded = false,
     this.counterText,
     this.controller,
-    this.filledColor = AppColors.background,
+    this.filledColor = Colors.transparent,
     this.readOnly = false,
     this.maxLines = 1,
     this.validator,
@@ -80,7 +80,7 @@ class _AppInputState extends State<AppInput> {
   Widget build(BuildContext context) {
     OutlineInputBorder outlineInputBorder = OutlineInputBorder(
       borderRadius: BorderRadius.circular(widget.borderRadius),
-      borderSide: widget.borderSide,
+      borderSide: widget.borderSide.copyWith(color: const Color(0xFF828282).withOpacity(.3)),
     );
 
     return Column(
@@ -115,7 +115,7 @@ class _AppInputState extends State<AppInput> {
           style: AppTextStyle.bodyText2.copyWith(
             fontWeight: FontWeight.w500,
           ),
-          cursorColor: AppColors.spanishGray,
+          cursorColor: AppColors.primary,
           decoration: InputDecoration(
             suffixIcon: widget.obscureText == true
                 ? GestureDetector(
