@@ -35,12 +35,14 @@ class AuthController extends GetxController {
   PageController businessPageController = PageController(initialPage: 0, keepPage: true);
   PageController personalPageController = PageController(initialPage: 0, keepPage: true);
 
+  int index = 0;
   bool isCorporate = false;
   bool isTermsAndConditionsChecked = false;
 
   AuthController(this.userRepo);
 
   toggleBusiness(int index) {
+    this.index = index;
     if(index == 0) {
       isCorporate = false;
       pageController.animateToPage(0, duration: const Duration(milliseconds: 500), curve: Curves.easeIn);

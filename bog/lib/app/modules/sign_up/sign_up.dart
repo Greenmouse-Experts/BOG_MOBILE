@@ -1,3 +1,4 @@
+import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:dart_countries/dart_countries.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -82,7 +83,7 @@ class SignUp extends GetView<AuthController> {
                     ),
                   ),
                   SizedBox(height: Get.height * 0.04),
-                  Padding(
+                 /* Padding(
                     padding: const EdgeInsets.only(left: AppThemes.appPaddingVal),
                     child: ToggleSwitch(
                       minWidth: Get.width * 0.4,
@@ -113,13 +114,50 @@ class SignUp extends GetView<AuthController> {
                         }
                       },
                     ),
+                  ),*/
+                  SizedBox(
+                    height: Get.height * 0.045,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: AppThemes.appPaddingVal),
+                      child: AnimatedToggleSwitch<int>.size(
+                        current: controller.isCorporate ? 1 : 0,
+                        values: const [0, 1],
+                        iconOpacity: 1,
+                        indicatorSize: Size.fromWidth(Get.width * 0.4),
+                        iconBuilder: (value, size) {
+                          return Center(
+                            child: Text(
+                              value == 0 ? 'Private Client ' : 'Corporate Client',
+                              style: AppTextStyle.bodyText1.copyWith(
+                                color: controller.index == value ? Colors.white : const Color(0xff2F2F2F),
+                                fontWeight: FontWeight.w300,
+                                fontSize: 14,
+                              ),
+                            ),
+                          );
+                        },
+                        borderColor: AppColors.backgroundVariant1,
+                        colorBuilder: (i) => AppColors.primary,
+                        onChanged: (i) => controller.toggleBusiness(i),
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(10),
+                          topRight: Radius.circular(10),
+                        ),
+                      ),
+                    ),
                   ),
+                  //Divider
+                  /*Divider(
+                    color: Colors.black.withOpacity(.2),
+                    thickness: 1,
+                  ),*/
                   SizedBox(height: Get.height * 0.03),
                   Container(
                     color: Colors.white,
                     child: Padding(
                       padding: const EdgeInsets.all(AppThemes.appPaddingVal),
                       child: SizedBox(
+                        height: Get.height * 0.68,
                         child: PageView(
                           controller: controller.pageController,
                           physics: const NeverScrollableScrollPhysics(),
