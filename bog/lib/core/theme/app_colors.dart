@@ -4,8 +4,9 @@ class AppColors {
   AppColors._();
 
   static const Color primary = Color(0xFF3F79AD);
+  static const Color primaryVariant = Color(0xFF5A5984);
   static const Color background = Color(0xFFFAFAFA);
-    static const Color backgroundVariant1 = Color(0xFFF9F9FF);
+  static const Color backgroundVariant1 = Color(0xFFF9F9FF);
   static const Color fadedPrimary = Color(0xFFFFCFBB);
   static const Color bostonUniRed = Color(0xFFC50000);
   static const Color darkChocolate = Color(0xFF410101);
@@ -20,5 +21,6 @@ class AppColors {
   static const Color eucalyptus = Color(0xFF43CFB6);
   static const Color satinSheenGold = Color(0xFFCF9743);
   static const Color orangeSoda = Color(0xFFF45D3C);
+  static const Color orange = Color(0xFFEC8B20);
   static const Color steelPink = Color(0xFFCF43CF);
 }

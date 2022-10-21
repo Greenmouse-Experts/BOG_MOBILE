@@ -37,10 +37,19 @@ class Multiplexor extends StatelessWidget {
                 height: Get.height * 0.025,
               ),
               Center(
-                child: Image.asset(
-                  'assets/images/boglogo.png',
-                  width: Get.width * 0.4,
-                  height: Get.height * 0.2,
+                child: Stack(
+                  children: [
+                    Image.asset(
+                        'assets/images/multiplexor_bg.png',
+                        width: Get.width * 0.4,
+                        height: Get.height * 0.2
+                    ),
+                    Image.asset(
+                      'assets/images/boglogo.png',
+                      width: Get.width * 0.4,
+                      height: Get.height * 0.2,
+                    ),
+                  ],
                 ),
               ),
               Expanded(
@@ -69,7 +78,7 @@ class Multiplexor extends StatelessWidget {
                         Text(
                           'Select the type of account you would like \nto create',
                           style: AppTextStyle.headline4.copyWith(
-                            color: Colors.black.withOpacity(.5),
+                            color: AppColors.primaryVariant,
                             fontWeight: FontWeight.normal,
                           ),
                         ),

@@ -1,4 +1,5 @@
 import 'package:dart_countries/dart_countries.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -76,6 +77,7 @@ class SignUp extends GetView<AuthController> {
                       style: AppTextStyle.headline4.copyWith(
                         color: Colors.black.withOpacity(.5),
                         fontWeight: FontWeight.normal,
+                          fontSize: 14
                       ),
                     ),
                   ),
@@ -118,7 +120,6 @@ class SignUp extends GetView<AuthController> {
                     child: Padding(
                       padding: const EdgeInsets.all(AppThemes.appPaddingVal),
                       child: SizedBox(
-                        height: Get.height ,
                         child: PageView(
                           controller: controller.pageController,
                           physics: const NeverScrollableScrollPhysics(),
@@ -179,21 +180,48 @@ class SignUp extends GetView<AuthController> {
                                     obscureText: true,
                                     controller: controller.password,
                                   ),
-                                  SizedBox(height: Get.height * 0.050),
+                                  SizedBox(height: Get.height * 0.025),
+                                  RichText(
+                                    text: TextSpan(
+                                      children: [
+                                        TextSpan(
+                                          text: 'By creating an account, you agree to BOG’s ',
+                                          style: AppTextStyle.headline4.copyWith(
+                                            color: Colors.black.withOpacity(.5),
+                                            fontWeight: FontWeight.normal,
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                        TextSpan(
+                                            text: ' Privacy Policy, Terms and Conditions',
+                                            style: AppTextStyle.headline4.copyWith(
+                                              color: AppColors.primary,
+                                              fontWeight: FontWeight.normal,
+                                              fontSize: 14,
+                                            ),
+                                            recognizer:  TapGestureRecognizer()..onTap = () {
+
+                                            }
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(height: Get.height * 0.025),
                                   AppButton(
-                                    title: 'Sign Up',
+                                    title: 'Sign Up As A Client',
                                     onPressed: () async => await controller.signupClient(_formKey),
                                     borderRadius: 10,
                                   ),
                                   AppButton(
-                                    title:
-                                    'Already have a account?  Log In',
+                                    title: 'Already have an account ? ',
+                                    trailingTitle: "Log In",
                                     onPressed: () {
                                       Get.toNamed(SignIn.route);
                                     },
                                     borderRadius: 10,
                                     bckgrndColor: Colors.white,
-                                    fontColor: AppColors.primary,
+                                    fontColor: Colors.black,
+                                    bold: false,
                                   ),
                                 ],
                               ),
@@ -254,20 +282,48 @@ class SignUp extends GetView<AuthController> {
                                     obscureText: true,
                                     controller: controller.password,
                                   ),
-                                  SizedBox(height: Get.height * 0.050),
+                                  SizedBox(height: Get.height * 0.025),
+                                  RichText(
+                                    text: TextSpan(
+                                      children: [
+                                        TextSpan(
+                                          text: 'By creating an account, you agree to BOG’s ',
+                                          style: AppTextStyle.headline4.copyWith(
+                                            color: Colors.black.withOpacity(.5),
+                                            fontWeight: FontWeight.normal,
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                        TextSpan(
+                                            text: ' Privacy Policy, Terms and Conditions',
+                                            style: AppTextStyle.headline4.copyWith(
+                                              color: AppColors.primary,
+                                              fontWeight: FontWeight.normal,
+                                              fontSize: 14,
+                                            ),
+                                            recognizer:  TapGestureRecognizer()..onTap = () {
+
+                                            }
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(height: Get.height * 0.025),
                                   AppButton(
                                     title: 'Sign Up',
                                     onPressed: () async => await controller.signupCorporate(_formKey1),
                                     borderRadius: 10,
                                   ),
                                   AppButton(
-                                    title: 'Already have a account?  Log In',
+                                    title: 'Already have an account ? ',
+                                    trailingTitle: "Log In",
                                     onPressed: () {
                                       Get.toNamed(SignIn.route);
                                     },
                                     borderRadius: 10,
                                     bckgrndColor: Colors.white,
-                                    fontColor: AppColors.primary,
+                                    fontColor: Colors.black,
+                                    bold: false,
                                   ),
                                 ],
                               ),

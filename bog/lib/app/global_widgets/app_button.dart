@@ -7,6 +7,7 @@ class AppButton extends StatefulWidget {
   const AppButton({
     Key? key,
     required this.title,
+    this.trailingTitle = '',
     this.onPressed,
     this.bckgrndColor = AppColors.primary,
     this.borderRadius = 10,
@@ -15,8 +16,10 @@ class AppButton extends StatefulWidget {
     this.padding = const EdgeInsets.symmetric(vertical: 16),
     this.fontSize = 16,
     this.fontColor = Colors.white,
+    this.bold = true
   }) : super(key: key);
   final String title;
+  final String trailingTitle;
   final Function()? onPressed;
   final double borderRadius;
   final Color bckgrndColor;
@@ -24,6 +27,7 @@ class AppButton extends StatefulWidget {
   final EdgeInsets padding;
   final double? width;
   final double fontSize;
+  final bool bold;
   final Border? border;
 
   @override
@@ -58,13 +62,28 @@ class _AppButtonState extends State<AppButton> {
                 children: [
                   Opacity(
                     opacity: loading ? 0 : 1,
-                    child: Text(
-                      widget.title,
-                      textAlign: TextAlign.center,
-                      style: Get.theme.textTheme.bodyText1!.copyWith(
-                        color: widget.fontColor,
-                        fontSize: widget.fontSize * Get.textScaleFactor * 0.90,
-                      ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          widget.title,
+                          textAlign: TextAlign.center,
+                          style: Get.theme.textTheme.bodyText1!.copyWith(
+                            color: widget.fontColor,
+                            fontSize: widget.fontSize * Get.textScaleFactor * 0.90,
+                            fontWeight: widget.bold ? FontWeight.w500 : FontWeight.w300
+                          ),
+                        ),
+                        Text(
+                          widget.trailingTitle,
+                          textAlign: TextAlign.center,
+                          style: Get.theme.textTheme.bodyText1!.copyWith(
+                            color: AppColors.orange,
+                            fontSize: widget.fontSize * Get.textScaleFactor * 0.90,
+                              fontWeight: widget.bold ? FontWeight.w500 : FontWeight.w300
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   Positioned(
