@@ -207,7 +207,7 @@ class Multiplexor extends StatelessWidget {
                             alignment: Alignment.center,
                             children: [
                               Image.asset(
-                                'assets/images/service_provider.png',
+                                'assets/images/rect3.png',
                               ),
                               Row(
                                 mainAxisAlignment:MainAxisAlignment.start,

@@ -1,3 +1,4 @@
+import 'package:bog/app/modules/sign_in/sign_in.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:feather_icons/feather_icons.dart';
 import 'package:flutter/material.dart';
@@ -37,27 +38,9 @@ class _OnboardingPageState extends State<OnboardingPage> {
           backgroundColor: AppColors.background,
           body: Stack(
             children: [
-              if(currentIndex == 0)
-                Image.asset(
-                  'assets/images/bg1.png',
-                  height: Get.height*1.1,
-                  width: Get.width,
-                ),
-              if(currentIndex == 1)
-                Image.asset(
-                  'assets/images/bg2.png',
-                  height: Get.height*1.1,
-                  width: Get.width,
-                ),
-              if(currentIndex == 2)
-                Image.asset(
-                  'assets/images/bg3.png',
-                  height: Get.height*1.1,
-                  width: Get.width,
-                ),
               SafeArea(
                 child: Container(
-                  color: Colors.transparent,
+                  color: AppColors.background,
                   child: Padding(
                     padding: const EdgeInsets.all(AppThemes.appPaddingVal),
                     child: Column(
@@ -65,12 +48,10 @@ class _OnboardingPageState extends State<OnboardingPage> {
                         Align(
                           alignment: Alignment.bottomRight,
                           child: InkWell(
-                            onTap: () {
-                              Get.toNamed(Multiplexor.route);
-                            },
+                            onTap: null,
                             child: Text(
                               'Skip',
-                              style: AppTextStyle.bodyText1.copyWith(color: AppColors.primary,fontWeight: FontWeight.normal),
+                              style: AppTextStyle.bodyText1.copyWith(color: AppColors.background,fontWeight: FontWeight.normal),
                             ),
                           ),
                         ),
@@ -91,7 +72,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                             carouselController: buttonCarouselController,
                             options: CarouselOptions(
                               height: double.infinity,
-                              autoPlay: false,
+                              autoPlay: true,
                               viewportFraction: 1,
                               initialPage: 0,
                               onPageChanged: (index, reason) {
@@ -118,7 +99,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                                   decoration: BoxDecoration(
                                       color: index == currentIndex
                                           ? AppColors.primary
-                                          : AppColors.fadedPrimary,
+                                          : AppColors.primary.withOpacity(.5),
                                       //borderRadius: BorderRadius.circular(8),
                                       shape: BoxShape.circle
                                   ),
@@ -146,14 +127,23 @@ class _OnboardingPageState extends State<OnboardingPage> {
                           height: 25,
                         ),
                         AppButton(
-                          title: currentIndex == 2 ? 'Continue' : 'Next',
+                          title: 'Sign Up',
                           onPressed: (){
-                            buttonCarouselController.nextPage();
-                            if (currentIndex == 2) {
-                              Get.toNamed(Multiplexor.route);
-                            }
+                            Get.toNamed(Multiplexor.route);
                           },
                           borderRadius: 10,
+                        ),
+                        SizedBox(
+                          height: Get.height * 0.01,
+                        ),
+                        AppButton(
+                          title: 'Login',
+                          onPressed: (){
+                            Get.toNamed(SignIn.route);
+                          },
+                          borderRadius: 10,
+                          fontColor: AppColors.primary,
+                          bckgrndColor: AppColors.background,
                         ),
                         SizedBox(
                           height: Get.height * 0.05,
@@ -184,18 +174,18 @@ class OnboardingModel {
 
 List<OnboardingModel> _screen = [
   OnboardingModel(
+    image: 'one',
+    title: 'Monitor and manage your projects',
+    subtitle: 'Enjoy full control over your project',
+  ),
+  OnboardingModel(
     image: 'two',
-    title: 'Monetize your knowledge',
-    subtitle: 'B.O.G gives you a chance to earn by offering expert services by signing up as a service provider .',
+    title: 'Find construction professionals for your jobs',
+    subtitle: 'Hire professional service providers',
   ),
   OnboardingModel(
     image: 'three',
-    title: 'Accelerate your career',
-    subtitle: 'With B.O.G you have a quick access to world-class professionals anywhere in the world offering the best services',
-  ),
-  OnboardingModel(
-    image: 'one',
-    title: 'Work with apprentices',
-    subtitle: 'B.O.G gives you a chance to provide workplaces, sites, equipment in a safe condition',
+    title: 'Get quality construction materials for projects',
+    subtitle: 'Access materials easily for your project',
   ),
 ];
