@@ -83,13 +83,13 @@ class ForgotPassword extends GetView<AuthController> {
 
                       SizedBox(height: Get.height * 0.03),
                       AppButton(
-                        title: 'Send Reset Email',
+                        title: 'Send OTP',
                         onPressed: () async => await controller.forgotPassword(_formKey),
                         borderRadius: 10,
                       ),
                       AppButton(
                         title: '',
-                        trailingTitle: 'Back To Sign In',
+                        trailingTitle: 'Back To Log In',
                         bckgrndColor: Colors.white,
                         fontColor: AppColors.primary,
                         onPressed: () {

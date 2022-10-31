@@ -73,6 +73,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                             options: CarouselOptions(
                               height: double.infinity,
                               autoPlay: true,
+                              enableInfiniteScroll: false,
                               viewportFraction: 1,
                               initialPage: 0,
                               onPageChanged: (index, reason) {

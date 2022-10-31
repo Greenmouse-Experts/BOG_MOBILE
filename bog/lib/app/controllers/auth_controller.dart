@@ -174,6 +174,7 @@ class AuthController extends GetxController {
     'company_name': companyName.text,
     'password': password.text,
     "userType": "professional",
+    "platform":"mobile"
   };
 
   Map<String, dynamic> get _signupServiceClient => {
@@ -182,6 +183,7 @@ class AuthController extends GetxController {
     'phone': phone.text,
     'password': password.text,
     "userType": "private_client",
+    "platform":"mobile"
   };
 
   Map<String, dynamic> get _signupServiceCorporate => {
@@ -191,6 +193,7 @@ class AuthController extends GetxController {
     'company_name': companyName.text,
     'password': password.text,
     "userType": "corporate_client",
+    "platform":"mobile"
   };
 
   Map<String, dynamic> get _signupServiceSupplier => {
@@ -200,6 +203,7 @@ class AuthController extends GetxController {
     'company_name': companyName.text,
     'password': password.text,
     "userType": "vendor",
+    "platform":"mobile"
   };
 
   //Sign In
@@ -229,6 +233,7 @@ class AuthController extends GetxController {
   Map<String, dynamic> get _signInPayload => {
     'email': email.text,
     'password': password.text,
+    "platform":"mobile"
   };
 
   Future<void> forgotPassword(GlobalKey<FormState> formKey) async {
