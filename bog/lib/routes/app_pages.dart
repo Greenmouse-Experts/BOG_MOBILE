@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 
 import '../app/bindings/auth_binding.dart';
+import '../app/modules/chat/chat.dart';
 import '../app/modules/home/home.dart';
 import '../app/modules/multiplexor/multiplexor.dart';
 import '../app/modules/onboarding/onboarding.dart';
@@ -8,6 +9,7 @@ import '../app/modules/profile/confirm_pin.dart';
 import '../app/modules/profile/create_pin.dart';
 import '../app/modules/profile/update_profile.dart';
 import '../app/modules/setup/interests.dart';
+import '../app/modules/shop/shop.dart';
 import '../app/modules/sign_in/sign_in.dart';
 import '../app/modules/sign_up/forgot_password.dart';
 import '../app/modules/sign_up/service_provider.dart';
@@ -86,6 +88,14 @@ class AppPages {
     GetPage(
         name: Home.route,
         page: () => const Home()
+    ),
+    GetPage(
+        name: Chat.route,
+        page: () => const Chat()
+    ),
+    GetPage(
+        name: Shop.route,
+        page: () => const Shop()
     ),
   ];
 }

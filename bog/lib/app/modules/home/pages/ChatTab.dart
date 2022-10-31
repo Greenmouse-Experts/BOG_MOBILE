@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:bog/app/modules/chat/chat.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
@@ -133,7 +134,9 @@ class ChatTab extends StatelessWidget {
             ),
             //floating action button
             FloatingActionButton(
-              onPressed: (){},
+              onPressed: (){
+                Get.toNamed(Chat.route);
+              },
               backgroundColor: AppColors.primary,
               child: Stack(
                 children: [

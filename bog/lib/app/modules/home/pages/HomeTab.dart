@@ -14,6 +14,7 @@ import '../../../data/providers/api_response.dart';
 import '../../../data/providers/my_pref.dart';
 import '../../../global_widgets/app_avatar.dart';
 import '../../../global_widgets/horizontal_item_tile.dart';
+import '../../shop/shop.dart';
 
 class HomeTab extends StatelessWidget {
   const HomeTab({Key? key}) : super(key: key);
@@ -209,7 +210,7 @@ class HomeTab extends StatelessWidget {
                 ),
                 InkWell(
                   onTap: () {
-
+                    Get.toNamed(Shop.route);
                   },
                   child: Container(
                     decoration: BoxDecoration(
