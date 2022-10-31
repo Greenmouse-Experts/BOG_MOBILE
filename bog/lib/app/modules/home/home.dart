@@ -54,7 +54,7 @@ class Home extends GetView<HomeController> {
                     ),
                     BottomNavigationBarItem(
                       icon: Image.asset(
-                        'assets/images/chatIcon.png',
+                        controller.currentBottomNavPage.value == 1 ? 'assets/images/chat_filled.png' : 'assets/images/chatIcon.png',
                         width: 25,
                         color: controller.currentBottomNavPage.value == 1 ? AppColors.primary : AppColors.grey,
                       ),
