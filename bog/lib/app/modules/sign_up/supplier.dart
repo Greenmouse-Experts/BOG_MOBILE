@@ -139,36 +139,93 @@ class SupplierSignUp extends GetView<AuthController> {
                               controller: controller.confirmPassword,
                             ),
                             SizedBox(height: Get.height * 0.025),
-                            RichText(
-                              text: TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text: 'By creating an account, you agree to BOG’s ',
-                                    style: AppTextStyle.headline4.copyWith(
-                                      color: Colors.black.withOpacity(.5),
-                                      fontWeight: FontWeight.normal,
-                                      fontSize: 14,
+                            PageInput(
+                              hint: '',
+                              label: 'Referral Code (Optional)',
+                              obscureText: true,
+                              validator: (value) {
+                                return null;
+                              },
+                              isCompulsory: false,
+                              controller: controller.referral,
+                            ),
+                            SizedBox(height: Get.height * 0.025),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 5),
+                              child: Text(
+                                'Where did you hear about us ?',
+                                style: AppTextStyle.bodyText2.copyWith(
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 5),
+                            PageDropButton(
+                              label: "",
+                              hint: '',
+                              padding: const EdgeInsets.symmetric(horizontal: 10),
+                              onChanged: (val) {
+
+                              },
+                              value:  "Apple App Store",
+                              items: ["Apple App Store","Google Play Store","Google         ","Email         ","Facebook         ","Twitter         ","Instagram         ","Whatsapp         "].map<DropdownMenuItem<String>>((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(value),
+                                );
+                              }).toList(),
+                            ),
+                            SizedBox(height: Get.height * 0.025),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Checkbox(
+                                    value: controller.isTermsAndConditionsChecked,
+                                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                    visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
+                                    onChanged: (val){
+                                      controller.toggleTermsAndConditions(val == true);
+                                    }
+                                ),
+                                SizedBox(
+                                  width: Get.width * 0.02,
+                                ),
+                                Expanded(
+                                  child: RichText(
+                                    text: TextSpan(
+                                      children: [
+                                        TextSpan(
+                                          text: 'By creating an account, you agree to BOG’s ',
+                                          style: AppTextStyle.headline4.copyWith(
+                                            color: Colors.black.withOpacity(.5),
+                                            fontWeight: FontWeight.normal,
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                        TextSpan(
+                                            text: ' Privacy Policy, Terms and Conditions',
+                                            style: AppTextStyle.headline4.copyWith(
+                                              color: AppColors.primary,
+                                              fontWeight: FontWeight.normal,
+                                              fontSize: 14,
+                                            ),
+                                            recognizer:  TapGestureRecognizer()..onTap = () {
+
+                                            }
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                  TextSpan(
-                                      text: ' Privacy Policy, Terms and Conditions',
-                                      style: AppTextStyle.headline4.copyWith(
-                                        color: AppColors.primary,
-                                        fontWeight: FontWeight.normal,
-                                        fontSize: 14,
-                                      ),
-                                      recognizer:  TapGestureRecognizer()..onTap = () {
-
-                                      }
-                                  ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
                             SizedBox(height: Get.height * 0.025),
                             AppButton(
                               title: 'Sign Up As A Vendor',
                               onPressed: () async => await controller.signupSupplier(_formKey),
                               borderRadius: 10,
+                              enabled: controller.isTermsAndConditionsChecked,
                             ),
                             AppButton(
                               title: 'Already have an account ? ',

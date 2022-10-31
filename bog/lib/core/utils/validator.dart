@@ -31,7 +31,7 @@ class Validator {
 
   static String? fullnameValidation(String? val) {
     if (val == null || val.isEmpty) {
-      return 'Please enter some text';
+      return 'Please enter a name';
     }
     return null;
   }
