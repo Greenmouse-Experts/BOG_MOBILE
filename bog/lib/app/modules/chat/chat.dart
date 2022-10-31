@@ -10,6 +10,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_styles.dart';
 import '../../controllers/home_controller.dart';
 import '../../global_widgets/app_avatar.dart';
+import '../../global_widgets/app_input.dart';
 
 class Chat extends GetView<HomeController> {
   const Chat({Key? key}) : super(key: key);
@@ -100,7 +101,58 @@ class Chat extends GetView<HomeController> {
                     //Divider
                     const Divider(
                       color: Colors.grey,
-                      thickness: 0.5,
+                      thickness: 0.3,
+                    ),
+                  ],
+                ),
+              ),
+              bottomNavigationBar: SizedBox(
+                height: Get.height * 0.1,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const Divider(
+                      color: Colors.grey,
+                      thickness: 0.3,
+                    ),
+                    Row(
+                      children: [
+                        SizedBox(
+                          width: Get.width * 0.03,
+                        ),
+                        const Icon(
+                          Icons.add,
+                          color: AppColors.primary,
+                          size: 30,
+                        ),
+                        SizedBox(
+                          width: Get.width * 0.03,
+                        ),
+                        const Expanded(
+                          child: AppInput(
+                            hintText: '',
+                          ),
+                        ),
+                        SizedBox(
+                          width: Get.width * 0.03,
+                        ),
+                        const Icon(
+                          Icons.camera_alt_rounded,
+                          color: AppColors.primary,
+                          size: 30,
+                        ),
+                        SizedBox(
+                          width: Get.width * 0.03,
+                        ),
+                        const Icon(
+                          Icons.mic,
+                          color: AppColors.primary,
+                          size: 30,
+                        ),
+                        SizedBox(
+                          width: Get.width * 0.03,
+                        ),
+                      ],
                     ),
                   ],
                 ),
