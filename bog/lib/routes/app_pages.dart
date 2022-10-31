@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 
 import '../app/bindings/auth_binding.dart';
+import '../app/modules/home/home.dart';
 import '../app/modules/multiplexor/multiplexor.dart';
 import '../app/modules/onboarding/onboarding.dart';
 import '../app/modules/profile/confirm_pin.dart';
@@ -12,6 +13,7 @@ import '../app/modules/sign_up/forgot_password.dart';
 import '../app/modules/sign_up/service_provider.dart';
 import '../app/modules/sign_up/sign_up.dart';
 import '../app/modules/sign_up/supplier.dart';
+import '../app/modules/sign_up/verify_otp.dart';
 import '../app/modules/verify_otp/verify_otp.dart';
 
 class AppPages {
@@ -36,6 +38,11 @@ class AppPages {
     GetPage(
       name: SignUp.route,
       page: () => const SignUp(),
+      binding: AuthBinding(),
+    ),
+    GetPage(
+      name: VerifySignUpOTP.route,
+      page: () => const VerifySignUpOTP(),
       binding: AuthBinding(),
     ),
     GetPage(
@@ -74,6 +81,11 @@ class AppPages {
     GetPage(
         name: Interests.route,
         page: () => const Interests()
-    )
+    ),
+
+    GetPage(
+        name: Home.route,
+        page: () => const Home()
+    ),
   ];
 }

@@ -1,11 +1,16 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
+import 'package:otp_text_field/otp_field.dart';
 
 import '../data/providers/api_response.dart';
 import '../global_widgets/overlays.dart';
+import '../modules/home/home.dart';
 import '../modules/sign_in/sign_in.dart';
+import '../modules/sign_up/verify_otp.dart';
 import '../modules/verify_otp/verify_otp.dart';
 import '../repository/user_repo.dart';
 
@@ -28,6 +33,8 @@ class AuthController extends GetxController {
   TextEditingController address = TextEditingController();
   TextEditingController lastname = TextEditingController();
   TextEditingController confirmPassword = TextEditingController();
+
+  OtpFieldController otpController = OtpFieldController();
 
   var currentBusinessPage = 0;
   var currentPersonalPage = 0;
@@ -68,18 +75,23 @@ class AuthController extends GetxController {
         message = "This Email is already in Use, Please Login";
         buttonMessage = "Login";
       } else {
-       message = "Account created successfully, Check your email for verification";
-        buttonMessage = "Login";
+        message = "Account created successfully, Check your email for otp verification";
+        buttonMessage = "Continue";
       }
       AppOverlay.showInfoDialog(
         title: response.isSuccessful ? 'Success' : 'Failure',
         content: message,
         buttonText: buttonMessage,
         onPressed: () {
-          if(response.isSuccessful || response.message == "This Email is already in Use") {
+          if(response.message == "This Email is already in Use") {
             Get.toNamed(SignIn.route);
           }else{
-            Get.back();
+            if(response.isSuccessful) {
+              Get.toNamed(VerifySignUpOTP.route);
+              startTimer();
+            }else{
+              Get.back();
+            }
           }
         },
       );
@@ -95,18 +107,23 @@ class AuthController extends GetxController {
         message = "This Email is already in Use, Please Login";
         buttonMessage = "Login";
       } else {
-        message = "Account created successfully, Check your email for verification";
-        buttonMessage = "Login";
+        message = "Account created successfully, Check your email for otp verification";
+        buttonMessage = "Continue";
       }
       AppOverlay.showInfoDialog(
         title: response.isSuccessful ? 'Success' : 'Failure',
         content: message,
         buttonText: buttonMessage,
         onPressed: () {
-          if(response.isSuccessful || response.message == "This Email is already in Use") {
+          if(response.message == "This Email is already in Use") {
             Get.toNamed(SignIn.route);
           }else{
-            Get.back();
+            if(response.isSuccessful) {
+              Get.toNamed(VerifySignUpOTP.route);
+              startTimer();
+            }else{
+              Get.back();
+            }
           }
         },
       );
@@ -122,18 +139,23 @@ class AuthController extends GetxController {
         message = "This Email is already in Use, Please Login";
         buttonMessage = "Login";
       } else {
-        message = "Account created successfully, Check your email for verification";
-        buttonMessage = "Login";
+        message = "Account created successfully, Check your email for otp verification";
+        buttonMessage = "Continue";
       }
       AppOverlay.showInfoDialog(
         title: response.isSuccessful ? 'Success' : 'Failure',
         content: message,
         buttonText: buttonMessage,
         onPressed: () {
-          if(response.isSuccessful || response.message == "This Email is already in Use") {
+          if(response.message == "This Email is already in Use") {
             Get.toNamed(SignIn.route);
           }else{
-            Get.back();
+            if(response.isSuccessful) {
+              Get.toNamed(VerifySignUpOTP.route);
+              startTimer();
+            }else{
+              Get.back();
+            }
           }
         },
       );
@@ -149,22 +171,70 @@ class AuthController extends GetxController {
         message = "This Email is already in Use, Please Login";
         buttonMessage = "Login";
       } else {
-        message = "Account created successfully, Check your email for verification";
-        buttonMessage = "Login";
+        message = "Account created successfully, Check your email for otp verification";
+        buttonMessage = "Continue";
       }
       AppOverlay.showInfoDialog(
         title: response.isSuccessful ? 'Success' : 'Failure',
         content: message,
         buttonText: buttonMessage,
         onPressed: () {
-          if(response.isSuccessful || response.message == "This Email is already in Use") {
+          if(response.message == "This Email is already in Use") {
             Get.toNamed(SignIn.route);
           }else{
-            Get.back();
+            if(response.isSuccessful) {
+              Get.toNamed(VerifySignUpOTP.route);
+              startTimer();
+            }else{
+              Get.back();
+            }
           }
         },
       );
     }
+  }
+
+  Future<void> verifyOTPForSignUp() async {
+    ApiResponse response = await userRepo.verifyOTPForSignUp(email.text, otp.text);
+    if(response.isSuccessful){
+      AppOverlay.showInfoDialog(
+        title: 'Success',
+        content: "OTP Verification Successful, Please Login",
+        buttonText: "Continue",
+        onPressed: () {
+          Get.toNamed(SignIn.route);
+        },
+      );
+    }else{
+      AppOverlay.showInfoDialog(
+        title: 'Failure',
+        content: "OTP Verification Failed. Please try again",
+        buttonText: "Okay",
+        onPressed: () {
+          Get.back();
+        },
+      );
+    }
+  }
+
+  int _start = 120;
+  var time = "0:00";
+  void startTimer() {
+    const oneSec = Duration(seconds: 1);
+    Timer.periodic(
+      oneSec, (Timer timer) {
+        var duration = Duration(seconds: _start);
+      if (_start < 1) {
+        time = "0:00";
+        timer.cancel();
+        update();
+      } else {
+        time = "0:${_start.toString().padLeft(2, '0')}";
+        _start = _start - 1;
+        update();
+      }
+    },
+    );
   }
 
   Map<String, dynamic> get _signupServiceProviderPayload => {
@@ -212,21 +282,29 @@ class AuthController extends GetxController {
       var message = "";
       var buttonMessage = "";
       ApiResponse response = await userRepo.signIn(_signInPayload);
-      if(response.message == "This Email is already in Use") {
-        message = "This Email is already in Use, Please Login";
-        buttonMessage = "Login";
-      } else {
-        message = "Account created successfully, Check your email for verification";
-        buttonMessage = "Login";
+      if(response.isSuccessful){
+        Get.toNamed(Home.route);
+      }else{
+        if(response.message == "This Email is already in Use") {
+          message = "This Email is already in Use, Please Login";
+          buttonMessage = "Login";
+        } else {
+          message = "Account created successfully, Check your email for verification";
+          buttonMessage = "Login";
+        }
+        AppOverlay.showInfoDialog(
+          title: response.isSuccessful ? 'Success' : 'Failure',
+          content: response.message,
+          buttonText: "Continue",
+          onPressed: () {
+            if(response.isSuccessful){
+
+            }else{
+              Get.back();
+            }
+          },
+        );
       }
-      AppOverlay.showInfoDialog(
-        title: response.isSuccessful ? 'Success' : 'Failure',
-        content: response.message,
-        buttonText: "Continue",
-        onPressed: () {
-          Get.back();
-        },
-      );
     }
   }
 

@@ -7,6 +7,7 @@ class AppColors {
   static const Color primaryVariant = Color(0xFF5A5984);
   static const Color background = Color(0xFFFFFFFF);
   static const Color backgroundVariant1 = Color(0xFFF9F9FF);
+  static const Color backgroundVariant2 = Color(0xFFFEFEFE);
   static const Color fadedPrimary = Color(0xFFFFCFBB);
   static const Color bostonUniRed = Color(0xFFC50000);
   static const Color darkChocolate = Color(0xFF410101);

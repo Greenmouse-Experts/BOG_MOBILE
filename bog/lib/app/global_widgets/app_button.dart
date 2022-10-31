@@ -16,6 +16,7 @@ class AppButton extends StatefulWidget {
     this.padding = const EdgeInsets.symmetric(vertical: 16),
     this.fontSize = 16,
     this.fontColor = Colors.white,
+    this.trailingColor = AppColors.orange,
     this.bold = true
   }) : super(key: key);
   final String title;
@@ -24,6 +25,7 @@ class AppButton extends StatefulWidget {
   final double borderRadius;
   final Color bckgrndColor;
   final Color fontColor;
+  final Color trailingColor;
   final EdgeInsets padding;
   final double? width;
   final double fontSize;
@@ -78,7 +80,7 @@ class _AppButtonState extends State<AppButton> {
                           widget.trailingTitle,
                           textAlign: TextAlign.center,
                           style: Get.theme.textTheme.bodyText1!.copyWith(
-                            color: AppColors.orange,
+                            color: widget.trailingColor,
                             fontSize: widget.fontSize * Get.textScaleFactor * 0.90,
                               fontWeight: widget.bold ? FontWeight.w500 : FontWeight.w300
                           ),

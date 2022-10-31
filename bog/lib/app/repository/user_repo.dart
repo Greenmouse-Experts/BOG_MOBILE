@@ -17,7 +17,13 @@ class UserRepository {
   }
 
   Future<ApiResponse> forgotPassword(String email) async {
-    final response = await api.getData('/user/forgot-password/$email');
+    final response = await api.getData('/user/forgot-password?email=$email');
+    return response;
+  }
+
+  Future<ApiResponse> verifyOTPForSignUp(String email,String token) async {
+    final response = await api.getData('/user/verify?email=$email&token=$token');
+    print(response.message);
     return response;
   }
 
