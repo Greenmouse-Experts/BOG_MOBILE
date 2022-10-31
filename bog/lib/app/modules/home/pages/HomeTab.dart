@@ -86,17 +86,28 @@ class HomeTab extends StatelessWidget {
             ),
           ),
           SizedBox(
-            height: Get.height * 0.02,
+            height: Get.height * 0.015,
           ),
-          Image.asset(
-            "assets/images/house.png",
-            height: Get.height * 0.2,
-            width: Get.width*0.95,
-            fit: BoxFit.contain,
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                height: Get.height * 0.18,
+                width: Get.width * 0.95,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10.0),
+                  image: const DecorationImage(
+                    image: AssetImage("assets/images/house.png"),
+                    fit: BoxFit.fitWidth,
+                  ),
+                ),
+              ),
+            ],
           ),
           //indicator
-          const SizedBox(
-            height: 10.0,
+          SizedBox(
+            height: Get.height * 0.01,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -111,8 +122,8 @@ class HomeTab extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(
-            height: 10.0,
+          SizedBox(
+            height: Get.height * 0.01,
           ),
           Padding(
             padding: EdgeInsets.only(left: Get.width*0.05,right: Get.width*0.05,top: 10.0),
@@ -125,24 +136,178 @@ class HomeTab extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(
-            height: 10.0,
+          SizedBox(
+            height: Get.height * 0.015,
           ),
           Padding(
             padding: EdgeInsets.only(left: Get.width*0.05,right: Get.width*0.05),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10.0),
+                InkWell(
+                  onTap: () {
+
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10.0),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.2),
+                          spreadRadius: 1,
+                          blurRadius: 1,
+                          offset: const Offset(0, 1), // changes position of shadow
+                        ),
+                      ],
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.only(left: Get.width*0.03,right: Get.width*0.03,top: Get.width*0.05,bottom: Get.width*0.05),
+                      child: Row(
+                        mainAxisAlignment:MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Create A Project',
+                                style: AppTextStyle.headline4.copyWith(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 19,
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Text(
+                                'Start a project with skilled \nprofessionals',
+                                style: AppTextStyle.headline4.copyWith(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            width: Get.width * 0.02,
+                          ),
+                          Image.asset(
+                            'assets/images/image 808.png',
+                            width: Get.width*0.15,
+                            height: Get.width*0.15,
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
-                  child: Column(
-                    children: [],
+                ),
+                const SizedBox(
+                  height: 20.0,
+                ),
+                InkWell(
+                  onTap: () {
+
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10.0),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.2),
+                          spreadRadius: 1,
+                          blurRadius: 1,
+                          offset: const Offset(0, 1), // changes position of shadow
+                        ),
+                      ],
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.only(left: Get.width*0.03,right: Get.width*0.03,top: Get.width*0.05,bottom: Get.width*0.05),
+                      child: Row(
+                        mainAxisAlignment:MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Shop Products',
+                                style: AppTextStyle.headline4.copyWith(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 19,
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Text(
+                                'Procure construction materials \nfor your projects',
+                                style: AppTextStyle.headline4.copyWith(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            width: Get.width * 0.02,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(right: Get.width * 0.02),
+                            child: Image.asset(
+                              'assets/images/image 809.png',
+                              width: Get.width*0.15,
+                              height: Get.width*0.15,
+                            ),
+                          ),
+
+                        ],
+                      ),
+                    ),
                   ),
-                )
+                ),
               ],
             ),
+          ),
+          SizedBox(
+            height: Get.height * 0.015,
+          ),
+          Padding(
+            padding: EdgeInsets.only(left: Get.width*0.05,right: Get.width*0.05,top: 10.0),
+            child: Text(
+              "Need Help?",
+              style: AppTextStyle.subtitle1.copyWith(
+                color: Colors.black,
+                fontSize: Get.width * 0.04,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+          SizedBox(
+            height: Get.height * 0.015,
+          ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Image.asset(
+                "assets/images/Group 47034.png",
+                height: Get.height * 0.2,
+                width: Get.width*0.5,
+                fit: BoxFit.contain,
+              ),
+              Image.asset(
+                "assets/images/Group 47035.png",
+                height: Get.height * 0.2,
+                width: Get.width*0.5,
+                fit: BoxFit.contain,
+              ),
+            ],
           ),
         ],
       );
