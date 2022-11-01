@@ -162,7 +162,7 @@ class SignUp extends GetView<AuthController> {
                           controller: controller.pageController,
                           physics: const NeverScrollableScrollPhysics(),
                           children: [
-                            //Business
+
                             Form(
                               key: _formKey,
                               child: Column(
@@ -171,10 +171,18 @@ class SignUp extends GetView<AuthController> {
                                 children: [
                                   PageInput(
                                     hint: '',
-                                    label: 'Full Name',
+                                    label: 'First Name',
                                     validator: Validator.fullnameValidation,
                                     isCompulsory: true,
-                                    controller: controller.fullName,
+                                    controller: controller.fName,
+                                  ),
+                                  SizedBox(height: Get.height * 0.025),
+                                  PageInput(
+                                    hint: '',
+                                    label: 'Last Name',
+                                    validator: Validator.fullnameValidation,
+                                    isCompulsory: true,
+                                    controller: controller.lName,
                                   ),
                                   SizedBox(height: Get.height * 0.025),
                                   PageInput(
@@ -322,7 +330,7 @@ class SignUp extends GetView<AuthController> {
                                 ],
                               ),
                             ),
-                            //Personal
+
                             Form(
                               key: _formKey1,
                               child: Column(

@@ -17,6 +17,8 @@ import '../repository/user_repo.dart';
 class AuthController extends GetxController {
   final UserRepository userRepo;
 
+  TextEditingController fName = TextEditingController();
+  TextEditingController lName = TextEditingController();
   TextEditingController fullName = TextEditingController();
   TextEditingController companyName = TextEditingController();
   TextEditingController phone = TextEditingController();
@@ -238,7 +240,9 @@ class AuthController extends GetxController {
   }
 
   Map<String, dynamic> get _signupServiceProviderPayload => {
-    'name': fullName.text,
+    'fname': fName.text,
+    'lname': lName.text,
+    'name': "${fName.text} ${lName.text}",
     'email': email.text,
     'phone': phone.text,
     'company_name': companyName.text,
@@ -248,7 +252,9 @@ class AuthController extends GetxController {
   };
 
   Map<String, dynamic> get _signupServiceClient => {
-    'name': fullName.text,
+    'fname': fName.text,
+    'lname': lName.text,
+    'name': "${fName.text} ${lName.text}",
     'email': email.text,
     'phone': phone.text,
     'password': password.text,
@@ -257,7 +263,9 @@ class AuthController extends GetxController {
   };
 
   Map<String, dynamic> get _signupServiceCorporate => {
-    'name': fullName.text,
+    'fname': fName.text,
+    'lname': lName.text,
+    'name': "${fName.text} ${lName.text}",
     'email': email.text,
     'phone': phone.text,
     'company_name': companyName.text,
@@ -267,7 +275,9 @@ class AuthController extends GetxController {
   };
 
   Map<String, dynamic> get _signupServiceSupplier => {
-    'name': fullName.text,
+    'fname': fName.text,
+    'lname': lName.text,
+    'name': "${fName.text} ${lName.text}",
     'email': email.text,
     'phone': phone.text,
     'company_name': companyName.text,
