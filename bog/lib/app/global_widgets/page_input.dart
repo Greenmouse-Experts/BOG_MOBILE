@@ -24,7 +24,8 @@ class PageInput extends StatefulWidget {
     this.isPhoneNumber = false,
     this.dropDownItems,
     this.onDropdownChanged,
-    this.isReferral = false
+    this.isReferral = false,
+    this.showInfo = true,
   }) : super(key: key);
 
   final String hint;
@@ -39,6 +40,7 @@ class PageInput extends StatefulWidget {
   final bool isCompulsory;
   final bool isPhoneNumber;
   final bool isReferral;
+  final bool showInfo;
   final String? Function(String?)? validator;
   final List<DropdownMenuItem<dynamic>>? dropDownItems;
   final Function(dynamic)? onDropdownChanged;
@@ -49,8 +51,30 @@ class PageInput extends StatefulWidget {
 
 class _PageInputState extends State<PageInput> {
   var showText = false;
+
+  @override
+  void initState() {
+    super.initState();
+    if(widget.obscureText){
+      if(widget.controller!= null) {
+        widget.controller!.addListener(() {
+          if(widget.controller!.text.isNotEmpty) {
+            setState(() {
+              showText = true;
+            });
+          } else {
+            setState(() {
+              showText = false;
+            });
+          }
+        });
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -76,7 +100,7 @@ class _PageInputState extends State<PageInput> {
                   color: Colors.red,
                 ),
               ),
-              if(widget.obscureText || widget.isReferral)
+              if(widget.isReferral && widget.showInfo)
                 Expanded(child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
@@ -149,7 +173,7 @@ class _PageInputState extends State<PageInput> {
               ),
           ],
         ),
-        if(!widget.isPhoneNumber && !showText)
+        if((!widget.isPhoneNumber && !showText) || widget.obscureText)
           AppInput(
             hintText: widget.hint,
             keyboardType: widget.keyboardType,
@@ -161,7 +185,8 @@ class _PageInputState extends State<PageInput> {
             prefexIcon: widget.prefix,
             suffixIcon: widget.suffix,
           ),
-        if(showText)
+        const SizedBox(height: 5,),
+        if(showText &&  widget.showInfo)
           Container(
             decoration: BoxDecoration(
               color: const Color(0xffEAF3FB),
