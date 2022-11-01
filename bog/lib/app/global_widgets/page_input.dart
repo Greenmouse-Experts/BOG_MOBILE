@@ -7,7 +7,7 @@ import 'package:get/get_core/src/get_main.dart';
 import '../../core/theme/theme.dart';
 import 'app_input.dart';
 
-class PageInput extends StatelessWidget {
+class PageInput extends StatefulWidget {
   const PageInput({
     Key? key,
     required this.hint,
@@ -23,7 +23,8 @@ class PageInput extends StatelessWidget {
     this.isCompulsory = false,
     this.isPhoneNumber = false,
     this.dropDownItems,
-    this.onDropdownChanged
+    this.onDropdownChanged,
+    this.isReferral = false
   }) : super(key: key);
 
   final String hint;
@@ -37,10 +38,17 @@ class PageInput extends StatelessWidget {
   final bool readOnly;
   final bool isCompulsory;
   final bool isPhoneNumber;
+  final bool isReferral;
   final String? Function(String?)? validator;
   final List<DropdownMenuItem<dynamic>>? dropDownItems;
   final Function(dynamic)? onDropdownChanged;
 
+  @override
+  State<PageInput> createState() => _PageInputState();
+}
+
+class _PageInputState extends State<PageInput> {
+  var showText = false;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -52,15 +60,15 @@ class PageInput extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                label,
+                widget.label,
                 style: AppTextStyle.bodyText2.copyWith(
                   fontWeight: FontWeight.w500,
                   color: Colors.black,
                 ),
               ),
-              if(isCompulsory)
+              if(widget.isCompulsory)
                 const SizedBox(width: 5),
-              if(isCompulsory)
+              if(widget.isCompulsory)
                 Text(
                 "*",
                 style: AppTextStyle.bodyText2.copyWith(
@@ -68,11 +76,31 @@ class PageInput extends StatelessWidget {
                   color: Colors.red,
                 ),
               ),
+              if(widget.obscureText || widget.isReferral)
+                Expanded(child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          setState(() {
+                            showText = !showText;
+                          });
+                        },
+                        child: Image.asset(
+                          'assets/images/info.png',
+                          width: Get.width * 0.04,
+                          height: Get.width * 0.04,
+                          color: Colors.black,
+                        ),
+                      ),
+                      SizedBox(width: Get.width * 0.02),
+                    ]
+                ))
             ],
           ),
         ),
         const SizedBox(height: 5),
-        if(isPhoneNumber)
+        if(widget.isPhoneNumber && !showText)
           Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -83,8 +111,8 @@ class PageInput extends StatelessWidget {
                   label: "",
                   hint: '',
                   onChanged: (val) {
-                    if(onDropdownChanged != null) {
-                      onDropdownChanged!(val);
+                    if(widget.onDropdownChanged != null) {
+                      widget.onDropdownChanged!(val);
                     }
                   },
                   value: countries.firstWhere((element) => element.name.toLowerCase() == 'nigeria'),
@@ -108,30 +136,64 @@ class PageInput extends StatelessWidget {
               SizedBox(
                 width: Get.width * 0.7,
                 child: AppInput(
-                  hintText: hint,
-                  keyboardType: keyboardType,
-                  controller: controller,
-                  validator: validator,
-                  obscureText: obscureText,
-                  autovalidateMode: autovalidateMode,
-                  readOnly: readOnly,
-                  prefexIcon: prefix,
-                  suffixIcon: suffix,
+                  hintText: widget.hint,
+                  keyboardType: widget.keyboardType,
+                  controller: widget.controller,
+                  validator: widget.validator,
+                  obscureText: widget.obscureText,
+                  autovalidateMode: widget.autovalidateMode,
+                  readOnly: widget.readOnly,
+                  prefexIcon: widget.prefix,
+                  suffixIcon: widget.suffix,
                 ),
               ),
           ],
         ),
-        if(!isPhoneNumber)
+        if(!widget.isPhoneNumber && !showText)
           AppInput(
-            hintText: hint,
-            keyboardType: keyboardType,
-            controller: controller,
-            validator: validator,
-            obscureText: obscureText,
-            autovalidateMode: autovalidateMode,
-            readOnly: readOnly,
-            prefexIcon: prefix,
-            suffixIcon: suffix,
+            hintText: widget.hint,
+            keyboardType: widget.keyboardType,
+            controller: widget.controller,
+            validator: widget.validator,
+            obscureText: widget.obscureText,
+            autovalidateMode: widget.autovalidateMode,
+            readOnly: widget.readOnly,
+            prefexIcon: widget.prefix,
+            suffixIcon: widget.suffix,
+          ),
+        if(showText)
+          Container(
+            decoration: BoxDecoration(
+              color: const Color(0xffEAF3FB),
+              borderRadius: BorderRadius.circular(5),
+              border: Border.all(color: const Color(0xffEAF3FB)),
+            ),
+            child: Padding(
+              padding: EdgeInsets.all(Get.width * 0.02),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Image.asset(
+                    'assets/images/info.png',
+                    width: Get.width * 0.04,
+                    height: Get.width * 0.04,
+                    color: Colors.black,
+                  ),
+                  SizedBox(width: Get.width * 0.02),
+                  Expanded(
+                    child: Text(
+                      widget.isReferral ? 'Please, only enter the referral. Leave empty if you don\'t have a referral code.' : 'The password must contain minimum of 8 characters, uppercase character and a unique character',
+                      style: AppTextStyle.bodyText2.copyWith(
+                        fontWeight: FontWeight.w400,
+                        color: Colors.black,
+                        fontSize: Get.width * 0.035,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           )
       ],
     );
