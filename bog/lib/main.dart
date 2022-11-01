@@ -1,10 +1,13 @@
 import 'package:bog/routes/app_pages.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:get_storage/get_storage.dart';
 
 import 'core/theme/app_themes.dart';
 
-void main() {
+Future<void> main() async {
+  await GetStorage.init('MyPref');
   runApp(const MyApp());
 }
 
