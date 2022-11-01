@@ -150,7 +150,7 @@ class SupplierSignUp extends GetView<AuthController> {
                             PageInput(
                               hint: '',
                               label: 'Referral Code (Optional)',
-                              obscureText: true,
+                             // obscureText: true,
                               validator: (value) {
                                 return null;
                               },

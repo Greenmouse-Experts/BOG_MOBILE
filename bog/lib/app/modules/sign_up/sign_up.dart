@@ -157,7 +157,7 @@ class SignUp extends GetView<AuthController> {
                     child: Padding(
                       padding: const EdgeInsets.all(AppThemes.appPaddingVal),
                       child: SizedBox(
-                        height: Get.height+10,
+                        height: Get.height+(Get.height * 0.2),
                         child: PageView(
                           controller: controller.pageController,
                           physics: const NeverScrollableScrollPhysics(),
@@ -231,7 +231,7 @@ class SignUp extends GetView<AuthController> {
                                   PageInput(
                                     hint: '',
                                     label: 'Referral Code (Optional)',
-                                    obscureText: true,
+                                    //obscureText: true,
                                     validator: (value) {
                                       return null;
                                     },
@@ -390,7 +390,7 @@ class SignUp extends GetView<AuthController> {
                                   PageInput(
                                     hint: '',
                                     label: 'Referral Code (Optional)',
-                                    obscureText: true,
+                                    //obscureText: true,
                                     validator: (value) {
                                       return null;
                                     },

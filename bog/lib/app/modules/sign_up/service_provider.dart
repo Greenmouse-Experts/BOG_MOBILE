@@ -84,7 +84,7 @@ class ServiceProviderSignUp extends GetView<AuthController> {
                     SizedBox(height: Get.height * 0.04),
                     Container(
                       color: Colors.white,
-                      height: Get.height,
+                      //height: Get.height+(Get.height * 0.15),
                       child: Padding(
                         padding: const EdgeInsets.all(AppThemes.appPaddingVal),
                         child: Column(
@@ -174,7 +174,7 @@ class ServiceProviderSignUp extends GetView<AuthController> {
                             PageInput(
                               hint: '',
                               label: 'Referral Code (Optional)',
-                              obscureText: true,
+                              //obscureText: true,
                               validator: (value) {
                                 return null;
                               },
