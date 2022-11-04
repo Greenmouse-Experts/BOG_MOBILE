@@ -31,6 +31,7 @@ class _ItemCounterState extends State<ItemCounter> {
       children: [
         _PageIconButton(
           icon: FeatherIcons.minus,
+          hasBorder: true,
           onPressed: () {
             setState(() {
               if(widget.maxCount != null){
@@ -51,7 +52,7 @@ class _ItemCounterState extends State<ItemCounter> {
             });
           },
           iconColor: count == 1 ? Colors.grey.withOpacity(.5) : Colors.white,
-          containerColor: count == 1 ? Colors.grey.withOpacity(.2) : AppColors.onyx,
+          containerColor: count == 1 ? Colors.grey.withOpacity(.2) : AppColors.primary,
         ),
         const SizedBox(width: 7),
         Text('$count'),
@@ -76,7 +77,7 @@ class _ItemCounterState extends State<ItemCounter> {
             });
           },
           iconColor: widget.maxCount != null ? (count < widget.maxCount! ? Colors.white : Colors.grey.withOpacity(.5)) : Colors.white,
-          containerColor: widget.maxCount != null ? (count < widget.maxCount! ? AppColors.onyx : Colors.grey.withOpacity(.2)) : AppColors.onyx,
+          containerColor: widget.maxCount != null ? (count < widget.maxCount! ? AppColors.onyx : Colors.grey.withOpacity(.2)) : AppColors.primary,
         ),
       ],
     );
@@ -90,12 +91,14 @@ class _PageIconButton extends StatelessWidget {
     required this.icon,
     this.iconColor = Colors.white,
     this.containerColor = AppColors.onyx,
+    this.hasBorder = false,
   }) : super(key: key);
 
   final Function()? onPressed;
   final IconData icon;
   final Color iconColor;
   final Color containerColor;
+  final bool hasBorder;
 
   @override
   Widget build(BuildContext context) {
@@ -104,12 +107,13 @@ class _PageIconButton extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(2.5),
         decoration: BoxDecoration(
-          color: containerColor,
+          color: hasBorder ? Colors.transparent : containerColor,
           borderRadius: BorderRadius.circular(5),
+          border: hasBorder ? Border.all(color: containerColor) : null,
         ),
         child: Icon(
           icon,
-          color: iconColor,
+          color: hasBorder ? containerColor : iconColor,
           size: 18,
         ),
       ),
