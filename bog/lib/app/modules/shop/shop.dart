@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:bog/app/modules/shop/product_details.dart';
 import 'package:feather_icons/feather_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -152,12 +153,17 @@ class Shop extends GetView<HomeController> {
                         itemBuilder: (context, index) {
                           return Padding(
                             padding: EdgeInsets.only(left: width*0.025,right: width*0.0),
-                            child: Container(
-                              width: Get.width * 0.4,
-                              decoration: BoxDecoration(
-                                image: const DecorationImage(
-                                  image: AssetImage("assets/images/Group 47037.png"),
-                                  fit: BoxFit.fitHeight,
+                            child: InkWell(
+                              onTap: (){
+                                Get.to(const ProductDetails(key: Key('ProductDetails')));
+                              },
+                              child: Container(
+                                width: Get.width * 0.4,
+                                decoration: const BoxDecoration(
+                                  image: DecorationImage(
+                                    image: AssetImage("assets/images/Group 47037.png"),
+                                    fit: BoxFit.fitHeight,
+                                  ),
                                 ),
                               ),
                             ),
@@ -189,12 +195,17 @@ class Shop extends GetView<HomeController> {
                         itemBuilder: (context, index) {
                           return Padding(
                             padding: EdgeInsets.only(left: width*0.025,right: width*0.0),
-                            child: Container(
-                              width: Get.width * 0.4,
-                              decoration: BoxDecoration(
-                                image: const DecorationImage(
-                                  image: AssetImage("assets/images/Group 47037.png"),
-                                  fit: BoxFit.fitHeight,
+                            child: InkWell(
+                              onTap: (){
+                                Get.to(const ProductDetails(key: Key('ProductDetails')));
+                              },
+                              child: Container(
+                                width: Get.width * 0.4,
+                                decoration: BoxDecoration(
+                                  image: const DecorationImage(
+                                    image: AssetImage("assets/images/Group 47037.png"),
+                                    fit: BoxFit.fitHeight,
+                                  ),
                                 ),
                               ),
                             ),

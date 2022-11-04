@@ -23,8 +23,8 @@ class AppRating extends StatelessWidget {
       updateOnDrag: false,
       initialRating: rating ?? 5,
       ignoreGestures: true,
-      itemBuilder: (context, index) => const Icon(
-        Icons.star_rate_rounded,
+      itemBuilder: (context, index) => Icon(
+        rating! >= index + 1 ? Icons.star_rounded : Icons.star_border_rounded,
         color: AppColors.deepSaffron,
       ),
       onRatingUpdate: onRatingUpdate,
