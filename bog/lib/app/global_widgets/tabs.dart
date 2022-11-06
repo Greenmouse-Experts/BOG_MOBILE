@@ -172,42 +172,52 @@ class _VerticalTabsState extends State<VerticalTabs> with TickerProviderStateMix
                                 left = ((widget.indicatorSide == IndicatorSide.start) ? 0 : null);
                               }
 
-                              return Stack(
-                                children: <Widget>[
-                                  Positioned(
-                                    top: 2,
-                                    bottom: 2,
-                                    width: widget.indicatorWidth,
-                                    left: left,
-                                    right: right,
-                                    child: ScaleTransition(
-                                      scale: Tween(begin: 0.0, end: 1.0).animate(
-                                        CurvedAnimation(
-                                          parent: animationControllers[index],
-                                          curve: Curves.elasticOut,
+                              return GestureDetector(
+                                onTap: () {
+                                  _changePageByTapView = true;
+                                  setState(() {
+                                    _selectTab(index);
+                                  });
+
+                                  pageController.animateToPage(index, duration: widget.changePageDuration, curve: widget.changePageCurve);
+                                },
+                                child: Stack(
+                                  children: <Widget>[
+                                    Positioned(
+                                      top: 2,
+                                      bottom: 2,
+                                      width: widget.indicatorWidth,
+                                      left: left,
+                                      right: right,
+                                      child: ScaleTransition(
+                                        scale: Tween(begin: 0.0, end: 1.0).animate(
+                                          CurvedAnimation(
+                                            parent: animationControllers[index],
+                                            curve: Curves.elasticOut,
+                                          ),
+                                        ),
+                                        child: Container(
+                                          color: widget.indicatorColor,
                                         ),
                                       ),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        _changePageByTapView = true;
+                                        setState(() {
+                                          _selectTab(index);
+                                        });
+
+                                        pageController.animateToPage(index, duration: widget.changePageDuration, curve: widget.changePageCurve);
+                                      },
                                       child: Container(
-                                        color: widget.indicatorColor,
+                                        alignment: alignment,
+                                        padding: const EdgeInsets.only(left: 10,top: 10,bottom: 10),
+                                        child: child,
                                       ),
                                     ),
-                                  ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      _changePageByTapView = true;
-                                      setState(() {
-                                        _selectTab(index);
-                                      });
-
-                                      pageController.animateToPage(index, duration: widget.changePageDuration, curve: widget.changePageCurve);
-                                    },
-                                    child: Container(
-                                      alignment: alignment,
-                                      padding: const EdgeInsets.only(left: 10,top: 10,bottom: 10),
-                                      child: child,
-                                    ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               );
                             },
                           ),

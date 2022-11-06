@@ -92,7 +92,6 @@ class Shop extends GetView<HomeController> {
                     SizedBox(
                       height: width*0.04,
                     ),
-
                     SizedBox(
                       height: Get.height*0.88,
                       child: VerticalTabs(
