@@ -13,6 +13,7 @@ import '../../../core/theme/app_styles.dart';
 import '../../controllers/home_controller.dart';
 import '../../global_widgets/app_avatar.dart';
 import '../../global_widgets/app_input.dart';
+import '../../global_widgets/tabs.dart';
 
 class Shop extends GetView<HomeController> {
   const Shop({Key? key}) : super(key: key);
@@ -81,136 +82,146 @@ class Shop extends GetView<HomeController> {
                       ),
                     ),
                     SizedBox(
-                      height: width*0.08,
+                      height: width*0.04,
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(left: width*0.025,right: width*0.05),
-                      child: Text(
-                        "Find and purchase materials for \nyour projects  ",
-                        style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.075,color: Colors.black,fontWeight: FontWeight.w500),
-                        textAlign: TextAlign.start,
-                      ),
+                    Container(
+                      height: 1,
+                      width: width,
+                      color: AppColors.grey.withOpacity(0.1),
                     ),
                     SizedBox(
-                      height: width*0.08,
+                      height: width*0.04,
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(left: width*0.025,right: width*0.025),
-                      child: AppInput(
-                        hintText: 'Search with keyword ...',
-                        filledColor: Colors.grey.withOpacity(.1),
-                        prefexIcon: Icon(
-                          FeatherIcons.search,
-                          color: Colors.black.withOpacity(.5),
-                          size: Get.width * 0.05,
-                        ),
-                      ),
-                    ),
+
                     SizedBox(
-                      height: width*0.08,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(left: width*0.025,right: width*0.025),
-                      child: Text(
-                        "Categories",
-                        style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.07,color: Colors.black,fontWeight: FontWeight.w500),
-                        textAlign: TextAlign.start,
-                      ),
-                    ),
-                    SizedBox(
-                      height: width*0.05,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(left: width*0.025,right: width*0.025),
-                      child: Image.asset(
-                        "assets/images/Group 47099.png",
-                        height: width*0.2,
-                        width: width*0.8,
-                        fit: BoxFit.contain,
-                      ),
-                    ),
-                    SizedBox(
-                      height: width*0.08,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(left: width*0.025,right: width*0.025),
-                      child: Text(
-                        "New Arrivals",
-                        style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.07,color: Colors.black,fontWeight: FontWeight.w500),
-                        textAlign: TextAlign.start,
-                      ),
-                    ),
-                    SizedBox(
-                      height: width*0.05,
-                    ),
-                    SizedBox(
-                      height: Get.height * 0.20,
-                      width: Get.width,
-                      child: ListView.builder(
-                        itemCount: 5,
-                        shrinkWrap: false,
-                        scrollDirection: Axis.horizontal,
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding: EdgeInsets.only(left: width*0.025,right: width*0.0),
-                            child: InkWell(
-                              onTap: (){
-                                Get.to(const ProductDetails(key: Key('ProductDetails')));
-                              },
-                              child: Container(
-                                width: Get.width * 0.4,
-                                decoration: const BoxDecoration(
-                                  image: DecorationImage(
-                                    image: AssetImage("assets/images/Group 47037.png"),
-                                    fit: BoxFit.fitHeight,
+                      height: Get.height*0.88,
+                      child: VerticalTabs(
+                        backgroundColor: AppColors.backgroundVariant2,
+                        tabBackgroundColor: AppColors.backgroundVariant2,
+                        indicatorColor: AppColors.primary,
+                        tabsShadowColor: AppColors.backgroundVariant2,
+                        tabsWidth: Get.width*0.25,
+                        initialIndex: 0,
+                        tabs: const <Tab>[
+                          Tab(child: Text('Sand')),
+                          Tab(child: Text('Granite')),
+                          Tab(child: Text('Cement')),
+                          Tab(child: Text('Steel')),
+                        ],
+                        contents: <Widget>[
+                          SizedBox(
+                            height: Get.height * 0.75,
+                            width: Get.width * 0.7,
+                            child: GridView.builder(
+                              itemCount: 20,
+                              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,mainAxisSpacing: 5),
+                              scrollDirection: Axis.vertical,
+                              padding: const EdgeInsets.all(0),
+                              itemBuilder: (BuildContext context, int index) {
+                                return Padding(
+                                  padding: EdgeInsets.only(bottom: width*0.0),
+                                  child: InkWell(
+                                    onTap: (){
+                                      Get.to(const ProductDetails(key: Key('ProductDetails')));
+                                    },
+                                    child: Container(
+                                      decoration: const BoxDecoration(
+                                        image: DecorationImage(
+                                          image: AssetImage("assets/images/Group 47037.png"),
+                                          fit: BoxFit.fitHeight,
+                                        ),
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                    SizedBox(
-                      height: width*0.08,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(left: width*0.025,right: width*0.025),
-                      child: Text(
-                        "Top Picks",
-                        style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.07,color: Colors.black,fontWeight: FontWeight.w500),
-                        textAlign: TextAlign.start,
-                      ),
-                    ),
-                    SizedBox(
-                      height: width*0.05,
-                    ),
-                    SizedBox(
-                      height: Get.height * 0.20,
-                      width: Get.width,
-                      child: ListView.builder(
-                        itemCount: 5,
-                        shrinkWrap: false,
-                        scrollDirection: Axis.horizontal,
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding: EdgeInsets.only(left: width*0.025,right: width*0.0),
-                            child: InkWell(
-                              onTap: (){
-                                Get.to(const ProductDetails(key: Key('ProductDetails')));
+                                );
                               },
-                              child: Container(
-                                width: Get.width * 0.4,
-                                decoration: BoxDecoration(
-                                  image: const DecorationImage(
-                                    image: AssetImage("assets/images/Group 47037.png"),
-                                    fit: BoxFit.fitHeight,
-                                  ),
-                                ),
-                              ),
                             ),
-                          );
-                        },
+                          ),
+                          SizedBox(
+                            height: Get.height * 0.75,
+                            width: Get.width * 0.7,
+                            child: GridView.builder(
+                              itemCount: 20,
+                              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,mainAxisSpacing: 5),
+                              scrollDirection: Axis.vertical,
+                              padding: const EdgeInsets.all(0),
+                              itemBuilder: (BuildContext context, int index) {
+                                return Padding(
+                                  padding: EdgeInsets.only(bottom: width*0.0),
+                                  child: InkWell(
+                                    onTap: (){
+                                      Get.to(const ProductDetails(key: Key('ProductDetails')));
+                                    },
+                                    child: Container(
+                                      decoration: const BoxDecoration(
+                                        image: DecorationImage(
+                                          image: AssetImage("assets/images/Group 47037.png"),
+                                          fit: BoxFit.fitHeight,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                          SizedBox(
+                            height: Get.height * 0.75,
+                            width: Get.width * 0.7,
+                            child: GridView.builder(
+                              itemCount: 20,
+                              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,mainAxisSpacing: 5),
+                              scrollDirection: Axis.vertical,
+                              padding: const EdgeInsets.all(0),
+                              itemBuilder: (BuildContext context, int index) {
+                                return Padding(
+                                  padding: EdgeInsets.only(bottom: width*0.0),
+                                  child: InkWell(
+                                    onTap: (){
+                                      Get.to(const ProductDetails(key: Key('ProductDetails')));
+                                    },
+                                    child: Container(
+                                      decoration: const BoxDecoration(
+                                        image: DecorationImage(
+                                          image: AssetImage("assets/images/Group 47037.png"),
+                                          fit: BoxFit.fitHeight,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                          SizedBox(
+                            height: Get.height * 0.75,
+                            width: Get.width * 0.7,
+                            child: GridView.builder(
+                              itemCount: 20,
+                              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,mainAxisSpacing: 5),
+                              scrollDirection: Axis.vertical,
+                              padding: const EdgeInsets.all(0),
+                              itemBuilder: (BuildContext context, int index) {
+                                return Padding(
+                                  padding: EdgeInsets.only(bottom: width*0.0),
+                                  child: InkWell(
+                                    onTap: (){
+                                      Get.to(const ProductDetails(key: Key('ProductDetails')));
+                                    },
+                                    child: Container(
+                                      decoration: const BoxDecoration(
+                                        image: DecorationImage(
+                                          image: AssetImage("assets/images/Group 47037.png"),
+                                          fit: BoxFit.fitHeight,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],

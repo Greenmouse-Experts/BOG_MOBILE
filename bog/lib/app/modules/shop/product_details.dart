@@ -147,7 +147,7 @@ class ProductDetails extends GetView<HomeController> {
                                           color: Colors.black,
                                           fontWeight: FontWeight.w500)),
                                 ),
-                                AppRating(onRatingUpdate: (value) {}, rating: 4,size: 30),
+                                AppRating(onRatingUpdate: (value) {}, rating: 4,size: 25),
                                 Padding(
                                   padding: EdgeInsets.only(left: Get.width * 0.015,top: Get.height*0.01),
                                   child: Text(
@@ -169,8 +169,8 @@ class ProductDetails extends GetView<HomeController> {
                             children: [
                               //Love Button
                               Container(
-                                height: Get.width * 0.08,
-                                width: Get.width * 0.08,
+                                height: Get.width * 0.07,
+                                width: Get.width * 0.07,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(100),
                                   border: Border.all(
@@ -204,13 +204,34 @@ class ProductDetails extends GetView<HomeController> {
                       height: Get.height * 0.03,
                     ),
                     Padding(
+                      padding: EdgeInsets.only(left: Get.width*0.0, right: Get.width*0.03),
+                      child: const DefaultTabController(
+                        length: 3,
+                        child: TabBar(
+                          padding: EdgeInsets.zero,
+                          labelColor: Colors.black,
+                          unselectedLabelColor: Color(0xff9A9A9A),
+                          indicatorColor: AppColors.primary,
+                          indicatorSize: TabBarIndicatorSize.label,
+                          tabs: [
+                            Tab(text: 'Description',),
+                            Tab(text: 'Specification',),
+                            Tab(text: 'Reviews',),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: Get.height * 0.03,
+                    ),
+                    Padding(
                       padding: EdgeInsets.only(left: Get.width*0.03, right: Get.width*0.03),
                       child: Text(
                         "This is a washed concreting sand suitable for concrete manufacture when mixed with gravel and cement. It is also ideal for bedding flagstones and block paving. This is a Sharp Sand with larger grain size, commonly used as a bedding material for paving. Delivered to your construction site",
                         style: AppTextStyle.subtitle1.copyWith(
-                          fontSize: multiplier * 0.068,
+                          fontSize: multiplier * 0.075,
                           color: Colors.black.withOpacity(0.5),
-                          fontWeight: FontWeight.normal,
+                          fontWeight: FontWeight.w300,
                         ),
                       ),
                     ),
