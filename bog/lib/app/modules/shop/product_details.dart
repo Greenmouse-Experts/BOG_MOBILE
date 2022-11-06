@@ -11,6 +11,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_styles.dart';
 import '../../controllers/home_controller.dart';
 import '../../global_widgets/app_avatar.dart';
+import '../../global_widgets/app_button.dart';
 import '../../global_widgets/app_input.dart';
 import '../../global_widgets/app_ratings.dart';
 import '../../global_widgets/item_counter.dart';
@@ -198,7 +199,57 @@ class ProductDetails extends GetView<HomeController> {
                           ),
                         ],
                       ),
-                    )
+                    ),
+                    SizedBox(
+                      height: Get.height * 0.03,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: Get.width*0.03, right: Get.width*0.03),
+                      child: Text(
+                        "This is a washed concreting sand suitable for concrete manufacture when mixed with gravel and cement. It is also ideal for bedding flagstones and block paving. This is a Sharp Sand with larger grain size, commonly used as a bedding material for paving. Delivered to your construction site",
+                        style: AppTextStyle.subtitle1.copyWith(
+                          fontSize: multiplier * 0.068,
+                          color: Colors.black.withOpacity(0.5),
+                          fontWeight: FontWeight.normal,
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: Get.height * 0.03,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        SizedBox(
+                          width: Get.width*0.45,
+                          child: Padding(
+                            padding: EdgeInsets.only(left: Get.width*0.03, right: Get.width*0.03),
+                            child: AppButton(
+                              title: 'Add To Cart',
+                              onPressed: () {},
+                              borderRadius: 10,
+                              padding: EdgeInsets.symmetric(vertical: Get.height*0.02),
+                            ),
+                          ),
+                        ),
+
+                        SizedBox(
+                          width: Get.width*0.45,
+                          child: Padding(
+                            padding: EdgeInsets.only(left: Get.width*0.03, right: Get.width*0.03),
+                            child: AppButton(
+                              title: 'Buy Now',
+                              onPressed: () {},
+                              borderRadius: 10,
+                              padding: EdgeInsets.symmetric(vertical: Get.height*0.02),
+                              border: Border.all(color: AppColors.primary),
+                              bckgrndColor: Colors.white,
+                              fontColor: AppColors.primary,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),
