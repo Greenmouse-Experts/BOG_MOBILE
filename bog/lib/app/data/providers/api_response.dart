@@ -10,16 +10,18 @@ enum ApiStatus {
 class ApiResponse {
   final int? code;
   dynamic data;
+  dynamic user;
   final bool isSuccessful;
   String? message;
   String? token;
 
-  ApiResponse(
-      {this.code,
+  ApiResponse({this.code,
       this.message,
       this.data,
       required this.isSuccessful,
-      this.token});
+      this.token,
+    this.user
+      });
 
   static ApiResponse response(Response response) {
     var json = response.data;
@@ -28,6 +30,8 @@ class ApiResponse {
       message: json['message'],
       isSuccessful: json['success'],
       data: json['data'],
+      user: json['user'],
+      token: json['token'],
     );
   }
 
@@ -38,7 +42,8 @@ class ApiResponse {
       message: jsonD['message'],
       isSuccessful: jsonD['success'],
       data: jsonD['data'],
-      //token: jsonD['token'],
+      user: jsonD['user'],
+      token: jsonD['token'],
     );
   }
 

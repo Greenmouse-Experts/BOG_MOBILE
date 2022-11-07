@@ -93,7 +93,7 @@ class Shop extends GetView<HomeController> {
                       height: width*0.04,
                     ),
                     SizedBox(
-                      height: Get.height*0.88,
+                      height: Get.height*0.8,
                       child: VerticalTabs(
                         backgroundColor: AppColors.backgroundVariant2,
                         tabBackgroundColor: AppColors.backgroundVariant2,
@@ -225,6 +225,63 @@ class Shop extends GetView<HomeController> {
                     ),
                   ],
                 ),
+              ),
+              bottomNavigationBar: BottomNavigationBar(
+                  backgroundColor: AppColors.backgroundVariant2,
+                  showSelectedLabels: true,
+                  showUnselectedLabels: true,
+                  type: BottomNavigationBarType.fixed,
+                  items: <BottomNavigationBarItem>[
+                    BottomNavigationBarItem(
+                      icon: Image.asset(
+                        'assets/images/homeIcon.png',
+                        width: 25,
+                        color: controller.currentBottomNavPage.value == 0 ? AppColors.primary : AppColors.grey,
+                      ),
+                      label: 'Home',
+                      backgroundColor: AppColors.background,
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Image.asset(
+                        controller.currentBottomNavPage.value == 1 ? 'assets/images/chat_filled.png' : 'assets/images/chatIcon.png',
+                        width: 25,
+                        color: controller.currentBottomNavPage.value == 1 ? AppColors.primary : AppColors.grey,
+                      ),
+                      label: 'Chat',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Image.asset(
+                        'assets/images/projectIcon.png',
+                        width: 25,
+                        color: controller.currentBottomNavPage.value == 2 ? AppColors.primary : AppColors.grey,
+                      ),
+                      label: 'Project',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Image.asset(
+                        'assets/images/cartIcon.png',
+                        width: 25,
+                        color: controller.currentBottomNavPage.value == 3 ? AppColors.primary : AppColors.grey,
+                      ),
+                      label: 'Cart',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Image.asset(
+                        'assets/images/profileIcon.png',
+                        width: 25,
+                        color: controller.currentBottomNavPage.value == 4 ? AppColors.primary : AppColors.grey,
+                      ),
+                      label: 'Profile',
+                    ),
+                  ],
+                  currentIndex: controller.currentBottomNavPage.value,
+                  selectedItemColor: AppColors.primary,
+                  unselectedItemColor: Colors.grey,
+                  onTap: (index) {
+                    controller.currentBottomNavPage.value = index;
+                    controller.update(['home']);
+                    Get.back();
+                  }
               ),
             );
           }),

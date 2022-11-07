@@ -12,6 +12,7 @@ class AppThemes {
     scaffoldBackgroundColor: AppColors.background,
     primaryColor: AppColors.primary,
     platform: TargetPlatform.iOS,
+    fontFamily: 'PP Telegraf',
     appBarTheme: AppBarTheme(
       centerTitle: true,
       backgroundColor: AppColors.background,

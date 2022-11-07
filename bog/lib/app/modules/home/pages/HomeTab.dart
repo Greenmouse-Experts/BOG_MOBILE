@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:bog/app/data/model/log_in_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
@@ -14,6 +15,7 @@ import '../../../data/providers/api_response.dart';
 import '../../../data/providers/my_pref.dart';
 import '../../../global_widgets/app_avatar.dart';
 import '../../../global_widgets/horizontal_item_tile.dart';
+import '../../create/create.dart';
 import '../../shop/shop.dart';
 
 class HomeTab extends StatelessWidget {
@@ -21,6 +23,7 @@ class HomeTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var logInDetails = LogInEntity.fromJson(jsonDecode(MyPref.logInDetail.val));
     return GetBuilder<HomeController>(builder: (controller) {
       return Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -38,7 +41,7 @@ class HomeTab extends StatelessWidget {
                   height: Get.width * 0.16,
                   child: IconButton(
                     icon: AppAvatar(
-                      imgUrl: "",
+                      imgUrl: (logInDetails.photo as String?).toString(),
                       radius: Get.width * 0.16,
                     ),
                     onPressed: () {
@@ -67,7 +70,7 @@ class HomeTab extends StatelessWidget {
                             height: 5.0,
                           ),
                           Text(
-                            "Chukka",
+                            logInDetails.name.toString(),
                             style: AppTextStyle.subtitle1.copyWith(
                               color: Colors.black,
                               fontSize: Get.width * 0.05,
@@ -147,7 +150,7 @@ class HomeTab extends StatelessWidget {
               children: [
                 InkWell(
                   onTap: () {
-
+                    Get.toNamed(Create.route);
                   },
                   child: Container(
                     decoration: BoxDecoration(

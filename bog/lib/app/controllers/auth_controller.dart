@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:convert';
 
+import 'package:bog/app/data/model/log_in_entity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -7,6 +9,7 @@ import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:otp_text_field/otp_field.dart';
 
 import '../data/providers/api_response.dart';
+import '../data/providers/my_pref.dart';
 import '../global_widgets/overlays.dart';
 import '../modules/home/home.dart';
 import '../modules/sign_in/sign_in.dart';
@@ -293,7 +296,12 @@ class AuthController extends GetxController {
       var buttonMessage = "";
       ApiResponse response = await userRepo.signIn(_signInPayload);
       if(response.isSuccessful){
-        Get.toNamed(Home.route);
+        var logInInfo = LogInEntity.fromJson(response.user);
+        response.user = logInInfo;
+        var token = logInInfo.token;
+        MyPref.logInDetail.val = jsonEncode(response.user);
+        MyPref.authToken.val = token.toString();
+        Get.offAndToNamed(Home.route);
       }else{
         if(response.message == "This Email is already in Use") {
           message = "This Email is already in Use, Please Login";

@@ -213,12 +213,22 @@ class ProductDetails extends GetView<HomeController> {
                           unselectedLabelColor: Color(0xff9A9A9A),
                           indicatorColor: AppColors.primary,
                           indicatorSize: TabBarIndicatorSize.label,
+                          labelPadding: EdgeInsets.zero,
+                          indicatorPadding: EdgeInsets.zero,
                           tabs: [
-                            Tab(text: 'Description',),
-                            Tab(text: 'Specification',),
-                            Tab(text: 'Reviews',),
+                            Tab(text: 'Description',iconMargin: EdgeInsets.zero,),
+                            Tab(text: 'Specification',iconMargin: EdgeInsets.zero,),
+                            Tab(text: 'Reviews',iconMargin: EdgeInsets.zero,),
                           ],
                         ),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: Get.width*0.03, right: Get.width*0.03),
+                      child: Container(
+                        height: 1,
+                        width: width,
+                        color: AppColors.grey.withOpacity(0.1),
                       ),
                     ),
                     SizedBox(
@@ -273,6 +283,63 @@ class ProductDetails extends GetView<HomeController> {
                     ),
                   ],
                 ),
+              ),
+              bottomNavigationBar: BottomNavigationBar(
+                  backgroundColor: AppColors.backgroundVariant2,
+                  showSelectedLabels: true,
+                  showUnselectedLabels: true,
+                  type: BottomNavigationBarType.fixed,
+                  items: <BottomNavigationBarItem>[
+                    BottomNavigationBarItem(
+                      icon: Image.asset(
+                        'assets/images/homeIcon.png',
+                        width: 25,
+                        color: controller.currentBottomNavPage.value == 0 ? AppColors.primary : AppColors.grey,
+                      ),
+                      label: 'Home',
+                      backgroundColor: AppColors.background,
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Image.asset(
+                        controller.currentBottomNavPage.value == 1 ? 'assets/images/chat_filled.png' : 'assets/images/chatIcon.png',
+                        width: 25,
+                        color: controller.currentBottomNavPage.value == 1 ? AppColors.primary : AppColors.grey,
+                      ),
+                      label: 'Chat',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Image.asset(
+                        'assets/images/projectIcon.png',
+                        width: 25,
+                        color: controller.currentBottomNavPage.value == 2 ? AppColors.primary : AppColors.grey,
+                      ),
+                      label: 'Project',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Image.asset(
+                        'assets/images/cartIcon.png',
+                        width: 25,
+                        color: controller.currentBottomNavPage.value == 3 ? AppColors.primary : AppColors.grey,
+                      ),
+                      label: 'Cart',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Image.asset(
+                        'assets/images/profileIcon.png',
+                        width: 25,
+                        color: controller.currentBottomNavPage.value == 4 ? AppColors.primary : AppColors.grey,
+                      ),
+                      label: 'Profile',
+                    ),
+                  ],
+                  currentIndex: controller.currentBottomNavPage.value,
+                  selectedItemColor: AppColors.primary,
+                  unselectedItemColor: Colors.grey,
+                  onTap: (index) {
+                    controller.currentBottomNavPage.value = index;
+                    controller.update(['home']);
+                    Get.back();
+                  }
               ),
             );
           }),

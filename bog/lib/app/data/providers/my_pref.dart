@@ -5,6 +5,7 @@ class MyPref  {
 
   static final userId = ReadWriteValue('userId', '', _box);
   static final authToken = ReadWriteValue('auth-token', '', _box);
+  static final logInDetail = ReadWriteValue('logInDeatail', '', _box);
   static final userDetail = ReadWriteValue('userProfile', '', _box);
 
   static Future<void> clearBoxes() async {

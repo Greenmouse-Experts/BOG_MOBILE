@@ -68,3 +68,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/
+  fonts:
+    - family: PP Telegraf
+      fonts:
+        - asset: assets/images/pptelegraf-regular.otf

@@ -125,7 +125,7 @@ class _VerticalTabsState extends State<VerticalTabs> with TickerProviderStateMix
                         SizedBox(height: Get.height*0.02,),
                         SizedBox(
                           width: widget.tabsWidth,
-                          height: Get.height*0.83,
+                          height: Get.height*0.75,
                           child: ListView.builder(
                             padding: EdgeInsets.zero,
                             itemCount: widget.tabs.length,
@@ -249,7 +249,7 @@ class _VerticalTabsState extends State<VerticalTabs> with TickerProviderStateMix
                         ),
                         SizedBox(height: Get.height*0.02,),
                         SizedBox(
-                          height: Get.height*0.76,
+                          height: Get.height*0.68,
                           child: PageView.builder(
                             scrollDirection: widget.contentScrollAxis,
                             physics: pageScrollPhysics,

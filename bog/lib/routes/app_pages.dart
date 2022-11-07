@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 
 import '../app/bindings/auth_binding.dart';
 import '../app/modules/chat/chat.dart';
+import '../app/modules/create/create.dart';
 import '../app/modules/home/home.dart';
 import '../app/modules/multiplexor/multiplexor.dart';
 import '../app/modules/onboarding/onboarding.dart';
@@ -96,6 +97,10 @@ class AppPages {
     GetPage(
         name: Shop.route,
         page: () => const Shop()
+    ),
+    GetPage(
+        name: Create.route,
+        page: () => const Create()
     ),
   ];
 }

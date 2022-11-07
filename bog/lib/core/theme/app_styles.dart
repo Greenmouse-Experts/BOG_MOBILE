@@ -6,7 +6,7 @@ import 'app_colors.dart';
 
 class AppTextStyle {
   AppTextStyle._();
-  static const String _font = 'Montserrat';
+  static const String _font = 'PP Telegraf';
 
   static  TextStyle bodyText1 = TextStyle(
     color: AppColors.platinum,
