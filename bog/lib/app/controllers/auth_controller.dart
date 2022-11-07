@@ -1,13 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:bog/app/data/model/log_in_entity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:otp_text_field/otp_field.dart';
 
+import '../data/model/log_in_model.dart';
 import '../data/providers/api_response.dart';
 import '../data/providers/my_pref.dart';
 import '../global_widgets/overlays.dart';
@@ -296,7 +296,7 @@ class AuthController extends GetxController {
       var buttonMessage = "";
       ApiResponse response = await userRepo.signIn(_signInPayload);
       if(response.isSuccessful){
-        var logInInfo = LogInEntity.fromJson(response.user);
+        var logInInfo = LogInModel.fromJson(response.user);
         response.user = logInInfo;
         var token = logInInfo.token;
         MyPref.logInDetail.val = jsonEncode(response.user);
