@@ -1,11 +1,6 @@
 import 'dart:convert';
 
 import 'package:bog/app/global_widgets/app_button.dart';
-import 'package:bog/app/modules/create/inner_pages/building_approval.dart';
-import 'package:bog/app/modules/create/inner_pages/construction_drawing.dart';
-import 'package:bog/app/modules/create/inner_pages/contractor_or_smart_calculator.dart';
-import 'package:bog/app/modules/create/inner_pages/geotechnical_investigation.dart';
-import 'package:bog/app/modules/create/inner_pages/land_survey.dart';
 import 'package:feather_icons/feather_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -13,17 +8,14 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
-import '../../../core/theme/app_colors.dart';
-import '../../../core/theme/app_styles.dart';
-import '../../controllers/home_controller.dart';
-import '../../global_widgets/app_avatar.dart';
-import '../../global_widgets/app_input.dart';
-import '../../global_widgets/tabs.dart';
+import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_styles.dart';
+import '../../../controllers/home_controller.dart';
+import '../../../global_widgets/app_input.dart';
 
-class Create extends GetView<HomeController> {
-  const Create({Key? key}) : super(key: key);
 
-  static const route = '/create';
+class ContractorOrSmartCalculator extends GetView<HomeController> {
+  const ContractorOrSmartCalculator({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +32,7 @@ class Create extends GetView<HomeController> {
           systemNavigationBarIconBrightness: Brightness.dark
       ),
       child: GetBuilder<HomeController>(
-          id: 'Create',
+          id: 'ContractorOrSmartCalculator',
           builder: (controller) {
             return Scaffold(
               backgroundColor: AppColors.backgroundVariant2,
@@ -130,90 +122,6 @@ class Create extends GetView<HomeController> {
                         height: width*0.04,
                       ),
 
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          ServiceWidget(
-                              width: width,
-                              function: (){
-                                Get.to(() => const LandSurvey());
-                              },
-                              asset: "assets/images/oneS.png",
-                              title: "Land Surveyor",
-                              multiplier: multiplier
-                          ),
-
-                          ServiceWidget(
-                              width: width,
-                              function: (){
-                                Get.to(() => const ConstructionDrawing());
-                              },
-                              asset: "assets/images/twoS.png",
-                              title: "Construction Drawing",
-                              multiplier: multiplier
-                          ),
-                        ],
-                      ),
-
-                      SizedBox(
-                        height: width*0.04,
-                      ),
-
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          ServiceWidget(
-                              width: width,
-                              function: (){
-                                Get.to(() => const GeotechnicalInvestigation());
-                              },
-                              asset: "assets/images/threeS.png",
-                              title: "Geotechnical \nInvestigation",
-                              multiplier: multiplier
-                          ),
-
-                          ServiceWidget(
-                              width: width,
-                              function: (){
-                                Get.to(() => const ContractorOrSmartCalculator());
-                              },
-                              asset: "assets/images/fourS.png",
-                              title: "Contractor or \nSmart Calculator",
-                              multiplier: multiplier
-                          ),
-                        ],
-                      ),
-
-                      SizedBox(
-                        height: width*0.04,
-                      ),
-
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          ServiceWidget(
-                              width: width,
-                              function: (){
-                                Get.to(() => const BuildingApproval());
-                              },
-                              asset: "assets/images/fiveS.png",
-                              title: "Building Approval",
-                              multiplier: multiplier
-                          ),
-                        ],
-                      ),
-
-                      SizedBox(
-                        height: width*0.07,
-                      ),
-
-                      Padding(
-                        padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
-                        child: AppButton(
-                          title: "Proceed",
-                          onPressed: (){},
-                        ),
-                      )
                     ],
                   ),
                 ),
@@ -277,73 +185,6 @@ class Create extends GetView<HomeController> {
               ),
             );
           }),
-    );
-  }
-}
-
-class ServiceWidget extends StatelessWidget {
-  const ServiceWidget({
-    Key? key,
-    required this.width,
-    required this.function,
-    required this.asset,
-    required this.title,
-    required this.multiplier,
-  }) : super(key: key);
-
-  final double width;
-  final Function() function;
-  final String asset;
-  final String title;
-  final double multiplier;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
-      child: InkWell(
-        onTap: function,
-        child: Container(
-          height: width*0.4,
-          width: width*0.4,
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black12,
-                blurRadius: 3,
-                spreadRadius: 0,
-                offset: Offset(0, 1),
-              ),
-            ],
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                height: width*0.15,
-                width: width*0.15,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage(asset),
-                    fit: BoxFit.fill,
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: width*0.04,
-              ),
-              Text(
-                title,
-                style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.065,color: Colors.black,fontWeight: FontWeight.normal),
-                textAlign: TextAlign.center,
-              ),
-            ],
-          ),
-        ),
-      ),
     );
   }
 }
