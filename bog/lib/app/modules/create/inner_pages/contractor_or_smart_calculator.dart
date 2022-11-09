@@ -12,6 +12,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_styles.dart';
 import '../../../controllers/home_controller.dart';
 import '../../../global_widgets/app_input.dart';
+import '../../home/home.dart';
 
 
 class ContractorOrSmartCalculator extends GetView<HomeController> {
@@ -180,6 +181,7 @@ class ContractorOrSmartCalculator extends GetView<HomeController> {
                   onTap: (index) {
                     controller.currentBottomNavPage.value = index;
                     controller.update(['home']);
+                    Get.back();
                     Get.back();
                   }
               ),
