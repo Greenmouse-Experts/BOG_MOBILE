@@ -113,7 +113,7 @@ class ConstructionDrawing extends GetView<HomeController> {
                                     Padding(
                                       padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
                                       child: Text(
-                                        "Request for Constructor or \nSmart Calculator",
+                                        "Request for Construction Drawings",
                                         style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.08,color: Colors.black,fontWeight: FontWeight.w600),
                                         textAlign: TextAlign.start,
                                       ),
@@ -136,6 +136,27 @@ class ConstructionDrawing extends GetView<HomeController> {
                                       child: const AppInput(
                                         hintText: "Enter your name  ",
                                         label: "Name of client",
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: Get.height*0.04,
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                      child: PageDropButton(
+                                        label: "Type of Drawing Needed",
+                                        hint: '',
+                                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                                        onChanged: (val) {
+
+                                        },
+                                        value:  "Apple App Store",
+                                        items: ["Apple App Store","Google Play Store","Google         ","Email         ","Facebook         ","Twitter         ","Instagram         ","Whatsapp         "].map<DropdownMenuItem<String>>((String value) {
+                                          return DropdownMenuItem<String>(
+                                            value: value,
+                                            child: Text(value),
+                                          );
+                                        }).toList(),
                                       ),
                                     ),
                                     SizedBox(
