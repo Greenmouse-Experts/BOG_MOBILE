@@ -16,17 +16,22 @@ import '../../../global_widgets/page_dropdown.dart';
 import '../../home/home.dart';
 
 
-class LandSurvey extends GetView<HomeController> {
+class LandSurvey extends StatefulWidget {
   const LandSurvey({Key? key}) : super(key: key);
+
+  @override
+  State<LandSurvey> createState() => _LandSurveyState();
+}
+
+class _LandSurveyState extends State<LandSurvey> {
+  var pageController = PageController();
+  var formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     var width = Get.width;
     final Size size = MediaQuery.of(context).size;
     double multiplier = 25 * size.height * 0.01;
-
-    var pageController = PageController();
-    var formKey = GlobalKey<FormState>();
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(

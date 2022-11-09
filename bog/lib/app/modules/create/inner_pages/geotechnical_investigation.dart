@@ -15,9 +15,14 @@ import '../../../global_widgets/app_input.dart';
 import '../../home/home.dart';
 
 
-class GeotechnicalInvestigation extends GetView<HomeController> {
+class GeotechnicalInvestigation extends StatefulWidget {
   const GeotechnicalInvestigation({Key? key}) : super(key: key);
 
+  @override
+  State<GeotechnicalInvestigation> createState() => _GeotechnicalInvestigationState();
+}
+
+class _GeotechnicalInvestigationState extends State<GeotechnicalInvestigation> {
   @override
   Widget build(BuildContext context) {
     var width = Get.width;

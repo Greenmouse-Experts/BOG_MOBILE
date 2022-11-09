@@ -13,20 +13,26 @@ import '../../../../core/theme/app_styles.dart';
 import '../../../controllers/home_controller.dart';
 import '../../../global_widgets/app_input.dart';
 import '../../../global_widgets/page_dropdown.dart';
+import '../../../global_widgets/page_input.dart';
 import '../../home/home.dart';
 
 
-class ConstructionDrawing extends GetView<HomeController> {
+class ConstructionDrawing extends StatefulWidget {
   const ConstructionDrawing({Key? key}) : super(key: key);
+
+  @override
+  State<ConstructionDrawing> createState() => _ConstructionDrawingState();
+}
+
+class _ConstructionDrawingState extends State<ConstructionDrawing> {
+  var pageController = PageController();
+  var formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     var width = Get.width;
     final Size size = MediaQuery.of(context).size;
     double multiplier = 25 * size.height * 0.01;
-
-    var pageController = PageController();
-    var formKey = GlobalKey<FormState>();
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
@@ -220,6 +226,93 @@ class ConstructionDrawing extends GetView<HomeController> {
                                         title: "Proceed to upload documents",
                                         onPressed: (){
                                           pageController.animateToPage(1, duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
+                                        },
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              Form(
+                                key: formKey,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                      child: Text(
+                                        "Request for Construction Drawings",
+                                        style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.08,color: Colors.black,fontWeight: FontWeight.w600),
+                                        textAlign: TextAlign.start,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: width*0.015,
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                      child: Image.asset(
+                                        "assets/images/line_coloured.png",
+                                        width: width*0.3,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: width*0.08,
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                      child: const PageInput(
+                                        hint: "Enter your name  ",
+                                        label: "Upload survey plan ",
+                                        isFilePicker: true,
+                                      ),
+                                    ),
+
+                                    SizedBox(
+                                      height: Get.height*0.04,
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                      child: const PageInput(
+                                        hint: "Enter your name  ",
+                                        label: "Upload architectural plan (If available) ",
+                                        isFilePicker: true,
+                                      ),
+                                    ),
+
+                                    SizedBox(
+                                      height: Get.height*0.04,
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                      child: const PageInput(
+                                        hint: "Enter your name  ",
+                                        label: "Upload structural plan (If available) ",
+                                        isFilePicker: true,
+                                      ),
+                                    ),
+
+                                    SizedBox(
+                                      height: Get.height*0.04,
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                      child: const PageInput(
+                                        hint: "Enter your name  ",
+                                        label: "Upload mechanical plan (If available) ",
+                                        isFilePicker: true,
+                                      ),
+                                    ),
+
+                                    SizedBox(
+                                      height: Get.height*0.04,
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                      child: AppButton(
+                                        title: "Submit",
+                                        onPressed: (){
+                                          pageController.animateToPage(2, duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
                                         },
                                       ),
                                     )
