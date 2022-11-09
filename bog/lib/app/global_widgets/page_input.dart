@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:bog/app/global_widgets/page_dropdown.dart';
 import 'package:dart_countries/dart_countries.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../core/theme/theme.dart';
 import 'app_input.dart';
@@ -26,6 +30,7 @@ class PageInput extends StatefulWidget {
     this.onDropdownChanged,
     this.isReferral = false,
     this.showInfo = true,
+    this.isFilePicker = false,
   }) : super(key: key);
 
   final String hint;
@@ -41,6 +46,7 @@ class PageInput extends StatefulWidget {
   final bool isPhoneNumber;
   final bool isReferral;
   final bool showInfo;
+  final bool isFilePicker;
   final String? Function(String?)? validator;
   final List<DropdownMenuItem<dynamic>>? dropDownItems;
   final Function(dynamic)? onDropdownChanged;
@@ -74,7 +80,6 @@ class _PageInputState extends State<PageInput> {
 
   @override
   Widget build(BuildContext context) {
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -175,14 +180,48 @@ class _PageInputState extends State<PageInput> {
         ),
         if((!widget.isPhoneNumber && !showText) || widget.obscureText)
           AppInput(
-            hintText: widget.hint,
+            hintText: !widget.isFilePicker ? widget.hint : 'Click to open file picker',
             keyboardType: widget.keyboardType,
             controller: widget.controller,
             validator: widget.validator,
             obscureText: widget.obscureText,
             autovalidateMode: widget.autovalidateMode,
-            readOnly: widget.readOnly,
-            prefexIcon: widget.prefix,
+            readOnly: widget.readOnly || widget.isFilePicker,
+            prefexIcon: !widget.isFilePicker ? widget.prefix : InkWell(
+              onTap: () async {
+                FilePickerResult? result = await FilePicker.platform.pickFiles();
+                if (result != null) {
+                  File file = File(result.files.single.path.toString());
+                  if(widget.controller != null) {
+                    widget.controller!.text = file.path;
+                  }
+                }
+              },
+              child: Padding(
+                padding: EdgeInsets.all(Get.width * 0.01),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade200,
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(
+                      color: Colors.grey.shade300,
+                      width: 1,
+                    ),
+                  ),
+                  width: Get.width * 0.25,
+                  child: Center(
+                    child: Text(
+                      'Choose file',
+                      textAlign: TextAlign.center,
+                      style: AppTextStyle.bodyText2.copyWith(
+                        color: Colors.black,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
             suffixIcon: widget.suffix,
           ),
         const SizedBox(height: 5,),
