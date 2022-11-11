@@ -165,8 +165,8 @@ class _LandSurveyState extends State<LandSurvey> {
                                         onChanged: (val) {
 
                                         },
-                                        value:  "Apple App Store",
-                                        items: ["Apple App Store","Google Play Store","Google         ","Email         ","Facebook         ","Twitter         ","Instagram         ","Whatsapp         "].map<DropdownMenuItem<String>>((String value) {
+                                        value:  "Eti Osa",
+                                        items: ["Eti Osa","Lagos Island","Ikeja","Apapa","Agege","Alimosho","Amuwu Odofin","Ibeju Lekki","Ifako Ijaye","Kosofe","Lagos Mainland","Mushin","Oshodi Isolo","Ojo","Shomolu","Surulere","Ajeromi-Ifelodun","Badagry","Epe","Ikorodu"].map<DropdownMenuItem<String>>((String value) {
                                           return DropdownMenuItem<String>(
                                             value: value,
                                             child: Text(value),
@@ -186,8 +186,8 @@ class _LandSurveyState extends State<LandSurvey> {
                                         onChanged: (val) {
 
                                         },
-                                        value:  "Apple App Store",
-                                        items: ["Apple App Store","Google Play Store","Google         ","Email         ","Facebook         ","Twitter         ","Instagram         ","Whatsapp         "].map<DropdownMenuItem<String>>((String value) {
+                                        value:  "0 - 1000 sq.m",
+                                        items: ["0 - 1000 sq.m","1001 - 2000 sq.m","2001 - 4000 sq.m","40001 - 5000 sq.m","5001 - 1 HA","1.01 HA - 2 HA","2.01 HA - 4 HA","4.01 HA - 6 HA","6.01 HA - 8 HA","8.01 HA - 10 HA","10.01 HA - 15 HA","15.01 HA - 20 HA","20.01 HA - 25 HA","25.01 HA - 30 HA","30.01 HA - 35 HA","35.01 HA - 40 HA","40.01 HA - 45 HA","45.01 HA -50 HA","Over 50 HA"].map<DropdownMenuItem<String>>((String value) {
                                           return DropdownMenuItem<String>(
                                             value: value,
                                             child: Text(value),
@@ -207,8 +207,8 @@ class _LandSurveyState extends State<LandSurvey> {
                                         onChanged: (val) {
 
                                         },
-                                        value:  "Apple App Store",
-                                        items: ["Apple App Store","Google Play Store","Google         ","Email         ","Facebook         ","Twitter         ","Instagram         ","Whatsapp         "].map<DropdownMenuItem<String>>((String value) {
+                                        value:  "Residential ",
+                                        items: ["Residential ","Commercial","Industrial","Educational","Religious"].map<DropdownMenuItem<String>>((String value) {
                                           return DropdownMenuItem<String>(
                                             value: value,
                                             child: Text(value),
@@ -228,8 +228,8 @@ class _LandSurveyState extends State<LandSurvey> {
                                         onChanged: (val) {
 
                                         },
-                                        value:  "Apple App Store",
-                                        items: ["Apple App Store","Google Play Store","Google         ","Email         ","Facebook         ","Twitter         ","Instagram         ","Whatsapp         "].map<DropdownMenuItem<String>>((String value) {
+                                        value:  "Perimeter Survey",
+                                        items: ["Perimeter Survey","Detailed Survey","As-built survey","Re-establishment of beacons","Compilation of plans","Court Appearance","Engineering Survey","Change of Title"].map<DropdownMenuItem<String>>((String value) {
                                           return DropdownMenuItem<String>(
                                             value: value,
                                             child: Text(value),
@@ -282,6 +282,9 @@ class _LandSurveyState extends State<LandSurvey> {
                                     child: AppButton(
                                       title: "View My Projects",
                                       onPressed: (){
+                                        controller.currentBottomNavPage.value = 2;
+                                        controller.update(['home']);
+                                        Get.back();
                                         Get.back();
                                       },
                                     ),

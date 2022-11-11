@@ -156,8 +156,8 @@ class _ConstructionDrawingState extends State<ConstructionDrawing> {
                                         onChanged: (val) {
 
                                         },
-                                        value:  "Apple App Store",
-                                        items: ["Apple App Store","Google Play Store","Google         ","Email         ","Facebook         ","Twitter         ","Instagram         ","Whatsapp         "].map<DropdownMenuItem<String>>((String value) {
+                                        value:  "Architectural",
+                                        items: ["Architectural","Structural","Mechanical","Electrical","All"].map<DropdownMenuItem<String>>((String value) {
                                           return DropdownMenuItem<String>(
                                             value: value,
                                             child: Text(value),
@@ -187,8 +187,8 @@ class _ConstructionDrawingState extends State<ConstructionDrawing> {
                                         onChanged: (val) {
 
                                         },
-                                        value:  "Apple App Store",
-                                        items: ["Apple App Store","Google Play Store","Google         ","Email         ","Facebook         ","Twitter         ","Instagram         ","Whatsapp         "].map<DropdownMenuItem<String>>((String value) {
+                                        value:  "Residential",
+                                        items: ["Residential","Commercial","Industrial","Educational","Religious"].map<DropdownMenuItem<String>>((String value) {
                                           return DropdownMenuItem<String>(
                                             value: value,
                                             child: Text(value),
@@ -208,8 +208,8 @@ class _ConstructionDrawingState extends State<ConstructionDrawing> {
                                         onChanged: (val) {
 
                                         },
-                                        value:  "Apple App Store",
-                                        items: ["Apple App Store","Google Play Store","Google         ","Email         ","Facebook         ","Twitter         ","Instagram         ","Whatsapp         "].map<DropdownMenuItem<String>>((String value) {
+                                        value:  "Bungalow",
+                                        items: ["Bungalow","Duplex","Multi-storey","Terraced building","High rise building"].map<DropdownMenuItem<String>>((String value) {
                                           return DropdownMenuItem<String>(
                                             value: value,
                                             child: Text(value),
@@ -349,6 +349,9 @@ class _ConstructionDrawingState extends State<ConstructionDrawing> {
                                     child: AppButton(
                                       title: "View My Projects",
                                       onPressed: (){
+                                        controller.currentBottomNavPage.value = 2;
+                                        controller.update(['home']);
+                                        Get.back();
                                         Get.back();
                                       },
                                     ),

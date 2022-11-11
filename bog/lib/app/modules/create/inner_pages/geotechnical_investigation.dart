@@ -12,6 +12,8 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_styles.dart';
 import '../../../controllers/home_controller.dart';
 import '../../../global_widgets/app_input.dart';
+import '../../../global_widgets/page_dropdown.dart';
+import '../../../global_widgets/page_input.dart';
 import '../../home/home.dart';
 
 
@@ -23,6 +25,9 @@ class GeotechnicalInvestigation extends StatefulWidget {
 }
 
 class _GeotechnicalInvestigationState extends State<GeotechnicalInvestigation> {
+  var pageController = PageController();
+  var formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     var width = Get.width;
@@ -44,92 +49,388 @@ class _GeotechnicalInvestigationState extends State<GeotechnicalInvestigation> {
               backgroundColor: AppColors.backgroundVariant2,
               body: SizedBox(
                 width: Get.width,
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(right: width*0.05,left: width*0.045,top: kToolbarHeight),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            InkWell(
-                              onTap: (){
-                                Navigator.pop(context);
-                              },
-                              child: SvgPicture.asset(
-                                "assets/images/back.svg",
-                                height: width*0.045,
-                                width: width*0.045,
-                                color: Colors.black,
-                              ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(right: width*0.05,left: width*0.045,top: kToolbarHeight),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          InkWell(
+                            onTap: (){
+                              Navigator.pop(context);
+                            },
+                            child: SvgPicture.asset(
+                              "assets/images/back.svg",
+                              height: width*0.045,
+                              width: width*0.045,
+                              color: Colors.black,
                             ),
-                            SizedBox(
-                              width: width*0.04,
+                          ),
+                          SizedBox(
+                            width: width*0.04,
+                          ),
+                          Expanded(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Create A Project",
+                                  style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.07,color: Colors.black,fontWeight: FontWeight.w600),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
                             ),
-                            Expanded(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    "Create",
-                                    style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.07,color: Colors.black,fontWeight: FontWeight.w500),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(
-                              width: width*0.04,
-                            ),
-                          ],
-                        ),
+                          ),
+                          SizedBox(
+                            width: width*0.04,
+                          ),
+                        ],
                       ),
-                      SizedBox(
-                        height: width*0.04,
-                      ),
-                      Container(
-                        height: 1,
-                        width: width,
-                        color: AppColors.grey.withOpacity(0.1),
-                      ),
-                      SizedBox(
-                        height: width*0.04,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
-                        child: Text(
-                          "What's your project name ? ",
-                          style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.08,color: Colors.black,fontWeight: FontWeight.w500),
-                          textAlign: TextAlign.start,
-                        ),
-                      ),
-                      SizedBox(
-                        height: width*0.04,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
-                        child: const AppInput(hintText: "Enter your desired project name "),
-                      ),
-                      SizedBox(
-                        height: width*0.1,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
-                        child: Text(
-                          "What your service do you need ? ",
-                          style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.08,color: Colors.black,fontWeight: FontWeight.w500),
-                          textAlign: TextAlign.start,
-                        ),
-                      ),
-                      SizedBox(
-                        height: width*0.04,
-                      ),
+                    ),
+                    SizedBox(
+                      height: width*0.04,
+                    ),
+                    Container(
+                      height: 1,
+                      width: width,
+                      color: AppColors.grey.withOpacity(0.1),
+                    ),
+                    SizedBox(
+                      height: width*0.04,
+                    ),
+                    Expanded(
+                      child: SingleChildScrollView(
+                        child: SizedBox(
+                          height: Get.height*1.1,
+                          child: PageView(
+                            controller: pageController,
+                            physics: const NeverScrollableScrollPhysics(),
+                            children: [
+                              Form(
+                                key: formKey,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                      child: Text(
+                                        "Request for Geotechnical \nAnd Geophysical Information",
+                                        style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.08,color: Colors.black,fontWeight: FontWeight.w600),
+                                        textAlign: TextAlign.start,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: width*0.015,
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                      child: Image.asset(
+                                        "assets/images/line_coloured.png",
+                                        width: width*0.3,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: width*0.08,
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                      child: const PageInput(
+                                        hint: "Enter your name  ",
+                                        label: "Name of client",
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: Get.height*0.04,
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                      child: const PageInput(
+                                        hint: "Enter location  ",
+                                        label: "Location Of Site",
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: Get.height*0.04,
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                      child: const PageInput(
+                                        hint: "Enter land size  ",
+                                        label: "Size Of Land",
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: Get.height*0.04,
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                      child: PageDropButton(
+                                        label: "Intended Project",
+                                        hint: '',
+                                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                                        onChanged: (val) {
 
-                    ],
-                  ),
+                                        },
+                                        value:  "Residential Building",
+                                        items: ["Residential Building","Industrial Building","High Rise Building","Road","Estate","Dumping Site","Water Borehole"].map<DropdownMenuItem<String>>((String value) {
+                                          return DropdownMenuItem<String>(
+                                            value: value,
+                                            child: Text(value),
+                                          );
+                                        }).toList(),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: Get.height*0.04,
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                      child: PageDropButton(
+                                        label: "Is there a building on the site?",
+                                        hint: '',
+                                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                                        onChanged: (val) {
+
+                                        },
+                                        value:  "Yes",
+                                        items: ["Yes","No"].map<DropdownMenuItem<String>>((String value) {
+                                          return DropdownMenuItem<String>(
+                                            value: value,
+                                            child: Text(value),
+                                          );
+                                        }).toList(),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: Get.height*0.04,
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                      child: AppButton(
+                                        title: "Proceed",
+                                        onPressed: (){
+                                          pageController.animateToPage(1, duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
+                                        },
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              Form(
+                                key: formKey,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                      child: Text(
+                                        "Request for Building Approval",
+                                        style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.08,color: Colors.black,fontWeight: FontWeight.w600),
+                                        textAlign: TextAlign.start,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: width*0.015,
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                      child: Image.asset(
+                                        "assets/images/line_coloured.png",
+                                        width: width*0.3,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: width*0.08,
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                      child: const PageInput(
+                                        hint: "Enter your name  ",
+                                        label: "Upload available picture of the land or property",
+                                        isFilePicker: true,
+                                      ),
+                                    ),
+
+                                    SizedBox(
+                                      height: Get.height*0.04,
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                      child: const PageInput(
+                                        hint: "Enter your name  ",
+                                        label: "Number of intended geotechnical borehole",
+                                        keyboardType: TextInputType.number,
+                                      ),
+                                    ),
+
+                                    SizedBox(
+                                      height: Get.height*0.04,
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                      child: const PageInput(
+                                        hint: "Enter your name  ",
+                                        label: "Depth of borehole",
+                                        keyboardType: TextInputType.numberWithOptions(decimal: true),
+                                      ),
+                                    ),
+
+                                    SizedBox(
+                                      height: Get.height*0.04,
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                      child: const PageInput(
+                                        hint: "Enter your name  ",
+                                        label: "Number of CPT",
+                                        keyboardType: TextInputType.number,
+                                      ),
+                                    ),
+
+                                    SizedBox(
+                                      height: Get.height*0.04,
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                      child: PageDropButton(
+                                        label: "Tonnage of CPT",
+                                        hint: '',
+                                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                                        onChanged: (val) {
+
+                                        },
+                                        value:  "2.5 Tons",
+                                        items: ["2.5 Tons","10 Tons","20 Tons"].map<DropdownMenuItem<String>>((String value) {
+                                          return DropdownMenuItem<String>(
+                                            value: value,
+                                            child: Text(value),
+                                          );
+                                        }).toList(),
+                                      ),
+                                    ),
+
+                                    SizedBox(
+                                      height: Get.height*0.04,
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                      child: PageDropButton(
+                                        label: "Types of CPT",
+                                        hint: '',
+                                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                                        onChanged: (val) {
+
+                                        },
+                                        value:  "Mechanical",
+                                        items: ["Mechanical","Electrical","Dynamic"].map<DropdownMenuItem<String>>((String value) {
+                                          return DropdownMenuItem<String>(
+                                            value: value,
+                                            child: Text(value),
+                                          );
+                                        }).toList(),
+                                      ),
+                                    ),
+
+                                    SizedBox(
+                                      height: Get.height*0.04,
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                      child: PageDropButton(
+                                        label: "Apart from borehole and CPT, are there any special test or \ninvestigation you intend to run?",
+                                        hint: '',
+                                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                                        onChanged: (val) {
+
+                                        },
+                                        value:  "Yes",
+                                        items: ["Yes","No"].map<DropdownMenuItem<String>>((String value) {
+                                          return DropdownMenuItem<String>(
+                                            value: value,
+                                            child: Text(value),
+                                          );
+                                        }).toList(),
+                                      ),
+                                    ),
+
+                                    SizedBox(
+                                      height: Get.height*0.04,
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                      child: const PageInput(
+                                        hint: "",
+                                        label: "If yes, please specify",
+                                        keyboardType: TextInputType.number,
+                                      ),
+                                    ),
+
+                                    SizedBox(
+                                      height: Get.height*0.04,
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                      child: AppButton(
+                                        title: "Submit",
+                                        onPressed: (){
+                                          pageController.animateToPage(2, duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
+                                        },
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              Stack(
+                                alignment: Alignment.bottomCenter,
+                                children: [
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        "Project Created",
+                                        style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.07,color: Colors.black,fontWeight: FontWeight.w600),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      SizedBox(
+                                        height: Get.height*0.02,
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                        child: Text(
+                                          "Your project has been created. You would be notified when you get a service provider.  ",
+                                          style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.06,color: Colors.black,fontWeight: FontWeight.normal),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(left: width*0.05,right: width*0.05,bottom: width*0.2),
+                                    child: AppButton(
+                                      title: "View My Projects",
+                                      onPressed: (){
+                                        controller.currentBottomNavPage.value = 2;
+                                        controller.update(['home']);
+                                        Get.back();
+                                        Get.back();
+                                      },
+                                    ),
+                                  )
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
               bottomNavigationBar: BottomNavigationBar(

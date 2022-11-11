@@ -157,8 +157,8 @@ class _BuildingApprovalState extends State<BuildingApproval> {
                                         onChanged: (val) {
 
                                         },
-                                        value:  "Apple App Store",
-                                        items: ["Apple App Store","Google Play Store","Google         ","Email         ","Facebook         ","Twitter         ","Instagram         ","Whatsapp         "].map<DropdownMenuItem<String>>((String value) {
+                                        value:  "Residential",
+                                        items: ["Residential","Commercial","Industrial","Religious","Educational","Recreational","Other"].map<DropdownMenuItem<String>>((String value) {
                                           return DropdownMenuItem<String>(
                                             value: value,
                                             child: Text(value),
@@ -457,6 +457,9 @@ class _BuildingApprovalState extends State<BuildingApproval> {
                                     child: AppButton(
                                       title: "View My Projects",
                                       onPressed: (){
+                                        controller.currentBottomNavPage.value = 2;
+                                        controller.update(['home']);
+                                        Get.back();
                                         Get.back();
                                       },
                                     ),
