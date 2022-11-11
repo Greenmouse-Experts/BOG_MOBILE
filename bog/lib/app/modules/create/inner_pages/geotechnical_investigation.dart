@@ -105,7 +105,7 @@ class _GeotechnicalInvestigationState extends State<GeotechnicalInvestigation> {
                     Expanded(
                       child: SingleChildScrollView(
                         child: SizedBox(
-                          height: Get.height*1.1,
+                          height: Get.height*1.2,
                           child: PageView(
                             controller: pageController,
                             physics: const NeverScrollableScrollPhysics(),
@@ -230,7 +230,7 @@ class _GeotechnicalInvestigationState extends State<GeotechnicalInvestigation> {
                                     Padding(
                                       padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
                                       child: Text(
-                                        "Request for Building Approval",
+                                        "Request for Geotechnical \nAnd Geophysical Information",
                                         style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.08,color: Colors.black,fontWeight: FontWeight.w600),
                                         textAlign: TextAlign.start,
                                       ),
