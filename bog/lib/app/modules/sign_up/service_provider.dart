@@ -57,7 +57,7 @@ class ServiceProviderSignUp extends GetView<AuthController> {
                   Padding(
                     padding: const EdgeInsets.only(left: AppThemes.appPaddingVal),
                     child: Text(
-                      'Sign Up as Service Provider',
+                      'Sign Up as Service Partner',
                       style: AppTextStyle.headline4.copyWith(
                         color: Colors.black,
                         fontWeight: FontWeight.w500,
@@ -257,7 +257,7 @@ class ServiceProviderSignUp extends GetView<AuthController> {
                               ),
                               SizedBox(height: Get.height * 0.025),
                               AppButton(
-                                title: 'Sign Up As A Service Provider',
+                                title: 'Sign Up As A Service Partner',
                                 onPressed: () async => await controller.signupServiceProvider(_formKey),
                                 borderRadius: 10,
                                 enabled: controller.isTermsAndConditionsChecked,

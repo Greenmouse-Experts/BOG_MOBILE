@@ -337,7 +337,7 @@ class _ConstructionDrawingState extends State<ConstructionDrawing> {
                                       Padding(
                                         padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
                                         child: Text(
-                                          "Your project has been created. You would be notified when you get a service provider.  ",
+                                          "Your project has been created. You would be notified when you get a Service Partner.  ",
                                           style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.06,color: Colors.black,fontWeight: FontWeight.normal),
                                           textAlign: TextAlign.center,
                                         ),

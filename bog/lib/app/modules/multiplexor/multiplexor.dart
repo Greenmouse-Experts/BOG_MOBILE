@@ -171,7 +171,7 @@ class Multiplexor extends StatelessWidget {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        'Service Provider',
+                                        'Service Partner',
                                         style: AppTextStyle.headline4.copyWith(
                                           color: Colors.black,
                                           fontWeight: FontWeight.w500,
@@ -228,7 +228,7 @@ class Multiplexor extends StatelessWidget {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        'Vendor',
+                                        'Product Partner',
                                         style: AppTextStyle.headline4.copyWith(
                                           color: Colors.black,
                                           fontWeight: FontWeight.w500,

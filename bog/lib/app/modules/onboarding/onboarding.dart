@@ -182,7 +182,7 @@ List<OnboardingModel> _screen = [
   OnboardingModel(
     image: 'two',
     title: 'Find construction professionals for your jobs',
-    subtitle: 'Hire professional service providers',
+    subtitle: 'Hire professional Service Partners',
   ),
   OnboardingModel(
     image: 'three',
