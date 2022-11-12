@@ -88,11 +88,14 @@ class _PageInputState extends State<PageInput> {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(
-                widget.label,
-                style: AppTextStyle.bodyText2.copyWith(
-                  fontWeight: FontWeight.w500,
-                  color: Colors.black,
+              SizedBox(
+                width: Get.width * 0.8,
+                child: Text(
+                  widget.label,
+                  style: AppTextStyle.bodyText2.copyWith(
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black,
+                  ),
                 ),
               ),
               if(widget.isCompulsory)

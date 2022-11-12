@@ -2,6 +2,8 @@
 import 'package:feather_icons/feather_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import '../../core/theme/theme.dart';
 
 
@@ -83,6 +85,8 @@ class _AppInputState extends State<AppInput> {
       borderSide: widget.borderSide.copyWith(color: const Color(0xFF828282).withOpacity(.3)),
     );
 
+    var contentPadding = widget.contentPadding;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -114,6 +118,7 @@ class _AppInputState extends State<AppInput> {
           keyboardType: widget.keyboardType,
           style: AppTextStyle.bodyText2.copyWith(
             fontWeight: FontWeight.w500,
+            fontSize: Get.width * .035,
           ),
           cursorColor: AppColors.primary,
           decoration: InputDecoration(
@@ -137,6 +142,7 @@ class _AppInputState extends State<AppInput> {
             focusColor: AppColors.spanishGray,
             hintStyle: AppTextStyle.bodyText2.copyWith(
               color: const Color(0xFFC4C4C4),
+              fontSize: Get.width * .035,
             ),
             focusedBorder: outlineInputBorder,
             enabledBorder: outlineInputBorder,
