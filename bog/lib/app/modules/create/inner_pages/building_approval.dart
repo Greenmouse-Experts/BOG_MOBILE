@@ -104,370 +104,390 @@ class _BuildingApprovalState extends State<BuildingApproval> {
                       height: width*0.04,
                     ),
                     Expanded(
-                      child: SingleChildScrollView(
-                        child: SizedBox(
-                          height: Get.height,
-                          child: PageView(
-                            controller: pageController,
-                            physics: const NeverScrollableScrollPhysics(),
-                            children: [
-                              Form(
-                                key: formKey,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
-                                      child: Text(
-                                        "Request for Building Approval",
-                                        style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.08,color: Colors.black,fontWeight: FontWeight.w600),
-                                        textAlign: TextAlign.start,
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: width*0.015,
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
-                                      child: Image.asset(
-                                        "assets/images/line_coloured.png",
-                                        width: width*0.3,
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: width*0.08,
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
-                                      child: const PageInput(
-                                        hint: "Enter your name  ",
-                                        label: "Name of client",
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: Get.height*0.04,
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
-                                      child: PageDropButton(
-                                        label: "Purpose of building",
-                                        hint: '',
-                                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                                        onChanged: (val) {
-
-                                        },
-                                        value:  "Residential",
-                                        items: ["Residential","Commercial","Industrial","Religious","Educational","Recreational","Other"].map<DropdownMenuItem<String>>((String value) {
-                                          return DropdownMenuItem<String>(
-                                            value: value,
-                                            child: Text(value),
-                                          );
-                                        }).toList(),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: Get.height*0.04,
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
-                                      child: AppButton(
-                                        title: "Proceed to upload plans",
-                                        onPressed: (){
-                                          pageController.animateToPage(1, duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
-                                        },
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                              Form(
-                                key: formKey,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
-                                      child: Text(
-                                        "Request for Building Approval",
-                                        style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.08,color: Colors.black,fontWeight: FontWeight.w600),
-                                        textAlign: TextAlign.start,
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: width*0.015,
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
-                                      child: Image.asset(
-                                        "assets/images/line_coloured.png",
-                                        width: width*0.3,
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: width*0.08,
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
-                                      child: const PageInput(
-                                        hint: "Enter your name  ",
-                                        label: "Upload survey plan",
-                                        isFilePicker: true,
-                                      ),
-                                    ),
-
-                                    SizedBox(
-                                      height: Get.height*0.04,
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
-                                      child: const PageInput(
-                                        hint: "Enter your name  ",
-                                        label: "Upload architectural plan",
-                                        isFilePicker: true,
-                                      ),
-                                    ),
-
-                                    SizedBox(
-                                      height: Get.height*0.04,
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
-                                      child: const PageInput(
-                                        hint: "Enter your name  ",
-                                        label: "Upload mechanical plan",
-                                        isFilePicker: true,
-                                      ),
-                                    ),
-
-                                    SizedBox(
-                                      height: Get.height*0.04,
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
-                                      child: const PageInput(
-                                        hint: "Enter your name  ",
-                                        label: "Upload electric plan",
-                                        isFilePicker: true,
-                                      ),
-                                    ),
-
-                                    SizedBox(
-                                      height: Get.height*0.04,
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
-                                      child: const PageInput(
-                                        hint: "Enter your name  ",
-                                        label: "Upload soil test report",
-                                        isFilePicker: true,
-                                      ),
-                                    ),
-
-                                    SizedBox(
-                                      height: Get.height*0.04,
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
-                                      child: const PageInput(
-                                        hint: "Enter your name  ",
-                                        label: "Upload site plan",
-                                        isFilePicker: true,
-                                      ),
-                                    ),
-
-                                    SizedBox(
-                                      height: Get.height*0.04,
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
-                                      child: const PageInput(
-                                        hint: "Enter your name  ",
-                                        label: "Upload structural plan",
-                                        isFilePicker: true,
-                                      ),
-                                    ),
-
-                                    SizedBox(
-                                      height: Get.height*0.04,
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
-                                      child: AppButton(
-                                        title: "Proceed to upload other documents",
-                                        onPressed: (){
-                                          pageController.animateToPage(2, duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
-                                        },
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                              Form(
-                                key: formKey,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
-                                      child: Text(
-                                        "Request for Building Approval",
-                                        style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.08,color: Colors.black,fontWeight: FontWeight.w600),
-                                        textAlign: TextAlign.start,
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: width*0.015,
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
-                                      child: Image.asset(
-                                        "assets/images/line_coloured.png",
-                                        width: width*0.3,
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: width*0.08,
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
-                                      child: const PageInput(
-                                        hint: "Enter your name  ",
-                                        label: "Upload C of O Deed of Agreement/ R of O",
-                                        isFilePicker: true,
-                                      ),
-                                    ),
-
-                                    SizedBox(
-                                      height: Get.height*0.04,
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
-                                      child: const PageInput(
-                                        hint: "Enter your name  ",
-                                        label: "Upload site analysis report",
-                                        isFilePicker: true,
-                                      ),
-                                    ),
-
-                                    SizedBox(
-                                      height: Get.height*0.04,
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
-                                      child: const PageInput(
-                                        hint: "Enter your name  ",
-                                        label: "Upload environmental impact \nassessment report",
-                                        isFilePicker: true,
-                                      ),
-                                    ),
-
-                                    SizedBox(
-                                      height: Get.height*0.04,
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
-                                      child: const PageInput(
-                                        hint: "Enter your name  ",
-                                        label: "Upload tax clearance certificate",
-                                        isFilePicker: true,
-                                      ),
-                                    ),
-
-                                    SizedBox(
-                                      height: Get.height*0.04,
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
-                                      child: const PageInput(
-                                        hint: "Enter your name  ",
-                                        label: "Upload letter of supervision from \nCOREN registered engineers",
-                                        isFilePicker: true,
-                                      ),
-                                    ),
-
-                                    SizedBox(
-                                      height: Get.height*0.04,
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
-                                      child: const PageInput(
-                                        hint: "Enter your name  ",
-                                        label: "Upload stamped and sealed copy of \nstructural calculation sheet",
-                                        isFilePicker: true,
-                                      ),
-                                    ),
-
-                                    SizedBox(
-                                      height: Get.height*0.04,
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
-                                      child: const PageInput(
-                                        hint: "Enter your name  ",
-                                        label: "Name of client",
-                                        isFilePicker: true,
-                                      ),
-                                    ),
-
-                                    SizedBox(
-                                      height: Get.height*0.04,
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
-                                      child: AppButton(
-                                        title: "Submit",
-                                        onPressed: (){
-                                          pageController.animateToPage(3, duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
-                                        },
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                              Stack(
-                                alignment: Alignment.bottomCenter,
+                      child: SizedBox(
+                        height: Get.height,
+                        child: PageView(
+                          controller: pageController,
+                          physics: const NeverScrollableScrollPhysics(),
+                          children: [
+                            Form(
+                              key: formKey,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        "Project Created",
-                                        style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.07,color: Colors.black,fontWeight: FontWeight.w600),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                      SizedBox(
-                                        height: Get.height*0.02,
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
-                                        child: Text(
-                                          "Your project has been created. You would be notified when you get a Service Partner.  ",
-                                          style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.06,color: Colors.black,fontWeight: FontWeight.normal),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      ),
-                                    ],
+                                  Padding(
+                                    padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                    child: Text(
+                                      "Request for Building Approval",
+                                      style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.08,color: Colors.black,fontWeight: FontWeight.w600),
+                                      textAlign: TextAlign.start,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: width*0.015,
                                   ),
                                   Padding(
-                                    padding: EdgeInsets.only(left: width*0.05,right: width*0.05,bottom: width*0.2),
+                                    padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                    child: Image.asset(
+                                      "assets/images/line_coloured.png",
+                                      width: width*0.3,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: width*0.08,
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                    child: const PageInput(
+                                      hint: "Enter your name  ",
+                                      label: "Name of client",
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: Get.height*0.04,
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                    child: PageDropButton(
+                                      label: "Purpose of building",
+                                      hint: '',
+                                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                                      onChanged: (val) {
+
+                                      },
+                                      value:  "Residential",
+                                      items: ["Residential","Commercial","Industrial","Religious","Educational","Recreational","Other"].map<DropdownMenuItem<String>>((String value) {
+                                        return DropdownMenuItem<String>(
+                                          value: value,
+                                          child: Text(value),
+                                        );
+                                      }).toList(),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: Get.height*0.04,
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
                                     child: AppButton(
-                                      title: "View My Projects",
+                                      title: "Proceed to upload plans",
                                       onPressed: (){
-                                        controller.currentBottomNavPage.value = 2;
-                                        controller.update(['home']);
-                                        Get.back();
-                                        Get.back();
+                                        pageController.animateToPage(1, duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
                                       },
                                     ),
                                   )
                                 ],
-                              )
-                            ],
-                          ),
+                              ),
+                            ),
+                            Form(
+                              key: formKey,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                    child: Text(
+                                      "Request for Building Approval",
+                                      style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.08,color: Colors.black,fontWeight: FontWeight.w600),
+                                      textAlign: TextAlign.start,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: width*0.015,
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                    child: Image.asset(
+                                      "assets/images/line_coloured.png",
+                                      width: width*0.3,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: width*0.08,
+                                  ),
+                                  Expanded(
+                                    child: SingleChildScrollView(
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Padding(
+                                            padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                            child: const PageInput(
+                                              hint: "Enter your name  ",
+                                              label: "Upload survey plan",
+                                              isFilePicker: true,
+                                            ),
+                                          ),
+
+                                          SizedBox(
+                                            height: Get.height*0.04,
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                            child: const PageInput(
+                                              hint: "Enter your name  ",
+                                              label: "Upload architectural plan",
+                                              isFilePicker: true,
+                                            ),
+                                          ),
+
+                                          SizedBox(
+                                            height: Get.height*0.04,
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                            child: const PageInput(
+                                              hint: "Enter your name  ",
+                                              label: "Upload mechanical plan",
+                                              isFilePicker: true,
+                                            ),
+                                          ),
+
+                                          SizedBox(
+                                            height: Get.height*0.04,
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                            child: const PageInput(
+                                              hint: "Enter your name  ",
+                                              label: "Upload electric plan",
+                                              isFilePicker: true,
+                                            ),
+                                          ),
+
+                                          SizedBox(
+                                            height: Get.height*0.04,
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                            child: const PageInput(
+                                              hint: "Enter your name  ",
+                                              label: "Upload soil test report",
+                                              isFilePicker: true,
+                                            ),
+                                          ),
+
+                                          SizedBox(
+                                            height: Get.height*0.04,
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                            child: const PageInput(
+                                              hint: "Enter your name  ",
+                                              label: "Upload site plan",
+                                              isFilePicker: true,
+                                            ),
+                                          ),
+
+                                          SizedBox(
+                                            height: Get.height*0.04,
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                            child: const PageInput(
+                                              hint: "Enter your name  ",
+                                              label: "Upload structural plan",
+                                              isFilePicker: true,
+                                            ),
+                                          ),
+
+                                          SizedBox(
+                                            height: Get.height*0.04,
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                            child: AppButton(
+                                              title: "Proceed to upload other documents",
+                                              onPressed: (){
+                                                pageController.animateToPage(2, duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
+                                              },
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Form(
+                              key: formKey,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                    child: Text(
+                                      "Request for Building Approval",
+                                      style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.08,color: Colors.black,fontWeight: FontWeight.w600),
+                                      textAlign: TextAlign.start,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: width*0.015,
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                    child: Image.asset(
+                                      "assets/images/line_coloured.png",
+                                      width: width*0.3,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: width*0.08,
+                                  ),
+                                  Expanded(
+                                    child: SingleChildScrollView(
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Padding(
+                                            padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                            child: const PageInput(
+                                              hint: "Enter your name  ",
+                                              label: "Upload C of O Deed of Agreement/ R of O",
+                                              isFilePicker: true,
+                                            ),
+                                          ),
+
+                                          SizedBox(
+                                            height: Get.height*0.04,
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                            child: const PageInput(
+                                              hint: "Enter your name  ",
+                                              label: "Upload site analysis report",
+                                              isFilePicker: true,
+                                            ),
+                                          ),
+
+                                          SizedBox(
+                                            height: Get.height*0.04,
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                            child: const PageInput(
+                                              hint: "Enter your name  ",
+                                              label: "Upload environmental impact \nassessment report",
+                                              isFilePicker: true,
+                                            ),
+                                          ),
+
+                                          SizedBox(
+                                            height: Get.height*0.04,
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                            child: const PageInput(
+                                              hint: "Enter your name  ",
+                                              label: "Upload tax clearance certificate",
+                                              isFilePicker: true,
+                                            ),
+                                          ),
+
+                                          SizedBox(
+                                            height: Get.height*0.04,
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                            child: const PageInput(
+                                              hint: "Enter your name  ",
+                                              label: "Upload letter of supervision from \nCOREN registered engineers",
+                                              isFilePicker: true,
+                                            ),
+                                          ),
+
+                                          SizedBox(
+                                            height: Get.height*0.04,
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                            child: const PageInput(
+                                              hint: "Enter your name  ",
+                                              label: "Upload stamped and sealed copy of \nstructural calculation sheet",
+                                              isFilePicker: true,
+                                            ),
+                                          ),
+
+                                          SizedBox(
+                                            height: Get.height*0.04,
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                            child: const PageInput(
+                                              hint: "Enter your name  ",
+                                              label: "Name of client",
+                                              isFilePicker: true,
+                                            ),
+                                          ),
+
+                                          SizedBox(
+                                            height: Get.height*0.04,
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                            child: AppButton(
+                                              title: "Submit",
+                                              onPressed: (){
+                                                pageController.animateToPage(3, duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
+                                              },
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Stack(
+                              alignment: Alignment.bottomCenter,
+                              children: [
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      "Project Created",
+                                      style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.07,color: Colors.black,fontWeight: FontWeight.w600),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    SizedBox(
+                                      height: Get.height*0.02,
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                      child: Text(
+                                        "Your project has been created. You would be notified when you get a Service Partner.  ",
+                                        style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.06,color: Colors.black,fontWeight: FontWeight.normal),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(left: width*0.05,right: width*0.05,bottom: width*0.2),
+                                  child: AppButton(
+                                    title: "View My Projects",
+                                    onPressed: (){
+                                      controller.currentBottomNavPage.value = 2;
+                                      controller.update(['home']);
+                                      Get.back();
+                                      Get.back();
+                                    },
+                                  ),
+                                )
+                              ],
+                            )
+                          ],
                         ),
                       ),
                     ),

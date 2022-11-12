@@ -29,166 +29,180 @@ class CartTab extends StatelessWidget {
     return GetBuilder<HomeController>(builder: (controller) {
       return Padding(
         padding: EdgeInsets.only(left: Get.width*0.03, right: Get.width*0.03),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const SizedBox(
-              height: kToolbarHeight,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 10.0,right: 10.0,top: 10.0),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "My Cart",
-                    style: AppTextStyle.subtitle1.copyWith(
-                      color: Colors.black,
-                      fontSize: Get.width * 0.045,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                ],
+        child: SizedBox(
+          height: Get.height * 0.91,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const SizedBox(
+                height: kToolbarHeight,
               ),
-            ),
-            SizedBox(
-              height: Get.height * 0.03,
-            ),
-            const CartItem(),
-            SizedBox(
-              height: Get.height * 0.01,
-            ),
-            const CartItem(),
-            SizedBox(
-              height: Get.height * 0.1,
-            ),
-            //Divider
-            Container(
-              height: 1,
-              color: Colors.grey[300],
-            ),
-            SizedBox(
-              height: Get.height * 0.02,
-            ),
-            const PageInput(
-              hint: 'Enter your coupon code',
-              label: 'Do you have a coupon ? Enter it here',
-              validator: null,
-              isCompulsory: true,
-              obscureText: false,
-            ),
-            SizedBox(
-              height: Get.height * 0.05,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "Sub Total:",
-                  style: AppTextStyle.subtitle1.copyWith(
-                    color: Colors.black,
-                    fontSize: Get.width * 0.035,
-                    fontWeight: FontWeight.w400,
+              Padding(
+                padding: const EdgeInsets.only(left: 10.0,right: 10.0,top: 10.0),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "My Cart",
+                      style: AppTextStyle.subtitle1.copyWith(
+                        color: Colors.black,
+                        fontSize: Get.width * 0.045,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: Get.height * 0.03,
+              ),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const CartItem(),
+                      SizedBox(
+                        height: Get.height * 0.01,
+                      ),
+                      const CartItem(),
+                      SizedBox(
+                        height: Get.height * 0.1,
+                      ),
+                      //Divider
+                      Container(
+                        height: 1,
+                        color: Colors.grey[300],
+                      ),
+                      SizedBox(
+                        height: Get.height * 0.02,
+                      ),
+                      const PageInput(
+                        hint: 'Enter your coupon code',
+                        label: 'Do you have a coupon ? Enter it here',
+                        validator: null,
+                        isCompulsory: true,
+                        obscureText: false,
+                      ),
+                      SizedBox(
+                        height: Get.height * 0.05,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Sub Total:",
+                            style: AppTextStyle.subtitle1.copyWith(
+                              color: Colors.black,
+                              fontSize: Get.width * 0.035,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                          Text(
+                            "N 115,000",
+                            style: AppTextStyle.subtitle1.copyWith(
+                              color: Colors.black,
+                              fontSize: Get.width * 0.035,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: Get.height * 0.025,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Delivery Fee :",
+                            style: AppTextStyle.subtitle1.copyWith(
+                              color: Colors.black,
+                              fontSize: Get.width * 0.035,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                          Text(
+                            "N 5,000",
+                            style: AppTextStyle.subtitle1.copyWith(
+                              color: Colors.black,
+                              fontSize: Get.width * 0.035,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: Get.height * 0.025,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Discount :",
+                            style: AppTextStyle.subtitle1.copyWith(
+                              color: Colors.black,
+                              fontSize: Get.width * 0.035,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                          Text(
+                            "50%",
+                            style: AppTextStyle.subtitle1.copyWith(
+                              color: Colors.black,
+                              fontSize: Get.width * 0.035,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: Get.height * 0.025,
+                      ),
+                      //Dotted Line
+                      CustomPaint(painter: DashedLinePainter()),
+                      SizedBox(
+                        height: Get.height * 0.025,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Total :",
+                            style: AppTextStyle.subtitle1.copyWith(
+                              color: Colors.black,
+                              fontSize: Get.width * 0.035,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                          Text(
+                            "N 150,000",
+                            style: AppTextStyle.subtitle1.copyWith(
+                              color: AppColors.primary,
+                              fontSize: Get.width * 0.04,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: Get.height * 0.025,
+                      ),
+                      AppButton(
+                        title: 'Proceed To Checkout',
+                        onPressed: () {},
+                        borderRadius: 10,
+                      ),
+                    ],
                   ),
                 ),
-                Text(
-                  "N 115,000",
-                  style: AppTextStyle.subtitle1.copyWith(
-                    color: Colors.black,
-                    fontSize: Get.width * 0.035,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: Get.height * 0.025,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "Delivery Fee :",
-                  style: AppTextStyle.subtitle1.copyWith(
-                    color: Colors.black,
-                    fontSize: Get.width * 0.035,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-                Text(
-                  "N 5,000",
-                  style: AppTextStyle.subtitle1.copyWith(
-                    color: Colors.black,
-                    fontSize: Get.width * 0.035,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: Get.height * 0.025,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "Discount :",
-                  style: AppTextStyle.subtitle1.copyWith(
-                    color: Colors.black,
-                    fontSize: Get.width * 0.035,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-                Text(
-                  "50%",
-                  style: AppTextStyle.subtitle1.copyWith(
-                    color: Colors.black,
-                    fontSize: Get.width * 0.035,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: Get.height * 0.025,
-            ),
-            //Dotted Line
-            CustomPaint(painter: DashedLinePainter()),
-            SizedBox(
-              height: Get.height * 0.025,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "Total :",
-                  style: AppTextStyle.subtitle1.copyWith(
-                    color: Colors.black,
-                    fontSize: Get.width * 0.035,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-                Text(
-                  "N 150,000",
-                  style: AppTextStyle.subtitle1.copyWith(
-                    color: AppColors.primary,
-                    fontSize: Get.width * 0.04,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: Get.height * 0.025,
-            ),
-            AppButton(
-              title: 'Proceed To Checkout',
-              onPressed: () {},
-              borderRadius: 10,
-            ),
-          ],
+              ),
+            ],
+          ),
         ),
       );
     });

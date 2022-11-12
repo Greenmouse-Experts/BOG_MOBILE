@@ -93,7 +93,7 @@ class Shop extends GetView<HomeController> {
                       height: width*0.04,
                     ),
                     SizedBox(
-                      height: Get.height*0.8,
+                      height: Get.height*0.7,
                       child: VerticalTabs(
                         backgroundColor: AppColors.backgroundVariant2,
                         tabBackgroundColor: AppColors.backgroundVariant2,

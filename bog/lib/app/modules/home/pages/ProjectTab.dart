@@ -30,70 +30,73 @@ class ProjectTab extends StatelessWidget {
         child: Stack(
           alignment: Alignment.bottomRight,
           children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const SizedBox(
-                  height: kToolbarHeight,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 10.0,right: 10.0,top: 10.0),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text(
-                        "My Projects",
-                        style: AppTextStyle.subtitle1.copyWith(
-                          color: Colors.black,
-                          fontSize: Get.width * 0.045,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
+            SizedBox(
+              height: Get.height * 0.91,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const SizedBox(
+                    height: kToolbarHeight,
                   ),
-                ),
-                SizedBox(
-                  height: Get.height * 0.03,
-                ),
-                AppInput(
-                  hintText: 'Search with name or keyword ...',
-                  filledColor: Colors.grey.withOpacity(.1),
-                  prefexIcon: Icon(
-                    FeatherIcons.search,
-                    color: Colors.black.withOpacity(.5),
-                    size: Get.width * 0.05,
-                  ),
-                ),
-                SizedBox(
-                  height: Get.height * 0.03,
-                ),
-                SizedBox(
-                  height: Get.height * 0.7,
-                  child: GridView.builder(
-                    itemCount: 3,
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,mainAxisSpacing: 15,crossAxisSpacing: 15),
-                    scrollDirection: Axis.vertical,
-                    padding: const EdgeInsets.all(0),
-                    itemBuilder: (BuildContext context, int index) {
-                      return InkWell(
-                        onTap: (){
-                          //Get.to(const ProductDetails(key: Key('ProductDetails')));
-                        },
-                        child: Container(
-                          decoration: const BoxDecoration(
-                            image: DecorationImage(
-                              image: AssetImage("assets/images/Group 47257.png"),
-                              fit: BoxFit.fitHeight,
-                            ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10.0,right: 10.0,top: 10.0),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          "My Projects",
+                          style: AppTextStyle.subtitle1.copyWith(
+                            color: Colors.black,
+                            fontSize: Get.width * 0.045,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
-                      );
-                    },
+                      ],
+                    ),
                   ),
-                )
-              ],
+                  SizedBox(
+                    height: Get.height * 0.03,
+                  ),
+                  AppInput(
+                    hintText: 'Search with name or keyword ...',
+                    filledColor: Colors.grey.withOpacity(.1),
+                    prefexIcon: Icon(
+                      FeatherIcons.search,
+                      color: Colors.black.withOpacity(.5),
+                      size: Get.width * 0.05,
+                    ),
+                  ),
+                  SizedBox(
+                    height: Get.height * 0.03,
+                  ),
+                  SizedBox(
+                    height: Get.height * 0.65,
+                    child: GridView.builder(
+                      itemCount: 4,
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,mainAxisSpacing: 15,crossAxisSpacing: 15),
+                      scrollDirection: Axis.vertical,
+                      padding: const EdgeInsets.all(0),
+                      itemBuilder: (BuildContext context, int index) {
+                        return InkWell(
+                          onTap: (){
+                            //Get.to(const ProductDetails(key: Key('ProductDetails')));
+                          },
+                          child: Container(
+                            decoration: const BoxDecoration(
+                              image: DecorationImage(
+                                image: AssetImage("assets/images/Group 47257.png"),
+                                fit: BoxFit.fitHeight,
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  )
+                ],
+              ),
             ),
             //floating action button
             FloatingActionButton(
