@@ -11,8 +11,11 @@ import 'package:toggle_switch/toggle_switch.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_styles.dart';
 import '../../controllers/home_controller.dart';
+import '../../data/model/log_in_model.dart';
+import '../../data/providers/my_pref.dart';
 import '../../global_widgets/app_avatar.dart';
 import '../../global_widgets/app_input.dart';
+import '../../global_widgets/page_input.dart';
 import '../../global_widgets/tabs.dart';
 
 class EditProfile extends GetView<HomeController> {
@@ -25,6 +28,15 @@ class EditProfile extends GetView<HomeController> {
     var width = Get.width;
     final Size size = MediaQuery.of(context).size;
     double multiplier = 25 * size.height * 0.01;
+
+    var logInDetails = LogInModel.fromJson(jsonDecode(MyPref.logInDetail.val));
+    TextEditingController firstName = TextEditingController(text: logInDetails.fname);
+    TextEditingController lastName = TextEditingController(text: logInDetails.lname);
+    TextEditingController email = TextEditingController(text: logInDetails.email);
+    TextEditingController phoneNumber = TextEditingController(text: logInDetails.phone);
+    TextEditingController address = TextEditingController(text: logInDetails.address);
+    TextEditingController state = TextEditingController(text: logInDetails.state);
+    TextEditingController city = TextEditingController(text: logInDetails.city);
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
@@ -81,17 +93,6 @@ class EditProfile extends GetView<HomeController> {
                             SizedBox(
                               width: width*0.04,
                             ),
-                            InkWell(
-                              onTap: (){
-                                //Navigator.pop(context);
-                              },
-                              child: SvgPicture.asset(
-                                "assets/images/write.svg",
-                                height: width*0.045,
-                                width: width*0.045,
-                                color: Colors.black,
-                              ),
-                            ),
                           ],
                         ),
                       ),
@@ -105,6 +106,142 @@ class EditProfile extends GetView<HomeController> {
                       ),
                       SizedBox(
                         height: width*0.04,
+                      ),
+                      Row(
+                        children: [
+                          SizedBox(
+                            width: width*0.03,
+                          ),
+                          SizedBox(
+                            width: Get.width * 0.22,
+                            height: Get.width * 0.22,
+                            child: IconButton(
+                              icon: AppAvatar(
+                                imgUrl: (logInDetails.photo).toString(),
+                                radius: Get.width * 0.16,
+                              ),
+                              onPressed: () {
+
+                              },
+                            ),
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                logInDetails.name.toString(),
+                                style: AppTextStyle.subtitle1.copyWith(
+                                  color: Colors.black,
+                                  fontSize: Get.width * 0.045,
+                                ),
+                              ),
+                              Text(
+                                logInDetails.userType.toString().replaceAll("_", " ").capitalizeFirst.toString(),
+                                style: AppTextStyle.subtitle1.copyWith(
+                                  color: Colors.black.withOpacity(0.5),
+                                  fontSize: Get.width * 0.035,
+                                ),
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+                      SizedBox(
+                        height: width*0.04,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: width*0.03,right: width*0.03),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                SizedBox(
+                                  width: width*0.45,
+                                  child: PageInput(
+                                    hint: '',
+                                    label: 'First Name',
+                                    isCompulsory: true,
+                                    controller: firstName,
+                                  ),
+                                ),
+
+                                SizedBox(
+                                  width: width*0.45,
+                                  child: PageInput(
+                                    hint: '',
+                                    label: 'Last Name',
+                                    isCompulsory: true,
+                                    controller: lastName,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: width*0.04,
+                            ),
+                            PageInput(
+                              hint: '',
+                              label: 'Email',
+                              isCompulsory: true,
+                              readOnly: true,
+                              controller: email,
+                            ),
+                            SizedBox(
+                              height: width*0.04,
+                            ),
+                            PageInput(
+                              hint: '',
+                              label: 'Phone Number',
+                              isCompulsory: true,
+                              controller: phoneNumber,
+                            ),
+                            SizedBox(
+                              height: width*0.04,
+                            ),
+                            PageInput(
+                              hint: 'Enter your address',
+                              label: 'Address',
+                              isCompulsory: false,
+                              controller: address,
+                            ),
+                            SizedBox(
+                              height: width*0.04,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                SizedBox(
+                                  width: width*0.45,
+                                  child: PageInput(
+                                    hint: 'Enter State',
+                                    label: 'State',
+                                    isCompulsory: false,
+                                    controller: state,
+                                  ),
+                                ),
+
+                                SizedBox(
+                                  width: width*0.45,
+                                  child: PageInput(
+                                    hint: 'Enter City',
+                                    label: 'City',
+                                    isCompulsory: false,
+                                    controller: city,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: Get.height*0.05,
+                            ),
+                            AppButton(
+                              title: "Save Changes",
+                              onPressed: (){},
+                            )
+                          ],
+                        ),
                       ),
                     ],
                   ),

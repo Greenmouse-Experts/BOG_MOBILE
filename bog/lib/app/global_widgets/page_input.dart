@@ -31,6 +31,10 @@ class PageInput extends StatefulWidget {
     this.isReferral = false,
     this.showInfo = true,
     this.isFilePicker = false,
+    this.borderSide = const BorderSide(
+      width: 1,
+      color: Color(0xFF828282),
+    ),
   }) : super(key: key);
 
   final String hint;
@@ -47,6 +51,7 @@ class PageInput extends StatefulWidget {
   final bool isReferral;
   final bool showInfo;
   final bool isFilePicker;
+  final BorderSide borderSide;
   final String? Function(String?)? validator;
   final List<DropdownMenuItem<dynamic>>? dropDownItems;
   final Function(dynamic)? onDropdownChanged;
@@ -84,12 +89,12 @@ class _PageInputState extends State<PageInput> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.only(left: 5),
+          padding: EdgeInsets.only(left: widget.borderSide == BorderSide.none ? 15 : 5),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(
-                width: Get.width * 0.8,
+                //width: Get.width * 0.8,
                 child: Text(
                   widget.label,
                   style: AppTextStyle.bodyText2.copyWith(
@@ -177,6 +182,7 @@ class _PageInputState extends State<PageInput> {
                   readOnly: widget.readOnly,
                   prefexIcon: widget.prefix,
                   suffixIcon: widget.suffix,
+                  borderSide: widget.borderSide,
                 ),
               ),
           ],
@@ -189,6 +195,7 @@ class _PageInputState extends State<PageInput> {
             validator: widget.validator,
             obscureText: widget.obscureText,
             autovalidateMode: widget.autovalidateMode,
+            borderSide: widget.borderSide,
             readOnly: widget.readOnly || widget.isFilePicker,
             prefexIcon: !widget.isFilePicker ? widget.prefix : InkWell(
               onTap: () async {

@@ -117,7 +117,7 @@ class _AppInputState extends State<AppInput> {
           focusNode: widget.focusNode,
           keyboardType: widget.keyboardType,
           style: AppTextStyle.bodyText2.copyWith(
-            fontWeight: FontWeight.w500,
+            fontWeight: widget.borderSide == BorderSide.none ? FontWeight.w600 : FontWeight.w500,
             fontSize: Get.width * .035,
           ),
           cursorColor: AppColors.primary,
@@ -143,6 +143,7 @@ class _AppInputState extends State<AppInput> {
             hintStyle: AppTextStyle.bodyText2.copyWith(
               color: const Color(0xFFC4C4C4),
               fontSize: Get.width * .035,
+              fontWeight: widget.borderSide == BorderSide.none ? FontWeight.w600 : FontWeight.normal,
             ),
             focusedBorder: outlineInputBorder,
             enabledBorder: outlineInputBorder,
