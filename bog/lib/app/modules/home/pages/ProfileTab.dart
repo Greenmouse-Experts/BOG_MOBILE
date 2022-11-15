@@ -15,6 +15,7 @@ import '../../../data/providers/my_pref.dart';
 import '../../../global_widgets/app_avatar.dart';
 import '../../../global_widgets/app_input.dart';
 import '../../../global_widgets/horizontal_item_tile.dart';
+import '../../settings/profile_info.dart';
 
 class ProfileTab extends StatelessWidget {
   const ProfileTab({Key? key}) : super(key: key);
@@ -94,7 +95,9 @@ class ProfileTab extends StatelessWidget {
           const SizedBox(
             height: kToolbarHeight/3,
           ),
-          _TextButton(text: "Profile Info", onPressed: () {},imageAsset: "assets/images/prifile.png",),
+          _TextButton(text: "Profile Info", onPressed: () {
+            Get.to(() => const ProfileInfo());
+          },imageAsset: "assets/images/prifile.png",),
 
           const SizedBox(
             height: kToolbarHeight/3,
