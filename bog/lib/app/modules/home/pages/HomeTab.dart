@@ -16,6 +16,7 @@ import '../../../data/providers/my_pref.dart';
 import '../../../global_widgets/app_avatar.dart';
 import '../../../global_widgets/horizontal_item_tile.dart';
 import '../../create/create.dart';
+import '../../notifications/notification.dart';
 import '../../shop/shop.dart';
 
 class HomeTab extends StatelessWidget {
@@ -43,7 +44,7 @@ class HomeTab extends StatelessWidget {
                     height: Get.width * 0.16,
                     child: IconButton(
                       icon: AppAvatar(
-                        imgUrl: (logInDetails.photo as String?).toString(),
+                        imgUrl: (logInDetails.photo).toString(),
                         radius: Get.width * 0.16,
                       ),
                       onPressed: () {
@@ -83,7 +84,9 @@ class HomeTab extends StatelessWidget {
                         //Alarm Icon
                         IconButton(
                           icon: const Icon(Icons.notifications,color: Colors.grey),
-                          onPressed: () {},
+                          onPressed: () {
+                            Get.to(() => const NotificationPage());
+                          },
                         )
                       ],
                     ),
