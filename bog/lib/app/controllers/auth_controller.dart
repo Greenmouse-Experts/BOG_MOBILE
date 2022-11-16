@@ -298,7 +298,8 @@ class AuthController extends GetxController {
       if(response.isSuccessful){
         var logInInfo = LogInModel.fromJson(response.user);
         response.user = logInInfo;
-        var token = logInInfo.token;
+        var token = response.token;
+        print(token);
         MyPref.logInDetail.val = jsonEncode(response.user);
         MyPref.authToken.val = token.toString();
         Get.offAndToNamed(Home.route);

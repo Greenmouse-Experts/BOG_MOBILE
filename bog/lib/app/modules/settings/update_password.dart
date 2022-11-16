@@ -1,11 +1,6 @@
 import 'dart:convert';
 
 import 'package:bog/app/global_widgets/app_button.dart';
-import 'package:bog/app/modules/create/inner_pages/building_approval.dart';
-import 'package:bog/app/modules/create/inner_pages/construction_drawing.dart';
-import 'package:bog/app/modules/create/inner_pages/contractor_or_smart_calculator.dart';
-import 'package:bog/app/modules/create/inner_pages/geotechnical_investigation.dart';
-import 'package:bog/app/modules/create/inner_pages/land_survey.dart';
 import 'package:feather_icons/feather_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -15,21 +10,38 @@ import 'package:toggle_switch/toggle_switch.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_styles.dart';
+import '../../../core/utils/validator.dart';
 import '../../controllers/home_controller.dart';
+import '../../data/model/log_in_model.dart';
+import '../../data/providers/my_pref.dart';
 import '../../global_widgets/app_avatar.dart';
 import '../../global_widgets/app_input.dart';
+import '../../global_widgets/page_input.dart';
 import '../../global_widgets/tabs.dart';
 
-class Create extends GetView<HomeController> {
-  const Create({Key? key}) : super(key: key);
+class UpdatePassword extends StatefulWidget {
+  const UpdatePassword({Key? key}) : super(key: key);
 
-  static const route = '/create';
+  static const route = '/UpdatePassword';
+
+  @override
+  State<UpdatePassword> createState() => _UpdatePasswordState();
+}
+
+class _UpdatePasswordState extends State<UpdatePassword> {
+  var homeController = Get.find<HomeController>();
+  var formKey = GlobalKey<FormState>();
+  var logInDetails = LogInModel.fromJson(jsonDecode(MyPref.logInDetail.val));
+  TextEditingController oldPassword = TextEditingController();
+  TextEditingController newNumber = TextEditingController();
+  TextEditingController confirmPassword = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     var width = Get.width;
     final Size size = MediaQuery.of(context).size;
     double multiplier = 25 * size.height * 0.01;
+
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
@@ -40,7 +52,7 @@ class Create extends GetView<HomeController> {
           systemNavigationBarIconBrightness: Brightness.dark
       ),
       child: GetBuilder<HomeController>(
-          id: 'Create',
+          id: 'UpdatePassword',
           builder: (controller) {
             return Scaffold(
               backgroundColor: AppColors.backgroundVariant2,
@@ -76,7 +88,7 @@ class Create extends GetView<HomeController> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Text(
-                                    "Create",
+                                    "Security",
                                     style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.07,color: Colors.black,fontWeight: FontWeight.w500),
                                     textAlign: TextAlign.center,
                                   ),
@@ -100,130 +112,105 @@ class Create extends GetView<HomeController> {
                       SizedBox(
                         height: width*0.04,
                       ),
-                      Padding(
-                        padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
-                        child: Text(
-                          "What's your project name ? ",
-                          style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.08,color: Colors.black,fontWeight: FontWeight.w500),
-                          textAlign: TextAlign.start,
-                        ),
-                      ),
-                      SizedBox(
-                        height: width*0.04,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
-                        child: const AppInput(hintText: "Enter your desired project name "),
-                      ),
-                      SizedBox(
-                        height: width*0.1,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
-                        child: Text(
-                          "What your service do you need ? ",
-                          style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.08,color: Colors.black,fontWeight: FontWeight.w500),
-                          textAlign: TextAlign.start,
-                        ),
-                      ),
-                      SizedBox(
-                        height: width*0.04,
-                      ),
-
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          ServiceWidget(
-                              width: width,
-                              function: (){
-                                Get.to(() => const LandSurvey());
-                              },
-                              asset: "assets/images/oneS.png",
-                              title: "Land Surveyor",
-                              multiplier: multiplier
+                          SizedBox(
+                            width: width*0.03,
                           ),
-
-                          ServiceWidget(
-                              width: width,
-                              function: (){
-                                Get.to(() => const ConstructionDrawing());
-                              },
-                              asset: "assets/images/twoS.png",
-                              title: "Construction Drawing",
-                              multiplier: multiplier
+                          Text(
+                            "Reset Password",
+                            style: AppTextStyle.subtitle1.copyWith(
+                              color: Colors.black,
+                              fontSize: Get.width * 0.04,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
                         ],
                       ),
-
                       SizedBox(
                         height: width*0.04,
                       ),
-
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          ServiceWidget(
-                              width: width,
-                              function: (){
-                                Get.to(() => const GeotechnicalInvestigation());
-                              },
-                              asset: "assets/images/threeS.png",
-                              title: "Geotechnical \nInvestigation",
-                              multiplier: multiplier
-                          ),
-
-                          ServiceWidget(
-                              width: width,
-                              function: (){
-                                Get.to(() => const ContractorOrSmartCalculator());
-                              },
-                              asset: "assets/images/fourS.png",
-                              title: "Smart Calculator",
-                              multiplier: multiplier
-                          ),
-                        ],
-                      ),
-
-                      SizedBox(
-                        height: width*0.04,
-                      ),
-
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          ServiceWidget(
-                              width: width,
-                              function: (){
-                                Get.to(() => const BuildingApproval());
-                              },
-                              asset: "assets/images/fiveS.png",
-                              title: "Building Approval",
-                              multiplier: multiplier
-                          ),
-
-                          ServiceWidget(
-                              width: width,
-                              function: (){
-                                Get.to(() => const ContractorOrSmartCalculator());
-                              },
-                              asset: "assets/images/fiveS.png",
-                              title: "Contractor",
-                              multiplier: multiplier
-                          ),
-                        ],
-                      ),
-
-                      SizedBox(
-                        height: width*0.07,
-                      ),
-
                       Padding(
-                        padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
-                        child: AppButton(
-                          title: "Proceed",
-                          onPressed: (){},
+                        padding: EdgeInsets.only(left: width*0.03,right: width*0.03),
+                        child: Form(
+                          key: formKey,
+                          child: Column(
+                            children: [
+                              PageInput(
+                                hint: '',
+                                label: 'Former Password',
+                                isCompulsory: true,
+                                controller: oldPassword,
+                                obscureText: true,
+                                validator: (value) {
+                                  if (value!.isEmpty) {
+                                    return 'Please enter your old password';
+                                  }
+                                  return null;
+                                },
+                                showInfo: false,
+                              ),
+                              SizedBox(
+                                height: width*0.04,
+                              ),
+                              PageInput(
+                                hint: '',
+                                label: 'New Password',
+                                isCompulsory: true,
+                                controller: newNumber,
+                                obscureText: true,
+                                validator: Validator.passwordValidation,
+                              ),
+                              SizedBox(
+                                height: width*0.04,
+                              ),
+                              PageInput(
+                                hint: '',
+                                label: 'Confirm Password',
+                                isCompulsory: false,
+                                controller: confirmPassword,
+                                obscureText: true,
+                                validator: (value) {
+                                  if (value!.isEmpty) {
+                                    return 'Please enter your new password';
+                                  }
+                                  if (value != newNumber.text) {
+                                    return 'Password does not match';
+                                  }
+                                  return null;
+                                },
+                                showInfo: false,
+                              ),
+                              SizedBox(
+                                height: Get.height*0.05,
+                              ),
+                              AppButton(
+                                title: "Save Changes",
+                                onPressed: () async {
+                                  if(formKey.currentState!.validate()){
+                                    var body = {
+                                      "oldPassword": oldPassword.text,
+                                      "newPassword": newNumber.text,
+                                      "confirmPassword": confirmPassword.text,
+                                    };
+                                    var response = await controller.userRepo.patchData("/user/change-password", body);
+                                    if(response.isSuccessful){
+                                      Get.back();
+                                      Get.snackbar("Success", "Password changed successfully",backgroundColor: Colors.green);
+                                    }else{
+                                      if(response.message != null){
+                                        Get.snackbar("Error", response.message.toString(),backgroundColor: Colors.red);
+                                      }else{
+                                        Get.snackbar("Error", "Something went wrong, please try again",backgroundColor: Colors.red);
+                                      }
+                                    }
+                                  }
+                                },
+                              )
+                            ],
+                          ),
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),

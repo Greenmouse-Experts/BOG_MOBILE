@@ -27,4 +27,20 @@ class UserRepository {
     return response;
   }
 
+  Future<ApiResponse> postData(String url,dynamic body,{hasHeader = true}) async {
+    final response = await api.postData(url,hasHeader: hasHeader,body: body);
+    return response;
+  }
+  Future<ApiResponse> getData(String url,{hasHeader = true}) async {
+    final response = await api.getData(url,hasHeader: hasHeader);
+    return response;
+  }
+  Future<ApiResponse> putData(String url,dynamic body,{hasHeader = true,sso = true}) async {
+    final response = await api.putData(url,hasHeader: hasHeader,body: body);
+    return response;
+  }
+  Future<ApiResponse> patchData(String url,dynamic body,{hasHeader = true,sso = true}) async {
+    final response = await api.patchData(url,hasHeader: hasHeader,body: body);
+    return response;
+  }
 }

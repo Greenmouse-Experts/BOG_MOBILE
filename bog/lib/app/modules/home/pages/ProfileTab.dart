@@ -16,6 +16,7 @@ import '../../../global_widgets/app_avatar.dart';
 import '../../../global_widgets/app_input.dart';
 import '../../../global_widgets/horizontal_item_tile.dart';
 import '../../settings/profile_info.dart';
+import '../../settings/update_password.dart';
 
 class ProfileTab extends StatelessWidget {
   const ProfileTab({Key? key}) : super(key: key);
@@ -102,7 +103,9 @@ class ProfileTab extends StatelessWidget {
           const SizedBox(
             height: kToolbarHeight/3,
           ),
-          _TextButton(text: "Security ", onPressed: () {},imageAsset: "assets/images/sheild.png",),
+          _TextButton(text: "Security ", onPressed: () {
+            Get.to(() => const UpdatePassword());
+          },imageAsset: "assets/images/sheild.png",),
 
           const SizedBox(
             height: kToolbarHeight/3,

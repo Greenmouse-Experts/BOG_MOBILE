@@ -122,6 +122,42 @@ class Api {
     }
   }
 
+  Future<ApiResponse> patchData(
+      String url, {
+        bool hasHeader = false,
+        body,
+      }) async {
+    token = CancelToken();
+    var head = {
+      'Authorization': MyPref.authToken.val,
+    };
+    print(MyPref.authToken.val);
+    try {
+      var request = await _client.request(
+        url,
+        data: body,
+        cancelToken: token,
+        options: Options(method: 'PATCH', headers: hasHeader ? head : null),
+      );
+
+      return ApiResponse.response(request);
+    } on DioError catch (e) {
+      return e.toApiError(cancelToken: token);
+    } on SocketException {
+      return ApiResponse(
+        data: null,
+        isSuccessful: false,
+        message: 'No Internet connection',
+      );
+    } on Exception catch (e) {
+      return ApiResponse(
+        data: null,
+        isSuccessful: false,
+        message: e.toString(),
+      );
+    }
+  }
+
   /* Future<ApiResponse> _sendRequest(request, bool hasHeader,
       {Map<String, String>? body,
       Iterable<Future<MultipartFile>>? files}) async {
