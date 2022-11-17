@@ -17,6 +17,7 @@ import '../../../global_widgets/app_avatar.dart';
 import '../../../global_widgets/app_input.dart';
 import '../../../global_widgets/horizontal_item_tile.dart';
 import '../../settings/profile_info.dart';
+import '../../settings/update_bank.dart';
 import '../../settings/update_password.dart';
 
 class ProfileTab extends StatelessWidget {
@@ -26,105 +27,119 @@ class ProfileTab extends StatelessWidget {
   Widget build(BuildContext context) {
     var logInDetails = LogInModel.fromJson(jsonDecode(MyPref.logInDetail.val));
     return GetBuilder<HomeController>(builder: (controller) {
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          const SizedBox(
-            height: kToolbarHeight,
-          ),
-          Padding(
-            padding: EdgeInsets.only(left: Get.width*0.03, right: Get.width*0.03,top: 10),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
-                  "Accounts",
-                  style: AppTextStyle.subtitle1.copyWith(
-                    color: Colors.black,
-                    fontSize: Get.width * 0.045,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ],
+      return SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const SizedBox(
+              height: kToolbarHeight,
             ),
-          ),
-          const SizedBox(
-            height: kToolbarHeight/2,
-          ),
-          Container(
-            width: Get.width,
-            height: Get.height * 0.25,
-            color: const Color(0xffFFF8F0),
-            child: Center(
-              child: Column(
+            Padding(
+              padding: EdgeInsets.only(left: Get.width*0.03, right: Get.width*0.03,top: 10),
+              child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  SizedBox(
-                    width: Get.width * 0.28,
-                    height: Get.width * 0.28,
-                    child: IconButton(
-                      icon: AppAvatar(
-                        imgUrl: (logInDetails.photo).toString(),
-                        radius: Get.width * 0.16,
-                      ),
-                      onPressed: () {
-
-                      },
-                    ),
-                  ),
                   Text(
-                    logInDetails.name.toString(),
+                    "Accounts",
                     style: AppTextStyle.subtitle1.copyWith(
                       color: Colors.black,
                       fontSize: Get.width * 0.045,
-                    ),
-                  ),
-                  Text(
-                    logInDetails.userType.toString().replaceAll("_", " ").capitalizeFirst.toString(),
-                    style: AppTextStyle.subtitle1.copyWith(
-                      color: Colors.black.withOpacity(0.5),
-                      fontSize: Get.width * 0.035,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ],
               ),
             ),
-          ),
+            const SizedBox(
+              height: kToolbarHeight/2,
+            ),
+            Container(
+              width: Get.width,
+              height: Get.height * 0.25,
+              color: const Color(0xffFFF8F0),
+              child: Center(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: Get.width * 0.28,
+                      height: Get.width * 0.28,
+                      child: IconButton(
+                        icon: AppAvatar(
+                          imgUrl: (logInDetails.photo).toString(),
+                          radius: Get.width * 0.16,
+                        ),
+                        onPressed: () {
 
-          const SizedBox(
-            height: kToolbarHeight/3,
-          ),
-          _TextButton(text: "Profile Info", onPressed: () {
-            Get.to(() => const ProfileInfo());
-          },imageAsset: "assets/images/prifile.png",),
+                        },
+                      ),
+                    ),
+                    Text(
+                      logInDetails.name.toString(),
+                      style: AppTextStyle.subtitle1.copyWith(
+                        color: Colors.black,
+                        fontSize: Get.width * 0.045,
+                      ),
+                    ),
+                    Text(
+                      controller.currentType,
+                      style: AppTextStyle.subtitle1.copyWith(
+                        color: Colors.black.withOpacity(0.5),
+                        fontSize: Get.width * 0.035,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
 
-          const SizedBox(
-            height: kToolbarHeight/3,
-          ),
-          _TextButton(text: "Security ", onPressed: () {
-            Get.to(() => const UpdatePassword());
-          },imageAsset: "assets/images/sheild.png",),
+            const SizedBox(
+              height: kToolbarHeight/3,
+            ),
+            _TextButton(text: "Profile Info", onPressed: () {
+              Get.to(() => const ProfileInfo());
+            },imageAsset: "assets/images/prifile.png",),
 
-          const SizedBox(
-            height: kToolbarHeight/3,
-          ),
-          _TextButton(text: "About ", onPressed: () {},imageAsset: "assets/images/i.png",),
+            const SizedBox(
+              height: kToolbarHeight/3,
+            ),
+            _TextButton(text: "Uploaded Document", onPressed: () {},imageAsset: "assets/images/i.png",),
 
-          const SizedBox(
-            height: kToolbarHeight/3,
-          ),
-          _TextButton(text: "Terms & Conditions", onPressed: () {},imageAsset: "assets/images/tac.png",),
+            const SizedBox(
+              height: kToolbarHeight/3,
+            ),
+            _TextButton(text: "Bank Details", onPressed: () {
+              Get.to(() => const UpdateBank());
+            },imageAsset: "assets/images/i.png",),
 
-          const SizedBox(
-            height: kToolbarHeight/3,
-          ),
-          _TextButton(text: "Log Out", onPressed: () {
-            Get.toNamed(OnboardingPage.route);
-          },imageAsset: "assets/images/log_out.png",showArrow: false,),
-        ],
+            const SizedBox(
+              height: kToolbarHeight/3,
+            ),
+            _TextButton(text: "Security ", onPressed: () {
+              Get.to(() => const UpdatePassword());
+            },imageAsset: "assets/images/sheild.png",),
+
+            const SizedBox(
+              height: kToolbarHeight/3,
+            ),
+            _TextButton(text: "About ", onPressed: () {},imageAsset: "assets/images/i.png",),
+
+            const SizedBox(
+              height: kToolbarHeight/3,
+            ),
+            _TextButton(text: "Terms & Conditions", onPressed: () {},imageAsset: "assets/images/tac.png",),
+
+            const SizedBox(
+              height: kToolbarHeight/3,
+            ),
+            _TextButton(text: "Log Out", onPressed: () {
+              Get.toNamed(OnboardingPage.route);
+            },imageAsset: "assets/images/log_out.png",showArrow: false,),
+          ],
+        ),
       );
     });
   }

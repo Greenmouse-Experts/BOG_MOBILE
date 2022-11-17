@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:bog/app/modules/meetings/meeting.dart';
 import 'package:bog/app/modules/onboarding/onboarding.dart';
 import 'package:bog/app/modules/settings/support.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,7 @@ import '../data/providers/my_pref.dart';
 import '../modules/multiplexor/multiplexor.dart';
 
 import '../modules/switch/switch.dart';
+import '../modules/transactions/transaction.dart';
 import 'app_avatar.dart';
 import 'app_button.dart';
 
@@ -89,7 +91,7 @@ class _AppDrawerState extends State<AppDrawer> {
                                             ),
                                           ),
                                           Text(
-                                            logInDetails.userType.toString().replaceAll("_", " ").capitalizeFirst.toString(),
+                                            controller.currentType,
                                             style: AppTextStyle.subtitle1.copyWith(
                                               color: Colors.black.withOpacity(0.5),
                                               fontSize: Get.width * 0.035,
@@ -125,7 +127,8 @@ class _AppDrawerState extends State<AppDrawer> {
                           _TextButton(
                               text: "Transactions",
                               onPressed: () {
-                                //Get.toNamed(OnboardingPage.route);
+                                Get.back();
+                                Get.to(() => const TransactionPage());
                               },
                               imageAsset: "assets/images/three1.png",
                               showArrow: true),
@@ -133,7 +136,8 @@ class _AppDrawerState extends State<AppDrawer> {
                           _TextButton(
                               text: "Meetings",
                               onPressed: () {
-                                //Get.toNamed(OnboardingPage.route);
+                                Get.back();
+                                Get.to(() => const Meetings());
                               },
                               imageAsset: "assets/images/four1.png",
                               showArrow: true),

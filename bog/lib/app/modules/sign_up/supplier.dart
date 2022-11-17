@@ -58,7 +58,7 @@ class SupplierSignUp extends GetView<AuthController> {
                   Padding(
                     padding: const EdgeInsets.only(left: AppThemes.appPaddingVal),
                     child: Text(
-                      'Sign Up As A Vendor',
+                      'Sign Up As A Product Partner',
                       style: AppTextStyle.headline4.copyWith(
                         color: Colors.black,
                         fontWeight: FontWeight.w500,
@@ -233,7 +233,7 @@ class SupplierSignUp extends GetView<AuthController> {
                               ),
                               SizedBox(height: Get.height * 0.025),
                               AppButton(
-                                title: 'Sign Up As A Vendor',
+                                title: 'Sign Up As A Product Partner',
                                 onPressed: () async => await controller.signupSupplier(_formKey),
                                 borderRadius: 10,
                                 enabled: controller.isTermsAndConditionsChecked,

@@ -114,7 +114,7 @@ class SwitchUser extends GetView<HomeController> {
                             ),
 
                             Text(
-                              logInDetails.userType.toString().replaceAll("_", " ").capitalizeFirst.toString(),
+                              controller.currentType,
                               style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.08,color: AppColors.primary,fontWeight: FontWeight.w500),
                               textAlign: TextAlign.start,
                             ),
@@ -133,14 +133,18 @@ class SwitchUser extends GetView<HomeController> {
                         ),
                       ),
 
-                      SizedBox(
+                      if(controller.currentType != "Client")
+                        SizedBox(
                         height: Get.height * 0.04,
                       ),
-                      Padding(
+                      if(controller.currentType != "Client")
+                        Padding(
                         padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
                         child: InkWell(
                           onTap: () {
-
+                            controller.currentType = "Client";
+                            controller.update();
+                            Get.back();
                           },
                           child: Stack(
                             alignment: Alignment.center,
@@ -193,14 +197,19 @@ class SwitchUser extends GetView<HomeController> {
                           ),
                         ),
                       ),
-                      SizedBox(
+
+                      if(controller.currentType != "Service Partner")
+                        SizedBox(
                         height: Get.height * 0.02,
                       ),
-                      Padding(
+                      if(controller.currentType != "Service Partner")
+                        Padding(
                         padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
                         child: InkWell(
                           onTap: () {
-
+                            controller.currentType = "Service Partner";
+                            controller.update();
+                            Get.back();
                           },
                           child: Stack(
                             alignment: Alignment.center,
@@ -253,14 +262,19 @@ class SwitchUser extends GetView<HomeController> {
                           ),
                         ),
                       ),
-                      SizedBox(
+
+                      if(controller.currentType != "Product Partner")
+                        SizedBox(
                         height: Get.height * 0.02,
                       ),
-                      Padding(
+                      if(controller.currentType != "Product Partner")
+                        Padding(
                         padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
                         child: InkWell(
                           onTap: () {
-
+                            controller.currentType = "Product Partner";
+                            controller.update();
+                            Get.back();
                           },
                           child: Stack(
                             alignment: Alignment.center,

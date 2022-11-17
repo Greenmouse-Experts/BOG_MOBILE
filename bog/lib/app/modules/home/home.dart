@@ -8,13 +8,36 @@ import 'package:toggle_switch/toggle_switch.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_styles.dart';
 import '../../controllers/home_controller.dart';
+import '../../data/model/log_in_model.dart';
+import '../../data/providers/my_pref.dart';
 import '../../global_widgets/app_avatar.dart';
 import '../../global_widgets/app_drawer.dart';
 
-class Home extends StatelessWidget{
+class Home extends StatefulWidget{
   const Home({Key? key}) : super(key: key);
 
   static const route = '/home';
+
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  var homeController = Get.find<HomeController>();
+
+  @override
+  void initState() {
+    super.initState();
+    var logInDetails = LogInModel.fromJson(jsonDecode(MyPref.logInDetail.val));
+    var type = logInDetails.userType.toString().replaceAll("_", " ").capitalizeFirst.toString();
+    if(type == "Client") {
+      homeController.currentType = "Client";
+    } else if(type == "Vendor") {
+      homeController.currentType = "Product Partner";
+    }else{
+      homeController.currentType = "Service Partner";
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

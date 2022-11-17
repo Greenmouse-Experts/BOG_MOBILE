@@ -112,8 +112,13 @@ class AuthController extends GetxController {
         message = "This Email is already in Use, Please Login";
         buttonMessage = "Login";
       } else {
-        message = "Account created successfully, Check your email for otp verification";
-        buttonMessage = "Continue";
+        if(response.isSuccessful){
+          message = "Account created successfully, Check your email for otp verification";
+          buttonMessage = "Continue";
+        }else{
+          message = "An error occurred, Please try again";
+          buttonMessage = "Ok";
+        }
       }
       AppOverlay.showInfoDialog(
         title: response.isSuccessful ? 'Success' : 'Failure',
@@ -144,8 +149,13 @@ class AuthController extends GetxController {
         message = "This Email is already in Use, Please Login";
         buttonMessage = "Login";
       } else {
-        message = "Account created successfully, Check your email for otp verification";
-        buttonMessage = "Continue";
+        if(response.isSuccessful){
+          message = "Account created successfully, Check your email for otp verification";
+          buttonMessage = "Continue";
+        }else{
+          message = "An error occurred, Please try again";
+          buttonMessage = "Ok";
+        }
       }
       AppOverlay.showInfoDialog(
         title: response.isSuccessful ? 'Success' : 'Failure',
@@ -176,8 +186,13 @@ class AuthController extends GetxController {
         message = "This Email is already in Use, Please Login";
         buttonMessage = "Login";
       } else {
-        message = "Account created successfully, Check your email for otp verification";
-        buttonMessage = "Continue";
+        if(response.isSuccessful){
+          message = "Account created successfully, Check your email for otp verification";
+          buttonMessage = "Continue";
+        }else{
+          message = "An error occurred, Please try again";
+          buttonMessage = "Ok";
+        }
       }
       AppOverlay.showInfoDialog(
         title: response.isSuccessful ? 'Success' : 'Failure',

@@ -14,6 +14,8 @@ class HomeController extends GetxController {
   HomeController(this.userRepo);
 
   RxInt currentBottomNavPage = 0.obs;
+  String currentType = "Client";
+
   List<Widget> pages = const [
     HomeTab(),
     ChatTab(),
