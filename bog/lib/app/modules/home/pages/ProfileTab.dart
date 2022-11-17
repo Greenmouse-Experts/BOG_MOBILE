@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:bog/app/modules/onboarding/onboarding.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_svg/svg.dart';
@@ -120,7 +121,9 @@ class ProfileTab extends StatelessWidget {
           const SizedBox(
             height: kToolbarHeight/3,
           ),
-          _TextButton(text: "Log Out", onPressed: () {},imageAsset: "assets/images/log_out.png",showArrow: false,),
+          _TextButton(text: "Log Out", onPressed: () {
+            Get.toNamed(OnboardingPage.route);
+          },imageAsset: "assets/images/log_out.png",showArrow: false,),
         ],
       );
     });

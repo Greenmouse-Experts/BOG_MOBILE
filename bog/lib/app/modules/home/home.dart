@@ -9,8 +9,9 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_styles.dart';
 import '../../controllers/home_controller.dart';
 import '../../global_widgets/app_avatar.dart';
+import '../../global_widgets/app_drawer.dart';
 
-class Home extends GetView<HomeController> {
+class Home extends StatelessWidget{
   const Home({Key? key}) : super(key: key);
 
   static const route = '/home';
@@ -93,6 +94,7 @@ class Home extends GetView<HomeController> {
                     controller.update(['home']);
                   }
               ),
+              drawer: const AppDrawer(),
             );
           }),
     );

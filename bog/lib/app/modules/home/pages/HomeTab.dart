@@ -14,6 +14,7 @@ import '../../../data/model/log_in_model.dart';
 import '../../../data/providers/api_response.dart';
 import '../../../data/providers/my_pref.dart';
 import '../../../global_widgets/app_avatar.dart';
+import '../../../global_widgets/app_drawer.dart';
 import '../../../global_widgets/horizontal_item_tile.dart';
 import '../../create/create.dart';
 import '../../notifications/notification.dart';
@@ -27,7 +28,7 @@ class HomeTab extends StatelessWidget {
     var logInDetails = LogInModel.fromJson(jsonDecode(MyPref.logInDetail.val));
     return GetBuilder<HomeController>(builder: (controller) {
       return SizedBox(
-        height: Get.height * 0.91,
+        height: Get.height * 0.936,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -39,18 +40,22 @@ class HomeTab extends StatelessWidget {
               padding: const EdgeInsets.only(left: 10.0,right: 10.0,top: 10.0),
               child: Row(
                 children: [
-                  SizedBox(
-                    width: Get.width * 0.16,
-                    height: Get.width * 0.16,
-                    child: IconButton(
-                      icon: AppAvatar(
-                        imgUrl: (logInDetails.photo).toString(),
-                        radius: Get.width * 0.16,
-                      ),
-                      onPressed: () {
-
-                      },
-                    ),
+                  Builder(
+                      builder: (context1) {
+                        return SizedBox(
+                          width: Get.width * 0.16,
+                          height: Get.width * 0.16,
+                          child: IconButton(
+                            icon: AppAvatar(
+                              imgUrl: (logInDetails.photo).toString(),
+                              radius: Get.width * 0.16,
+                            ),
+                            onPressed: () {
+                              Scaffold.of(context).openDrawer();
+                            },
+                          ),
+                        );
+                      }
                   ),
                   const SizedBox(
                     width: 10.0,
