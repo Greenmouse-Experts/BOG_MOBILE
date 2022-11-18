@@ -94,7 +94,7 @@ extension ApiError on DioError {
         return ApiResponse(
           isSuccessful: false,
           data: null,
-          message: "Please help report this error to Deepend support",
+          message: "Please help report this error to BOG support",
         );
 
       case DioErrorType.response:

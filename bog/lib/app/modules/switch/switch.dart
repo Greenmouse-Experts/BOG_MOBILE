@@ -141,10 +141,14 @@ class SwitchUser extends GetView<HomeController> {
                         Padding(
                         padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
                         child: InkWell(
-                          onTap: () {
+                          onTap: () async {
                             controller.currentType = "Client";
                             controller.update();
                             Get.back();
+                            var body = {
+                              "userType": "corporate_client",
+                            };
+                            var response = await controller.userRepo.postData("/user/switch-account", body);
                           },
                           child: Stack(
                             alignment: Alignment.center,
@@ -206,10 +210,14 @@ class SwitchUser extends GetView<HomeController> {
                         Padding(
                         padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
                         child: InkWell(
-                          onTap: () {
+                          onTap: () async {
                             controller.currentType = "Service Partner";
                             controller.update();
                             Get.back();
+                            var body = {
+                              "userType": "professional",
+                            };
+                            var response = await controller.userRepo.postData("/user/switch-account", body);
                           },
                           child: Stack(
                             alignment: Alignment.center,
@@ -271,10 +279,14 @@ class SwitchUser extends GetView<HomeController> {
                         Padding(
                         padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
                         child: InkWell(
-                          onTap: () {
+                          onTap: () async {
                             controller.currentType = "Product Partner";
                             controller.update();
                             Get.back();
+                            var body = {
+                              "userType": "vendor",
+                            };
+                            var response = await controller.userRepo.postData("/user/switch-account", body);
                           },
                           child: Stack(
                             alignment: Alignment.center,

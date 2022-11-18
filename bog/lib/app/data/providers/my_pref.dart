@@ -7,6 +7,7 @@ class MyPref  {
   static final authToken = ReadWriteValue('auth-token', '', _box);
   static final logInDetail = ReadWriteValue('logInDeatail', '', _box);
   static final userDetail = ReadWriteValue('userProfile', '', _box);
+  static final bankListDetail = ReadWriteValue('bankListDeatail', '', _box);
 
   static Future<void> clearBoxes() async {
     await _box().erase();

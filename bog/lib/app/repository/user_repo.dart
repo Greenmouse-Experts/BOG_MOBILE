@@ -23,7 +23,11 @@ class UserRepository {
 
   Future<ApiResponse> verifyOTPForSignUp(String email,String token) async {
     final response = await api.getData('/user/verify?email=$email&token=$token');
-    print(response.message);
+    return response;
+  }
+
+  Future<ApiResponse> getBanks() async {
+    final response = await api.getData('/bank/allbanks');
     return response;
   }
 

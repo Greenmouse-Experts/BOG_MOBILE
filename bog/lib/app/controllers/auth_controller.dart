@@ -7,6 +7,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:otp_text_field/otp_field.dart';
 
+import '../data/model/BankListModel.dart';
 import '../data/model/log_in_model.dart';
 import '../data/providers/api_response.dart';
 import '../data/providers/my_pref.dart';
@@ -314,10 +315,23 @@ class AuthController extends GetxController {
         var logInInfo = LogInModel.fromJson(response.user);
         response.user = logInInfo;
         var token = response.token;
-        print(token);
         MyPref.logInDetail.val = jsonEncode(response.user);
         MyPref.authToken.val = token.toString();
-        Get.offAndToNamed(Home.route);
+        ApiResponse bankListResponse = await userRepo.getBanks();
+        if(bankListResponse.isSuccessful){
+          MyPref.bankListDetail.val = jsonEncode(bankListResponse.data);
+          //var bankList = BankListModel.fromJsonList(bankListResponse.data);
+          Get.offAndToNamed(Home.route);
+        }else{
+          AppOverlay.showInfoDialog(
+            title: "Error",
+            content: "An error occurred, Please try again",
+            buttonText: "Okay",
+            onPressed: () {
+              Get.back();
+            },
+          );
+        }
       }else{
         if(response.message == "This Email is already in Use") {
           message = "This Email is already in Use, Please Login";

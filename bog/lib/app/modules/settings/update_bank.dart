@@ -12,10 +12,12 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_styles.dart';
 import '../../../core/utils/validator.dart';
 import '../../controllers/home_controller.dart';
+import '../../data/model/BankListModel.dart';
 import '../../data/model/log_in_model.dart';
 import '../../data/providers/my_pref.dart';
 import '../../global_widgets/app_avatar.dart';
 import '../../global_widgets/app_input.dart';
+import '../../global_widgets/page_dropdown.dart';
 import '../../global_widgets/page_input.dart';
 import '../../global_widgets/tabs.dart';
 
@@ -29,12 +31,14 @@ class UpdateBank extends StatefulWidget {
 }
 
 class _UpdateBankState extends State<UpdateBank> {
+  var bankList = BankListModel.fromJsonList(jsonDecode(MyPref.bankListDetail.val));
   var homeController = Get.find<HomeController>();
   var formKey = GlobalKey<FormState>();
   var logInDetails = LogInModel.fromJson(jsonDecode(MyPref.logInDetail.val));
-  TextEditingController oldPassword = TextEditingController();
-  TextEditingController newNumber = TextEditingController();
-  TextEditingController confirmPassword = TextEditingController();
+  TextEditingController bankName = TextEditingController();
+  TextEditingController bankAcct = TextEditingController();
+  TextEditingController bankCode = TextEditingController(text: '120001');
+  TextEditingController chosenBankName = TextEditingController(text: '9mobile 9Payment Service Bank');
 
   @override
   Widget build(BuildContext context) {
@@ -155,7 +159,7 @@ class _UpdateBankState extends State<UpdateBank> {
                                 hint: '',
                                 label: 'Account Holders Name',
                                 isCompulsory: true,
-                                controller: oldPassword,
+                                controller: bankName,
                                 validator: (value) {
                                   if (value!.isEmpty) {
                                     return 'Please enter your account name';
@@ -171,7 +175,7 @@ class _UpdateBankState extends State<UpdateBank> {
                                 hint: '',
                                 label: 'Account Number ',
                                 isCompulsory: true,
-                                controller: newNumber,
+                                controller: bankAcct,
                                 keyboardType: TextInputType.number,
                                 validator: (value) {
                                   if (value!.isEmpty) {
@@ -185,18 +189,21 @@ class _UpdateBankState extends State<UpdateBank> {
                               SizedBox(
                                 height: width*0.04,
                               ),
-                              PageInput(
+                              PageDropButton(
+                                label: "Bank",
                                 hint: '',
-                                label: 'Bank',
-                                isCompulsory: false,
-                                controller: confirmPassword,
-                                validator: (value) {
-                                  if (value!.isEmpty) {
-                                    return 'Please enter your bank';
-                                  }
-                                  return null;
+                                padding: const EdgeInsets.symmetric(horizontal: 10),
+                                onChanged: (val) {
+                                  bankCode.text = (val! as BankListModel).code.toString();
+                                  chosenBankName.text = (val as BankListModel).name.toString();
                                 },
-                                showInfo: false,
+                                value:  bankList.first,
+                                items: bankList.map<DropdownMenuItem<BankListModel>>((BankListModel value) {
+                                  return DropdownMenuItem<BankListModel>(
+                                    value: value,
+                                    child: Text(value.name.toString()),
+                                  );
+                                }).toList(),
                               ),
                               SizedBox(
                                 height: Get.height*0.05,
@@ -206,10 +213,23 @@ class _UpdateBankState extends State<UpdateBank> {
                                 onPressed: () async {
                                   if(formKey.currentState!.validate()){
                                     var body = {
-                                      "oldPassword": oldPassword.text,
-                                      "newPassword": newNumber.text,
-                                      "confirmPassword": confirmPassword.text,
+                                      "account_name": bankName.text,
+                                      "account_number": bankAcct.text,
+                                      "bank_code": bankCode.text,
+                                      "bank_name": chosenBankName.text,
                                     };
+
+                                    var response = await controller.userRepo.postData("/bank/save-bank", body);
+                                    if(response.isSuccessful){
+                                      Get.back();
+                                      Get.snackbar("Success", "Bank Details Added Successfully",backgroundColor: Colors.green);
+                                    }else{
+                                      if(response.message != null){
+                                        Get.snackbar("Error", response.message.toString(),backgroundColor: Colors.red);
+                                      }else{
+                                        Get.snackbar("Error", "Something went wrong, please try again",backgroundColor: Colors.red);
+                                      }
+                                    }
                                   }
                                 },
                               )
