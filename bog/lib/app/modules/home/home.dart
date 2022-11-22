@@ -69,8 +69,8 @@ class _HomeState extends State<Home> {
                   items: <BottomNavigationBarItem>[
                     BottomNavigationBarItem(
                       icon: Image.asset(
-                        'assets/images/homeIcon.png',
-                        width: 25,
+                        controller.homeIcon,
+                        width: 20,
                         color: controller.currentBottomNavPage.value == 0 ? AppColors.primary : AppColors.grey,
                       ),
                       label: 'Home',
@@ -79,22 +79,22 @@ class _HomeState extends State<Home> {
                     BottomNavigationBarItem(
                       icon: Image.asset(
                         controller.currentBottomNavPage.value == 1 ? 'assets/images/chat_filled.png' : 'assets/images/chatIcon.png',
-                        width: 25,
+                        width: 22,
                         color: controller.currentBottomNavPage.value == 1 ? AppColors.primary : AppColors.grey,
                       ),
                       label: 'Chat',
                     ),
                     BottomNavigationBarItem(
                       icon: Image.asset(
-                        'assets/images/projectIcon.png',
-                        width: 25,
+                        controller.projectIcon,
+                        width: 20,
                         color: controller.currentBottomNavPage.value == 2 ? AppColors.primary : AppColors.grey,
                       ),
                       label: 'Project',
                     ),
                     BottomNavigationBarItem(
                       icon: Image.asset(
-                        'assets/images/cartIcon.png',
+                        controller.cartIcon,
                         width: 25,
                         color: controller.currentBottomNavPage.value == 3 ? AppColors.primary : AppColors.grey,
                       ),
@@ -102,7 +102,7 @@ class _HomeState extends State<Home> {
                     ),
                     BottomNavigationBarItem(
                       icon: Image.asset(
-                        'assets/images/profileIcon.png',
+                        controller.profileIcon,
                         width: 25,
                         color: controller.currentBottomNavPage.value == 4 ? AppColors.primary : AppColors.grey,
                       ),

@@ -144,6 +144,7 @@ class SwitchUser extends GetView<HomeController> {
                           onTap: () async {
                             controller.currentType = "Client";
                             controller.update();
+                            controller.updateNewUser("Client");
                             Get.back();
                             var body = {
                               "userType": "corporate_client",
@@ -213,6 +214,7 @@ class SwitchUser extends GetView<HomeController> {
                           onTap: () async {
                             controller.currentType = "Service Partner";
                             controller.update();
+                            controller.updateNewUser("Service Partner");
                             Get.back();
                             var body = {
                               "userType": "professional",
@@ -282,6 +284,7 @@ class SwitchUser extends GetView<HomeController> {
                           onTap: () async {
                             controller.currentType = "Product Partner";
                             controller.update();
+                            controller.updateNewUser("Product Partner");
                             Get.back();
                             var body = {
                               "userType": "vendor",

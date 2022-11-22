@@ -16,6 +16,41 @@ class HomeController extends GetxController {
   RxInt currentBottomNavPage = 0.obs;
   String currentType = "Client";
 
+  String homeIcon = 'assets/images/homeIcon.png';
+  String chatIcon = 'assets/images/homeIcon.png';
+  String projectIcon = 'assets/images/projectIcon.png';
+  String cartIcon = 'assets/images/cartIcon.png';
+  String profileIcon = 'assets/images/profileIcon.png';
+
+  String homeTitle = 'Home';
+  String cartTitle = 'Cart';
+  String projectTitle = 'Project';
+
+  updateNewUser(String userType){
+    if(userType == "Client"){
+      homeIcon = 'assets/images/homeIcon.png';
+      chatIcon = 'assets/images/chatIcon.png';
+      projectIcon = 'assets/images/projectIcon.png';
+      cartIcon = 'assets/images/cartIcon.png';
+      profileIcon = 'assets/images/profileIcon.png';
+
+      homeTitle = 'Home';
+      cartTitle = 'Cart';
+      projectTitle = 'Project';
+    }else{
+      homeIcon = 'assets/images/dashboardIcon.png';
+      chatIcon = 'assets/images/chatIcon.png';
+      projectIcon = 'assets/images/ordersIcon.png';
+      cartIcon = 'assets/images/prodctIcon.png';
+      profileIcon = 'assets/images/profileIcon.png';
+
+      homeTitle = 'Dashboard';
+      cartTitle = 'Products';
+      projectTitle = 'Orders';
+    }
+    update();
+    update(['home']);
+  }
   List<Widget> pages = const [
     HomeTab(),
     ChatTab(),

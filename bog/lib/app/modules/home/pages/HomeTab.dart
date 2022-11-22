@@ -26,6 +26,9 @@ class HomeTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var logInDetails = LogInModel.fromJson(jsonDecode(MyPref.logInDetail.val));
+    String title = "N 300,000";
+    String subTitle = "Monthly Earnings";
+    String icon = "";
     return GetBuilder<HomeController>(builder: (controller) {
       return SizedBox(
         height: Get.height * 0.936,
@@ -102,7 +105,8 @@ class HomeTab extends StatelessWidget {
             SizedBox(
               height: Get.height * 0.015,
             ),
-            Column(
+            if(controller.currentType == "Client")
+              Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Container(
@@ -119,11 +123,70 @@ class HomeTab extends StatelessWidget {
                 ),
               ],
             ),
+            if(controller.currentType != "Client")
+              Padding(
+                padding: EdgeInsets.only(left: Get.width*0.05,right: Get.width*0.05,top: 10.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Text(
+                      "Overview",
+                      style: AppTextStyle.subtitle1.copyWith(
+                        color: Colors.black,
+                        fontSize: Get.width * 0.04,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10.0,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        buildOverViewContainer(
+                          "assets/images/earnings.png",
+                          title,
+                          subTitle,
+                          const Color(0xffD3DDFE),
+                        ),
+
+                        buildOverViewContainer(
+                          "assets/images/sales.png",
+                          "N 2,000,000",
+                          "Total Sales",
+                          const Color(0xffDEFEFE),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 20.0,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        buildOverViewContainer(
+                          "assets/images/products.png",
+                          "150",
+                          "Products",
+                          const Color(0xffF6DEFE),
+                        ),
+
+                        buildOverViewContainer(
+                          "assets/images/orders.png",
+                          "52",
+                          "Orders",
+                          const Color(0xffFED8D5),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
             //indicator
             SizedBox(
               height: Get.height * 0.01,
             ),
-            Row(
+            if(controller.currentType == "Client")
+              Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
@@ -143,6 +206,7 @@ class HomeTab extends StatelessWidget {
               child: SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Padding(
                       padding: EdgeInsets.only(left: Get.width*0.05,right: Get.width*0.05,top: 10.0),
@@ -336,5 +400,75 @@ class HomeTab extends StatelessWidget {
         ),
       );
     });
+  }
+
+  Container buildOverViewContainer(String icon, String title, String subTitle, Color color) {
+    return Container(
+                        height: Get.height * 0.13,
+                        width: Get.width * 0.4,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10.0),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.3),
+                              spreadRadius: 1,
+                              blurRadius: 7,
+                              offset: const Offset(0, 3), // changes position of shadow
+                            ),
+                          ],
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                width: Get.width * 0.085,
+                                height: Get.width * 0.085,
+                                decoration: BoxDecoration(
+                                  color: color,
+                                  borderRadius: BorderRadius.circular(100),
+                                ),
+                                child: Center(
+                                  child: Image.asset(
+                                    icon,
+                                    width: Get.width * 0.045,
+                                    height: Get.width * 0.045,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 10.0,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 2.0),
+                                child: Text(
+                                  title,
+                                  style: AppTextStyle.subtitle1.copyWith(
+                                    color: Colors.black,
+                                    fontSize: Get.width * 0.04,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 5.0,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 2.0),
+                                child: Text(
+                                  subTitle,
+                                  style: AppTextStyle.subtitle1.copyWith(
+                                    color: Colors.black,
+                                    fontSize: Get.width * 0.035,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
   }
 }
