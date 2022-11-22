@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'dart:math';
 
+import 'package:d_chart/d_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
@@ -29,6 +31,17 @@ class HomeTab extends StatelessWidget {
     String title = "N 300,000";
     String subTitle = "Monthly Earnings";
     String icon = "";
+
+    List ranking = [
+      {'class': 'Mon', 'total': 23},
+      {'class': 'Tue', 'total': 14},
+      {'class': 'Wed', 'total': 80},
+      {'class': 'Thur', 'total': 70},
+      {'class': 'Fri', 'total': 21},
+      {'class': 'Sat', 'total': 12},
+      {'class': 'Sun', 'total': 50},
+    ];
+
     return GetBuilder<HomeController>(builder: (controller) {
       return SizedBox(
         height: Get.height * 0.936,
@@ -208,7 +221,8 @@ class HomeTab extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Padding(
+                    if(controller.currentType == "Client")
+                      Padding(
                       padding: EdgeInsets.only(left: Get.width*0.05,right: Get.width*0.05,top: 10.0),
                       child: Text(
                         "What would you like to do?",
@@ -219,10 +233,23 @@ class HomeTab extends StatelessWidget {
                         ),
                       ),
                     ),
+                    if(controller.currentType != "Client")
+                      Padding(
+                        padding: EdgeInsets.only(left: Get.width*0.05,right: Get.width*0.05,top: 10.0),
+                        child: Text(
+                          "Sales",
+                          style: AppTextStyle.subtitle1.copyWith(
+                            color: Colors.black,
+                            fontSize: Get.width * 0.04,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
                     SizedBox(
                       height: Get.height * 0.015,
                     ),
-                    Padding(
+                    if(controller.currentType == "Client")
+                      Padding(
                       padding: EdgeInsets.only(left: Get.width*0.05,right: Get.width*0.05),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -357,6 +384,42 @@ class HomeTab extends StatelessWidget {
                         ],
                       ),
                     ),
+                    if(controller.currentType != "Client")
+                      Padding(
+                        padding: EdgeInsets.only(left: Get.width*0.05,right: Get.width*0.05,top: 10.0),
+                        child: SizedBox(
+                          width: Get.width,
+                          height: Get.height * 0.3,
+                          child: DChartBarCustom(
+                            radiusBar: const BorderRadius.only(
+                              topLeft: Radius.circular(30),
+                              topRight: Radius.circular(30),
+                            ),
+                            showDomainLabel: true,
+                            showMeasureLabel: true,
+                            showMeasureLine: true,
+                            showDomainLine: true,
+                            spaceMeasureLinetoChart: 10,
+                            showLoading: true,
+                            spaceBetweenItem: Get.width * 0.05,
+                            listData: List.generate(ranking.length, (index) {
+                              Color currentColor =
+                              Color((Random().nextDouble() * 0xFFFFFF).toInt());
+                              return DChartBarDataCustom(
+                                onTap: () {
+
+                                },
+                                elevation: 0,
+                                value: ranking[index]['total'].toDouble(),
+                                label: ranking[index]['class'],
+                                color: AppColors.primary,
+                                splashColor: AppColors.primary,
+                                showValue: false,
+                              );
+                            }),
+                          ),
+                        ),
+                      ),
                     SizedBox(
                       height: Get.height * 0.015,
                     ),
