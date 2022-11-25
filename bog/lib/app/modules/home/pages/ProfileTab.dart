@@ -18,6 +18,7 @@ import '../../../global_widgets/app_input.dart';
 import '../../../global_widgets/horizontal_item_tile.dart';
 import '../../settings/profile_info.dart';
 import '../../settings/update_bank.dart';
+import '../../settings/update_kyc.dart';
 import '../../settings/update_password.dart';
 
 class ProfileTab extends StatelessWidget {
@@ -71,6 +72,7 @@ class ProfileTab extends StatelessWidget {
                         icon: AppAvatar(
                           imgUrl: (logInDetails.photo).toString(),
                           radius: Get.width * 0.16,
+                          name: logInDetails.name.toString(),
                         ),
                         onPressed: () {
 
@@ -103,17 +105,23 @@ class ProfileTab extends StatelessWidget {
               Get.to(() => const ProfileInfo());
             },imageAsset: "assets/images/prifile.png",),
 
-            const SizedBox(
+            if(controller.currentType != "Client")
+              const SizedBox(
               height: kToolbarHeight/3,
             ),
-            _TextButton(text: "Uploaded Document", onPressed: () {},imageAsset: "assets/images/i.png",),
+            if(controller.currentType != "Client")
+              _TextButton(text: "Uploaded Document", onPressed: () {
+                Get.to(() => const UpdateKyc());
+              },imageAsset: "assets/images/kyc.png",),
 
-            const SizedBox(
+            if(controller.currentType != "Client")
+              const SizedBox(
               height: kToolbarHeight/3,
             ),
-            _TextButton(text: "Bank Details", onPressed: () {
+            if(controller.currentType != "Client")
+              _TextButton(text: "Bank Details", onPressed: () {
               Get.to(() => const UpdateBank());
-            },imageAsset: "assets/images/i.png",),
+            },imageAsset: "assets/images/bank.png",),
 
             const SizedBox(
               height: kToolbarHeight/3,

@@ -18,6 +18,7 @@ import '../../../global_widgets/horizontal_item_tile.dart';
 import '../../chat/chat.dart';
 import '../../create/create.dart';
 import '../../shop/product_details.dart';
+import 'CartTab.dart';
 
 class ProjectTab extends StatelessWidget {
   const ProjectTab({Key? key}) : super(key: key);
@@ -46,7 +47,7 @@ class ProjectTab extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text(
-                          "My Projects",
+                          "My ${controller.projectTitle}",
                           style: AppTextStyle.subtitle1.copyWith(
                             color: Colors.black,
                             fontSize: Get.width * 0.045,
@@ -71,7 +72,8 @@ class ProjectTab extends StatelessWidget {
                   SizedBox(
                     height: Get.height * 0.03,
                   ),
-                  SizedBox(
+                  if(controller.currentType == "Client")
+                    SizedBox(
                     height: Get.height * 0.65,
                     child: GridView.builder(
                       itemCount: 4,
@@ -94,12 +96,25 @@ class ProjectTab extends StatelessWidget {
                         );
                       },
                     ),
-                  )
+                  ),
+                  if(controller.currentType != "Client")
+                    SizedBox(
+                      height: Get.height * 0.65,
+                      child: ListView.builder(
+                        itemCount: 4,
+                        scrollDirection: Axis.vertical,
+                        padding: const EdgeInsets.all(0),
+                        itemBuilder: (BuildContext context, int index) {
+                          return OrderItem();
+                        },
+                      ),
+                    )
                 ],
               ),
             ),
             //floating action button
-            FloatingActionButton(
+            if(controller.currentType == "Client")
+              FloatingActionButton(
               onPressed: (){
                 Get.toNamed(Create.route);
               },

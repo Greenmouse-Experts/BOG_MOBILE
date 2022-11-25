@@ -91,6 +91,7 @@ class ChatTab extends StatelessWidget {
                                   icon: AppAvatar(
                                     imgUrl: "",
                                     radius: Get.width * 0.16,
+                                    name:"BOG"
                                   ),
                                   onPressed: () {
 

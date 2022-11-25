@@ -140,6 +140,7 @@ class Meetings extends GetView<HomeController> {
                                           icon: AppAvatar(
                                             imgUrl: "",
                                             radius: Get.width * 0.16,
+                                            name: "Land"
                                           ),
                                           onPressed: () {
 

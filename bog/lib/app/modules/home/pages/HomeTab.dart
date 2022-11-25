@@ -22,12 +22,25 @@ import '../../create/create.dart';
 import '../../notifications/notification.dart';
 import '../../shop/shop.dart';
 
-class HomeTab extends StatelessWidget {
+class HomeTab extends StatefulWidget {
   const HomeTab({Key? key}) : super(key: key);
 
   @override
+  State<HomeTab> createState() => _HomeTabState();
+}
+
+class _HomeTabState extends State<HomeTab> {
+  final HomeController controller = Get.find<HomeController>();
+  var logInDetails = LogInModel.fromJson(jsonDecode(MyPref.logInDetail.val));
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    controller.updateNewUser(logInDetails.userType.toString().replaceAll("_", " ").capitalizeFirst.toString(),updatePages: false);
+  }
+  @override
   Widget build(BuildContext context) {
-    var logInDetails = LogInModel.fromJson(jsonDecode(MyPref.logInDetail.val));
     String title = "N 300,000";
     String subTitle = "Monthly Earnings";
     String icon = "";
@@ -65,6 +78,7 @@ class HomeTab extends StatelessWidget {
                             icon: AppAvatar(
                               imgUrl: (logInDetails.photo).toString(),
                               radius: Get.width * 0.16,
+                              name: logInDetails.name.toString(),
                             ),
                             onPressed: () {
                               Scaffold.of(context).openDrawer();

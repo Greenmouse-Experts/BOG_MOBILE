@@ -26,7 +26,7 @@ class HomeController extends GetxController {
   String cartTitle = 'Cart';
   String projectTitle = 'Project';
 
-  updateNewUser(String userType){
+  updateNewUser(String userType,{bool updatePages = true}) {
     if(userType == "Client"){
       homeIcon = 'assets/images/homeIcon.png';
       chatIcon = 'assets/images/chatIcon.png';
@@ -40,7 +40,7 @@ class HomeController extends GetxController {
     }else{
       homeIcon = 'assets/images/dashboardIcon.png';
       chatIcon = 'assets/images/chatIcon.png';
-      projectIcon = 'assets/images/ordersIcon.png';
+      projectIcon = currentBottomNavPage.value == 2 ? 'assets/images/Group 47400.png': 'assets/images/ordersIcon.png';
       cartIcon = 'assets/images/prodctIcon.png';
       profileIcon = 'assets/images/profileIcon.png';
 
@@ -48,8 +48,10 @@ class HomeController extends GetxController {
       cartTitle = 'Products';
       projectTitle = 'Orders';
     }
-    update();
-    update(['home']);
+    if(updatePages){
+      update();
+      update(['home']);
+    }
   }
   List<Widget> pages = const [
     HomeTab(),

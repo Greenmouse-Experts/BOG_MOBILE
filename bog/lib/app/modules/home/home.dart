@@ -73,7 +73,7 @@ class _HomeState extends State<Home> {
                         width: 20,
                         color: controller.currentBottomNavPage.value == 0 ? AppColors.primary : AppColors.grey,
                       ),
-                      label: 'Home',
+                      label: controller.homeTitle,
                       backgroundColor: AppColors.background,
                     ),
                     BottomNavigationBarItem(
@@ -90,15 +90,15 @@ class _HomeState extends State<Home> {
                         width: 20,
                         color: controller.currentBottomNavPage.value == 2 ? AppColors.primary : AppColors.grey,
                       ),
-                      label: 'Project',
+                      label: controller.projectTitle,
                     ),
                     BottomNavigationBarItem(
                       icon: Image.asset(
                         controller.cartIcon,
                         width: 25,
-                        color: controller.currentBottomNavPage.value == 3 ? AppColors.primary : AppColors.grey,
+                        //color: controller.currentBottomNavPage.value == 3 ? AppColors.primary : AppColors.grey,
                       ),
-                      label: 'Cart',
+                      label: controller.cartTitle,
                     ),
                     BottomNavigationBarItem(
                       icon: Image.asset(

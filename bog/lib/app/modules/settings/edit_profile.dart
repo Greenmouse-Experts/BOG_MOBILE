@@ -119,6 +119,7 @@ class EditProfile extends GetView<HomeController> {
                               icon: AppAvatar(
                                 imgUrl: (logInDetails.photo).toString(),
                                 radius: Get.width * 0.16,
+                                name: logInDetails.name.toString(),
                               ),
                               onPressed: () {
 

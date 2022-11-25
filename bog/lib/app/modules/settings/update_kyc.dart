@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:bog/app/global_widgets/app_button.dart';
-import 'package:bog/app/modules/settings/edit_profile.dart';
 import 'package:feather_icons/feather_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -13,17 +12,33 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_styles.dart';
 import '../../../core/utils/validator.dart';
 import '../../controllers/home_controller.dart';
+import '../../data/model/BankListModel.dart';
 import '../../data/model/log_in_model.dart';
 import '../../data/providers/my_pref.dart';
 import '../../global_widgets/app_avatar.dart';
 import '../../global_widgets/app_input.dart';
+import '../../global_widgets/page_dropdown.dart';
 import '../../global_widgets/page_input.dart';
 import '../../global_widgets/tabs.dart';
 
-class ProfileInfo extends GetView<HomeController> {
-  const ProfileInfo({Key? key}) : super(key: key);
+class UpdateKyc extends StatefulWidget {
+  const UpdateKyc({Key? key}) : super(key: key);
 
-  static const route = '/ProfileInfo';
+  static const route = '/UpdateKyc';
+
+  @override
+  State<UpdateKyc> createState() => _UpdateKycState();
+}
+
+class _UpdateKycState extends State<UpdateKyc> {
+  var bankList = BankListModel.fromJsonList(jsonDecode(MyPref.bankListDetail.val));
+  var homeController = Get.find<HomeController>();
+  var formKey = GlobalKey<FormState>();
+  var logInDetails = LogInModel.fromJson(jsonDecode(MyPref.logInDetail.val));
+  TextEditingController bankName = TextEditingController();
+  TextEditingController bankAcct = TextEditingController();
+  TextEditingController bankCode = TextEditingController(text: '120001');
+  TextEditingController chosenBankName = TextEditingController(text: '9mobile 9Payment Service Bank');
 
   @override
   Widget build(BuildContext context) {
@@ -31,14 +46,6 @@ class ProfileInfo extends GetView<HomeController> {
     final Size size = MediaQuery.of(context).size;
     double multiplier = 25 * size.height * 0.01;
 
-    var logInDetails = LogInModel.fromJson(jsonDecode(MyPref.logInDetail.val));
-    TextEditingController firstName = TextEditingController(text: logInDetails.fname);
-    TextEditingController lastName = TextEditingController(text: logInDetails.lname);
-    TextEditingController email = TextEditingController(text: logInDetails.email);
-    TextEditingController phoneNumber = TextEditingController(text: logInDetails.phone);
-    TextEditingController address = TextEditingController(text: logInDetails.address);
-    TextEditingController state = TextEditingController(text: logInDetails.state);
-    TextEditingController city = TextEditingController(text: logInDetails.city);
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
@@ -49,7 +56,7 @@ class ProfileInfo extends GetView<HomeController> {
           systemNavigationBarIconBrightness: Brightness.dark
       ),
       child: GetBuilder<HomeController>(
-          id: 'ProfileInfo',
+          id: 'UpdateKyc',
           builder: (controller) {
             return Scaffold(
               backgroundColor: AppColors.backgroundVariant2,
@@ -85,7 +92,7 @@ class ProfileInfo extends GetView<HomeController> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Text(
-                                    "Profile Info",
+                                    "KYC",
                                     style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.07,color: Colors.black,fontWeight: FontWeight.w500),
                                     textAlign: TextAlign.center,
                                   ),
@@ -94,19 +101,6 @@ class ProfileInfo extends GetView<HomeController> {
                             ),
                             SizedBox(
                               width: width*0.04,
-                            ),
-                            InkWell(
-                              onTap: (){
-                                //Navigator.pop(context);
-                                Get.to(() => const EditProfile());
-                                //Get.to(const EditProfile());
-                              },
-                              child: SvgPicture.asset(
-                                "assets/images/write.svg",
-                                height: width*0.045,
-                                width: width*0.045,
-                                color: Colors.black,
-                              ),
                             ),
                           ],
                         ),
@@ -127,142 +121,140 @@ class ProfileInfo extends GetView<HomeController> {
                           SizedBox(
                             width: width*0.03,
                           ),
-                          SizedBox(
-                            width: Get.width * 0.22,
-                            height: Get.width * 0.22,
-                            child: IconButton(
-                              icon: AppAvatar(
-                                imgUrl: (logInDetails.photo).toString(),
-                                radius: Get.width * 0.16,
-                                name:logInDetails.name.toString()
-                              ),
-                              onPressed: () {
-
-                              },
+                          Text(
+                            "Complete your KYC",
+                            style: AppTextStyle.subtitle1.copyWith(
+                              color: Colors.black,
+                              fontSize: Get.width * 0.04,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                logInDetails.name.toString(),
-                                style: AppTextStyle.subtitle1.copyWith(
-                                  color: Colors.black,
-                                  fontSize: Get.width * 0.045,
-                                ),
-                              ),
-                              Text(
-                                logInDetails.userType.toString().replaceAll("_", " ").capitalizeFirst.toString(),
-                                style: AppTextStyle.subtitle1.copyWith(
-                                  color: Colors.black.withOpacity(0.5),
-                                  fontSize: Get.width * 0.035,
-                                ),
-                              ),
-                            ],
-                          )
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          SizedBox(
+                            width: width*0.03,
+                          ),
+                          Text(
+                            "Get verified by completing your KYC \ntoday",
+                            style: AppTextStyle.subtitle1.copyWith(
+                              color: Colors.black.withOpacity(0.7),
+                              fontSize: Get.width * 0.036,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
                         ],
                       ),
                       SizedBox(
-                        height: width*0.04,
+                        height: width*0.05,
                       ),
                       Padding(
-                        padding: EdgeInsets.only(left: width*0.025,right: width*0.025),
-                        child: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                SizedBox(
-                                  width: width*0.45,
-                                  child: PageInput(
-                                    hint: '',
-                                    label: 'First Name',
-                                    isCompulsory: false,
-                                    readOnly: true,
-                                    borderSide: BorderSide.none,
-                                    controller: firstName,
-                                  ),
+                        padding: EdgeInsets.only(left: width*0.03,right: width*0.03),
+                        child: Form(
+                          key: formKey,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              PageInput(
+                                hint: '',
+                                label: 'Your Tin',
+                                isCompulsory: true,
+                                validator: (value) {
+                                  if (value!.isEmpty) {
+                                    return 'Please enter your TIN';
+                                  }
+                                  return null;
+                                },
+                                showInfo: false,
+                              ),
+                              SizedBox(
+                                height: width*0.04,
+                              ),
+                              PageInput(
+                                hint: '',
+                                label: 'Upload your CAC',
+                                controller: bankAcct,
+                                keyboardType: TextInputType.number,
+                                isFilePicker: true,
+                              ),
+                              SizedBox(
+                                height: width*0.1,
+                              ),
+                              Text(
+                                "Bank Details",
+                                style: AppTextStyle.subtitle1.copyWith(
+                                  color: Colors.black,
+                                  fontSize: Get.width * 0.035,
+                                  fontWeight: FontWeight.w600,
                                 ),
+                              ),
+                              SizedBox(
+                                height: width*0.04,
+                              ),
+                              PageInput(
+                                hint: '',
+                                label: 'Account Holder Name',
+                                isCompulsory: true,
+                                controller: bankName,
+                                validator: (value) {
+                                  if (value!.isEmpty) {
+                                    return 'Please enter your account name';
+                                  }
+                                  return null;
+                                },
+                                showInfo: false,
+                              ),
+                              SizedBox(
+                                height: width*0.04,
+                              ),
+                              PageInput(
+                                hint: '',
+                                label: 'Account Number',
+                                isCompulsory: true,
+                                controller: bankAcct,
+                                keyboardType: TextInputType.number,
+                                validator: (value) {
+                                  if (value!.isEmpty) {
+                                    return 'Please enter your account number';
+                                  }else if(GetUtils.isNumericOnly(value) == false){
+                                    return 'Please enter a valid account number';
+                                  }
+                                  return null;
+                                },
+                              ),
+                              SizedBox(
+                                height: width*0.04,
+                              ),
+                              PageDropButton(
+                                label: "Bank",
+                                hint: '',
+                                padding: const EdgeInsets.symmetric(horizontal: 10),
+                                onChanged: (val) {
+                                  bankCode.text = (val! as BankListModel).code.toString();
+                                  chosenBankName.text = (val as BankListModel).name.toString();
+                                },
+                                value:  bankList.first,
+                                items: bankList.map<DropdownMenuItem<BankListModel>>((BankListModel value) {
+                                  return DropdownMenuItem<BankListModel>(
+                                    value: value,
+                                    child: Text(value.name.toString()),
+                                  );
+                                }).toList(),
+                              ),
+                              SizedBox(
+                                height: Get.height*0.05,
+                              ),
+                              AppButton(
+                                title: "Submit KYC",
+                                onPressed: () async {
+                                  if(formKey.currentState!.validate()){
 
-                                SizedBox(
-                                  width: width*0.45,
-                                  child: PageInput(
-                                    hint: '',
-                                    label: 'Last Name',
-                                    isCompulsory: false,
-                                    readOnly: true,
-                                    borderSide: BorderSide.none,
-                                    controller: lastName,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: width*0.04,
-                            ),
-                            PageInput(
-                              hint: '',
-                              label: 'Email',
-                              isCompulsory: false,
-                              readOnly: true,
-                              borderSide: BorderSide.none,
-                              controller: email,
-                            ),
-                            SizedBox(
-                              height: width*0.04,
-                            ),
-                            PageInput(
-                              hint: '',
-                              label: 'Phone Number',
-                              isCompulsory: false,
-                              readOnly: true,
-                              borderSide: BorderSide.none,
-                              controller: phoneNumber,
-                            ),
-                            SizedBox(
-                              height: width*0.04,
-                            ),
-                            PageInput(
-                              hint: 'No Address Currently',
-                              label: 'Address',
-                              isCompulsory: false,
-                              readOnly: true,
-                              borderSide: BorderSide.none,
-                              controller: address,
-                            ),
-                            SizedBox(
-                              height: width*0.04,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                SizedBox(
-                                  width: width*0.45,
-                                  child: PageInput(
-                                    hint: 'No State Currently',
-                                    label: 'State',
-                                    isCompulsory: false,
-                                    readOnly: true,
-                                    borderSide: BorderSide.none,
-                                    controller: state,
-                                  ),
-                                ),
-
-                                SizedBox(
-                                  width: width*0.45,
-                                  child: PageInput(
-                                    hint: 'No City Currently',
-                                    label: 'City',
-                                    isCompulsory: false,
-                                    readOnly: true,
-                                    borderSide: BorderSide.none,
-                                    controller: city,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
+                                  }
+                                },
+                              )
+                            ],
+                          ),
                         ),
                       ),
                     ],

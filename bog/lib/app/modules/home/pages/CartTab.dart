@@ -283,6 +283,95 @@ class CartItem extends StatelessWidget {
   }
 }
 
+class OrderItem extends StatelessWidget {
+  const OrderItem({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+
+    /*CachedNetworkImageProvider(
+      "www.com",
+    )*/
+    return IntrinsicHeight(
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 25),
+        child: Row(
+          children: [
+            Container(
+              height: 90,
+              width: 90,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                color: AppColors.bostonUniRed,
+                image: const DecorationImage(
+                  image: AssetImage("assets/images/dummy_image.png"),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(left: Get.width * 0.015),
+                    child: const Text("30 Tonnes Sharp Sand"),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: Get.width * 0.015),
+                    child: Text(
+                      'Monday, 31 October 2022 ',
+                      style: AppTextStyle.caption.copyWith(
+                        color: Color(0xFF9A9A9A),
+                        fontSize: Get.width * 0.033,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: Get.width * 0.015),
+                    child: Text(
+                      'Pending Shipping ',
+                      style: AppTextStyle.caption.copyWith(
+                        color: Color(0xFFEC8B20),
+                        fontSize: Get.width * 0.033,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 8),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                const SizedBox(height: 5),
+                Padding(
+                  padding: EdgeInsets.only(left: Get.width * 0.015),
+                  child: Text(
+                    'N 115,000',
+                    style: AppTextStyle.caption.copyWith(
+                      color: Colors.black,
+                      fontSize: Get.width * 0.035,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class DashedLinePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {

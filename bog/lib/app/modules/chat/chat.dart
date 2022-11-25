@@ -71,6 +71,7 @@ class Chat extends GetView<HomeController> {
                                     icon: AppAvatar(
                                       imgUrl: "",
                                       radius: Get.width * 0.12,
+                                      name:"BOG"
                                     ),
                                     onPressed: () {
 

@@ -9,12 +9,14 @@ class AppAvatar extends StatelessWidget {
     this.imgUrl = '',
     this.selectedImg,
     this.radius = 55,
-    this.backgroundColor = const Color.fromARGB(255, 26, 26, 25)
+    this.backgroundColor = const Color(0xffEEF5FE),
+    required this.name
   }) : super(key: key);
 
   final String imgUrl;
   final String? selectedImg;
   final double radius;
+  final String name;
   final Color backgroundColor;
 
   @override
@@ -30,10 +32,15 @@ class AppAvatar extends StatelessWidget {
                   imageUrl: imgUrl,
                   fit: BoxFit.cover,
                   errorWidget: (context, url, error) {
-                    return Icon(
-                      IconlyLight.profile,
-                      color: Colors.white,
-                      size: radius * 0.7,
+                    return Center(
+                      child: Text(
+                        name.substring(0, 1).toUpperCase(),
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: radius * 0.5,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
                     );
                   },
                   width: radius * 2,
