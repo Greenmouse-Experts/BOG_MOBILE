@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:bog/app/global_widgets/app_button.dart';
 import 'package:feather_icons/feather_icons.dart';
@@ -11,10 +12,13 @@ import 'package:toggle_switch/toggle_switch.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_styles.dart';
 import '../../../controllers/home_controller.dart';
+import '../../../data/providers/api.dart';
 import '../../../global_widgets/app_input.dart';
 import '../../../global_widgets/page_dropdown.dart';
 import '../../../global_widgets/page_input.dart';
 import '../../home/home.dart';
+
+import 'package:dio/dio.dart' as dio;
 
 
 class ConstructionDrawing extends StatefulWidget {
@@ -28,8 +32,26 @@ class _ConstructionDrawingState extends State<ConstructionDrawing> {
   var pageController = PageController();
   var formKey = GlobalKey<FormState>();
 
+  var nameController = TextEditingController();
+  var locationController = TextEditingController();
+  var drawingController = TextEditingController(text: 'Architectural');
+  var typeController = TextEditingController(text: 'Residential');
+  var type2Controller = TextEditingController(text: 'Bungalow');
+  var surveyController = TextEditingController();
+  var architecturalController = TextEditingController();
+  var structuralController = TextEditingController();
+  var mechanicalController = TextEditingController();
+  var electricalController = TextEditingController();
+
+  File? surveyPlan;
+  File? structuralPlan;
+  File? architecturalPlan;
+  File? mechanicalPlan;
+  File? electricalPlan;
+
   @override
   Widget build(BuildContext context) {
+    var title  = Get.arguments as String;
     var width = Get.width;
     final Size size = MediaQuery.of(context).size;
     double multiplier = 25 * size.height * 0.01;
@@ -139,9 +161,16 @@ class _ConstructionDrawingState extends State<ConstructionDrawing> {
                                     ),
                                     Padding(
                                       padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
-                                      child: const AppInput(
+                                      child: AppInput(
                                         hintText: "Enter your name  ",
                                         label: "Name of client",
+                                        controller: nameController,
+                                        validator: (value){
+                                          if(value!.isEmpty){
+                                            return "Please enter your name";
+                                          }
+                                          return null;
+                                        },
                                       ),
                                     ),
                                     SizedBox(
@@ -154,7 +183,7 @@ class _ConstructionDrawingState extends State<ConstructionDrawing> {
                                         hint: '',
                                         padding: const EdgeInsets.symmetric(horizontal: 10),
                                         onChanged: (val) {
-
+                                          drawingController.text = val;
                                         },
                                         value:  "Architectural",
                                         items: ["Architectural","Structural","Mechanical","Electrical","All"].map<DropdownMenuItem<String>>((String value) {
@@ -170,9 +199,16 @@ class _ConstructionDrawingState extends State<ConstructionDrawing> {
                                     ),
                                     Padding(
                                       padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
-                                      child: const AppInput(
+                                      child: AppInput(
                                         hintText: "Enter the location of your project",
                                         label: "Location of project",
+                                        controller: locationController,
+                                        validator: (value){
+                                          if(value!.isEmpty){
+                                            return "Please enter the location of your project";
+                                          }
+                                          return null;
+                                        },
                                       ),
                                     ),
                                     SizedBox(
@@ -185,7 +221,7 @@ class _ConstructionDrawingState extends State<ConstructionDrawing> {
                                         hint: '',
                                         padding: const EdgeInsets.symmetric(horizontal: 10),
                                         onChanged: (val) {
-
+                                          typeController.text = val;
                                         },
                                         value:  "Residential",
                                         items: ["Residential","Commercial","Industrial","Educational","Religious"].map<DropdownMenuItem<String>>((String value) {
@@ -206,7 +242,7 @@ class _ConstructionDrawingState extends State<ConstructionDrawing> {
                                         hint: '',
                                         padding: const EdgeInsets.symmetric(horizontal: 10),
                                         onChanged: (val) {
-
+                                          type2Controller.text = val;
                                         },
                                         value:  "Bungalow",
                                         items: ["Bungalow","Duplex","Multi-storey","Terraced building","High rise building"].map<DropdownMenuItem<String>>((String value) {
@@ -225,7 +261,9 @@ class _ConstructionDrawingState extends State<ConstructionDrawing> {
                                       child: AppButton(
                                         title: "Proceed to upload documents",
                                         onPressed: (){
-                                          pageController.animateToPage(1, duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
+                                          if(formKey.currentState!.validate()){
+                                            pageController.animateToPage(1, duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
+                                          }
                                         },
                                       ),
                                     )
@@ -261,10 +299,20 @@ class _ConstructionDrawingState extends State<ConstructionDrawing> {
                                     ),
                                     Padding(
                                       padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
-                                      child: const PageInput(
+                                      child: PageInput(
                                         hint: "Enter your name  ",
                                         label: "Upload survey plan ",
                                         isFilePicker: true,
+                                        controller: surveyController,
+                                        validator: (value){
+                                          if(value!.isEmpty){
+                                            return "Please upload survey plan";
+                                          }
+                                          return null;
+                                        },
+                                        onFilePicked: (file){
+                                          surveyPlan = file;
+                                        },
                                       ),
                                     ),
 
@@ -273,10 +321,20 @@ class _ConstructionDrawingState extends State<ConstructionDrawing> {
                                     ),
                                     Padding(
                                       padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
-                                      child: const PageInput(
+                                      child: PageInput(
                                         hint: "Enter your name  ",
                                         label: "Upload architectural plan (If available) ",
                                         isFilePicker: true,
+                                        controller: architecturalController,
+                                        validator: (value){
+                                          if(value!.isEmpty){
+                                            return "Please upload architectural plan";
+                                          }
+                                          return null;
+                                        },
+                                        onFilePicked: (file){
+                                          architecturalPlan = file;
+                                        },
                                       ),
                                     ),
 
@@ -285,10 +343,20 @@ class _ConstructionDrawingState extends State<ConstructionDrawing> {
                                     ),
                                     Padding(
                                       padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
-                                      child: const PageInput(
+                                      child: PageInput(
                                         hint: "Enter your name  ",
                                         label: "Upload structural plan (If available) ",
                                         isFilePicker: true,
+                                        controller: structuralController,
+                                        validator: (value){
+                                          if(value!.isEmpty){
+                                            return "Please upload structural plan";
+                                          }
+                                          return null;
+                                        },
+                                        onFilePicked: (file){
+                                          structuralPlan = file;
+                                        },
                                       ),
                                     ),
 
@@ -297,10 +365,42 @@ class _ConstructionDrawingState extends State<ConstructionDrawing> {
                                     ),
                                     Padding(
                                       padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
-                                      child: const PageInput(
+                                      child: PageInput(
                                         hint: "Enter your name  ",
                                         label: "Upload mechanical plan (If available) ",
                                         isFilePicker: true,
+                                        controller: mechanicalController,
+                                        validator: (value){
+                                          if(value!.isEmpty){
+                                            return "Please upload mechanical plan";
+                                          }
+                                          return null;
+                                        },
+                                        onFilePicked: (file){
+                                          mechanicalPlan = file;
+                                        },
+                                      ),
+                                    ),
+
+                                    SizedBox(
+                                      height: Get.height*0.04,
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                      child: PageInput(
+                                        hint: "Enter your name  ",
+                                        label: "Upload electrical plan (If available) ",
+                                        isFilePicker: true,
+                                        controller: electricalController,
+                                        validator: (value){
+                                          if(value!.isEmpty){
+                                            return "Please upload electrical plan";
+                                          }
+                                          return null;
+                                        },
+                                        onFilePicked: (file){
+                                          electricalPlan = file;
+                                        },
                                       ),
                                     ),
 
@@ -311,8 +411,43 @@ class _ConstructionDrawingState extends State<ConstructionDrawing> {
                                       padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
                                       child: AppButton(
                                         title: "Submit",
-                                        onPressed: (){
-                                          pageController.animateToPage(2, duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
+                                        onPressed: () async {
+                                          if(formKey.currentState!.validate()){
+                                            Map<String, dynamic> body = {
+                                              'title': title,
+                                              'clientName': nameController.text,
+                                              'projectLocation': locationController.text,
+                                              "projectType": typeController.text,
+                                              "buildingType": type2Controller.text,
+                                            };
+                                            body['surveyPlan'] = await dio.MultipartFile.fromFile(
+                                              surveyPlan!.path,
+                                              filename: surveyPlan!.path.split('/').last,
+                                            );
+                                            body['structuralPlan'] = await dio.MultipartFile.fromFile(
+                                              structuralPlan!.path,
+                                              filename: structuralPlan!.path.split('/').last,
+                                            );
+                                            body['architecturalPlan'] = await dio.MultipartFile.fromFile(
+                                              architecturalPlan!.path,
+                                              filename: architecturalPlan!.path.split('/').last,
+                                            );
+                                            body['mechanicalPlan'] = await dio.MultipartFile.fromFile(
+                                              mechanicalPlan!.path,
+                                              filename: mechanicalPlan!.path.split('/').last,
+                                            );
+                                            body['electricalPlan'] = await dio.MultipartFile.fromFile(
+                                              electricalPlan!.path,
+                                              filename: electricalPlan!.path.split('/').last,
+                                            );
+                                            var formData = dio.FormData.fromMap(body);
+                                            var response = await Api().postData("/projects/drawing/request",body: formData,hasHeader: true);
+                                            if(response.isSuccessful){
+                                              pageController.animateToPage(2, duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
+                                            }else{
+                                              Get.snackbar("Error", response.data.toString());
+                                            }
+                                          }
                                         },
                                       ),
                                     )
