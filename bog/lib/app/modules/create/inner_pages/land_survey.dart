@@ -11,6 +11,7 @@ import 'package:toggle_switch/toggle_switch.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_styles.dart';
 import '../../../controllers/home_controller.dart';
+import '../../../data/providers/api.dart';
 import '../../../global_widgets/app_input.dart';
 import '../../../global_widgets/page_dropdown.dart';
 import '../../home/home.dart';
@@ -27,8 +28,16 @@ class _LandSurveyState extends State<LandSurvey> {
   var pageController = PageController();
   var formKey = GlobalKey<FormState>();
 
+  var nameController = TextEditingController();
+  var locationController = TextEditingController();
+  var lgaController = TextEditingController(text: 'Eti Osa');
+  var sizeController = TextEditingController(text: '0 - 1000 sq.m');
+  var typeController = TextEditingController(text:'Residential');
+  var surveyController = TextEditingController(text: 'Perimeter Survey');
+
   @override
   Widget build(BuildContext context) {
+    var title = Get.arguments as String;
     var width = Get.width;
     final Size size = MediaQuery.of(context).size;
     double multiplier = 25 * size.height * 0.01;
@@ -144,9 +153,16 @@ class _LandSurveyState extends State<LandSurvey> {
                                           ),
                                           Padding(
                                             padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
-                                            child: const AppInput(
+                                            child: AppInput(
                                               hintText: "Enter the name of your property",
                                               label: "Name of property ",
+                                              validator: (value) {
+                                                if (value!.isEmpty) {
+                                                  return "Please enter the name of your property";
+                                                }
+                                                return null;
+                                              },
+                                              controller: nameController,
                                             ),
                                           ),
                                           SizedBox(
@@ -154,9 +170,16 @@ class _LandSurveyState extends State<LandSurvey> {
                                           ),
                                           Padding(
                                             padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
-                                            child: const AppInput(
+                                            child: AppInput(
                                               hintText: "Enter the location of your property",
                                               label: "Location of property",
+                                              validator: (value) {
+                                                if (value!.isEmpty) {
+                                                  return "Please enter the location of your property";
+                                                }
+                                                return null;
+                                              },
+                                              controller: locationController,
                                             ),
                                           ),
                                           SizedBox(
@@ -169,7 +192,7 @@ class _LandSurveyState extends State<LandSurvey> {
                                               hint: '',
                                               padding: const EdgeInsets.symmetric(horizontal: 10),
                                               onChanged: (val) {
-
+                                                lgaController.text = val;
                                               },
                                               value:  "Eti Osa",
                                               items: ["Eti Osa","Lagos Island","Ikeja","Apapa","Agege","Alimosho","Amuwu Odofin","Ibeju Lekki","Ifako Ijaye","Kosofe","Lagos Mainland","Mushin","Oshodi Isolo","Ojo","Shomolu","Surulere","Ajeromi-Ifelodun","Badagry","Epe","Ikorodu"].map<DropdownMenuItem<String>>((String value) {
@@ -190,7 +213,7 @@ class _LandSurveyState extends State<LandSurvey> {
                                               hint: '',
                                               padding: const EdgeInsets.symmetric(horizontal: 10),
                                               onChanged: (val) {
-
+                                                sizeController.text = val;
                                               },
                                               value:  "0 - 1000 sq.m",
                                               items: ["0 - 1000 sq.m","1001 - 2000 sq.m","2001 - 4000 sq.m","40001 - 5000 sq.m","5001 - 1 HA","1.01 HA - 2 HA","2.01 HA - 4 HA","4.01 HA - 6 HA","6.01 HA - 8 HA","8.01 HA - 10 HA","10.01 HA - 15 HA","15.01 HA - 20 HA","20.01 HA - 25 HA","25.01 HA - 30 HA","30.01 HA - 35 HA","35.01 HA - 40 HA","40.01 HA - 45 HA","45.01 HA -50 HA","Over 50 HA"].map<DropdownMenuItem<String>>((String value) {
@@ -211,10 +234,10 @@ class _LandSurveyState extends State<LandSurvey> {
                                               hint: '',
                                               padding: const EdgeInsets.symmetric(horizontal: 10),
                                               onChanged: (val) {
-
+                                                typeController.text = val;
                                               },
-                                              value:  "Residential ",
-                                              items: ["Residential ","Commercial","Industrial","Educational","Religious"].map<DropdownMenuItem<String>>((String value) {
+                                              value:  "Residential",
+                                              items: ["Residential","Commercial","Industrial","Educational","Religious"].map<DropdownMenuItem<String>>((String value) {
                                                 return DropdownMenuItem<String>(
                                                   value: value,
                                                   child: Text(value),
@@ -232,7 +255,7 @@ class _LandSurveyState extends State<LandSurvey> {
                                               hint: '',
                                               padding: const EdgeInsets.symmetric(horizontal: 10),
                                               onChanged: (val) {
-
+                                                surveyController.text = val;
                                               },
                                               value:  "Perimeter Survey",
                                               items: ["Perimeter Survey","Detailed Survey","As-built survey","Re-establishment of beacons","Compilation of plans","Court Appearance","Engineering Survey","Change of Title"].map<DropdownMenuItem<String>>((String value) {
@@ -250,8 +273,24 @@ class _LandSurveyState extends State<LandSurvey> {
                                             padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
                                             child: AppButton(
                                               title: "Submit",
-                                              onPressed: (){
-                                                pageController.animateToPage(1, duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
+                                              onPressed: () async{
+                                                if(formKey.currentState!.validate()){
+                                                  var body = {
+                                                    "title": title,
+                                                    "propertyName": nameController.text,
+                                                    "propertyLocation": locationController.text,
+                                                    "propertyLga": lgaController.text,
+                                                    "landSize": sizeController.text,
+                                                    "propertyType": typeController.text,
+                                                    "surveyType": surveyController.text,
+                                                  };
+                                                  var response = await Api().postData("/projects/land-survey/request",body: body,hasHeader: true);
+                                                  if(response.isSuccessful){
+                                                    pageController.animateToPage(1, duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
+                                                  }else{
+                                                    Get.snackbar("Error", response.data.toString());
+                                                  }
+                                                }
                                               },
                                             ),
                                           )

@@ -35,6 +35,7 @@ class PageInput extends StatefulWidget {
       width: 1,
       color: Color(0xFF828282),
     ),
+    this.onFilePicked
   }) : super(key: key);
 
   final String hint;
@@ -55,6 +56,7 @@ class PageInput extends StatefulWidget {
   final String? Function(String?)? validator;
   final List<DropdownMenuItem<dynamic>>? dropDownItems;
   final Function(dynamic)? onDropdownChanged;
+  final Function(File)? onFilePicked;
 
   @override
   State<PageInput> createState() => _PageInputState();
@@ -203,7 +205,10 @@ class _PageInputState extends State<PageInput> {
                 if (result != null) {
                   File file = File(result.files.single.path.toString());
                   if(widget.controller != null) {
-                    widget.controller!.text = file.path;
+                    widget.controller!.text = file.path.split('/').last;
+                  }
+                  if(widget.onFilePicked != null) {
+                    widget.onFilePicked!(file);
                   }
                 }
               },

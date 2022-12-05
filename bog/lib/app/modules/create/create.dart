@@ -20,10 +20,18 @@ import '../../global_widgets/app_avatar.dart';
 import '../../global_widgets/app_input.dart';
 import '../../global_widgets/tabs.dart';
 
-class Create extends GetView<HomeController> {
+class Create extends StatefulWidget {
   const Create({Key? key}) : super(key: key);
 
   static const route = '/create';
+
+  @override
+  State<Create> createState() => _CreateState();
+}
+
+class _CreateState extends State<Create> {
+  var chosen = -1;
+  var titleController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -113,7 +121,7 @@ class Create extends GetView<HomeController> {
                       ),
                       Padding(
                         padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
-                        child: const AppInput(hintText: "Enter your desired project name "),
+                        child: AppInput(hintText: "Enter your desired project name ",controller: titleController,),
                       ),
                       SizedBox(
                         height: width*0.1,
@@ -136,21 +144,27 @@ class Create extends GetView<HomeController> {
                           ServiceWidget(
                               width: width,
                               function: (){
-                                Get.to(() => const LandSurvey());
+                                //Get.to(() => const LandSurvey());
+                                chosen = 1;
+                                controller.update(['Create']);
                               },
                               asset: "assets/images/oneS.png",
                               title: "Land Surveyor",
-                              multiplier: multiplier
+                              multiplier: multiplier,
+                            hasBorder: chosen == 1,
                           ),
 
                           ServiceWidget(
                               width: width,
                               function: (){
-                                Get.to(() => const ConstructionDrawing());
+                                //Get.to(() => const ConstructionDrawing());
+                                chosen = 2;
+                                controller.update(['Create']);
                               },
                               asset: "assets/images/twoS.png",
                               title: "Construction Drawing",
-                              multiplier: multiplier
+                              multiplier: multiplier,
+                            hasBorder: chosen == 2,
                           ),
                         ],
                       ),
@@ -165,21 +179,27 @@ class Create extends GetView<HomeController> {
                           ServiceWidget(
                               width: width,
                               function: (){
-                                Get.to(() => const GeotechnicalInvestigation());
+                                //Get.to(() => const GeotechnicalInvestigation());
+                                chosen = 3;
+                                controller.update(['Create']);
                               },
                               asset: "assets/images/threeS.png",
                               title: "Geotechnical \nInvestigation",
-                              multiplier: multiplier
+                              multiplier: multiplier,
+                            hasBorder: chosen == 3,
                           ),
 
                           ServiceWidget(
                               width: width,
                               function: (){
-                                Get.to(() => const ContractorOrSmartCalculator());
+                                //Get.to(() => const ContractorOrSmartCalculator());
+                                chosen = 4;
+                                controller.update(['Create']);
                               },
                               asset: "assets/images/fourS.png",
                               title: "Smart Calculator",
-                              multiplier: multiplier
+                              multiplier: multiplier,
+                            hasBorder: chosen == 4,
                           ),
                         ],
                       ),
@@ -194,21 +214,27 @@ class Create extends GetView<HomeController> {
                           ServiceWidget(
                               width: width,
                               function: (){
-                                Get.to(() => const BuildingApproval());
+                                //Get.to(() => const BuildingApproval());
+                                chosen = 5;
+                                controller.update(['Create']);
                               },
                               asset: "assets/images/fiveS.png",
                               title: "Building Approval",
-                              multiplier: multiplier
+                              multiplier: multiplier,
+                            hasBorder: chosen == 5,
                           ),
 
                           ServiceWidget(
                               width: width,
                               function: (){
-                                Get.to(() => const ContractorOrSmartCalculator());
+                                //Get.to(() => const ContractorOrSmartCalculator());
+                                chosen = 6;
+                                controller.update(['Create']);
                               },
-                              asset: "assets/images/fiveS.png",
+                              asset: "assets/images/Group 47136.png",
                               title: "Contractor",
-                              multiplier: multiplier
+                              multiplier: multiplier,
+                            hasBorder: chosen == 6,
                           ),
                         ],
                       ),
@@ -221,7 +247,24 @@ class Create extends GetView<HomeController> {
                         padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
                         child: AppButton(
                           title: "Proceed",
-                          onPressed: (){},
+                          onPressed: (){
+                            if(titleController.text.isNotEmpty){
+                              if(chosen == 1){
+                                Get.to(() => const LandSurvey(),arguments: titleController.text);
+                              }else if(chosen == 2){
+                                Get.to(() => const ConstructionDrawing(),arguments: titleController.text);
+                              }else if(chosen == 3){
+                                Get.to(() => const GeotechnicalInvestigation(),arguments: titleController.text);
+                              }else if(chosen == 4){
+                                Get.to(() => const ContractorOrSmartCalculator(),arguments: titleController.text);
+                              }else if(chosen == 5){
+                                Get.to(() => const BuildingApproval(),arguments: titleController.text);
+                              }else if(chosen == 6){
+                                Get.to(() => const ContractorOrSmartCalculator(),arguments: titleController.text);
+                              }
+                            }
+                          },
+                          enabled: titleController.text.isNotEmpty && chosen != -1,
                         ),
                       )
                     ],
@@ -299,6 +342,7 @@ class ServiceWidget extends StatelessWidget {
     required this.asset,
     required this.title,
     required this.multiplier,
+    this.hasBorder = false
   }) : super(key: key);
 
   final double width;
@@ -306,6 +350,7 @@ class ServiceWidget extends StatelessWidget {
   final String asset;
   final String title;
   final double multiplier;
+  final bool hasBorder;
 
   @override
   Widget build(BuildContext context) {
@@ -316,9 +361,10 @@ class ServiceWidget extends StatelessWidget {
         child: Container(
           height: width*0.4,
           width: width*0.4,
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.all(Radius.circular(10)),
+            borderRadius: const BorderRadius.all(Radius.circular(10)),
+            border: hasBorder ? const Border.fromBorderSide(BorderSide(color: Color(0xffEC8B20))) : null,
             boxShadow: [
               BoxShadow(
                 color: Colors.black12,

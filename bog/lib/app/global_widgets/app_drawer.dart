@@ -50,146 +50,153 @@ class _AppDrawerState extends State<AppDrawer> {
               var logInDetails = LogInModel.fromJson(jsonDecode(MyPref.logInDetail.val));
               return SizedBox(
                 width: Get.width*0.7,
+                height: Get.height,
                 child: Scaffold(
                     backgroundColor: AppColors.background,
                     body: SafeArea(
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.only(left: Get.width*0.015,right: 10.0,top: 10.0),
-                            child: Row(
-                              children: [
-                                SizedBox(
-                                  width: Get.width * 0.16,
-                                  height: Get.width * 0.16,
-                                  child: IconButton(
-                                    icon: AppAvatar(
-                                      imgUrl: (logInDetails.photo).toString(),
-                                      radius: Get.width * 0.16,
-                                      name: logInDetails.name.toString(),
-                                    ),
-                                    onPressed: () {
+                      child: SingleChildScrollView(
+                        child: SizedBox(
+                          width: Get.width*0.7,
+                          height: Get.height*0.95,
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.only(left: Get.width*0.015,right: 10.0,top: 10.0),
+                                child: Row(
+                                  children: [
+                                    SizedBox(
+                                      width: Get.width * 0.16,
+                                      height: Get.width * 0.16,
+                                      child: IconButton(
+                                        icon: AppAvatar(
+                                          imgUrl: (logInDetails.photo).toString(),
+                                          radius: Get.width * 0.16,
+                                          name: logInDetails.name.toString(),
+                                        ),
+                                        onPressed: () {
 
-                                    },
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 10.0,
-                                ),
-                                Expanded(
-                                  child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        },
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      width: 10.0,
+                                    ),
+                                    Expanded(
+                                      child: Row(
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Text(
-                                            logInDetails.name.toString(),
-                                            style: AppTextStyle.subtitle1.copyWith(
-                                              color: Colors.black,
-                                              fontSize: Get.width * 0.045,
-                                            ),
-                                          ),
-                                          Text(
-                                            controller.currentType,
-                                            style: AppTextStyle.subtitle1.copyWith(
-                                              color: Colors.black.withOpacity(0.5),
-                                              fontSize: Get.width * 0.035,
-                                            ),
+                                          Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                logInDetails.name.toString(),
+                                                style: AppTextStyle.subtitle1.copyWith(
+                                                  color: Colors.black,
+                                                  fontSize: Get.width * 0.045,
+                                                ),
+                                              ),
+                                              Text(
+                                                controller.currentType,
+                                                style: AppTextStyle.subtitle1.copyWith(
+                                                  color: Colors.black.withOpacity(0.5),
+                                                  fontSize: Get.width * 0.035,
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                         ],
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            height: Get.height * 0.02,
-                          ),
-                          _TextButton(
-                            text: "Account",
-                            onPressed: () {
-                              //Get.toNamed(OnboardingPage.route);
-                            },
-                            imageAsset: "assets/images/one1.png",
-                            showArrow: true),
-
-                          _TextButton(
-                              text: "Orders",
-                              onPressed: () {
-                                //Get.toNamed(OnboardingPage.route);
-                              },
-                              imageAsset: "assets/images/two1.png",
-                              showArrow: true),
-
-                          _TextButton(
-                              text: "Transactions",
-                              onPressed: () {
-                                Get.back();
-                                Get.to(() => const TransactionPage());
-                              },
-                              imageAsset: "assets/images/three1.png",
-                              showArrow: true),
-
-                          _TextButton(
-                              text: "Meetings",
-                              onPressed: () {
-                                Get.back();
-                                Get.to(() => const Meetings());
-                              },
-                              imageAsset: "assets/images/four1.png",
-                              showArrow: true),
-
-                          _TextButton(
-                              text: "Smart Calculator",
-                              onPressed: () {
-                                //Get.toNamed(OnboardingPage.route);
-                              },
-                              imageAsset: "assets/images/five1.png",
-                              showArrow: true),
-
-
-                          Expanded(child: Column(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              _TextButton(
-                                  text: "Switch Account",
-                                  onPressed: () {
-                                    Get.back();
-                                    Get.to(() => const SwitchUser());
-                                    //Get.toNamed(OnboardingPage.route);
-                                  },
-                                  imageAsset: "assets/images/six1.png",
-                                  showArrow: true),
-
-                              _TextButton(
-                                  text: "Support",
-                                  onPressed: () {
-                                    Get.back();
-                                    Get.to(() => const Support());
-                                    //Get.toNamed(OnboardingPage.route);
-                                  },
-                                  imageAsset: "assets/images/seven1.png",
-                                  showArrow: true),
-
-                              _TextButton(
-                                  text: "Log Out",
-                                  onPressed: () {
-                                    Get.back();
-                                    Get.toNamed(OnboardingPage.route);
-                                  },
-                                  imageAsset: "assets/images/log_out.png",
-                                  showArrow: false),
-
-                              SizedBox(
-                                height: Get.height * 0.05,
                               ),
+                              SizedBox(
+                                height: Get.height * 0.02,
+                              ),
+                              _TextButton(
+                                text: "Account",
+                                onPressed: () {
+                                  //Get.toNamed(OnboardingPage.route);
+                                },
+                                imageAsset: "assets/images/one1.png",
+                                showArrow: true),
+
+                              _TextButton(
+                                  text: "Orders",
+                                  onPressed: () {
+                                    //Get.toNamed(OnboardingPage.route);
+                                  },
+                                  imageAsset: "assets/images/two1.png",
+                                  showArrow: true),
+
+                              _TextButton(
+                                  text: "Transactions",
+                                  onPressed: () {
+                                    Get.back();
+                                    Get.to(() => const TransactionPage());
+                                  },
+                                  imageAsset: "assets/images/three1.png",
+                                  showArrow: true),
+
+                              _TextButton(
+                                  text: "Meetings",
+                                  onPressed: () {
+                                    Get.back();
+                                    Get.to(() => const Meetings());
+                                  },
+                                  imageAsset: "assets/images/four1.png",
+                                  showArrow: true),
+
+                              _TextButton(
+                                  text: "Smart Calculator",
+                                  onPressed: () {
+                                    //Get.toNamed(OnboardingPage.route);
+                                  },
+                                  imageAsset: "assets/images/five1.png",
+                                  showArrow: true),
+
+
+                              Expanded(child: Column(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  _TextButton(
+                                      text: "Switch Account",
+                                      onPressed: () {
+                                        Get.back();
+                                        Get.to(() => const SwitchUser());
+                                        //Get.toNamed(OnboardingPage.route);
+                                      },
+                                      imageAsset: "assets/images/six1.png",
+                                      showArrow: true),
+
+                                  _TextButton(
+                                      text: "Support",
+                                      onPressed: () {
+                                        Get.back();
+                                        Get.to(() => const Support());
+                                        //Get.toNamed(OnboardingPage.route);
+                                      },
+                                      imageAsset: "assets/images/seven1.png",
+                                      showArrow: true),
+
+                                  _TextButton(
+                                      text: "Log Out",
+                                      onPressed: () {
+                                        Get.back();
+                                        Get.toNamed(OnboardingPage.route);
+                                      },
+                                      imageAsset: "assets/images/log_out.png",
+                                      showArrow: false),
+
+                                  SizedBox(
+                                    height: Get.height * 0.05,
+                                  ),
+                                ],
+                              )),
                             ],
-                          )),
-                        ],
+                          ),
+                        ),
                       ),
                     )),
               );
