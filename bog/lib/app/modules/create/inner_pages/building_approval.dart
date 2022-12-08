@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:bog/app/global_widgets/app_button.dart';
 import 'package:bog/app/global_widgets/global_widgets.dart';
@@ -12,9 +13,13 @@ import 'package:toggle_switch/toggle_switch.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_styles.dart';
 import '../../../controllers/home_controller.dart';
+import '../../../data/providers/api.dart';
 import '../../../global_widgets/app_input.dart';
 import '../../../global_widgets/page_dropdown.dart';
 import '../../home/home.dart';
+
+import 'package:dio/dio.dart' as dio;
+
 
 
 class BuildingApproval extends StatefulWidget {
@@ -28,8 +33,41 @@ class _BuildingApprovalState extends State<BuildingApproval> {
   var pageController = PageController();
   var formKey = GlobalKey<FormState>();
 
+  var nameController = TextEditingController();
+  var locationController = TextEditingController();
+  var drawingController = TextEditingController(text: 'Architectural');
+  var typeController = TextEditingController(text: 'Residential');
+  var surveyController = TextEditingController();
+  var architecturalController = TextEditingController();
+  var structuralController = TextEditingController();
+  var mechanicalController = TextEditingController();
+  var electricalController = TextEditingController();
+  var soilTestController = TextEditingController();
+  var sitePlanController = TextEditingController();
+  var deedController = TextEditingController();
+  var siteAnalysisController = TextEditingController();
+  var environmentalController = TextEditingController();
+  var taxController = TextEditingController();
+  var corenController = TextEditingController();
+  var stampedController = TextEditingController();
+
+  File? surveyPlan;
+  File? structuralPlan;
+  File? architecturalPlan;
+  File? mechanicalPlan;
+  File? electricalPlan;
+  File? soilTestPlan;
+  File? sitePlan;
+  File? deedPlan;
+  File? siteAnalysisPlan;
+  File? environmentalPlan;
+  File? taxPlan;
+  File? corenPlan;
+  File? stampedPlan;
+
   @override
   Widget build(BuildContext context) {
+    var title  = Get.arguments as String?;
     var width = Get.width;
     final Size size = MediaQuery.of(context).size;
     double multiplier = 25 * size.height * 0.01;
@@ -139,9 +177,16 @@ class _BuildingApprovalState extends State<BuildingApproval> {
                                   ),
                                   Padding(
                                     padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
-                                    child: const PageInput(
+                                    child: PageInput(
                                       hint: "Enter your name  ",
                                       label: "Name of client",
+                                      controller: nameController,
+                                      validator: (value){
+                                        if(value!.isEmpty){
+                                          return "Please enter your name";
+                                        }
+                                        return null;
+                                      },
                                     ),
                                   ),
                                   SizedBox(
@@ -154,7 +199,7 @@ class _BuildingApprovalState extends State<BuildingApproval> {
                                       hint: '',
                                       padding: const EdgeInsets.symmetric(horizontal: 10),
                                       onChanged: (val) {
-
+                                        typeController.text = val;
                                       },
                                       value:  "Residential",
                                       items: ["Residential","Commercial","Industrial","Religious","Educational","Recreational","Other"].map<DropdownMenuItem<String>>((String value) {
@@ -173,7 +218,9 @@ class _BuildingApprovalState extends State<BuildingApproval> {
                                     child: AppButton(
                                       title: "Proceed to upload plans",
                                       onPressed: (){
-                                        pageController.animateToPage(1, duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
+                                        if(formKey.currentState!.validate()){
+                                          pageController.animateToPage(1, duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
+                                        }
                                       },
                                     ),
                                   )
@@ -216,10 +263,20 @@ class _BuildingApprovalState extends State<BuildingApproval> {
                                         children: [
                                           Padding(
                                             padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
-                                            child: const PageInput(
+                                            child: PageInput(
                                               hint: "Enter your name  ",
                                               label: "Upload survey plan",
                                               isFilePicker: true,
+                                              controller: surveyController,
+                                              validator: (value){
+                                                if(value!.isEmpty){
+                                                  return "Please upload survey plan";
+                                                }
+                                                return null;
+                                              },
+                                              onFilePicked: (file){
+                                                surveyPlan = file;
+                                              },
                                             ),
                                           ),
 
@@ -228,10 +285,20 @@ class _BuildingApprovalState extends State<BuildingApproval> {
                                           ),
                                           Padding(
                                             padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
-                                            child: const PageInput(
+                                            child: PageInput(
                                               hint: "Enter your name  ",
                                               label: "Upload architectural plan",
                                               isFilePicker: true,
+                                              controller: architecturalController,
+                                              validator: (value){
+                                                if(value!.isEmpty){
+                                                  return "Please upload architectural plan";
+                                                }
+                                                return null;
+                                              },
+                                              onFilePicked: (file){
+                                                architecturalPlan = file;
+                                              },
                                             ),
                                           ),
 
@@ -240,10 +307,20 @@ class _BuildingApprovalState extends State<BuildingApproval> {
                                           ),
                                           Padding(
                                             padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
-                                            child: const PageInput(
+                                            child: PageInput(
                                               hint: "Enter your name  ",
                                               label: "Upload mechanical plan",
                                               isFilePicker: true,
+                                              controller: mechanicalController,
+                                              validator: (value){
+                                                if(value!.isEmpty){
+                                                  return "Please upload mechanical plan";
+                                                }
+                                                return null;
+                                              },
+                                              onFilePicked: (file){
+                                                mechanicalPlan = file;
+                                              },
                                             ),
                                           ),
 
@@ -252,10 +329,20 @@ class _BuildingApprovalState extends State<BuildingApproval> {
                                           ),
                                           Padding(
                                             padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
-                                            child: const PageInput(
+                                            child: PageInput(
                                               hint: "Enter your name  ",
                                               label: "Upload electric plan",
                                               isFilePicker: true,
+                                              controller: electricalController,
+                                              validator: (value){
+                                                if(value!.isEmpty){
+                                                  return "Please upload electric plan";
+                                                }
+                                                return null;
+                                              },
+                                              onFilePicked: (file){
+                                                electricalPlan = file;
+                                              },
                                             ),
                                           ),
 
@@ -264,10 +351,20 @@ class _BuildingApprovalState extends State<BuildingApproval> {
                                           ),
                                           Padding(
                                             padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
-                                            child: const PageInput(
+                                            child: PageInput(
                                               hint: "Enter your name  ",
                                               label: "Upload soil test report",
                                               isFilePicker: true,
+                                              controller: soilTestController,
+                                              validator: (value){
+                                                if(value!.isEmpty){
+                                                  return "Please upload soil test report";
+                                                }
+                                                return null;
+                                              },
+                                              onFilePicked: (file){
+                                                soilTestPlan = file;
+                                              },
                                             ),
                                           ),
 
@@ -276,10 +373,20 @@ class _BuildingApprovalState extends State<BuildingApproval> {
                                           ),
                                           Padding(
                                             padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
-                                            child: const PageInput(
+                                            child: PageInput(
                                               hint: "Enter your name  ",
                                               label: "Upload site plan",
                                               isFilePicker: true,
+                                              controller: sitePlanController,
+                                              validator: (value){
+                                                if(value!.isEmpty){
+                                                  return "Please upload site plan";
+                                                }
+                                                return null;
+                                              },
+                                              onFilePicked: (file){
+                                                sitePlan = file;
+                                              },
                                             ),
                                           ),
 
@@ -288,10 +395,20 @@ class _BuildingApprovalState extends State<BuildingApproval> {
                                           ),
                                           Padding(
                                             padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
-                                            child: const PageInput(
+                                            child: PageInput(
                                               hint: "Enter your name  ",
                                               label: "Upload structural plan",
                                               isFilePicker: true,
+                                              controller: structuralController,
+                                              validator: (value){
+                                                if(value!.isEmpty){
+                                                  return "Please upload structural plan";
+                                                }
+                                                return null;
+                                              },
+                                              onFilePicked: (file){
+                                                structuralPlan = file;
+                                              },
                                             ),
                                           ),
 
@@ -302,8 +419,10 @@ class _BuildingApprovalState extends State<BuildingApproval> {
                                             padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
                                             child: AppButton(
                                               title: "Proceed to upload other documents",
-                                              onPressed: (){
-                                                pageController.animateToPage(2, duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
+                                              onPressed: () {
+                                                if(formKey.currentState!.validate()){
+                                                  pageController.animateToPage(2, duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
+                                                }
                                               },
                                             ),
                                           )
@@ -350,10 +469,20 @@ class _BuildingApprovalState extends State<BuildingApproval> {
                                         children: [
                                           Padding(
                                             padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
-                                            child: const PageInput(
+                                            child: PageInput(
                                               hint: "Enter your name  ",
                                               label: "Upload C of O Deed of Agreement/ R of O",
                                               isFilePicker: true,
+                                              controller: deedController,
+                                              validator: (value){
+                                                if(value!.isEmpty){
+                                                  return "Please upload C of O Deed of Agreement/ R of O";
+                                                }
+                                                return null;
+                                              },
+                                              onFilePicked: (file){
+                                                deedPlan = file;
+                                              },
                                             ),
                                           ),
 
@@ -362,10 +491,20 @@ class _BuildingApprovalState extends State<BuildingApproval> {
                                           ),
                                           Padding(
                                             padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
-                                            child: const PageInput(
+                                            child: PageInput(
                                               hint: "Enter your name  ",
                                               label: "Upload site analysis report",
                                               isFilePicker: true,
+                                              controller: siteAnalysisController,
+                                              validator: (value){
+                                                if(value!.isEmpty){
+                                                  return "Please upload site analysis report";
+                                                }
+                                                return null;
+                                              },
+                                              onFilePicked: (file){
+                                                siteAnalysisPlan = file;
+                                              },
                                             ),
                                           ),
 
@@ -374,10 +513,20 @@ class _BuildingApprovalState extends State<BuildingApproval> {
                                           ),
                                           Padding(
                                             padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
-                                            child: const PageInput(
+                                            child: PageInput(
                                               hint: "Enter your name  ",
                                               label: "Upload environmental impact \nassessment report",
                                               isFilePicker: true,
+                                              controller: environmentalController,
+                                              validator: (value){
+                                                if(value!.isEmpty){
+                                                  return "Please upload environmental impact assessment report";
+                                                }
+                                                return null;
+                                              },
+                                              onFilePicked: (file){
+                                                environmentalPlan = file;
+                                              },
                                             ),
                                           ),
 
@@ -386,10 +535,20 @@ class _BuildingApprovalState extends State<BuildingApproval> {
                                           ),
                                           Padding(
                                             padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
-                                            child: const PageInput(
+                                            child: PageInput(
                                               hint: "Enter your name  ",
                                               label: "Upload tax clearance certificate",
                                               isFilePicker: true,
+                                              controller: taxController,
+                                              validator: (value){
+                                                if(value!.isEmpty){
+                                                  return "Please upload tax clearance certificate";
+                                                }
+                                                return null;
+                                              },
+                                              onFilePicked: (file){
+                                                taxPlan = file;
+                                              },
                                             ),
                                           ),
 
@@ -398,10 +557,20 @@ class _BuildingApprovalState extends State<BuildingApproval> {
                                           ),
                                           Padding(
                                             padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
-                                            child: const PageInput(
+                                            child: PageInput(
                                               hint: "Enter your name  ",
                                               label: "Upload letter of supervision from \nCOREN registered engineers",
                                               isFilePicker: true,
+                                              controller: corenController,
+                                              validator: (value){
+                                                if(value!.isEmpty){
+                                                  return "Please upload letter of supervision from COREN registered engineers";
+                                                }
+                                                return null;
+                                              },
+                                              onFilePicked: (file){
+                                                corenPlan = file;
+                                              },
                                             ),
                                           ),
 
@@ -410,22 +579,20 @@ class _BuildingApprovalState extends State<BuildingApproval> {
                                           ),
                                           Padding(
                                             padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
-                                            child: const PageInput(
+                                            child: PageInput(
                                               hint: "Enter your name  ",
                                               label: "Upload stamped and sealed copy of \nstructural calculation sheet",
                                               isFilePicker: true,
-                                            ),
-                                          ),
-
-                                          SizedBox(
-                                            height: Get.height*0.04,
-                                          ),
-                                          Padding(
-                                            padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
-                                            child: const PageInput(
-                                              hint: "Enter your name  ",
-                                              label: "Name of client",
-                                              isFilePicker: true,
+                                              controller: stampedController,
+                                              validator: (value){
+                                                if(value!.isEmpty){
+                                                  return "Please upload stamped and sealed copy of structural calculation sheet";
+                                                }
+                                                return null;
+                                              },
+                                              onFilePicked: (file){
+                                                stampedPlan = file;
+                                              },
                                             ),
                                           ),
 
@@ -436,8 +603,75 @@ class _BuildingApprovalState extends State<BuildingApproval> {
                                             padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
                                             child: AppButton(
                                               title: "Submit",
-                                              onPressed: (){
-                                                pageController.animateToPage(3, duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
+                                              onPressed: ()async {
+                                                if(formKey.currentState!.validate()){
+                                                  Map<String, dynamic> body = {
+                                                    'title': title,
+                                                    'clientName': nameController.text,
+                                                    'projectLocation': locationController.text,
+                                                    "purpose": typeController.text,
+                                                  };
+                                                  body['surveyPlan'] = await dio.MultipartFile.fromFile(
+                                                    surveyPlan!.path,
+                                                    filename: surveyPlan!.path.split('/').last,
+                                                  );
+                                                  body['structuralPlan'] = await dio.MultipartFile.fromFile(
+                                                    structuralPlan!.path,
+                                                    filename: structuralPlan!.path.split('/').last,
+                                                  );
+                                                  body['architecturalPlan'] = await dio.MultipartFile.fromFile(
+                                                    architecturalPlan!.path,
+                                                    filename: architecturalPlan!.path.split('/').last,
+                                                  );
+                                                  body['mechanicalPlan'] = await dio.MultipartFile.fromFile(
+                                                    mechanicalPlan!.path,
+                                                    filename: mechanicalPlan!.path.split('/').last,
+                                                  );
+                                                  body['electricalPlan'] = await dio.MultipartFile.fromFile(
+                                                    electricalPlan!.path,
+                                                    filename: electricalPlan!.path.split('/').last,
+                                                  );
+
+                                                  body['soilTestReport'] = await dio.MultipartFile.fromFile(
+                                                    soilTestPlan!.path,
+                                                    filename: soilTestPlan!.path.split('/').last,
+                                                  );
+                                                  body['sitePlan'] = await dio.MultipartFile.fromFile(
+                                                    sitePlan!.path,
+                                                    filename: sitePlan!.path.split('/').last,
+                                                  );
+                                                  body['siteAnalysisReport'] = await dio.MultipartFile.fromFile(
+                                                    siteAnalysisPlan!.path,
+                                                    filename: siteAnalysisPlan!.path.split('/').last,
+                                                  );
+                                                  body['environmentImpactReport'] = await dio.MultipartFile.fromFile(
+                                                    environmentalPlan!.path,
+                                                    filename: environmentalPlan!.path.split('/').last,
+                                                  );
+                                                  body['clearanceCertificate'] = await dio.MultipartFile.fromFile(
+                                                    taxPlan!.path,
+                                                    filename: taxPlan!.path.split('/').last,
+                                                  );
+                                                  body['structuralCalculationSheet'] = await dio.MultipartFile.fromFile(
+                                                    structuralPlan!.path,
+                                                    filename: structuralPlan!.path.split('/').last,
+                                                  );
+                                                  body['deedOfAgreement'] = await dio.MultipartFile.fromFile(
+                                                    deedPlan!.path,
+                                                    filename: deedPlan!.path.split('/').last,
+                                                  );
+                                                  body['supervisorLetter'] = await dio.MultipartFile.fromFile(
+                                                    corenPlan!.path,
+                                                    filename: corenPlan!.path.split('/').last,
+                                                  );
+                                                  var formData = dio.FormData.fromMap(body);
+                                                  var response = await Api().postData("/projects/building-approval/request",body: formData,hasHeader: true);
+                                                  if(response.isSuccessful){
+                                                    pageController.animateToPage(3, duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
+                                                  }else{
+                                                    Get.snackbar("Error", response.data.toString());
+                                                  }
+                                                }
                                               },
                                             ),
                                           )

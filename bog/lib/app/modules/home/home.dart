@@ -37,6 +37,7 @@ class _HomeState extends State<Home> {
     }else{
       homeController.currentType = "Service Partner";
     }
+    //homeController.updateNewUser(logInDetails.userType.toString().replaceAll("_", " ").capitalizeFirst.toString(),updatePages: false);
   }
 
   @override

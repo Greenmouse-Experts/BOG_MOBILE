@@ -51,7 +51,7 @@ class _ConstructionDrawingState extends State<ConstructionDrawing> {
 
   @override
   Widget build(BuildContext context) {
-    var title  = Get.arguments as String;
+    var title  = Get.arguments as String?;
     var width = Get.width;
     final Size size = MediaQuery.of(context).size;
     double multiplier = 25 * size.height * 0.01;
