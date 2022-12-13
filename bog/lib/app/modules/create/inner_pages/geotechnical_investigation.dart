@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:bog/app/global_widgets/app_button.dart';
 import 'package:feather_icons/feather_icons.dart';
@@ -11,10 +12,13 @@ import 'package:toggle_switch/toggle_switch.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_styles.dart';
 import '../../../controllers/home_controller.dart';
+import '../../../data/providers/api.dart';
 import '../../../global_widgets/app_input.dart';
 import '../../../global_widgets/page_dropdown.dart';
 import '../../../global_widgets/page_input.dart';
 import '../../home/home.dart';
+
+import 'package:dio/dio.dart' as dio;
 
 
 class GeotechnicalInvestigation extends StatefulWidget {
@@ -27,9 +31,28 @@ class GeotechnicalInvestigation extends StatefulWidget {
 class _GeotechnicalInvestigationState extends State<GeotechnicalInvestigation> {
   var pageController = PageController();
   var formKey = GlobalKey<FormState>();
+  var formKey1 = GlobalKey<FormState>();
+
+  var nameController = TextEditingController();
+  var locationController = TextEditingController();
+  var sizeController = TextEditingController();
+  var intendedController = TextEditingController(text: 'Residential Building');
+  var isController = TextEditingController(text: 'Yes');
+  var picture = TextEditingController();
+  var boreholeController = TextEditingController();
+  var depthController = TextEditingController();
+  var cptController = TextEditingController();
+  var tonnageController = TextEditingController(text: '2.5 Tons');
+  var typeController = TextEditingController(text: 'Mechanical');
+  var specialController = TextEditingController(text: "Yes");
+  var specifyController = TextEditingController();
+
+  File? picturePlan;
 
   @override
   Widget build(BuildContext context) {
+    var title  = Get.arguments as String?;
+
     var width = Get.width;
     final Size size = MediaQuery.of(context).size;
     double multiplier = 25 * size.height * 0.01;
@@ -145,9 +168,16 @@ class _GeotechnicalInvestigationState extends State<GeotechnicalInvestigation> {
                                         children: [
                                           Padding(
                                             padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
-                                            child: const PageInput(
+                                            child: PageInput(
                                               hint: "Enter your name  ",
                                               label: "Name of client",
+                                              controller: nameController,
+                                              validator: (value){
+                                                if(value!.isEmpty){
+                                                  return "Please enter your name";
+                                                }
+                                                return null;
+                                              },
                                             ),
                                           ),
                                           SizedBox(
@@ -155,9 +185,16 @@ class _GeotechnicalInvestigationState extends State<GeotechnicalInvestigation> {
                                           ),
                                           Padding(
                                             padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
-                                            child: const PageInput(
+                                            child: PageInput(
                                               hint: "Enter location  ",
                                               label: "Location Of Site",
+                                              controller: locationController,
+                                              validator: (value){
+                                                if(value!.isEmpty){
+                                                  return "Please enter location";
+                                                }
+                                                return null;
+                                              },
                                             ),
                                           ),
                                           SizedBox(
@@ -165,9 +202,16 @@ class _GeotechnicalInvestigationState extends State<GeotechnicalInvestigation> {
                                           ),
                                           Padding(
                                             padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
-                                            child: const PageInput(
+                                            child: PageInput(
                                               hint: "Enter land size  ",
                                               label: "Size Of Land",
+                                              controller: sizeController,
+                                              validator: (value){
+                                                if(value!.isEmpty){
+                                                  return "Please enter land size";
+                                                }
+                                                return null;
+                                              },
                                             ),
                                           ),
                                           SizedBox(
@@ -180,7 +224,7 @@ class _GeotechnicalInvestigationState extends State<GeotechnicalInvestigation> {
                                               hint: '',
                                               padding: const EdgeInsets.symmetric(horizontal: 10),
                                               onChanged: (val) {
-
+                                                intendedController.text = val;
                                               },
                                               value:  "Residential Building",
                                               items: ["Residential Building","Industrial Building","High Rise Building","Road","Estate","Dumping Site","Water Borehole"].map<DropdownMenuItem<String>>((String value) {
@@ -201,7 +245,7 @@ class _GeotechnicalInvestigationState extends State<GeotechnicalInvestigation> {
                                               hint: '',
                                               padding: const EdgeInsets.symmetric(horizontal: 10),
                                               onChanged: (val) {
-
+                                                isController.text = val;
                                               },
                                               value:  "Yes",
                                               items: ["Yes","No"].map<DropdownMenuItem<String>>((String value) {
@@ -220,7 +264,9 @@ class _GeotechnicalInvestigationState extends State<GeotechnicalInvestigation> {
                                             child: AppButton(
                                               title: "Proceed",
                                               onPressed: (){
-                                                pageController.animateToPage(1, duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
+                                                if(formKey.currentState!.validate()){
+                                                  pageController.animateToPage(1, duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
+                                                }
                                               },
                                             ),
                                           )
@@ -232,7 +278,7 @@ class _GeotechnicalInvestigationState extends State<GeotechnicalInvestigation> {
                               ),
                             ),
                             Form(
-                              key: formKey,
+                              key: formKey1,
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -268,10 +314,20 @@ class _GeotechnicalInvestigationState extends State<GeotechnicalInvestigation> {
                                         children: [
                                           Padding(
                                             padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
-                                            child: const PageInput(
+                                            child: PageInput(
                                               hint: "Enter your name  ",
                                               label: "Upload available picture of the land or property",
                                               isFilePicker: true,
+                                              controller: picture,
+                                              validator: (value){
+                                                if(value!.isEmpty){
+                                                  return "Please pick a picture to upload";
+                                                }
+                                                return null;
+                                              },
+                                              onFilePicked: (file){
+                                                picturePlan = file;
+                                              },
                                             ),
                                           ),
 
@@ -280,10 +336,17 @@ class _GeotechnicalInvestigationState extends State<GeotechnicalInvestigation> {
                                           ),
                                           Padding(
                                             padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
-                                            child: const PageInput(
-                                              hint: "Enter your name  ",
+                                            child: PageInput(
+                                              hint: "Enter number  ",
                                               label: "Number of intended geotechnical borehole",
                                               keyboardType: TextInputType.number,
+                                              controller: boreholeController,
+                                              validator: (value){
+                                                if(value!.isEmpty){
+                                                  return "Please enter number of borehole";
+                                                }
+                                                return null;
+                                              },
                                             ),
                                           ),
 
@@ -292,10 +355,17 @@ class _GeotechnicalInvestigationState extends State<GeotechnicalInvestigation> {
                                           ),
                                           Padding(
                                             padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
-                                            child: const PageInput(
-                                              hint: "Enter your name  ",
+                                            child: PageInput(
+                                              hint: "Enter depth  ",
                                               label: "Depth of borehole",
-                                              keyboardType: TextInputType.numberWithOptions(decimal: true),
+                                              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                                              controller: depthController,
+                                              validator: (value){
+                                                if(value!.isEmpty){
+                                                  return "Please enter depth of borehole";
+                                                }
+                                                return null;
+                                              },
                                             ),
                                           ),
 
@@ -304,10 +374,17 @@ class _GeotechnicalInvestigationState extends State<GeotechnicalInvestigation> {
                                           ),
                                           Padding(
                                             padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
-                                            child: const PageInput(
-                                              hint: "Enter your name  ",
+                                            child: PageInput(
+                                              hint: "Enter CPT number  ",
                                               label: "Number of CPT",
                                               keyboardType: TextInputType.number,
+                                              controller: cptController,
+                                              validator: (value){
+                                                if(value!.isEmpty){
+                                                  return "Please enter number of CPT";
+                                                }
+                                                return null;
+                                              },
                                             ),
                                           ),
 
@@ -321,7 +398,7 @@ class _GeotechnicalInvestigationState extends State<GeotechnicalInvestigation> {
                                               hint: '',
                                               padding: const EdgeInsets.symmetric(horizontal: 10),
                                               onChanged: (val) {
-
+                                                tonnageController.text = val;
                                               },
                                               value:  "2.5 Tons",
                                               items: ["2.5 Tons","10 Tons","20 Tons"].map<DropdownMenuItem<String>>((String value) {
@@ -343,7 +420,7 @@ class _GeotechnicalInvestigationState extends State<GeotechnicalInvestigation> {
                                               hint: '',
                                               padding: const EdgeInsets.symmetric(horizontal: 10),
                                               onChanged: (val) {
-
+                                                typeController.text = val;
                                               },
                                               value:  "Mechanical",
                                               items: ["Mechanical","Electrical","Dynamic"].map<DropdownMenuItem<String>>((String value) {
@@ -365,7 +442,7 @@ class _GeotechnicalInvestigationState extends State<GeotechnicalInvestigation> {
                                               hint: '',
                                               padding: const EdgeInsets.symmetric(horizontal: 10),
                                               onChanged: (val) {
-
+                                                specialController.text = val;
                                               },
                                               value:  "Yes",
                                               items: ["Yes","No"].map<DropdownMenuItem<String>>((String value) {
@@ -382,10 +459,10 @@ class _GeotechnicalInvestigationState extends State<GeotechnicalInvestigation> {
                                           ),
                                           Padding(
                                             padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
-                                            child: const PageInput(
+                                            child: PageInput(
                                               hint: "",
                                               label: "If yes, please specify",
-                                              keyboardType: TextInputType.number,
+                                              controller: specifyController,
                                             ),
                                           ),
 
@@ -396,8 +473,35 @@ class _GeotechnicalInvestigationState extends State<GeotechnicalInvestigation> {
                                             padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
                                             child: AppButton(
                                               title: "Submit",
-                                              onPressed: (){
-                                                pageController.animateToPage(2, duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
+                                              onPressed: () async {
+                                                if(formKey1.currentState!.validate()){
+                                                  Map<String, dynamic> body = {
+                                                    'title': title,
+                                                    'clientName': nameController.text,
+                                                    'projectLocation': locationController.text,
+                                                    "projectType": intendedController.text,
+                                                    "siteHasBuilding": isController.text == "Yes" ? true : false,
+                                                    "noOfIntentendedBorehole": boreholeController.text,
+                                                    "depthOfBorehole": depthController.text,
+                                                    "noOfCpt": cptController.text,
+                                                    "tonnageOfCpt": tonnageController.text,
+                                                    "typeOfCpt": typeController.text,
+                                                    "anySpecialInvestigation": specialController.text == "Yes" ? true : false,
+                                                    "comment": specifyController.text,
+                                                  };
+                                                  body['propertyPicture'] = await dio.MultipartFile.fromFile(
+                                                    picturePlan!.path,
+                                                    filename: picturePlan!.path.split('/').last,
+                                                  );
+                                                  var formData = dio.FormData.fromMap(body);
+                                                  var response = await Api().postData("/projects/geotechnical/request",body: formData,hasHeader: true);
+                                                  if(response.isSuccessful){
+                                                    pageController.animateToPage(2, duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
+                                                  }else{
+                                                    print(response.code);
+                                                    Get.snackbar("Error", response.data.toString());
+                                                  }
+                                                }
                                               },
                                             ),
                                           )

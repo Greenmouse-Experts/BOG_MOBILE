@@ -361,7 +361,8 @@ class ServiceWidget extends StatelessWidget {
                   TextSpan(
                       text: '',
                       children: highlightOccurrences(title, selectedText)
-                  )
+                  ),
+                textAlign: TextAlign.center,
               )
             ],
           ),

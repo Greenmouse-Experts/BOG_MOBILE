@@ -113,13 +113,13 @@ class VerifySignUpOTP extends GetView<AuthController> {
                           borderRadius: 10,
                         ),
                         AppButton(
-                          title: 'Resend Link In ',
+                          title: 'Resend Link',
                           trailingTitle: "${controller.time} min",
                           bckgrndColor: Colors.white,
                           fontColor: Colors.black,
                           trailingColor: AppColors.blue,
                           onPressed: () {
-                            Get.back();
+
                           },
                           borderRadius: 10,
                           bold: false,
