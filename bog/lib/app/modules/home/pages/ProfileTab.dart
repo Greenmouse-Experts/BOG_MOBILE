@@ -200,7 +200,7 @@ class _TextButton extends StatelessWidget {
                         text,
                         maxLines: 1,
                         overflow: TextOverflow.clip,
-                        style: AppTextStyle.subtitle1.copyWith(color: Colors.black,fontSize: Get.width*0.04,fontWeight: FontWeight.w600),
+                        style: AppTextStyle.subtitle1.copyWith(color: Colors.black,fontSize: Get.width*0.04,fontWeight: FontWeight.w500),
                       ),
                       SizedBox(
                         height: Get.height*0.01,

@@ -17,6 +17,7 @@ import '../../../data/providers/my_pref.dart';
 import '../../../global_widgets/app_avatar.dart';
 import '../../../global_widgets/app_input.dart';
 import '../../../global_widgets/horizontal_item_tile.dart';
+import '../../../global_widgets/page_dropdown.dart';
 import '../../chat/chat.dart';
 import '../../create/create.dart';
 import '../../shop/product_details.dart';
@@ -28,44 +29,68 @@ class ProjectTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String search = "";
+    String currentOrder = "New Order Requests";
     List<ProjectListModel> savedPosts = [];
 
     double multiplier = 25 * Get.height * 0.01;
     return GetBuilder<HomeController>(builder: (controller) {
       return Expanded(
         child: Scaffold(
-          body: Padding(
-            padding: EdgeInsets.only(left: Get.width*0.03, right: Get.width*0.03),
-            child: SizedBox(
-              height: Get.height * 0.91,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  const SizedBox(
-                    height: kToolbarHeight,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 10.0,right: 10.0,top: 10.0),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(
-                          "My ${controller.projectTitle}",
-                          style: AppTextStyle.subtitle1.copyWith(
-                            color: Colors.black,
-                            fontSize: Get.width * 0.045,
-                            fontWeight: FontWeight.w600,
-                          ),
+          body: SizedBox(
+            height: Get.height * 0.91,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const SizedBox(
+                  height: kToolbarHeight,
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: Get.width*0.035, right: Get.width*0.03,top: 10),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        "My ${controller.projectTitle}",
+                        style: AppTextStyle.subtitle1.copyWith(
+                          color: Colors.black,
+                          fontSize: Get.width * 0.045,
+                          fontWeight: FontWeight.w600,
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                  SizedBox(
-                    height: Get.height * 0.03,
+                ),
+                SizedBox(
+                  height: Get.height * 0.03,
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: Get.width*0.03, right: Get.width*0.03),
+                  child: PageDropButtonWithoutBackground(
+                    label: "",
+                    hint: '',
+                    padding: const EdgeInsets.fromLTRB(10, 0, 5, 0),
+                    onChanged: (val) {
+                      currentOrder = val;
+                      controller.update();
+                    },
+                    value: "New Order Requests",
+                    items: ["New Order Requests","Ongoing Orders"].map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value,style: AppTextStyle.subtitle1.copyWith(
+                          color: AppColors.primary,
+                          fontSize: Get.width * 0.035,
+                          fontWeight: FontWeight.w500,
+                        ),textAlign: TextAlign.start,),
+                      );
+                    }).toList(),
                   ),
-                  AppInput(
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: Get.width*0.03, right: Get.width*0.03),
+                  child: AppInput(
                     hintText: 'Search with name or keyword ...',
                     filledColor: Colors.grey.withOpacity(.1),
                     prefexIcon: Icon(
@@ -78,36 +103,39 @@ class ProjectTab extends StatelessWidget {
                       controller.update();
                     },
                   ),
-                  SizedBox(
-                    height: Get.height * 0.03,
-                  ),
-                  if(controller.currentType == "Client")
-                    Expanded(
-                      child: FutureBuilder<ApiResponse>(
-                          future: controller.userRepo.getData("/projects/my-request"),
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState == ConnectionState.done && snapshot.data!.isSuccessful) {
-                              final posts = ProjectListModel.fromJsonList(snapshot.data!.data);
-                              savedPosts.clear();
-                              savedPosts.addAll(posts);
-                              if(posts.isEmpty){
-                                return SizedBox(
-                                  height: Get.height*0.65,
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        "No Projects Available",
-                                        style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.07,color: Colors.black,fontWeight: FontWeight.w500),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              }
-                              final postsToUse = posts.where((post) => post.title.toString().toLowerCase().contains(search.toLowerCase())).toList();
-                              return GridView.builder(
+                ),
+                SizedBox(
+                  height: Get.height * 0.03,
+                ),
+                if(controller.currentType == "Client")
+                  Expanded(
+                    child: FutureBuilder<ApiResponse>(
+                        future: controller.userRepo.getData("/projects/my-request"),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState == ConnectionState.done && snapshot.data!.isSuccessful) {
+                            final posts = ProjectListModel.fromJsonList(snapshot.data!.data);
+                            savedPosts.clear();
+                            savedPosts.addAll(posts);
+                            if(posts.isEmpty){
+                              return SizedBox(
+                                height: Get.height*0.65,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      "No Projects Available",
+                                      style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.07,color: Colors.black,fontWeight: FontWeight.w500),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }
+                            final postsToUse = posts.where((post) => post.title.toString().toLowerCase().contains(search.toLowerCase())).toList();
+                            return Padding(
+                              padding: EdgeInsets.only(left: Get.width*0.03, right: Get.width*0.03),
+                              child: GridView.builder(
                                 itemCount: postsToUse.length,
                                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,mainAxisSpacing: 15,crossAxisSpacing: 15),
                                 scrollDirection: Axis.vertical,
@@ -198,27 +226,30 @@ class ProjectTab extends StatelessWidget {
                                     ),
                                   );
                                 },
+                              ),
+                            );
+                          }else if(savedPosts.isNotEmpty){
+                            final posts = savedPosts;
+                            if(posts.isEmpty){
+                              return SizedBox(
+                                height: Get.height*0.65,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      "No Projects Available",
+                                      style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.07,color: Colors.black,fontWeight: FontWeight.w500),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ],
+                                ),
                               );
-                            }else if(savedPosts.isNotEmpty){
-                              final posts = savedPosts;
-                              if(posts.isEmpty){
-                                return SizedBox(
-                                  height: Get.height*0.65,
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        "No Projects Available",
-                                        style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.07,color: Colors.black,fontWeight: FontWeight.w500),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              }
-                              final postsToUse = posts.where((post) => post.title.toString().toLowerCase().contains(search.toLowerCase())).toList();
-                              return GridView.builder(
+                            }
+                            final postsToUse = posts.where((post) => post.title.toString().toLowerCase().contains(search.toLowerCase())).toList();
+                            return Padding(
+                              padding: EdgeInsets.only(left: Get.width*0.03, right: Get.width*0.03),
+                              child: GridView.builder(
                                 itemCount: postsToUse.length,
                                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,mainAxisSpacing: 15,crossAxisSpacing: 15),
                                 scrollDirection: Axis.vertical,
@@ -309,54 +340,53 @@ class ProjectTab extends StatelessWidget {
                                     ),
                                   );
                                 },
-                              );
-                            } else{
-                              if(snapshot.connectionState == ConnectionState.done){
-                                return SizedBox(
-                                  height: Get.height*0.65,
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        "No Projects Available",
-                                        style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.07,color: Colors.black,fontWeight: FontWeight.w500),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              }
+                              ),
+                            );
+                          } else{
+                            if(snapshot.connectionState == ConnectionState.done){
                               return SizedBox(
                                 height: Get.height*0.65,
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   mainAxisAlignment: MainAxisAlignment.center,
-                                  children: const [
-                                    CircularProgressIndicator(
-                                      color: AppColors.primary,
+                                  children: [
+                                    Text(
+                                      "No Projects Available",
+                                      style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.07,color: Colors.black,fontWeight: FontWeight.w500),
+                                      textAlign: TextAlign.center,
                                     ),
                                   ],
                                 ),
                               );
                             }
-                          }),
+                            return SizedBox(
+                              height: Get.height*0.65,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: const [
+                                  CircularProgressIndicator(
+                                    color: AppColors.primary,
+                                  ),
+                                ],
+                              ),
+                            );
+                          }
+                        }),
+                  ),
+                if(controller.currentType != "Client")
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: 4,
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      padding: const EdgeInsets.all(0),
+                      itemBuilder: (BuildContext context, int index) {
+                        return currentOrder == "Ongoing Orders" ? OrderItem() : OrderRequestItem();
+                      },
                     ),
-                  if(controller.currentType != "Client")
-                    SizedBox(
-                      height: Get.height * 0.65,
-                      child: ListView.builder(
-                        itemCount: 4,
-                        scrollDirection: Axis.vertical,
-                        shrinkWrap: true,
-                        padding: const EdgeInsets.all(0),
-                        itemBuilder: (BuildContext context, int index) {
-                          return OrderItem();
-                        },
-                      ),
-                    )
-                ],
-              ),
+                  )
+              ],
             ),
           ),
           floatingActionButton: controller.currentType != "Client" ? null : FloatingActionButton(

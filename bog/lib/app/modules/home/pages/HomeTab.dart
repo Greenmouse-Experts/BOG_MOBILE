@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:d_chart/d_chart.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
@@ -399,42 +400,19 @@ class _HomeTabState extends State<HomeTab> {
                     ),
                     if(controller.currentType != "Client")
                       Padding(
-                        padding: EdgeInsets.only(left: Get.width*0.05,right: Get.width*0.05,top: 10.0),
+                        padding: EdgeInsets.only(left: Get.width*0.0,right: Get.width*0.05,top: 10.0),
                         child: SizedBox(
                           width: Get.width,
                           height: Get.height * 0.3,
-                          child: DChartBarCustom(
-                            radiusBar: const BorderRadius.only(
-                              topLeft: Radius.circular(30),
-                              topRight: Radius.circular(30),
-                            ),
-                            showDomainLabel: true,
-                            showMeasureLabel: true,
-                            showMeasureLine: true,
-                            showDomainLine: true,
-                            spaceMeasureLinetoChart: 10,
-                            showLoading: true,
-                            spaceBetweenItem: Get.width * 0.05,
-                            listData: List.generate(ranking.length, (index) {
-                              Color currentColor =
-                              Color((Random().nextDouble() * 0xFFFFFF).toInt());
-                              return DChartBarDataCustom(
-                                onTap: () {
-
-                                },
-                                elevation: 0,
-                                value: ranking[index]['total'].toDouble(),
-                                label: ranking[index]['class'],
-                                color: AppColors.primary,
-                                splashColor: AppColors.primary,
-                                showValue: false,
-                              );
-                            }),
+                          child: BarChart(
+                            mainBarData(),
+                            swapAnimationDuration: const Duration(milliseconds: 150), // Optional
+                            swapAnimationCurve: Curves.linear, // Optional
                           ),
                         ),
                       ),
                     SizedBox(
-                      height: Get.height * 0.015,
+                      height: Get.height * 0.01,
                     ),
                     Padding(
                       padding: EdgeInsets.only(left: Get.width*0.05,right: Get.width*0.05,top: 10.0),
@@ -476,6 +454,243 @@ class _HomeTabState extends State<HomeTab> {
         ),
       );
     });
+  }
+
+  BarChartGroupData makeGroupData(
+      int x,
+      double y) {
+    return BarChartGroupData(
+      x: x,
+      barRods: [
+        BarChartRodData(
+          toY: y,
+          color: AppColors.primary,
+          width: 20,
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(10),
+            topRight: Radius.circular(10),
+          ),
+          borderSide: const BorderSide(color: AppColors.primary, width: 0),
+          backDrawRodData: BackgroundBarChartRodData(
+            show: true,
+            toY: 1500,
+            color: const Color(0xffE6F3FF),
+          ),
+        ),
+      ],
+    );
+  }
+
+  List<BarChartGroupData> showingGroups() => List.generate(7, (i) {
+    switch (i) {
+      case 0:
+        return makeGroupData(0, 850,);
+      case 1:
+        return makeGroupData(1, 750,);
+      case 2:
+        return makeGroupData(2, 125, );
+      case 3:
+        return makeGroupData(3, 1250,);
+      case 4:
+        return makeGroupData(4, 500,);
+      case 5:
+        return makeGroupData(5, 750,);
+      case 6:
+        return makeGroupData(6, 110,);
+      default:
+        return throw Error();
+    }
+  });
+
+  BarChartData mainBarData() {
+    return BarChartData(
+      minY: 0,
+      //maxY: 2000,
+      titlesData: FlTitlesData(
+        show: true,
+        rightTitles: AxisTitles(
+          sideTitles: SideTitles(showTitles: false),
+        ),
+        topTitles: AxisTitles(
+          sideTitles: SideTitles(showTitles: false),
+        ),
+        bottomTitles: AxisTitles(
+          sideTitles: SideTitles(
+            showTitles: true,
+            getTitlesWidget: getTitles,
+            reservedSize: 38,
+          ),
+        ),
+        leftTitles: AxisTitles(
+          sideTitles: SideTitles(
+            showTitles: true,
+            getTitlesWidget: getSideTitles,
+            reservedSize: 50,
+          ),
+        ),
+      ),
+      borderData: FlBorderData(
+        show: true,
+        border: Border(
+          bottom: BorderSide(
+            color: const Color(0xffDEDEDE),
+            width: 1,
+          ),
+          left: BorderSide(
+            color: const Color(0xffDEDEDE),
+            width: 1,
+          ),
+          right: BorderSide.none,
+          top: BorderSide.none,
+        ),
+      ),
+      barGroups: showingGroups(),
+      gridData: FlGridData(
+        show: false,
+      ),
+    );
+  }
+
+  Widget getTitles(double value, TitleMeta meta) {
+    const style = TextStyle(
+      color: Color(0xff85858A),
+      fontWeight: FontWeight.normal,
+      fontSize: 14,
+    );
+    Widget text;
+    switch (value.toInt()) {
+      case 0:
+        text = const Text('Mon', style: style);
+        break;
+      case 1:
+        text = const Text('Tue', style: style);
+        break;
+      case 2:
+        text = const Text('Wed', style: style);
+        break;
+      case 3:
+        text = const Text('Thu', style: style);
+        break;
+      case 4:
+        text = const Text('Fri', style: style);
+        break;
+      case 5:
+        text = const Text('Sat', style: style);
+        break;
+      case 6:
+        text = const Text('Sun', style: style);
+        break;
+      default:
+        text = const Text('', style: style);
+        break;
+    }
+    return SideTitleWidget(
+      axisSide: meta.axisSide,
+      space: 16,
+      child: text,
+    );
+  }
+
+  Widget getSideTitles(double value, TitleMeta meta) {
+
+    const style = TextStyle(
+      color: Color(0xff85858A),
+      fontWeight: FontWeight.normal,
+      fontSize: 12,
+    );
+    String valueToDisplay = value.toInt().toString();
+    if(valueToDisplay.length == 4){
+      valueToDisplay = valueToDisplay.substring(0,2) + "M";
+    }else if(valueToDisplay.length == 5){
+      valueToDisplay = valueToDisplay.substring(0,2) + "K";
+    }else{
+      valueToDisplay = valueToDisplay + "K";
+    }
+    Widget text = Text(valueToDisplay == "0K" ? "0" : valueToDisplay, style: style,maxLines: 1,);
+
+    return SideTitleWidget(
+      axisSide: meta.axisSide,
+      space: 4,
+      child: text,
+    );
+  }
+
+  BarChartData randomData() {
+    return BarChartData(
+      barTouchData: BarTouchData(
+        enabled: false,
+      ),
+      titlesData: FlTitlesData(
+        show: true,
+        bottomTitles: AxisTitles(
+          sideTitles: SideTitles(
+            showTitles: true,
+            getTitlesWidget: getTitles,
+            reservedSize: 38,
+          ),
+        ),
+        leftTitles: AxisTitles(
+          sideTitles: SideTitles(
+            showTitles: false,
+          ),
+        ),
+        topTitles: AxisTitles(
+          sideTitles: SideTitles(
+            showTitles: false,
+          ),
+        ),
+        rightTitles: AxisTitles(
+          sideTitles: SideTitles(
+            showTitles: false,
+          ),
+        ),
+      ),
+      borderData: FlBorderData(
+        show: false,
+      ),
+      barGroups: List.generate(7, (i) {
+        switch (i) {
+          case 0:
+            return makeGroupData(
+              0,
+              Random().nextInt(15).toDouble() + 6,
+            );
+          case 1:
+            return makeGroupData(
+              1,
+              Random().nextInt(15).toDouble() + 6,
+            );
+          case 2:
+            return makeGroupData(
+              2,
+              Random().nextInt(15).toDouble() + 6,
+            );
+          case 3:
+            return makeGroupData(
+              3,
+              Random().nextInt(15).toDouble() + 6,
+            );
+          case 4:
+            return makeGroupData(
+              4,
+              Random().nextInt(15).toDouble() + 6,
+            );
+          case 5:
+            return makeGroupData(
+              5,
+              Random().nextInt(15).toDouble() + 6,
+            );
+          case 6:
+            return makeGroupData(
+              6,
+              Random().nextInt(15).toDouble() + 6,
+            );
+          default:
+            return throw Error();
+        }
+      }),
+      gridData: FlGridData(show: false),
+    );
   }
 
   Container buildOverViewContainer(String icon, String title, String subTitle, Color color) {

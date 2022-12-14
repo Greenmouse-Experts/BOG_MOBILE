@@ -50,6 +50,8 @@ dependencies:
   vertical_tabs_flutter: ^1.0.0
   file_picker: ^5.2.2
   d_chart: ^0.1.0
+  syncfusion_flutter_charts: ^20.3.61
+  fl_chart: ^0.55.2
 
 dev_dependencies:
   flutter_test:
