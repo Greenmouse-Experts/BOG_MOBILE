@@ -28,21 +28,22 @@ class HomeController extends GetxController {
 
   updateNewUser(String userType,{bool updatePages = true}) {
     if(userType == "Client"){
-      homeIcon = 'assets/images/homeIcon.png';
-      chatIcon = 'assets/images/chatIcon.png';
-      projectIcon = 'assets/images/projectIcon.png';
-      cartIcon = 'assets/images/cartIcon.png';
-      profileIcon = 'assets/images/profileIcon.png';
+      //Group 46942.png
+      homeIcon = currentBottomNavPage.value == 0 ? 'assets/images/homeIcon.png': 'assets/images/Vector (7).png';
+      chatIcon = currentBottomNavPage.value == 1 ? 'assets/images/Vector (5).png': 'assets/images/chatIcon.png';
+      projectIcon = currentBottomNavPage.value == 2 ? 'assets/images/Group 46942.png': 'assets/images/projectIcon.png';
+      cartIcon = currentBottomNavPage.value == 3 ? 'assets/images/Vector (6).png': 'assets/images/cartIcon.png';
+      profileIcon = currentBottomNavPage.value == 4 ? 'assets/images/Group (3).png': 'assets/images/profileIcon.png';
 
       homeTitle = 'Home';
       cartTitle = 'Cart';
       projectTitle = 'Project';
     }else{
-      homeIcon = 'assets/images/dashboardIcon.png';
-      chatIcon = 'assets/images/chatIcon.png';
+      homeIcon = currentBottomNavPage.value == 0 ? 'assets/images/Vector (4).png': 'assets/images/dashboardIcon.png';
+      chatIcon = currentBottomNavPage.value == 1 ? 'assets/images/Vector (5).png': 'assets/images/chatIcon.png';
       projectIcon = currentBottomNavPage.value == 2 ? 'assets/images/Group 47400.png': 'assets/images/ordersIcon.png';
-      cartIcon = 'assets/images/prodctIcon.png';
-      profileIcon = 'assets/images/profileIcon.png';
+      cartIcon = currentBottomNavPage.value == 3 ? 'assets/images/Group (2).png': 'assets/images/prodctIcon.png';
+      profileIcon = currentBottomNavPage.value == 4 ? 'assets/images/Group (3).png': 'assets/images/profileIcon.png';
 
       homeTitle = 'Dashboard';
       cartTitle = 'Products';

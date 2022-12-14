@@ -148,13 +148,13 @@ class _AppDrawerState extends State<AppDrawer> {
                                   imageAsset: "assets/images/four1.png",
                                   showArrow: true),
 
-                              _TextButton(
+                             /* _TextButton(
                                   text: "Smart Calculator",
                                   onPressed: () {
                                     //Get.toNamed(OnboardingPage.route);
                                   },
                                   imageAsset: "assets/images/five1.png",
-                                  showArrow: true),
+                                  showArrow: true),*/
 
 
                               Expanded(child: Column(

@@ -22,6 +22,7 @@ import '../../../global_widgets/horizontal_item_tile.dart';
 import '../../../global_widgets/item_counter.dart';
 import '../../../global_widgets/page_input.dart';
 import '../../add_products/add_products.dart';
+import '../../orders/order_details.dart';
 
 class CartTab extends StatelessWidget {
   const CartTab({Key? key}) : super(key: key);
@@ -237,7 +238,7 @@ class CartTab extends StatelessWidget {
                       shrinkWrap: true,
                       padding: const EdgeInsets.all(0),
                       itemBuilder: (BuildContext context, int index) {
-                        return ProductItem();
+                        return const ProductItem();
                       },
                     ),
                   )
@@ -417,7 +418,7 @@ class OrderItem extends StatelessWidget {
                   child: Text(
                     'N 115,000',
                     style: AppTextStyle.caption.copyWith(
-                      color: Colors.black,
+                      color: AppColors.primary,
                       fontSize: Get.width * 0.035,
                       fontWeight: FontWeight.w400,
                     ),
@@ -552,31 +553,66 @@ class OrderRequestItem extends StatelessWidget {
           ),
         ],
       ),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+      child: InkWell(
+        onTap: (){
+          Get.to(() => const OrderDetails());
+        },
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(left: Get.width * 0.005),
+                        child: Text(
+                          "Order ID :  SAN - 123- NDS ",
+                          style: AppTextStyle.caption.copyWith(
+                            color: Colors.black,
+                            fontSize: Get.width * 0.035,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      Padding(
+                        padding: EdgeInsets.only(left: Get.width * 0.005),
+                        child: Text(
+                          '30 Tonnes of Sharp Sand  ',
+                          style: AppTextStyle.caption.copyWith(
+                            color: Colors.black.withOpacity(0.6),
+                            fontSize: Get.width * 0.033,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Padding(
-                      padding: EdgeInsets.only(left: Get.width * 0.005),
+                      padding: EdgeInsets.only(left: Get.width * 0.015),
                       child: Text(
-                        "Order ID :  SAN - 123- NDS ",
+                        'N 115,000',
                         style: AppTextStyle.caption.copyWith(
-                          color: Colors.black,
+                          color: AppColors.primary,
                           fontSize: Get.width * 0.035,
-                          fontWeight: FontWeight.w600,
+                          fontWeight: FontWeight.w400,
                         ),
                       ),
                     ),
                     const SizedBox(height: 10),
                     Padding(
-                      padding: EdgeInsets.only(left: Get.width * 0.005),
+                      padding: EdgeInsets.only(left: Get.width * 0.015),
                       child: Text(
-                        '30 Tonnes of Sharp Sand  ',
+                        'x2',
                         style: AppTextStyle.caption.copyWith(
                           color: Colors.black.withOpacity(0.6),
                           fontSize: Get.width * 0.033,
@@ -586,67 +622,37 @@ class OrderRequestItem extends StatelessWidget {
                     ),
                   ],
                 ),
-              ),
-              const SizedBox(width: 8),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(left: Get.width * 0.015),
-                    child: Text(
-                      'N 115,000',
-                      style: AppTextStyle.caption.copyWith(
-                        color: AppColors.primary,
-                        fontSize: Get.width * 0.035,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                SizedBox(
+                  width: Get.width * 0.4,
+                  child: AppButton(
+                    title: "Decline",
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    border: Border.all(color: Color(0xFF24B53D)),
+                    bckgrndColor: Colors.white,
+                    fontColor: Color(0xFF24B53D),
                   ),
-                  const SizedBox(height: 10),
-                  Padding(
-                    padding: EdgeInsets.only(left: Get.width * 0.015),
-                    child: Text(
-                      'x2',
-                      style: AppTextStyle.caption.copyWith(
-                        color: Colors.black.withOpacity(0.6),
-                        fontSize: Get.width * 0.033,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
+                ),
+                SizedBox(
+                  width: Get.width * 0.4,
+                  child: AppButton(
+                    title: "Accept",
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    border: Border.all(color: Color(0xFF24B53D)),
+                    bckgrndColor: Colors.white,
+                    fontColor: const Color(0xFF24B53D),
                   ),
-                ],
-              ),
-            ],
-          ),
-          const SizedBox(height: 10),
-          Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              SizedBox(
-                width: Get.width * 0.4,
-                child: AppButton(
-                  title: "Decline",
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  border: Border.all(color: Color(0xFF24B53D)),
-                  bckgrndColor: Colors.white,
-                  fontColor: Color(0xFF24B53D),
                 ),
-              ),
-              SizedBox(
-                width: Get.width * 0.4,
-                child: AppButton(
-                  title: "Accept",
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  border: Border.all(color: Color(0xFF24B53D)),
-                  bckgrndColor: Colors.white,
-                  fontColor: const Color(0xFF24B53D),
-                ),
-              ),
-            ],
-          )
-        ],
+              ],
+            )
+          ],
+        ),
       ),
     );
   }

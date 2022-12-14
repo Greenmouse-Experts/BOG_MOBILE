@@ -69,43 +69,58 @@ class _HomeState extends State<Home> {
                   type: BottomNavigationBarType.fixed,
                   items: <BottomNavigationBarItem>[
                     BottomNavigationBarItem(
-                      icon: Image.asset(
-                        controller.homeIcon,
-                        width: 20,
-                        color: controller.currentBottomNavPage.value == 0 ? AppColors.primary : AppColors.grey,
+                      icon: Padding(
+                        padding: const EdgeInsets.only(bottom: 5),
+                        child: Image.asset(
+                          controller.homeIcon,
+                          width: 20,
+                          //color: controller.currentBottomNavPage.value == 0 ? AppColors.primary : AppColors.grey,
+                        ),
                       ),
                       label: controller.homeTitle,
                       backgroundColor: AppColors.background,
                     ),
                     BottomNavigationBarItem(
-                      icon: Image.asset(
-                        controller.currentBottomNavPage.value == 1 ? 'assets/images/chat_filled.png' : 'assets/images/chatIcon.png',
-                        width: 22,
-                        color: controller.currentBottomNavPage.value == 1 ? AppColors.primary : AppColors.grey,
+                      icon: Padding(
+                        padding: const EdgeInsets.only(bottom: 5),
+                        child: Image.asset(
+                          controller.currentBottomNavPage.value == 1 ? 'assets/images/chat_filled.png' : 'assets/images/chatIcon.png',
+                          width: 22,
+                          //color: controller.currentBottomNavPage.value == 1 ? AppColors.primary : AppColors.grey,
+                        ),
                       ),
                       label: 'Chat',
                     ),
                     BottomNavigationBarItem(
-                      icon: Image.asset(
-                        controller.projectIcon,
-                        width: 20,
-                        color: controller.currentBottomNavPage.value == 2 ? AppColors.primary : AppColors.grey,
+                      icon: Padding(
+                        padding: const EdgeInsets.only(bottom: 5),
+                        child: Image.asset(
+                          controller.projectIcon,
+                          width: 20,
+                          //color: controller.currentBottomNavPage.value == 2 ? AppColors.primary : AppColors.grey,
+                        ),
                       ),
                       label: controller.projectTitle,
                     ),
                     BottomNavigationBarItem(
-                      icon: Image.asset(
-                        controller.cartIcon,
-                        width: 25,
-                        //color: controller.currentBottomNavPage.value == 3 ? AppColors.primary : AppColors.grey,
+                      icon: Padding(
+                        padding: const EdgeInsets.only(bottom: 5),
+                        child: Image.asset(
+                          controller.cartIcon,
+                          width: 25,
+                          //color: controller.currentBottomNavPage.value == 3 ? AppColors.primary : AppColors.grey,
+                        ),
                       ),
                       label: controller.cartTitle,
                     ),
                     BottomNavigationBarItem(
-                      icon: Image.asset(
-                        controller.profileIcon,
-                        width: 25,
-                        color: controller.currentBottomNavPage.value == 4 ? AppColors.primary : AppColors.grey,
+                      icon: Padding(
+                        padding: const EdgeInsets.only(bottom: 5),
+                        child: Image.asset(
+                          controller.profileIcon,
+                          width: 25,
+                          //color: controller.currentBottomNavPage.value == 4 ? AppColors.primary : AppColors.grey,
+                        ),
                       ),
                       label: 'Profile',
                     ),
@@ -115,6 +130,7 @@ class _HomeState extends State<Home> {
                   unselectedItemColor: Colors.grey,
                   onTap: (index) {
                     controller.currentBottomNavPage.value = index;
+                    controller.updateNewUser(controller.currentType);
                     controller.update(['home']);
                   }
               ),

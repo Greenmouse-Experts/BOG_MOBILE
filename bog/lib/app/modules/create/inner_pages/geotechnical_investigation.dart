@@ -543,7 +543,7 @@ class _GeotechnicalInvestigationState extends State<GeotechnicalInvestigation> {
                                     title: "View My Projects",
                                     onPressed: (){
                                       controller.currentBottomNavPage.value = 2;
-                                      controller.update(['home']);
+                                      controller.updateNewUser(controller.currentType);
                                       Get.back();
                                       Get.back();
                                     },
@@ -565,43 +565,58 @@ class _GeotechnicalInvestigationState extends State<GeotechnicalInvestigation> {
                   type: BottomNavigationBarType.fixed,
                   items: <BottomNavigationBarItem>[
                     BottomNavigationBarItem(
-                      icon: Image.asset(
-                        'assets/images/homeIcon.png',
-                        width: 25,
-                        color: controller.currentBottomNavPage.value == 0 ? AppColors.primary : AppColors.grey,
+                      icon: Padding(
+                        padding: const EdgeInsets.only(bottom: 5),
+                        child: Image.asset(
+                          controller.homeIcon,
+                          width: 20,
+                          //color: controller.currentBottomNavPage.value == 0 ? AppColors.primary : AppColors.grey,
+                        ),
                       ),
-                      label: 'Home',
+                      label: controller.homeTitle,
                       backgroundColor: AppColors.background,
                     ),
                     BottomNavigationBarItem(
-                      icon: Image.asset(
-                        controller.currentBottomNavPage.value == 1 ? 'assets/images/chat_filled.png' : 'assets/images/chatIcon.png',
-                        width: 25,
-                        color: controller.currentBottomNavPage.value == 1 ? AppColors.primary : AppColors.grey,
+                      icon: Padding(
+                        padding: const EdgeInsets.only(bottom: 5),
+                        child: Image.asset(
+                          controller.currentBottomNavPage.value == 1 ? 'assets/images/chat_filled.png' : 'assets/images/chatIcon.png',
+                          width: 22,
+                          //color: controller.currentBottomNavPage.value == 1 ? AppColors.primary : AppColors.grey,
+                        ),
                       ),
                       label: 'Chat',
                     ),
                     BottomNavigationBarItem(
-                      icon: Image.asset(
-                        'assets/images/projectIcon.png',
-                        width: 25,
-                        color: controller.currentBottomNavPage.value == 2 ? AppColors.primary : AppColors.grey,
+                      icon: Padding(
+                        padding: const EdgeInsets.only(bottom: 5),
+                        child: Image.asset(
+                          controller.projectIcon,
+                          width: 20,
+                          //color: controller.currentBottomNavPage.value == 2 ? AppColors.primary : AppColors.grey,
+                        ),
                       ),
-                      label: 'Project',
+                      label: controller.projectTitle,
                     ),
                     BottomNavigationBarItem(
-                      icon: Image.asset(
-                        'assets/images/cartIcon.png',
-                        width: 25,
-                        color: controller.currentBottomNavPage.value == 3 ? AppColors.primary : AppColors.grey,
+                      icon: Padding(
+                        padding: const EdgeInsets.only(bottom: 5),
+                        child: Image.asset(
+                          controller.cartIcon,
+                          width: 25,
+                          //color: controller.currentBottomNavPage.value == 3 ? AppColors.primary : AppColors.grey,
+                        ),
                       ),
-                      label: 'Cart',
+                      label: controller.cartTitle,
                     ),
                     BottomNavigationBarItem(
-                      icon: Image.asset(
-                        'assets/images/profileIcon.png',
-                        width: 25,
-                        color: controller.currentBottomNavPage.value == 4 ? AppColors.primary : AppColors.grey,
+                      icon: Padding(
+                        padding: const EdgeInsets.only(bottom: 5),
+                        child: Image.asset(
+                          controller.profileIcon,
+                          width: 25,
+                          //color: controller.currentBottomNavPage.value == 4 ? AppColors.primary : AppColors.grey,
+                        ),
                       ),
                       label: 'Profile',
                     ),

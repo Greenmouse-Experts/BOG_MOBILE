@@ -65,7 +65,8 @@ class ProjectTab extends StatelessWidget {
                 SizedBox(
                   height: Get.height * 0.03,
                 ),
-                Padding(
+                if(controller.currentType != "Client")
+                  Padding(
                   padding: EdgeInsets.only(left: Get.width*0.03, right: Get.width*0.03),
                   child: PageDropButtonWithoutBackground(
                     label: "",
