@@ -65,7 +65,7 @@ class ProjectTab extends StatelessWidget {
                 SizedBox(
                   height: Get.height * 0.03,
                 ),
-                if(controller.currentType != "Client")
+                if(controller.currentType == "Product Partner")
                   Padding(
                   padding: EdgeInsets.only(left: Get.width*0.03, right: Get.width*0.03),
                   child: PageDropButtonWithoutBackground(
@@ -108,7 +108,7 @@ class ProjectTab extends StatelessWidget {
                 SizedBox(
                   height: Get.height * 0.03,
                 ),
-                if(controller.currentType == "Client")
+                if(controller.currentType == "Client" || controller.currentType == "Corporate Client")
                   Expanded(
                     child: FutureBuilder<ApiResponse>(
                         future: controller.userRepo.getData("/projects/my-request"),
@@ -375,7 +375,7 @@ class ProjectTab extends StatelessWidget {
                           }
                         }),
                   ),
-                if(controller.currentType != "Client")
+                if(controller.currentType == "Product Partner")
                   Expanded(
                     child: ListView.builder(
                       itemCount: 4,
@@ -390,7 +390,7 @@ class ProjectTab extends StatelessWidget {
               ],
             ),
           ),
-          floatingActionButton: controller.currentType != "Client" ? null : FloatingActionButton(
+          floatingActionButton: controller.currentType == "Product Partner" ? null : FloatingActionButton(
             onPressed: (){
               Get.toNamed(Create.route);
             },

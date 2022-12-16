@@ -147,7 +147,7 @@ class SwitchUser extends GetView<HomeController> {
                             controller.updateNewUser("Client");
                             Get.back();
                             var body = {
-                              "userType": "corporate_client",
+                              "userType": "private_client",
                             };
                             var response = await controller.userRepo.postData("/user/switch-account", body);
                           },
@@ -342,6 +342,76 @@ class SwitchUser extends GetView<HomeController> {
                           ),
                         ),
                       ),
+
+                      if(controller.currentType != "Corporate Client")
+                        SizedBox(
+                          height: Get.height * 0.04,
+                        ),
+                      if(controller.currentType != "Corporate Client")
+                        Padding(
+                          padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                          child: InkWell(
+                            onTap: () async {
+                              controller.currentType = "Corporate Client";
+                              controller.update();
+                              controller.updateNewUser("Corporate Client");
+                              Get.back();
+                              var body = {
+                                "userType": "corporate_client",
+                              };
+                              var response = await controller.userRepo.postData("/user/switch-account", body);
+                            },
+                            child: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                Image.asset(
+                                  'assets/images/client_bg.png',
+                                ),
+                                Row(
+                                  mainAxisAlignment:MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    SizedBox(
+                                      width: Get.width * 0.05,
+                                    ),
+                                    Image.asset(
+                                      'assets/images/m2.png',
+                                      width: Get.width*0.15,
+                                      height: Get.width*0.15,
+                                    ),
+                                    SizedBox(
+                                      width: Get.width * 0.02,
+                                    ),
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Corporate Client',
+                                          style: AppTextStyle.headline4.copyWith(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 20,
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          height: 10,
+                                        ),
+                                        Text(
+                                          'Access services and products',
+                                          style: AppTextStyle.headline4.copyWith(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.normal,
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
                     ]
                   ),
                 ),

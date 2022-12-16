@@ -62,7 +62,7 @@ class CartTab extends StatelessWidget {
                 SizedBox(
                   height: Get.height * 0.03,
                 ),
-                if(controller.currentType == "Client")
+                if(controller.currentType == "Client"  || controller.currentType == "Corporate Client")
                   Expanded(
                     child: Padding(
                       padding: EdgeInsets.only(left: Get.width*0.03, right: Get.width*0.03),
@@ -209,7 +209,7 @@ class CartTab extends StatelessWidget {
                       ),
                     ),
                   ),
-                if(controller.currentType != "Client")
+                if(controller.currentType == "Product Partner")
                   Padding(
                     padding: EdgeInsets.only(left: Get.width*0.03, right: Get.width*0.03),
                     child: AppInput(
@@ -226,11 +226,11 @@ class CartTab extends StatelessWidget {
                       },
                     ),
                   ),
-                if(controller.currentType != "Client")
+                if(controller.currentType == "Product Partner")
                   SizedBox(
                     height: Get.height * 0.015,
                   ),
-                if(controller.currentType != "Client")
+                if(controller.currentType == "Product Partner")
                   Expanded(
                     child: ListView.builder(
                       itemCount: 4,
@@ -245,7 +245,7 @@ class CartTab extends StatelessWidget {
               ],
             ),
           ),
-          floatingActionButton: controller.currentType == "Client" ? null : FloatingActionButton(
+          floatingActionButton: controller.currentType == "Client" || controller.currentType == "Corporate Client" ? null : FloatingActionButton(
             onPressed: (){
               Get.to(() => const AddProject());
             },

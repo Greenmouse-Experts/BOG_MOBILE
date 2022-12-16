@@ -105,20 +105,20 @@ class ProfileTab extends StatelessWidget {
               Get.to(() => const ProfileInfo());
             },imageAsset: "assets/images/prifile.png",),
 
-            if(controller.currentType != "Client")
+            if(controller.currentType == "Product Partner")
               const SizedBox(
               height: kToolbarHeight/3,
             ),
-            if(controller.currentType != "Client")
+            if(controller.currentType == "Product Partner")
               _TextButton(text: "Uploaded Document", onPressed: () {
                 Get.to(() => const UpdateKyc());
               },imageAsset: "assets/images/kyc.png",),
 
-            if(controller.currentType != "Client")
+            if(controller.currentType == "Product Partner")
               const SizedBox(
               height: kToolbarHeight/3,
             ),
-            if(controller.currentType != "Client")
+            if(controller.currentType == "Product Partner")
               _TextButton(text: "Bank Details", onPressed: () {
               Get.to(() => const UpdateBank());
             },imageAsset: "assets/images/bank.png",),

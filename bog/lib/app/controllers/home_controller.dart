@@ -27,7 +27,7 @@ class HomeController extends GetxController {
   String projectTitle = 'Project';
 
   updateNewUser(String userType,{bool updatePages = true}) {
-    if(userType == "Client"){
+    if(userType == "Client" || userType == "Corporate Client"){
       //Group 46942.png
       homeIcon = currentBottomNavPage.value == 0 ? 'assets/images/homeIcon.png': 'assets/images/Vector (7).png';
       chatIcon = currentBottomNavPage.value == 1 ? 'assets/images/Vector (5).png': 'assets/images/chatIcon.png';
@@ -38,7 +38,7 @@ class HomeController extends GetxController {
       homeTitle = 'Home';
       cartTitle = 'Cart';
       projectTitle = 'Project';
-    }else{
+    }else if(userType == "Product Partner"){
       homeIcon = currentBottomNavPage.value == 0 ? 'assets/images/Vector (4).png': 'assets/images/dashboardIcon.png';
       chatIcon = currentBottomNavPage.value == 1 ? 'assets/images/Vector (5).png': 'assets/images/chatIcon.png';
       projectIcon = currentBottomNavPage.value == 2 ? 'assets/images/Group 47400.png': 'assets/images/ordersIcon.png';
@@ -48,6 +48,16 @@ class HomeController extends GetxController {
       homeTitle = 'Dashboard';
       cartTitle = 'Products';
       projectTitle = 'Orders';
+    }else{
+      homeIcon = currentBottomNavPage.value == 0 ? 'assets/images/Vector (4).png': 'assets/images/dashboardIcon.png';
+      chatIcon = currentBottomNavPage.value == 1 ? 'assets/images/Vector (5).png': 'assets/images/chatIcon.png';
+      projectIcon = currentBottomNavPage.value == 2 ? 'assets/images/Group 47400.png': 'assets/images/ordersIcon.png';
+      cartIcon = currentBottomNavPage.value == 3 ? 'assets/images/Group (2).png': 'assets/images/prodctIcon.png';
+      profileIcon = currentBottomNavPage.value == 4 ? 'assets/images/Group (3).png': 'assets/images/profileIcon.png';
+
+      homeTitle = 'Home';
+      cartTitle = 'Orders';
+      projectTitle = 'Project';
     }
     if(updatePages){
       update();

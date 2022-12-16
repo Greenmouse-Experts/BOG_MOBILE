@@ -132,7 +132,7 @@ class _HomeTabState extends State<HomeTab> {
             SizedBox(
               height: Get.height * 0.015,
             ),
-            if(controller.currentType == "Client")
+            if(controller.currentType == "Client" || controller.currentType == "Corporate Client")
               Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -150,7 +150,7 @@ class _HomeTabState extends State<HomeTab> {
                 ),
               ],
             ),
-            if(controller.currentType != "Client")
+            if(controller.currentType == "Product Partner")
               Padding(
                 padding: EdgeInsets.only(left: Get.width*0.05,right: Get.width*0.05,top: 10.0),
                 child: Column(
@@ -212,7 +212,7 @@ class _HomeTabState extends State<HomeTab> {
             SizedBox(
               height: Get.height * 0.01,
             ),
-            if(controller.currentType == "Client")
+            if(controller.currentType == "Client" || controller.currentType == "Corporate Client")
               Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -235,7 +235,7 @@ class _HomeTabState extends State<HomeTab> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    if(controller.currentType == "Client")
+                    if(controller.currentType == "Client" || controller.currentType == "Corporate Client")
                       Padding(
                       padding: EdgeInsets.only(left: Get.width*0.05,right: Get.width*0.05,top: 10.0),
                       child: Text(
@@ -247,7 +247,7 @@ class _HomeTabState extends State<HomeTab> {
                         ),
                       ),
                     ),
-                    if(controller.currentType != "Client")
+                    if(controller.currentType == "Product Partner")
                       Padding(
                         padding: EdgeInsets.only(left: Get.width*0.05,right: Get.width*0.05,top: 10.0),
                         child: Text(
@@ -262,7 +262,7 @@ class _HomeTabState extends State<HomeTab> {
                     SizedBox(
                       height: Get.height * 0.015,
                     ),
-                    if(controller.currentType == "Client")
+                    if(controller.currentType == "Client" || controller.currentType == "Corporate Client")
                       Padding(
                       padding: EdgeInsets.only(left: Get.width*0.05,right: Get.width*0.05),
                       child: Column(
@@ -398,7 +398,7 @@ class _HomeTabState extends State<HomeTab> {
                         ],
                       ),
                     ),
-                    if(controller.currentType != "Client")
+                    if(controller.currentType == "Product Partner")
                       Padding(
                         padding: EdgeInsets.only(left: Get.width*0.0,right: Get.width*0.05,top: 10.0),
                         child: SizedBox(
