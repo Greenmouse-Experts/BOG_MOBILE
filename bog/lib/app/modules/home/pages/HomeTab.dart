@@ -129,7 +129,8 @@ class _HomeTabState extends State<HomeTab> {
                 ],
               ),
             ),
-            SizedBox(
+            if(controller.currentType == "Client" || controller.currentType == "Corporate Client" || controller.currentType == "Product Partner")
+              SizedBox(
               height: Get.height * 0.015,
             ),
             if(controller.currentType == "Client" || controller.currentType == "Corporate Client")
@@ -209,7 +210,8 @@ class _HomeTabState extends State<HomeTab> {
                 ),
               ),
             //indicator
-            SizedBox(
+            if(controller.currentType == "Client" || controller.currentType == "Corporate Client" || controller.currentType == "Product Partner")
+              SizedBox(
               height: Get.height * 0.01,
             ),
             if(controller.currentType == "Client" || controller.currentType == "Corporate Client")
@@ -226,7 +228,8 @@ class _HomeTabState extends State<HomeTab> {
                 ),
               ],
             ),
-            SizedBox(
+            if(controller.currentType == "Client" || controller.currentType == "Corporate Client" || controller.currentType == "Product Partner")
+              SizedBox(
               height: Get.height * 0.01,
             ),
             Expanded(
@@ -411,6 +414,592 @@ class _HomeTabState extends State<HomeTab> {
                           ),
                         ),
                       ),
+
+                    if(controller.currentType == "Service Partner")
+                      Padding(
+                      padding: EdgeInsets.only(left: Get.width*0.05,right: Get.width*0.05,top: 10.0),
+                      child: Text(
+                        "Overview",
+                        style: AppTextStyle.subtitle1.copyWith(
+                          color: Colors.black,
+                          fontSize: Get.width * 0.04,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+
+                    if(controller.currentType == "Service Partner")
+                      Padding(
+                      padding: EdgeInsets.only(left: Get.width*0.05,right: Get.width*0.05,top: 10.0),
+                      child: SizedBox(
+                        width: Get.width,
+                        height: Get.height * 0.13,
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: [
+                              Container(
+                                height: Get.height * 0.13,
+                                width: Get.width*0.5,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  border: Border.all(
+                                    color: const Color(0xff4CD964),
+                                    width: 1,
+                                  ),
+                                ),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Column(
+                                      mainAxisSize: MainAxisSize.max,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Padding(
+                                          padding: EdgeInsets.only(left: Get.width*0.025),
+                                          child: Text(
+                                            "02",
+                                            style: AppTextStyle.headline4.copyWith(
+                                              color: Colors.black,
+                                              fontSize: Get.width * 0.04,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: Get.height * 0.01,
+                                        ),
+                                        Padding(
+                                          padding: EdgeInsets.only(left: Get.width*0.025),
+                                          child: Text(
+                                            "Current Projects",
+                                            style: AppTextStyle.headline4.copyWith(
+                                              color: Colors.black.withOpacity(0.5),
+                                              fontSize: Get.width * 0.035,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(right: 10.0),
+                                      child: Container(
+                                        height: Get.height * 0.05,
+                                        width: Get.height * 0.05,
+                                        decoration: BoxDecoration(
+                                          color: const Color(0xff00E396).withOpacity(0.1),
+                                          borderRadius: const BorderRadius.all(Radius.circular(100.0)),
+                                        ),
+                                        child: Center(
+                                          child: Image.asset(
+                                            'assets/images/image 804.png',
+                                            width: Get.width*0.05,
+                                            height: Get.width*0.05,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 10.0,
+                              ),
+                              Container(
+                                height: Get.height * 0.13,
+                                width: Get.width*0.5,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  border: Border.all(
+                                    color: const Color(0xff4C52D9),
+                                    width: 1,
+                                  ),
+                                ),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Column(
+                                      mainAxisSize: MainAxisSize.max,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Padding(
+                                          padding: EdgeInsets.only(left: Get.width*0.025),
+                                          child: Text(
+                                            "N 2,300,000",
+                                            style: AppTextStyle.headline4.copyWith(
+                                              color: Colors.black,
+                                              fontSize: Get.width * 0.04,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: Get.height * 0.01,
+                                        ),
+                                        Padding(
+                                          padding: EdgeInsets.only(left: Get.width*0.025),
+                                          child: Text(
+                                            "Total Earning",
+                                            style: AppTextStyle.headline4.copyWith(
+                                              color: Colors.black.withOpacity(0.5),
+                                              fontSize: Get.width * 0.035,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(right: 10.0),
+                                      child: Container(
+                                        height: Get.height * 0.05,
+                                        width: Get.height * 0.05,
+                                        decoration: BoxDecoration(
+                                          color: const Color(0xff4C52D9).withOpacity(0.1),
+                                          borderRadius: const BorderRadius.all(Radius.circular(100.0)),
+                                        ),
+                                        child: Center(
+                                          child: Image.asset(
+                                            'assets/images/image 804.png',
+                                            width: Get.width*0.05,
+                                            height: Get.width*0.05,
+                                            color: const Color(0xff4C52D9),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    if(controller.currentType == "Service Partner")
+                      SizedBox(
+                        height: Get.height * 0.01,
+                      ),
+
+                    if(controller.currentType == "Service Partner")
+                      Padding(
+                        padding: EdgeInsets.only(left: Get.width*0.05,right: Get.width*0.05,top: 10.0),
+                        child: Text(
+                          "Upcoming Deadlines",
+                          style: AppTextStyle.subtitle1.copyWith(
+                            color: Colors.black,
+                            fontSize: Get.width * 0.04,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+
+                    if(controller.currentType == "Service Partner")
+                      Padding(
+                        padding: EdgeInsets.only(left: Get.width*0.05,right: Get.width*0.05,top: 20.0),
+                        child: Container(
+                          width: Get.width,
+                          height: Get.height * 0.13,
+                          decoration: BoxDecoration(
+                            color: const Color(0xffFFF9F9),
+                            borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(0.0),
+                              topRight: Radius.circular(10.0),
+                              bottomLeft: Radius.circular(0.0),
+                              bottomRight: Radius.circular(10.0),
+                            ),
+                            border: Border.all(
+                              color: const Color(0xffFFF9F9),
+                              width: 1,
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Container(
+                                width: Get.width * 0.01,
+                                color: const Color(0xffDC1515),
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.only(left: Get.width*0.025),
+                                    child: Text(
+                                      "Land Survey Project",
+                                      style: AppTextStyle.headline4.copyWith(
+                                        color: Colors.black,
+                                        fontSize: Get.width * 0.04,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ),
+
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.only(left: Get.width*0.025),
+                                        child: Icon(
+                                          Icons.calendar_today_rounded,
+                                          color: Colors.black.withOpacity(0.5),
+                                          size: Get.width * 0.045,
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.only(left: Get.width*0.01),
+                                        child: Text(
+                                          "Start  : 12 - 10- 22 ",
+                                          style: AppTextStyle.headline4.copyWith(
+                                            color: Colors.black,
+                                            fontSize: Get.width * 0.035,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      ),
+
+                                      Padding(
+                                        padding: EdgeInsets.only(left: Get.width*0.03),
+                                        child: Icon(
+                                          Icons.calendar_today_rounded,
+                                          color: Colors.black.withOpacity(0.5),
+                                          size: Get.width * 0.045,
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.only(left: Get.width*0.01),
+                                        child: Text(
+                                          "Due  : 12 - 01- 23  ",
+                                          style: AppTextStyle.headline4.copyWith(
+                                            color: Colors.black,
+                                            fontSize: Get.width * 0.035,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.only(left: Get.width*0.025),
+                                        child: Text(
+                                          "Project Status :",
+                                          style: AppTextStyle.headline4.copyWith(
+                                            color: Colors.black.withOpacity(0.5),
+                                            fontSize: Get.width * 0.035,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.only(left: Get.width*0.025),
+                                        child: Container(
+                                          decoration: const BoxDecoration(
+                                            color: Color(0xffE8F4FE),
+                                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(left: 10.0,right: 10.0,top: 5.0,bottom: 5.0),
+                                            child: Text(
+                                              "Ongoing",
+                                              style: AppTextStyle.headline4.copyWith(
+                                                color: AppColors.primary,
+                                                fontSize: Get.width * 0.035,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    if(controller.currentType == "Service Partner")
+                      Padding(
+                        padding: EdgeInsets.only(left: Get.width*0.05,right: Get.width*0.05,top: 20.0),
+                        child: Container(
+                          width: Get.width,
+                          height: Get.height * 0.13,
+                          decoration: BoxDecoration(
+                            color: const Color(0xffFFFFF9),
+                            borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(0.0),
+                              topRight: Radius.circular(10.0),
+                              bottomLeft: Radius.circular(0.0),
+                              bottomRight: Radius.circular(10.0),
+                            ),
+                            border: Border.all(
+                              color: const Color(0xffFFF9F9),
+                              width: 1,
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Container(
+                                width: Get.width * 0.01,
+                                color: const Color(0xffFCE727),
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.only(left: Get.width*0.025),
+                                    child: Text(
+                                      "Land Survey Project",
+                                      style: AppTextStyle.headline4.copyWith(
+                                        color: Colors.black,
+                                        fontSize: Get.width * 0.04,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ),
+
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.only(left: Get.width*0.025),
+                                        child: Icon(
+                                          Icons.calendar_today_rounded,
+                                          color: Colors.black.withOpacity(0.5),
+                                          size: Get.width * 0.045,
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.only(left: Get.width*0.01),
+                                        child: Text(
+                                          "Start  : 12 - 10- 22 ",
+                                          style: AppTextStyle.headline4.copyWith(
+                                            color: Colors.black,
+                                            fontSize: Get.width * 0.035,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      ),
+
+                                      Padding(
+                                        padding: EdgeInsets.only(left: Get.width*0.03),
+                                        child: Icon(
+                                          Icons.calendar_today_rounded,
+                                          color: Colors.black.withOpacity(0.5),
+                                          size: Get.width * 0.045,
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.only(left: Get.width*0.01),
+                                        child: Text(
+                                          "Due  : 12 - 01- 23  ",
+                                          style: AppTextStyle.headline4.copyWith(
+                                            color: Colors.black,
+                                            fontSize: Get.width * 0.035,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.only(left: Get.width*0.025),
+                                        child: Text(
+                                          "Project Status :",
+                                          style: AppTextStyle.headline4.copyWith(
+                                            color: Colors.black.withOpacity(0.5),
+                                            fontSize: Get.width * 0.035,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.only(left: Get.width*0.025),
+                                        child: Container(
+                                          decoration: const BoxDecoration(
+                                            color: Color(0xffE8F4FE),
+                                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(left: 10.0,right: 10.0,top: 5.0,bottom: 5.0),
+                                            child: Text(
+                                              "Ongoing",
+                                              style: AppTextStyle.headline4.copyWith(
+                                                color: AppColors.primary,
+                                                fontSize: Get.width * 0.035,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    if(controller.currentType == "Service Partner")
+                      Padding(
+                        padding: EdgeInsets.only(left: Get.width*0.05,right: Get.width*0.05,top: 20.0),
+                        child: Container(
+                          width: Get.width,
+                          height: Get.height * 0.13,
+                          decoration: BoxDecoration(
+                            color: const Color(0xffFFF9F9),
+                            borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(0.0),
+                              topRight: Radius.circular(10.0),
+                              bottomLeft: Radius.circular(0.0),
+                              bottomRight: Radius.circular(10.0),
+                            ),
+                            border: Border.all(
+                              color: const Color(0xffF9FAFF),
+                              width: 1,
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Container(
+                                width: Get.width * 0.01,
+                                color: const Color(0xff3F79AD),
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.only(left: Get.width*0.025),
+                                    child: Text(
+                                      "Land Survey Project",
+                                      style: AppTextStyle.headline4.copyWith(
+                                        color: Colors.black,
+                                        fontSize: Get.width * 0.04,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ),
+
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.only(left: Get.width*0.025),
+                                        child: Icon(
+                                          Icons.calendar_today_rounded,
+                                          color: Colors.black.withOpacity(0.5),
+                                          size: Get.width * 0.045,
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.only(left: Get.width*0.01),
+                                        child: Text(
+                                          "Start  : 12 - 10- 22 ",
+                                          style: AppTextStyle.headline4.copyWith(
+                                            color: Colors.black,
+                                            fontSize: Get.width * 0.035,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      ),
+
+                                      Padding(
+                                        padding: EdgeInsets.only(left: Get.width*0.03),
+                                        child: Icon(
+                                          Icons.calendar_today_rounded,
+                                          color: Colors.black.withOpacity(0.5),
+                                          size: Get.width * 0.045,
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.only(left: Get.width*0.01),
+                                        child: Text(
+                                          "Due  : 12 - 01- 23  ",
+                                          style: AppTextStyle.headline4.copyWith(
+                                            color: Colors.black,
+                                            fontSize: Get.width * 0.035,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.only(left: Get.width*0.025),
+                                        child: Text(
+                                          "Project Status :",
+                                          style: AppTextStyle.headline4.copyWith(
+                                            color: Colors.black.withOpacity(0.5),
+                                            fontSize: Get.width * 0.035,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.only(left: Get.width*0.025),
+                                        child: Container(
+                                          decoration: const BoxDecoration(
+                                            color: Color(0xffE8F4FE),
+                                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(left: 10.0,right: 10.0,top: 5.0,bottom: 5.0),
+                                            child: Text(
+                                              "Ongoing",
+                                              style: AppTextStyle.headline4.copyWith(
+                                                color: AppColors.primary,
+                                                fontSize: Get.width * 0.035,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+
+
                     SizedBox(
                       height: Get.height * 0.01,
                     ),
@@ -445,6 +1034,9 @@ class _HomeTabState extends State<HomeTab> {
                           fit: BoxFit.contain,
                         ),
                       ],
+                    ),
+                    SizedBox(
+                      height: Get.height * 0.015,
                     ),
                   ],
                 ),

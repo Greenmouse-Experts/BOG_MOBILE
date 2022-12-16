@@ -20,6 +20,7 @@ import '../../../global_widgets/app_button.dart';
 import '../../../global_widgets/app_input.dart';
 import '../../../global_widgets/horizontal_item_tile.dart';
 import '../../../global_widgets/item_counter.dart';
+import '../../../global_widgets/page_dropdown.dart';
 import '../../../global_widgets/page_input.dart';
 import '../../add_products/add_products.dart';
 import '../../orders/order_details.dart';
@@ -239,6 +240,46 @@ class CartTab extends StatelessWidget {
                       padding: const EdgeInsets.all(0),
                       itemBuilder: (BuildContext context, int index) {
                         return const ProductItem();
+                      },
+                    ),
+                  ),
+                if(controller.currentType == "Service Partner")
+                  Padding(
+                    padding: EdgeInsets.only(left: Get.width*0.03, right: Get.width*0.03),
+                    child: PageDropButtonWithoutBackground(
+                      label: "",
+                      hint: '',
+                      padding: const EdgeInsets.fromLTRB(10, 0, 5, 0),
+                      onChanged: (val) {
+                        //currentOrder = val;
+                        controller.update();
+                      },
+                      value: "All Service Orders",
+                      items: ["All Service Orders"].map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value,style: AppTextStyle.subtitle1.copyWith(
+                            color: AppColors.primary,
+                            fontSize: Get.width * 0.035,
+                            fontWeight: FontWeight.w500,
+                          ),textAlign: TextAlign.start,),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                if(controller.currentType == "Service Partner")
+                  SizedBox(
+                    height: Get.height * 0.015,
+                  ),
+                if(controller.currentType == "Service Partner")
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: 4,
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      padding: const EdgeInsets.all(0),
+                      itemBuilder: (BuildContext context, int index) {
+                        return ServiceRequestItem();
                       },
                     ),
                   )
@@ -622,6 +663,108 @@ class OrderRequestItem extends StatelessWidget {
                     ),
                   ],
                 ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                SizedBox(
+                  width: Get.width * 0.4,
+                  child: AppButton(
+                    title: "Decline",
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    border: Border.all(color: Color(0xFF24B53D)),
+                    bckgrndColor: Colors.white,
+                    fontColor: Color(0xFF24B53D),
+                  ),
+                ),
+                SizedBox(
+                  width: Get.width * 0.4,
+                  child: AppButton(
+                    title: "Accept",
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    border: Border.all(color: Color(0xFF24B53D)),
+                    bckgrndColor: Colors.white,
+                    fontColor: const Color(0xFF24B53D),
+                  ),
+                ),
+              ],
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class ServiceRequestItem extends StatelessWidget {
+  const ServiceRequestItem({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+
+    /*CachedNetworkImageProvider(
+      "www.com",
+    )*/
+    return Container(
+      margin: EdgeInsets.only(left: Get.width*0.03, right: Get.width*0.03,bottom: 20,top: 5),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.2),
+            spreadRadius: 1,
+            blurRadius: 6,
+            offset: const Offset(0, 3), // changes position of shadow
+          ),
+        ],
+      ),
+      child: InkWell(
+        onTap: (){
+          Get.to(() => const OrderDetails());
+        },
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(left: Get.width * 0.005),
+                        child: Text(
+                          "Project ID : LAN -SUV-132  ",
+                          style: AppTextStyle.caption.copyWith(
+                            color: Colors.black,
+                            fontSize: Get.width * 0.035,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      Padding(
+                        padding: EdgeInsets.only(left: Get.width * 0.005),
+                        child: Text(
+                          'Location : Ogba-Ikeja, Lagos',
+                          style: AppTextStyle.caption.copyWith(
+                            color: Colors.black.withOpacity(0.6),
+                            fontSize: Get.width * 0.033,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 8),
               ],
             ),
             const SizedBox(height: 10),

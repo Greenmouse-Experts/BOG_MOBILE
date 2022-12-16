@@ -345,7 +345,7 @@ class SwitchUser extends GetView<HomeController> {
 
                       if(controller.currentType != "Corporate Client")
                         SizedBox(
-                          height: Get.height * 0.04,
+                          height: Get.height * 0.02,
                         ),
                       if(controller.currentType != "Corporate Client")
                         Padding(

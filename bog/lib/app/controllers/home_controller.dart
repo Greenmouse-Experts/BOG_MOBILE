@@ -49,10 +49,10 @@ class HomeController extends GetxController {
       cartTitle = 'Products';
       projectTitle = 'Orders';
     }else{
-      homeIcon = currentBottomNavPage.value == 0 ? 'assets/images/Vector (4).png': 'assets/images/dashboardIcon.png';
+      homeIcon = currentBottomNavPage.value == 0 ? 'assets/images/homeIcon.png': 'assets/images/Vector (7).png';
       chatIcon = currentBottomNavPage.value == 1 ? 'assets/images/Vector (5).png': 'assets/images/chatIcon.png';
-      projectIcon = currentBottomNavPage.value == 2 ? 'assets/images/Group 47400.png': 'assets/images/ordersIcon.png';
-      cartIcon = currentBottomNavPage.value == 3 ? 'assets/images/Group (2).png': 'assets/images/prodctIcon.png';
+      projectIcon = currentBottomNavPage.value == 2 ? 'assets/images/Group 46942.png': 'assets/images/projectIcon.png';
+      cartIcon = currentBottomNavPage.value == 3 ? 'assets/images/Group (4).png': 'assets/images/Vector (8).png';
       profileIcon = currentBottomNavPage.value == 4 ? 'assets/images/Group (3).png': 'assets/images/profileIcon.png';
 
       homeTitle = 'Home';
