@@ -213,9 +213,9 @@ class _OrderDetailsState extends State<OrderDetails> {
                               child: AppButton(
                                 title: "Decline",
                                 padding: const EdgeInsets.symmetric(vertical: 15),
-                                border: Border.all(color: Color(0xFF24B53D)),
+                                border: Border.all(color: const Color(0xFFDC1515)),
                                 bckgrndColor: Colors.white,
-                                fontColor: Color(0xFF24B53D),
+                                fontColor: const Color(0xFFDC1515),
                               ),
                             ),
                             SizedBox(
@@ -223,7 +223,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                               child: AppButton(
                                 title: "Accept",
                                 padding: const EdgeInsets.symmetric(vertical: 15),
-                                border: Border.all(color: Color(0xFF24B53D)),
+                                border: Border.all(color: const Color(0xFF24B53D)),
                                 bckgrndColor: Colors.white,
                                 fontColor: const Color(0xFF24B53D),
                               ),

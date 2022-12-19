@@ -161,7 +161,29 @@ class Shop extends GetView<HomeController> {
                                                           child: Padding(
                                                             padding: EdgeInsets.only(top: width*0.01,left: width*0.01,right: width*0.01),
                                                             child: ClipRRect(
-                                                              borderRadius: BorderRadius.circular(10), child: Image.network(posts[index].productImage!.isEmpty ? "https://www.woolha.com/media/2020/03/eevee.png" : posts[index].productImage![0].url.toString(),fit: BoxFit.cover,),
+                                                              borderRadius: BorderRadius.circular(10), child: Image.network(
+                                                              posts[index].productImage!.isEmpty ? "https://www.woolha.com/media/2020/03/eevee.png" :
+                                                              posts[index].productImage![0].url.toString(),
+                                                              fit: BoxFit.cover,
+                                                              errorBuilder: (context, error, stackTrace) {
+                                                                return Container(
+                                                                  width: width*0.35,
+                                                                  height: Get.height*0.1,
+                                                                  decoration: BoxDecoration(
+                                                                    color: AppColors.primary,
+                                                                    borderRadius: BorderRadius.circular(10),
+                                                                    border: Border.all(color: AppColors.grey.withOpacity(0.1),width: 1),
+                                                                  ),
+                                                                  child: Center(
+                                                                    child: Icon(
+                                                                      Icons.image_not_supported,
+                                                                      color: AppColors.background,
+                                                                      size: width*0.1,
+                                                                    ),
+                                                                  ),
+                                                                );
+                                                              },
+                                                            ),
                                                             ),
                                                           ),
                                                         ),
@@ -299,43 +321,58 @@ class Shop extends GetView<HomeController> {
                   type: BottomNavigationBarType.fixed,
                   items: <BottomNavigationBarItem>[
                     BottomNavigationBarItem(
-                      icon: Image.asset(
-                        'assets/images/homeIcon.png',
-                        width: 25,
-                        color: controller.currentBottomNavPage.value == 0 ? AppColors.primary : AppColors.grey,
+                      icon: Padding(
+                        padding: const EdgeInsets.only(bottom: 5),
+                        child: Image.asset(
+                          controller.homeIcon,
+                          width: 20,
+                          //color: controller.currentBottomNavPage.value == 0 ? AppColors.primary : AppColors.grey,
+                        ),
                       ),
-                      label: 'Home',
+                      label: controller.homeTitle,
                       backgroundColor: AppColors.background,
                     ),
                     BottomNavigationBarItem(
-                      icon: Image.asset(
-                        controller.currentBottomNavPage.value == 1 ? 'assets/images/chat_filled.png' : 'assets/images/chatIcon.png',
-                        width: 25,
-                        color: controller.currentBottomNavPage.value == 1 ? AppColors.primary : AppColors.grey,
+                      icon: Padding(
+                        padding: const EdgeInsets.only(bottom: 5),
+                        child: Image.asset(
+                          controller.currentBottomNavPage.value == 1 ? 'assets/images/chat_filled.png' : 'assets/images/chatIcon.png',
+                          width: 22,
+                          //color: controller.currentBottomNavPage.value == 1 ? AppColors.primary : AppColors.grey,
+                        ),
                       ),
                       label: 'Chat',
                     ),
                     BottomNavigationBarItem(
-                      icon: Image.asset(
-                        'assets/images/projectIcon.png',
-                        width: 25,
-                        color: controller.currentBottomNavPage.value == 2 ? AppColors.primary : AppColors.grey,
+                      icon: Padding(
+                        padding: const EdgeInsets.only(bottom: 5),
+                        child: Image.asset(
+                          controller.projectIcon,
+                          width: 20,
+                          //color: controller.currentBottomNavPage.value == 2 ? AppColors.primary : AppColors.grey,
+                        ),
                       ),
-                      label: 'Project',
+                      label: controller.projectTitle,
                     ),
                     BottomNavigationBarItem(
-                      icon: Image.asset(
-                        'assets/images/cartIcon.png',
-                        width: 25,
-                        color: controller.currentBottomNavPage.value == 3 ? AppColors.primary : AppColors.grey,
+                      icon: Padding(
+                        padding: const EdgeInsets.only(bottom: 5),
+                        child: Image.asset(
+                          controller.cartIcon,
+                          width: 25,
+                          //color: controller.currentBottomNavPage.value == 3 ? AppColors.primary : AppColors.grey,
+                        ),
                       ),
-                      label: 'Cart',
+                      label: controller.cartTitle,
                     ),
                     BottomNavigationBarItem(
-                      icon: Image.asset(
-                        'assets/images/profileIcon.png',
-                        width: 25,
-                        color: controller.currentBottomNavPage.value == 4 ? AppColors.primary : AppColors.grey,
+                      icon: Padding(
+                        padding: const EdgeInsets.only(bottom: 5),
+                        child: Image.asset(
+                          controller.profileIcon,
+                          width: 25,
+                          //color: controller.currentBottomNavPage.value == 4 ? AppColors.primary : AppColors.grey,
+                        ),
                       ),
                       label: 'Profile',
                     ),
@@ -345,7 +382,7 @@ class Shop extends GetView<HomeController> {
                   unselectedItemColor: Colors.grey,
                   onTap: (index) {
                     controller.currentBottomNavPage.value = index;
-                    controller.update(['home']);
+                    controller.updateNewUser(controller.currentType);
                     Get.back();
                   }
               ),

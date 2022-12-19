@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 
+import '../data/model/MyProducts.dart';
 import '../modules/home/pages/HomeTab.dart';
 import '../repository/user_repo.dart';
 
@@ -71,4 +72,10 @@ class HomeController extends GetxController {
     CartTab(),
     ProfileTab()
   ];
+
+  int totalPrice = 0;
+  bool isBuyNow = false;
+  MyProducts? myProducts;
+  List<MyProducts> productsList = [];
+  Map<String,int> productsMap = {};
 }

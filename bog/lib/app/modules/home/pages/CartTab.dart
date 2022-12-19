@@ -23,6 +23,7 @@ import '../../../global_widgets/item_counter.dart';
 import '../../../global_widgets/page_dropdown.dart';
 import '../../../global_widgets/page_input.dart';
 import '../../add_products/add_products.dart';
+import '../../checkout/checkout.dart';
 import '../../orders/order_details.dart';
 
 class CartTab extends StatelessWidget {
@@ -67,146 +68,201 @@ class CartTab extends StatelessWidget {
                   Expanded(
                     child: Padding(
                       padding: EdgeInsets.only(left: Get.width*0.03, right: Get.width*0.03),
-                      child: SingleChildScrollView(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const CartItem(),
-                            SizedBox(
-                              height: Get.height * 0.01,
-                            ),
-                            const CartItem(),
-                            SizedBox(
-                              height: Get.height * 0.1,
-                            ),
-                            //Divider
-                            Container(
-                              height: 1,
-                              color: Colors.grey[300],
-                            ),
-                            SizedBox(
-                              height: Get.height * 0.02,
-                            ),
-                            const PageInput(
-                              hint: 'Enter your coupon code',
-                              label: 'Do you have a coupon ? Enter it here',
-                              validator: null,
-                              isCompulsory: true,
-                              obscureText: false,
-                            ),
-                            SizedBox(
-                              height: Get.height * 0.05,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  "Sub Total:",
-                                  style: AppTextStyle.subtitle1.copyWith(
-                                    color: Colors.black,
-                                    fontSize: Get.width * 0.035,
-                                    fontWeight: FontWeight.w400,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          SizedBox(
+                            height: Get.height * 0.3,
+                            child: controller.productsList.isEmpty ? Center(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.only(right: Get.width*0.03),
+                                    child: Icon(
+                                      FeatherIcons.shoppingCart,
+                                      size: Get.width * 0.2,
+                                      color: Colors.grey,
+                                    ),
                                   ),
-                                ),
-                                Text(
-                                  "N 115,000",
-                                  style: AppTextStyle.subtitle1.copyWith(
-                                    color: Colors.black,
-                                    fontSize: Get.width * 0.035,
-                                    fontWeight: FontWeight.w400,
+                                  SizedBox(
+                                    height: Get.height * 0.02,
                                   ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: Get.height * 0.025,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  "Delivery Fee :",
-                                  style: AppTextStyle.subtitle1.copyWith(
-                                    color: Colors.black,
-                                    fontSize: Get.width * 0.035,
-                                    fontWeight: FontWeight.w400,
+                                  Text(
+                                    "Nothing in your cart",
+                                    style: AppTextStyle.subtitle1.copyWith(
+                                      color: Colors.black,
+                                      fontSize: Get.width * 0.035,
+                                      fontWeight: FontWeight.w500,
+                                    ),
                                   ),
-                                ),
-                                Text(
-                                  "N 5,000",
-                                  style: AppTextStyle.subtitle1.copyWith(
-                                    color: Colors.black,
-                                    fontSize: Get.width * 0.035,
-                                    fontWeight: FontWeight.w400,
+                                ],
+                              ),
+                            ) :ListView.builder(
+                              padding: EdgeInsets.zero,
+                              itemCount: controller.productsList.length,
+                                shrinkWrap: false,
+                                itemBuilder: (context,index){
+                                  var product = controller.productsList[index];
+                                  return CartItem(
+                                    title: product.name.toString(),
+                                    image: product.image.toString(),
+                                    price: "N ${product.price}",
+                                    quantity: controller.productsMap[product.id.toString()] ?? 1,
+                                    quantityChanged: (value){
+                                      controller.productsMap[product.id.toString()] = value;
+                                      controller.update();
+                                    },
+                                  );
+                                }
+                            ),
+                          ),
+                          SizedBox(
+                            height: Get.height * 0.025,
+                          ),
+                          //Divider
+                          Container(
+                            height: 1,
+                            color: Colors.grey[300],
+                          ),
+                          SizedBox(
+                            height: Get.height * 0.025,
+                          ),
+                          SizedBox(
+                            height: Get.height * 0.02,
+                          ),
+                          SizedBox(
+                            height: Get.height * 0.4,
+                            child: SingleChildScrollView(
+                              child: Column(
+                                children: [
+                                  const PageInput(
+                                    hint: 'Enter your coupon code',
+                                    label: 'Do you have a coupon ? Enter it here',
+                                    validator: null,
+                                    isCompulsory: true,
+                                    obscureText: false,
                                   ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: Get.height * 0.025,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  "Discount :",
-                                  style: AppTextStyle.subtitle1.copyWith(
-                                    color: Colors.black,
-                                    fontSize: Get.width * 0.035,
-                                    fontWeight: FontWeight.w400,
+                                  SizedBox(
+                                    height: Get.height * 0.05,
                                   ),
-                                ),
-                                Text(
-                                  "50%",
-                                  style: AppTextStyle.subtitle1.copyWith(
-                                    color: Colors.black,
-                                    fontSize: Get.width * 0.035,
-                                    fontWeight: FontWeight.w400,
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        "Sub Total:",
+                                        style: AppTextStyle.subtitle1.copyWith(
+                                          color: Colors.black,
+                                          fontSize: Get.width * 0.035,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ),
+                                      Text(
+                                        "N ${controller.totalPrice}",
+                                        style: AppTextStyle.subtitle1.copyWith(
+                                          color: Colors.black,
+                                          fontSize: Get.width * 0.035,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: Get.height * 0.025,
-                            ),
-                            //Dotted Line
-                            CustomPaint(painter: DashedLinePainter()),
-                            SizedBox(
-                              height: Get.height * 0.025,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  "Total :",
-                                  style: AppTextStyle.subtitle1.copyWith(
-                                    color: Colors.black,
-                                    fontSize: Get.width * 0.035,
-                                    fontWeight: FontWeight.w400,
+                                  SizedBox(
+                                    height: Get.height * 0.025,
                                   ),
-                                ),
-                                Text(
-                                  "N 150,000",
-                                  style: AppTextStyle.subtitle1.copyWith(
-                                    color: AppColors.primary,
-                                    fontSize: Get.width * 0.04,
-                                    fontWeight: FontWeight.w400,
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        "Delivery Fee :",
+                                        style: AppTextStyle.subtitle1.copyWith(
+                                          color: Colors.black,
+                                          fontSize: Get.width * 0.035,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ),
+                                      Text(
+                                        "N 5,000",
+                                        style: AppTextStyle.subtitle1.copyWith(
+                                          color: Colors.black,
+                                          fontSize: Get.width * 0.035,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ),
-                              ],
+                                  SizedBox(
+                                    height: Get.height * 0.025,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        "Discount :",
+                                        style: AppTextStyle.subtitle1.copyWith(
+                                          color: Colors.black,
+                                          fontSize: Get.width * 0.035,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ),
+                                      Text(
+                                        "0%",
+                                        style: AppTextStyle.subtitle1.copyWith(
+                                          color: Colors.black,
+                                          fontSize: Get.width * 0.035,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: Get.height * 0.025,
+                                  ),
+                                  //Dotted Line
+                                  CustomPaint(painter: DashedLinePainter()),
+                                  SizedBox(
+                                    height: Get.height * 0.025,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        "Total :",
+                                        style: AppTextStyle.subtitle1.copyWith(
+                                          color: Colors.black,
+                                          fontSize: Get.width * 0.035,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ),
+                                      Text(
+                                        "N ${controller.totalPrice + 5000}",
+                                        style: AppTextStyle.subtitle1.copyWith(
+                                          color: AppColors.primary,
+                                          fontSize: Get.width * 0.04,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: Get.height * 0.025,
+                                  ),
+                                  AppButton(
+                                    title: 'Proceed To Checkout',
+                                    onPressed: () {
+                                      Get.to(() => Checkout());
+                                    },
+                                    borderRadius: 10,
+                                    enabled: controller.productsList.isNotEmpty,
+                                  ),
+                                ],
+                              ),
                             ),
-                            SizedBox(
-                              height: Get.height * 0.025,
-                            ),
-                            AppButton(
-                              title: 'Proceed To Checkout',
-                              onPressed: () {},
-                              borderRadius: 10,
-                            ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
@@ -314,7 +370,20 @@ class CartTab extends StatelessWidget {
 class CartItem extends StatelessWidget {
   const CartItem({
     Key? key,
+    this.image = "assets/images/dummy_image.png",
+    this.title = "30 Tonnes Sharp Sand",
+    this.subTitle = "",
+    this.price = "N 115,000",
+    this.quantity = 1,
+    this.quantityChanged
   }) : super(key: key);
+
+  final String image;
+  final String title;
+  final String subTitle;
+  final String price;
+  final int quantity;
+  final Function(int)? quantityChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -330,13 +399,29 @@ class CartItem extends StatelessWidget {
             Container(
               height: 90,
               width: 90,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                color: AppColors.bostonUniRed,
-                image: const DecorationImage(
-                  image: AssetImage("assets/images/dummy_image.png"),
-                  fit: BoxFit.cover,
-                ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10), child: Image.network(
+                image,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return Container(
+                    height: 90,
+                    width: 90,
+                    decoration: BoxDecoration(
+                      color: AppColors.primary,
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: AppColors.grey.withOpacity(0.1),width: 1),
+                    ),
+                    child: Center(
+                      child: Icon(
+                        Icons.image_not_supported,
+                        color: AppColors.background,
+                        size: Get.width*0.1,
+                      ),
+                    ),
+                  );
+                },
+              ),
               ),
             ),
             const SizedBox(width: 10),
@@ -347,13 +432,20 @@ class CartItem extends StatelessWidget {
                 children: [
                   Padding(
                     padding: EdgeInsets.only(left: Get.width * 0.015),
-                    child: const Text("30 Tonnes Sharp Sand"),
+                    child: Text(
+                        title,
+                      style: AppTextStyle.caption.copyWith(
+                        color: Colors.black,
+                        fontSize: Get.width * 0.035,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                   ),
                   AppRating(onRatingUpdate: (value) {}, rating: 4.5),
                   Padding(
                     padding: EdgeInsets.only(left: Get.width * 0.015),
                     child: Text(
-                      'N 115,000',
+                      price,
                       style: AppTextStyle.caption.copyWith(
                         color: Colors.black,
                         fontSize: Get.width * 0.035,
@@ -370,9 +462,11 @@ class CartItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 ItemCounter(
-                  initialCount: 1,
+                  initialCount: quantity,
                   onCountChanged: (count) {
-
+                    if(quantityChanged != null){
+                      quantityChanged!(count);
+                    }
                   },
                 ),
                 const SizedBox(height: 5),
@@ -675,9 +769,9 @@ class OrderRequestItem extends StatelessWidget {
                   child: AppButton(
                     title: "Decline",
                     padding: const EdgeInsets.symmetric(vertical: 10),
-                    border: Border.all(color: Color(0xFF24B53D)),
+                    border: Border.all(color: Color(0xFFDC1515)),
                     bckgrndColor: Colors.white,
-                    fontColor: Color(0xFF24B53D),
+                    fontColor: Color(0xFFDC1515),
                   ),
                 ),
                 SizedBox(
@@ -777,9 +871,9 @@ class ServiceRequestItem extends StatelessWidget {
                   child: AppButton(
                     title: "Decline",
                     padding: const EdgeInsets.symmetric(vertical: 10),
-                    border: Border.all(color: Color(0xFF24B53D)),
+                    border: Border.all(color: Color(0xFFDC1515)),
                     bckgrndColor: Colors.white,
-                    fontColor: Color(0xFF24B53D),
+                    fontColor: Color(0xFFDC1515),
                   ),
                 ),
                 SizedBox(

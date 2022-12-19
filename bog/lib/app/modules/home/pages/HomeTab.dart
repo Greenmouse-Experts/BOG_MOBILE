@@ -134,23 +134,26 @@ class _HomeTabState extends State<HomeTab> {
               height: Get.height * 0.015,
             ),
             if(controller.currentType == "Client" || controller.currentType == "Corporate Client")
-              Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  height: Get.height * 0.18,
-                  width: Get.width * 0.95,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10.0),
-                    image: const DecorationImage(
-                      image: AssetImage("assets/images/house.png"),
-                      fit: BoxFit.fitWidth,
+              Padding(
+                padding: EdgeInsets.only(left: Get.width*0.045,right: Get.width*0.045),
+                child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    height: Get.height * 0.18,
+                    width: Get.width * 0.95,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10.0),
+                      image: const DecorationImage(
+                        image: AssetImage("assets/images/Frame 466380.png"),
+                        fit: BoxFit.fitWidth,
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
             ),
+              ),
             if(controller.currentType == "Product Partner")
               Padding(
                 padding: EdgeInsets.only(left: Get.width*0.05,right: Get.width*0.05,top: 10.0),
