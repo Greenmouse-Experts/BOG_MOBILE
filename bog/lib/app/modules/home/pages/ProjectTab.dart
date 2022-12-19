@@ -386,11 +386,39 @@ class ProjectTab extends StatelessWidget {
                         return currentOrder == "Ongoing Orders" ? OrderItem() : OrderRequestItem();
                       },
                     ),
+                  ),
+                if(controller.currentType == "Service Partner")
+                  Padding(
+                    padding: EdgeInsets.only(left: Get.width*0.03, right: Get.width*0.03),
+                    child: SizedBox(
+                      height: Get.height * 0.65,
+                      child: GridView.builder(
+                        itemCount: 5,
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,mainAxisSpacing: 15,crossAxisSpacing: 15),
+                        scrollDirection: Axis.vertical,
+                        padding: const EdgeInsets.all(0),
+                        itemBuilder: (BuildContext context, int index) {
+                          return InkWell(
+                            onTap: (){
+                              //Get.to(const ProductDetails(key: Key('ProductDetails')));
+                            },
+                            child: Container(
+                              decoration: const BoxDecoration(
+                                image: DecorationImage(
+                                  image: AssetImage("assets/images/Group 47257.png"),
+                                  fit: BoxFit.fitHeight,
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
                   )
               ],
             ),
           ),
-          floatingActionButton: controller.currentType == "Product Partner" ? null : FloatingActionButton(
+          floatingActionButton: controller.currentType == "Product Partner" ||  controller.currentType == "Service Partner" ? null : FloatingActionButton(
             onPressed: (){
               Get.toNamed(Create.route);
             },

@@ -105,20 +105,20 @@ class ProfileTab extends StatelessWidget {
               Get.to(() => const ProfileInfo());
             },imageAsset: "assets/images/prifile.png",),
 
-            if(controller.currentType == "Product Partner")
+            if(controller.currentType == "Product Partner" || controller.currentType == "Service Partner" )
               const SizedBox(
               height: kToolbarHeight/3,
             ),
-            if(controller.currentType == "Product Partner")
-              _TextButton(text: "Uploaded Document", onPressed: () {
+            if(controller.currentType == "Product Partner" || controller.currentType == "Service Partner")
+              _TextButton(text: controller.currentType == "Product Partner" ? "Uploaded Document" : "KYC", onPressed: () {
                 Get.to(() => const UpdateKyc());
               },imageAsset: "assets/images/kyc.png",),
 
-            if(controller.currentType == "Product Partner")
+            if(controller.currentType == "Product Partner" || controller.currentType == "Service Partner")
               const SizedBox(
               height: kToolbarHeight/3,
             ),
-            if(controller.currentType == "Product Partner")
+            if(controller.currentType == "Product Partner" || controller.currentType == "Service Partner")
               _TextButton(text: "Bank Details", onPressed: () {
               Get.to(() => const UpdateBank());
             },imageAsset: "assets/images/bank.png",),
@@ -200,7 +200,7 @@ class _TextButton extends StatelessWidget {
                         text,
                         maxLines: 1,
                         overflow: TextOverflow.clip,
-                        style: AppTextStyle.subtitle1.copyWith(color: Colors.black,fontSize: Get.width*0.04,fontWeight: FontWeight.w500),
+                        style: AppTextStyle.subtitle1.copyWith(color: text == "Log Out" ? AppColors.bostonUniRed : Colors.black,fontSize: Get.width*0.04,fontWeight: FontWeight.w500),
                       ),
                       SizedBox(
                         height: Get.height*0.01,

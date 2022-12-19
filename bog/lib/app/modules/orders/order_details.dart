@@ -114,50 +114,77 @@ class _OrderDetailsState extends State<OrderDetails> {
                       Padding(
                         padding: EdgeInsets.only(right: width*0.05,left: width*0.045,top: 10),
                         child: Text(
-                          "Order ID :  SAN - 123- NDS ",
+                          controller.currentType == "Service Partner" ? "Project ID :  LAN -SUV -132" :"Order ID :  SAN - 123- NDS ",
                           style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.07,color: Colors.black,fontWeight: FontWeight.w600),
                           textAlign: TextAlign.center,
                         ),
                       ),
                       SizedBox(
-                        height: width*0.02,
+                        height: width*0.04,
                       ),
                       Padding(
                         padding: EdgeInsets.only(right: width*0.05,left: width*0.045,top: 10),
                         child: Text(
-                          "Order Items",
+                          "Project Name ",
                           style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.065,color: Colors.black.withOpacity(0.5),fontWeight: FontWeight.normal),
                           textAlign: TextAlign.center,
                         ),
                       ),
                       SizedBox(
-                        height: width*0.02,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(right: width*0.020,left: width*0.020),
-                        child: OrderItem(),
-                      ),
-                      SizedBox(
-                        height: width*0.08,
+                        height: width*0.01,
                       ),
                       Padding(
                         padding: EdgeInsets.only(right: width*0.05,left: width*0.045,top: 10),
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.location_on,
-                              color: Colors.black,
-                              size: width*0.045,
-                            ),
-                            SizedBox(
-                              width: width*0.02,
-                            ),
-                            Text(
-                              "2972 Agbulegba Rd. Santa Ana, Ikeja 85486 ",
-                              style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.068,color: Colors.black,fontWeight: FontWeight.normal),
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
+                        child: Text(
+                          "Land Survey Project",
+                          style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.068,color: Colors.black,fontWeight: FontWeight.normal),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+
+                      SizedBox(
+                        height: width*0.04,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(right: width*0.05,left: width*0.045,top: 10),
+                        child: Text(
+                          "Service type",
+                          style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.065,color: Colors.black.withOpacity(0.5),fontWeight: FontWeight.normal),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      SizedBox(
+                        height: width*0.01,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(right: width*0.05,left: width*0.045,top: 10),
+                        child: Text(
+                          "Land Survey",
+                          style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.068,color: Colors.black,fontWeight: FontWeight.normal),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+
+                      SizedBox(
+                        height: width*0.04,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(right: width*0.05,left: width*0.045,top: 10),
+                        child: Text(
+                          "Service Location",
+                          style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.065,color: Colors.black.withOpacity(0.5),fontWeight: FontWeight.normal),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      SizedBox(
+                        height: width*0.01,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(right: width*0.05,left: width*0.045,top: 10),
+                        child: Text(
+                          "No 7, Street close, Ogba Ikeja, Lagos",
+                          style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.068,color: Colors.black,fontWeight: FontWeight.normal),
+                          textAlign: TextAlign.center,
                         ),
                       ),
 

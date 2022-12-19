@@ -57,7 +57,7 @@ class _HomeTabState extends State<HomeTab> {
 
     return GetBuilder<HomeController>(builder: (controller) {
       return SizedBox(
-        height: Get.height * 0.936,
+        height: Get.height * 0.93,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,

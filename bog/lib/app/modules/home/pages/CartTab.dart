@@ -286,7 +286,7 @@ class CartTab extends StatelessWidget {
               ],
             ),
           ),
-          floatingActionButton: controller.currentType == "Client" || controller.currentType == "Corporate Client" ? null : FloatingActionButton(
+          floatingActionButton: controller.currentType == "Client" || controller.currentType == "Corporate Client" || controller.currentType == "Service Partner" ? null : FloatingActionButton(
             onPressed: (){
               Get.to(() => const AddProject());
             },
