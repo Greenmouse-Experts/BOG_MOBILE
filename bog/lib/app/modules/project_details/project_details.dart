@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:bog/app/global_widgets/app_button.dart';
 import 'package:bog/app/global_widgets/global_widgets.dart';
+import 'package:bog/app/modules/project_details/project_info.dart';
 import 'package:feather_icons/feather_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -172,7 +173,7 @@ class _ProjectDetailsState extends State<ProjectDetails> with TickerProviderStat
                                     height: Get.height*0.02,
                                   ),
                                   _TextButton(text: "Project Info", onPressed: () {
-
+                                    Get.to(() => const ProjectInfo(),arguments: project);
                                   },imageAsset: "assets/images/oneC.png",),
                                   SizedBox(
                                     height: Get.height*0.02,
