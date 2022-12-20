@@ -20,6 +20,7 @@ import '../../../global_widgets/horizontal_item_tile.dart';
 import '../../../global_widgets/page_dropdown.dart';
 import '../../chat/chat.dart';
 import '../../create/create.dart';
+import '../../project_details/project_details.dart';
 import '../../shop/product_details.dart';
 import 'CartTab.dart';
 
@@ -424,7 +425,7 @@ class ProjectTab extends StatelessWidget {
                                 itemBuilder: (BuildContext context, int index) {
                                   return InkWell(
                                     onTap: (){
-                                      //Get.to(const ProductDetails(key: Key('ProductDetails')));
+                                      Get.to(() => const ProjectDetails(), arguments: postsToUse[index]);
                                     },
                                     child: Container(
                                       width: Get.width*0.35,
@@ -538,7 +539,7 @@ class ProjectTab extends StatelessWidget {
                                 itemBuilder: (BuildContext context, int index) {
                                   return InkWell(
                                     onTap: (){
-                                      //Get.to(const ProductDetails(key: Key('ProductDetails')));
+                                      Get.to(() => const ProjectDetails(), arguments: postsToUse[index]);
                                     },
                                     child: Container(
                                       width: Get.width*0.35,
@@ -657,7 +658,27 @@ class ProjectTab extends StatelessWidget {
               ],
             ),
           ),
-          floatingActionButton: controller.currentType == "Product Partner" ||  controller.currentType == "Service Partner" ? null : FloatingActionButton(
+          floatingActionButton: controller.currentType == "Product Partner" ||  controller.currentType == "Service Partner" ?
+          FloatingActionButton(
+            onPressed: (){
+              //Get.toNamed(Create.route);
+            },
+            backgroundColor: AppColors.primary,
+            child: Stack(
+              children: [
+                SizedBox(
+                  width: Get.width * 0.05,
+                  height: Get.width * 0.05,
+                  child: Image.asset(
+                    "assets/images/Group 46942.png",
+                    fit: BoxFit.contain,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            ),
+          ) :
+          FloatingActionButton(
             onPressed: (){
               Get.toNamed(Create.route);
             },
