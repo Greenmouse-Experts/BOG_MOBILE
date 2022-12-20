@@ -78,7 +78,7 @@ class _HomeTabState extends State<HomeTab> {
                             icon: AppAvatar(
                               imgUrl: (logInDetails.photo).toString(),
                               radius: Get.width * 0.16,
-                              name: logInDetails.name.toString(),
+                              name: "${logInDetails.fname} ${logInDetails.lname}",
                             ),
                             onPressed: () {
                               Scaffold.of(context).openDrawer();
@@ -108,7 +108,7 @@ class _HomeTabState extends State<HomeTab> {
                               height: 5.0,
                             ),
                             Text(
-                              logInDetails.name.toString(),
+                              "${logInDetails.fname} ${logInDetails.lname}",
                               style: AppTextStyle.subtitle1.copyWith(
                                 color: Colors.black,
                                 fontSize: Get.width * 0.05,

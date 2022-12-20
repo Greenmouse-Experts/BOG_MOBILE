@@ -37,7 +37,6 @@ class _AppDrawerState extends State<AppDrawer> {
   @override
   Widget build(BuildContext context) {
 
-    var controller = Get.find<HomeController>();
     return AnnotatedRegion<SystemUiOverlayStyle>(
         value: const SystemUiOverlayStyle(
             statusBarColor: AppColors.background,
@@ -56,59 +55,77 @@ class _AppDrawerState extends State<AppDrawer> {
                     backgroundColor: AppColors.background,
                     body: SafeArea(
                       child: SingleChildScrollView(
-                        child: SizedBox(
+                        child: Container(
                           width: Get.width*0.7,
                           height: Get.height*0.95,
+                          decoration: const BoxDecoration(
+                            //color: AppColors.background,
+                            image: DecorationImage(
+                              image: AssetImage("assets/images/Frame 466391.png"),
+                              fit: BoxFit.fitHeight,
+                            ),
+                          ),
                           child: Column(
                             children: [
                               Padding(
                                 padding: EdgeInsets.only(left: Get.width*0.015,right: 10.0,top: 10.0),
-                                child: Row(
+                                child: Stack(
+                                  alignment: Alignment.centerRight,
                                   children: [
-                                    SizedBox(
-                                      width: Get.width * 0.16,
-                                      height: Get.width * 0.16,
-                                      child: IconButton(
-                                        icon: AppAvatar(
-                                          imgUrl: (logInDetails.photo).toString(),
-                                          radius: Get.width * 0.16,
-                                          name: logInDetails.name.toString(),
-                                        ),
-                                        onPressed: () {
+                                    Row(
+                                      children: [
+                                        SizedBox(
+                                          width: Get.width * 0.16,
+                                          height: Get.width * 0.16,
+                                          child: IconButton(
+                                            icon: AppAvatar(
+                                              imgUrl: (logInDetails.photo).toString(),
+                                              radius: Get.width * 0.16,
+                                              name: "${logInDetails.fname} ${logInDetails.lname}",
+                                            ),
+                                            onPressed: () {
 
-                                        },
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      width: 10.0,
-                                    ),
-                                    Expanded(
-                                      child: Row(
-                                        crossAxisAlignment: CrossAxisAlignment.center,
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            },
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          width: 10.0,
+                                        ),
+                                        Expanded(
+                                          child: Row(
+                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                             children: [
-                                              Text(
-                                                logInDetails.name.toString(),
-                                                style: AppTextStyle.subtitle1.copyWith(
-                                                  color: Colors.black,
-                                                  fontSize: Get.width * 0.045,
-                                                ),
-                                              ),
-                                              Text(
-                                                controller.currentType,
-                                                style: AppTextStyle.subtitle1.copyWith(
-                                                  color: Colors.black.withOpacity(0.5),
-                                                  fontSize: Get.width * 0.035,
-                                                ),
+                                              Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    "${logInDetails.fname} ${logInDetails.lname}",
+                                                    style: AppTextStyle.subtitle1.copyWith(
+                                                      color: Colors.black,
+                                                      fontSize: Get.width * 0.045,
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    controller.currentType,
+                                                    style: AppTextStyle.subtitle1.copyWith(
+                                                      color: Colors.black.withOpacity(0.5),
+                                                      fontSize: Get.width * 0.035,
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
                                             ],
                                           ),
-                                        ],
-                                      ),
+                                        ),
+                                      ],
                                     ),
+                                    IconButton(
+                                        onPressed: (){
+                                          Get.back();
+                                        },
+                                        icon: Image.asset("assets/images/Group 47364.png",width: Get.width*0.05,height: Get.width*0.05,)
+                                    )
                                   ],
                                 ),
                               ),
@@ -123,13 +140,14 @@ class _AppDrawerState extends State<AppDrawer> {
                                 imageAsset: "assets/images/one1.png",
                                 showArrow: true),
 
-                              _TextButton(
-                                  text: "Orders",
-                                  onPressed: () {
-                                    //Get.toNamed(OnboardingPage.route);
-                                  },
-                                  imageAsset: "assets/images/two1.png",
-                                  showArrow: true),
+                              if(controller.currentType == "Client" || controller.currentType == "Corporate Client")
+                                _TextButton(
+                                    text: "Orders",
+                                    onPressed: () {
+                                      //Get.toNamed(OnboardingPage.route);
+                                    },
+                                    imageAsset: "assets/images/two1.png",
+                                    showArrow: true),
 
                               _TextButton(
                                   text: "Transactions",
@@ -155,7 +173,7 @@ class _AppDrawerState extends State<AppDrawer> {
                                     Get.back();
                                     Get.to(() => const Reviews());
                                   },
-                                  imageAsset: "assets/images/five1.png",
+                                  imageAsset: "assets/images/carbon_review.png",
                                   showArrow: true),
 
 

@@ -119,7 +119,7 @@ class EditProfile extends GetView<HomeController> {
                               icon: AppAvatar(
                                 imgUrl: (logInDetails.photo).toString(),
                                 radius: Get.width * 0.16,
-                                name: logInDetails.name.toString(),
+                                name: "${logInDetails.fname} ${logInDetails.lname}",
                               ),
                               onPressed: () {
 
@@ -131,7 +131,7 @@ class EditProfile extends GetView<HomeController> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                logInDetails.name.toString(),
+                                "${logInDetails.fname} ${logInDetails.lname}",
                                 style: AppTextStyle.subtitle1.copyWith(
                                   color: Colors.black,
                                   fontSize: Get.width * 0.045,
