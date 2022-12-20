@@ -55,4 +55,16 @@ ShopCategory copyWith({  String? id,
     if (list.isEmpty) return [];
     return list.map((item) => ShopCategory.fromJson(item)).toList();
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ShopCategory &&
+          runtimeType == other.runtimeType &&
+          _id == other._id &&
+          _name == other._name &&
+          _description == other._description;
+
+  @override
+  int get hashCode => _id.hashCode ^ _name.hashCode ^ _description.hashCode;
 }

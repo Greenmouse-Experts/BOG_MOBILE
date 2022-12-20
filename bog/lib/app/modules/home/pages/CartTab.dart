@@ -14,6 +14,7 @@ import 'package:qr_flutter/qr_flutter.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_styles.dart';
 import '../../../controllers/home_controller.dart';
+import '../../../data/model/MyProducts.dart';
 import '../../../data/providers/api_response.dart';
 import '../../../data/providers/my_pref.dart';
 import '../../../global_widgets/app_button.dart';
@@ -32,6 +33,10 @@ class CartTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String search = "";
+    var width = Get.width;
+    final Size size = MediaQuery.of(context).size;
+    double multiplier = 25 * size.height * 0.01;
+
     return GetBuilder<HomeController>(builder: (controller) {
       return Expanded(
         child: Scaffold(
@@ -289,15 +294,72 @@ class CartTab extends StatelessWidget {
                   ),
                 if(controller.currentType == "Product Partner")
                   Expanded(
-                    child: ListView.builder(
-                      itemCount: 4,
-                      scrollDirection: Axis.vertical,
-                      shrinkWrap: true,
-                      padding: const EdgeInsets.all(0),
-                      itemBuilder: (BuildContext context, int index) {
-                        return const ProductItem();
-                      },
-                    ),
+                    child: FutureBuilder<ApiResponse>(
+                        future: controller.userRepo.getData("/products"),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState == ConnectionState.done && snapshot.data!.isSuccessful) {
+                            final posts = MyProducts.fromJsonList(snapshot.data!.data);
+                            if(posts.isEmpty){
+                              return SizedBox(
+                                height: Get.height*0.7,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      "No Products Available",
+                                      style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.07,color: Colors.black,fontWeight: FontWeight.w500),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }
+                            return ListView.builder(
+                              itemCount: posts.length,
+                              scrollDirection: Axis.vertical,
+                              shrinkWrap: true,
+                              padding: const EdgeInsets.all(0),
+                              itemBuilder: (BuildContext context, int index) {
+                                return ProductItem(
+                                  title: posts[index].name,
+                                  subTitle: "N ${posts[index].price}",
+                                  date: posts[index].createdAt,
+                                  image: posts[index].image,
+                                );
+                              },
+                            );
+                          }else{
+                            if(snapshot.connectionState == ConnectionState.done){
+                              return SizedBox(
+                                height: Get.height*0.7,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      "No Products Found",
+                                      style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.07,color: Colors.black,fontWeight: FontWeight.w500),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }
+                            return SizedBox(
+                              height: Get.height*0.7,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const CircularProgressIndicator(
+                                    color: AppColors.primary,
+                                  ),
+                                ],
+                              ),
+                            );
+                          }
+                        }),
                   ),
                 if(controller.currentType == "Service Partner")
                   Padding(
@@ -396,7 +458,7 @@ class CartItem extends StatelessWidget {
         margin: const EdgeInsets.only(bottom: 25),
         child: Row(
           children: [
-            Container(
+            SizedBox(
               height: 90,
               width: 90,
               child: ClipRRect(
@@ -571,8 +633,16 @@ class OrderItem extends StatelessWidget {
 class ProductItem extends StatelessWidget {
   const ProductItem({
     Key? key,
+    this.title,
+    this.subTitle,
+    this.date,
+    this.image,
   }) : super(key: key);
 
+  final String? title;
+  final String? subTitle;
+  final String? date;
+  final String? image;
   @override
   Widget build(BuildContext context) {
 
@@ -584,16 +654,32 @@ class ProductItem extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         child: Row(
           children: [
-            Container(
+            SizedBox(
               height: 90,
               width: 90,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                color: AppColors.bostonUniRed,
-                image: const DecorationImage(
-                  image: AssetImage("assets/images/dummy_image.png"),
-                  fit: BoxFit.cover,
-                ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10), child: Image.network(
+                image.toString(),
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return Container(
+                    height: 90,
+                    width: 90,
+                    decoration: BoxDecoration(
+                      color: AppColors.primary,
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: AppColors.grey.withOpacity(0.1),width: 1),
+                    ),
+                    child: Center(
+                      child: Icon(
+                        Icons.image_not_supported,
+                        color: AppColors.background,
+                        size: Get.width*0.1,
+                      ),
+                    ),
+                  );
+                },
+              ),
               ),
             ),
             const SizedBox(width: 10),
@@ -604,12 +690,12 @@ class ProductItem extends StatelessWidget {
                 children: [
                   Padding(
                     padding: EdgeInsets.only(left: Get.width * 0.015),
-                    child: const Text("30 Tonnes Sharp Sand"),
+                    child: Text(title ?? "30 Tonnes Sharp Sand"),
                   ),
                   Padding(
                     padding: EdgeInsets.only(left: Get.width * 0.015),
                     child: Text(
-                      'N 115,000',
+                      subTitle ?? 'N 115,000',
                       style: AppTextStyle.caption.copyWith(
                         color: Colors.black,
                         fontSize: Get.width * 0.035,
@@ -620,7 +706,7 @@ class ProductItem extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.only(left: Get.width * 0.015),
                     child: Text(
-                      'Monday, 31 October 2022 ',
+                      date ?? 'Monday, 31 October 2022 ',
                       style: AppTextStyle.caption.copyWith(
                         color: Color(0xFF9A9A9A),
                         fontSize: Get.width * 0.033,

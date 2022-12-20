@@ -16,6 +16,7 @@ import '../data/model/log_in_model.dart';
 import '../data/providers/my_pref.dart';
 import '../modules/multiplexor/multiplexor.dart';
 
+import '../modules/reviews/reviews.dart';
 import '../modules/switch/switch.dart';
 import '../modules/transactions/transaction.dart';
 import 'app_avatar.dart';
@@ -148,13 +149,14 @@ class _AppDrawerState extends State<AppDrawer> {
                                   imageAsset: "assets/images/four1.png",
                                   showArrow: true),
 
-                             /* _TextButton(
-                                  text: "Smart Calculator",
+                              _TextButton(
+                                  text: "Reviews",
                                   onPressed: () {
-                                    //Get.toNamed(OnboardingPage.route);
+                                    Get.back();
+                                    Get.to(() => const Reviews());
                                   },
                                   imageAsset: "assets/images/five1.png",
-                                  showArrow: true),*/
+                                  showArrow: true),
 
 
                               Expanded(child: Column(
