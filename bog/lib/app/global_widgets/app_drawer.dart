@@ -16,6 +16,7 @@ import '../data/model/log_in_model.dart';
 import '../data/providers/my_pref.dart';
 import '../modules/multiplexor/multiplexor.dart';
 
+import '../modules/orders/my_orders.dart';
 import '../modules/reviews/reviews.dart';
 import '../modules/switch/switch.dart';
 import '../modules/transactions/transaction.dart';
@@ -144,7 +145,8 @@ class _AppDrawerState extends State<AppDrawer> {
                                 _TextButton(
                                     text: "Orders",
                                     onPressed: () {
-                                      //Get.toNamed(OnboardingPage.route);
+                                      Get.back();
+                                      Get.to(() => MyOrderScreen());
                                     },
                                     imageAsset: "assets/images/two1.png",
                                     showArrow: true),
@@ -167,14 +169,15 @@ class _AppDrawerState extends State<AppDrawer> {
                                   imageAsset: "assets/images/four1.png",
                                   showArrow: true),
 
-                              _TextButton(
-                                  text: "Reviews",
-                                  onPressed: () {
-                                    Get.back();
-                                    Get.to(() => const Reviews());
-                                  },
-                                  imageAsset: "assets/images/carbon_review.png",
-                                  showArrow: true),
+                              if(controller.currentType != "Client" && controller.currentType != "Corporate Client")
+                                _TextButton(
+                                    text: "Reviews",
+                                    onPressed: () {
+                                      Get.back();
+                                      Get.to(() => const Reviews());
+                                    },
+                                    imageAsset: "assets/images/carbon_review.png",
+                                    showArrow: true),
 
 
                               Expanded(child: Column(

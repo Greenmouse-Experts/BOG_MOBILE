@@ -543,9 +543,11 @@ class CartItem extends StatelessWidget {
 
 class OrderItem extends StatelessWidget {
   const OrderItem({
-    Key? key,
+    Key? key, this.status = "Pending Shipping", this.statusColor,
   }) : super(key: key);
 
+  final String status;
+  final Color? statusColor;
   @override
   Widget build(BuildContext context) {
 
@@ -593,9 +595,9 @@ class OrderItem extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.only(left: Get.width * 0.015),
                     child: Text(
-                      'Pending Shipping ',
+                      status,
                       style: AppTextStyle.caption.copyWith(
-                        color: Color(0xFFEC8B20),
+                        color: statusColor ?? const Color(0xFFEC8B20),
                         fontSize: Get.width * 0.033,
                         fontWeight: FontWeight.w400,
                       ),

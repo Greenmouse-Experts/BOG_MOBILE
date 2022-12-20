@@ -146,16 +146,16 @@ class ProjectTab extends StatelessWidget {
                                 itemBuilder: (BuildContext context, int index) {
                                   return InkWell(
                                     onTap: (){
-                                      //Get.to(const ProductDetails(key: Key('ProductDetails')));
+                                      Get.to(() => const ProjectDetails(), arguments: postsToUse[index]);
                                     },
                                     child: Container(
-                                        width: Get.width*0.35,
-                                        height: Get.height*0.35,
-                                        decoration: BoxDecoration(
-                                          color: AppColors.backgroundVariant2,
-                                          borderRadius: BorderRadius.circular(10),
-                                          border: Border.all(color: AppColors.grey.withOpacity(0.1),width: 1),
-                                        ),
+                                      width: Get.width*0.35,
+                                      height: Get.height*0.35,
+                                      decoration: BoxDecoration(
+                                        color: AppColors.backgroundVariant2,
+                                        borderRadius: BorderRadius.circular(10),
+                                        border: Border.all(color: AppColors.grey.withOpacity(0.1),width: 1),
+                                      ),
                                       child: Column(
                                         crossAxisAlignment: CrossAxisAlignment.stretch,
                                         children: [
@@ -260,7 +260,7 @@ class ProjectTab extends StatelessWidget {
                                 itemBuilder: (BuildContext context, int index) {
                                   return InkWell(
                                     onTap: (){
-                                      //Get.to(const ProductDetails(key: Key('ProductDetails')));
+                                      Get.to(() => const ProjectDetails(), arguments: postsToUse[index]);
                                     },
                                     child: Container(
                                       width: Get.width*0.35,

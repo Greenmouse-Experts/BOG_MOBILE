@@ -1020,23 +1020,26 @@ class _HomeTabState extends State<HomeTab> {
                     SizedBox(
                       height: Get.height * 0.015,
                     ),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Image.asset(
-                          "assets/images/Group 47034.png",
-                          height: Get.height * 0.2,
-                          width: Get.width*0.5,
-                          fit: BoxFit.contain,
-                        ),
-                        Image.asset(
-                          "assets/images/Group 47035.png",
-                          height: Get.height * 0.2,
-                          width: Get.width*0.5,
-                          fit: BoxFit.contain,
-                        ),
-                      ],
+                    Padding(
+                      padding: EdgeInsets.only(left: Get.width*0.05,right: Get.width*0.05),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Image.asset(
+                            "assets/images/Group 47034.png",
+                            height: Get.height * 0.2,
+                            width: Get.width*0.4,
+                            fit: BoxFit.fitWidth,
+                          ),
+                          Image.asset(
+                            "assets/images/Group 47035.png",
+                            height: Get.height * 0.2,
+                            width: Get.width*0.4,
+                            fit: BoxFit.fitWidth,
+                          ),
+                        ],
+                      ),
                     ),
                     SizedBox(
                       height: Get.height * 0.015,

@@ -343,7 +343,7 @@ class _ProjectDetailsState extends State<ProjectDetails> with TickerProviderStat
                     Get.back();
                   }
               ),
-              floatingActionButton: tabController.index == 1 ?
+              floatingActionButton: (tabController.index == 1 && controller.currentType == "Service Partner") ?
               FloatingActionButton(
                 onPressed: (){
                   Get.to(()=>const AddActivity());
