@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
 import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_styles.dart';
 
 class PageDropButton extends StatelessWidget {
   const PageDropButton({
@@ -39,7 +40,10 @@ class PageDropButton extends StatelessWidget {
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(left: 5),
-                    child: Text(label,style: style),
+                    child: Text(label,style: style ?? AppTextStyle.bodyText2.copyWith(
+                      fontWeight: FontWeight.w500,
+                      color: Colors.black,
+                    )),
                   ),
                   const SizedBox(
                     height: 10,

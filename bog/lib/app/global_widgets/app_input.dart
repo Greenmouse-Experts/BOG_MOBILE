@@ -91,13 +91,16 @@ class _AppInputState extends State<AppInput> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         widget.label != null
-            ? Text(
-                widget.label!,
-                style: AppTextStyle.bodyText2.copyWith(
-                  fontWeight: FontWeight.w600,
-                  color: const Color(0xFF828282),
+            ? Padding(
+          padding: EdgeInsets.only(left: widget.borderSide == BorderSide.none ? 15 : 5),
+              child: Text(
+                  widget.label!,
+                  style: AppTextStyle.bodyText2.copyWith(
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black,
+                  ),
                 ),
-              )
+            )
             : const SizedBox.shrink(),
         SizedBox(
           height: widget.label != null ? 3 : 0,

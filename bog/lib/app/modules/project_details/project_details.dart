@@ -17,6 +17,7 @@ import '../../data/providers/api.dart';
 import '../../global_widgets/app_input.dart';
 import '../../global_widgets/page_dropdown.dart';
 import '../home/pages/CartTab.dart';
+import 'add_activity.dart';
 
 
 class ProjectDetails extends StatefulWidget {
@@ -344,7 +345,7 @@ class _ProjectDetailsState extends State<ProjectDetails> with TickerProviderStat
               floatingActionButton: tabController.index == 1 ?
               FloatingActionButton(
                 onPressed: (){
-
+                  Get.to(()=>const AddActivity());
                 },
                 backgroundColor: AppColors.primary,
                 child: Stack(
