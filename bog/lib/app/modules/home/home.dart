@@ -56,11 +56,7 @@ class _HomeState extends State<Home> {
             return Scaffold(
               body: SizedBox(
                 width: Get.width,
-                child: Column(
-                  children: [
-                    controller.pages[controller.currentBottomNavPage.value],
-                  ],
-                ),
+                child: controller.pages[controller.currentBottomNavPage.value],
               ),
               bottomNavigationBar: BottomNavigationBar(
                   backgroundColor: AppColors.backgroundVariant2,

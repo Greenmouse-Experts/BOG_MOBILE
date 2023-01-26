@@ -190,6 +190,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.0.6"
+  dio_logger:
+    dependency: "direct main"
+    description:
+      name: dio_logger
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "4.0.8+8"
   dropdown_search:
     dependency: "direct main"
     description:
@@ -293,6 +300,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0"
+  flutter_datetime_picker:
+    dependency: "direct main"
+    description:
+      name: flutter_datetime_picker
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.5.1"
   flutter_feather_icons:
     dependency: "direct main"
     description:
@@ -373,6 +387,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.3"
+  gif_view:
+    dependency: "direct main"
+    description:
+      name: gif_view
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.3.1"
   hive:
     dependency: "direct main"
     description:
@@ -660,13 +681,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.0"
-  qr:
-    dependency: transitive
-    description:
-      name: qr
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.1.0"
   qr_code_scanner:
     dependency: "direct main"
     description:
@@ -681,6 +695,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.0.0"
+  qrr:
+    dependency: transitive
+    description:
+      path: "../../../flutter/.pub-cache/hosted/pub.dartlang.org/qr_flutter-4.0.0/qrr"
+      relative: true
+    source: path
+    version: "2.0.0"
   rxdart:
     dependency: transitive
     description:

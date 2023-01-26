@@ -46,137 +46,139 @@ class NotificationPage extends GetView<HomeController> {
               backgroundColor: AppColors.backgroundVariant2,
               body: SizedBox(
                 width: Get.width,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(right: width*0.05,left: width*0.045,top: kToolbarHeight),
-                      child: Row(
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(right: width*0.05,left: width*0.045,top: kToolbarHeight),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            InkWell(
+                              onTap: (){
+                                Navigator.pop(context);
+                              },
+                              child: SvgPicture.asset(
+                                "assets/images/back.svg",
+                                height: width*0.045,
+                                width: width*0.045,
+                                color: Colors.black,
+                              ),
+                            ),
+                            SizedBox(
+                              width: width*0.04,
+                            ),
+                            Expanded(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "Notification",
+                                    style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.07,color: Colors.black,fontWeight: FontWeight.w500),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              width: width*0.04,
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: width*0.04,
+                      ),
+                      Container(
+                        height: 1,
+                        width: width,
+                        color: AppColors.grey.withOpacity(0.1),
+                      ),
+                      SizedBox(
+                        height: width*0.04,
+                      ),
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          InkWell(
-                            onTap: (){
-                              Navigator.pop(context);
-                            },
-                            child: SvgPicture.asset(
-                              "assets/images/back.svg",
-                              height: width*0.045,
-                              width: width*0.045,
-                              color: Colors.black,
+                          Padding(
+                            padding: EdgeInsets.only(left: width*0.06),
+                            child: Text(
+                              "All",
+                              style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.07,color: AppColors.grey.withOpacity(0.8),fontWeight: FontWeight.w500),
+                              textAlign: TextAlign.center,
                             ),
                           ),
-                          SizedBox(
-                            width: width*0.04,
-                          ),
-                          Expanded(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "Notification",
-                                  style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.07,color: Colors.black,fontWeight: FontWeight.w500),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ],
+                          Padding(
+                            padding: EdgeInsets.only(right: width*0.06),
+                            child: Image.asset(
+                              "assets/images/Group 47358.png",
+                              height: width*0.08,
+                              width: width*0.08,
                             ),
-                          ),
-                          SizedBox(
-                            width: width*0.04,
                           ),
                         ],
                       ),
-                    ),
-                    SizedBox(
-                      height: width*0.04,
-                    ),
-                    Container(
-                      height: 1,
-                      width: width,
-                      color: AppColors.grey.withOpacity(0.1),
-                    ),
-                    SizedBox(
-                      height: width*0.04,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(left: width*0.06),
-                          child: Text(
-                            "All",
-                            style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.07,color: AppColors.grey.withOpacity(0.8),fontWeight: FontWeight.w500),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(right: width*0.06),
-                          child: Image.asset(
-                            "assets/images/Group 47358.png",
-                            height: width*0.08,
-                            width: width*0.08,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: width*0.02,
-                    ),
-                    SizedBox(
-                      height: Get.height * 0.77,
-                      child: ListView.builder(
-                        itemCount: 51,
-                        shrinkWrap: true,
-                        padding: EdgeInsets.only(left: width*0.02,right: width*0.02),
-                        physics: const BouncingScrollPhysics(),
-                        itemBuilder: (context, index) {
-                          return SizedBox(
-                            height: Get.height * 0.08,
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                SizedBox(
-                                  width: Get.width * 0.13,
-                                  height: Get.width * 0.13,
-                                  child: IconButton(
-                                    icon: Image.asset(
-                                      "assets/images/Ellipse 956.png",
-                                      fit: BoxFit.cover,
-                                    ),
-                                    onPressed: () {
-
-                                    },
-                                  ),
-                                ),
-                                RichText(
-                                  text: TextSpan(
-                                    text: "BOG added a file to your Building \nproject",
-                                    style: AppTextStyle.subtitle1.copyWith(
-                                        fontSize: multiplier * 0.07,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w500),
-                                    children: <TextSpan>[
-                                      TextSpan(
-                                        text: "  2 hours ago",
-                                        style: AppTextStyle.subtitle1.copyWith(
-                                            fontSize: multiplier * 0.05,
-                                            color: AppColors.grey,
-                                            fontWeight: FontWeight.w400),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
+                      SizedBox(
+                        height: width*0.02,
                       ),
-                    )
-                  ],
+                      SizedBox(
+                        height: Get.height * 0.77,
+                        child: ListView.builder(
+                          itemCount: 51,
+                          shrinkWrap: true,
+                          padding: EdgeInsets.only(left: width*0.02,right: width*0.02),
+                          physics: const BouncingScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            return SizedBox(
+                              height: Get.height * 0.08,
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  SizedBox(
+                                    width: Get.width * 0.13,
+                                    height: Get.width * 0.13,
+                                    child: IconButton(
+                                      icon: Image.asset(
+                                        "assets/images/Ellipse 956.png",
+                                        fit: BoxFit.cover,
+                                      ),
+                                      onPressed: () {
+
+                                      },
+                                    ),
+                                  ),
+                                  RichText(
+                                    text: TextSpan(
+                                      text: "BOG added a file to your Building \nproject",
+                                      style: AppTextStyle.subtitle1.copyWith(
+                                          fontSize: multiplier * 0.07,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w500),
+                                      children: <TextSpan>[
+                                        TextSpan(
+                                          text: "  2 hours ago",
+                                          style: AppTextStyle.subtitle1.copyWith(
+                                              fontSize: multiplier * 0.05,
+                                              color: AppColors.grey,
+                                              fontWeight: FontWeight.w400),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
               bottomNavigationBar: BottomNavigationBar(

@@ -163,7 +163,7 @@ class _PageInputState extends State<PageInput> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(value.flag),
+                            Flexible(child: Text(value.flag)),
                             Text("+${value.countryCode}"),
                           ],
                         ),

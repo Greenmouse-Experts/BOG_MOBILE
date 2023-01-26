@@ -1,3 +1,4 @@
+import 'package:bog/app/modules/settings/update_kyc.dart';
 import 'package:get/get.dart';
 
 import '../app/bindings/auth_binding.dart';
@@ -35,7 +36,8 @@ class AppPages {
     ),
     GetPage(
       name: SignIn.route,
-      page: () => const SignIn(),
+  // page: () => const UpdateKyc(),
+  page: () => const SignIn(),
       binding: AuthBinding(),
     ),
     GetPage(

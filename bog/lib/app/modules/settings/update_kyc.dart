@@ -1,6 +1,13 @@
 import 'dart:convert';
 
+import 'package:bog/app/assets/color_assets.dart';
 import 'package:bog/app/global_widgets/app_button.dart';
+import 'package:bog/app/modules/settings/kyc/general_info.dart';
+import 'package:bog/app/modules/settings/kyc/job_experience.dart';
+import 'package:bog/app/modules/settings/kyc/org_info.dart';
+import 'package:bog/app/modules/settings/kyc/tax_info.dart';
+import 'package:bog/core/utils/extensions.dart';
+import 'package:bog/core/utils/widget_util.dart';
 import 'package:feather_icons/feather_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -46,7 +53,6 @@ class _UpdateKycState extends State<UpdateKyc> {
     final Size size = MediaQuery.of(context).size;
     double multiplier = 25 * size.height * 0.01;
 
-
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
           statusBarColor: AppColors.backgroundVariant2,
@@ -62,203 +68,137 @@ class _UpdateKycState extends State<UpdateKyc> {
               backgroundColor: AppColors.backgroundVariant2,
               body: SizedBox(
                 width: Get.width,
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(right: width*0.05,left: width*0.045,top: kToolbarHeight),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            InkWell(
-                              onTap: (){
-                                Navigator.pop(context);
-                              },
-                              child: SvgPicture.asset(
-                                "assets/images/back.svg",
-                                height: width*0.045,
-                                width: width*0.045,
-                                color: Colors.black,
-                              ),
-                            ),
-                            SizedBox(
-                              width: width*0.04,
-                            ),
-                            Expanded(
+                            Padding(
+                              padding: EdgeInsets.only(right: width*0.05,left: width*0.045,top: kToolbarHeight),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  Text(
-                                    "KYC",
-                                    style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.07,color: Colors.black,fontWeight: FontWeight.w500),
-                                    textAlign: TextAlign.center,
+                                  InkWell(
+                                    onTap: (){
+                                      Navigator.pop(context);
+                                    },
+                                    child: SvgPicture.asset(
+                                      "assets/images/back.svg",
+                                      height: width*0.045,
+                                      width: width*0.045,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: width*0.04,
+                                  ),
+                                  Expanded(
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          "KYC",
+                                          style: AppTextStyle.subtitle1.copyWith(fontSize: 20,color: Colors.black,fontWeight: FontWeight.bold),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: width*0.04,
                                   ),
                                 ],
                               ),
                             ),
-                            SizedBox(
-                              width: width*0.04,
+
+                            addSpace(40),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(20,0,20,0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text("Complete our KYC",
+                                    style: textStyle(true, 18, blackColor),),
+                                  addSpace(10),
+                                  Text("Get verified by completing your KYC today",
+                                    style: textStyle(false, 12, blackColor),),
+                                  addSpace(15),
+                                  Container(
+                                    width: double.infinity,
+                                    padding: EdgeInsets.fromLTRB(10,20,10,20),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(
+                                        color: blackColor.withOpacity(.1),width: 1
+                                      ),
+
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.end,
+                                      children: [
+                                        Text("10% done",style: textStyle(false, 14, red0),),
+                                        addSpace(5),
+                                        Card(
+                                          elevation: 0,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(10)
+                                          ),
+                                          margin: EdgeInsets.zero,
+                                          clipBehavior: Clip.antiAlias,
+                                          child: Container(
+                                            height: 10,
+                                            child: LinearProgressIndicator(
+                                              value: .2,
+                                              color: red0,
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  )
+
+                                ],
+                              ),
                             ),
+                            addSpace(20),
+                            kycWidget("General Info", (){
+                              launchScreen(context, GeneralInfo());
+                            }),
+                            kycWidget("Organizational Info", (){
+                              launchScreen(context, OrgInfo());
+                            }),
+                            kycWidget("Tax Details and Permit", (){
+                              launchScreen(context, TaxInfo());
+                            }),
+                            kycWidget("Work Job Experience", (){
+                              launchScreen(context, JobExperience());
+                            }),
+                            kycWidget("Category of Supply", (){}),
+                            kycWidget("Financial Data", (){}),
+                            kycWidget("Documents Upload", (){}),
+
                           ],
                         ),
                       ),
-                      SizedBox(
-                        height: width*0.04,
-                      ),
-                      Container(
-                        height: 1,
-                        width: width,
-                        color: AppColors.grey.withOpacity(0.1),
-                      ),
-                      SizedBox(
-                        height: width*0.04,
-                      ),
-                      Row(
-                        children: [
-                          SizedBox(
-                            width: width*0.03,
-                          ),
-                          Text(
-                            "Complete your KYC",
-                            style: AppTextStyle.subtitle1.copyWith(
-                              color: Colors.black,
-                              fontSize: Get.width * 0.04,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          SizedBox(
-                            width: width*0.03,
-                          ),
-                          Text(
-                            "Get verified by completing your KYC \ntoday",
-                            style: AppTextStyle.subtitle1.copyWith(
-                              color: Colors.black.withOpacity(0.7),
-                              fontSize: Get.width * 0.036,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: width*0.05,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(left: width*0.03,right: width*0.03),
-                        child: Form(
-                          key: formKey,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              PageInput(
-                                hint: '',
-                                label: 'Your Tin',
-                                isCompulsory: true,
-                                validator: (value) {
-                                  if (value!.isEmpty) {
-                                    return 'Please enter your TIN';
-                                  }
-                                  return null;
-                                },
-                                showInfo: false,
-                              ),
-                              SizedBox(
-                                height: width*0.04,
-                              ),
-                              PageInput(
-                                hint: '',
-                                label: 'Upload your CAC',
-                                controller: bankAcct,
-                                keyboardType: TextInputType.number,
-                                isFilePicker: true,
-                              ),
-                              SizedBox(
-                                height: width*0.1,
-                              ),
-                              Text(
-                                "Bank Details",
-                                style: AppTextStyle.subtitle1.copyWith(
-                                  color: Colors.black,
-                                  fontSize: Get.width * 0.035,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              SizedBox(
-                                height: width*0.04,
-                              ),
-                              PageInput(
-                                hint: '',
-                                label: 'Account Holder Name',
-                                isCompulsory: true,
-                                controller: bankName,
-                                validator: (value) {
-                                  if (value!.isEmpty) {
-                                    return 'Please enter your account name';
-                                  }
-                                  return null;
-                                },
-                                showInfo: false,
-                              ),
-                              SizedBox(
-                                height: width*0.04,
-                              ),
-                              PageInput(
-                                hint: '',
-                                label: 'Account Number',
-                                isCompulsory: true,
-                                controller: bankAcct,
-                                keyboardType: TextInputType.number,
-                                validator: (value) {
-                                  if (value!.isEmpty) {
-                                    return 'Please enter your account number';
-                                  }else if(GetUtils.isNumericOnly(value) == false){
-                                    return 'Please enter a valid account number';
-                                  }
-                                  return null;
-                                },
-                              ),
-                              SizedBox(
-                                height: width*0.04,
-                              ),
-                              PageDropButton(
-                                label: "Bank",
-                                hint: '',
-                                padding: const EdgeInsets.symmetric(horizontal: 10),
-                                onChanged: (val) {
-                                  bankCode.text = (val! as BankListModel).code.toString();
-                                  chosenBankName.text = (val as BankListModel).name.toString();
-                                },
-                                value:  bankList.first,
-                                items: bankList.map<DropdownMenuItem<BankListModel>>((BankListModel value) {
-                                  return DropdownMenuItem<BankListModel>(
-                                    value: value,
-                                    child: Text(value.name.toString()),
-                                  );
-                                }).toList(),
-                              ),
-                              SizedBox(
-                                height: Get.height*0.05,
-                              ),
-                              AppButton(
-                                title: "Submit KYC",
-                                onPressed: () async {
-                                  if(formKey.currentState!.validate()){
+                    ),
 
-                                  }
-                                },
-                              )
-                            ],
-                          ),
-                        ),
+                    Container(
+                      margin: EdgeInsets.fromLTRB(20,5,20,20),
+                      child: AppButton(
+                        title: "Submit KYC",
+                        onPressed: () async {
+                          // if(formKey.currentState!.validate()){
+                          //
+                          // }
+                        },
                       ),
-                    ],
-                  ),
+                    )
+                  ],
                 ),
               ),
               bottomNavigationBar: BottomNavigationBar(
@@ -338,71 +278,34 @@ class _UpdateKycState extends State<UpdateKyc> {
           }),
     );
   }
-}
 
-class ServiceWidget extends StatelessWidget {
-  const ServiceWidget({
-    Key? key,
-    required this.width,
-    required this.function,
-    required this.asset,
-    required this.title,
-    required this.multiplier,
-  }) : super(key: key);
+  Widget kycWidget(String title, onClick){
 
-  final double width;
-  final Function() function;
-  final String asset;
-  final String title;
-  final double multiplier;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
-      child: InkWell(
-        onTap: function,
-        child: Container(
-          height: width*0.4,
-          width: width*0.4,
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black12,
-                blurRadius: 3,
-                spreadRadius: 0,
-                offset: Offset(0, 1),
-              ),
-            ],
+    return Container(
+      // height: 40,
+      width: double.infinity,
+      child: TextButton(onPressed: (){
+        onClick();
+      },
+          style: TextButton.styleFrom(
+            padding: EdgeInsets.fromLTRB(20, 10, 20, 10)
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
+          child: Row(
             children: [
+
               Container(
-                height: width*0.15,
-                width: width*0.15,
+                width: 40,height: 40,
+                alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage(asset),
-                    fit: BoxFit.fill,
-                  ),
+                  color: default_white,shape: BoxShape.circle
                 ),
+                child: Image.asset("circle_user".png,height: 16,),
               ),
-              SizedBox(
-                height: width*0.04,
-              ),
-              Text(
-                title,
-                style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.065,color: Colors.black,fontWeight: FontWeight.normal),
-                textAlign: TextAlign.center,
-              ),
+              addSpaceWidth(10),
+              Flexible(fit: FlexFit.tight,child: Text(title,style: textStyle(true, 16, blackColor),)),
+              Icon(Icons.navigate_next,color: blackColor,)
             ],
-          ),
-        ),
-      ),
+          )),
     );
   }
 }

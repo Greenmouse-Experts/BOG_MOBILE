@@ -15,6 +15,7 @@ dependencies:
   get: ^4.6.1
   feather_icons: ^1.2.0
   dio: ^4.0.4
+  dio_logger: ^4.0.8+8
   get_storage: ^2.0.3
   image_picker: ^0.8.5
   flutter_iconly: ^1.0.2
@@ -52,6 +53,8 @@ dependencies:
   d_chart: ^0.1.0
   syncfusion_flutter_charts: ^20.3.61
   fl_chart: ^0.55.2
+  gif_view: ^0.3.1
+  flutter_datetime_picker: ^1.5.1
 
 dev_dependencies:
   flutter_test:
@@ -76,3 +79,4 @@ flutter:
     - family: PP Telegraf
       fonts:
         - asset: assets/images/pptelegraf-regular.otf
+

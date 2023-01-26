@@ -24,6 +24,8 @@ class OnboardingPage extends StatefulWidget {
 
 class _OnboardingPageState extends State<OnboardingPage> {
   int currentIndex = 0;
+
+
   @override
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
@@ -36,11 +38,50 @@ class _OnboardingPageState extends State<OnboardingPage> {
         ),
         child: Scaffold(
           backgroundColor: AppColors.background,
-          body: Stack(
+          body: Stack(fit: StackFit.expand,
             children: [
+              Builder(
+                builder: (context) {
+                  var onboardingModel = _screen[0];
+                  return AnimatedOpacity(
+                    duration: Duration(milliseconds: 500),
+                    opacity: currentIndex==0?1:0,
+                    child: Image.asset(
+                      'assets/images/${onboardingModel.image}.png',
+                      fit: BoxFit.cover,
+                    ),
+                  );
+                }
+              ),
+              Builder(
+                builder: (context) {
+                  var onboardingModel = _screen[1];
+                  return AnimatedOpacity(
+                    duration: Duration(milliseconds: 500),
+                    opacity: currentIndex==1?1:0,
+                    child: Image.asset(
+                      'assets/images/${onboardingModel.image}.png',
+                      fit: BoxFit.cover,
+                    ),
+                  );
+                }
+              ),
+              Builder(
+                builder: (context) {
+                  var onboardingModel = _screen[2];
+                  return AnimatedOpacity(
+                    duration: Duration(milliseconds: 500),
+                    opacity: currentIndex==2?1:0,
+                    child: Image.asset(
+                      'assets/images/${onboardingModel.image}.png',
+                      fit: BoxFit.cover,
+                    ),
+                  );
+                }
+              ),
               SafeArea(
                 child: Container(
-                  color: AppColors.background,
+                  // color: AppColors.background,
                   child: Padding(
                     padding: const EdgeInsets.all(AppThemes.appPaddingVal),
                     child: Column(
@@ -59,7 +100,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                           height: 20,
                         ),
                         Image.asset(
-                          'assets/images/boglogo.png',
+                          'assets/images/logo.png',
                           height: Get.width * 0.13,
                           width: Get.height*0.13,
                         ),
@@ -143,8 +184,8 @@ class _OnboardingPageState extends State<OnboardingPage> {
                             Get.toNamed(SignIn.route);
                           },
                           borderRadius: 10,
-                          fontColor: AppColors.primary,
-                          bckgrndColor: AppColors.background,
+                          fontColor: Colors.white,
+                          bckgrndColor: Colors.transparent,
                         ),
                         SizedBox(
                           height: Get.height * 0.05,

@@ -24,16 +24,7 @@ class OnboardingItem extends StatelessWidget {
         children: [
           Expanded(
             flex: 3,
-            child: pos == 1 ? Image.asset(
-              'assets/images/${onboardingModel.image}.png',
-              height: Get.width * 0.25,
-              width: Get.height*0.25,
-            ) :
-            Image.asset(
-              'assets/images/${onboardingModel.image}.png',
-              height: Get.width * 0.3,
-              width: Get.height*0.3,
-            ),
+            child: Container()
           ),
 
           Expanded(
@@ -44,7 +35,7 @@ class OnboardingItem extends StatelessWidget {
                   onboardingModel.title,
                   style: AppTextStyle.headline5.copyWith(
                     fontWeight: FontWeight.w600,
-                    color: Colors.black,
+                    color: Colors.white,
                     fontSize: 17 * Get.textScaleFactor * 1.3,
                   ),
                   textAlign: TextAlign.center,
@@ -54,7 +45,8 @@ class OnboardingItem extends StatelessWidget {
                 ),
                 Text(
                   onboardingModel.subtitle,
-                  style: AppTextStyle.bodyText2.copyWith(height: 1.5,color: Colors.black,fontSize: 17 * Get.textScaleFactor * 0.90),
+                  style: AppTextStyle.bodyText2.copyWith(height: 1.5,color:
+                  Colors.white,fontSize: 17 * Get.textScaleFactor * 0.90),
                   textAlign: TextAlign.center,
                 ),
               ],

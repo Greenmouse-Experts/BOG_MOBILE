@@ -2,12 +2,13 @@ import 'dart:io';
 import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
+import 'package:dio_logger/dio_logger.dart';
 
 import 'api_response.dart';
 import 'my_pref.dart';
 
 class Api {
-  static const String baseUrl = 'https://bog-application.herokuapp.com/api';
+  static const String baseUrl = 'https://bog.greenmouseproperties.com/api';
 
   static const String imgUrl = 'http://imgURl';
   CancelToken token = CancelToken();
@@ -18,7 +19,8 @@ class Api {
       'Content-Type': 'application/x-www-form-urlencoded',
     },
     receiveTimeout: 10000,
-  ));
+  ))..interceptors.add(dioLoggerInterceptor);
+
 
   Future<ApiResponse> postData(
     String url, {
