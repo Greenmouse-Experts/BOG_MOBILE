@@ -3,15 +3,18 @@ import 'dart:convert';
 import 'package:bog/app/assets/color_assets.dart';
 import 'package:bog/app/controllers/home_controller.dart';
 import 'package:bog/app/global_widgets/app_button.dart';
+import 'package:bog/app/modules/settings/kyc/add_job.dart';
 import 'package:bog/core/theme/app_colors.dart';
 import 'package:bog/core/theme/app_styles.dart';
 import 'package:bog/core/utils/dialog_utils.dart';
 import 'package:bog/core/utils/extensions.dart';
-import 'package:bog/core/utils/http_utils.dart';
 import 'package:bog/core/utils/input_mixin.dart';
 import 'package:bog/core/utils/widget_util.dart';
+import 'package:bog/core/widgets/click_text.dart';
+import 'package:bog/core/widgets/custom_expandable.dart';
 import 'package:bog/core/widgets/input_text_field.dart';
 import 'package:feather_icons/feather_icons.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
@@ -19,50 +22,62 @@ import 'package:get/get.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
 
-class GeneralInfo extends StatefulWidget {
-  const GeneralInfo({Key? key}) : super(key: key);
+class FinancialData extends StatefulWidget {
+  const FinancialData({Key? key}) : super(key: key);
 
-  static const route = '/GeneralInfo';
+  static const route = '/FinancialData';
 
   @override
-  State<GeneralInfo> createState() => _GeneralInfoState();
+  State<FinancialData> createState() => _FinancialDataState();
 }
 
-class _GeneralInfoState extends State<GeneralInfo> with InputMixin {
+class _FinancialDataState extends State<FinancialData> with InputMixin {
 
-  // TextEditingController nameController = TextEditingController();
-  // TextEditingController emailController = TextEditingController();
-  // TextEditingController phoneController = TextEditingController();
-  // TextEditingController regNoController = TextEditingController();
-  // TextEditingController addressController = TextEditingController();
-  // TextEditingController moreAddressController = TextEditingController();
-  //
-  // FocusNode focusName = FocusNode();
-  // FocusNode focusEmail = FocusNode();
-  // FocusNode focusPhone = FocusNode();
-  // FocusNode focusRegNo = FocusNode();
-  // FocusNode focusAddress = FocusNode();
-  // FocusNode focusMoreAddress = FocusNode();
-  String businessType = "";
+  String bankName = "";
+  String bankId = "";
+  List bankList = ["Zenith Bank","Access Bank","UBA","Eco Bank"];
 
-  List businessTypes = ["Incorporation", "Registered Business name"];
+  String accountType = "";
+  List accountTypes = ["Current Account","Savings Account"];
+
 
 
   @override
   void initState() {
     super.initState();
+
     inputModels.add(InputTextFieldModel(
-        "Name of Organization", hint: "Enter name of organization"));
-    inputModels.add(
-        InputTextFieldModel("Email Address", hint: "Enter your email address"));
+        "Account Holder Name",
+        hint: "Enter account name",
+    ));
+
     inputModels.add(InputTextFieldModel(
-        "Office Telephone/ Contact Number", hint: "Enter contact number"));
-    inputModels.add(InputTextFieldModel("Incorporation/Registration Number",
-        hint: "Enter incorporation/registration number"));
+        "Account Number",
+        hint: "Enter account number",
+    ));
+
     inputModels.add(InputTextFieldModel(
-        "Business Address", hint: "Enter your business address"));
-    inputModels.add(InputTextFieldModel("Address of any other operational base",
-        hint: "Enter address of other base"));
+        "Level of Current Overdraft Facility",
+        hint: "Enter the level of overdraft facility",
+    ));
+
+
+inputModels.add(InputTextFieldModel(
+        "Bankers Name",
+        hint: "Enter name of banker",
+    ));
+
+inputModels.add(InputTextFieldModel(
+        "Bankers Address",
+        hint: "Enter bankers address",
+    ));
+
+
+
+
+
+
+
   }
 
   @override
@@ -82,7 +97,7 @@ class _GeneralInfoState extends State<GeneralInfo> with InputMixin {
           systemNavigationBarIconBrightness: Brightness.dark
       ),
       child: GetBuilder<HomeController>(
-          id: 'GeneralInfo',
+          id: 'FinancialData',
           builder: (controller) {
             return Scaffold(
               backgroundColor: AppColors.backgroundVariant2,
@@ -126,7 +141,7 @@ class _GeneralInfoState extends State<GeneralInfo> with InputMixin {
                                           .center,
                                       children: [
                                         Text(
-                                          "General Information",
+                                          "Financial Data",
                                           style: AppTextStyle.subtitle1
                                               .copyWith(fontSize: 20,
                                               color: Colors.black,
@@ -151,28 +166,25 @@ class _GeneralInfoState extends State<GeneralInfo> with InputMixin {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
 
-                                  // inputModelWidgets(0,end: 3),
+                                  InputTextField(inputTextFieldModel: inputModels[0],),
+                                  addSpace(20),
+                                  InputTextField(inputTextFieldModel: inputModels[1],keyBoardType: TextInputType.number,),
 
-                                  InputTextField(inputTextFieldModel: inputModels[0]),
-                                  addSpace(20),
-                                  InputTextField(inputTextFieldModel: inputModels[1]),
-                                  addSpace(20),
-                                  InputTextField(inputTextFieldModel: inputModels[2]),
                                   addSpace(20),
                                   Container(
                                       margin: EdgeInsets.only(bottom: 20),
-                                      child: Text("Type of Organization",style: textStyle(false, 14, blackColor),)),
+                                      child: Text("Type of Account",style: textStyle(false, 14, blackColor),)),
                                   SingleChildScrollView(
                                     scrollDirection: Axis.horizontal,
                                     child: Row(
                                       children: List.generate(
-                                          businessTypes.length, (index) {
-                                        String name = businessTypes[index];
-                                        bool selected = businessType == name;
+                                          accountTypes.length, (index) {
+                                        String name = accountTypes[index];
+                                        bool selected = accountType == name;
                                         return GestureDetector(
                                           onTap: (){
                                             setState(() {
-                                              businessType=name;
+                                              accountType=name;
                                             });
                                           },
                                           child: Container(
@@ -193,18 +205,40 @@ class _GeneralInfoState extends State<GeneralInfo> with InputMixin {
                                       }),
                                     ),
                                   ),
-                                  addSpace(20),
-                                  InputTextField(inputTextFieldModel: inputModels[3]),
-                                  addSpace(20),
-                                  InputTextField(inputTextFieldModel: inputModels[4],maxLine: 4,),
-                                  addSpace(20),
-                                  InputTextField(inputTextFieldModel: inputModels[5],maxLine: 4,),
-                                  addSpace(20),
+                                  addSpace(30),
+                                  InputTextField(inputTextFieldModel: inputModels[2]),
 
-                                  // inputModelWidgets(3),
+
+
+
                                 ],
                               ),
                             ),
+
+                            addSpace(20),
+                            Container(
+                                width: double.infinity,
+                                margin: EdgeInsets.only(bottom: 20),
+                                padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                                color: blue0.withOpacity(.2),
+                                child: Text("Reference Bankers(s) Details",style: textStyle(true, 14, blackColor),)),
+
+
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(20,0,20,0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  InputTextField(inputTextFieldModel: inputModels[3]),
+                                  addSpace(20),
+                                  InputTextField(inputTextFieldModel: inputModels[4],maxLine: 4),
+                                ],
+                              ),
+                            ),
+
+
+                            addSpace(20),
+                            
 
                           ],
                         ),
@@ -216,29 +250,7 @@ class _GeneralInfoState extends State<GeneralInfo> with InputMixin {
                       child: AppButton(
                         title: "Save",
                         onPressed: () async {
-                          Map studs = {};
-                          studs[3] = (){
-                            if(businessType.isEmpty){
-                              return "Select business type";
-                            }
-                            return null;
-                          };
-                          bool proceed = validateInputModels(studs: studs);
-                          if(!proceed)return;
 
-                          performApiCall(context, "/kyc-general-info/create", (response, error){
-
-                          },data: {
-                            "organisation_name": "Ace",
-                            "email_address": "yhomiace18@gmail.com",
-                            "contact_number": 2147483647,
-                            "reg_type": "Incorporation",
-                            "registration_number": 0,
-                            "business_address": "No, 2 Lekki",
-                            "operational_address": "2 lekki way",
-                            "id": "f303e149-623a-428b-879d-583a99d38b47",
-                            "userType": "professional"
-                          });
                         },
                       ),
                     )

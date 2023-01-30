@@ -44,6 +44,7 @@ class _AppButtonState extends State<AppButton> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () async {
+        if(loading)return;
         if(widget.enabled){
           setState(() {
             loading = true;

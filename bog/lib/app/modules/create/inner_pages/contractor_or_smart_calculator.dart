@@ -478,7 +478,7 @@ class _ContractorOrSmartCalculatorState extends State<ContractorOrSmartCalculato
                           //color: controller.currentBottomNavPage.value == 1 ? AppColors.primary : AppColors.grey,
                         ),
                       ),
-                      label: 'Chat',
+                      label: 'Message',
                     ),
                     BottomNavigationBarItem(
                       icon: Padding(

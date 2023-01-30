@@ -1,12 +1,14 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:bog/core/utils/dialog_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:otp_text_field/otp_field.dart';
 
+import '../base/base.dart';
 import '../data/model/BankListModel.dart';
 import '../data/model/log_in_model.dart';
 import '../data/providers/api_response.dart';
@@ -27,7 +29,9 @@ class AuthController extends GetxController {
   TextEditingController companyName = TextEditingController();
   TextEditingController phone = TextEditingController();
   TextEditingController email = TextEditingController();
+  // TextEditingController(text: "johnebere58@gmail.com");
   TextEditingController password = TextEditingController();
+  // TextEditingController(text: "Ebejon@1go");
   TextEditingController officeAddress = TextEditingController();
   TextEditingController certOfOperation = TextEditingController();
   TextEditingController proMemCert = TextEditingController();
@@ -310,7 +314,9 @@ class AuthController extends GetxController {
     if (formKey.currentState!.validate()) {
       var message = "";
       var buttonMessage = "";
+      showLoading();
       ApiResponse response = await userRepo.signIn(_signInPayload);
+      hideLoading();
       if(response.isSuccessful){
         var logInInfo = LogInModel.fromJson(response.user);
         response.user = logInInfo;
@@ -323,14 +329,15 @@ class AuthController extends GetxController {
           //var bankList = BankListModel.fromJsonList(bankListResponse.data);
           Get.offAndToNamed(Home.route);
         }else{
-          AppOverlay.showInfoDialog(
-            title: "Error",
-            content: "An error occurred, Please try again",
-            buttonText: "Okay",
-            onPressed: () {
-              Get.back();
-            },
-          );
+          showErrorDialog(formKey.currentContext!, message);
+          // AppOverlay.showInfoDialog(
+          //   title: "Error",
+          //   content: "An error occurred, Please try again",
+          //   buttonText: "Okay",
+          //   onPressed: () {
+          //     Get.back();
+          //   },
+          // );
         }
       }else{
         if(response.message == "This Email is already in Use") {
@@ -340,18 +347,23 @@ class AuthController extends GetxController {
           message = "Account created successfully, Check your email for verification";
           buttonMessage = "Login";
         }
-        AppOverlay.showInfoDialog(
-          title: response.isSuccessful ? 'Success' : 'Failure',
-          content: response.message,
-          buttonText: "Continue",
-          onPressed: () {
-            if(response.isSuccessful){
-
-            }else{
-              Get.back();
-            }
-          },
-        );
+        if(response.isSuccessful){
+          showSuccessDialog(formKey.currentContext!, response.message!);
+        }else{
+          showErrorDialog(formKey.currentContext!, response.message!);
+        }
+        // AppOverlay.showInfoDialog(
+        //   title: response.isSuccessful ? 'Success' : 'Failure',
+        //   content: response.message,
+        //   buttonText: "Continue",
+        //   onPressed: () {
+        //     if(response.isSuccessful){
+        //
+        //     }else{
+        //       Get.back();
+        //     }
+        //   },
+        // );
       }
     }
   }

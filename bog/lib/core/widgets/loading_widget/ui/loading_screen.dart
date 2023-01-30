@@ -199,13 +199,13 @@ class LoadingScreenState extends State<LoadingScreen> {
                   child: Center(
                     child: AnimatedContainer(
                       duration: const Duration(seconds: 1),
-                      width: (counter%2==0)?30:40,
-                      height: (counter%2==0)?30:40,
+                      width: (counter%2==0)?35:45,
+                      height: (counter%2==0)?35:45,
                       decoration: const BoxDecoration(
                         // color: white.withOpacity(.9),
                           shape: BoxShape.circle
                       ),
-                      child: Image.asset("rectangle".png),
+                      child: Image.asset("Ellipse 956".png),
                     ),
                   ),
                 ),

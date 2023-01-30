@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:bog/app/assets/color_assets.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
@@ -33,8 +34,11 @@ class AppAvatar extends StatelessWidget {
                   fit: BoxFit.cover,
                   errorWidget: (context, url, error) {
                     return Center(
-                      child: Text(
+                      child: //Icon(Icons.person,color: blackColor.withOpacity(.5),)
+                      Text(
+
                         name.substring(0, 1).toUpperCase(),
+                        // name.substring(0, 1).toUpperCase(),
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: radius * 0.5,

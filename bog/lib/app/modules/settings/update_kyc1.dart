@@ -288,7 +288,7 @@ class _UpdateKyc1State extends State<UpdateKyc1> {
                           //color: controller.currentBottomNavPage.value == 1 ? AppColors.primary : AppColors.grey,
                         ),
                       ),
-                      label: 'Chat',
+                      label: 'Message',
                     ),
                     BottomNavigationBarItem(
                       icon: Padding(

@@ -2,10 +2,13 @@ import 'dart:convert';
 
 import 'package:bog/app/assets/color_assets.dart';
 import 'package:bog/app/global_widgets/app_button.dart';
+import 'package:bog/app/modules/settings/kyc/financial_data.dart';
 import 'package:bog/app/modules/settings/kyc/general_info.dart';
 import 'package:bog/app/modules/settings/kyc/job_experience.dart';
 import 'package:bog/app/modules/settings/kyc/org_info.dart';
+import 'package:bog/app/modules/settings/kyc/supply_category.dart';
 import 'package:bog/app/modules/settings/kyc/tax_info.dart';
+import 'package:bog/app/modules/settings/kyc/upload_documents.dart';
 import 'package:bog/core/utils/extensions.dart';
 import 'package:bog/core/utils/widget_util.dart';
 import 'package:feather_icons/feather_icons.dart';
@@ -178,9 +181,16 @@ class _UpdateKycState extends State<UpdateKyc> {
                             kycWidget("Work Job Experience", (){
                               launchScreen(context, JobExperience());
                             }),
-                            kycWidget("Category of Supply", (){}),
-                            kycWidget("Financial Data", (){}),
-                            kycWidget("Documents Upload", (){}),
+                            kycWidget("Category of Supply", (){
+                              launchScreen(context, SupplyCategory());
+                            }),
+                            //1667092852 Access Bank ..Innocent...
+                            kycWidget("Financial Data", (){
+                              launchScreen(context, FinancialData());
+                            }),
+                            kycWidget("Documents Upload", (){
+                              launchScreen(context, UploadDocuments());
+                            }),
 
                           ],
                         ),
@@ -228,7 +238,7 @@ class _UpdateKycState extends State<UpdateKyc> {
                           //color: controller.currentBottomNavPage.value == 1 ? AppColors.primary : AppColors.grey,
                         ),
                       ),
-                      label: 'Chat',
+                      label: 'Message',
                     ),
                     BottomNavigationBarItem(
                       icon: Padding(

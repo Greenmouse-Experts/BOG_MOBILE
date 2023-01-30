@@ -191,7 +191,10 @@ class Api {
       var head = {
         'Authorization': MyPref.authToken.val,
       };
+      print("The auth: ${MyPref.authToken.val}");
+      print("The link: ${Uri.parse(baseUrl+url)}");
       var response = await http.get(Uri.parse(baseUrl+url), headers: hasHeader ? head : null);
+      print("The respx: ${response.statusCode} ${response.body}");
       return ApiResponse.responseFromBody(response.body, response.statusCode);
       //return ApiResponse.response(request);
     } on DioError catch (e) {

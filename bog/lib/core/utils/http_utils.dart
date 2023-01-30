@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:bog/app/data/providers/api.dart';
 import 'package:bog/app/data/providers/my_pref.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -12,7 +13,7 @@ Future<LoadingResult> performApiCall(BuildContext context, String path,
     Function(dynamic response, String? error) onComplete,
     {Map<String, dynamic>? data,
     bool getMethod = false,
-    String progressMessage = "",
+    String progressMessage = "Please wait",
     bool silently = false,
     bool handleError = true}) async {
 
@@ -30,7 +31,7 @@ Future<LoadingResult> performApiCall(BuildContext context, String path,
   //   return LoadingResult(null, NO_INTERNET);
   // }
 
-  String url = "$baseUrl$path";
+  String url = "${Api.baseUrl}$path";
   printOut("Url: $url");
 
   String? payload;
@@ -44,7 +45,7 @@ Future<LoadingResult> performApiCall(BuildContext context, String path,
 
   Map<String, String> header = {
     "Content-Type": "application/json",
-    "Authorization": 'Bearer ${MyPref.authToken.val}',
+    "Authorization": '${MyPref.authToken.val}',
   };
 
   printOut("Requesting >> $url $payload");
@@ -65,18 +66,19 @@ Future<LoadingResult> performApiCall(BuildContext context, String path,
       await Future.delayed(const Duration(milliseconds: 600));
     }
 
-    printOut("response>>: ${response.body} <<");
+    printOut("response>>:${response.statusCode} : ${response.body} <<");
 
     // {"status":false,"message":"Validation Error","error":
     // {"username":["The username has already been taken."],"phone":["The phone has already been taken."]}}
 
     Map res = jsonDecode(response.body);
-    bool success = res["status"] ?? false;
+    bool success = res["status"] ?? res["success"] ?? false;
 
     String errorMessage = "";
-    Map errorMap = res["error"]??{};
-    for(var items in errorMap.entries){
-      dynamic values = items.value;
+    List errors = res["errors"]??[];
+    // {"errors":[{"message":"Couldn't get profile type"}]}
+    for(Map items in errors){
+      dynamic values = items['message'];
       if(values is String)errorMessage=values;
       if(values is List)errorMessage = values[0];
       break;

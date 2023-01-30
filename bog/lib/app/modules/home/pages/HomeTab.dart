@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:bog/app/base/base.dart';
+import 'package:bog/app/blocs/homeswitch_controller.dart';
 import 'package:d_chart/d_chart.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -33,11 +35,12 @@ class HomeTab extends StatefulWidget {
 class _HomeTabState extends State<HomeTab> {
   final HomeController controller = Get.find<HomeController>();
   var logInDetails = LogInModel.fromJson(jsonDecode(MyPref.logInDetail.val));
-
+  var subs = [];
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+
   }
   @override
   Widget build(BuildContext context) {
@@ -55,6 +58,7 @@ class _HomeTabState extends State<HomeTab> {
       {'class': 'Sun', 'total': 50},
     ];
 
+
     return GetBuilder<HomeController>(builder: (controller) {
       return SizedBox(
         height: Get.height * 0.93,
@@ -67,9 +71,17 @@ class _HomeTabState extends State<HomeTab> {
                 height: kToolbarHeight/1.5,
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 10.0,right: 10.0,top: 10.0),
+                padding: const EdgeInsets.only(right: 10.0,top: 10.0),
                 child: Row(
                   children: [
+                    // Container(
+                    //     width: 30,height: 40,
+                    //     child: TextButton(onPressed: (){},
+                    //         style: TextButton.styleFrom(
+                    //           padding: EdgeInsets.zero
+                    //         ),
+                    //         child: Icon(Icons.menu,color: blackColor.withOpacity(.5),))),
+                    addSpaceWidth(10),
                     Builder(
                         builder: (context1) {
                           return SizedBox(

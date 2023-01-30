@@ -1,4 +1,5 @@
 import 'package:bog/app/base/app_builder.dart';
+import 'package:bog/app/blocs/homeswitch_controller.dart';
 import 'package:bog/app/blocs/mode_controller.dart';
 import 'package:bog/app/blocs/nav_controller.dart';
 import 'package:bog/app/blocs/trigger_mode_controller.dart';
@@ -24,6 +25,7 @@ Future<void> main() async {
   Get.put(ModeController());
   Get.put(NavController());
   Get.put(TriggerModeController());
+  Get.put(HomeSwitchController());
   runApp(const MyApp());
 }
 

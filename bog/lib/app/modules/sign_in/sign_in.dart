@@ -1,3 +1,4 @@
+import 'package:bog/app/base/base.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -118,11 +119,32 @@ class SignIn extends GetView<AuthController> {
                           ),
 
                           SizedBox(height: Get.height * 0.03),
-                          AppButton(
-                            title: 'Log In',
-                            onPressed: () async => await controller.signIn(_formKey),
-                            borderRadius: 10,
+                          Container(
+                            height: 45,
+                            width: double.infinity,
+                            child: TextButton(
+                              onPressed: ()async{
+                                await controller.signIn(_formKey);
+                              },
+                              style: TextButton.styleFrom(
+                                backgroundColor: AppColors.primary,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10)
+                                )
+                              ),
+                              child: Text(
+                                "Log In",style: textStyle(false, 14, white),
+                              ),
+                            ),
                           ),
+                          // AppButton(
+                          //   title: 'Log In',
+                          //   onPressed: () async {
+                          //     // showLoading();
+                          //     await controller.signIn(_formKey);
+                          //   },
+                          //   borderRadius: 10,
+                          // ),
                           AppButton(
                             title: 'Don\'t have an account? ',
                             trailingTitle: "Sign Up",

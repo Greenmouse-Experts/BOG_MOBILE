@@ -23,45 +23,35 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
-class AddJob extends StatefulWidget {
+class SupplyCategory extends StatefulWidget {
 
-  final JobModel? jobModel;
-  const AddJob({this.jobModel,
-    Key? key}) : super(key: key);
-
-  static const route = '/AddJob';
+  static const route = '/SupplyCategory';
 
   @override
-  State<AddJob> createState() => _AddJobState();
+  State<SupplyCategory> createState() => _SupplyCategoryState();
 }
 
-class _AddJobState extends State<AddJob> with InputMixin {
-  DateTime? date;
-  int? yearOfExperience;
-  PlatformFile? fileInfo;
-  JobModel? jobModel;
+class _SupplyCategoryState extends State<SupplyCategory> with InputMixin {
+
+  bool showCancel = false;
+  FocusNode focusSearch = FocusNode();
+  TextEditingController searchController = TextEditingController();
+  List categories = [
+    "Marine","Paints","Plumbing","Building Materials","Mechanicals"
+  ];
 
   @override
   void initState() {
     super.initState();
-    jobModel = widget.jobModel;
-    date = jobModel!=null?jobModel!.date:null;
-    yearOfExperience = jobModel!=null?jobModel!.years:null;
-    fileInfo = jobModel!=null?jobModel!.fileInfo:null;
 
+    focusSearch.addListener(() { setState(() {
+
+    });});
     inputModels.add(InputTextFieldModel(
-      "Name",
-      hint: "Enter the name",prefill: jobModel!=null?jobModel!.name:null
+      "Others (Specify below)",
+      hint: "Enter the category of supply",optional: true
     ));
 
-    inputModels.add(
-        InputTextFieldModel("Value (NGN)", hint: "Enter the monetary value",
-        prefill: jobModel!=null?jobModel!.value:null));
-
-    inputModels.add(InputTextFieldModel(
-        "If this company is a subsidiary, what involvement, if any will the arent company have",
-        hint: "State the involvement of the parent company (If any)",
-        optional: true,prefill: jobModel!=null?jobModel!.subsidiary:null));
   }
 
   @override
@@ -78,7 +68,7 @@ class _AddJobState extends State<AddJob> with InputMixin {
           systemNavigationBarColor: AppColors.backgroundVariant2,
           systemNavigationBarIconBrightness: Brightness.dark),
       child: GetBuilder<HomeController>(
-          id: 'AddJob',
+          id: 'SupplyCategory',
           builder: (controller) {
             return Scaffold(
               backgroundColor: AppColors.backgroundVariant2,
@@ -123,7 +113,7 @@ class _AddJobState extends State<AddJob> with InputMixin {
                                           CrossAxisAlignment.center,
                                       children: [
                                         Text(
-                                          "Add Job Experience",
+                                          "Category of Supply",
                                           style: AppTextStyle.subtitle1
                                               .copyWith(
                                                   fontSize: 20,
@@ -144,37 +134,140 @@ class _AddJobState extends State<AddJob> with InputMixin {
                             Padding(
                               padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                               child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
+
+                                  Container(
+                                      margin: EdgeInsets.only(bottom: 20),
+                                      child: Text("Choose the category you supply or offer",style: textStyle(true, 16, blackColor),)),
+
+                                  Container(
+                                    height: 45,
+                                    decoration: BoxDecoration(
+                                      color: whiteColor4.withOpacity(.5),
+                                        border:
+                                        Border.all(
+                                            // bottom: BorderSide(
+                                                color: focusSearch
+                                                    .hasFocus
+                                                    ? blue0
+                                                    : blackColor.withOpacity(.05),
+                                                width: focusSearch
+                                                    .hasFocus
+                                                    ? 2
+                                                    : 1),borderRadius: BorderRadius.circular(10)//)
+                                  ),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      crossAxisAlignment:
+                                      CrossAxisAlignment.center,
+                                      //mainAxisAlignment: MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        addSpaceWidth(10),
+                                        Icon(
+                                          Icons.search,
+                                          color: blackColor
+                                              .withOpacity(
+                                              focusSearch.hasFocus
+                                                  ? 1
+                                                  : (.5)),
+                                          size: 17,
+                                        ),
+                                        addSpaceWidth(10),
+                                        Flexible(
+                                          flex: 1,
+                                          child: TextField(
+                                            textInputAction:
+                                            TextInputAction.search,
+                                            textCapitalization:
+                                            TextCapitalization
+                                                .sentences,
+                                            autofocus: false,
+                                            onSubmitted: (_) {
+                                              runSearch();
+                                            },
+                                            decoration: InputDecoration(
+                                                hintText: "Search the keyword",
+                                                hintStyle: textStyle(
+                                                  false,
+                                                  14,
+                                                  blackColor
+                                                      .withOpacity(.2),
+                                                ),
+                                                border: InputBorder.none,
+                                                isDense: true),
+                                            style: textStyle(false, 16,
+                                                blackColor),
+                                            controller: searchController,
+                                            cursorColor: blackColor,
+                                            cursorWidth: 1,
+                                            focusNode: focusSearch,
+                                            keyboardType:
+                                            TextInputType.text,
+                                            onChanged: (s) {
+                                              showCancel =
+                                                  s.trim().isNotEmpty;
+                                              setState(() {});
+                                              runSearch();
+                                            },
+                                          ),
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            setState(() {
+                                              showCancel = false;
+                                              searchController.text = "";
+                                            });
+                                            runSearch();
+                                          },
+                                          child: showCancel
+                                              ? const Padding(
+                                            padding:
+                                            EdgeInsets
+                                                .fromLTRB(
+                                                0, 0, 15, 0),
+                                            child: Icon(
+                                              Icons.close,
+                                              color: red0,
+                                              size: 20,
+                                            ),
+                                          )
+                                              : Container(),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+
+                                  addSpace(20),
+                                  Container(
+                                      margin: EdgeInsets.only(bottom: 20),
+                                      child: Text("Categories (${categories.length})",style: textStyle(false, 14, blackColor.withOpacity(.5)),)),
+
+
+                                  Container(width: double.infinity,
+                                    child: Wrap(
+                                      crossAxisAlignment: WrapCrossAlignment.start,
+                                      children: List.generate(categories.length, (index){
+
+                                        String name = categories[index];
+                                        return Container(
+                                          margin: EdgeInsets.fromLTRB(0, 0, 10, 15),
+                                          padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
+                                          decoration: BoxDecoration(
+                                           border: Border.all(
+                                             color: blackColor,width: 1
+                                           ),borderRadius: BorderRadius.circular(5)
+                                          ),
+                                          child: Text(name,style: textStyle(false, 14, blackColor),),
+                                        );
+                                      }),
+                                    ),
+                                  ),
+                                  
+                                  addSpace(20),
+
                                   InputTextField(
                                       inputTextFieldModel: inputModels[0]),
-                                  addSpace(20),
-                                  InputTextField(
-                                      inputTextFieldModel: inputModels[1],isAmount: true,),
-                                  addSpace(20),
-
-                                  DatePickerWidget((d){
-                                    date = d;
-                                    setState(() {});
-                                  },label:"Date of Incorporation",hint: "dd/mm/yy",date: date,),
-                                  addSpace(20),
-                                  FilePickerWidget(onSelected: (PlatformFile file) {
-                                    setState(() {
-                                      fileInfo = file;
-                                    });
-                                  },title: "Upload Provisional Documents (If any)",fileInfo:fileInfo),
-                                  addSpace(20),
-                                  ClickText("Select Years", yearOfExperience==null?"":"${yearOfExperience} year${yearOfExperience==1?"":"s"} of experience", (){
-                                    showListDialog(context, List.generate(31, (index) => "$index year${index==1?"":"s"} of experience"), (_){
-
-                                      setState(() {
-                                        yearOfExperience = _;
-                                      });
-                                    },returnIndex: true);
-
-                                  },label:"Years of Experience as a Contractor/Sub Contractor"),
-                                  addSpace(20),
-                                  InputTextField(
-                                      inputTextFieldModel: inputModels[2],maxLine: 4,),
 
                                 ],
                               ),
@@ -187,32 +280,13 @@ class _AddJobState extends State<AddJob> with InputMixin {
                     Container(
                       margin: const EdgeInsets.fromLTRB(20, 5, 20, 20),
                       child: AppButton(
-                        title: "Add",
+                        title: "Save",
                         onPressed: () async {
                           Map studs = {};
-                          studs[2] = () {
-                            if (date==null) {
-                              return "Select date of incorporation";
-                            }
-                            return null;
-                          };
-                          studs[4] = () {
-                            if (yearOfExperience==null) {
-                              return "Select years of experience";
-                            }
-                            return null;
-                          };
                           bool proceed = validateInputModels(studs: studs);
                           if (proceed) {
 
-                            String name = inputModels[0].text;
-                            String value = inputModels[1].text.replaceAll(",", "");
-                            String incorp = inputModels[2].text;
 
-                            Navigator.pop(context,JobModel(name: name,
-                                value: double.parse(value),
-                                date: date!, fileInfo: fileInfo!, years: yearOfExperience!,
-                                subsidiary: incorp));
 
                           }
 
@@ -298,5 +372,9 @@ class _AddJobState extends State<AddJob> with InputMixin {
             );
           }),
     );
+  }
+
+  void runSearch(){
+
   }
 }

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:bog/app/blocs/homeswitch_controller.dart';
 import 'package:bog/app/modules/meetings/meeting.dart';
 import 'package:bog/app/modules/onboarding/onboarding.dart';
 import 'package:bog/app/modules/settings/support.dart';
@@ -10,6 +11,7 @@ import 'package:get/get.dart';
 
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_styles.dart';
+import '../base/base.dart';
 import '../controllers/home_controller.dart';
 
 import '../data/model/log_in_model.dart';
@@ -107,13 +109,38 @@ class _AppDrawerState extends State<AppDrawer> {
                                                       fontSize: Get.width * 0.045,
                                                     ),
                                                   ),
-                                                  Text(
-                                                    controller.currentType,
-                                                    style: AppTextStyle.subtitle1.copyWith(
-                                                      color: Colors.black.withOpacity(0.5),
-                                                      fontSize: Get.width * 0.035,
-                                                    ),
-                                                  ),
+                                                  // Text(
+                                                  //   controller.currentType,
+                                                  //   style: AppTextStyle.subtitle1.copyWith(
+                                                  //     color: Colors.black.withOpacity(0.5),
+                                                  //     fontSize: Get.width * 0.035,
+                                                  //   ),
+                                                  // ),
+                                                  addSpace(5),
+                                                  Container(
+                                                    height: 20,
+                                                    child: TextButton(onPressed: (){
+
+                                                      HomeSwitchController.instance.clickSwitch(context);
+
+
+                                                    },
+                                                        style: TextButton.styleFrom(
+                                                            backgroundColor: AppColors.primary,
+                                                            shape: RoundedRectangleBorder(
+                                                                borderRadius: BorderRadius.circular(5)
+                                                            ),
+                                                            padding: const EdgeInsets.fromLTRB(10, 0, 10, 0)
+                                                        ),
+                                                        child: Row(
+                                                          mainAxisSize: MainAxisSize.min,
+                                                          children: [
+                                                            Text(controller.currentType,style: textStyle(false, 12, white),),
+                                                            addSpaceWidth(5),
+                                                            const Icon(Icons.expand_circle_down,color: white,size: 12,)
+                                                          ],
+                                                        )),
+                                                  )
                                                 ],
                                               ),
                                             ],
@@ -183,15 +210,15 @@ class _AppDrawerState extends State<AppDrawer> {
                               Expanded(child: Column(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
-                                  _TextButton(
-                                      text: "Switch Account",
-                                      onPressed: () {
-                                        Get.back();
-                                        Get.to(() => const SwitchUser());
-                                        //Get.toNamed(OnboardingPage.route);
-                                      },
-                                      imageAsset: "assets/images/six1.png",
-                                      showArrow: true),
+                                  // _TextButton(
+                                  //     text: "Switch Account",
+                                  //     onPressed: () {
+                                  //       Get.back();
+                                  //       Get.to(() => const SwitchUser());
+                                  //       //Get.toNamed(OnboardingPage.route);
+                                  //     },
+                                  //     imageAsset: "assets/images/six1.png",
+                                  //     showArrow: true),
 
                                   _TextButton(
                                       text: "Support",

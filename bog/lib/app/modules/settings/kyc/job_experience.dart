@@ -9,6 +9,7 @@ import 'package:bog/core/theme/app_styles.dart';
 import 'package:bog/core/utils/dialog_utils.dart';
 import 'package:bog/core/utils/extensions.dart';
 import 'package:bog/core/utils/input_mixin.dart';
+import 'package:bog/core/utils/time_utils.dart';
 import 'package:bog/core/utils/widget_util.dart';
 import 'package:bog/core/widgets/click_text.dart';
 import 'package:bog/core/widgets/custom_expandable.dart';
@@ -170,13 +171,34 @@ class _JobExperienceState extends State<JobExperience> with InputMixin {
                                             Container(
                                               width: 24,height: 24,
                                               child: ElevatedButton(
-                                                onPressed: (){},
-                                                child: const Icon(Icons.remove,color: white,size: 14,),
+                                                onPressed: (){
+                                                  launchScreen(context, AddJob(jobModel: jobModel,),result:(_){
+                                                    if(_==null)return;
+                                                    experiences[index] = _;
+                                                    setState(() {});
+                                                  });
+                                                },
+                                                child: const Icon(Icons.edit,color: white,size: 12,),
                                                 style: ElevatedButton.styleFrom(
                                                     shape: const CircleBorder(),backgroundColor: blue0,padding: EdgeInsets.zero
                                                 ),
                                               ),
-                                            )
+                                            ),
+                                            addSpaceWidth(10),
+                                            Container(
+                                              width: 24,height: 24,
+                                              child: ElevatedButton(
+                                                onPressed: (){
+                                                  experiences.removeAt(index);
+                                                  setState(() {});
+                                                },
+                                                child: const Icon(Icons.close,color: white,size: 14,),
+                                                style: ElevatedButton.styleFrom(
+                                                    shape: const CircleBorder(),backgroundColor: red0,padding: EdgeInsets.zero
+                                                ),
+                                              ),
+                                            ),
+
                                           ],
                                         )),
                                     Container(width: double.infinity,
@@ -187,8 +209,9 @@ class _JobExperienceState extends State<JobExperience> with InputMixin {
                                       children: [
                                         rowItem("Name", jobModel.name),
                                         rowItem("Value", jobModel.value,isAmount: true),
-                                        rowItem("Date of Execution", jobModel.date,isDate: true),
+                                        rowItem("Date of Execution", getSimpleDate(jobModel.date.millisecondsSinceEpoch)),
                                         rowItem("Provisional Document", jobModel.fileInfo!=null?jobModel.fileInfo!.name:""),
+                                        rowItem("Years of Experience", jobModel.years),
                                         rowItem("Subsidiary Info", jobModel.subsidiary),
 
                                       ],
@@ -278,7 +301,7 @@ class _JobExperienceState extends State<JobExperience> with InputMixin {
                           //color: controller.currentBottomNavPage.value == 1 ? AppColors.primary : AppColors.grey,
                         ),
                       ),
-                      label: 'Chat',
+                      label: 'Message',
                     ),
                     BottomNavigationBarItem(
                       icon: Padding(

@@ -341,7 +341,7 @@ void showPopup(String message,
 }
 
 Widget checkBox(bool selected,
-    {double size: 15,
+    {double size= 16,
     checkColor = app_color,
     iconColor,
     boxColor,
@@ -453,8 +453,9 @@ scrollDown(ScrollController scrollController){
 
 Widget rowItem(String title,var item,
     {bool isAmount=false,bool isDate=false,bool hideBottomLine=false,
-      bool copy=false,context,double textSize=13,textColor=blue0,bool bold=false})
+      bool copy=false,context,double textSize=13,textColor,bool bold=false})
 {
+  textColor = textColor ?? blackColor;
   String text = item==null||item=="null"?"":item.toString();
   String dateText = "-";
   try{
@@ -462,14 +463,14 @@ Widget rowItem(String title,var item,
   }catch(e){}
   return Container(
     margin: EdgeInsets.only(top: 8),
-    padding: EdgeInsets.only(bottom: 8),
-    decoration: BoxDecoration(
-        border: Border(
-            bottom: BorderSide(
-                color: hideBottomLine?transparent: black.withOpacity(.1),width: .3
-            )
-        )
-    ),
+    // padding: EdgeInsets.only(bottom: 8),
+    // decoration: BoxDecoration(
+    //     border: Border(
+    //         bottom: BorderSide(
+    //             color: hideBottomLine?transparent: black.withOpacity(.1),width: .3
+    //         )
+    //     )
+    // ),
     child: Row(
       children: [
         Flexible(fit: FlexFit.tight,
@@ -480,23 +481,29 @@ Widget rowItem(String title,var item,
         ),
         addSpaceWidth(5),
         Flexible(
-          child: RichText(text: TextSpan(
-              children: [
-                if(isAmount)WidgetSpan(child: Container(
-                    margin: EdgeInsets.only(bottom: 3,right: 3),
-                    child: Image.asset(
-                      "naira".png,
-                      width: textSize-4,
-                      height: textSize-4,
-                      color: textColor,
-                    )),),
-                TextSpan(text:
-                text==null || text.isEmpty?"-":
-                isDate?dateText:
-                !isAmount?"$text":"${formatAmount(text,decimal: 0)}"
-                    ,style: textStyle(bold, textSize, textColor,)),
-              ]
-          ),textAlign: TextAlign.left,),
+          child: Container(
+            padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
+            decoration: BoxDecoration(
+              color: whiteColor4,borderRadius: BorderRadius.circular(10)
+            ),
+            child: RichText(text: TextSpan(
+                children: [
+                  if(isAmount)WidgetSpan(child: Container(
+                      margin: EdgeInsets.only(bottom: 3,right: 3),
+                      child: Image.asset(
+                        "naira1".png,
+                        width: textSize-4,
+                        height: textSize-4,
+                        color: textColor,
+                      )),),
+                  TextSpan(text:
+                  text==null || text.isEmpty?"-":
+                  isDate?dateText:
+                  !isAmount?"$text":"${formatAmount(text,decimal: 0)}"
+                      ,style: textStyle(bold, textSize, textColor,)),
+                ]
+            ),textAlign: TextAlign.left,),
+          ),
         ),
         if(copy)GestureDetector(
           onTap: (){

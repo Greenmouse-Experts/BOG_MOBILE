@@ -5,12 +5,14 @@ import 'package:file_picker/file_picker.dart';
 class FilePickerWidget extends StatefulWidget {
   final double height;
   final String title;
+  final PlatformFile? fileInfo;
   Function(PlatformFile fileInfo) onSelected;
 
   FilePickerWidget({
     this.height = 55,
     this.title="",
     required this.onSelected,
+    this.fileInfo,
     Key? key}) : super(key: key);
 
   @override
@@ -20,6 +22,14 @@ class FilePickerWidget extends StatefulWidget {
 class _FilePickerWidgetState extends State<FilePickerWidget> {
 
   PlatformFile? fileInfo;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    fileInfo = widget.fileInfo;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(

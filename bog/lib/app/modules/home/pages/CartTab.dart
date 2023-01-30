@@ -1,6 +1,8 @@
 import 'dart:convert';
 
+import 'package:bog/app/base/base.dart';
 import 'package:bog/app/global_widgets/app_ratings.dart';
+import 'package:bog/app/modules/home/subscribe.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -38,10 +40,10 @@ class CartTab extends StatelessWidget {
     double multiplier = 25 * size.height * 0.01;
 
     return GetBuilder<HomeController>(builder: (controller) {
-      return Expanded(
-        child: Scaffold(
-          body: SizedBox(
-            height: Get.height * 0.91,
+      return Scaffold(
+        body: SizedBox(
+          // height: Get.height * 0.91,
+          child: SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -69,206 +71,206 @@ class CartTab extends StatelessWidget {
                 SizedBox(
                   height: Get.height * 0.03,
                 ),
+                addSpace(15),
                 if(controller.currentType == "Client"  || controller.currentType == "Corporate Client")
-                  Expanded(
-                    child: Padding(
-                      padding: EdgeInsets.only(left: Get.width*0.03, right: Get.width*0.03),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          SizedBox(
-                            height: Get.height * 0.3,
-                            child: controller.productsList.isEmpty ? Center(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsets.only(right: Get.width*0.03),
-                                    child: Icon(
-                                      FeatherIcons.shoppingCart,
-                                      size: Get.width * 0.2,
-                                      color: Colors.grey,
+                  Padding(
+                    padding: EdgeInsets.only(left: Get.width*0.03, right: Get.width*0.03),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        SizedBox(
+                          height: Get.height * 0.3,
+                          child: controller.productsList.isEmpty ? Center(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.only(right: Get.width*0.03),
+                                  child: Icon(
+                                    FeatherIcons.shoppingCart,
+                                    size: Get.width * 0.2,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: Get.height * 0.02,
+                                ),
+                                Text(
+                                  "Nothing in your cart",
+                                  style: AppTextStyle.subtitle1.copyWith(
+                                    color: Colors.black,
+                                    fontSize: Get.width * 0.035,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ) :ListView.builder(
+                            padding: EdgeInsets.zero,
+                            itemCount: controller.productsList.length,
+                              shrinkWrap: false,
+                              itemBuilder: (context,index){
+                                var product = controller.productsList[index];
+                                return CartItem(
+                                  title: product.name.toString(),
+                                  image: product.image.toString(),
+                                  price: "N ${product.price}",
+                                  quantity: controller.productsMap[product.id.toString()] ?? 1,
+                                  quantityChanged: (value){
+                                    controller.productsMap[product.id.toString()] = value;
+                                    controller.update();
+                                  },
+                                );
+                              }
+                          ),
+                        ),
+                        SizedBox(
+                          height: Get.height * 0.025,
+                        ),
+                        //Divider
+                        Container(
+                          height: 1,
+                          color: Colors.grey[300],
+                        ),
+                        SizedBox(
+                          height: Get.height * 0.025,
+                        ),
+                        SizedBox(
+                          height: Get.height * 0.02,
+                        ),
+                        SizedBox(
+                          height: Get.height * 0.4,
+                          child: SingleChildScrollView(
+                            child: Column(
+                              children: [
+                                const PageInput(
+                                  hint: 'Enter your coupon code',
+                                  label: 'Do you have a coupon ? Enter it here',
+                                  validator: null,
+                                  isCompulsory: true,
+                                  obscureText: false,
+                                ),
+                                SizedBox(
+                                  height: Get.height * 0.05,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      "Sub Total:",
+                                      style: AppTextStyle.subtitle1.copyWith(
+                                        color: Colors.black,
+                                        fontSize: Get.width * 0.035,
+                                        fontWeight: FontWeight.w400,
+                                      ),
                                     ),
-                                  ),
-                                  SizedBox(
-                                    height: Get.height * 0.02,
-                                  ),
-                                  Text(
-                                    "Nothing in your cart",
-                                    style: AppTextStyle.subtitle1.copyWith(
-                                      color: Colors.black,
-                                      fontSize: Get.width * 0.035,
-                                      fontWeight: FontWeight.w500,
+                                    Text(
+                                      "N ${controller.totalPrice}",
+                                      style: AppTextStyle.subtitle1.copyWith(
+                                        color: Colors.black,
+                                        fontSize: Get.width * 0.035,
+                                        fontWeight: FontWeight.w400,
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                            ) :ListView.builder(
-                              padding: EdgeInsets.zero,
-                              itemCount: controller.productsList.length,
-                                shrinkWrap: false,
-                                itemBuilder: (context,index){
-                                  var product = controller.productsList[index];
-                                  return CartItem(
-                                    title: product.name.toString(),
-                                    image: product.image.toString(),
-                                    price: "N ${product.price}",
-                                    quantity: controller.productsMap[product.id.toString()] ?? 1,
-                                    quantityChanged: (value){
-                                      controller.productsMap[product.id.toString()] = value;
-                                      controller.update();
-                                    },
-                                  );
-                                }
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: Get.height * 0.025,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      "Delivery Fee :",
+                                      style: AppTextStyle.subtitle1.copyWith(
+                                        color: Colors.black,
+                                        fontSize: Get.width * 0.035,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                    Text(
+                                      "N 5,000",
+                                      style: AppTextStyle.subtitle1.copyWith(
+                                        color: Colors.black,
+                                        fontSize: Get.width * 0.035,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: Get.height * 0.025,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      "Discount :",
+                                      style: AppTextStyle.subtitle1.copyWith(
+                                        color: Colors.black,
+                                        fontSize: Get.width * 0.035,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                    Text(
+                                      "0%",
+                                      style: AppTextStyle.subtitle1.copyWith(
+                                        color: Colors.black,
+                                        fontSize: Get.width * 0.035,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: Get.height * 0.025,
+                                ),
+                                //Dotted Line
+                                CustomPaint(painter: DashedLinePainter()),
+                                SizedBox(
+                                  height: Get.height * 0.025,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      "Total :",
+                                      style: AppTextStyle.subtitle1.copyWith(
+                                        color: Colors.black,
+                                        fontSize: Get.width * 0.035,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                    Text(
+                                      "N ${controller.totalPrice + 5000}",
+                                      style: AppTextStyle.subtitle1.copyWith(
+                                        color: AppColors.primary,
+                                        fontSize: Get.width * 0.04,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: Get.height * 0.025,
+                                ),
+                                AppButton(
+                                  title: 'Proceed To Checkout',
+                                  onPressed: () {
+                                    Get.to(() => Checkout());
+                                  },
+                                  borderRadius: 10,
+                                  enabled: controller.productsList.isNotEmpty,
+                                ),
+                                addSpace(20)
+                              ],
                             ),
                           ),
-                          SizedBox(
-                            height: Get.height * 0.025,
-                          ),
-                          //Divider
-                          Container(
-                            height: 1,
-                            color: Colors.grey[300],
-                          ),
-                          SizedBox(
-                            height: Get.height * 0.025,
-                          ),
-                          SizedBox(
-                            height: Get.height * 0.02,
-                          ),
-                          SizedBox(
-                            height: Get.height * 0.4,
-                            child: SingleChildScrollView(
-                              child: Column(
-                                children: [
-                                  const PageInput(
-                                    hint: 'Enter your coupon code',
-                                    label: 'Do you have a coupon ? Enter it here',
-                                    validator: null,
-                                    isCompulsory: true,
-                                    obscureText: false,
-                                  ),
-                                  SizedBox(
-                                    height: Get.height * 0.05,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        "Sub Total:",
-                                        style: AppTextStyle.subtitle1.copyWith(
-                                          color: Colors.black,
-                                          fontSize: Get.width * 0.035,
-                                          fontWeight: FontWeight.w400,
-                                        ),
-                                      ),
-                                      Text(
-                                        "N ${controller.totalPrice}",
-                                        style: AppTextStyle.subtitle1.copyWith(
-                                          color: Colors.black,
-                                          fontSize: Get.width * 0.035,
-                                          fontWeight: FontWeight.w400,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: Get.height * 0.025,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        "Delivery Fee :",
-                                        style: AppTextStyle.subtitle1.copyWith(
-                                          color: Colors.black,
-                                          fontSize: Get.width * 0.035,
-                                          fontWeight: FontWeight.w400,
-                                        ),
-                                      ),
-                                      Text(
-                                        "N 5,000",
-                                        style: AppTextStyle.subtitle1.copyWith(
-                                          color: Colors.black,
-                                          fontSize: Get.width * 0.035,
-                                          fontWeight: FontWeight.w400,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: Get.height * 0.025,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        "Discount :",
-                                        style: AppTextStyle.subtitle1.copyWith(
-                                          color: Colors.black,
-                                          fontSize: Get.width * 0.035,
-                                          fontWeight: FontWeight.w400,
-                                        ),
-                                      ),
-                                      Text(
-                                        "0%",
-                                        style: AppTextStyle.subtitle1.copyWith(
-                                          color: Colors.black,
-                                          fontSize: Get.width * 0.035,
-                                          fontWeight: FontWeight.w400,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: Get.height * 0.025,
-                                  ),
-                                  //Dotted Line
-                                  CustomPaint(painter: DashedLinePainter()),
-                                  SizedBox(
-                                    height: Get.height * 0.025,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        "Total :",
-                                        style: AppTextStyle.subtitle1.copyWith(
-                                          color: Colors.black,
-                                          fontSize: Get.width * 0.035,
-                                          fontWeight: FontWeight.w400,
-                                        ),
-                                      ),
-                                      Text(
-                                        "N ${controller.totalPrice + 5000}",
-                                        style: AppTextStyle.subtitle1.copyWith(
-                                          color: AppColors.primary,
-                                          fontSize: Get.width * 0.04,
-                                          fontWeight: FontWeight.w400,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: Get.height * 0.025,
-                                  ),
-                                  AppButton(
-                                    title: 'Proceed To Checkout',
-                                    onPressed: () {
-                                      Get.to(() => Checkout());
-                                    },
-                                    borderRadius: 10,
-                                    enabled: controller.productsList.isNotEmpty,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                 if(controller.currentType == "Product Partner")
@@ -293,135 +295,136 @@ class CartTab extends StatelessWidget {
                     height: Get.height * 0.015,
                   ),
                 if(controller.currentType == "Product Partner")
-                  Expanded(
-                    child: FutureBuilder<ApiResponse>(
-                        future: controller.userRepo.getData("/products"),
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState == ConnectionState.done && snapshot.data!.isSuccessful) {
-                            final posts = MyProducts.fromJsonList(snapshot.data!.data);
-                            if(posts.isEmpty){
-                              return SizedBox(
-                                height: Get.height*0.7,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "No Products Available",
-                                      style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.07,color: Colors.black,fontWeight: FontWeight.w500),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ],
-                                ),
-                              );
-                            }
-                            return ListView.builder(
-                              itemCount: posts.length,
-                              scrollDirection: Axis.vertical,
-                              shrinkWrap: true,
-                              padding: const EdgeInsets.all(0),
-                              itemBuilder: (BuildContext context, int index) {
-                                return ProductItem(
-                                  title: posts[index].name,
-                                  subTitle: "N ${posts[index].price}",
-                                  date: posts[index].createdAt,
-                                  image: posts[index].image,
-                                );
-                              },
-                            );
-                          }else{
-                            if(snapshot.connectionState == ConnectionState.done){
-                              return SizedBox(
-                                height: Get.height*0.7,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "No Products Found",
-                                      style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.07,color: Colors.black,fontWeight: FontWeight.w500),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ],
-                                ),
-                              );
-                            }
+                  FutureBuilder<ApiResponse>(
+                      future: controller.userRepo.getData("/products"),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.done && snapshot.data!.isSuccessful) {
+                          final posts = MyProducts.fromJsonList(snapshot.data!.data);
+                          if(posts.isEmpty){
                             return SizedBox(
                               height: Get.height*0.7,
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  const CircularProgressIndicator(
-                                    color: AppColors.primary,
+                                  Text(
+                                    "No Products Available",
+                                    style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.07,color: Colors.black,fontWeight: FontWeight.w500),
+                                    textAlign: TextAlign.center,
                                   ),
                                 ],
                               ),
                             );
                           }
-                        }),
-                  ),
+                          return ListView.builder(
+                            itemCount: posts.length,
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                            padding: const EdgeInsets.all(0),
+                            itemBuilder: (BuildContext context, int index) {
+                              return ProductItem(
+                                title: posts[index].name,
+                                subTitle: "N ${posts[index].price}",
+                                date: posts[index].createdAt,
+                                image: posts[index].image,
+                              );
+                            },
+                          );
+                        }else{
+                          if(snapshot.connectionState == ConnectionState.done){
+                            return SizedBox(
+                              height: Get.height*0.7,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "No Products Found",
+                                    style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.07,color: Colors.black,fontWeight: FontWeight.w500),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ],
+                              ),
+                            );
+                          }
+                          return SizedBox(
+                            height: Get.height*0.7,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const CircularProgressIndicator(
+                                  color: AppColors.primary,
+                                ),
+                              ],
+                            ),
+                          );
+                        }
+                      }),
+
                 if(controller.currentType == "Service Partner")
-                  Padding(
-                    padding: EdgeInsets.only(left: Get.width*0.03, right: Get.width*0.03),
-                    child: PageDropButtonWithoutBackground(
-                      label: "",
-                      hint: '',
-                      padding: const EdgeInsets.fromLTRB(10, 0, 5, 0),
-                      onChanged: (val) {
-                        //currentOrder = val;
-                        controller.update();
-                      },
-                      value: "All Service Orders",
-                      items: ["All Service Orders"].map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value,style: AppTextStyle.subtitle1.copyWith(
-                            color: AppColors.primary,
-                            fontSize: Get.width * 0.035,
-                            fontWeight: FontWeight.w500,
-                          ),textAlign: TextAlign.start,),
-                        );
-                      }).toList(),
-                    ),
-                  ),
-                if(controller.currentType == "Service Partner")
-                  SizedBox(
-                    height: Get.height * 0.015,
-                  ),
-                if(controller.currentType == "Service Partner")
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: 4,
-                      scrollDirection: Axis.vertical,
-                      shrinkWrap: true,
-                      padding: const EdgeInsets.all(0),
-                      itemBuilder: (BuildContext context, int index) {
-                        return ServiceRequestItem();
-                      },
-                    ),
-                  )
+                  Subscribe(),
+                  /*Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(left: Get.width*0.03, right: Get.width*0.03),
+                        child: PageDropButtonWithoutBackground(
+                          label: "",
+                          hint: '',
+                          padding: const EdgeInsets.fromLTRB(10, 0, 5, 0),
+                          onChanged: (val) {
+                            //currentOrder = val;
+                            controller.update();
+                          },
+                          value: "All Service Orders",
+                          items: ["All Service Orders"].map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value,style: AppTextStyle.subtitle1.copyWith(
+                                color: AppColors.primary,
+                                fontSize: Get.width * 0.035,
+                                fontWeight: FontWeight.w500,
+                              ),textAlign: TextAlign.start,),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                      SizedBox(
+                        height: Get.height * 0.015,
+                      ),
+                      ListView.builder(
+                        itemCount: 4,
+                        scrollDirection: Axis.vertical,
+                        shrinkWrap: true,
+                        padding: const EdgeInsets.all(0),
+                        itemBuilder: (BuildContext context, int index) {
+                          return ServiceRequestItem();
+                        },
+                      ),
+                    ],
+                  )*/
               ],
             ),
           ),
-          floatingActionButton: controller.currentType == "Client" || controller.currentType == "Corporate Client" || controller.currentType == "Service Partner" ? null : FloatingActionButton(
-            onPressed: (){
-              Get.to(() => const AddProject());
-            },
-            backgroundColor: AppColors.primary,
-            child: Stack(
-              children: [
-                SizedBox(
-                  width: Get.width * 0.05,
-                  height: Get.width * 0.05,
-                  child: Icon(
-                    Icons.add,
-                    color: Colors.white,
-                    size: Get.width * 0.05,
-                  ),
+        ),
+        floatingActionButton: controller.currentType == "Client" || controller.currentType == "Corporate Client" || controller.currentType == "Service Partner" ? null : FloatingActionButton(
+          onPressed: (){
+            Get.to(() => const AddProject());
+          },
+          backgroundColor: AppColors.primary,
+          child: Stack(
+            children: [
+              SizedBox(
+                width: Get.width * 0.05,
+                height: Get.width * 0.05,
+                child: Icon(
+                  Icons.add,
+                  color: Colors.white,
+                  size: Get.width * 0.05,
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       );
@@ -429,117 +432,7 @@ class CartTab extends StatelessWidget {
   }
 }
 
-class CartItem extends StatelessWidget {
-  const CartItem({
-    Key? key,
-    this.image = "assets/images/dummy_image.png",
-    this.title = "30 Tonnes Sharp Sand",
-    this.subTitle = "",
-    this.price = "N 115,000",
-    this.quantity = 1,
-    this.quantityChanged
-  }) : super(key: key);
 
-  final String image;
-  final String title;
-  final String subTitle;
-  final String price;
-  final int quantity;
-  final Function(int)? quantityChanged;
-
-  @override
-  Widget build(BuildContext context) {
-
-    /*CachedNetworkImageProvider(
-      "www.com",
-    )*/
-    return IntrinsicHeight(
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 25),
-        child: Row(
-          children: [
-            SizedBox(
-              height: 90,
-              width: 90,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(10), child: Image.network(
-                image,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
-                  return Container(
-                    height: 90,
-                    width: 90,
-                    decoration: BoxDecoration(
-                      color: AppColors.primary,
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: AppColors.grey.withOpacity(0.1),width: 1),
-                    ),
-                    child: Center(
-                      child: Icon(
-                        Icons.image_not_supported,
-                        color: AppColors.background,
-                        size: Get.width*0.1,
-                      ),
-                    ),
-                  );
-                },
-              ),
-              ),
-            ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(left: Get.width * 0.015),
-                    child: Text(
-                        title,
-                      style: AppTextStyle.caption.copyWith(
-                        color: Colors.black,
-                        fontSize: Get.width * 0.035,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                  AppRating(onRatingUpdate: (value) {}, rating: 4.5),
-                  Padding(
-                    padding: EdgeInsets.only(left: Get.width * 0.015),
-                    child: Text(
-                      price,
-                      style: AppTextStyle.caption.copyWith(
-                        color: Colors.black,
-                        fontSize: Get.width * 0.035,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(width: 8),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                ItemCounter(
-                  initialCount: quantity,
-                  onCountChanged: (count) {
-                    if(quantityChanged != null){
-                      quantityChanged!(count);
-                    }
-                  },
-                ),
-                const SizedBox(height: 5),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
 
 class OrderItem extends StatelessWidget {
   const OrderItem({

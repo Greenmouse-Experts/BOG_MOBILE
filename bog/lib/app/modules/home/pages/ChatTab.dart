@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:bog/app/base/base.dart';
 import 'package:bog/app/modules/chat/chat.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -38,26 +39,24 @@ class ChatTab extends StatelessWidget {
                   const SizedBox(
                     height: kToolbarHeight,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 10.0,right: 10.0,top: 10.0),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Messages",
-                          style: AppTextStyle.subtitle1.copyWith(
-                            color: Colors.black,
-                            fontSize: Get.width * 0.045,
-                            fontWeight: FontWeight.w400,
-                          ),
+                  Row(
+                    // crossAxisAlignment: CrossAxisAlignment.center,
+                    // mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Messages",
+                        style: AppTextStyle.subtitle1.copyWith(
+                          color: Colors.black,
+                          fontSize: Get.width * 0.045,
+                          fontWeight: FontWeight.bold,
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                   SizedBox(
                     height: Get.height * 0.03,
                   ),
+                  addSpace(15),
                   AppInput(
                     hintText: 'Search with name or keyword ...',
                     filledColor: Colors.grey.withOpacity(.1),
