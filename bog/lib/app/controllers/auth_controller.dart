@@ -28,10 +28,10 @@ class AuthController extends GetxController {
   TextEditingController fullName = TextEditingController();
   TextEditingController companyName = TextEditingController();
   TextEditingController phone = TextEditingController();
-  TextEditingController email = TextEditingController();
-  // TextEditingController(text: "johnebere58@gmail.com");
-  TextEditingController password = TextEditingController();
-  // TextEditingController(text: "Ebejon@1go");
+  TextEditingController email = //TextEditingController();
+  TextEditingController(text: "greenmouseapp@gmail.com");
+  TextEditingController password = //TextEditingController();
+  TextEditingController(text: "Dandytech@2022");
   TextEditingController officeAddress = TextEditingController();
   TextEditingController certOfOperation = TextEditingController();
   TextEditingController proMemCert = TextEditingController();

@@ -1,16 +1,21 @@
 import 'dart:convert';
 
 import 'package:bog/app/assets/color_assets.dart';
+import 'package:bog/app/base/base.dart';
 import 'package:bog/app/controllers/home_controller.dart';
 import 'package:bog/app/global_widgets/app_button.dart';
 import 'package:bog/core/theme/app_colors.dart';
 import 'package:bog/core/theme/app_styles.dart';
 import 'package:bog/core/utils/dialog_utils.dart';
 import 'package:bog/core/utils/extensions.dart';
+import 'package:bog/core/utils/http_utils.dart';
 import 'package:bog/core/utils/input_mixin.dart';
+import 'package:bog/core/utils/time_utils.dart';
 import 'package:bog/core/utils/widget_util.dart';
+import 'package:bog/core/widgets/bottom_nav.dart';
 import 'package:bog/core/widgets/click_text.dart';
 import 'package:bog/core/widgets/custom_expandable.dart';
+import 'package:bog/core/widgets/date_picker_widget.dart';
 import 'package:bog/core/widgets/input_text_field.dart';
 import 'package:feather_icons/feather_icons.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +25,7 @@ import 'package:get/get.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
 
-class OrgInfo extends StatefulWidget {
+class OrgInfo extends BaseWidget {
   const OrgInfo({Key? key}) : super(key: key);
 
   static const route = '/OrgInfo';
@@ -29,55 +34,92 @@ class OrgInfo extends StatefulWidget {
   State<OrgInfo> createState() => _OrgInfoState();
 }
 
-class _OrgInfoState extends State<OrgInfo> with InputMixin {
+class _OrgInfoState extends BaseWidgetState<OrgInfo> with InputMixin {
 
   String businessType = "";
 
   List businessTypes = ["Incorporation", "Registered Business name"];
 
+  DateTime? dateOfInc;
+
+  // showAppBar()=>!setup;
+
+  getPageTitle()=>"Organization Details";
 
   @override
   void initState() {
+    setup=false;
     super.initState();
+  }
+
+  Map setupData = {};
+  @override
+  loadItems() {
+    performApiCall(context, "/kyc-organisation-info/fetch?userType=${currentUser.userType}", (response, error){
+      if(error!=null){
+        setupError=error;
+        if(mounted)setState(() {});
+        return;
+      }
+
+      setupData = response["data"]??{};
+      setupModels();
+      setup=true;
+      if(mounted)setState(() {});
+
+    },getMethod: true,handleError: false,silently: true);
+  }
+
+  void setupModels(){
+
+    // businessType = ;
+
     inputModels.add(InputTextFieldModel(
         "Others (Specify)",
-        hint: "Enter the type of organization",optional: true));
+        hint: "Enter the type of organization",optional: true,
+    prefill: setupData["others"]));
+
+    String date = setupData["Incorporation_date"]??"";
+    if(date.isNotEmpty){
+      dateOfInc = DateTime.parse(date);
+      // print("The $date ${dateOfInc!.millisecondsSinceEpoch}");
+    }
 
     inputModels.add(InputTextFieldModel(
         "Full Name",
-        hint: "Enter directors full name"));
+        hint: "Enter directors full name",
+    prefill: setupData["director_fullname"]));
 
     inputModels.add(InputTextFieldModel(
         "Designation",
-        hint: "Enter designation"));
+        hint: "Enter designation",prefill: setupData["director_designation"]));
 
     inputModels.add(InputTextFieldModel(
         "Phone Number",
-        hint: "Enter directors phone number"));
+        hint: "Enter directors phone number",prefill: setupData["director_phone"]));
 
     inputModels.add(InputTextFieldModel(
         "Email",
-        hint: "Enter directors email"));
+        hint: "Enter directors email",prefill: setupData["director_email"]));
 
-inputModels.add(InputTextFieldModel(
+    inputModels.add(InputTextFieldModel(
         "Phone Number",
-        hint: "Enter your phone number"));
+        hint: "Enter your phone number",prefill: setupData["contact_phone"]));
 
-  inputModels.add(InputTextFieldModel(
+    inputModels.add(InputTextFieldModel(
         "Email",
-        hint: "Enter email"));
+        hint: "Enter email",prefill: setupData["contact_email"]));
 
-inputModels.add(InputTextFieldModel(
+    inputModels.add(InputTextFieldModel(
         "Please mention other companies operated",
-        hint: "Enter other companies operated"));
+        hint: "Enter other companies operated",prefill: setupData["others_operations"]));
+    setState(() {
 
-
-
-
+    });
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget page(BuildContext context) {
     var width = Get.width;
     final Size size = MediaQuery
         .of(context)
@@ -106,7 +148,7 @@ inputModels.add(InputTextFieldModel(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Padding(
+                            if(false)Padding(
                               padding: EdgeInsets.only(right: width * 0.05,
                                   left: width * 0.045,
                                   top: kToolbarHeight),
@@ -181,9 +223,11 @@ inputModels.add(InputTextFieldModel(
                                       margin: EdgeInsets.only(bottom: 20),
                                       child: Text("Date of Incorporation",style: textStyle(false, 14, blackColor),)),
 
-                                  ClickText("dd/mm/yy", "", (){
-
-                                  }),
+                                  DatePickerWidget((date){
+                                    dateOfInc = date;
+                                    // print(formatTime3(dateOfInc!.millisecondsSinceEpoch));
+                                    setState(() {});
+                                  },hint: "yyyy-mm-dd",date: dateOfInc),
 
 
 
@@ -256,93 +300,56 @@ inputModels.add(InputTextFieldModel(
                             }
                             return null;
                           };
+                          studs[2] = (){
+                            if(dateOfInc==null){
+                              return "Select date of incorporation";
+                            }
+                            return null;
+                          };
+
                           bool proceed = validateInputModels(studs: studs);
-                          if(proceed){
-                            // showSuccessDialog(context, "Ready");
+                          if(!proceed)return;
+
+                          String others = inputModels[0].text;
+                          String date = formatTime3(dateOfInc!.millisecondsSinceEpoch);
+                          String directors = inputModels[1].text;
+                          String designation = inputModels[2].text;
+                          String director_phone = inputModels[3].text;
+                          String director_email = inputModels[4].text;
+                          String contact_phone = inputModels[5].text;
+                          String contact_email = inputModels[6].text;
+                          String mention = inputModels[7].text;
+                          String currentType = currentUser.userType??"";
+
+                          performApiCall(context, "/kyc-organisation-info/create", (response, error){
+
+                            showSuccessDialog(context, "Organization Info Updated",onOkClicked: (){
+                              Navigator.pop(context);
+                            });
+
+                          },data:
+                          {
+                            "organisation_type": businessType,
+                            "others": others,
+                            "Incorporation_date": date,
+                            "director_fullname": directors,
+                            "director_designation": designation,
+                            "director_phone": director_phone,
+                            "director_email": director_email,
+                            "contact_phone": contact_phone,
+                            "contact_email": contact_email,
+                            "others_operations": "",
+                            "userType": currentType,
+                            "id": setupData["id"]??"" // incase of update
                           }
-                          // if(formKey.currentState!.validate()){
-                          //
-                          // }
+                        );
                         },
                       ),
                     )
                   ],
                 ),
               ),
-              bottomNavigationBar: BottomNavigationBar(
-                  backgroundColor: AppColors.backgroundVariant2,
-                  showSelectedLabels: true,
-                  showUnselectedLabels: true,
-                  type: BottomNavigationBarType.fixed,
-                  items: <BottomNavigationBarItem>[
-                    BottomNavigationBarItem(
-                      icon: Padding(
-                        padding: const EdgeInsets.only(bottom: 5),
-                        child: Image.asset(
-                          controller.homeIcon,
-                          width: 20,
-                          //color: controller.currentBottomNavPage.value == 0 ? AppColors.primary : AppColors.grey,
-                        ),
-                      ),
-                      label: controller.homeTitle,
-                      backgroundColor: AppColors.background,
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Padding(
-                        padding: const EdgeInsets.only(bottom: 5),
-                        child: Image.asset(
-                          controller.currentBottomNavPage.value == 1
-                              ? 'assets/images/chat_filled.png'
-                              : 'assets/images/chatIcon.png',
-                          width: 22,
-                          //color: controller.currentBottomNavPage.value == 1 ? AppColors.primary : AppColors.grey,
-                        ),
-                      ),
-                      label: 'Message',
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Padding(
-                        padding: const EdgeInsets.only(bottom: 5),
-                        child: Image.asset(
-                          controller.projectIcon,
-                          width: 20,
-                          //color: controller.currentBottomNavPage.value == 2 ? AppColors.primary : AppColors.grey,
-                        ),
-                      ),
-                      label: controller.projectTitle,
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Padding(
-                        padding: const EdgeInsets.only(bottom: 5),
-                        child: Image.asset(
-                          controller.cartIcon,
-                          width: 25,
-                          //color: controller.currentBottomNavPage.value == 3 ? AppColors.primary : AppColors.grey,
-                        ),
-                      ),
-                      label: controller.cartTitle,
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Padding(
-                        padding: const EdgeInsets.only(bottom: 5),
-                        child: Image.asset(
-                          controller.profileIcon,
-                          width: 25,
-                          //color: controller.currentBottomNavPage.value == 4 ? AppColors.primary : AppColors.grey,
-                        ),
-                      ),
-                      label: 'Profile',
-                    ),
-                  ],
-                  currentIndex: controller.currentBottomNavPage.value,
-                  selectedItemColor: AppColors.primary,
-                  unselectedItemColor: Colors.grey,
-                  onTap: (index) {
-                    controller.currentBottomNavPage.value = index;
-                    controller.updateNewUser(controller.currentType);
-                    Get.back();
-                  }
-              ),
+              bottomNavigationBar: bottomNav(),
 
             );
           }),

@@ -1,6 +1,9 @@
 import 'dart:convert';
 
+import 'package:bog/app/base/base.dart';
 import 'package:bog/app/global_widgets/app_button.dart';
+import 'package:bog/core/utils/dialog_utils.dart';
+import 'package:bog/core/utils/http_utils.dart';
 import 'package:feather_icons/feather_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -239,7 +242,54 @@ class EditProfile extends GetView<HomeController> {
                             ),
                             AppButton(
                               title: "Save Changes",
-                              onPressed: (){},
+                              onPressed: (){
+
+                                String _fame = firstName.text.trim();
+                                String _lname = lastName.text.trim();
+                                String _email = email.text.trim();
+                                String _phone = phoneNumber.text.trim();
+                                String _address = address.text.trim();
+                                String _state = state.text.trim();
+                                String _city = city.text.trim();
+
+                                if(_fame.isEmpty){
+                                  showPopup("Enter your first name");
+                                  return;
+                                }
+                                if(_lname.isEmpty){
+                                  showPopup("Enter your last name");
+                                  return;
+                                }
+                                if(_email.isEmpty){
+                                  showPopup("Enter your email address");
+                                  return;
+                                }
+                                if(_phone.isEmpty){
+                                  showPopup("Enter your phone number");
+                                  return;
+                                }
+
+
+
+
+
+                                performApiCallWithDIO(context, "/user/update-account", (response, error){
+
+                                  showSuccessDialog(context, "Profile Updated",
+                                  onOkClicked: (){
+                                    Navigator.pop(context);
+                                  });
+
+                                },data:{
+                                  "phone": _phone,
+                                  "name": "${_fame} ${_lname}",
+                                  "address": _address,
+                                  "state": _state,
+                                  "city": _city,
+                                  "street": ""
+                                },
+                                    patch:true);
+                              },
                             )
                           ],
                         ),

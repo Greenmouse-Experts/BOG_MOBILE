@@ -86,7 +86,7 @@ showListDialog(context,List items, onSelected,
           onSelected(returnIndex?items.indexOf(_):_);
         }
       },opaque: false,
-      transitionBuilder:scaleTransition,
+      transitionBuilder:slideUpTransition,
       transitionDuration: const Duration(milliseconds: 800),ignoreIOS: true);
 }
 

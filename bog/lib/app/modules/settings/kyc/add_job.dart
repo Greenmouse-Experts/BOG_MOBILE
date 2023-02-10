@@ -1,27 +1,26 @@
-import 'dart:convert';
 
-import 'package:bog/app/assets/color_assets.dart';
+import 'package:bog/app/assets/setup_assets.dart';
 import 'package:bog/app/controllers/home_controller.dart';
 import 'package:bog/app/global_widgets/app_button.dart';
 import 'package:bog/app/modules/settings/kyc/job_experience.dart';
 import 'package:bog/core/theme/app_colors.dart';
 import 'package:bog/core/theme/app_styles.dart';
 import 'package:bog/core/utils/dialog_utils.dart';
-import 'package:bog/core/utils/extensions.dart';
+import 'package:bog/core/utils/http_utils.dart';
 import 'package:bog/core/utils/input_mixin.dart';
+import 'package:bog/core/utils/time_utils.dart';
 import 'package:bog/core/utils/widget_util.dart';
+import 'package:bog/core/widgets/bottom_nav.dart';
 import 'package:bog/core/widgets/click_text.dart';
-import 'package:bog/core/widgets/custom_expandable.dart';
 import 'package:bog/core/widgets/date_picker_widget.dart';
 import 'package:bog/core/widgets/file_picker_widget.dart';
 import 'package:bog/core/widgets/input_text_field.dart';
-import 'package:feather_icons/feather_icons.dart';
+import 'package:dio/dio.dart' as dio;
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:toggle_switch/toggle_switch.dart';
 
 class AddJob extends StatefulWidget {
 
@@ -205,14 +204,37 @@ class _AddJobState extends State<AddJob> with InputMixin {
                           bool proceed = validateInputModels(studs: studs);
                           if (proceed) {
 
+                            dio.MultipartFile? mtf;
+                            if(fileInfo!=null) {
+                              try {
+                                mtf = await dio.MultipartFile.fromFile(
+                                    fileInfo!.path!, filename: fileInfo!.name);
+                              }catch(e){}
+                            }
+
                             String name = inputModels[0].text;
                             String value = inputModels[1].text.replaceAll(",", "");
-                            String incorp = inputModels[2].text;
+                            String subsidiary = inputModels[2].text;
 
-                            Navigator.pop(context,JobModel(name: name,
-                                value: double.parse(value),
-                                date: date!, fileInfo: fileInfo!, years: yearOfExperience!,
-                                subsidiary: incorp));
+
+                            performApiCallWithDIO(context, "/kyc-work-experience/create", (response, error){
+
+                              Navigator.pop(context,JobModel(name: name,
+                                  value: double.parse(value),
+                                  date: date!, fileInfo: fileInfo!, years: yearOfExperience!,
+                                  subsidiary: subsidiary));
+
+                            },data: {
+                              "value": value,
+                              "name": name,
+                              "document":mtf ?? null,
+                              "years_of_experience": yearOfExperience,
+                              "company_involvement": subsidiary,
+                              "date": formatTime3(date!.millisecondsSinceEpoch),
+                              "userType": currentUser.userType
+                            },withFile:true);
+
+
 
                           }
 
@@ -222,79 +244,7 @@ class _AddJobState extends State<AddJob> with InputMixin {
                   ],
                 ),
               ),
-              bottomNavigationBar: BottomNavigationBar(
-                  backgroundColor: AppColors.backgroundVariant2,
-                  showSelectedLabels: true,
-                  showUnselectedLabels: true,
-                  type: BottomNavigationBarType.fixed,
-                  items: <BottomNavigationBarItem>[
-                    BottomNavigationBarItem(
-                      icon: Padding(
-                        padding: const EdgeInsets.only(bottom: 5),
-                        child: Image.asset(
-                          controller.homeIcon,
-                          width: 20,
-                          //color: controller.currentBottomNavPage.value == 0 ? AppColors.primary : AppColors.grey,
-                        ),
-                      ),
-                      label: controller.homeTitle,
-                      backgroundColor: AppColors.background,
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Padding(
-                        padding: const EdgeInsets.only(bottom: 5),
-                        child: Image.asset(
-                          controller.currentBottomNavPage.value == 1
-                              ? 'assets/images/chat_filled.png'
-                              : 'assets/images/chatIcon.png',
-                          width: 22,
-                          //color: controller.currentBottomNavPage.value == 1 ? AppColors.primary : AppColors.grey,
-                        ),
-                      ),
-                      label: 'Message',
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Padding(
-                        padding: const EdgeInsets.only(bottom: 5),
-                        child: Image.asset(
-                          controller.projectIcon,
-                          width: 20,
-                          //color: controller.currentBottomNavPage.value == 2 ? AppColors.primary : AppColors.grey,
-                        ),
-                      ),
-                      label: controller.projectTitle,
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Padding(
-                        padding: const EdgeInsets.only(bottom: 5),
-                        child: Image.asset(
-                          controller.cartIcon,
-                          width: 25,
-                          //color: controller.currentBottomNavPage.value == 3 ? AppColors.primary : AppColors.grey,
-                        ),
-                      ),
-                      label: controller.cartTitle,
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Padding(
-                        padding: const EdgeInsets.only(bottom: 5),
-                        child: Image.asset(
-                          controller.profileIcon,
-                          width: 25,
-                          //color: controller.currentBottomNavPage.value == 4 ? AppColors.primary : AppColors.grey,
-                        ),
-                      ),
-                      label: 'Profile',
-                    ),
-                  ],
-                  currentIndex: controller.currentBottomNavPage.value,
-                  selectedItemColor: AppColors.primary,
-                  unselectedItemColor: Colors.grey,
-                  onTap: (index) {
-                    controller.currentBottomNavPage.value = index;
-                    controller.updateNewUser(controller.currentType);
-                    Get.back();
-                  }),
+              bottomNavigationBar: bottomNav(),
             );
           }),
     );

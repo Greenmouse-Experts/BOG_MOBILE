@@ -1,27 +1,17 @@
-import 'dart:convert';
 
 import 'package:bog/app/assets/color_assets.dart';
 import 'package:bog/app/controllers/home_controller.dart';
 import 'package:bog/app/global_widgets/app_button.dart';
-import 'package:bog/app/modules/settings/kyc/job_experience.dart';
 import 'package:bog/core/theme/app_colors.dart';
 import 'package:bog/core/theme/app_styles.dart';
-import 'package:bog/core/utils/dialog_utils.dart';
-import 'package:bog/core/utils/extensions.dart';
 import 'package:bog/core/utils/input_mixin.dart';
 import 'package:bog/core/utils/widget_util.dart';
-import 'package:bog/core/widgets/click_text.dart';
-import 'package:bog/core/widgets/custom_expandable.dart';
-import 'package:bog/core/widgets/date_picker_widget.dart';
 import 'package:bog/core/widgets/file_picker_widget.dart';
-import 'package:bog/core/widgets/input_text_field.dart';
-import 'package:feather_icons/feather_icons.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:toggle_switch/toggle_switch.dart';
 
 class UploadDocuments extends StatefulWidget {
 

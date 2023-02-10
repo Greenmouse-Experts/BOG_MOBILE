@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:convert';
+import 'package:bog/app/data/providers/my_pref.dart';
 import 'package:bog/core/utils/http_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -23,13 +25,14 @@ class HomeSwitchController {
 
   List accountTypes = [];
 
-  void loadTypes(BuildContext context){
+  void loadTypes(BuildContext context,{bool silently=false}){
     performApiCall(context, "/user/get-accounts", (response, error){
       if(error!=null){
         return;
       }
       accountTypes = response["accounts"]??[];
-      if(accountTypes.isNotEmpty)clickSwitch(context);
-    },silently: false,getMethod: true);
+      if(accountTypes.isNotEmpty && !silently)clickSwitch(context);
+    },silently: silently,getMethod: true,handleError: !silently);
   }
+
  }

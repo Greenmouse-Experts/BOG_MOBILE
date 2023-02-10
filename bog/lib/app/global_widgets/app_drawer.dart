@@ -4,6 +4,7 @@ import 'package:bog/app/blocs/homeswitch_controller.dart';
 import 'package:bog/app/modules/meetings/meeting.dart';
 import 'package:bog/app/modules/onboarding/onboarding.dart';
 import 'package:bog/app/modules/settings/support.dart';
+import 'package:bog/core/utils/dialog_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
@@ -99,49 +100,51 @@ class _AppDrawerState extends State<AppDrawer> {
                                             crossAxisAlignment: CrossAxisAlignment.center,
                                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                             children: [
-                                              Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    "${logInDetails.fname} ${logInDetails.lname}",
-                                                    style: AppTextStyle.subtitle1.copyWith(
-                                                      color: Colors.black,
-                                                      fontSize: Get.width * 0.045,
+                                              Flexible(
+                                                child: Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      "${logInDetails.fname} ${logInDetails.lname}",
+                                                      style: AppTextStyle.subtitle1.copyWith(
+                                                        color: Colors.black,
+                                                        fontSize: Get.width * 0.045,
+                                                      ),
                                                     ),
-                                                  ),
-                                                  // Text(
-                                                  //   controller.currentType,
-                                                  //   style: AppTextStyle.subtitle1.copyWith(
-                                                  //     color: Colors.black.withOpacity(0.5),
-                                                  //     fontSize: Get.width * 0.035,
-                                                  //   ),
-                                                  // ),
-                                                  addSpace(5),
-                                                  Container(
-                                                    height: 20,
-                                                    child: TextButton(onPressed: (){
-
-                                                      HomeSwitchController.instance.clickSwitch(context);
-
-
-                                                    },
-                                                        style: TextButton.styleFrom(
-                                                            backgroundColor: AppColors.primary,
-                                                            shape: RoundedRectangleBorder(
-                                                                borderRadius: BorderRadius.circular(5)
-                                                            ),
-                                                            padding: const EdgeInsets.fromLTRB(10, 0, 10, 0)
-                                                        ),
-                                                        child: Row(
-                                                          mainAxisSize: MainAxisSize.min,
-                                                          children: [
-                                                            Text(controller.currentType,style: textStyle(false, 12, white),),
-                                                            addSpaceWidth(5),
-                                                            const Icon(Icons.expand_circle_down,color: white,size: 12,)
-                                                          ],
-                                                        )),
-                                                  )
-                                                ],
+                                                    Text(
+                                                      controller.currentType,
+                                                      style: AppTextStyle.subtitle1.copyWith(
+                                                        color: Colors.black.withOpacity(0.5),
+                                                        fontSize: Get.width * 0.035,
+                                                      ),
+                                                    ),
+                                                    // addSpace(5),
+                                                    // Container(
+                                                    //   height: 20,
+                                                    //   child: TextButton(onPressed: (){
+                                                    //
+                                                    //     HomeSwitchController.instance.clickSwitch(context);
+                                                    //
+                                                    //
+                                                    //   },
+                                                    //       style: TextButton.styleFrom(
+                                                    //           backgroundColor: AppColors.primary,
+                                                    //           shape: RoundedRectangleBorder(
+                                                    //               borderRadius: BorderRadius.circular(5)
+                                                    //           ),
+                                                    //           padding: const EdgeInsets.fromLTRB(10, 0, 10, 0)
+                                                    //       ),
+                                                    //       child: Row(
+                                                    //         mainAxisSize: MainAxisSize.min,
+                                                    //         children: [
+                                                    //           Text(controller.currentType,style: textStyle(false, 12, white),),
+                                                    //           addSpaceWidth(5),
+                                                    //           const Icon(Icons.expand_circle_down,color: white,size: 12,)
+                                                    //         ],
+                                                    //       )),
+                                                    // )
+                                                  ],
+                                                ),
                                               ),
                                             ],
                                           ),
@@ -210,15 +213,16 @@ class _AppDrawerState extends State<AppDrawer> {
                               Expanded(child: Column(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
-                                  // _TextButton(
-                                  //     text: "Switch Account",
-                                  //     onPressed: () {
-                                  //       Get.back();
-                                  //       Get.to(() => const SwitchUser());
-                                  //       //Get.toNamed(OnboardingPage.route);
-                                  //     },
-                                  //     imageAsset: "assets/images/six1.png",
-                                  //     showArrow: true),
+                                  _TextButton(
+                                      text: "Switch Account",
+                                      onPressed: () {
+                                        HomeSwitchController.instance.clickSwitch(context);
+                                        // Get.back();
+                                        // Get.to(() => const SwitchUser());
+                                        //Get.toNamed(OnboardingPage.route);
+                                      },
+                                      imageAsset: "assets/images/six1.png",
+                                      showArrow: true),
 
                                   _TextButton(
                                       text: "Support",
@@ -233,8 +237,10 @@ class _AppDrawerState extends State<AppDrawer> {
                                   _TextButton(
                                       text: "Log Out",
                                       onPressed: () {
-                                        Get.back();
-                                        Get.toNamed(OnboardingPage.route);
+                                        yesNoDialog(context, "Log Out", "are you sure you want to log out?", (){
+                                          MyPref.clearBoxes();
+                                          Get.offAllNamed(OnboardingPage.route);
+                                        });
                                       },
                                       imageAsset: "assets/images/log_out.png",
                                       showArrow: false),
@@ -267,8 +273,14 @@ class _TextButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onPressed,
-      child: Padding(
-        padding: EdgeInsets.only(left: Get.width*0.03,right: Get.width*0.0,top: Get.height*0.02),
+      child: Container(
+      decoration: BoxDecoration(
+        // color: whiteColor4,borderRadius: BorderRadius.circular(25)
+      ),
+        margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
+        padding: EdgeInsets.only(left: 5,right: Get.width*0.0,
+            // top: Get.height*0.02
+        ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -277,48 +289,51 @@ class _TextButton extends StatelessWidget {
               width: Get.width * 0.1,
               height: Get.width * 0.1,
               decoration: BoxDecoration(
-                color: const Color(0xffE8F4FE),
+                color: blue3,
                 borderRadius: BorderRadius.circular(100),
               ),
               child: Center(
                 child: Image.asset(
                   imageAsset,
-                  width: Get.width * 0.05,
-                  height: Get.width * 0.05,
+                  width: 18,
+                  height: 18,color: white,
                 ),
               ),
             ),
-            SizedBox(
-              width: Get.width*0.43,
-              child: Padding(
-                padding: EdgeInsets.only(left: Get.width*0.01),
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      SizedBox(
-                        height: Get.height*0.01,
-                      ),
-                      Text(
-                        text,
-                        maxLines: 1,
-                        overflow: TextOverflow.clip,
-                        style: AppTextStyle.subtitle1.copyWith(color: showArrow ? Colors.black : Colors.red,fontSize: Get.width*0.038,fontWeight: FontWeight.w600),
-                      ),
-                      SizedBox(
-                        height: Get.height*0.01,
-                      ),
-                      if(subtitle!=null)
-                        Text(
-                          subtitle!,
-                          maxLines: 1,
-                          overflow: TextOverflow.clip,
-                          style: AppTextStyle.subtitle1.copyWith(color: Colors.black),
-                        ),
-                      if(subtitle!=null)
+            addSpaceWidth(5),
+            Flexible(
+              child: SizedBox(
+                width: Get.width*0.43,
+                child: Padding(
+                  padding: EdgeInsets.only(left: Get.width*0.01),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
                         SizedBox(
                           height: Get.height*0.01,
                         ),
-                    ]
+                        Text(
+                          text,
+                          maxLines: 1,
+                          overflow: TextOverflow.clip,
+                          style: AppTextStyle.subtitle1.copyWith(color: showArrow ? Colors.black : Colors.red,fontSize: Get.width*0.038,fontWeight: FontWeight.w600),
+                        ),
+                        SizedBox(
+                          height: Get.height*0.01,
+                        ),
+                        if(subtitle!=null)
+                          Text(
+                            subtitle!,
+                            maxLines: 1,
+                            overflow: TextOverflow.clip,
+                            style: AppTextStyle.subtitle1.copyWith(color: Colors.black),
+                          ),
+                        if(subtitle!=null)
+                          SizedBox(
+                            height: Get.height*0.01,
+                          ),
+                      ]
+                  ),
                 ),
               ),
             ),

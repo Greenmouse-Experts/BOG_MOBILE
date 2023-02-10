@@ -231,7 +231,7 @@ Widget loadingLayout(
     color = Colors.blue,
     backColor = Colors.black,
     titleColor = Colors.black,
-    double bottom = 0,
+    double bottom = 0,String pageTitle="",
     String message = ""}) {
   Widget child = Center(child: loadingBar(color: color, text: message));
   return Container(
@@ -247,25 +247,47 @@ Widget loadingLayout(
                     Align(
                         alignment: Alignment.topLeft,
                         child: Container(
-                          width: 40,
                           height: 40,
-                          margin: const EdgeInsets.only(left: 20, top: 20),
-                          child: TextButton(
-                            onPressed: () {
-                              onClosed();
-                            },
-                            style: TextButton.styleFrom(
-                              padding: const EdgeInsets.all(0),
-                              shape: const CircleBorder(
-                                  side: const BorderSide(
-                                      color: Colors.blue, width: 2)),
-                              // backgroundColor: Colors.black.withOpacity(top?(.1):0)
-                            ),
-                            child: const Icon(
-                              Icons.arrow_back,
-                              color: Colors.blue,
-                              size: 20,
-                            ),
+                          margin: const EdgeInsets.only(top: 20),
+                          child: Row(
+                            children: [
+                              Container(
+                                width: 40,
+                                height: 40,
+                                margin: const EdgeInsets.only(left: 20, ),
+                                child: TextButton(
+                                  onPressed: () {
+                                    onClosed();
+                                  },
+                                  style: TextButton.styleFrom(
+                                    padding: const EdgeInsets.all(0),
+                                    shape: const CircleBorder(
+                                      // side: const BorderSide(
+                                      //     color: Colors.blue, width: 2)
+                                    ),
+                                    // backgroundColor: Colors.black.withOpacity(top?(.1):0)
+                                  ),
+                                  child:  Icon(
+                                    Icons.arrow_back_ios,
+                                    color: titleColor,
+                                    size: 20,
+                                  ),
+                                ),
+                              ),
+                              Flexible(
+                                  child: Align(
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      pageTitle,
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                          color: titleColor ??
+                                              blackColor),
+                                    ),
+                                  )),
+                              addSpaceWidth(75)
+                            ],
                           ),
                         ))
                 ],
@@ -473,14 +495,14 @@ Widget rowItem(String title,var item,
     // ),
     child: Row(
       children: [
-        Flexible(fit: FlexFit.tight,
+        Flexible(fit: FlexFit.tight,flex: 1,
           child: Container(
             width: 100,
             child: Text(title,style: textStyle(false, textSize, blackColor.withOpacity(.4))),
           ),
         ),
         addSpaceWidth(5),
-        Flexible(
+        Flexible(flex: 3,
           child: Container(
             padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
             decoration: BoxDecoration(
@@ -508,7 +530,8 @@ Widget rowItem(String title,var item,
         if(copy)GestureDetector(
           onTap: (){
             Clipboard.setData(ClipboardData(text: text));
-            showMessage(context, Icons.copy, blue0, "Copied", "");
+            // showMessage(context, Icons.copy, blue0, "Copied", "");
+            showPopup("Copied",error: false);
           },
           child: Container(
               margin: EdgeInsets.only(left: 5),

@@ -71,7 +71,7 @@ import 'package:flutter/material.dart';
                      padding: const EdgeInsets.all(15),
                      child:
                      imageItem(widget.icon, 40, blackColor)),
-                 addSpace(10),
+                 addSpace(20),
                  if(title.isNotEmpty)Container(
                    child: Text(
                      title,
@@ -84,7 +84,7 @@ import 'package:flutter/material.dart';
 //                    borderRadius: BorderRadius.circular(25)
 //                  ),
                  ),
-                 if(text.isNotEmpty && title.isNotEmpty)addSpace(5),
+                 if(text.isNotEmpty && title.isNotEmpty)addSpace(15),
                  if(text.isNotEmpty)Flexible(
                    child: Text(
                      text,

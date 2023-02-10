@@ -1,25 +1,25 @@
-import 'dart:convert';
 
 import 'package:bog/app/assets/color_assets.dart';
+import 'package:bog/app/base/base.dart';
+import 'package:bog/app/blocs/homeswitch_controller.dart';
 import 'package:bog/app/controllers/home_controller.dart';
+import 'package:bog/app/data/model/log_in_model.dart';
 import 'package:bog/app/global_widgets/app_button.dart';
 import 'package:bog/core/theme/app_colors.dart';
 import 'package:bog/core/theme/app_styles.dart';
 import 'package:bog/core/utils/dialog_utils.dart';
-import 'package:bog/core/utils/extensions.dart';
 import 'package:bog/core/utils/http_utils.dart';
 import 'package:bog/core/utils/input_mixin.dart';
 import 'package:bog/core/utils/widget_util.dart';
+import 'package:bog/core/widgets/bottom_nav.dart';
 import 'package:bog/core/widgets/input_text_field.dart';
-import 'package:feather_icons/feather_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:toggle_switch/toggle_switch.dart';
 
 
-class GeneralInfo extends StatefulWidget {
+class GeneralInfo extends BaseWidget {
   const GeneralInfo({Key? key}) : super(key: key);
 
   static const route = '/GeneralInfo';
@@ -28,7 +28,7 @@ class GeneralInfo extends StatefulWidget {
   State<GeneralInfo> createState() => _GeneralInfoState();
 }
 
-class _GeneralInfoState extends State<GeneralInfo> with InputMixin {
+class _GeneralInfoState extends BaseWidgetState<GeneralInfo> with InputMixin {
 
   // TextEditingController nameController = TextEditingController();
   // TextEditingController emailController = TextEditingController();
@@ -50,23 +50,57 @@ class _GeneralInfoState extends State<GeneralInfo> with InputMixin {
 
   @override
   void initState() {
+    setup=false;
     super.initState();
-    inputModels.add(InputTextFieldModel(
-        "Name of Organization", hint: "Enter name of organization"));
-    inputModels.add(
-        InputTextFieldModel("Email Address", hint: "Enter your email address"));
-    inputModels.add(InputTextFieldModel(
-        "Office Telephone/ Contact Number", hint: "Enter contact number"));
-    inputModels.add(InputTextFieldModel("Incorporation/Registration Number",
-        hint: "Enter incorporation/registration number"));
-    inputModels.add(InputTextFieldModel(
-        "Business Address", hint: "Enter your business address"));
-    inputModels.add(InputTextFieldModel("Address of any other operational base",
-        hint: "Enter address of other base"));
   }
 
+  Map setupData = {};
   @override
-  Widget build(BuildContext context) {
+  loadItems() {
+     performApiCall(context, "/kyc-general-info/fetch?userType=${currentUser.userType}", (response, error){
+      if(error!=null){
+        setupError=error;
+        if(mounted)setState(() {});
+        return;
+      }
+
+      setupData = response["data"]??{};
+      setupModels();
+      setup=true;
+      if(mounted)setState(() {});
+
+    },getMethod: true,handleError: false,silently: true);
+  }
+  
+  void setupModels(){
+    inputModels.add(InputTextFieldModel(
+        "Name of Organization", hint: "Enter name of organization",
+        prefill: setupData["organisation_name"]??""));
+    inputModels.add(
+        InputTextFieldModel("Email Address", hint: "Enter your email address",
+        prefill: setupData["email_address"]??""));
+    inputModels.add(InputTextFieldModel(
+        "Office Telephone/ Contact Number", hint: "Enter contact number",
+    prefill: setupData["contact_number"]??""));
+    inputModels.add(InputTextFieldModel("Incorporation/Registration Number",
+        hint: "Enter incorporation/registration number",prefill: setupData["registration_number"]??""));
+    inputModels.add(InputTextFieldModel(
+        "Business Address", hint: "Enter your business address",prefill: setupData["business_address"]??""));
+    inputModels.add(InputTextFieldModel("Address of any other operational base",
+        hint: "Enter address of other base",prefill: setupData["operational_address"]??""));
+
+    businessType = setupData["reg_type"]??"";
+    setState(() {
+
+    });
+  }
+
+  // showAppBar()=>!setup;
+
+  getPageTitle()=>"General Information";
+
+  @override
+  Widget page(BuildContext context) {
     var width = Get.width;
     final Size size = MediaQuery
         .of(context)
@@ -95,7 +129,7 @@ class _GeneralInfoState extends State<GeneralInfo> with InputMixin {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Padding(
+                           if(false)Padding(
                               padding: EdgeInsets.only(right: width * 0.05,
                                   left: width * 0.045,
                                   top: kToolbarHeight),
@@ -168,7 +202,7 @@ class _GeneralInfoState extends State<GeneralInfo> with InputMixin {
                                       children: List.generate(
                                           businessTypes.length, (index) {
                                         String name = businessTypes[index];
-                                        bool selected = businessType == name;
+                                        bool selected = businessType.trim().toLowerCase() == name.trim().toLowerCase();
                                         return GestureDetector(
                                           onTap: (){
                                             setState(() {
@@ -216,6 +250,9 @@ class _GeneralInfoState extends State<GeneralInfo> with InputMixin {
                       child: AppButton(
                         title: "Save",
                         onPressed: () async {
+                          // print(businessType);
+                          // print(businessTypes[1].toString().trim().toLowerCase()==businessType.trim().toLowerCase());
+                          // return;
                           Map studs = {};
                           studs[3] = (){
                             if(businessType.isEmpty){
@@ -226,18 +263,33 @@ class _GeneralInfoState extends State<GeneralInfo> with InputMixin {
                           bool proceed = validateInputModels(studs: studs);
                           if(!proceed)return;
 
-                          performApiCall(context, "/kyc-general-info/create", (response, error){
+                          // HomeSwitchController.instance.refreshUser(context);
+                          // return;
+                          String currentType = currentUser.userType??"";
 
+                          String org_name = inputModels[0].text;
+                          String email_address = inputModels[1].text;
+                          String phone = inputModels[2].text;
+                          String reg_number = inputModels[3].text;
+                          String business_address = inputModels[4].text;
+                          String other_address = inputModels[5].text;
+
+                          performApiCall(context, "/kyc-general-info/create", (response, error){
+                            
+                            showSuccessDialog(context, "General Info Updated",onOkClicked: (){
+                              Navigator.pop(context);
+                            });
+                            
                           },data: {
-                            "organisation_name": "Ace",
-                            "email_address": "yhomiace18@gmail.com",
-                            "contact_number": 2147483647,
-                            "reg_type": "Incorporation",
-                            "registration_number": 0,
-                            "business_address": "No, 2 Lekki",
-                            "operational_address": "2 lekki way",
-                            "id": "f303e149-623a-428b-879d-583a99d38b47",
-                            "userType": "professional"
+                            "organisation_name": org_name,
+                            "email_address": email_address,
+                            "contact_number": phone,
+                            "reg_type": businessType,
+                            "registration_number": reg_number,
+                            "business_address": business_address,
+                            "operational_address": other_address,
+                            "id": setupData["id"]??"",
+                            "userType": currentType
                           });
                         },
                       ),
@@ -245,80 +297,7 @@ class _GeneralInfoState extends State<GeneralInfo> with InputMixin {
                   ],
                 ),
               ),
-              bottomNavigationBar: BottomNavigationBar(
-                  backgroundColor: AppColors.backgroundVariant2,
-                  showSelectedLabels: true,
-                  showUnselectedLabels: true,
-                  type: BottomNavigationBarType.fixed,
-                  items: <BottomNavigationBarItem>[
-                    BottomNavigationBarItem(
-                      icon: Padding(
-                        padding: const EdgeInsets.only(bottom: 5),
-                        child: Image.asset(
-                          controller.homeIcon,
-                          width: 20,
-                          //color: controller.currentBottomNavPage.value == 0 ? AppColors.primary : AppColors.grey,
-                        ),
-                      ),
-                      label: controller.homeTitle,
-                      backgroundColor: AppColors.background,
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Padding(
-                        padding: const EdgeInsets.only(bottom: 5),
-                        child: Image.asset(
-                          controller.currentBottomNavPage.value == 1
-                              ? 'assets/images/chat_filled.png'
-                              : 'assets/images/chatIcon.png',
-                          width: 22,
-                          //color: controller.currentBottomNavPage.value == 1 ? AppColors.primary : AppColors.grey,
-                        ),
-                      ),
-                      label: 'Message',
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Padding(
-                        padding: const EdgeInsets.only(bottom: 5),
-                        child: Image.asset(
-                          controller.projectIcon,
-                          width: 20,
-                          //color: controller.currentBottomNavPage.value == 2 ? AppColors.primary : AppColors.grey,
-                        ),
-                      ),
-                      label: controller.projectTitle,
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Padding(
-                        padding: const EdgeInsets.only(bottom: 5),
-                        child: Image.asset(
-                          controller.cartIcon,
-                          width: 25,
-                          //color: controller.currentBottomNavPage.value == 3 ? AppColors.primary : AppColors.grey,
-                        ),
-                      ),
-                      label: controller.cartTitle,
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Padding(
-                        padding: const EdgeInsets.only(bottom: 5),
-                        child: Image.asset(
-                          controller.profileIcon,
-                          width: 25,
-                          //color: controller.currentBottomNavPage.value == 4 ? AppColors.primary : AppColors.grey,
-                        ),
-                      ),
-                      label: 'Profile',
-                    ),
-                  ],
-                  currentIndex: controller.currentBottomNavPage.value,
-                  selectedItemColor: AppColors.primary,
-                  unselectedItemColor: Colors.grey,
-                  onTap: (index) {
-                    controller.currentBottomNavPage.value = index;
-                    controller.updateNewUser(controller.currentType);
-                    Get.back();
-                  }
-              ),
+              bottomNavigationBar: bottomNav(),
 
             );
           }),

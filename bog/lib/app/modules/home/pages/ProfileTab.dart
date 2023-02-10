@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:bog/app/base/base.dart';
 import 'package:bog/app/blocs/homeswitch_controller.dart';
 import 'package:bog/app/modules/onboarding/onboarding.dart';
+import 'package:bog/core/utils/dialog_utils.dart';
 import 'package:bog/core/utils/http_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
@@ -69,20 +70,31 @@ class ProfileTab extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SizedBox(
-                      width: Get.width * 0.28,
-                      height: Get.width * 0.28,
-                      child: IconButton(
-                        icon: AppAvatar(
-                          imgUrl: (logInDetails.photo).toString(),
-                          radius: Get.width * 0.16,
-                          name: "${logInDetails.fname} ${logInDetails.lname}",
-                        ),
-                        onPressed: () {
-
-                        },
+                    Container(
+                      width: 100,height: 100,decoration: BoxDecoration(
+                      border: Border.all(color: blackColor.withOpacity(.1),width: 1),
+                      shape: BoxShape.circle
+                    ),
+                      child: AppAvatar(
+                        imgUrl: (logInDetails.photo).toString(),
+                        radius: Get.width * 0.16,
+                        name: "${logInDetails.fname} ${logInDetails.lname}",
                       ),
                     ),
+                    // SizedBox(
+                    //   width: Get.width * 0.28,
+                    //   height: Get.width * 0.28,
+                    //   child: IconButton(style: IconButton.styleFrom(
+                    //     shape: CircleBorder(
+                    //       side: BorderSide(color: blackColor,width: 5)
+                    //     )
+                    //   ),
+                    //     icon: ,
+                    //     onPressed: () {
+                    //
+                    //     },
+                    //   ),
+                    // ),
                     Text(
                       "${logInDetails.fname} ${logInDetails.lname}",
                       style: AppTextStyle.subtitle1.copyWith(
@@ -177,7 +189,10 @@ class ProfileTab extends StatelessWidget {
               height: kToolbarHeight/3,
             ),
             _TextButton(text: "Log Out", onPressed: () {
-              Get.toNamed(OnboardingPage.route);
+             yesNoDialog(context, "Log Out", "are you sure you want to log out?", (){
+               MyPref.clearBoxes();
+               Get.offAllNamed(OnboardingPage.route);
+             });
             },imageAsset: "assets/images/log_out.png",showArrow: false,),
           ],
         ),

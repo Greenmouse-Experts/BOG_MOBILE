@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:bog/app/assets/color_assets.dart';
+import 'package:bog/app/base/base.dart';
 import 'package:bog/app/controllers/home_controller.dart';
 import 'package:bog/app/global_widgets/app_button.dart';
 import 'package:bog/app/modules/settings/kyc/add_job.dart';
@@ -8,6 +9,7 @@ import 'package:bog/core/theme/app_colors.dart';
 import 'package:bog/core/theme/app_styles.dart';
 import 'package:bog/core/utils/dialog_utils.dart';
 import 'package:bog/core/utils/extensions.dart';
+import 'package:bog/core/utils/http_utils.dart';
 import 'package:bog/core/utils/input_mixin.dart';
 import 'package:bog/core/utils/time_utils.dart';
 import 'package:bog/core/utils/widget_util.dart';
@@ -40,7 +42,7 @@ class JobModel{
 
 }
 
-class JobExperience extends StatefulWidget {
+class JobExperience extends BaseWidget {
   const JobExperience({Key? key}) : super(key: key);
 
   static const route = '/JobExperience';
@@ -49,18 +51,43 @@ class JobExperience extends StatefulWidget {
   State<JobExperience> createState() => _JobExperienceState();
 }
 
-class _JobExperienceState extends State<JobExperience> with InputMixin {
+class _JobExperienceState extends BaseWidgetState<JobExperience> with InputMixin {
 
   List<JobModel> experiences = [];
 
   @override
   void initState() {
+    setup= false;
     super.initState();
 
   }
 
+  loadItems(){
+    performApiCall(context, "/kyc-work-experience/fetch?userType=${currentUser.userType}", (response, error){
+      if(error!=null){
+        setupError=error;
+        if(mounted)setState(() {});
+        return;
+      }
+
+      List items = response["data"]??[];
+      for(Map map in items){
+        experiences.add(JobModel(name: map["name"],
+            value: double.parse(map["value"]??"0"),
+            date: DateTime.parse(map["date"]),fileInfo: map["fileUrl"]==null?null:PlatformFile(name: map["fileUrl"], size: 0),
+            years: int.parse(map["years_of_experience"]??"0"),
+            subsidiary: map["company_involvement"]));
+      }
+      setup=true;
+      if(mounted)setState(() {});
+
+    },getMethod: true,handleError: false,silently: true);
+  }
+
+  getPageTitle()=>"Job Experience";
+
   @override
-  Widget build(BuildContext context) {
+  Widget page(BuildContext context) {
     var width = Get.width;
     final Size size = MediaQuery
         .of(context)
@@ -89,7 +116,7 @@ class _JobExperienceState extends State<JobExperience> with InputMixin {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Padding(
+                            if(false)Padding(
                               padding: EdgeInsets.only(right: width * 0.05,
                                   left: width * 0.045,
                                   top: kToolbarHeight),
@@ -162,9 +189,12 @@ class _JobExperienceState extends State<JobExperience> with InputMixin {
                                   children: [
                                     Container(
                                         width: double.infinity,
-                                        margin: const EdgeInsets.only(bottom: 20),
+                                        margin: const EdgeInsets.only(bottom: 20,left: 15,right: 15),
                                         padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-                                        color: blue.withOpacity(.2),
+                                        decoration: BoxDecoration(
+                                          color: blue.withOpacity(.2),
+                                          borderRadius: BorderRadius.circular(10)
+                                        ),
                                         child: Row(
                                           children: [
                                             Flexible(fit: FlexFit.tight,child: Text("Job Experience (${index+1})",style: textStyle(true, 14, blackColor),)),
@@ -260,15 +290,15 @@ class _JobExperienceState extends State<JobExperience> with InputMixin {
                       ),
                     ),
 
-                    Container(
-                      margin: const EdgeInsets.fromLTRB(20, 5, 20, 20),
-                      child: AppButton(
-                        title: "Save",
-                        onPressed: () async {
-
-                        },
-                      ),
-                    )
+                    // Container(
+                    //   margin: const EdgeInsets.fromLTRB(20, 5, 20, 20),
+                    //   child: AppButton(
+                    //     title: "Save",dontLoad: true,
+                    //     onPressed: () async {
+                    //
+                    //     },
+                    //   ),
+                    // )
                   ],
                 ),
               ),

@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:async';
 import 'package:dio/dio.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:dio_logger/dio_logger.dart';
 
@@ -8,6 +9,7 @@ import 'api_response.dart';
 import 'my_pref.dart';
 
 class Api {
+  static Api instance  = Get.find();
   static const String baseUrl = 'https://bog.greenmouseproperties.com/api';
 
   static const String imgUrl = 'http://imgURl';
@@ -20,6 +22,7 @@ class Api {
     },
     receiveTimeout: 10000,
   ))..interceptors.add(dioLoggerInterceptor);
+  Dio get client => _client;
 
 
   Future<ApiResponse> postData(

@@ -3,6 +3,8 @@ import 'dart:math';
 
 import 'package:bog/app/base/base.dart';
 import 'package:bog/app/blocs/homeswitch_controller.dart';
+import 'package:bog/app/modules/settings/support.dart';
+import 'package:bog/core/utils/app_utils.dart';
 import 'package:d_chart/d_chart.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -120,13 +122,47 @@ class _HomeTabState extends State<HomeTab> {
                               const SizedBox(
                                 height: 5.0,
                               ),
-                              Text(
-                                "${logInDetails.fname} ${logInDetails.lname}",
-                                style: AppTextStyle.subtitle1.copyWith(
-                                  color: Colors.black,
-                                  fontSize: Get.width * 0.05,
-                                ),
+                              Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Flexible(
+                                    child: Text(
+                                      "${logInDetails.fname} ${logInDetails.lname}",
+                                      style: AppTextStyle.subtitle1.copyWith(
+                                        color: Colors.black,
+                                        fontSize: Get.width * 0.05,
+                                      ),
+                                    ),
+                                  ),
+                                  addSpaceWidth(8),
+                                  Container(
+                                    height: 20,
+                                    width: 20,
+                                    child: TextButton(onPressed: (){
+
+                                      HomeSwitchController.instance.clickSwitch(context);
+
+
+                                    },
+                                        style: TextButton.styleFrom(
+                                            backgroundColor: AppColors.primary,
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(5)
+                                            ),
+                                            padding: const EdgeInsets.fromLTRB(0, 0, 0, 0)
+                                        ),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            // Text(controller.currentType,style: textStyle(false, 12, white),),
+                                            // addSpaceWidth(5),
+                                            const Icon(Icons.expand_circle_down,color: white,size: 12,)
+                                          ],
+                                        )),
+                                  )
+                                ],
                               ),
+
                             ],
                           ),
                           //Alarm Icon
@@ -1037,17 +1073,27 @@ class _HomeTabState extends State<HomeTab> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Image.asset(
-                          "assets/images/Group 47034.png",
-                          height: Get.height * 0.2,
-                          width: Get.width*0.4,
-                          fit: BoxFit.fitWidth,
+                        GestureDetector(
+                          onTap: (){
+                            openLink("https://bog-project.netlify.app/faqs");
+                          },
+                          child: Image.asset(
+                            "assets/images/Group 47034.png",
+                            height: Get.height * 0.2,
+                            width: Get.width*0.4,
+                            fit: BoxFit.fitWidth,
+                          ),
                         ),
-                        Image.asset(
-                          "assets/images/Group 47035.png",
-                          height: Get.height * 0.2,
-                          width: Get.width*0.4,
-                          fit: BoxFit.fitWidth,
+                        GestureDetector(
+                          onTap: (){
+                            Get.to(() => const Support());
+                          },
+                          child: Image.asset(
+                            "assets/images/Group 47035.png",
+                            height: Get.height * 0.2,
+                            width: Get.width*0.4,
+                            fit: BoxFit.fitWidth,
+                          ),
                         ),
                       ],
                     ),

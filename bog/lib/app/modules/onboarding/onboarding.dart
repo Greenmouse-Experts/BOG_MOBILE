@@ -29,7 +29,7 @@ class OnboardingPage extends StatefulWidget {
 
 class _OnboardingPageState extends State<OnboardingPage> {
   int currentIndex = 0;
-  PageController pageController = PageController(initialPage: 999);
+  PageController pageController = PageController();
   @override
   void initState() {
     // TODO: implement initState

@@ -1,4 +1,5 @@
 import 'package:bog/app/modules/settings/update_kyc.dart';
+import 'package:bog/main_home.dart';
 import 'package:get/get.dart';
 
 import '../app/bindings/auth_binding.dart';
@@ -23,9 +24,14 @@ import '../app/modules/verify_otp/verify_otp.dart';
 class AppPages {
   AppPages._();
   //static String initial = MyPref.authToken.val.isNotEmpty ? HomePage.route : OnbordingPage.route;
-  static String initial =  OnboardingPage.route;
+  static String initial =  MainHome.route;
 
   static final routes = [
+    GetPage(
+      name: MainHome.route,
+      page: () => const MainHome(),
+  binding: AuthBinding(),
+    ),
     GetPage(
       name: OnboardingPage.route,
       page: () => const OnboardingPage()

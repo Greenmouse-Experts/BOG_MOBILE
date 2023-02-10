@@ -1,12 +1,15 @@
 import 'dart:convert';
 
 import 'package:bog/app/assets/color_assets.dart';
+import 'package:bog/app/assets/setup_assets.dart';
+import 'package:bog/app/base/base.dart';
 import 'package:bog/app/controllers/home_controller.dart';
 import 'package:bog/app/global_widgets/app_button.dart';
 import 'package:bog/core/theme/app_colors.dart';
 import 'package:bog/core/theme/app_styles.dart';
 import 'package:bog/core/utils/dialog_utils.dart';
 import 'package:bog/core/utils/extensions.dart';
+import 'package:bog/core/utils/http_utils.dart';
 import 'package:bog/core/utils/input_mixin.dart';
 import 'package:bog/core/utils/widget_util.dart';
 import 'package:bog/core/widgets/click_text.dart';
@@ -20,7 +23,7 @@ import 'package:get/get.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
 
-class TaxInfo extends StatefulWidget {
+class TaxInfo extends BaseWidget {
   const TaxInfo({Key? key}) : super(key: key);
 
   static const route = '/TaxInfo';
@@ -29,28 +32,55 @@ class TaxInfo extends StatefulWidget {
   State<TaxInfo> createState() => _TaxInfoState();
 }
 
-class _TaxInfoState extends State<TaxInfo> with InputMixin {
+class _TaxInfoState extends BaseWidgetState<TaxInfo> with InputMixin {
+
+
+  Map setupData = {};
 
   @override
   void initState() {
+    setup=false;
     super.initState();
+  }
+
+
+  loadItems(){
+    // kyc-tax-permits/fetch?userType=vendor
+    performApiCall(context, "/kyc-tax-permits/fetch?userType=${currentUser.userType}", (response, error){
+      if(error!=null){
+        setupError=error;
+        if(mounted)setState(() {});
+        return;
+      }
+
+      setupData = response["data"]??{};
+      setupModels();
+      setup=true;
+      if(mounted)setState(() {});
+
+    },getMethod: true,handleError: false,silently: true);
+  }
+
+  setupModels(){
+    // "VAT":"ksskksdccd","TIN":"dcdc","relevant_statutory":"dcscs",
     inputModels.add(InputTextFieldModel(
         "VAT Registration Number",
-        hint: "Enter your VAT registration number",optional: true));
+        hint: "Enter your VAT registration number",optional: true,
+    prefill: setupData["VAT"]));
 
     inputModels.add(InputTextFieldModel(
         "Tax Identification Number (TIN)",
-        hint: "Enter your tax number"));
+        hint: "Enter your tax number",prefill: setupData["TIN"]));
 
     inputModels.add(InputTextFieldModel(
-        "List of relevant statutory bodies registered with",
-        hint: "Enter your list",optional: true,));
-
-
+      "List of relevant statutory bodies registered with",
+      hint: "Enter your list",optional: true,prefill: setupData["relevant_statutory"]));
   }
 
+  showAppBar()=>!setup;
+
   @override
-  Widget build(BuildContext context) {
+  Widget page(BuildContext context) {
     var width = Get.width;
     final Size size = MediaQuery
         .of(context)
@@ -158,12 +188,24 @@ class _TaxInfoState extends State<TaxInfo> with InputMixin {
                           Map studs = {};
 
                           bool proceed = validateInputModels(studs: studs);
-                          if(proceed){
-                            // showSuccessDialog(context, "Ready");
-                          }
-                          // if(formKey.currentState!.validate()){
-                          //
-                          // }
+                          if(!proceed)return;
+
+                          String vat_number = inputModels[0].text;
+                          String tin_number = inputModels[1].text;
+                          String bodies = inputModels[2].text;
+
+                          performApiCall(context, "/kyc-tax-permits/create", (response, error){
+
+                            showSuccessDialog(context, "Tax Details Updated",onOkClicked: (){
+                              Navigator.pop(context);
+                            });
+
+                          },data: {
+                            "VAT": vat_number,
+                            "TIN": tin_number,
+                            "relevant_statutory": bodies,
+                            "userType": currentUser.userType
+                          });
                         },
                       ),
                     )

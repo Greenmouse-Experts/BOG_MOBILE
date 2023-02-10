@@ -19,6 +19,7 @@ class AppButton extends StatefulWidget {
     this.trailingColor = AppColors.orange,
     this.bold = true,
     this.enabled = true,
+    this.dontLoad=false,
   }) : super(key: key);
   final String title;
   final String trailingTitle;
@@ -33,6 +34,7 @@ class AppButton extends StatefulWidget {
   final bool bold;
   final bool enabled;
   final Border? border;
+  final bool dontLoad;
 
   @override
   State<AppButton> createState() => _AppButtonState();
@@ -44,6 +46,10 @@ class _AppButtonState extends State<AppButton> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () async {
+        if(widget.dontLoad){
+          widget.onPressed!();
+          return;
+        }
         if(loading)return;
         if(widget.enabled){
           setState(() {

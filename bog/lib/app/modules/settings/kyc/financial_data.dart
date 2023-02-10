@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:bog/app/assets/color_assets.dart';
+import 'package:bog/app/assets/setup_assets.dart';
+import 'package:bog/app/base/base.dart';
 import 'package:bog/app/controllers/home_controller.dart';
 import 'package:bog/app/global_widgets/app_button.dart';
 import 'package:bog/app/modules/settings/kyc/add_job.dart';
@@ -8,6 +10,7 @@ import 'package:bog/core/theme/app_colors.dart';
 import 'package:bog/core/theme/app_styles.dart';
 import 'package:bog/core/utils/dialog_utils.dart';
 import 'package:bog/core/utils/extensions.dart';
+import 'package:bog/core/utils/http_utils.dart';
 import 'package:bog/core/utils/input_mixin.dart';
 import 'package:bog/core/utils/widget_util.dart';
 import 'package:bog/core/widgets/click_text.dart';
@@ -22,7 +25,7 @@ import 'package:get/get.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
 
-class FinancialData extends StatefulWidget {
+class FinancialData extends BaseWidget {
   const FinancialData({Key? key}) : super(key: key);
 
   static const route = '/FinancialData';
@@ -31,7 +34,7 @@ class FinancialData extends StatefulWidget {
   State<FinancialData> createState() => _FinancialDataState();
 }
 
-class _FinancialDataState extends State<FinancialData> with InputMixin {
+class _FinancialDataState extends BaseWidgetState<FinancialData> with InputMixin {
 
   String bankName = "";
   String bankId = "";
@@ -40,48 +43,80 @@ class _FinancialDataState extends State<FinancialData> with InputMixin {
   String accountType = "";
   List accountTypes = ["Current Account","Savings Account"];
 
+  Map setupData = {};
 
 
   @override
   void initState() {
+    setup = false;
     super.initState();
-
-    inputModels.add(InputTextFieldModel(
-        "Account Holder Name",
-        hint: "Enter account name",
-    ));
-
-    inputModels.add(InputTextFieldModel(
-        "Account Number",
-        hint: "Enter account number",
-    ));
-
-    inputModels.add(InputTextFieldModel(
-        "Level of Current Overdraft Facility",
-        hint: "Enter the level of overdraft facility",
-    ));
-
-
-inputModels.add(InputTextFieldModel(
-        "Bankers Name",
-        hint: "Enter name of banker",
-    ));
-
-inputModels.add(InputTextFieldModel(
-        "Bankers Address",
-        hint: "Enter bankers address",
-    ));
-
-
-
-
-
-
 
   }
 
+  loadItems(){
+    // kyc-tax-permits/fetch?userType=vendor
+    performApiCall(context, "/kyc-financial-data/fetch?userType=${currentUser.userType}", (response, error){
+      if(error!=null){
+        setupError=error;
+        if(mounted)setState(() {});
+        return;
+      }
+
+      setupData = response["data"]??{};
+      setupModels();
+      setup=true;
+      if(mounted)setState(() {});
+
+    },getMethod: true,handleError: false,silently: true);
+  }
+
+
+  void setupModels(){
+    // {"id":"0a2e0a20-366d-4ba6-81ea-c4d7570ebb22",
+    // "userType":"corporate_client",
+    // "userId":"c2f648b5-cd36-4b67-ba25-7fc21dbcce0a","account_name":"Jaka",
+    // "account_number":"00983039","bank_name":"","banker_address":"ksks",
+    // "account_type":"","overdraft_facility":"jss",
+    // "createdAt":"2023-02-09T17:20:48.000Z",
+    // "updatedAt":"2023-02-09T17:20:48.000Z","deletedAt":null}
+
+    accountType = setupData["account_type"]??"";
+    inputModels.add(InputTextFieldModel(
+      "Account Holder Name",
+      hint: "Enter account name",
+    prefill: setupData["account_name"]
+    ));
+
+    inputModels.add(InputTextFieldModel(
+      "Account Number",
+      hint: "Enter account number",
+    prefill: setupData["account_number"]
+    ));
+
+    inputModels.add(InputTextFieldModel(
+      "Level of Current Overdraft Facility",
+      hint: "Enter the level of overdraft facility",
+    prefill: setupData["overdraft_facility"]
+    ));
+
+
+    inputModels.add(InputTextFieldModel(
+      "Bankers Name",
+      hint: "Enter name of banker",
+    prefill: setupData["bank_name"]
+    ));
+
+    inputModels.add(InputTextFieldModel(
+      "Bankers Address",
+      hint: "Enter bankers address",
+    prefill: setupData["banker_address"]
+    ));
+  }
+
+  getPageTitle()=>"Financial Data";
+
   @override
-  Widget build(BuildContext context) {
+  Widget page(BuildContext context) {
     var width = Get.width;
     final Size size = MediaQuery
         .of(context)
@@ -110,7 +145,7 @@ inputModels.add(InputTextFieldModel(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Padding(
+                            if(false)Padding(
                               padding: EdgeInsets.only(right: width * 0.05,
                                   left: width * 0.045,
                                   top: kToolbarHeight),
@@ -251,6 +286,44 @@ inputModels.add(InputTextFieldModel(
                         title: "Save",
                         onPressed: () async {
 
+                          Map studs = {};
+                          studs[2] = (){
+                            if(accountType.isEmpty){
+                              return "Select account type";
+                            }
+                            return null;
+                          };
+
+
+                          bool proceed = validateInputModels(studs: studs);
+                          if(!proceed)return;
+
+                          String accountName = inputModels[0].text;
+                          String accountNumber = inputModels[1].text;
+                          String overdraft = inputModels[2].text;
+                          String bankerName = inputModels[3].text;
+                          String bankerAddress = inputModels[4].text;
+
+                          performApiCall(context, "/kyc-financial-data/create", (response, error){
+
+                            showSuccessDialog(context, "Financial Data Updated",onOkClicked: (){
+                              Navigator.pop(context);
+                            });
+
+                          },data:
+                          {
+                            "bank_name": bankName,
+                            "account_name": accountName,
+                            "account_number": accountNumber,
+                            "account_type": accountType,
+                            "overdraft_facility": overdraft,
+                            "banker_name": bankerName,
+                            "banker_address": bankerAddress,
+                            // "id": "1a310e9c-7580-485d-aab2-ea8686bb869a",
+                            "userType": currentUser.userType,
+                            "userId": currentUser.id,
+                          }
+                         );
                         },
                       ),
                     )

@@ -3,6 +3,8 @@ import 'package:bog/app/blocs/homeswitch_controller.dart';
 import 'package:bog/app/blocs/mode_controller.dart';
 import 'package:bog/app/blocs/nav_controller.dart';
 import 'package:bog/app/blocs/trigger_mode_controller.dart';
+import 'package:bog/app/blocs/user_controller.dart';
+import 'package:bog/app/data/providers/api.dart';
 import 'package:bog/core/widgets/popup_widget/bloc/popup_controller.dart';
 import 'package:bog/routes/app_pages.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +28,8 @@ Future<void> main() async {
   Get.put(NavController());
   Get.put(TriggerModeController());
   Get.put(HomeSwitchController());
+  Get.put(UserController());
+  Get.put(Api());
   runApp(const MyApp());
 }
 

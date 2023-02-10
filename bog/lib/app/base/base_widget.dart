@@ -82,8 +82,8 @@ abstract class BaseWidgetState<T extends BaseWidget> extends State<T> {
   List filter(List itemList) => itemList;
   List sortItems(List itemList) => itemList;
 
-  pageColor() => blackColor;
-  titleColor() => whiteColor;
+  pageColor() => whiteColor;
+  titleColor() => blackColor;
 
   List<Widget> backgroundWidgets() => [];
 
@@ -131,7 +131,7 @@ abstract class BaseWidgetState<T extends BaseWidget> extends State<T> {
                       : !setup
                           ? loadingLayout(
                               fullPage: showAppBar(),
-                      // pageTitle: getPageTitle(),
+                      pageTitle: getPageTitle(),
                               trans: true, //getAppBarWidgets().isNotEmpty,
                               onClosed: showAppBar() == false
                                   ? null

@@ -108,7 +108,7 @@ class Shop extends GetView<HomeController> {
 
                                 contents.add(
                                   FutureBuilder<ApiResponse>(
-                                      future: controller.userRepo.getData("/products"),
+                                      future: controller.userRepo.getData("/products/all"),
                                       builder: (context, snapshot) {
                                         if (snapshot.connectionState == ConnectionState.done && snapshot.data!.isSuccessful) {
                                           final posts = MyProducts.fromJsonList(snapshot.data!.data);

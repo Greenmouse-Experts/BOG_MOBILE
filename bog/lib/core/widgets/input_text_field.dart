@@ -12,8 +12,9 @@ class InputTextFieldModel{
   final FocusNode focusNode = FocusNode();
   final bool optional;
   final dynamic prefill;
+  final TextInputType? inputType;
 
-  InputTextFieldModel(this.title,{this.hint,this.optional=false,this.prefill});
+  InputTextFieldModel(this.title,{this.hint,this.optional=false,this.prefill,this.inputType});
 
   String get text=>textController.text.trim();
 }
@@ -184,6 +185,7 @@ class _InputTextFieldState extends State<InputTextField> {
                   keyboardType:
                   widget.maxLine>1?TextInputType.multiline:
                   widget.isAmount?TextInputType.number:
+                      widget.inputTextFieldModel.inputType??
                   widget.keyBoardType,
                   textCapitalization: widget.textCapitalization,
                   minLines: widget.maxLine,

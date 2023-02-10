@@ -93,7 +93,7 @@ class _listDialogState extends State<listDialog> {
                 Container(
                   height: 75,
 //                  decoration: BoxDecoration(
-//                    color: red3,
+//                    color: blue3,
 //
 //                  ),
                 ),
@@ -120,7 +120,7 @@ class _listDialogState extends State<listDialog> {
                         padding: const EdgeInsets.only(left: 20),
                         child: Text(
                           widget.title!,
-                          style: textStyle(false, 16, red3),
+                          style: textStyle(false, 16, blue3),
                         ),
                       ),
                       addSpace(5),
@@ -186,7 +186,7 @@ class _listDialogState extends State<listDialog> {
                                                             size: 20,
                                                             color: !widget.useTint
                                                                 ? null
-                                                                : red3,
+                                                                : blue3,
                                                           )
                                                         : Image.asset(
                                                             widget.images![position],
@@ -194,7 +194,7 @@ class _listDialogState extends State<listDialog> {
                                                             height: 20,
                                                             color: !widget.useTint
                                                                 ? null
-                                                                : red3,
+                                                                : blue3,
                                                           ),
                                                 widget.images!=null
                                                     ? addSpaceWidth(10)

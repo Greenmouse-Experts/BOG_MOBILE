@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:bog/app/assets/color_assets.dart';
+import 'package:bog/app/base/base.dart';
 import 'package:bog/app/controllers/home_controller.dart';
 import 'package:bog/app/global_widgets/app_button.dart';
 import 'package:bog/app/modules/settings/kyc/job_experience.dart';
@@ -8,6 +9,7 @@ import 'package:bog/core/theme/app_colors.dart';
 import 'package:bog/core/theme/app_styles.dart';
 import 'package:bog/core/utils/dialog_utils.dart';
 import 'package:bog/core/utils/extensions.dart';
+import 'package:bog/core/utils/http_utils.dart';
 import 'package:bog/core/utils/input_mixin.dart';
 import 'package:bog/core/utils/widget_util.dart';
 import 'package:bog/core/widgets/click_text.dart';
@@ -23,7 +25,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
-class SupplyCategory extends StatefulWidget {
+class SupplyCategory extends BaseWidget {
 
   static const route = '/SupplyCategory';
 
@@ -31,31 +33,69 @@ class SupplyCategory extends StatefulWidget {
   State<SupplyCategory> createState() => _SupplyCategoryState();
 }
 
-class _SupplyCategoryState extends State<SupplyCategory> with InputMixin {
+class _SupplyCategoryState extends BaseWidgetState<SupplyCategory> with InputMixin {
 
   bool showCancel = false;
   FocusNode focusSearch = FocusNode();
   TextEditingController searchController = TextEditingController();
-  List categories = [
-    "Marine","Paints","Plumbing","Building Materials","Mechanicals"
-  ];
+
+  Map setupData = {};
+  List selections = [];
 
   @override
   void initState() {
+    setup=false;
     super.initState();
-
-    focusSearch.addListener(() { setState(() {
-
-    });});
-    inputModels.add(InputTextFieldModel(
-      "Others (Specify below)",
-      hint: "Enter the category of supply",optional: true
-    ));
-
+    focusSearch.addListener(() { setState(() {});});
   }
 
+  loadItems(){
+    // kyc-tax-permits/fetch?userType=vendor
+    performApiCall(context, "/kyc-supply-category/fetch?userType=professional", (response, error){
+      if(error!=null){
+        setupError=error;
+        if(mounted)setState(() {});
+        return;
+      }
+
+      setupData = response["data"]??{};
+      allItemList = setupData["categories"]??[];
+      runSearch();
+      setupModels();
+      setup=true;
+      if(mounted)setState(() {});
+
+    },getMethod: true,handleError: false,silently: true);
+  }
+
+  void setupModels(){
+    inputModels.add(InputTextFieldModel(
+        "Others (Specify below)",
+        hint: "Enter the category of supply",optional: true
+    ));
+  }
+
+  runSearch() {
+    String search = searchController.text.trim();
+    itemList.clear();
+    for (String text in allItemList) {
+
+      if (search.isNotEmpty &&
+          !text.toLowerCase().contains(search.toLowerCase())) continue;
+      itemList.add(text);
+    }
+
+    setup = true;
+    setState(() {});
+  }
+
+  // showAppBar()=>!setup;
+
   @override
-  Widget build(BuildContext context) {
+  String getPageTitle() =>"Category of Supply";
+
+  @override
+  Widget page(BuildContext context) {
     var width = Get.width;
     final Size size = MediaQuery.of(context).size;
     // double multiplier = 25 * size.height * 0.01;
@@ -81,7 +121,7 @@ class _SupplyCategoryState extends State<SupplyCategory> with InputMixin {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Padding(
+                            if(false)Padding(
                               padding: EdgeInsets.only(
                                   right: width * 0.05,
                                   left: width * 0.045,
@@ -241,24 +281,43 @@ class _SupplyCategoryState extends State<SupplyCategory> with InputMixin {
                                   addSpace(20),
                                   Container(
                                       margin: EdgeInsets.only(bottom: 20),
-                                      child: Text("Categories (${categories.length})",style: textStyle(false, 14, blackColor.withOpacity(.5)),)),
+                                      child: Text("Categories (${itemList.length})",style: textStyle(false, 14, blackColor.withOpacity(.5)),)),
 
 
                                   Container(width: double.infinity,
                                     child: Wrap(
                                       crossAxisAlignment: WrapCrossAlignment.start,
-                                      children: List.generate(categories.length, (index){
+                                      children: List.generate(itemList.length, (index){
 
-                                        String name = categories[index];
-                                        return Container(
-                                          margin: EdgeInsets.fromLTRB(0, 0, 10, 15),
-                                          padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
-                                          decoration: BoxDecoration(
-                                           border: Border.all(
-                                             color: blackColor,width: 1
-                                           ),borderRadius: BorderRadius.circular(5)
+                                        String name = itemList[index];
+                                        bool selected = selections.contains(name);
+                                        return GestureDetector(
+                                          onTap: (){
+                                            setState(() {
+                                              if(!selected){
+                                                selections.add(name);
+                                              }else{
+                                                selections.remove(name);
+                                              }
+                                            });
+                                          },
+                                          child: AnimatedContainer(duration: Duration(milliseconds: 300),
+                                            margin: EdgeInsets.fromLTRB(0, 0, 10, 15),
+                                            padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
+                                            decoration: BoxDecoration(
+                                             border: Border.all(
+                                               color: blackColor,width: 1
+                                             ),borderRadius: BorderRadius.circular(5),color: selected?blue0:whiteColor
+                                            ),
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                if(selected)Container(margin: EdgeInsets.only(right: 5),
+                                                child: Icon(Icons.check_circle,color: white,size: 12,),),
+                                                Text(name,style: textStyle(false, 14, selected?white:black),),
+                                              ],
+                                            ),
                                           ),
-                                          child: Text(name,style: textStyle(false, 14, blackColor),),
                                         );
                                       }),
                                     ),
@@ -286,7 +345,19 @@ class _SupplyCategoryState extends State<SupplyCategory> with InputMixin {
                           bool proceed = validateInputModels(studs: studs);
                           if (proceed) {
 
+                            String others = inputModels[0].text;
 
+                            performApiCallWithDIO(context, "/kyc-supply-category/create", (response, error){
+
+                              showSuccessDialog(context, "Supply Category Updated",onOkClicked: (){
+                                Navigator.pop(context);
+                              });
+
+                            },data: {
+                              "categories": "${selections}",
+                              "userType": currentUser.userType,
+                              "others":others,
+                            });
 
                           }
 
@@ -374,7 +445,4 @@ class _SupplyCategoryState extends State<SupplyCategory> with InputMixin {
     );
   }
 
-  void runSearch(){
-
-  }
 }

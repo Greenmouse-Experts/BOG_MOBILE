@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:bog/app/base/base.dart';
+import 'package:bog/app/blocs/user_controller.dart';
 import 'package:bog/app/modules/home/subscribe.dart';
 import 'package:bog/app/modules/notifications/notification.dart';
 import 'package:flutter/material.dart';
@@ -49,6 +50,8 @@ class _HomeState extends State<Home> {
     subs.add(HomeSwitchController.instance.stream.listen((event) {
       showSwitch();
     }));
+    HomeSwitchController.instance.loadTypes(context,silently:true);
+    UserController.instance.refreshUser(context);
   }
 
   @override
@@ -291,10 +294,10 @@ class _HomeState extends State<Home> {
       'Sell your products online ',
     ];
     List icons = [
-      'assets/images/m2.png',
-      'assets/images/m2.png',
-      'assets/images/m1.png',
-      'assets/images/m3.png',
+      'assets/images/PrivateClient.png',
+      'assets/images/CorporateClient.png',
+      'assets/images/ServicePartner.png',
+      'assets/images/ProductPartner.png',
     ];
     List types = [
       "private_client",
@@ -375,7 +378,7 @@ class _HomeState extends State<Home> {
                   String title = titles[index];
                   String subtitle = subtitles[index];
                   String icon = icons[index];
-                  if(!myTypes.contains(types[index]))return Container();
+                  // if(!myTypes.contains(types[index]))return Container();
                   return optionItem(title,subtitle,icon, selectedPosition==index,
                           (){
                         setState((){
