@@ -44,7 +44,7 @@ class _AppButtonState extends State<AppButton> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () async {
-        if(widget.enabled){
+        if (widget.enabled) {
           setState(() {
             loading = true;
           });
@@ -74,20 +74,24 @@ class _AppButtonState extends State<AppButton> {
                         Text(
                           widget.title,
                           textAlign: TextAlign.center,
-                          style: Get.theme.textTheme.bodyText1!.copyWith(
-                            color: widget.fontColor,
-                            fontSize: widget.fontSize * Get.textScaleFactor * 0.90,
-                            fontWeight: widget.bold ? FontWeight.w500 : FontWeight.w300
-                          ),
+                          style: Get.theme.textTheme.bodyLarge!.copyWith(
+                              color: widget.fontColor,
+                              fontSize:
+                                  widget.fontSize * Get.textScaleFactor * 0.90,
+                              fontWeight: widget.bold
+                                  ? FontWeight.w500
+                                  : FontWeight.w300),
                         ),
                         Text(
                           widget.trailingTitle,
                           textAlign: TextAlign.center,
-                          style: Get.theme.textTheme.bodyText1!.copyWith(
-                            color: widget.trailingColor,
-                            fontSize: widget.fontSize * Get.textScaleFactor * 0.90,
-                              fontWeight: widget.bold ? FontWeight.w500 : FontWeight.w300
-                          ),
+                          style: Get.theme.textTheme.bodyLarge!.copyWith(
+                              color: widget.trailingColor,
+                              fontSize:
+                                  widget.fontSize * Get.textScaleFactor * 0.90,
+                              fontWeight: widget.bold
+                                  ? FontWeight.w500
+                                  : FontWeight.w300),
                         ),
                       ],
                     ),

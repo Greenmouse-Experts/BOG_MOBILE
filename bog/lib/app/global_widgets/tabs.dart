@@ -34,26 +34,26 @@ class VerticalTabs extends StatefulWidget {
 
   const VerticalTabs(
       {Key? key,
-        required this.tabs,
-        required this.contents,
-        this.tabsWidth = 200,
-        this.indicatorWidth = 3,
-        this.indicatorSide = IndicatorSide.end,
-        this.initialIndex = 0,
-        this.direction = TextDirection.ltr,
-        this.indicatorColor = Colors.green,
-        this.disabledChangePageFromContentView = false,
-        this.contentScrollAxis = Axis.horizontal,
-        this.selectedTabBackgroundColor = const Color(0x1100ff00),
-        this.tabBackgroundColor = const Color(0xfff8f8f8),
-        this.selectedTabTextStyle = const TextStyle(color: Colors.black),
-        this.tabTextStyle = const TextStyle(color: Colors.black38),
-        this.changePageCurve = Curves.easeInOut,
-        this.changePageDuration = const Duration(milliseconds: 300),
-        this.tabsShadowColor = Colors.black54,
-        this.tabsElevation = 2.0,
-        this.onSelect,
-        this.backgroundColor})
+      required this.tabs,
+      required this.contents,
+      this.tabsWidth = 200,
+      this.indicatorWidth = 3,
+      this.indicatorSide = IndicatorSide.end,
+      this.initialIndex = 0,
+      this.direction = TextDirection.ltr,
+      this.indicatorColor = Colors.green,
+      this.disabledChangePageFromContentView = false,
+      this.contentScrollAxis = Axis.horizontal,
+      this.selectedTabBackgroundColor = const Color(0x1100ff00),
+      this.tabBackgroundColor = const Color(0xfff8f8f8),
+      this.selectedTabTextStyle = const TextStyle(color: Colors.black),
+      this.tabTextStyle = const TextStyle(color: Colors.black38),
+      this.changePageCurve = Curves.easeInOut,
+      this.changePageDuration = const Duration(milliseconds: 300),
+      this.tabsShadowColor = Colors.black54,
+      this.tabsElevation = 2.0,
+      this.onSelect,
+      this.backgroundColor})
       : assert(tabs.length == contents.length),
         super(key: key);
 
@@ -61,7 +61,8 @@ class VerticalTabs extends StatefulWidget {
   _VerticalTabsState createState() => _VerticalTabsState();
 }
 
-class _VerticalTabsState extends State<VerticalTabs> with TickerProviderStateMixin {
+class _VerticalTabsState extends State<VerticalTabs>
+    with TickerProviderStateMixin {
   late int _selectedIndex;
   bool? _changePageByTapView;
 
@@ -86,10 +87,11 @@ class _VerticalTabsState extends State<VerticalTabs> with TickerProviderStateMix
     }
     _selectTab(widget.initialIndex);
 
-    if (widget.disabledChangePageFromContentView == true) pageScrollPhysics = const NeverScrollableScrollPhysics();
+    if (widget.disabledChangePageFromContentView == true)
+      pageScrollPhysics = const NeverScrollableScrollPhysics();
 
     super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       pageController.jumpToPage(widget.initialIndex);
       setState(() {});
     });
@@ -121,11 +123,19 @@ class _VerticalTabsState extends State<VerticalTabs> with TickerProviderStateMix
                     color: widget.tabBackgroundColor,
                     child: Column(
                       children: [
-                        Text('Categories',style: AppTextStyle.subtitle1.copyWith(fontSize: 25 * Get.height * 0.01 * 0.07,color: Colors.black,fontWeight: FontWeight.w500),),
-                        SizedBox(height: Get.height*0.02,),
+                        Text(
+                          'Categories',
+                          style: AppTextStyle.subtitle1.copyWith(
+                              fontSize: 25 * Get.height * 0.01 * 0.07,
+                              color: Colors.black,
+                              fontWeight: FontWeight.w500),
+                        ),
+                        SizedBox(
+                          height: Get.height * 0.02,
+                        ),
                         SizedBox(
                           width: widget.tabsWidth,
-                          height: Get.height*0.7,
+                          height: Get.height * 0.7,
                           child: ListView.builder(
                             padding: EdgeInsets.zero,
                             itemCount: widget.tabs.length,
@@ -144,32 +154,47 @@ class _VerticalTabsState extends State<VerticalTabs> with TickerProviderStateMix
                                 child = Container(
                                     padding: const EdgeInsets.all(20),
                                     child: Row(
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
                                       children: <Widget>[
                                         (tab.text != null)
                                             ? SizedBox(
-                                            width: widget.tabsWidth - 50,
-                                            child: Text(
-                                              tab.text!,
-                                              softWrap: true,
-                                              textAlign: TextAlign.start,
-                                            ))
+                                                width: widget.tabsWidth - 50,
+                                                child: Text(
+                                                  tab.text!,
+                                                  softWrap: true,
+                                                  textAlign: TextAlign.start,
+                                                ))
                                             : Container(),
                                       ],
                                     ));
                               }
 
                               Color itemBGColor = widget.tabBackgroundColor;
-                              if (_selectedIndex == index) itemBGColor = widget.selectedTabBackgroundColor;
+                              if (_selectedIndex == index)
+                                itemBGColor = widget.selectedTabBackgroundColor;
 
                               double? left, right;
                               if (widget.direction == TextDirection.rtl) {
-                                left = ((widget.indicatorSide == IndicatorSide.end) ? 0 : null);
-                                right = ((widget.indicatorSide == IndicatorSide.start) ? 0 : null);
+                                left =
+                                    ((widget.indicatorSide == IndicatorSide.end)
+                                        ? 0
+                                        : null);
+                                right = ((widget.indicatorSide ==
+                                        IndicatorSide.start)
+                                    ? 0
+                                    : null);
                               } else {
-                                right = ((widget.indicatorSide == IndicatorSide.end) ? 0 : null);
-                                left = ((widget.indicatorSide == IndicatorSide.start) ? 0 : null);
+                                right =
+                                    ((widget.indicatorSide == IndicatorSide.end)
+                                        ? 0
+                                        : null);
+                                left = ((widget.indicatorSide ==
+                                        IndicatorSide.start)
+                                    ? 0
+                                    : null);
                               }
 
                               return GestureDetector(
@@ -179,7 +204,9 @@ class _VerticalTabsState extends State<VerticalTabs> with TickerProviderStateMix
                                     _selectTab(index);
                                   });
 
-                                  pageController.animateToPage(index, duration: widget.changePageDuration, curve: widget.changePageCurve);
+                                  pageController.animateToPage(index,
+                                      duration: widget.changePageDuration,
+                                      curve: widget.changePageCurve);
                                 },
                                 child: Stack(
                                   children: <Widget>[
@@ -190,7 +217,8 @@ class _VerticalTabsState extends State<VerticalTabs> with TickerProviderStateMix
                                       left: left,
                                       right: right,
                                       child: ScaleTransition(
-                                        scale: Tween(begin: 0.0, end: 1.0).animate(
+                                        scale:
+                                            Tween(begin: 0.0, end: 1.0).animate(
                                           CurvedAnimation(
                                             parent: animationControllers[index],
                                             curve: Curves.elasticOut,
@@ -208,11 +236,14 @@ class _VerticalTabsState extends State<VerticalTabs> with TickerProviderStateMix
                                           _selectTab(index);
                                         });
 
-                                        pageController.animateToPage(index, duration: widget.changePageDuration, curve: widget.changePageCurve);
+                                        pageController.animateToPage(index,
+                                            duration: widget.changePageDuration,
+                                            curve: widget.changePageCurve);
                                       },
                                       child: Container(
                                         alignment: alignment,
-                                        padding: const EdgeInsets.only(left: 10,top: 10,bottom: 10),
+                                        padding: const EdgeInsets.only(
+                                            left: 10, top: 10, bottom: 10),
                                         child: child,
                                       ),
                                     ),
@@ -233,10 +264,22 @@ class _VerticalTabsState extends State<VerticalTabs> with TickerProviderStateMix
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text((widget.tabs[_selectedIndex].child as Text).data.toString(),style: AppTextStyle.subtitle1.copyWith(fontSize: 25 * Get.height * 0.01 * 0.07,color: Colors.black,fontWeight: FontWeight.w500),),
-                        SizedBox(height: Get.height*0.02,),
+                        Text(
+                          (widget.tabs[_selectedIndex].child as Text)
+                              .data
+                              .toString(),
+                          style: AppTextStyle.subtitle1.copyWith(
+                              fontSize: 25 * Get.height * 0.01 * 0.07,
+                              color: Colors.black,
+                              fontWeight: FontWeight.w500),
+                        ),
+                        SizedBox(
+                          height: Get.height * 0.02,
+                        ),
                         Padding(
-                          padding: EdgeInsets.only(left: Get.width*0.038,right: Get.width*0.038),
+                          padding: EdgeInsets.only(
+                              left: Get.width * 0.038,
+                              right: Get.width * 0.038),
                           child: AppInput(
                             hintText: 'Search with keyword ...',
                             filledColor: Colors.grey.withOpacity(.1),
@@ -247,14 +290,17 @@ class _VerticalTabsState extends State<VerticalTabs> with TickerProviderStateMix
                             ),
                           ),
                         ),
-                        SizedBox(height: Get.height*0.02,),
                         SizedBox(
-                          height: Get.height*0.68,
+                          height: Get.height * 0.02,
+                        ),
+                        SizedBox(
+                          height: Get.height * 0.68,
                           child: PageView.builder(
                             scrollDirection: widget.contentScrollAxis,
                             physics: pageScrollPhysics,
                             onPageChanged: (index) {
-                              if (_changePageByTapView == false || _changePageByTapView == null) {
+                              if (_changePageByTapView == false ||
+                                  _changePageByTapView == null) {
                                 _selectTab(index);
                               }
                               if (_selectedIndex == index) {

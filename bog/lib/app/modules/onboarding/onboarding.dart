@@ -1,6 +1,6 @@
 import 'package:bog/app/modules/sign_in/sign_in.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:feather_icons/feather_icons.dart';
+// import 'package:feather_icons/feather_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter/services.dart';
@@ -32,8 +32,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
             statusBarIconBrightness: Brightness.dark,
             statusBarBrightness: Brightness.dark,
             systemNavigationBarColor: AppColors.background,
-            systemNavigationBarIconBrightness: Brightness.dark
-        ),
+            systemNavigationBarIconBrightness: Brightness.dark),
         child: Scaffold(
           backgroundColor: AppColors.background,
           body: Stack(
@@ -51,7 +50,9 @@ class _OnboardingPageState extends State<OnboardingPage> {
                             onTap: null,
                             child: Text(
                               'Skip',
-                              style: AppTextStyle.bodyText1.copyWith(color: AppColors.background,fontWeight: FontWeight.normal),
+                              style: AppTextStyle.bodyText1.copyWith(
+                                  color: AppColors.background,
+                                  fontWeight: FontWeight.normal),
                             ),
                           ),
                         ),
@@ -61,13 +62,15 @@ class _OnboardingPageState extends State<OnboardingPage> {
                         Image.asset(
                           'assets/images/boglogo.png',
                           height: Get.width * 0.13,
-                          width: Get.height*0.13,
+                          width: Get.height * 0.13,
                         ),
                         Expanded(
                           child: CarouselSlider(
-                            items: _screen.map((e) => OnboardingItem(
-                              onboardingModel: e, pos: _screen.indexOf(e),
-                            ))
+                            items: _screen
+                                .map((e) => OnboardingItem(
+                                      onboardingModel: e,
+                                      pos: _screen.indexOf(e),
+                                    ))
                                 .toList(),
                             carouselController: buttonCarouselController,
                             options: CarouselOptions(
@@ -97,28 +100,29 @@ class _OnboardingPageState extends State<OnboardingPage> {
                               children: [
                                 index == currentIndex
                                     ? Container(
-                                  decoration: BoxDecoration(
-                                      color: index == currentIndex
-                                          ? AppColors.primary
-                                          : AppColors.primary.withOpacity(.5),
-                                      //borderRadius: BorderRadius.circular(8),
-                                      shape: BoxShape.circle
-                                  ),
-                                  height: 8,
-                                  width: 8,
-                                )
+                                        decoration: BoxDecoration(
+                                            color: index == currentIndex
+                                                ? AppColors.primary
+                                                : AppColors.primary
+                                                    .withOpacity(.5),
+                                            //borderRadius: BorderRadius.circular(8),
+                                            shape: BoxShape.circle),
+                                        height: 8,
+                                        width: 8,
+                                      )
                                     : Container(
-                                  decoration: BoxDecoration(
-                                      color: index == currentIndex
-                                          ? AppColors.primary
-                                          : AppColors.fadedPrimary,
-                                      shape: BoxShape.circle),
-                                  height: 8,
-                                  width: 8,
-                                ),
+                                        decoration: BoxDecoration(
+                                            color: index == currentIndex
+                                                ? AppColors.primary
+                                                : AppColors.fadedPrimary,
+                                            shape: BoxShape.circle),
+                                        height: 8,
+                                        width: 8,
+                                      ),
                               ],
                             ),
-                            separatorBuilder: (context, index) => const SizedBox(
+                            separatorBuilder: (context, index) =>
+                                const SizedBox(
                               width: 5,
                             ),
                             itemCount: 3,
@@ -129,7 +133,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                         ),
                         AppButton(
                           title: 'Sign Up',
-                          onPressed: (){
+                          onPressed: () {
                             Get.toNamed(Multiplexor.route);
                           },
                           borderRadius: 10,
@@ -139,7 +143,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                         ),
                         AppButton(
                           title: 'Login',
-                          onPressed: (){
+                          onPressed: () {
                             Get.toNamed(SignIn.route);
                           },
                           borderRadius: 10,
@@ -156,8 +160,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
               ),
             ],
           ),
-        )
-    );
+        ));
   }
 }
 

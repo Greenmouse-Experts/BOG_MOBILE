@@ -4,7 +4,7 @@ import 'package:bog/app/modules/home/pages/ProfileTab.dart';
 import 'package:bog/app/modules/home/pages/ProjectTab.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/src/simple/get_controllers.dart';
+// import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 
 import '../data/model/MyProducts.dart';
 import '../modules/home/pages/HomeTab.dart';
@@ -27,44 +27,75 @@ class HomeController extends GetxController {
   String cartTitle = 'Cart';
   String projectTitle = 'Project';
 
-  updateNewUser(String userType,{bool updatePages = true}) {
-    if(userType == "Client" || userType == "Corporate Client"){
+  updateNewUser(String userType, {bool updatePages = true}) {
+    if (userType == "Client" || userType == "Corporate Client") {
       //Group 46942.png
-      homeIcon = currentBottomNavPage.value == 0 ? 'assets/images/homeIcon.png': 'assets/images/Vector (7).png';
-      chatIcon = currentBottomNavPage.value == 1 ? 'assets/images/Vector (5).png': 'assets/images/chatIcon.png';
-      projectIcon = currentBottomNavPage.value == 2 ? 'assets/images/Group 46942.png': 'assets/images/projectIcon.png';
-      cartIcon = currentBottomNavPage.value == 3 ? 'assets/images/Vector (6).png': 'assets/images/cartIcon.png';
-      profileIcon = currentBottomNavPage.value == 4 ? 'assets/images/Group (3).png': 'assets/images/profileIcon.png';
+      homeIcon = currentBottomNavPage.value == 0
+          ? 'assets/images/homeIcon.png'
+          : 'assets/images/Vector (7).png';
+      chatIcon = currentBottomNavPage.value == 1
+          ? 'assets/images/Vector (5).png'
+          : 'assets/images/chatIcon.png';
+      projectIcon = currentBottomNavPage.value == 2
+          ? 'assets/images/Group 46942.png'
+          : 'assets/images/projectIcon.png';
+      cartIcon = currentBottomNavPage.value == 3
+          ? 'assets/images/Vector (6).png'
+          : 'assets/images/cartIcon.png';
+      profileIcon = currentBottomNavPage.value == 4
+          ? 'assets/images/Group (3).png'
+          : 'assets/images/profileIcon.png';
 
       homeTitle = 'Home';
       cartTitle = 'Cart';
       projectTitle = 'Project';
-    }else if(userType == "Product Partner"){
-      homeIcon = currentBottomNavPage.value == 0 ? 'assets/images/Vector (4).png': 'assets/images/dashboardIcon.png';
-      chatIcon = currentBottomNavPage.value == 1 ? 'assets/images/Vector (5).png': 'assets/images/chatIcon.png';
-      projectIcon = currentBottomNavPage.value == 2 ? 'assets/images/Group 47400.png': 'assets/images/ordersIcon.png';
-      cartIcon = currentBottomNavPage.value == 3 ? 'assets/images/Group (2).png': 'assets/images/prodctIcon.png';
-      profileIcon = currentBottomNavPage.value == 4 ? 'assets/images/Group (3).png': 'assets/images/profileIcon.png';
+    } else if (userType == "Product Partner") {
+      homeIcon = currentBottomNavPage.value == 0
+          ? 'assets/images/Vector (4).png'
+          : 'assets/images/dashboardIcon.png';
+      chatIcon = currentBottomNavPage.value == 1
+          ? 'assets/images/Vector (5).png'
+          : 'assets/images/chatIcon.png';
+      projectIcon = currentBottomNavPage.value == 2
+          ? 'assets/images/Group 47400.png'
+          : 'assets/images/ordersIcon.png';
+      cartIcon = currentBottomNavPage.value == 3
+          ? 'assets/images/Group (2).png'
+          : 'assets/images/prodctIcon.png';
+      profileIcon = currentBottomNavPage.value == 4
+          ? 'assets/images/Group (3).png'
+          : 'assets/images/profileIcon.png';
 
       homeTitle = 'Dashboard';
       cartTitle = 'Products';
       projectTitle = 'Orders';
-    }else{
-      homeIcon = currentBottomNavPage.value == 0 ? 'assets/images/homeIcon.png': 'assets/images/Vector (7).png';
-      chatIcon = currentBottomNavPage.value == 1 ? 'assets/images/Vector (5).png': 'assets/images/chatIcon.png';
-      projectIcon = currentBottomNavPage.value == 2 ? 'assets/images/Group 46942.png': 'assets/images/projectIcon.png';
-      cartIcon = currentBottomNavPage.value == 3 ? 'assets/images/Group (4).png': 'assets/images/Vector (8).png';
-      profileIcon = currentBottomNavPage.value == 4 ? 'assets/images/Group (3).png': 'assets/images/profileIcon.png';
+    } else {
+      homeIcon = currentBottomNavPage.value == 0
+          ? 'assets/images/homeIcon.png'
+          : 'assets/images/Vector (7).png';
+      chatIcon = currentBottomNavPage.value == 1
+          ? 'assets/images/Vector (5).png'
+          : 'assets/images/chatIcon.png';
+      projectIcon = currentBottomNavPage.value == 2
+          ? 'assets/images/Group 46942.png'
+          : 'assets/images/projectIcon.png';
+      cartIcon = currentBottomNavPage.value == 3
+          ? 'assets/images/Group (4).png'
+          : 'assets/images/Vector (8).png';
+      profileIcon = currentBottomNavPage.value == 4
+          ? 'assets/images/Group (3).png'
+          : 'assets/images/profileIcon.png';
 
       homeTitle = 'Home';
       cartTitle = 'Orders';
       projectTitle = 'Project';
     }
-    if(updatePages){
+    if (updatePages) {
       update();
       update(['home']);
     }
   }
+
   List<Widget> pages = const [
     HomeTab(),
     ChatTab(),
@@ -77,5 +108,5 @@ class HomeController extends GetxController {
   bool isBuyNow = false;
   MyProducts? myProducts;
   List<MyProducts> productsList = [];
-  Map<String,int> productsMap = {};
+  Map<String, int> productsMap = {};
 }

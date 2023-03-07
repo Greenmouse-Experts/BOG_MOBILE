@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+// import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import '../multiplexor/multiplexor.dart';
 import '../sign_up/forgot_password.dart';
@@ -19,9 +19,9 @@ class SignIn extends GetView<AuthController> {
 
   @override
   Widget build(BuildContext context) {
-    GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+    GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-    return  Scaffold(
+    return Scaffold(
       appBar: AppBar(
         elevation: 0,
         leading: IconButton(
@@ -39,7 +39,7 @@ class SignIn extends GetView<AuthController> {
         color: AppColors.backgroundVariant1,
         width: Get.width,
         child: Form(
-          key: _formKey,
+          key: formKey,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -78,8 +78,7 @@ class SignIn extends GetView<AuthController> {
                             style: AppTextStyle.headline4.copyWith(
                                 color: Colors.black.withOpacity(.5),
                                 fontWeight: FontWeight.normal,
-                                fontSize: 16
-                            ),
+                                fontSize: 16),
                           ),
                           SizedBox(height: Get.height * 0.035),
                           PageInput(
@@ -116,11 +115,11 @@ class SignIn extends GetView<AuthController> {
                               ),
                             ],
                           ),
-
                           SizedBox(height: Get.height * 0.03),
                           AppButton(
                             title: 'Log In',
-                            onPressed: () async => await controller.signIn(_formKey),
+                            onPressed: () async =>
+                                await controller.signIn(formKey),
                             borderRadius: 10,
                           ),
                           AppButton(
