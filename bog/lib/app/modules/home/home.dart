@@ -1,18 +1,15 @@
 import 'dart:convert';
 
-import 'package:bog/app/global_widgets/bottom_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-// import 'package:toggle_switch/toggle_switch.dart';
 
-import '../../../core/theme/app_colors.dart';
-// import '../../../core/theme/app_styles.dart';
 import '../../controllers/home_controller.dart';
 import '../../data/model/log_in_model.dart';
 import '../../data/providers/my_pref.dart';
-// import '../../global_widgets/app_avatar.dart';
+
+import '../../global_widgets/app_base_view.dart';
 import '../../global_widgets/app_drawer.dart';
+import '../../global_widgets/bottom_widget.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -53,30 +50,27 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: const SystemUiOverlayStyle(
-          statusBarColor: AppColors.backgroundVariant2,
-          statusBarIconBrightness: Brightness.dark,
-          statusBarBrightness: Brightness.dark,
-          systemNavigationBarColor: AppColors.backgroundVariant2,
-          systemNavigationBarIconBrightness: Brightness.dark),
-      child: GetBuilder<HomeController>(
-          id: 'home',
-          builder: (controller) {
-            return Scaffold(
-              body: SizedBox(
-                width: Get.width,
-                child: Column(
-                  children: [
-                    controller.pages[controller.currentBottomNavPage.value],
-                  ],
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: AppBaseView(
+        child: GetBuilder<HomeController>(
+            id: 'home',
+            builder: (controller) {
+              return Scaffold(
+                body: SizedBox(
+                  width: Get.width,
+                  child: Column(
+                    children: [
+                      controller.pages[controller.currentBottomNavPage.value],
+                    ],
+                  ),
                 ),
-              ),
-              bottomNavigationBar:
-                  HomeBottomWidget(controller: controller, isHome: true),
-              drawer: const AppDrawer(),
-            );
-          }),
+                bottomNavigationBar:
+                    HomeBottomWidget(controller: controller, isHome: true),
+                drawer: const AppDrawer(),
+              );
+            }),
+      ),
     );
   }
 }

@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_styles.dart';
 import '../../../core/theme/app_themes.dart';
-import '../../global_widgets/app_button.dart';
 import '../sign_up/service_provider.dart';
 import '../sign_up/sign_up.dart';
 import '../sign_up/supplier.dart';
@@ -24,8 +22,7 @@ class Multiplexor extends StatelessWidget {
           statusBarIconBrightness: Brightness.dark,
           statusBarBrightness: Brightness.dark,
           systemNavigationBarColor: Colors.white,
-          systemNavigationBarIconBrightness: Brightness.dark
-      ),
+          systemNavigationBarIconBrightness: Brightness.dark),
       child: Scaffold(
         body: Container(
           color: AppColors.backgroundVariant1,
@@ -39,11 +36,8 @@ class Multiplexor extends StatelessWidget {
               Center(
                 child: Stack(
                   children: [
-                    Image.asset(
-                        'assets/images/multiplexor_bg.png',
-                        width: Get.width * 0.4,
-                        height: Get.height * 0.2
-                    ),
+                    Image.asset('assets/images/multiplexor_bg.png',
+                        width: Get.width * 0.4, height: Get.height * 0.2),
                     Image.asset(
                       'assets/images/boglogo.png',
                       width: Get.width * 0.4,
@@ -69,8 +63,7 @@ class Multiplexor extends StatelessWidget {
                           style: AppTextStyle.headline4.copyWith(
                               color: Colors.black,
                               fontWeight: FontWeight.w500,
-                              fontSize: 24
-                          ),
+                              fontSize: 24),
                         ),
                         SizedBox(
                           height: Get.height * 0.018,
@@ -96,7 +89,7 @@ class Multiplexor extends StatelessWidget {
                                 'assets/images/client_bg.png',
                               ),
                               Row(
-                                mainAxisAlignment:MainAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   SizedBox(
@@ -104,14 +97,15 @@ class Multiplexor extends StatelessWidget {
                                   ),
                                   Image.asset(
                                     'assets/images/m2.png',
-                                    width: Get.width*0.15,
-                                    height: Get.width*0.15,
+                                    width: Get.width * 0.15,
+                                    height: Get.width * 0.15,
                                   ),
                                   SizedBox(
                                     width: Get.width * 0.02,
                                   ),
                                   Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         'Client',
@@ -153,7 +147,7 @@ class Multiplexor extends StatelessWidget {
                                 'assets/images/service_provider.png',
                               ),
                               Row(
-                                mainAxisAlignment:MainAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   SizedBox(
@@ -161,14 +155,15 @@ class Multiplexor extends StatelessWidget {
                                   ),
                                   Image.asset(
                                     'assets/images/m1.png',
-                                    width: Get.width*0.15,
-                                    height: Get.width*0.15,
+                                    width: Get.width * 0.15,
+                                    height: Get.width * 0.15,
                                   ),
                                   SizedBox(
                                     width: Get.width * 0.02,
                                   ),
                                   Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         'Service Partner',
@@ -210,7 +205,7 @@ class Multiplexor extends StatelessWidget {
                                 'assets/images/rect3.png',
                               ),
                               Row(
-                                mainAxisAlignment:MainAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   SizedBox(
@@ -218,14 +213,15 @@ class Multiplexor extends StatelessWidget {
                                   ),
                                   Image.asset(
                                     'assets/images/m3.png',
-                                    width: Get.width*0.15,
-                                    height: Get.width*0.15,
+                                    width: Get.width * 0.15,
+                                    height: Get.width * 0.15,
                                   ),
                                   SizedBox(
                                     width: Get.width * 0.02,
                                   ),
                                   Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         'Product Partner',

@@ -1,27 +1,17 @@
-import 'dart:convert';
-
+import 'package:bog/app/global_widgets/app_loader.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_styles.dart';
 import '../../../controllers/home_controller.dart';
-import '../../../data/model/MyProducts.dart';
 import '../../../data/model/ProjectListModel.dart';
 import '../../../data/providers/api_response.dart';
-import '../../../data/providers/my_pref.dart';
-import '../../../global_widgets/app_avatar.dart';
 import '../../../global_widgets/app_input.dart';
-import '../../../global_widgets/horizontal_item_tile.dart';
 import '../../../global_widgets/page_dropdown.dart';
-import '../../chat/chat.dart';
 import '../../create/create.dart';
 import '../../project_details/project_details.dart';
-import '../../shop/product_details.dart';
 import 'CartTab.dart';
 
 class ProjectTab extends StatelessWidget {
@@ -510,18 +500,7 @@ class ProjectTab extends StatelessWidget {
                               ),
                             );
                           }
-                          return SizedBox(
-                            height: Get.height * 0.65,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: const [
-                                CircularProgressIndicator(
-                                  color: AppColors.primary,
-                                ),
-                              ],
-                            ),
-                          );
+                          return const AppLoader();
                         }
                       }),
                 if (controller.currentType == "Product Partner")

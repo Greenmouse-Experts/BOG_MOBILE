@@ -1,7 +1,7 @@
 import 'package:bog/app/modules/home/pages/CartTab.dart';
 import 'package:bog/app/modules/home/pages/ChatTab.dart';
 import 'package:bog/app/modules/home/pages/ProfileTab.dart';
-import 'package:bog/app/modules/home/pages/ProjectTab.dart';
+import 'package:bog/app/modules/home/pages/project_tab.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 // import 'package:get/get_state_manager/src/simple/get_controllers.dart';

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:bog/app/modules/settings/faq.dart';
 import 'package:d_chart/d_chart.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -1172,7 +1173,7 @@ class _HomeTabState extends State<HomeTab> {
                         children: [
                           InkWell(
                             onTap: () {
-                              launchURL(faq);
+                              Get.to(() => const FAQ());
                             },
                             child: Image.asset(
                               "assets/images/Group 47034.png",

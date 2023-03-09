@@ -50,7 +50,10 @@ class CartTab extends StatelessWidget {
                   height: kToolbarHeight,
                 ),
                 Padding(
-                  padding: EdgeInsets.only(left: Get.width*0.035, right: Get.width*0.03,top: 10),
+                  padding: EdgeInsets.only(
+                      left: Get.width * 0.035,
+                      right: Get.width * 0.03,
+                      top: 10),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -69,10 +72,12 @@ class CartTab extends StatelessWidget {
                 SizedBox(
                   height: Get.height * 0.03,
                 ),
-                if(controller.currentType == "Client"  || controller.currentType == "Corporate Client")
+                if (controller.currentType == "Client" ||
+                    controller.currentType == "Corporate Client")
                   Expanded(
                     child: Padding(
-                      padding: EdgeInsets.only(left: Get.width*0.03, right: Get.width*0.03),
+                      padding: EdgeInsets.only(
+                          left: Get.width * 0.03, right: Get.width * 0.03),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -80,50 +85,59 @@ class CartTab extends StatelessWidget {
                         children: [
                           SizedBox(
                             height: Get.height * 0.3,
-                            child: controller.productsList.isEmpty ? Center(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsets.only(right: Get.width*0.03),
-                                    child: Icon(
-                                      FeatherIcons.shoppingCart,
-                                      size: Get.width * 0.2,
-                                      color: Colors.grey,
+                            child: controller.productsList.isEmpty
+                                ? Center(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Padding(
+                                          padding: EdgeInsets.only(
+                                              right: Get.width * 0.03),
+                                          child: Icon(
+                                            FeatherIcons.shoppingCart,
+                                            size: Get.width * 0.2,
+                                            color: Colors.grey,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: Get.height * 0.02,
+                                        ),
+                                        Text(
+                                          "Nothing in your cart",
+                                          style:
+                                              AppTextStyle.subtitle1.copyWith(
+                                            color: Colors.black,
+                                            fontSize: Get.width * 0.035,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                  ),
-                                  SizedBox(
-                                    height: Get.height * 0.02,
-                                  ),
-                                  Text(
-                                    "Nothing in your cart",
-                                    style: AppTextStyle.subtitle1.copyWith(
-                                      color: Colors.black,
-                                      fontSize: Get.width * 0.035,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ) :ListView.builder(
-                              padding: EdgeInsets.zero,
-                              itemCount: controller.productsList.length,
-                                shrinkWrap: false,
-                                itemBuilder: (context,index){
-                                  var product = controller.productsList[index];
-                                  return CartItem(
-                                    title: product.name.toString(),
-                                    image: product.image.toString(),
-                                    price: "N ${product.price}",
-                                    quantity: controller.productsMap[product.id.toString()] ?? 1,
-                                    quantityChanged: (value){
-                                      controller.productsMap[product.id.toString()] = value;
-                                      controller.update();
-                                    },
-                                  );
-                                }
-                            ),
+                                  )
+                                : ListView.builder(
+                                    padding: EdgeInsets.zero,
+                                    itemCount: controller.productsList.length,
+                                    shrinkWrap: false,
+                                    itemBuilder: (context, index) {
+                                      var product =
+                                          controller.productsList[index];
+                                      return CartItem(
+                                        title: product.name.toString(),
+                                        image: product.image.toString(),
+                                        price: "N ${product.price}",
+                                        quantity: controller.productsMap[
+                                                product.id.toString()] ??
+                                            1,
+                                        quantityChanged: (value) {
+                                          controller.productsMap[
+                                              product.id.toString()] = value;
+                                          controller.update();
+                                        },
+                                      );
+                                    }),
                           ),
                           SizedBox(
                             height: Get.height * 0.025,
@@ -146,7 +160,8 @@ class CartTab extends StatelessWidget {
                                 children: [
                                   const PageInput(
                                     hint: 'Enter your coupon code',
-                                    label: 'Do you have a coupon ? Enter it here',
+                                    label:
+                                        'Do you have a coupon ? Enter it here',
                                     validator: null,
                                     isCompulsory: true,
                                     obscureText: false,
@@ -155,7 +170,8 @@ class CartTab extends StatelessWidget {
                                     height: Get.height * 0.05,
                                   ),
                                   Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
                                         "Sub Total:",
@@ -179,7 +195,8 @@ class CartTab extends StatelessWidget {
                                     height: Get.height * 0.025,
                                   ),
                                   Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
                                         "Delivery Fee :",
@@ -203,7 +220,8 @@ class CartTab extends StatelessWidget {
                                     height: Get.height * 0.025,
                                   ),
                                   Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
                                         "Discount :",
@@ -232,7 +250,8 @@ class CartTab extends StatelessWidget {
                                     height: Get.height * 0.025,
                                   ),
                                   Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
                                         "Total :",
@@ -271,9 +290,10 @@ class CartTab extends StatelessWidget {
                       ),
                     ),
                   ),
-                if(controller.currentType == "Product Partner")
+                if (controller.currentType == "Product Partner")
                   Padding(
-                    padding: EdgeInsets.only(left: Get.width*0.03, right: Get.width*0.03),
+                    padding: EdgeInsets.only(
+                        left: Get.width * 0.03, right: Get.width * 0.03),
                     child: AppInput(
                       hintText: 'Search with name or keyword ...',
                       filledColor: Colors.grey.withOpacity(.1),
@@ -288,27 +308,33 @@ class CartTab extends StatelessWidget {
                       },
                     ),
                   ),
-                if(controller.currentType == "Product Partner")
+                if (controller.currentType == "Product Partner")
                   SizedBox(
                     height: Get.height * 0.015,
                   ),
-                if(controller.currentType == "Product Partner")
+                if (controller.currentType == "Product Partner")
                   Expanded(
                     child: FutureBuilder<ApiResponse>(
                         future: controller.userRepo.getData("/products"),
                         builder: (context, snapshot) {
-                          if (snapshot.connectionState == ConnectionState.done && snapshot.data!.isSuccessful) {
-                            final posts = MyProducts.fromJsonList(snapshot.data!.data);
-                            if(posts.isEmpty){
+                          if (snapshot.connectionState ==
+                                  ConnectionState.done &&
+                              snapshot.data!.isSuccessful) {
+                            final posts =
+                                MyProducts.fromJsonList(snapshot.data!.data);
+                            if (posts.isEmpty) {
                               return SizedBox(
-                                height: Get.height*0.7,
+                                height: Get.height * 0.7,
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
                                       "No Products Available",
-                                      style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.07,color: Colors.black,fontWeight: FontWeight.w500),
+                                      style: AppTextStyle.subtitle1.copyWith(
+                                          fontSize: multiplier * 0.07,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w500),
                                       textAlign: TextAlign.center,
                                     ),
                                   ],
@@ -329,17 +355,21 @@ class CartTab extends StatelessWidget {
                                 );
                               },
                             );
-                          }else{
-                            if(snapshot.connectionState == ConnectionState.done){
+                          } else {
+                            if (snapshot.connectionState ==
+                                ConnectionState.done) {
                               return SizedBox(
-                                height: Get.height*0.7,
+                                height: Get.height * 0.7,
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
                                       "No Products Found",
-                                      style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.07,color: Colors.black,fontWeight: FontWeight.w500),
+                                      style: AppTextStyle.subtitle1.copyWith(
+                                          fontSize: multiplier * 0.07,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w500),
                                       textAlign: TextAlign.center,
                                     ),
                                   ],
@@ -347,7 +377,7 @@ class CartTab extends StatelessWidget {
                               );
                             }
                             return SizedBox(
-                              height: Get.height*0.7,
+                              height: Get.height * 0.7,
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -361,9 +391,10 @@ class CartTab extends StatelessWidget {
                           }
                         }),
                   ),
-                if(controller.currentType == "Service Partner")
+                if (controller.currentType == "Service Partner")
                   Padding(
-                    padding: EdgeInsets.only(left: Get.width*0.03, right: Get.width*0.03),
+                    padding: EdgeInsets.only(
+                        left: Get.width * 0.03, right: Get.width * 0.03),
                     child: PageDropButtonWithoutBackground(
                       label: "",
                       hint: '',
@@ -373,23 +404,28 @@ class CartTab extends StatelessWidget {
                         controller.update();
                       },
                       value: "All Service Orders",
-                      items: ["All Service Orders"].map<DropdownMenuItem<String>>((String value) {
+                      items: ["All Service Orders"]
+                          .map<DropdownMenuItem<String>>((String value) {
                         return DropdownMenuItem<String>(
                           value: value,
-                          child: Text(value,style: AppTextStyle.subtitle1.copyWith(
-                            color: AppColors.primary,
-                            fontSize: Get.width * 0.035,
-                            fontWeight: FontWeight.w500,
-                          ),textAlign: TextAlign.start,),
+                          child: Text(
+                            value,
+                            style: AppTextStyle.subtitle1.copyWith(
+                              color: AppColors.primary,
+                              fontSize: Get.width * 0.035,
+                              fontWeight: FontWeight.w500,
+                            ),
+                            textAlign: TextAlign.start,
+                          ),
                         );
                       }).toList(),
                     ),
                   ),
-                if(controller.currentType == "Service Partner")
+                if (controller.currentType == "Service Partner")
                   SizedBox(
                     height: Get.height * 0.015,
                   ),
-                if(controller.currentType == "Service Partner")
+                if (controller.currentType == "Service Partner")
                   Expanded(
                     child: ListView.builder(
                       itemCount: 4,
@@ -404,25 +440,29 @@ class CartTab extends StatelessWidget {
               ],
             ),
           ),
-          floatingActionButton: controller.currentType == "Client" || controller.currentType == "Corporate Client" || controller.currentType == "Service Partner" ? null : FloatingActionButton(
-            onPressed: (){
-              Get.to(() => const AddProject());
-            },
-            backgroundColor: AppColors.primary,
-            child: Stack(
-              children: [
-                SizedBox(
-                  width: Get.width * 0.05,
-                  height: Get.width * 0.05,
-                  child: Icon(
-                    Icons.add,
-                    color: Colors.white,
-                    size: Get.width * 0.05,
+          floatingActionButton: controller.currentType == "Client" ||
+                  controller.currentType == "Corporate Client" ||
+                  controller.currentType == "Service Partner"
+              ? null
+              : FloatingActionButton(
+                  onPressed: () {
+                    Get.to(() => const AddProject());
+                  },
+                  backgroundColor: AppColors.primary,
+                  child: Stack(
+                    children: [
+                      SizedBox(
+                        width: Get.width * 0.05,
+                        height: Get.width * 0.05,
+                        child: Icon(
+                          Icons.add,
+                          color: Colors.white,
+                          size: Get.width * 0.05,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            ),
-          ),
         ),
       );
     });
@@ -430,15 +470,15 @@ class CartTab extends StatelessWidget {
 }
 
 class CartItem extends StatelessWidget {
-  const CartItem({
-    Key? key,
-    this.image = "assets/images/dummy_image.png",
-    this.title = "30 Tonnes Sharp Sand",
-    this.subTitle = "",
-    this.price = "N 115,000",
-    this.quantity = 1,
-    this.quantityChanged
-  }) : super(key: key);
+  const CartItem(
+      {Key? key,
+      this.image = "assets/images/dummy_image.png",
+      this.title = "30 Tonnes Sharp Sand",
+      this.subTitle = "",
+      this.price = "N 115,000",
+      this.quantity = 1,
+      this.quantityChanged})
+      : super(key: key);
 
   final String image;
   final String title;
@@ -449,7 +489,6 @@ class CartItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     /*CachedNetworkImageProvider(
       "www.com",
     )*/
@@ -462,28 +501,30 @@ class CartItem extends StatelessWidget {
               height: 90,
               width: 90,
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(10), child: Image.network(
-                image,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
-                  return Container(
-                    height: 90,
-                    width: 90,
-                    decoration: BoxDecoration(
-                      color: AppColors.primary,
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: AppColors.grey.withOpacity(0.1),width: 1),
-                    ),
-                    child: Center(
-                      child: Icon(
-                        Icons.image_not_supported,
-                        color: AppColors.background,
-                        size: Get.width*0.1,
+                borderRadius: BorderRadius.circular(10),
+                child: Image.network(
+                  image,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      height: 90,
+                      width: 90,
+                      decoration: BoxDecoration(
+                        color: AppColors.primary,
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(
+                            color: AppColors.grey.withOpacity(0.1), width: 1),
                       ),
-                    ),
-                  );
-                },
-              ),
+                      child: Center(
+                        child: Icon(
+                          Icons.image_not_supported,
+                          color: AppColors.background,
+                          size: Get.width * 0.1,
+                        ),
+                      ),
+                    );
+                  },
+                ),
               ),
             ),
             const SizedBox(width: 10),
@@ -495,7 +536,7 @@ class CartItem extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.only(left: Get.width * 0.015),
                     child: Text(
-                        title,
+                      title,
                       style: AppTextStyle.caption.copyWith(
                         color: Colors.black,
                         fontSize: Get.width * 0.035,
@@ -526,7 +567,7 @@ class CartItem extends StatelessWidget {
                 ItemCounter(
                   initialCount: quantity,
                   onCountChanged: (count) {
-                    if(quantityChanged != null){
+                    if (quantityChanged != null) {
                       quantityChanged!(count);
                     }
                   },
@@ -543,14 +584,15 @@ class CartItem extends StatelessWidget {
 
 class OrderItem extends StatelessWidget {
   const OrderItem({
-    Key? key, this.status = "Pending Shipping", this.statusColor,
+    Key? key,
+    this.status = "Pending Shipping",
+    this.statusColor,
   }) : super(key: key);
 
   final String status;
   final Color? statusColor;
   @override
   Widget build(BuildContext context) {
-
     /*CachedNetworkImageProvider(
       "www.com",
     )*/
@@ -586,7 +628,7 @@ class OrderItem extends StatelessWidget {
                     child: Text(
                       'Monday, 31 October 2022 ',
                       style: AppTextStyle.caption.copyWith(
-                        color: Color(0xFF9A9A9A),
+                        color: const Color(0xFF9A9A9A),
                         fontSize: Get.width * 0.033,
                         fontWeight: FontWeight.w400,
                       ),
@@ -647,7 +689,6 @@ class ProductItem extends StatelessWidget {
   final String? image;
   @override
   Widget build(BuildContext context) {
-
     /*CachedNetworkImageProvider(
       "www.com",
     )*/
@@ -660,28 +701,30 @@ class ProductItem extends StatelessWidget {
               height: 90,
               width: 90,
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(10), child: Image.network(
-                image.toString(),
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
-                  return Container(
-                    height: 90,
-                    width: 90,
-                    decoration: BoxDecoration(
-                      color: AppColors.primary,
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: AppColors.grey.withOpacity(0.1),width: 1),
-                    ),
-                    child: Center(
-                      child: Icon(
-                        Icons.image_not_supported,
-                        color: AppColors.background,
-                        size: Get.width*0.1,
+                borderRadius: BorderRadius.circular(10),
+                child: Image.network(
+                  image.toString(),
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      height: 90,
+                      width: 90,
+                      decoration: BoxDecoration(
+                        color: AppColors.primary,
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(
+                            color: AppColors.grey.withOpacity(0.1), width: 1),
                       ),
-                    ),
-                  );
-                },
-              ),
+                      child: Center(
+                        child: Icon(
+                          Icons.image_not_supported,
+                          color: AppColors.background,
+                          size: Get.width * 0.1,
+                        ),
+                      ),
+                    );
+                  },
+                ),
               ),
             ),
             const SizedBox(width: 10),
@@ -725,11 +768,15 @@ class ProductItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Padding(
-                  padding: EdgeInsets.only(left: Get.width * 0.015,top: 5),
-                  child: Image.asset('assets/images/Group 47403.png',height: Get.width * 0.07,width: Get.width * 0.07,),
+                  padding: EdgeInsets.only(left: Get.width * 0.015, top: 5),
+                  child: Image.asset(
+                    'assets/images/Group 47403.png',
+                    height: Get.width * 0.07,
+                    width: Get.width * 0.07,
+                  ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(left: Get.width * 0.015,bottom: 5),
+                  padding: EdgeInsets.only(left: Get.width * 0.015, bottom: 5),
                   child: SizedBox(
                     width: Get.width * 0.2,
                     child: AppButton(
@@ -757,12 +804,12 @@ class OrderRequestItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     /*CachedNetworkImageProvider(
       "www.com",
     )*/
     return Container(
-      margin: EdgeInsets.only(left: Get.width*0.03, right: Get.width*0.03,bottom: 20,top: 5),
+      margin: EdgeInsets.only(
+          left: Get.width * 0.03, right: Get.width * 0.03, bottom: 20, top: 5),
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
@@ -777,7 +824,7 @@ class OrderRequestItem extends StatelessWidget {
         ],
       ),
       child: InkWell(
-        onTap: (){
+        onTap: () {
           Get.to(() => const OrderDetails());
         },
         child: Column(
@@ -888,12 +935,12 @@ class ServiceRequestItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     /*CachedNetworkImageProvider(
       "www.com",
     )*/
     return Container(
-      margin: EdgeInsets.only(left: Get.width*0.03, right: Get.width*0.03,bottom: 20,top: 5),
+      margin: EdgeInsets.only(
+          left: Get.width * 0.03, right: Get.width * 0.03, bottom: 20, top: 5),
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
@@ -908,7 +955,7 @@ class ServiceRequestItem extends StatelessWidget {
         ],
       ),
       child: InkWell(
-        onTap: (){
+        onTap: () {
           Get.to(() => const OrderDetails());
         },
         child: Column(

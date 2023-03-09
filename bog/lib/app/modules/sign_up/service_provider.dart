@@ -1,10 +1,8 @@
-import 'package:dart_countries/dart_countries.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+
 import 'package:get/get.dart';
-import 'package:nigerian_states_and_lga/nigerian_states_and_lga.dart';
-import 'package:toggle_switch/toggle_switch.dart';
+
 import '../../../core/theme/app_colors.dart';
 
 import '../../../core/theme/app_styles.dart';
@@ -15,7 +13,6 @@ import '../../global_widgets/app_button.dart';
 import '../../global_widgets/page_dropdown.dart';
 import '../../global_widgets/page_input.dart';
 import '../sign_in/sign_in.dart';
-import '../verify_otp/verify_otp.dart';
 
 class ServiceProviderSignUp extends GetView<AuthController> {
   const ServiceProviderSignUp({Key? key}) : super(key: key);
@@ -55,7 +52,8 @@ class ServiceProviderSignUp extends GetView<AuthController> {
                 children: [
                   SizedBox(height: Get.height * 0.025),
                   Padding(
-                    padding: const EdgeInsets.only(left: AppThemes.appPaddingVal),
+                    padding:
+                        const EdgeInsets.only(left: AppThemes.appPaddingVal),
                     child: Text(
                       'Sign Up as Service Partner',
                       style: AppTextStyle.headline4.copyWith(
@@ -70,14 +68,14 @@ class ServiceProviderSignUp extends GetView<AuthController> {
                     height: Get.height * 0.010,
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left: AppThemes.appPaddingVal),
+                    padding:
+                        const EdgeInsets.only(left: AppThemes.appPaddingVal),
                     child: Text(
                       'Render services to users in need',
                       style: AppTextStyle.headline4.copyWith(
-                        color: Colors.black.withOpacity(.5),
-                        fontWeight: FontWeight.normal,
-                        fontSize: 16
-                      ),
+                          color: Colors.black.withOpacity(.5),
+                          fontWeight: FontWeight.normal,
+                          fontSize: 16),
                     ),
                   ),
                   SizedBox(height: Get.height * 0.04),
@@ -87,7 +85,8 @@ class ServiceProviderSignUp extends GetView<AuthController> {
                         color: Colors.white,
                         //height: Get.height+(Get.height * 0.15),
                         child: Padding(
-                          padding: const EdgeInsets.all(AppThemes.appPaddingVal),
+                          padding:
+                              const EdgeInsets.all(AppThemes.appPaddingVal),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -199,12 +198,20 @@ class ServiceProviderSignUp extends GetView<AuthController> {
                               PageDropButton(
                                 label: "",
                                 hint: '',
-                                padding: const EdgeInsets.symmetric(horizontal: 10),
-                                onChanged: (val) {
-
-                                },
-                                value:  "Apple App Store",
-                                items: ["Apple App Store","Google Play Store","Google         ","Email         ","Facebook         ","Twitter         ","Instagram         ","Whatsapp         "].map<DropdownMenuItem<String>>((String value) {
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 10),
+                                onChanged: (val) {},
+                                value: "Apple App Store",
+                                items: [
+                                  "Apple App Store",
+                                  "Google Play Store",
+                                  "Google         ",
+                                  "Email         ",
+                                  "Facebook         ",
+                                  "Twitter         ",
+                                  "Instagram         ",
+                                  "Whatsapp         "
+                                ].map<DropdownMenuItem<String>>((String value) {
                                   return DropdownMenuItem<String>(
                                     value: value,
                                     child: Text(value),
@@ -216,13 +223,16 @@ class ServiceProviderSignUp extends GetView<AuthController> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   Checkbox(
-                                      value: controller.isTermsAndConditionsChecked,
-                                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                      visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-                                      onChanged: (val){
-                                        controller.toggleTermsAndConditions(val == true);
-                                      }
-                                  ),
+                                      value: controller
+                                          .isTermsAndConditionsChecked,
+                                      materialTapTargetSize:
+                                          MaterialTapTargetSize.shrinkWrap,
+                                      visualDensity: const VisualDensity(
+                                          horizontal: -4, vertical: -4),
+                                      onChanged: (val) {
+                                        controller.toggleTermsAndConditions(
+                                            val == true);
+                                      }),
                                   SizedBox(
                                     width: Get.width * 0.02,
                                   ),
@@ -231,24 +241,27 @@ class ServiceProviderSignUp extends GetView<AuthController> {
                                       text: TextSpan(
                                         children: [
                                           TextSpan(
-                                            text: 'By creating an account, you agree to BOG’s ',
-                                            style: AppTextStyle.headline4.copyWith(
-                                              color: Colors.black.withOpacity(.5),
+                                            text:
+                                                'By creating an account, you agree to BOG’s ',
+                                            style:
+                                                AppTextStyle.headline4.copyWith(
+                                              color:
+                                                  Colors.black.withOpacity(.5),
                                               fontWeight: FontWeight.normal,
                                               fontSize: 14,
                                             ),
                                           ),
                                           TextSpan(
-                                              text: ' Privacy Policy, Terms and Conditions',
-                                              style: AppTextStyle.headline4.copyWith(
+                                              text:
+                                                  ' Privacy Policy, Terms and Conditions',
+                                              style: AppTextStyle.headline4
+                                                  .copyWith(
                                                 color: AppColors.primary,
                                                 fontWeight: FontWeight.normal,
                                                 fontSize: 14,
                                               ),
-                                              recognizer:  TapGestureRecognizer()..onTap = () {
-
-                                              }
-                                          ),
+                                              recognizer: TapGestureRecognizer()
+                                                ..onTap = () {}),
                                         ],
                                       ),
                                     ),
@@ -258,7 +271,8 @@ class ServiceProviderSignUp extends GetView<AuthController> {
                               SizedBox(height: Get.height * 0.025),
                               AppButton(
                                 title: 'Sign Up As A Service Partner',
-                                onPressed: () async => await controller.signupServiceProvider(_formKey),
+                                onPressed: () async => await controller
+                                    .signupServiceProvider(_formKey),
                                 borderRadius: 10,
                                 enabled: controller.isTermsAndConditionsChecked,
                               ),
@@ -283,7 +297,6 @@ class ServiceProviderSignUp extends GetView<AuthController> {
               ),
             ),
           );
-        })
-    );
+        }));
   }
 }
