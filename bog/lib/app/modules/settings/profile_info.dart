@@ -296,7 +296,7 @@ class ProfileInfo extends GetView<HomeController> {
                           //color: controller.currentBottomNavPage.value == 1 ? AppColors.primary : AppColors.grey,
                         ),
                       ),
-                      label: 'Chat',
+                      label: 'Message',
                     ),
                     BottomNavigationBarItem(
                       icon: Padding(

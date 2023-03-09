@@ -31,7 +31,7 @@ class Chat extends GetView<HomeController> {
           systemNavigationBarIconBrightness: Brightness.dark
       ),
       child: GetBuilder<HomeController>(
-          id: 'Chat',
+          id: 'Message',
           builder: (controller) {
             return Scaffold(
               body: SizedBox(

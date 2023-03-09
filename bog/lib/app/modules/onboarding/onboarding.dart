@@ -1,9 +1,14 @@
+import 'dart:async';
+
+import 'package:bog/app/base/base.dart';
 import 'package:bog/app/modules/sign_in/sign_in.dart';
+import 'package:bog/core/utils/extensions.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:feather_icons/feather_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter/services.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../multiplexor/multiplexor.dart';
 import '../../../app/global_widgets/app_button.dart';
 
@@ -24,6 +29,31 @@ class OnboardingPage extends StatefulWidget {
 
 class _OnboardingPageState extends State<OnboardingPage> {
   int currentIndex = 0;
+  PageController pageController = PageController();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      // Future.delayed(Duration(seconds: 1),(){startTimer();});
+    });
+  }
+
+  Timer? timer;
+  void startTimer(){
+    timer?.cancel();
+    timer = Timer.periodic(Duration(seconds: 3), (timer) {
+      pageController.nextPage(duration: Duration(milliseconds: 500), curve: Curves.ease);
+    });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    timer?.cancel();
+  }
+
   @override
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
@@ -36,92 +66,103 @@ class _OnboardingPageState extends State<OnboardingPage> {
         ),
         child: Scaffold(
           backgroundColor: AppColors.background,
-          body: Stack(
+          body: Stack(fit: StackFit.expand,
             children: [
+              Center(
+                child: Image.asset(
+                  "launch_back".png,
+                  fit: BoxFit.cover,
+                ),
+              ),
+              Builder(
+                builder: (context) {
+                  var onboardingModel = _screen[0];
+                  return Center(
+                    child: AnimatedOpacity(
+                      duration: Duration(milliseconds: 500),
+                      opacity: currentIndex==0?1:0,
+                      child: Image.asset(
+                        "launch1a".png,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  );
+                }
+              ),
+              Builder(
+                builder: (context) {
+                  var onboardingModel = _screen[1];
+                  return Center(
+                    child: AnimatedOpacity(
+                      duration: Duration(milliseconds: 500),
+                      opacity: currentIndex==1?1:0,
+                      child: Image.asset(
+                        "launch1b".png,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  );
+                }
+              ),
+              Builder(
+                builder: (context) {
+                  var onboardingModel = _screen[2];
+                  return Center(
+                    child: AnimatedOpacity(
+                      duration: Duration(milliseconds: 500),
+                      opacity: currentIndex==2?1:0,
+                      child: Image.asset(
+                        "launch1c".png,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  );
+                }
+              ),
               SafeArea(
                 child: Container(
-                  color: AppColors.background,
+                  // color: AppColors.background,
                   child: Padding(
                     padding: const EdgeInsets.all(AppThemes.appPaddingVal),
                     child: Column(
                       children: [
-                        Align(
-                          alignment: Alignment.bottomRight,
-                          child: InkWell(
-                            onTap: null,
-                            child: Text(
-                              'Skip',
-                              style: AppTextStyle.bodyText1.copyWith(color: AppColors.background,fontWeight: FontWeight.normal),
-                            ),
-                          ),
+                        addSpace(20),
+                        SmoothPageIndicator(
+                            controller: pageController,
+                            key: ValueKey("pc$currentIndex"),
+                            count:  _screen.length,
+                            effect:  WormEffect(dotWidth: 80,
+                                dotHeight: 3,radius: 5,
+                                activeDotColor: AppColors.primary,
+                                dotColor: AppColors.primary.withOpacity(.5)),  // your preferred effect
+                            onDotClicked: (index){
+
+                            }
                         ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        Image.asset(
-                          'assets/images/boglogo.png',
-                          height: Get.width * 0.13,
-                          width: Get.height*0.13,
-                        ),
+                        addSpace(50),
                         Expanded(
-                          child: CarouselSlider(
-                            items: _screen.map((e) => OnboardingItem(
-                              onboardingModel: e, pos: _screen.indexOf(e),
-                            ))
-                                .toList(),
-                            carouselController: buttonCarouselController,
-                            options: CarouselOptions(
-                              height: double.infinity,
-                              autoPlay: true,
-                              enableInfiniteScroll: false,
-                              viewportFraction: 1,
-                              initialPage: 0,
-                              onPageChanged: (index, reason) {
-                                setState(() {
-                                  currentIndex = index;
-                                });
-                              },
-                            ),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 31,
-                        ),
-                        SizedBox(
-                          height: 10,
-                          child: ListView.separated(
-                            scrollDirection: Axis.horizontal,
-                            shrinkWrap: true,
-                            itemBuilder: (context, index) => Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                index == currentIndex
-                                    ? Container(
-                                  decoration: BoxDecoration(
-                                      color: index == currentIndex
-                                          ? AppColors.primary
-                                          : AppColors.primary.withOpacity(.5),
-                                      //borderRadius: BorderRadius.circular(8),
-                                      shape: BoxShape.circle
-                                  ),
-                                  height: 8,
-                                  width: 8,
-                                )
-                                    : Container(
-                                  decoration: BoxDecoration(
-                                      color: index == currentIndex
-                                          ? AppColors.primary
-                                          : AppColors.fadedPrimary,
-                                      shape: BoxShape.circle),
-                                  height: 8,
-                                  width: 8,
-                                ),
-                              ],
-                            ),
-                            separatorBuilder: (context, index) => const SizedBox(
-                              width: 5,
-                            ),
-                            itemCount: 3,
+                          child: PageView.builder(
+                            itemBuilder: (c,p){
+
+                              OnboardingModel model = _screen[currentIndex];
+                              return Column(
+                                children: [
+                                  Text(model.title,style: textStyle(true, 20, blackColor),
+                                  textAlign: TextAlign.center,),
+                                  Expanded(child: Container(color: Colors.transparent,)),
+                                  Text(model.subtitle,style: textStyle(false, 16, blackColor),
+                                  textAlign: TextAlign.center,),
+
+
+                                ],
+                              );
+                            },
+                            controller: pageController,
+                            onPageChanged: (p){
+                              setState((){
+                                currentIndex=p%(_screen.length);
+                              });
+                            },
                           ),
                         ),
                         const SizedBox(
@@ -144,11 +185,11 @@ class _OnboardingPageState extends State<OnboardingPage> {
                           },
                           borderRadius: 10,
                           fontColor: AppColors.primary,
-                          bckgrndColor: AppColors.background,
+                          bckgrndColor: Colors.transparent,
                         ),
-                        SizedBox(
-                          height: Get.height * 0.05,
-                        ),
+                        // SizedBox(
+                        //   height: Get.height * 0.05,
+                        // ),
                       ],
                     ),
                   ),
@@ -176,17 +217,17 @@ class OnboardingModel {
 List<OnboardingModel> _screen = [
   OnboardingModel(
     image: 'one',
-    title: 'Monitor and manage your projects',
-    subtitle: 'Enjoy full control over your project',
+    title: 'Monitor and manage your projects from anywhere',
+    subtitle: 'Achieve your dream project to your taste without the barrier or distance',
   ),
   OnboardingModel(
     image: 'two',
-    title: 'Find construction professionals for your jobs',
-    subtitle: 'Hire professional Service Partners',
+    title: 'Find service partners suitable for your jobs',
+    subtitle: 'Hire professional workers with top skills and experience for your projects.',
   ),
   OnboardingModel(
     image: 'three',
-    title: 'Get quality construction materials for projects',
-    subtitle: 'Access materials easily for your project',
+    title: 'Access quality construction materials for projects',
+    subtitle: 'We offer top-quality construction materials to suit your project need',
   ),
 ];

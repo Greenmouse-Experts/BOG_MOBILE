@@ -1,13 +1,16 @@
 import 'dart:io';
 import 'dart:async';
 import 'package:dio/dio.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:dio_logger/dio_logger.dart';
 
 import 'api_response.dart';
 import 'my_pref.dart';
 
 class Api {
-  static const String baseUrl = 'https://bog-application.herokuapp.com/api';
+  static Api instance  = Get.find();
+  static const String baseUrl = 'https://bog.greenmouseproperties.com/api';
 
   static const String imgUrl = 'http://imgURl';
   CancelToken token = CancelToken();
@@ -18,7 +21,9 @@ class Api {
       'Content-Type': 'application/x-www-form-urlencoded',
     },
     receiveTimeout: 10000,
-  ));
+  ))..interceptors.add(dioLoggerInterceptor);
+  Dio get client => _client;
+
 
   Future<ApiResponse> postData(
     String url, {
@@ -189,7 +194,10 @@ class Api {
       var head = {
         'Authorization': MyPref.authToken.val,
       };
+      print("The auth: ${MyPref.authToken.val}");
+      print("The link: ${Uri.parse(baseUrl+url)}");
       var response = await http.get(Uri.parse(baseUrl+url), headers: hasHeader ? head : null);
+      print("The respx: ${response.statusCode} ${response.body}");
       return ApiResponse.responseFromBody(response.body, response.statusCode);
       //return ApiResponse.response(request);
     } on DioError catch (e) {

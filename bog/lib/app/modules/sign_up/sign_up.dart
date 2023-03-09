@@ -25,6 +25,7 @@ class SignUp extends GetView<AuthController> {
 
   @override
   Widget build(BuildContext context) {
+
     GlobalKey<FormState> _formKey = GlobalKey<FormState>();
     GlobalKey<FormState> _formKey1 = GlobalKey<FormState>();
 
@@ -324,6 +325,7 @@ class SignUp extends GetView<AuthController> {
                                       trailingTitle: "Log In",
                                       onPressed: () {
                                         Get.toNamed(SignIn.route);
+
                                       },
                                       borderRadius: 10,
                                       bckgrndColor: Colors.white,
@@ -485,7 +487,7 @@ class SignUp extends GetView<AuthController> {
                                       title: 'Already have an account ? ',
                                       trailingTitle: "Log In",
                                       onPressed: () {
-                                        Get.toNamed(SignIn.route);
+                                        Get.toNamed(SignIn.route,);
                                       },
                                       borderRadius: 10,
                                       bckgrndColor: Colors.white,

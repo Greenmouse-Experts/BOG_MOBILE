@@ -1,6 +1,10 @@
 import 'dart:convert';
 
+import 'package:bog/app/base/base.dart';
+import 'package:bog/app/blocs/homeswitch_controller.dart';
 import 'package:bog/app/modules/onboarding/onboarding.dart';
+import 'package:bog/core/utils/dialog_utils.dart';
+import 'package:bog/core/utils/http_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_svg/svg.dart';
@@ -36,6 +40,7 @@ class ProfileTab extends StatelessWidget {
             const SizedBox(
               height: kToolbarHeight,
             ),
+            // addSpace(15),
             Padding(
               padding: EdgeInsets.only(left: Get.width*0.03, right: Get.width*0.03,top: 10),
               child: Row(
@@ -65,20 +70,31 @@ class ProfileTab extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SizedBox(
-                      width: Get.width * 0.28,
-                      height: Get.width * 0.28,
-                      child: IconButton(
-                        icon: AppAvatar(
-                          imgUrl: (logInDetails.photo).toString(),
-                          radius: Get.width * 0.16,
-                          name: "${logInDetails.fname} ${logInDetails.lname}",
-                        ),
-                        onPressed: () {
-
-                        },
+                    Container(
+                      width: 100,height: 100,decoration: BoxDecoration(
+                      border: Border.all(color: blackColor.withOpacity(.1),width: 1),
+                      shape: BoxShape.circle
+                    ),
+                      child: AppAvatar(
+                        imgUrl: (logInDetails.photo).toString(),
+                        radius: Get.width * 0.16,
+                        name: "${logInDetails.fname} ${logInDetails.lname}",
                       ),
                     ),
+                    // SizedBox(
+                    //   width: Get.width * 0.28,
+                    //   height: Get.width * 0.28,
+                    //   child: IconButton(style: IconButton.styleFrom(
+                    //     shape: CircleBorder(
+                    //       side: BorderSide(color: blackColor,width: 5)
+                    //     )
+                    //   ),
+                    //     icon: ,
+                    //     onPressed: () {
+                    //
+                    //     },
+                    //   ),
+                    // ),
                     Text(
                       "${logInDetails.fname} ${logInDetails.lname}",
                       style: AppTextStyle.subtitle1.copyWith(
@@ -86,23 +102,52 @@ class ProfileTab extends StatelessWidget {
                         fontSize: Get.width * 0.045,
                       ),
                     ),
-                    Text(
-                      controller.currentType,
-                      style: AppTextStyle.subtitle1.copyWith(
-                        color: Colors.black.withOpacity(0.5),
-                        fontSize: Get.width * 0.035,
-                      ),
-                    ),
+                    // Text(
+                    //   controller.currentType,
+                    //   style: AppTextStyle.subtitle1.copyWith(
+                    //     color: Colors.black.withOpacity(0.5),
+                    //     fontSize: Get.width * 0.035,
+                    //   ),
+                    // ),
+                    addSpace(5),
+                    Container(
+                      height: 20,
+                      child: TextButton(onPressed: (){
+
+                        HomeSwitchController.instance.clickSwitch(context);
+
+
+                      },
+                          style: TextButton.styleFrom(
+                              backgroundColor: AppColors.primary,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5)
+                              ),
+                              padding: const EdgeInsets.fromLTRB(10, 0, 10, 0)
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(controller.currentType,style: textStyle(false, 12, white),),
+                              addSpaceWidth(5),
+                              const Icon(Icons.expand_circle_down,color: white,size: 12,)
+                            ],
+                          )),
+                    )
                   ],
                 ),
               ),
             ),
 
-            const SizedBox(
+            /*const SizedBox(
               height: kToolbarHeight/3,
-            ),
+            ),*/
+            addSpace(15),
             _TextButton(text: "Profile Info", onPressed: () {
+
               Get.to(() => const ProfileInfo());
+
+
             },imageAsset: "assets/images/prifile.png",),
 
             if(controller.currentType == "Product Partner" || controller.currentType == "Service Partner" )
@@ -144,7 +189,10 @@ class ProfileTab extends StatelessWidget {
               height: kToolbarHeight/3,
             ),
             _TextButton(text: "Log Out", onPressed: () {
-              Get.toNamed(OnboardingPage.route);
+             yesNoDialog(context, "Log Out", "are you sure you want to log out?", (){
+               MyPref.clearBoxes();
+               Get.offAllNamed(OnboardingPage.route);
+             });
             },imageAsset: "assets/images/log_out.png",showArrow: false,),
           ],
         ),

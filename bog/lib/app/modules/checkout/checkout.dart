@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:bog/app/global_widgets/app_button.dart';
+import 'package:bog/app/global_widgets/global_widgets.dart';
 import 'package:feather_icons/feather_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -688,7 +689,7 @@ class _CheckoutState extends State<Checkout> {
                           //color: controller.currentBottomNavPage.value == 1 ? AppColors.primary : AppColors.grey,
                         ),
                       ),
-                      label: 'Chat',
+                      label: 'Message',
                     ),
                     BottomNavigationBarItem(
                       icon: Padding(
@@ -801,6 +802,118 @@ class ServiceWidget extends StatelessWidget {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class CartItem extends StatelessWidget {
+  const CartItem({
+    Key? key,
+    this.image = "assets/images/dummy_image.png",
+    this.title = "30 Tonnes Sharp Sand",
+    this.subTitle = "",
+    this.price = "N 115,000",
+    this.quantity = 1,
+    this.quantityChanged
+  }) : super(key: key);
+
+  final String image;
+  final String title;
+  final String subTitle;
+  final String price;
+  final int quantity;
+  final Function(int)? quantityChanged;
+
+  @override
+  Widget build(BuildContext context) {
+
+    /*CachedNetworkImageProvider(
+      "www.com",
+    )*/
+    return IntrinsicHeight(
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 25),
+        child: Row(
+          children: [
+            SizedBox(
+              height: 90,
+              width: 90,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10), child: Image.network(
+                image,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return Container(
+                    height: 90,
+                    width: 90,
+                    decoration: BoxDecoration(
+                      color: AppColors.primary,
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: AppColors.grey.withOpacity(0.1),width: 1),
+                    ),
+                    child: Center(
+                      child: Icon(
+                        Icons.image_not_supported,
+                        color: AppColors.background,
+                        size: Get.width*0.1,
+                      ),
+                    ),
+                  );
+                },
+              ),
+              ),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(left: Get.width * 0.015),
+                    child: Text(
+                      title,
+                      style: AppTextStyle.caption.copyWith(
+                        color: Colors.black,
+                        fontSize: Get.width * 0.035,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                  AppRating(onRatingUpdate: (value) {}, rating: 4.5),
+                  Padding(
+                    padding: EdgeInsets.only(left: Get.width * 0.015),
+                    child: Text(
+                      price,
+                      style: AppTextStyle.caption.copyWith(
+                        color: Colors.black,
+                        fontSize: Get.width * 0.035,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 8),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                ItemCounter(
+                  initialCount: quantity,
+                  onCountChanged: (count) {
+                    if(quantityChanged != null){
+                      quantityChanged!(count);
+                    }
+                  },
+                ),
+                const SizedBox(height: 5),
+              ],
+            ),
+          ],
         ),
       ),
     );

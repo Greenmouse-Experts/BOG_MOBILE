@@ -47,6 +47,7 @@ class LogInModel {
     _email = email;
     _phone = phone;
     _isActive = isActive;
+    _hasActiveSubscription = hasActiveSubscription;
     _token = token;
     _userType = userType;
     _address = address;
@@ -69,6 +70,7 @@ class LogInModel {
     _email = json['email'];
     _phone = json['phone'];
     _isActive = json['isActive'];
+    _hasActiveSubscription = json['hasActiveSubscription'];
     _token = json['token'];
     _userType = json['userType'];
     _address = json['address'];
@@ -89,6 +91,7 @@ class LogInModel {
   String? _email;
   String? _phone;
   bool? _isActive;
+  bool? _hasActiveSubscription;
   String? _token;
   String? _userType;
   String? _address;
@@ -147,6 +150,7 @@ LogInModel copyWith({  String? id,
   String? get email => _email;
   String? get phone => _phone;
   bool? get isActive => _isActive;
+  bool? get hasActiveSubscription => _hasActiveSubscription;
   String? get token => _token;
   String? get userType => _userType;
   String? get address => _address;
@@ -169,6 +173,7 @@ LogInModel copyWith({  String? id,
     map['email'] = _email;
     map['phone'] = _phone;
     map['isActive'] = _isActive;
+    map['hasActiveSubscription'] = _hasActiveSubscription;
     map['token'] = _token;
     map['userType'] = _userType;
     map['address'] = _address;

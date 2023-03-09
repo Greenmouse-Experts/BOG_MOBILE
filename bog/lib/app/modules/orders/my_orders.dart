@@ -251,7 +251,7 @@ class _MyOrderScreenState extends State<MyOrderScreen> with TickerProviderStateM
                           //color: controller.currentBottomNavPage.value == 1 ? AppColors.primary : AppColors.grey,
                         ),
                       ),
-                      label: 'Chat',
+                      label: 'Message',
                     ),
                     BottomNavigationBarItem(
                       icon: Padding(

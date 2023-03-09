@@ -1,0 +1,6 @@
+
+printOut(data){
+
+  print("$data");
+
+}

@@ -437,7 +437,7 @@ class SwitchUser extends GetView<HomeController> {
                         width: 25,
                         color: controller.currentBottomNavPage.value == 1 ? AppColors.primary : AppColors.grey,
                       ),
-                      label: 'Chat',
+                      label: 'Message',
                     ),
                     BottomNavigationBarItem(
                       icon: Image.asset(

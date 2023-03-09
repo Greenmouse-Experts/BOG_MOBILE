@@ -248,29 +248,31 @@ class _VerticalTabsState extends State<VerticalTabs> with TickerProviderStateMix
                           ),
                         ),
                         SizedBox(height: Get.height*0.02,),
-                        SizedBox(
-                          height: Get.height*0.68,
-                          child: PageView.builder(
-                            scrollDirection: widget.contentScrollAxis,
-                            physics: pageScrollPhysics,
-                            onPageChanged: (index) {
-                              if (_changePageByTapView == false || _changePageByTapView == null) {
-                                _selectTab(index);
-                              }
-                              if (_selectedIndex == index) {
-                                _changePageByTapView = null;
-                              }
-                              setState(() {});
-                            },
-                            controller: pageController,
+                        Expanded(
+                          child: SizedBox(
+                            height: Get.height*0.68,
+                            child: PageView.builder(
+                              scrollDirection: widget.contentScrollAxis,
+                              physics: pageScrollPhysics,
+                              onPageChanged: (index) {
+                                if (_changePageByTapView == false || _changePageByTapView == null) {
+                                  _selectTab(index);
+                                }
+                                if (_selectedIndex == index) {
+                                  _changePageByTapView = null;
+                                }
+                                setState(() {});
+                              },
+                              controller: pageController,
 
-                            // the number of pages
-                            itemCount: widget.contents.length,
+                              // the number of pages
+                              itemCount: widget.contents.length,
 
-                            // building pages
-                            itemBuilder: (BuildContext context, int index) {
-                              return widget.contents[index];
-                            },
+                              // building pages
+                              itemBuilder: (BuildContext context, int index) {
+                                return widget.contents[index];
+                              },
+                            ),
                           ),
                         ),
                       ],

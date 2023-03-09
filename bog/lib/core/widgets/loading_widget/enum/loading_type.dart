@@ -1,0 +1,4 @@
+
+enum LoadingType{
+  normal, nonCancellable
+}

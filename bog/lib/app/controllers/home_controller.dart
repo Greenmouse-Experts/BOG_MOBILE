@@ -65,7 +65,7 @@ class HomeController extends GetxController {
       update(['home']);
     }
   }
-  List<Widget> pages = const [
+  List<Widget> pages =  [
     HomeTab(),
     ChatTab(),
     ProjectTab(),
