@@ -9,6 +9,7 @@ import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_styles.dart';
@@ -21,6 +22,7 @@ import '../../../global_widgets/app_drawer.dart';
 import '../../../global_widgets/horizontal_item_tile.dart';
 import '../../create/create.dart';
 import '../../notifications/notification.dart';
+import '../../settings/support.dart';
 import '../../shop/shop.dart';
 
 class HomeTab extends StatefulWidget {
@@ -39,6 +41,7 @@ class _HomeTabState extends State<HomeTab> {
     // TODO: implement initState
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     String title = "N 300,000";
@@ -55,6 +58,17 @@ class _HomeTabState extends State<HomeTab> {
       {'class': 'Sun', 'total': 50},
     ];
 
+    final Uri faq = Uri.parse('https://bog-project-new.netlify.app/faqs');
+    final Uri support = Uri.parse('https://bog-project-new.netlify.app/terms');
+
+    launchURL(Uri url) async {
+      if (await canLaunchUrl(url)) {
+        await launchUrl(url);
+      } else {
+        throw 'Could not launch $url';
+      }
+    }
+
     return GetBuilder<HomeController>(builder: (controller) {
       return SizedBox(
         height: Get.height * 0.93,
@@ -63,30 +77,29 @@ class _HomeTabState extends State<HomeTab> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             const SizedBox(
-              height: kToolbarHeight/1.5,
+              height: kToolbarHeight / 1.5,
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 10.0,right: 10.0,top: 10.0),
+              padding:
+                  const EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0),
               child: Row(
                 children: [
-                  Builder(
-                      builder: (context1) {
-                        return SizedBox(
-                          width: Get.width * 0.16,
-                          height: Get.width * 0.16,
-                          child: IconButton(
-                            icon: AppAvatar(
-                              imgUrl: (logInDetails.photo).toString(),
-                              radius: Get.width * 0.16,
-                              name: "${logInDetails.fname} ${logInDetails.lname}",
-                            ),
-                            onPressed: () {
-                              Scaffold.of(context).openDrawer();
-                            },
-                          ),
-                        );
-                      }
-                  ),
+                  Builder(builder: (context1) {
+                    return SizedBox(
+                      width: Get.width * 0.16,
+                      height: Get.width * 0.16,
+                      child: IconButton(
+                        icon: AppAvatar(
+                          imgUrl: (logInDetails.photo).toString(),
+                          radius: Get.width * 0.16,
+                          name: "${logInDetails.fname} ${logInDetails.lname}",
+                        ),
+                        onPressed: () {
+                          Scaffold.of(context).openDrawer();
+                        },
+                      ),
+                    );
+                  }),
                   const SizedBox(
                     width: 10.0,
                   ),
@@ -118,7 +131,8 @@ class _HomeTabState extends State<HomeTab> {
                         ),
                         //Alarm Icon
                         IconButton(
-                          icon: const Icon(Icons.notifications,color: Colors.grey),
+                          icon: const Icon(Icons.notifications,
+                              color: Colors.grey),
                           onPressed: () {
                             Get.to(() => const NotificationPage());
                           },
@@ -129,34 +143,39 @@ class _HomeTabState extends State<HomeTab> {
                 ],
               ),
             ),
-            if(controller.currentType == "Client" || controller.currentType == "Corporate Client" || controller.currentType == "Product Partner")
+            if (controller.currentType == "Client" ||
+                controller.currentType == "Corporate Client" ||
+                controller.currentType == "Product Partner")
               SizedBox(
-              height: Get.height * 0.015,
-            ),
-            if(controller.currentType == "Client" || controller.currentType == "Corporate Client")
+                height: Get.height * 0.015,
+              ),
+            if (controller.currentType == "Client" ||
+                controller.currentType == "Corporate Client")
               Padding(
-                padding: EdgeInsets.only(left: Get.width*0.045,right: Get.width*0.045),
+                padding: EdgeInsets.only(
+                    left: Get.width * 0.045, right: Get.width * 0.045),
                 child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Container(
-                    height: Get.height * 0.18,
-                    width: Get.width * 0.95,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10.0),
-                      image: const DecorationImage(
-                        image: AssetImage("assets/images/Frame 466380.png"),
-                        fit: BoxFit.fitWidth,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      height: Get.height * 0.18,
+                      width: Get.width * 0.95,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10.0),
+                        image: const DecorationImage(
+                          image: AssetImage("assets/images/Frame 466380.png"),
+                          fit: BoxFit.fitWidth,
+                        ),
                       ),
                     ),
-                  ),
-                ],
-            ),
+                  ],
+                ),
               ),
-            if(controller.currentType == "Product Partner")
+            if (controller.currentType == "Product Partner")
               Padding(
-                padding: EdgeInsets.only(left: Get.width*0.05,right: Get.width*0.05,top: 10.0),
+                padding: EdgeInsets.only(
+                    left: Get.width * 0.05, right: Get.width * 0.05, top: 10.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
@@ -179,7 +198,6 @@ class _HomeTabState extends State<HomeTab> {
                           subTitle,
                           const Color(0xffD3DDFE),
                         ),
-
                         buildOverViewContainer(
                           "assets/images/sales.png",
                           "N 2,000,000",
@@ -200,7 +218,6 @@ class _HomeTabState extends State<HomeTab> {
                           "Products",
                           const Color(0xffF6DEFE),
                         ),
-
                         buildOverViewContainer(
                           "assets/images/orders.png",
                           "52",
@@ -213,49 +230,61 @@ class _HomeTabState extends State<HomeTab> {
                 ),
               ),
             //indicator
-            if(controller.currentType == "Client" || controller.currentType == "Corporate Client" || controller.currentType == "Product Partner")
+            if (controller.currentType == "Client" ||
+                controller.currentType == "Corporate Client" ||
+                controller.currentType == "Product Partner")
               SizedBox(
-              height: Get.height * 0.01,
-            ),
-            if(controller.currentType == "Client" || controller.currentType == "Corporate Client")
+                height: Get.height * 0.01,
+              ),
+            if (controller.currentType == "Client" ||
+                controller.currentType == "Corporate Client")
               Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  width: Get.width * 0.018,
-                  height: Get.width * 0.018,
-                  decoration: BoxDecoration(
-                    color: AppColors.primary,
-                    borderRadius: BorderRadius.circular(100.0),
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    width: Get.width * 0.018,
+                    height: Get.width * 0.018,
+                    decoration: BoxDecoration(
+                      color: AppColors.primary,
+                      borderRadius: BorderRadius.circular(100.0),
+                    ),
                   ),
-                ),
-              ],
-            ),
-            if(controller.currentType == "Client" || controller.currentType == "Corporate Client" || controller.currentType == "Product Partner")
+                ],
+              ),
+            if (controller.currentType == "Client" ||
+                controller.currentType == "Corporate Client" ||
+                controller.currentType == "Product Partner")
               SizedBox(
-              height: Get.height * 0.01,
-            ),
+                height: Get.height * 0.01,
+              ),
             Expanded(
               child: SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    if(controller.currentType == "Client" || controller.currentType == "Corporate Client")
+                    if (controller.currentType == "Client" ||
+                        controller.currentType == "Corporate Client")
                       Padding(
-                      padding: EdgeInsets.only(left: Get.width*0.05,right: Get.width*0.05,top: 10.0),
-                      child: Text(
-                        "What would you like to do?",
-                        style: AppTextStyle.subtitle1.copyWith(
-                          color: Colors.black,
-                          fontSize: Get.width * 0.04,
-                          fontWeight: FontWeight.w500,
+                        padding: EdgeInsets.only(
+                            left: Get.width * 0.05,
+                            right: Get.width * 0.05,
+                            top: 10.0),
+                        child: Text(
+                          "What would you like to do?",
+                          style: AppTextStyle.subtitle1.copyWith(
+                            color: Colors.black,
+                            fontSize: Get.width * 0.04,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
                       ),
-                    ),
-                    if(controller.currentType == "Product Partner")
+                    if (controller.currentType == "Product Partner")
                       Padding(
-                        padding: EdgeInsets.only(left: Get.width*0.05,right: Get.width*0.05,top: 10.0),
+                        padding: EdgeInsets.only(
+                            left: Get.width * 0.05,
+                            right: Get.width * 0.05,
+                            top: 10.0),
                         child: Text(
                           "Sales",
                           style: AppTextStyle.subtitle1.copyWith(
@@ -268,333 +297,390 @@ class _HomeTabState extends State<HomeTab> {
                     SizedBox(
                       height: Get.height * 0.015,
                     ),
-                    if(controller.currentType == "Client" || controller.currentType == "Corporate Client")
+                    if (controller.currentType == "Client" ||
+                        controller.currentType == "Corporate Client")
                       Padding(
-                      padding: EdgeInsets.only(left: Get.width*0.05,right: Get.width*0.05),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          InkWell(
-                            onTap: () {
-                              Get.toNamed(Create.route);
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(10.0),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey.withOpacity(0.2),
-                                    spreadRadius: 1,
-                                    blurRadius: 1,
-                                    offset: const Offset(0, 1), // changes position of shadow
-                                  ),
-                                ],
-                              ),
-                              child: Padding(
-                                padding: EdgeInsets.only(left: Get.width*0.03,right: Get.width*0.03,top: Get.width*0.05,bottom: Get.width*0.05),
-                                child: Row(
-                                  mainAxisAlignment:MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'Create A Project',
-                                          style: AppTextStyle.headline4.copyWith(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 19,
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          height: 10,
-                                        ),
-                                        Text(
-                                          'Start a project with skilled \nprofessionals',
-                                          style: AppTextStyle.headline4.copyWith(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.normal,
-                                            fontSize: 14,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      width: Get.width * 0.02,
-                                    ),
-                                    Image.asset(
-                                      'assets/images/image 808.png',
-                                      width: Get.width*0.15,
-                                      height: Get.width*0.15,
+                        padding: EdgeInsets.only(
+                            left: Get.width * 0.05, right: Get.width * 0.05),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                Get.toNamed(Create.route);
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.2),
+                                      spreadRadius: 1,
+                                      blurRadius: 1,
+                                      offset: const Offset(
+                                          0, 1), // changes position of shadow
                                     ),
                                   ],
                                 ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 20.0,
-                          ),
-                          InkWell(
-                            onTap: () {
-                              Get.toNamed(Shop.route);
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(10.0),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey.withOpacity(0.2),
-                                    spreadRadius: 1,
-                                    blurRadius: 1,
-                                    offset: const Offset(0, 1), // changes position of shadow
-                                  ),
-                                ],
-                              ),
-                              child: Padding(
-                                padding: EdgeInsets.only(left: Get.width*0.03,right: Get.width*0.03,top: Get.width*0.05,bottom: Get.width*0.05),
-                                child: Row(
-                                  mainAxisAlignment:MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'Shop Products',
-                                          style: AppTextStyle.headline4.copyWith(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 19,
+                                child: Padding(
+                                  padding: EdgeInsets.only(
+                                      left: Get.width * 0.03,
+                                      right: Get.width * 0.03,
+                                      top: Get.width * 0.05,
+                                      bottom: Get.width * 0.05),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            'Create A Project',
+                                            style:
+                                                AppTextStyle.headline4.copyWith(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: 19,
+                                            ),
                                           ),
-                                        ),
-                                        const SizedBox(
-                                          height: 10,
-                                        ),
-                                        Text(
-                                          'Procure construction materials \nfor your projects',
-                                          style: AppTextStyle.headline4.copyWith(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.normal,
-                                            fontSize: 14,
+                                          const SizedBox(
+                                            height: 10,
                                           ),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      width: Get.width * 0.02,
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.only(right: Get.width * 0.02),
-                                      child: Image.asset(
-                                        'assets/images/image 809.png',
-                                        width: Get.width*0.15,
-                                        height: Get.width*0.15,
+                                          Text(
+                                            'Start a project with skilled \nprofessionals',
+                                            style:
+                                                AppTextStyle.headline4.copyWith(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.normal,
+                                              fontSize: 14,
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                    ),
-
-                                  ],
+                                      SizedBox(
+                                        width: Get.width * 0.02,
+                                      ),
+                                      Image.asset(
+                                        'assets/images/image 808.png',
+                                        width: Get.width * 0.15,
+                                        height: Get.width * 0.15,
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        ],
+                            const SizedBox(
+                              height: 20.0,
+                            ),
+                            InkWell(
+                              onTap: () {
+                                Get.toNamed(Shop.route);
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.2),
+                                      spreadRadius: 1,
+                                      blurRadius: 1,
+                                      offset: const Offset(
+                                          0, 1), // changes position of shadow
+                                    ),
+                                  ],
+                                ),
+                                child: Padding(
+                                  padding: EdgeInsets.only(
+                                      left: Get.width * 0.03,
+                                      right: Get.width * 0.03,
+                                      top: Get.width * 0.05,
+                                      bottom: Get.width * 0.05),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            'Shop Products',
+                                            style:
+                                                AppTextStyle.headline4.copyWith(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: 19,
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            height: 10,
+                                          ),
+                                          Text(
+                                            'Procure construction materials \nfor your projects',
+                                            style:
+                                                AppTextStyle.headline4.copyWith(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.normal,
+                                              fontSize: 14,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        width: Get.width * 0.02,
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                            right: Get.width * 0.02),
+                                        child: Image.asset(
+                                          'assets/images/image 809.png',
+                                          width: Get.width * 0.15,
+                                          height: Get.width * 0.15,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                    if(controller.currentType == "Product Partner")
+                    if (controller.currentType == "Product Partner")
                       Padding(
-                        padding: EdgeInsets.only(left: Get.width*0.0,right: Get.width*0.05,top: 10.0),
+                        padding: EdgeInsets.only(
+                            left: Get.width * 0.0,
+                            right: Get.width * 0.05,
+                            top: 10.0),
                         child: SizedBox(
                           width: Get.width,
                           height: Get.height * 0.3,
                           child: BarChart(
                             mainBarData(),
-                            swapAnimationDuration: const Duration(milliseconds: 150), // Optional
+                            swapAnimationDuration:
+                                const Duration(milliseconds: 150), // Optional
                             swapAnimationCurve: Curves.linear, // Optional
                           ),
                         ),
                       ),
-
-                    if(controller.currentType == "Service Partner")
+                    if (controller.currentType == "Service Partner")
                       Padding(
-                      padding: EdgeInsets.only(left: Get.width*0.05,right: Get.width*0.05,top: 10.0),
-                      child: Text(
-                        "Overview",
-                        style: AppTextStyle.subtitle1.copyWith(
-                          color: Colors.black,
-                          fontSize: Get.width * 0.04,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-
-                    if(controller.currentType == "Service Partner")
-                      Padding(
-                      padding: EdgeInsets.only(left: Get.width*0.05,right: Get.width*0.05,top: 10.0),
-                      child: SizedBox(
-                        width: Get.width,
-                        height: Get.height * 0.13,
-                        child: SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            children: [
-                              Container(
-                                height: Get.height * 0.13,
-                                width: Get.width*0.5,
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(10.0),
-                                  border: Border.all(
-                                    color: const Color(0xff4CD964),
-                                    width: 1,
-                                  ),
-                                ),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Column(
-                                      mainAxisSize: MainAxisSize.max,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Padding(
-                                          padding: EdgeInsets.only(left: Get.width*0.025),
-                                          child: Text(
-                                            "02",
-                                            style: AppTextStyle.headline4.copyWith(
-                                              color: Colors.black,
-                                              fontSize: Get.width * 0.04,
-                                              fontWeight: FontWeight.w600,
-                                            ),
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          height: Get.height * 0.01,
-                                        ),
-                                        Padding(
-                                          padding: EdgeInsets.only(left: Get.width*0.025),
-                                          child: Text(
-                                            "Current Projects",
-                                            style: AppTextStyle.headline4.copyWith(
-                                              color: Colors.black.withOpacity(0.5),
-                                              fontSize: Get.width * 0.035,
-                                              fontWeight: FontWeight.w500,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(right: 10.0),
-                                      child: Container(
-                                        height: Get.height * 0.05,
-                                        width: Get.height * 0.05,
-                                        decoration: BoxDecoration(
-                                          color: const Color(0xff00E396).withOpacity(0.1),
-                                          borderRadius: const BorderRadius.all(Radius.circular(100.0)),
-                                        ),
-                                        child: Center(
-                                          child: Image.asset(
-                                            'assets/images/image 804.png',
-                                            width: Get.width*0.05,
-                                            height: Get.width*0.05,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 10.0,
-                              ),
-                              Container(
-                                height: Get.height * 0.13,
-                                width: Get.width*0.5,
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(10.0),
-                                  border: Border.all(
-                                    color: const Color(0xff4C52D9),
-                                    width: 1,
-                                  ),
-                                ),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Column(
-                                      mainAxisSize: MainAxisSize.max,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Padding(
-                                          padding: EdgeInsets.only(left: Get.width*0.025),
-                                          child: Text(
-                                            "N 2,300,000",
-                                            style: AppTextStyle.headline4.copyWith(
-                                              color: Colors.black,
-                                              fontSize: Get.width * 0.04,
-                                              fontWeight: FontWeight.w600,
-                                            ),
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          height: Get.height * 0.01,
-                                        ),
-                                        Padding(
-                                          padding: EdgeInsets.only(left: Get.width*0.025),
-                                          child: Text(
-                                            "Total Earning",
-                                            style: AppTextStyle.headline4.copyWith(
-                                              color: Colors.black.withOpacity(0.5),
-                                              fontSize: Get.width * 0.035,
-                                              fontWeight: FontWeight.w500,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(right: 10.0),
-                                      child: Container(
-                                        height: Get.height * 0.05,
-                                        width: Get.height * 0.05,
-                                        decoration: BoxDecoration(
-                                          color: const Color(0xff4C52D9).withOpacity(0.1),
-                                          borderRadius: const BorderRadius.all(Radius.circular(100.0)),
-                                        ),
-                                        child: Center(
-                                          child: Image.asset(
-                                            'assets/images/image 804.png',
-                                            width: Get.width*0.05,
-                                            height: Get.width*0.05,
-                                            color: const Color(0xff4C52D9),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
+                        padding: EdgeInsets.only(
+                            left: Get.width * 0.05,
+                            right: Get.width * 0.05,
+                            top: 10.0),
+                        child: Text(
+                          "Overview",
+                          style: AppTextStyle.subtitle1.copyWith(
+                            color: Colors.black,
+                            fontSize: Get.width * 0.04,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
                       ),
-                    ),
-
-                    if(controller.currentType == "Service Partner")
+                    if (controller.currentType == "Service Partner")
+                      Padding(
+                        padding: EdgeInsets.only(
+                            left: Get.width * 0.05,
+                            right: Get.width * 0.05,
+                            top: 10.0),
+                        child: SizedBox(
+                          width: Get.width,
+                          height: Get.height * 0.13,
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Row(
+                              children: [
+                                Container(
+                                  height: Get.height * 0.13,
+                                  width: Get.width * 0.5,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    border: Border.all(
+                                      color: const Color(0xff4CD964),
+                                      width: 1,
+                                    ),
+                                  ),
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Column(
+                                        mainAxisSize: MainAxisSize.max,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Padding(
+                                            padding: EdgeInsets.only(
+                                                left: Get.width * 0.025),
+                                            child: Text(
+                                              "02",
+                                              style: AppTextStyle.headline4
+                                                  .copyWith(
+                                                color: Colors.black,
+                                                fontSize: Get.width * 0.04,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: Get.height * 0.01,
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.only(
+                                                left: Get.width * 0.025),
+                                            child: Text(
+                                              "Current Projects",
+                                              style: AppTextStyle.headline4
+                                                  .copyWith(
+                                                color: Colors.black
+                                                    .withOpacity(0.5),
+                                                fontSize: Get.width * 0.035,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 10.0),
+                                        child: Container(
+                                          height: Get.height * 0.05,
+                                          width: Get.height * 0.05,
+                                          decoration: BoxDecoration(
+                                            color: const Color(0xff00E396)
+                                                .withOpacity(0.1),
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                                    Radius.circular(100.0)),
+                                          ),
+                                          child: Center(
+                                            child: Image.asset(
+                                              'assets/images/image 804.png',
+                                              width: Get.width * 0.05,
+                                              height: Get.width * 0.05,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 10.0,
+                                ),
+                                Container(
+                                  height: Get.height * 0.13,
+                                  width: Get.width * 0.5,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    border: Border.all(
+                                      color: const Color(0xff4C52D9),
+                                      width: 1,
+                                    ),
+                                  ),
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Column(
+                                        mainAxisSize: MainAxisSize.max,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Padding(
+                                            padding: EdgeInsets.only(
+                                                left: Get.width * 0.025),
+                                            child: Text(
+                                              "N 2,300,000",
+                                              style: AppTextStyle.headline4
+                                                  .copyWith(
+                                                color: Colors.black,
+                                                fontSize: Get.width * 0.04,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: Get.height * 0.01,
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.only(
+                                                left: Get.width * 0.025),
+                                            child: Text(
+                                              "Total Earning",
+                                              style: AppTextStyle.headline4
+                                                  .copyWith(
+                                                color: Colors.black
+                                                    .withOpacity(0.5),
+                                                fontSize: Get.width * 0.035,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 10.0),
+                                        child: Container(
+                                          height: Get.height * 0.05,
+                                          width: Get.height * 0.05,
+                                          decoration: BoxDecoration(
+                                            color: const Color(0xff4C52D9)
+                                                .withOpacity(0.1),
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                                    Radius.circular(100.0)),
+                                          ),
+                                          child: Center(
+                                            child: Image.asset(
+                                              'assets/images/image 804.png',
+                                              width: Get.width * 0.05,
+                                              height: Get.width * 0.05,
+                                              color: const Color(0xff4C52D9),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    if (controller.currentType == "Service Partner")
                       SizedBox(
                         height: Get.height * 0.01,
                       ),
-
-                    if(controller.currentType == "Service Partner")
+                    if (controller.currentType == "Service Partner")
                       Padding(
-                        padding: EdgeInsets.only(left: Get.width*0.05,right: Get.width*0.05,top: 10.0),
+                        padding: EdgeInsets.only(
+                            left: Get.width * 0.05,
+                            right: Get.width * 0.05,
+                            top: 10.0),
                         child: Text(
                           "Upcoming Deadlines",
                           style: AppTextStyle.subtitle1.copyWith(
@@ -604,10 +690,12 @@ class _HomeTabState extends State<HomeTab> {
                           ),
                         ),
                       ),
-
-                    if(controller.currentType == "Service Partner")
+                    if (controller.currentType == "Service Partner")
                       Padding(
-                        padding: EdgeInsets.only(left: Get.width*0.05,right: Get.width*0.05,top: 20.0),
+                        padding: EdgeInsets.only(
+                            left: Get.width * 0.05,
+                            right: Get.width * 0.05,
+                            top: 20.0),
                         child: Container(
                           width: Get.width,
                           height: Get.height * 0.13,
@@ -634,10 +722,12 @@ class _HomeTabState extends State<HomeTab> {
                               ),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
                                 children: [
                                   Padding(
-                                    padding: EdgeInsets.only(left: Get.width*0.025),
+                                    padding: EdgeInsets.only(
+                                        left: Get.width * 0.025),
                                     child: Text(
                                       "Land Survey Project",
                                       style: AppTextStyle.headline4.copyWith(
@@ -647,13 +737,13 @@ class _HomeTabState extends State<HomeTab> {
                                       ),
                                     ),
                                   ),
-
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     crossAxisAlignment: CrossAxisAlignment.end,
                                     children: [
                                       Padding(
-                                        padding: EdgeInsets.only(left: Get.width*0.025),
+                                        padding: EdgeInsets.only(
+                                            left: Get.width * 0.025),
                                         child: Icon(
                                           Icons.calendar_today_rounded,
                                           color: Colors.black.withOpacity(0.5),
@@ -661,19 +751,21 @@ class _HomeTabState extends State<HomeTab> {
                                         ),
                                       ),
                                       Padding(
-                                        padding: EdgeInsets.only(left: Get.width*0.01),
+                                        padding: EdgeInsets.only(
+                                            left: Get.width * 0.01),
                                         child: Text(
                                           "Start  : 12 - 10- 22 ",
-                                          style: AppTextStyle.headline4.copyWith(
+                                          style:
+                                              AppTextStyle.headline4.copyWith(
                                             color: Colors.black,
                                             fontSize: Get.width * 0.035,
                                             fontWeight: FontWeight.w500,
                                           ),
                                         ),
                                       ),
-
                                       Padding(
-                                        padding: EdgeInsets.only(left: Get.width*0.03),
+                                        padding: EdgeInsets.only(
+                                            left: Get.width * 0.03),
                                         child: Icon(
                                           Icons.calendar_today_rounded,
                                           color: Colors.black.withOpacity(0.5),
@@ -681,10 +773,12 @@ class _HomeTabState extends State<HomeTab> {
                                         ),
                                       ),
                                       Padding(
-                                        padding: EdgeInsets.only(left: Get.width*0.01),
+                                        padding: EdgeInsets.only(
+                                            left: Get.width * 0.01),
                                         child: Text(
                                           "Due  : 12 - 01- 23  ",
-                                          style: AppTextStyle.headline4.copyWith(
+                                          style:
+                                              AppTextStyle.headline4.copyWith(
                                             color: Colors.black,
                                             fontSize: Get.width * 0.035,
                                             fontWeight: FontWeight.w500,
@@ -693,34 +787,44 @@ class _HomeTabState extends State<HomeTab> {
                                       ),
                                     ],
                                   ),
-
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
                                     children: [
                                       Padding(
-                                        padding: EdgeInsets.only(left: Get.width*0.025),
+                                        padding: EdgeInsets.only(
+                                            left: Get.width * 0.025),
                                         child: Text(
                                           "Project Status :",
-                                          style: AppTextStyle.headline4.copyWith(
-                                            color: Colors.black.withOpacity(0.5),
+                                          style:
+                                              AppTextStyle.headline4.copyWith(
+                                            color:
+                                                Colors.black.withOpacity(0.5),
                                             fontSize: Get.width * 0.035,
                                             fontWeight: FontWeight.w500,
                                           ),
                                         ),
                                       ),
                                       Padding(
-                                        padding: EdgeInsets.only(left: Get.width*0.025),
+                                        padding: EdgeInsets.only(
+                                            left: Get.width * 0.025),
                                         child: Container(
                                           decoration: const BoxDecoration(
                                             color: Color(0xffE8F4FE),
-                                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(10.0)),
                                           ),
                                           child: Padding(
-                                            padding: const EdgeInsets.only(left: 10.0,right: 10.0,top: 5.0,bottom: 5.0),
+                                            padding: const EdgeInsets.only(
+                                                left: 10.0,
+                                                right: 10.0,
+                                                top: 5.0,
+                                                bottom: 5.0),
                                             child: Text(
                                               "Ongoing",
-                                              style: AppTextStyle.headline4.copyWith(
+                                              style: AppTextStyle.headline4
+                                                  .copyWith(
                                                 color: AppColors.primary,
                                                 fontSize: Get.width * 0.035,
                                                 fontWeight: FontWeight.w500,
@@ -737,9 +841,12 @@ class _HomeTabState extends State<HomeTab> {
                           ),
                         ),
                       ),
-                    if(controller.currentType == "Service Partner")
+                    if (controller.currentType == "Service Partner")
                       Padding(
-                        padding: EdgeInsets.only(left: Get.width*0.05,right: Get.width*0.05,top: 20.0),
+                        padding: EdgeInsets.only(
+                            left: Get.width * 0.05,
+                            right: Get.width * 0.05,
+                            top: 20.0),
                         child: Container(
                           width: Get.width,
                           height: Get.height * 0.13,
@@ -766,10 +873,12 @@ class _HomeTabState extends State<HomeTab> {
                               ),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
                                 children: [
                                   Padding(
-                                    padding: EdgeInsets.only(left: Get.width*0.025),
+                                    padding: EdgeInsets.only(
+                                        left: Get.width * 0.025),
                                     child: Text(
                                       "Land Survey Project",
                                       style: AppTextStyle.headline4.copyWith(
@@ -779,13 +888,13 @@ class _HomeTabState extends State<HomeTab> {
                                       ),
                                     ),
                                   ),
-
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     crossAxisAlignment: CrossAxisAlignment.end,
                                     children: [
                                       Padding(
-                                        padding: EdgeInsets.only(left: Get.width*0.025),
+                                        padding: EdgeInsets.only(
+                                            left: Get.width * 0.025),
                                         child: Icon(
                                           Icons.calendar_today_rounded,
                                           color: Colors.black.withOpacity(0.5),
@@ -793,19 +902,21 @@ class _HomeTabState extends State<HomeTab> {
                                         ),
                                       ),
                                       Padding(
-                                        padding: EdgeInsets.only(left: Get.width*0.01),
+                                        padding: EdgeInsets.only(
+                                            left: Get.width * 0.01),
                                         child: Text(
                                           "Start  : 12 - 10- 22 ",
-                                          style: AppTextStyle.headline4.copyWith(
+                                          style:
+                                              AppTextStyle.headline4.copyWith(
                                             color: Colors.black,
                                             fontSize: Get.width * 0.035,
                                             fontWeight: FontWeight.w500,
                                           ),
                                         ),
                                       ),
-
                                       Padding(
-                                        padding: EdgeInsets.only(left: Get.width*0.03),
+                                        padding: EdgeInsets.only(
+                                            left: Get.width * 0.03),
                                         child: Icon(
                                           Icons.calendar_today_rounded,
                                           color: Colors.black.withOpacity(0.5),
@@ -813,10 +924,12 @@ class _HomeTabState extends State<HomeTab> {
                                         ),
                                       ),
                                       Padding(
-                                        padding: EdgeInsets.only(left: Get.width*0.01),
+                                        padding: EdgeInsets.only(
+                                            left: Get.width * 0.01),
                                         child: Text(
                                           "Due  : 12 - 01- 23  ",
-                                          style: AppTextStyle.headline4.copyWith(
+                                          style:
+                                              AppTextStyle.headline4.copyWith(
                                             color: Colors.black,
                                             fontSize: Get.width * 0.035,
                                             fontWeight: FontWeight.w500,
@@ -825,34 +938,44 @@ class _HomeTabState extends State<HomeTab> {
                                       ),
                                     ],
                                   ),
-
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
                                     children: [
                                       Padding(
-                                        padding: EdgeInsets.only(left: Get.width*0.025),
+                                        padding: EdgeInsets.only(
+                                            left: Get.width * 0.025),
                                         child: Text(
                                           "Project Status :",
-                                          style: AppTextStyle.headline4.copyWith(
-                                            color: Colors.black.withOpacity(0.5),
+                                          style:
+                                              AppTextStyle.headline4.copyWith(
+                                            color:
+                                                Colors.black.withOpacity(0.5),
                                             fontSize: Get.width * 0.035,
                                             fontWeight: FontWeight.w500,
                                           ),
                                         ),
                                       ),
                                       Padding(
-                                        padding: EdgeInsets.only(left: Get.width*0.025),
+                                        padding: EdgeInsets.only(
+                                            left: Get.width * 0.025),
                                         child: Container(
                                           decoration: const BoxDecoration(
                                             color: Color(0xffE8F4FE),
-                                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(10.0)),
                                           ),
                                           child: Padding(
-                                            padding: const EdgeInsets.only(left: 10.0,right: 10.0,top: 5.0,bottom: 5.0),
+                                            padding: const EdgeInsets.only(
+                                                left: 10.0,
+                                                right: 10.0,
+                                                top: 5.0,
+                                                bottom: 5.0),
                                             child: Text(
                                               "Ongoing",
-                                              style: AppTextStyle.headline4.copyWith(
+                                              style: AppTextStyle.headline4
+                                                  .copyWith(
                                                 color: AppColors.primary,
                                                 fontSize: Get.width * 0.035,
                                                 fontWeight: FontWeight.w500,
@@ -869,9 +992,12 @@ class _HomeTabState extends State<HomeTab> {
                           ),
                         ),
                       ),
-                    if(controller.currentType == "Service Partner")
+                    if (controller.currentType == "Service Partner")
                       Padding(
-                        padding: EdgeInsets.only(left: Get.width*0.05,right: Get.width*0.05,top: 20.0),
+                        padding: EdgeInsets.only(
+                            left: Get.width * 0.05,
+                            right: Get.width * 0.05,
+                            top: 20.0),
                         child: Container(
                           width: Get.width,
                           height: Get.height * 0.13,
@@ -898,10 +1024,12 @@ class _HomeTabState extends State<HomeTab> {
                               ),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
                                 children: [
                                   Padding(
-                                    padding: EdgeInsets.only(left: Get.width*0.025),
+                                    padding: EdgeInsets.only(
+                                        left: Get.width * 0.025),
                                     child: Text(
                                       "Land Survey Project",
                                       style: AppTextStyle.headline4.copyWith(
@@ -911,13 +1039,13 @@ class _HomeTabState extends State<HomeTab> {
                                       ),
                                     ),
                                   ),
-
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     crossAxisAlignment: CrossAxisAlignment.end,
                                     children: [
                                       Padding(
-                                        padding: EdgeInsets.only(left: Get.width*0.025),
+                                        padding: EdgeInsets.only(
+                                            left: Get.width * 0.025),
                                         child: Icon(
                                           Icons.calendar_today_rounded,
                                           color: Colors.black.withOpacity(0.5),
@@ -925,19 +1053,21 @@ class _HomeTabState extends State<HomeTab> {
                                         ),
                                       ),
                                       Padding(
-                                        padding: EdgeInsets.only(left: Get.width*0.01),
+                                        padding: EdgeInsets.only(
+                                            left: Get.width * 0.01),
                                         child: Text(
                                           "Start  : 12 - 10- 22 ",
-                                          style: AppTextStyle.headline4.copyWith(
+                                          style:
+                                              AppTextStyle.headline4.copyWith(
                                             color: Colors.black,
                                             fontSize: Get.width * 0.035,
                                             fontWeight: FontWeight.w500,
                                           ),
                                         ),
                                       ),
-
                                       Padding(
-                                        padding: EdgeInsets.only(left: Get.width*0.03),
+                                        padding: EdgeInsets.only(
+                                            left: Get.width * 0.03),
                                         child: Icon(
                                           Icons.calendar_today_rounded,
                                           color: Colors.black.withOpacity(0.5),
@@ -945,10 +1075,12 @@ class _HomeTabState extends State<HomeTab> {
                                         ),
                                       ),
                                       Padding(
-                                        padding: EdgeInsets.only(left: Get.width*0.01),
+                                        padding: EdgeInsets.only(
+                                            left: Get.width * 0.01),
                                         child: Text(
                                           "Due  : 12 - 01- 23  ",
-                                          style: AppTextStyle.headline4.copyWith(
+                                          style:
+                                              AppTextStyle.headline4.copyWith(
                                             color: Colors.black,
                                             fontSize: Get.width * 0.035,
                                             fontWeight: FontWeight.w500,
@@ -957,34 +1089,44 @@ class _HomeTabState extends State<HomeTab> {
                                       ),
                                     ],
                                   ),
-
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
                                     children: [
                                       Padding(
-                                        padding: EdgeInsets.only(left: Get.width*0.025),
+                                        padding: EdgeInsets.only(
+                                            left: Get.width * 0.025),
                                         child: Text(
                                           "Project Status :",
-                                          style: AppTextStyle.headline4.copyWith(
-                                            color: Colors.black.withOpacity(0.5),
+                                          style:
+                                              AppTextStyle.headline4.copyWith(
+                                            color:
+                                                Colors.black.withOpacity(0.5),
                                             fontSize: Get.width * 0.035,
                                             fontWeight: FontWeight.w500,
                                           ),
                                         ),
                                       ),
                                       Padding(
-                                        padding: EdgeInsets.only(left: Get.width*0.025),
+                                        padding: EdgeInsets.only(
+                                            left: Get.width * 0.025),
                                         child: Container(
                                           decoration: const BoxDecoration(
                                             color: Color(0xffE8F4FE),
-                                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(10.0)),
                                           ),
                                           child: Padding(
-                                            padding: const EdgeInsets.only(left: 10.0,right: 10.0,top: 5.0,bottom: 5.0),
+                                            padding: const EdgeInsets.only(
+                                                left: 10.0,
+                                                right: 10.0,
+                                                top: 5.0,
+                                                bottom: 5.0),
                                             child: Text(
                                               "Ongoing",
-                                              style: AppTextStyle.headline4.copyWith(
+                                              style: AppTextStyle.headline4
+                                                  .copyWith(
                                                 color: AppColors.primary,
                                                 fontSize: Get.width * 0.035,
                                                 fontWeight: FontWeight.w500,
@@ -1001,13 +1143,14 @@ class _HomeTabState extends State<HomeTab> {
                           ),
                         ),
                       ),
-
-
                     SizedBox(
                       height: Get.height * 0.01,
                     ),
                     Padding(
-                      padding: EdgeInsets.only(left: Get.width*0.05,right: Get.width*0.05,top: 10.0),
+                      padding: EdgeInsets.only(
+                          left: Get.width * 0.05,
+                          right: Get.width * 0.05,
+                          top: 10.0),
                       child: Text(
                         "Need Help?",
                         style: AppTextStyle.subtitle1.copyWith(
@@ -1021,22 +1164,33 @@ class _HomeTabState extends State<HomeTab> {
                       height: Get.height * 0.015,
                     ),
                     Padding(
-                      padding: EdgeInsets.only(left: Get.width*0.05,right: Get.width*0.05),
+                      padding: EdgeInsets.only(
+                          left: Get.width * 0.05, right: Get.width * 0.05),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Image.asset(
-                            "assets/images/Group 47034.png",
-                            height: Get.height * 0.2,
-                            width: Get.width*0.4,
-                            fit: BoxFit.fitWidth,
+                          InkWell(
+                            onTap: () {
+                              launchURL(faq);
+                            },
+                            child: Image.asset(
+                              "assets/images/Group 47034.png",
+                              height: Get.height * 0.2,
+                              width: Get.width * 0.4,
+                              fit: BoxFit.fitWidth,
+                            ),
                           ),
-                          Image.asset(
-                            "assets/images/Group 47035.png",
-                            height: Get.height * 0.2,
-                            width: Get.width*0.4,
-                            fit: BoxFit.fitWidth,
+                          InkWell(
+                            onTap: () {
+                              Get.to(() => const Support());
+                            },
+                            child: Image.asset(
+                              "assets/images/Group 47035.png",
+                              height: Get.height * 0.2,
+                              width: Get.width * 0.4,
+                              fit: BoxFit.fitWidth,
+                            ),
                           ),
                         ],
                       ),
@@ -1054,9 +1208,7 @@ class _HomeTabState extends State<HomeTab> {
     });
   }
 
-  BarChartGroupData makeGroupData(
-      int x,
-      double y) {
+  BarChartGroupData makeGroupData(int x, double y) {
     return BarChartGroupData(
       x: x,
       barRods: [
@@ -1080,25 +1232,46 @@ class _HomeTabState extends State<HomeTab> {
   }
 
   List<BarChartGroupData> showingGroups() => List.generate(7, (i) {
-    switch (i) {
-      case 0:
-        return makeGroupData(0, 850,);
-      case 1:
-        return makeGroupData(1, 750,);
-      case 2:
-        return makeGroupData(2, 125, );
-      case 3:
-        return makeGroupData(3, 1250,);
-      case 4:
-        return makeGroupData(4, 500,);
-      case 5:
-        return makeGroupData(5, 750,);
-      case 6:
-        return makeGroupData(6, 110,);
-      default:
-        return throw Error();
-    }
-  });
+        switch (i) {
+          case 0:
+            return makeGroupData(
+              0,
+              850,
+            );
+          case 1:
+            return makeGroupData(
+              1,
+              750,
+            );
+          case 2:
+            return makeGroupData(
+              2,
+              125,
+            );
+          case 3:
+            return makeGroupData(
+              3,
+              1250,
+            );
+          case 4:
+            return makeGroupData(
+              4,
+              500,
+            );
+          case 5:
+            return makeGroupData(
+              5,
+              750,
+            );
+          case 6:
+            return makeGroupData(
+              6,
+              110,
+            );
+          default:
+            return throw Error();
+        }
+      });
 
   BarChartData mainBarData() {
     return BarChartData(
@@ -1190,21 +1363,24 @@ class _HomeTabState extends State<HomeTab> {
   }
 
   Widget getSideTitles(double value, TitleMeta meta) {
-
     const style = TextStyle(
       color: Color(0xff85858A),
       fontWeight: FontWeight.normal,
       fontSize: 12,
     );
     String valueToDisplay = value.toInt().toString();
-    if(valueToDisplay.length == 4){
-      valueToDisplay = valueToDisplay.substring(0,2) + "M";
-    }else if(valueToDisplay.length == 5){
-      valueToDisplay = valueToDisplay.substring(0,2) + "K";
-    }else{
+    if (valueToDisplay.length == 4) {
+      valueToDisplay = valueToDisplay.substring(0, 2) + "M";
+    } else if (valueToDisplay.length == 5) {
+      valueToDisplay = valueToDisplay.substring(0, 2) + "K";
+    } else {
       valueToDisplay = valueToDisplay + "K";
     }
-    Widget text = Text(valueToDisplay == "0K" ? "0" : valueToDisplay, style: style,maxLines: 1,);
+    Widget text = Text(
+      valueToDisplay == "0K" ? "0" : valueToDisplay,
+      style: style,
+      maxLines: 1,
+    );
 
     return SideTitleWidget(
       axisSide: meta.axisSide,
@@ -1291,73 +1467,74 @@ class _HomeTabState extends State<HomeTab> {
     );
   }
 
-  Container buildOverViewContainer(String icon, String title, String subTitle, Color color) {
+  Container buildOverViewContainer(
+      String icon, String title, String subTitle, Color color) {
     return Container(
-                        height: Get.height * 0.13,
-                        width: Get.width * 0.4,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10.0),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.3),
-                              spreadRadius: 1,
-                              blurRadius: 7,
-                              offset: const Offset(0, 3), // changes position of shadow
-                            ),
-                          ],
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                width: Get.width * 0.085,
-                                height: Get.width * 0.085,
-                                decoration: BoxDecoration(
-                                  color: color,
-                                  borderRadius: BorderRadius.circular(100),
-                                ),
-                                child: Center(
-                                  child: Image.asset(
-                                    icon,
-                                    width: Get.width * 0.045,
-                                    height: Get.width * 0.045,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 10.0,
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 2.0),
-                                child: Text(
-                                  title,
-                                  style: AppTextStyle.subtitle1.copyWith(
-                                    color: Colors.black,
-                                    fontSize: Get.width * 0.04,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 5.0,
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 2.0),
-                                child: Text(
-                                  subTitle,
-                                  style: AppTextStyle.subtitle1.copyWith(
-                                    color: Colors.black,
-                                    fontSize: Get.width * 0.035,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
+      height: Get.height * 0.13,
+      width: Get.width * 0.4,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10.0),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.3),
+            spreadRadius: 1,
+            blurRadius: 7,
+            offset: const Offset(0, 3), // changes position of shadow
+          ),
+        ],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: Get.width * 0.085,
+              height: Get.width * 0.085,
+              decoration: BoxDecoration(
+                color: color,
+                borderRadius: BorderRadius.circular(100),
+              ),
+              child: Center(
+                child: Image.asset(
+                  icon,
+                  width: Get.width * 0.045,
+                  height: Get.width * 0.045,
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 10.0,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 2.0),
+              child: Text(
+                title,
+                style: AppTextStyle.subtitle1.copyWith(
+                  color: Colors.black,
+                  fontSize: Get.width * 0.04,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 5.0,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 2.0),
+              child: Text(
+                subTitle,
+                style: AppTextStyle.subtitle1.copyWith(
+                  color: Colors.black,
+                  fontSize: Get.width * 0.035,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

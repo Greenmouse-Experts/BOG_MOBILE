@@ -38,8 +38,7 @@ class TransactionPage extends GetView<HomeController> {
           statusBarIconBrightness: Brightness.dark,
           statusBarBrightness: Brightness.dark,
           systemNavigationBarColor: AppColors.backgroundVariant2,
-          systemNavigationBarIconBrightness: Brightness.dark
-      ),
+          systemNavigationBarIconBrightness: Brightness.dark),
       child: GetBuilder<HomeController>(
           id: 'Transaction',
           builder: (controller) {
@@ -52,24 +51,27 @@ class TransactionPage extends GetView<HomeController> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Padding(
-                      padding: EdgeInsets.only(right: width*0.05,left: width*0.045,top: kToolbarHeight),
+                      padding: EdgeInsets.only(
+                          right: width * 0.05,
+                          left: width * 0.045,
+                          top: kToolbarHeight),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           InkWell(
-                            onTap: (){
+                            onTap: () {
                               Navigator.pop(context);
                             },
                             child: SvgPicture.asset(
                               "assets/images/back.svg",
-                              height: width*0.045,
-                              width: width*0.045,
+                              height: width * 0.045,
+                              width: width * 0.045,
                               color: Colors.black,
                             ),
                           ),
                           SizedBox(
-                            width: width*0.04,
+                            width: width * 0.04,
                           ),
                           Expanded(
                             child: Row(
@@ -78,20 +80,23 @@ class TransactionPage extends GetView<HomeController> {
                               children: [
                                 Text(
                                   "Transactions",
-                                  style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.07,color: Colors.black,fontWeight: FontWeight.w500),
+                                  style: AppTextStyle.subtitle1.copyWith(
+                                      fontSize: multiplier * 0.07,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w500),
                                   textAlign: TextAlign.center,
                                 ),
                               ],
                             ),
                           ),
                           SizedBox(
-                            width: width*0.04,
+                            width: width * 0.04,
                           ),
                         ],
                       ),
                     ),
                     SizedBox(
-                      height: width*0.04,
+                      height: width * 0.04,
                     ),
                     Container(
                       height: 1,
@@ -99,46 +104,50 @@ class TransactionPage extends GetView<HomeController> {
                       color: AppColors.grey.withOpacity(0.1),
                     ),
                     SizedBox(
-                      height: width*0.04,
+                      height: width * 0.04,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Padding(
-                          padding: EdgeInsets.only(left: width*0.02,right: width*0.0),
+                          padding: EdgeInsets.only(
+                              left: width * 0.02, right: width * 0.0),
                           child: SizedBox(
-                              height: Get.height*0.055,
-                              width: Get.width*0.78,
+                              height: Get.height * 0.055,
+                              width: Get.width * 0.78,
                               child: AppInput(
                                 hintText: "Search",
-                                prefexIcon: Icon(FeatherIcons.search,color: AppColors.grey.withOpacity(0.5),),
-                              )
-                          ),
+                                prefexIcon: Icon(
+                                  FeatherIcons.search,
+                                  color: AppColors.grey.withOpacity(0.5),
+                                ),
+                              )),
                         ),
                         Padding(
-                          padding: EdgeInsets.only(right: width*0.02),
+                          padding: EdgeInsets.only(right: width * 0.02),
                           child: SizedBox(
-                            height: Get.height*0.054,
-                            width: Get.height*0.054,
+                            height: Get.height * 0.054,
+                            width: Get.height * 0.054,
                             child: Image.asset(
                               "assets/images/Group 47358.png",
-                              height: width*0.08,
-                              width: width*0.08,
+                              height: width * 0.08,
+                              width: width * 0.08,
                             ),
                           ),
                         ),
                       ],
                     ),
                     SizedBox(
-                      height: width*0.02,
+                      height: width * 0.02,
                     ),
                     SizedBox(
                       height: Get.height * 0.75,
                       child: ListView.builder(
                         itemCount: 51,
                         shrinkWrap: true,
-                        padding: EdgeInsets.only(left: width*0.02,right: width*0.02),
+                        padding: EdgeInsets.only(
+                            left: width * 0.02, right: width * 0.02),
                         physics: const BouncingScrollPhysics(),
                         itemBuilder: (context, index) {
                           return SizedBox(
@@ -183,12 +192,16 @@ class TransactionPage extends GetView<HomeController> {
                                     ],
                                   ),
                                 ),
-                                Expanded(child: Wrap(
+                                Expanded(
+                                    child: Wrap(
                                   alignment: WrapAlignment.end,
                                   children: [
                                     Text(
                                       "N 150,000",
-                                      style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.065,color: Colors.black,fontWeight: FontWeight.w500),
+                                      style: AppTextStyle.subtitle1.copyWith(
+                                          fontSize: multiplier * 0.065,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w500),
                                       textAlign: TextAlign.center,
                                     ),
                                   ],
@@ -224,7 +237,9 @@ class TransactionPage extends GetView<HomeController> {
                       icon: Padding(
                         padding: const EdgeInsets.only(bottom: 5),
                         child: Image.asset(
-                          controller.currentBottomNavPage.value == 1 ? 'assets/images/chat_filled.png' : 'assets/images/chatIcon.png',
+                          controller.currentBottomNavPage.value == 1
+                              ? 'assets/images/chat_filled.png'
+                              : 'assets/images/chatIcon.png',
                           width: 22,
                           //color: controller.currentBottomNavPage.value == 1 ? AppColors.primary : AppColors.grey,
                         ),
@@ -272,9 +287,7 @@ class TransactionPage extends GetView<HomeController> {
                     controller.currentBottomNavPage.value = index;
                     controller.updateNewUser(controller.currentType);
                     Get.back();
-                  }
-              ),
-
+                  }),
             );
           }),
     );

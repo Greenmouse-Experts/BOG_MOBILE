@@ -1,3 +1,4 @@
+import 'package:bog/app/modules/home/pages/ProfileTab.dart';
 import 'package:get/get.dart';
 
 import '../app/bindings/auth_binding.dart';
@@ -22,17 +23,12 @@ import '../app/modules/verify_otp/verify_otp.dart';
 class AppPages {
   AppPages._();
   //static String initial = MyPref.authToken.val.isNotEmpty ? HomePage.route : OnbordingPage.route;
-  static String initial =  OnboardingPage.route;
+  static String initial = OnboardingPage.route;
 
   static final routes = [
-    GetPage(
-      name: OnboardingPage.route,
-      page: () => const OnboardingPage()
-    ),
-    GetPage(
-        name: Multiplexor.route,
-        page: () => const Multiplexor()
-    ),
+    GetPage(name: OnboardingPage.route, page: () => const OnboardingPage()),
+    GetPage(name: Multiplexor.route, page: () => const Multiplexor()),
+    GetPage(name: ProfileTab.route, page: () => const ProfileTab()),
     GetPage(
       name: SignIn.route,
       page: () => const SignIn(),
@@ -68,39 +64,13 @@ class AppPages {
       page: () => const VerifyOTP(),
       binding: AuthBinding(),
     ),
-    GetPage(
-        name: UpdateProfile.route,
-        page: () => const UpdateProfile()
-    ),
-
-    GetPage(
-        name: CreatePIN.route,
-        page: () => const CreatePIN()
-    ),
-    GetPage(
-        name: ConfirmPIN.route,
-        page: () => const ConfirmPIN()
-    ),
-    GetPage(
-        name: Interests.route,
-        page: () => const Interests()
-    ),
-
-    GetPage(
-        name: Home.route,
-        page: () => const Home()
-    ),
-    GetPage(
-        name: Chat.route,
-        page: () => const Chat()
-    ),
-    GetPage(
-        name: Shop.route,
-        page: () => const Shop()
-    ),
-    GetPage(
-        name: Create.route,
-        page: () => const Create()
-    ),
+    GetPage(name: UpdateProfile.route, page: () => const UpdateProfile()),
+    GetPage(name: CreatePIN.route, page: () => const CreatePIN()),
+    GetPage(name: ConfirmPIN.route, page: () => const ConfirmPIN()),
+    GetPage(name: Interests.route, page: () => const Interests()),
+    GetPage(name: Home.route, page: () => const Home()),
+    GetPage(name: Chat.route, page: () => const Chat()),
+    GetPage(name: Shop.route, page: () => const Shop()),
+    GetPage(name: Create.route, page: () => const Create()),
   ];
 }

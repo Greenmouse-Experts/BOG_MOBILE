@@ -1,11 +1,13 @@
 import 'dart:convert';
 
+import 'package:bog/app/global_widgets/confirm_logout.dart';
+// import 'package:bog/app/modules/home/pages/ProfileTab.dart';
 import 'package:bog/app/modules/meetings/meeting.dart';
-import 'package:bog/app/modules/onboarding/onboarding.dart';
+// import 'package:bog/app/modules/onboarding/onboarding.dart';
 import 'package:bog/app/modules/settings/support.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_feather_icons/flutter_feather_icons.dart';
+// import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:get/get.dart';
 
 import '../../core/theme/app_colors.dart';
@@ -14,7 +16,7 @@ import '../controllers/home_controller.dart';
 
 import '../data/model/log_in_model.dart';
 import '../data/providers/my_pref.dart';
-import '../modules/multiplexor/multiplexor.dart';
+// import '../modules/multiplexor/multiplexor.dart';
 
 import '../modules/orders/my_orders.dart';
 import '../modules/reviews/reviews.dart';
@@ -37,194 +39,207 @@ class _AppDrawerState extends State<AppDrawer> {
 
   @override
   Widget build(BuildContext context) {
-
     return AnnotatedRegion<SystemUiOverlayStyle>(
         value: const SystemUiOverlayStyle(
             statusBarColor: AppColors.background,
             statusBarIconBrightness: Brightness.dark,
             statusBarBrightness: Brightness.light,
             systemNavigationBarColor: AppColors.background,
-            systemNavigationBarIconBrightness: Brightness.dark
-        ),
-        child: GetBuilder<HomeController>(
-            builder: (controller) {
-              var logInDetails = LogInModel.fromJson(jsonDecode(MyPref.logInDetail.val));
-              return SizedBox(
-                width: Get.width*0.7,
-                height: Get.height,
-                child: Scaffold(
-                    backgroundColor: AppColors.background,
-                    body: SafeArea(
-                      child: SingleChildScrollView(
-                        child: Container(
-                          width: Get.width*0.7,
-                          height: Get.height*0.95,
-                          decoration: const BoxDecoration(
-                            //color: AppColors.background,
-                            image: DecorationImage(
-                              image: AssetImage("assets/images/Frame 466391.png"),
-                              fit: BoxFit.fitHeight,
-                            ),
-                          ),
-                          child: Column(
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.only(left: Get.width*0.015,right: 10.0,top: 10.0),
-                                child: Stack(
-                                  alignment: Alignment.centerRight,
+            systemNavigationBarIconBrightness: Brightness.dark),
+        child: GetBuilder<HomeController>(builder: (controller) {
+          var logInDetails =
+              LogInModel.fromJson(jsonDecode(MyPref.logInDetail.val));
+          return SizedBox(
+            width: Get.width * 0.7,
+            height: Get.height,
+            child: Scaffold(
+                backgroundColor: AppColors.background,
+                body: SafeArea(
+                  child: SingleChildScrollView(
+                    child: Container(
+                      width: Get.width * 0.7,
+                      height: Get.height * 0.95,
+                      decoration: const BoxDecoration(
+                        //color: AppColors.background,
+                        image: DecorationImage(
+                          image: AssetImage("assets/images/Frame 466391.png"),
+                          fit: BoxFit.fitHeight,
+                        ),
+                      ),
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(
+                                left: Get.width * 0.015,
+                                right: 10.0,
+                                top: 10.0),
+                            child: Stack(
+                              alignment: Alignment.centerRight,
+                              children: [
+                                Row(
                                   children: [
-                                    Row(
-                                      children: [
-                                        SizedBox(
-                                          width: Get.width * 0.16,
-                                          height: Get.width * 0.16,
-                                          child: IconButton(
-                                            icon: AppAvatar(
-                                              imgUrl: (logInDetails.photo).toString(),
-                                              radius: Get.width * 0.16,
-                                              name: "${logInDetails.fname} ${logInDetails.lname}",
-                                            ),
-                                            onPressed: () {
-
-                                            },
-                                          ),
+                                    SizedBox(
+                                      width: Get.width * 0.16,
+                                      height: Get.width * 0.16,
+                                      child: IconButton(
+                                        icon: AppAvatar(
+                                          imgUrl:
+                                              (logInDetails.photo).toString(),
+                                          radius: Get.width * 0.16,
+                                          name:
+                                              "${logInDetails.fname} ${logInDetails.lname}",
                                         ),
-                                        const SizedBox(
-                                          width: 10.0,
-                                        ),
-                                        Expanded(
-                                          child: Row(
-                                            crossAxisAlignment: CrossAxisAlignment.center,
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        onPressed: () {},
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      width: 10.0,
+                                    ),
+                                    Expanded(
+                                      child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: [
-                                              Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    "${logInDetails.fname} ${logInDetails.lname}",
-                                                    style: AppTextStyle.subtitle1.copyWith(
-                                                      color: Colors.black,
-                                                      fontSize: Get.width * 0.045,
-                                                    ),
-                                                  ),
-                                                  Text(
-                                                    controller.currentType,
-                                                    style: AppTextStyle.subtitle1.copyWith(
-                                                      color: Colors.black.withOpacity(0.5),
-                                                      fontSize: Get.width * 0.035,
-                                                    ),
-                                                  ),
-                                                ],
+                                              Text(
+                                                "${logInDetails.fname} ${logInDetails.lname}",
+                                                style: AppTextStyle.subtitle1
+                                                    .copyWith(
+                                                  color: Colors.black,
+                                                  fontSize: Get.width * 0.045,
+                                                ),
+                                              ),
+                                              Text(
+                                                controller.currentType,
+                                                style: AppTextStyle.subtitle1
+                                                    .copyWith(
+                                                  color: Colors.black
+                                                      .withOpacity(0.5),
+                                                  fontSize: Get.width * 0.035,
+                                                ),
                                               ),
                                             ],
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
-                                    IconButton(
-                                        onPressed: (){
-                                          Get.back();
-                                        },
-                                        icon: Image.asset("assets/images/Group 47364.png",width: Get.width*0.05,height: Get.width*0.05,)
-                                    )
                                   ],
                                 ),
-                              ),
-                              SizedBox(
-                                height: Get.height * 0.02,
-                              ),
-                              _TextButton(
-                                text: "Account",
-                                onPressed: () {
-                                  //Get.toNamed(OnboardingPage.route);
-                                },
-                                imageAsset: "assets/images/one1.png",
-                                showArrow: true),
-
-                              if(controller.currentType == "Client" || controller.currentType == "Corporate Client")
-                                _TextButton(
-                                    text: "Orders",
+                                IconButton(
                                     onPressed: () {
                                       Get.back();
-                                      Get.to(() => MyOrderScreen());
                                     },
-                                    imageAsset: "assets/images/two1.png",
-                                    showArrow: true),
-
-                              _TextButton(
-                                  text: "Transactions",
-                                  onPressed: () {
-                                    Get.back();
-                                    Get.to(() => const TransactionPage());
-                                  },
-                                  imageAsset: "assets/images/three1.png",
-                                  showArrow: true),
-
-                              _TextButton(
-                                  text: "Meetings",
-                                  onPressed: () {
-                                    Get.back();
-                                    Get.to(() => const Meetings());
-                                  },
-                                  imageAsset: "assets/images/four1.png",
-                                  showArrow: true),
-
-                              if(controller.currentType != "Client" && controller.currentType != "Corporate Client")
-                                _TextButton(
-                                    text: "Reviews",
-                                    onPressed: () {
-                                      Get.back();
-                                      Get.to(() => const Reviews());
-                                    },
-                                    imageAsset: "assets/images/carbon_review.png",
-                                    showArrow: true),
-
-
-                              Expanded(child: Column(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  _TextButton(
-                                      text: "Switch Account",
-                                      onPressed: () {
-                                        Get.back();
-                                        Get.to(() => const SwitchUser());
-                                        //Get.toNamed(OnboardingPage.route);
-                                      },
-                                      imageAsset: "assets/images/six1.png",
-                                      showArrow: true),
-
-                                  _TextButton(
-                                      text: "Support",
-                                      onPressed: () {
-                                        Get.back();
-                                        Get.to(() => const Support());
-                                        //Get.toNamed(OnboardingPage.route);
-                                      },
-                                      imageAsset: "assets/images/seven1.png",
-                                      showArrow: true),
-
-                                  _TextButton(
-                                      text: "Log Out",
-                                      onPressed: () {
-                                        Get.back();
-                                        Get.toNamed(OnboardingPage.route);
-                                      },
-                                      imageAsset: "assets/images/log_out.png",
-                                      showArrow: false),
-
-                                  SizedBox(
-                                    height: Get.height * 0.05,
-                                  ),
-                                ],
-                              )),
-                            ],
+                                    icon: Image.asset(
+                                      "assets/images/Group 47364.png",
+                                      width: Get.width * 0.05,
+                                      height: Get.width * 0.05,
+                                    ))
+                              ],
+                            ),
                           ),
-                        ),
+                          SizedBox(
+                            height: Get.height * 0.02,
+                          ),
+                          _TextButton(
+                              text: "Account",
+                              onPressed: () {
+                                Get.back();
+                                controller.currentBottomNavPage.value = 4;
+                                controller
+                                    .updateNewUser(controller.currentType);
+                                controller.update(['home']);
+                                // Get.to(() => const ProfileTab(isPage: true));
+                              },
+                              imageAsset: "assets/images/one1.png",
+                              showArrow: true),
+                          if (controller.currentType == "Client" ||
+                              controller.currentType == "Corporate Client")
+                            _TextButton(
+                                text: "Orders",
+                                onPressed: () {
+                                  Get.back();
+                                  Get.to(() => const MyOrderScreen());
+                                },
+                                imageAsset: "assets/images/two1.png",
+                                showArrow: true),
+                          _TextButton(
+                              text: "Transactions",
+                              onPressed: () {
+                                Get.back();
+                                Get.to(() => const TransactionPage());
+                              },
+                              imageAsset: "assets/images/three1.png",
+                              showArrow: true),
+                          _TextButton(
+                              text: "Meetings",
+                              onPressed: () {
+                                Get.back();
+                                Get.to(() => const Meetings());
+                              },
+                              imageAsset: "assets/images/four1.png",
+                              showArrow: true),
+                          if (controller.currentType != "Client" &&
+                              controller.currentType != "Corporate Client")
+                            _TextButton(
+                                text: "Reviews",
+                                onPressed: () {
+                                  Get.back();
+                                  Get.to(() => const Reviews());
+                                },
+                                imageAsset: "assets/images/carbon_review.png",
+                                showArrow: true),
+                          Expanded(
+                              child: Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              _TextButton(
+                                  text: "Switch Account",
+                                  onPressed: () {
+                                    Get.back();
+                                    Get.to(() => const SwitchUser());
+                                    //Get.toNamed(OnboardingPage.route);
+                                  },
+                                  imageAsset: "assets/images/six1.png",
+                                  showArrow: true),
+                              _TextButton(
+                                  text: "Support",
+                                  onPressed: () {
+                                    Get.back();
+                                    Get.to(() => const Support());
+                                    //Get.toNamed(OnboardingPage.route);
+                                  },
+                                  imageAsset: "assets/images/seven1.png",
+                                  showArrow: true),
+                              _TextButton(
+                                  text: "Log Out",
+                                  onPressed: () {
+                                    showDialog(
+                                        context: context,
+                                        barrierDismissible: false,
+                                        builder: (BuildContext context) =>
+                                            const ConfirmLogout());
+                                    // Get.back();
+                                    //   Get.toNamed(OnboardingPage.route);
+                                  },
+                                  imageAsset: "assets/images/log_out.png",
+                                  showArrow: false),
+                              SizedBox(
+                                height: Get.height * 0.05,
+                              ),
+                            ],
+                          )),
+                        ],
                       ),
-                    )),
-              );
-            })
-    );
+                    ),
+                  ),
+                )),
+          );
+        }));
   }
 }
 
@@ -234,14 +249,22 @@ class _TextButton extends StatelessWidget {
   final String? subtitle;
   final bool showArrow;
   final Function() onPressed;
-  const _TextButton({required this.imageAsset,required this.text, required this.onPressed, this.subtitle,this.showArrow = true});
+  const _TextButton(
+      {required this.imageAsset,
+      required this.text,
+      required this.onPressed,
+      this.subtitle,
+      this.showArrow = true});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onPressed,
       child: Padding(
-        padding: EdgeInsets.only(left: Get.width*0.03,right: Get.width*0.0,top: Get.height*0.02),
+        padding: EdgeInsets.only(
+            left: Get.width * 0.03,
+            right: Get.width * 0.0,
+            top: Get.height * 0.02),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -262,44 +285,52 @@ class _TextButton extends StatelessWidget {
               ),
             ),
             SizedBox(
-              width: Get.width*0.43,
+              width: Get.width * 0.43,
               child: Padding(
-                padding: EdgeInsets.only(left: Get.width*0.01),
+                padding: EdgeInsets.only(left: Get.width * 0.01),
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       SizedBox(
-                        height: Get.height*0.01,
+                        height: Get.height * 0.01,
                       ),
                       Text(
                         text,
                         maxLines: 1,
                         overflow: TextOverflow.clip,
-                        style: AppTextStyle.subtitle1.copyWith(color: showArrow ? Colors.black : Colors.red,fontSize: Get.width*0.038,fontWeight: FontWeight.w600),
+                        style: AppTextStyle.subtitle1.copyWith(
+                            color: showArrow ? Colors.black : Colors.red,
+                            fontSize: Get.width * 0.038,
+                            fontWeight: FontWeight.w600),
                       ),
                       SizedBox(
-                        height: Get.height*0.01,
+                        height: Get.height * 0.01,
                       ),
-                      if(subtitle!=null)
+                      if (subtitle != null)
                         Text(
                           subtitle!,
                           maxLines: 1,
                           overflow: TextOverflow.clip,
-                          style: AppTextStyle.subtitle1.copyWith(color: Colors.black),
+                          style: AppTextStyle.subtitle1
+                              .copyWith(color: Colors.black),
                         ),
-                      if(subtitle!=null)
+                      if (subtitle != null)
                         SizedBox(
-                          height: Get.height*0.01,
+                          height: Get.height * 0.01,
                         ),
-                    ]
-                ),
+                    ]),
               ),
             ),
-
             IconButton(
               onPressed: onPressed,
               padding: EdgeInsets.zero,
-              icon: showArrow ? Icon(Icons.arrow_forward_ios_rounded, color: Colors.black, size: Get.width*0.04,) : Container(),
+              icon: showArrow
+                  ? Icon(
+                      Icons.arrow_forward_ios_rounded,
+                      color: Colors.black,
+                      size: Get.width * 0.04,
+                    )
+                  : Container(),
             )
           ],
         ),
@@ -307,4 +338,3 @@ class _TextButton extends StatelessWidget {
     );
   }
 }
-
