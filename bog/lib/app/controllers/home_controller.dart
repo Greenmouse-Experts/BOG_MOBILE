@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 // import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 
 import '../data/model/my_products.dart';
-import '../modules/home/pages/HomeTab.dart';
+import '../modules/home/pages/home_tab.dart';
 import '../repository/user_repo.dart';
 
 class HomeController extends GetxController {

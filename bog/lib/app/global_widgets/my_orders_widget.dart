@@ -1,4 +1,5 @@
 
+import 'package:bog/app/data/model/my_order_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -39,17 +40,21 @@ class MyOrdersWidget extends StatelessWidget {
               ),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(8),
-                child: CachedNetworkImage(
+                child: 
+                
+             
+                
+                CachedNetworkImage(
                     imageUrl: image,
                     // 'https://media.premiumtimesng.com/wp-content/files/2021/07/1625980458926blob.png',
+                       
                     fit: BoxFit.cover,
                     placeholder: (context, url) => const AppLoader(),
-                    errorWidget: (context, url, error) => Image.asset(
-                          'bog/assets/images/launch.png',
-                          fit: BoxFit.cover,
+                    
+                    errorWidget: (context, url, error) => const Icon(Icons.error)
                         )),
               ),
-            ),
+            
             const SizedBox(width: 10),
             Expanded(
               child: Column(
@@ -119,5 +124,59 @@ class MyOrdersWidget extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+
+class MyOrderWidgetList extends StatelessWidget {
+  final List<MyOrderItem> orderItemsList;
+  final String status;
+  final Color statusColor;
+  const MyOrderWidgetList({super.key, required this.orderItemsList, required this.status, required this.statusColor});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+                                                itemCount: orderItemsList.length,
+                                                scrollDirection: Axis.vertical,
+                                                shrinkWrap: false,
+                                                padding: EdgeInsets.only(
+                                                    left: Get.width * 0.02,
+                                                    right: Get.width * 0.02),
+                                                itemBuilder:
+                                                    (BuildContext context,
+                                                        int i) {
+                                                  return MyOrdersWidget(
+                                                    status: status,
+                                                    statusColor: statusColor,
+                                                  //      const Color(0xFFEC8B20),
+                                                    image: orderItemsList[i]
+                                                            .product!
+                                                            .image ??
+                                                        '',
+                                                    date: orderItemsList[i]
+                                                            .createdAt ??
+                                                        DateTime.now(),
+                                                    orderItemName: orderItemsList[i]
+                                                            .product!
+                                                            .name ??
+                                                        '',
+                                                    // status: myOrdersData
+                                                    //         .firstWhere((element) =>
+                                                    //             element
+                                                    //                 .orderItems!
+                                                    //                 .contains(
+                                                    //                     orderItemsList[
+                                                    //                         i]))
+                                                    //         .status ??
+                                                    //     '',
+                                                    price: orderItemsList[i]
+                                                        .amount
+                                                        .toString(),
+
+                                                 
+                                                  );
+                                                },
+                                              );
   }
 }

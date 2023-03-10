@@ -12,6 +12,7 @@ Future<void> main() async {
   //wait three seconds
   await Future.delayed(const Duration(seconds: 3));
   await GetStorage.init('MyPref');
+ // ErrorWidget.builder = (FlutterErrorDetails details) => const Center(child: Text('An error occurred'),);
   runApp(const MyApp());
 }
 
@@ -22,6 +23,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     //FlutterNativeSplash.remove();
     return GetMaterialApp(
+      
       theme: AppThemes.lightTheme,
       debugShowCheckedModeBanner: false,
       initialRoute: AppPages.initial,

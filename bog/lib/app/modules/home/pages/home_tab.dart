@@ -2,25 +2,20 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:bog/app/modules/settings/faq.dart';
-import 'package:d_chart/d_chart.dart';
+
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_feather_icons/flutter_feather_icons.dart';
-import 'package:flutter_svg/svg.dart';
+
 import 'package:get/get.dart';
-import 'package:qr_flutter/qr_flutter.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_styles.dart';
 import '../../../controllers/home_controller.dart';
 import '../../../data/model/log_in_model.dart';
-import '../../../data/providers/api_response.dart';
+
 import '../../../data/providers/my_pref.dart';
 import '../../../global_widgets/app_avatar.dart';
-import '../../../global_widgets/app_drawer.dart';
-import '../../../global_widgets/horizontal_item_tile.dart';
+
 import '../../create/create.dart';
 import '../../notifications/notification.dart';
 import '../../settings/support.dart';
@@ -39,7 +34,7 @@ class _HomeTabState extends State<HomeTab> {
 
   @override
   void initState() {
-    // TODO: implement initState
+    
     super.initState();
   }
 
@@ -49,26 +44,8 @@ class _HomeTabState extends State<HomeTab> {
     String subTitle = "Monthly Earnings";
     String icon = "";
 
-    List ranking = [
-      {'class': 'Mon', 'total': 23},
-      {'class': 'Tue', 'total': 14},
-      {'class': 'Wed', 'total': 80},
-      {'class': 'Thur', 'total': 70},
-      {'class': 'Fri', 'total': 21},
-      {'class': 'Sat', 'total': 12},
-      {'class': 'Sun', 'total': 50},
-    ];
 
-    final Uri faq = Uri.parse('https://bog-project-new.netlify.app/faqs');
-    final Uri support = Uri.parse('https://bog-project-new.netlify.app/terms');
-
-    launchURL(Uri url) async {
-      if (await canLaunchUrl(url)) {
-        await launchUrl(url);
-      } else {
-        throw 'Could not launch $url';
-      }
-    }
+  
 
     return GetBuilder<HomeController>(builder: (controller) {
       return SizedBox(
@@ -122,7 +99,7 @@ class _HomeTabState extends State<HomeTab> {
                               height: 5.0,
                             ),
                             Text(
-                              "${logInDetails.fname} ${logInDetails.lname}",
+                              "${logInDetails.fname} ",
                               style: AppTextStyle.subtitle1.copyWith(
                                 color: Colors.black,
                                 fontSize: Get.width * 0.05,

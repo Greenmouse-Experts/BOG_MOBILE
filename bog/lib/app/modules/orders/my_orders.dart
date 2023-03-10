@@ -1,11 +1,3 @@
-// import 'dart:convert';
-
-import 'package:bog/app/data/model/my_order_model.dart';
-import 'package:bog/app/data/providers/api_response.dart';
-import 'package:bog/app/global_widgets/app_base_view.dart';
-import 'package:bog/app/global_widgets/app_loader.dart';
-import 'package:bog/app/global_widgets/bottom_widget.dart';
-import 'package:bog/app/global_widgets/my_orders_widget.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_svg/svg.dart';
@@ -14,7 +6,13 @@ import 'package:get/get.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_styles.dart';
 import '../../controllers/home_controller.dart';
-import '../home/pages/CartTab.dart';
+import '../../data/model/my_order_model.dart';
+import '../../data/providers/api_response.dart';
+import '../../global_widgets/app_base_view.dart';
+import '../../global_widgets/app_loader.dart';
+import '../../global_widgets/bottom_widget.dart';
+import '../../global_widgets/my_orders_widget.dart';
+
 
 class MyOrderScreen extends StatefulWidget {
   const MyOrderScreen({Key? key}) : super(key: key);
@@ -50,9 +48,7 @@ class _MyOrderScreenState extends State<MyOrderScreen>
     double multiplier = 25 * size.height * 0.01;
 
     List<MyOrderItem> getAllOrderItems(List<MyOrdersModel> orders) {
-      for (var i in orders) {
-        print(i.orderItems);
-      }
+      
       return orders.expand((order) => order.orderItems!).toList();
     }
 
@@ -168,8 +164,7 @@ class _MyOrderScreenState extends State<MyOrderScreen>
                             } else if (snapshot.connectionState ==
                                 ConnectionState.done) {
                               if (snapshot.hasData) {
-                                // myOrders = MyOrdersModel.fromJsonList(
-                                //     snapshot.data!.data as List<dynamic>);
+                            
                                 final res =
                                     snapshot.data!.data as List<dynamic>;
                                 final myOrdersData = <MyOrdersModel>[];
@@ -177,11 +172,17 @@ class _MyOrderScreenState extends State<MyOrderScreen>
                                   myOrdersData
                                       .add(MyOrdersModel.fromJson(element));
                                 }
-                                final orderItems =
-                                    getAllOrderItems(myOrdersData);
-                                for (var i in myOrdersData) {
-                                  print(i.orderSlug);
-                                }
+
+                               final pendingOrders = myOrdersData.where((element) => element.status == 'pending').toList();
+                                final completedOrders = myOrdersData.where((element) => element.status == 'completed').toList();
+                                 final cancelledOrders = myOrdersData.where((element) => element.status == 'cancelled').toList();
+                                final pendingItems =
+                                    getAllOrderItems(pendingOrders);
+                                final completedItems = getAllOrderItems(completedOrders);
+                                final cancelledItems = getAllOrderItems(cancelledOrders);
+
+                                
+                             
                                 return SizedBox(
                                   height: Get.height * 0.78,
                                   child: TabBarView(
@@ -196,48 +197,7 @@ class _MyOrderScreenState extends State<MyOrderScreen>
                                           children: [
                                             SizedBox(
                                               height: Get.height * 0.75,
-                                              child: ListView.builder(
-                                                itemCount: orderItems.length,
-                                                scrollDirection: Axis.vertical,
-                                                shrinkWrap: false,
-                                                padding: EdgeInsets.only(
-                                                    left: width * 0.02,
-                                                    right: width * 0.02),
-                                                itemBuilder:
-                                                    (BuildContext context,
-                                                        int i) {
-                                                  return MyOrdersWidget(
-                                                    statusColor:
-                                                        const Color(0xFFEC8B20),
-                                                    image: orderItems[i]
-                                                            .product!
-                                                            .image ??
-                                                        '',
-                                                    date: orderItems[i]
-                                                            .createdAt ??
-                                                        DateTime.now(),
-                                                    orderItemName: orderItems[i]
-                                                            .product!
-                                                            .name ??
-                                                        '',
-                                                    status: myOrdersData
-                                                            .firstWhere((element) =>
-                                                                element
-                                                                    .orderItems!
-                                                                    .contains(
-                                                                        orderItems[
-                                                                            i]))
-                                                            .status ??
-                                                        '',
-                                                    price: orderItems[i]
-                                                        .amount
-                                                        .toString(),
-
-                                                    // orderItems[i].status ??
-                                                    //     'Pending',
-                                                  );
-                                                },
-                                              ),
+                                              child: pendingItems.isEmpty ? const Center(child: Text('No pending Orders'),): MyOrderWidgetList(orderItemsList: pendingItems, status: 'Pending', statusColor: const Color(0xFFEC8B20),)
                                             )
                                           ],
                                         ),
@@ -251,26 +211,11 @@ class _MyOrderScreenState extends State<MyOrderScreen>
                                           children: [
                                             SizedBox(
                                               height: Get.height * 0.75,
-                                              child: ListView.builder(
-                                                itemCount: 4,
-                                                scrollDirection: Axis.vertical,
-                                                shrinkWrap: false,
-                                                padding: EdgeInsets.only(
-                                                    left: width * 0.02,
-                                                    right: width * 0.02),
-                                                itemBuilder:
-                                                    (BuildContext context,
-                                                        int index) {
-                                                  return OrderItem(
-                                                    price: '115,000',
-                                                    date: DateTime.now(),
-                                                    orderItemName:
-                                                        '20 tons of cement',
-                                                    status: 'Completed',
-                                                    statusColor: Colors.green,
-                                                  );
-                                                },
-                                              ),
+                                              child: completedOrders.isEmpty ? const Center(child: Text('No Completed Orders'),): MyOrderWidgetList(orderItemsList: completedItems, status: 'completed', statusColor: Colors.green)
+                                              
+                                              
+                                              
+                                          
                                             )
                                           ],
                                         ),
@@ -284,27 +229,9 @@ class _MyOrderScreenState extends State<MyOrderScreen>
                                           children: [
                                             SizedBox(
                                               height: Get.height * 0.75,
-                                              child: ListView.builder(
-                                                itemCount: 4,
-                                                scrollDirection: Axis.vertical,
-                                                shrinkWrap: false,
-                                                padding: EdgeInsets.only(
-                                                    left: width * 0.02,
-                                                    right: width * 0.02),
-                                                itemBuilder:
-                                                    (BuildContext context,
-                                                        int index) {
-                                                  return OrderItem(
-                                                    price: '115,000',
-                                                    date: DateTime.now(),
-                                                    orderItemName:
-                                                        '20 tons of cement',
-                                                    status: 'Cancelled',
-                                                    statusColor:
-                                                        AppColors.bostonUniRed,
-                                                  );
-                                                },
-                                              ),
+                                              child:     cancelledOrders.isEmpty ? const Center(child: Text('No cancelled Orders'),): MyOrderWidgetList(orderItemsList: cancelledItems, status: 'cancelled', statusColor: Colors.red)
+                                              
+                          
                                             )
                                           ],
                                         ),
@@ -315,9 +242,74 @@ class _MyOrderScreenState extends State<MyOrderScreen>
 
                                 //Text('Result: ${orderItems[1].amount}');
                               } else if (snapshot.hasError) {
-                                return Text('Error: ${snapshot.error}');
+                                return TabBarView(
+                                  controller: tabController, children: [
+                                    Center(child: Text('Error: ${snapshot.error.toString()}'),),
+                                         Center(child: Text('Error: ${snapshot.error.toString()}'),),
+                                              Center(child: Text('Error: ${snapshot.error.toString()}'),),
+                                  ]);
+
+                                //return Text('Error: ${snapshot.error}');
                               } else {
-                                return const Text('No Orders yet');
+                             return   SizedBox(
+                                  height: Get.height * 0.78,
+                                  child: TabBarView(
+                                    controller: tabController,
+                                    children: [
+                                      SingleChildScrollView(
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            SizedBox(
+                                              height: Get.height * 0.75,
+                                              child: const Center(child: Text('No pending Orders'),)
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                      SingleChildScrollView(
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            SizedBox(
+                                              height: Get.height * 0.75,
+                                              child:  const Center(child: Text('No Completed Orders'),)
+                                              
+                                              
+                                          
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                      SingleChildScrollView(
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            SizedBox(
+                                              height: Get.height * 0.75,
+                                              child:     const Center(child: Text('No cancelled Orders'),)
+                                              
+                          
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                                
+                                
+                                
+                                //return const Text('No Orders yet');
                               }
                             } else {
                               return const Text('Active');

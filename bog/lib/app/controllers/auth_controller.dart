@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:bog/app/controllers/home_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 // import 'package:get/get_core/src/get_main.dart';
@@ -19,6 +20,7 @@ import '../modules/sign_up/verify_otp.dart';
 import '../repository/user_repo.dart';
 
 class AuthController extends GetxController {
+ // final HomeController homeController;
   final UserRepository userRepo;
 
   TextEditingController fName = TextEditingController();
@@ -325,6 +327,48 @@ class AuthController extends GetxController {
       if (response.isSuccessful) {
         var logInInfo = LogInModel.fromJson(response.user);
         response.user = logInInfo;
+     
+        // if (logInInfo.userType == 'professional'){
+        //    homeController.currentType = "Service Partner";
+        //                           homeController.update();
+        //                           homeController.updateNewUser("Service Partner");
+        //                         //  Get.back();
+        //                           var body = {
+        //                             "userType": "professional",
+        //                           };
+        //                           var response = await homeController.userRepo
+        //                               .postData("/user/switch-account", body);
+        // } else if (logInInfo.userType == 'private_client'){
+        //     homeController.currentType = "Client";
+        //                           homeController.update();
+        //                           homeController.updateNewUser("Client");
+        //                         //  Get.back();
+        //                           var body = {
+        //                             "userType": "private_client",
+        //                           };
+        //                           var response = await homeController.userRepo
+        //                               .postData("/user/switch-account", body);
+        // } else if (logInInfo.userType == 'corporate_client'){
+        //    homeController.currentType = "Corporate Client";
+        //                           homeController.update();
+        //                           homeController.updateNewUser("Corporate Client");
+        //                          // Get.back();
+        //                           var body = {
+        //                             "userType": "corporate_client",
+        //                           };
+        //                           var response = await homeController.userRepo
+        //                               .postData("/user/switch-account", body);
+        // } else {
+        //   homeController.currentType = "Product Partner";
+        //                           homeController.update();
+        //                           homeController.updateNewUser("Product Partner");
+        //                         //  Get.back();
+        //                           var body = {
+        //                             "userType": "vendor",
+        //                           };
+        //                           var response = await homeController.userRepo
+        //                               .postData("/user/switch-account", body);
+        // }
         var token = response.token;
         MyPref.logInDetail.val = jsonEncode(response.user);
         MyPref.authToken.val = token.toString();

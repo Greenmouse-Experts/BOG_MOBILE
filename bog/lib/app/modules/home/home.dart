@@ -27,17 +27,24 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
     var logInDetails = LogInModel.fromJson(jsonDecode(MyPref.logInDetail.val));
-    var type = logInDetails.userType
-        .toString()
-        .replaceAll("_", " ")
-        .capitalizeFirst
-        .toString();
-    if (type == "Client") {
+   
+    var type = logInDetails.userType;
+        // .toString()
+        // .replaceAll("_", " ")
+        // .capitalizeFirst
+        // .toString();
+        // print('fhdhoef');
+        //  print('fhdhwvwoef'); print('fhdhoreef');
+        //  print(type);
+    if (type == "private_client") {
       homeController.currentType = "Client";
-    } else if (type == "Vendor") {
+    } else if (type == "vendor") {
       homeController.currentType = "Product Partner";
-    } else {
-      homeController.currentType = "Service Partner";
+    } else if (type == 'professional'){
+      homeController.currentType = 'Service Partner';
+    }
+    else {
+      homeController.currentType = "Corporate Client";
     }
     homeController.updateNewUser(
         logInDetails.userType
@@ -45,7 +52,7 @@ class _HomeState extends State<Home> {
             .replaceAll("_", " ")
             .capitalizeFirst
             .toString(),
-        updatePages: false);
+        updatePages: true);
   }
 
   @override
