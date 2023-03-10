@@ -96,7 +96,7 @@ class _AppDrawerState extends State<AppDrawer> {
                                               CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              "${logInDetails.fname} ${logInDetails.lname}",
+                                              "${logInDetails.fname}",
                                               style: AppTextStyle.subtitle1
                                                   .copyWith(
                                                 color: Colors.black,
