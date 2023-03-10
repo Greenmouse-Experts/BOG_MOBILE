@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:bog/app/global_widgets/app_ratings.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:date_time_format/date_time_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
@@ -14,7 +15,7 @@ import 'package:qr_flutter/qr_flutter.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_styles.dart';
 import '../../../controllers/home_controller.dart';
-import '../../../data/model/MyProducts.dart';
+import '../../../data/model/my_products.dart';
 import '../../../data/providers/api_response.dart';
 import '../../../data/providers/my_pref.dart';
 import '../../../global_widgets/app_button.dart';
@@ -583,14 +584,19 @@ class CartItem extends StatelessWidget {
 }
 
 class OrderItem extends StatelessWidget {
-  const OrderItem({
-    Key? key,
-    this.status = "Pending Shipping",
-    this.statusColor,
-  }) : super(key: key);
-
+  final String price;
+  final DateTime date;
   final String status;
   final Color? statusColor;
+  final String orderItemName;
+  const OrderItem({
+    Key? key,
+    required this.status,
+    this.statusColor,
+    required this.orderItemName,
+    required this.date,
+    required this.price,
+  }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     /*CachedNetworkImageProvider(
@@ -621,12 +627,12 @@ class OrderItem extends StatelessWidget {
                 children: [
                   Padding(
                     padding: EdgeInsets.only(left: Get.width * 0.015),
-                    child: const Text("30 Tonnes Sharp Sand"),
+                    child: Text(orderItemName),
                   ),
                   Padding(
                     padding: EdgeInsets.only(left: Get.width * 0.015),
                     child: Text(
-                      'Monday, 31 October 2022 ',
+                      date.format(AmericanDateFormats.dayOfWeek),
                       style: AppTextStyle.caption.copyWith(
                         color: const Color(0xFF9A9A9A),
                         fontSize: Get.width * 0.033,
@@ -637,7 +643,7 @@ class OrderItem extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.only(left: Get.width * 0.015),
                     child: Text(
-                      status,
+                      status.capitalize!,
                       style: AppTextStyle.caption.copyWith(
                         color: statusColor ?? const Color(0xFFEC8B20),
                         fontSize: Get.width * 0.033,
@@ -657,7 +663,7 @@ class OrderItem extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.only(left: Get.width * 0.015),
                   child: Text(
-                    'N 115,000',
+                    price,
                     style: AppTextStyle.caption.copyWith(
                       color: AppColors.primary,
                       fontSize: Get.width * 0.035,

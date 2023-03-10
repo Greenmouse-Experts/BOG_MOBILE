@@ -12,12 +12,11 @@ import 'package:toggle_switch/toggle_switch.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_styles.dart';
 import '../../controllers/home_controller.dart';
-import '../../data/model/ProjectListModel.dart';
+import '../../data/model/project_list_model.dart';
 import '../../data/providers/api.dart';
 import '../../global_widgets/app_input.dart';
 import '../../global_widgets/page_dropdown.dart';
 import '../home/pages/CartTab.dart';
-
 
 class AddActivity extends StatefulWidget {
   const AddActivity({Key? key}) : super(key: key);
@@ -47,8 +46,7 @@ class _AddActivityState extends State<AddActivity> {
           statusBarIconBrightness: Brightness.dark,
           statusBarBrightness: Brightness.dark,
           systemNavigationBarColor: AppColors.backgroundVariant2,
-          systemNavigationBarIconBrightness: Brightness.dark
-      ),
+          systemNavigationBarIconBrightness: Brightness.dark),
       child: GetBuilder<HomeController>(
           id: 'AddActivity',
           builder: (controller) {
@@ -60,24 +58,27 @@ class _AddActivityState extends State<AddActivity> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: EdgeInsets.only(right: width*0.05,left: width*0.045,top: kToolbarHeight),
+                      padding: EdgeInsets.only(
+                          right: width * 0.05,
+                          left: width * 0.045,
+                          top: kToolbarHeight),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           InkWell(
-                            onTap: (){
+                            onTap: () {
                               Navigator.pop(context);
                             },
                             child: SvgPicture.asset(
                               "assets/images/back.svg",
-                              height: width*0.045,
-                              width: width*0.045,
+                              height: width * 0.045,
+                              width: width * 0.045,
                               color: Colors.black,
                             ),
                           ),
                           SizedBox(
-                            width: width*0.04,
+                            width: width * 0.04,
                           ),
                           Expanded(
                             child: Row(
@@ -86,20 +87,23 @@ class _AddActivityState extends State<AddActivity> {
                               children: [
                                 Text(
                                   "Add Activity",
-                                  style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.07,color: Colors.black,fontWeight: FontWeight.w600),
+                                  style: AppTextStyle.subtitle1.copyWith(
+                                      fontSize: multiplier * 0.07,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w600),
                                   textAlign: TextAlign.center,
                                 ),
                               ],
                             ),
                           ),
                           SizedBox(
-                            width: width*0.04,
+                            width: width * 0.04,
                           ),
                         ],
                       ),
                     ),
                     SizedBox(
-                      height: width*0.04,
+                      height: width * 0.04,
                     ),
                     Container(
                       height: 1,
@@ -107,29 +111,28 @@ class _AddActivityState extends State<AddActivity> {
                       color: AppColors.grey.withOpacity(0.1),
                     ),
                     SizedBox(
-                      height: width*0.04,
+                      height: width * 0.04,
                     ),
                     Padding(
-                      padding: EdgeInsets.only(left: width*0.043,right: width*0.043),
+                      padding: EdgeInsets.only(
+                          left: width * 0.043, right: width * 0.043),
                       child: const PageInput(
                           hint: "Enter a title for your report",
-                          label: "Task Name"
-                      ),
+                          label: "Task Name"),
                     ),
-
                     SizedBox(
-                      height: width*0.06,
+                      height: width * 0.06,
                     ),
                     Padding(
-                      padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                      padding: EdgeInsets.only(
+                          left: width * 0.05, right: width * 0.05),
                       child: PageDropButton(
                         label: "Task Status",
                         hint: '',
                         padding: const EdgeInsets.symmetric(horizontal: 10),
-                        onChanged: (val) {
-
-                        },
-                        items: ["Pending","Ongoing","Completed"].map<DropdownMenuItem<String>>((String value) {
+                        onChanged: (val) {},
+                        items: ["Pending", "Ongoing", "Completed"]
+                            .map<DropdownMenuItem<String>>((String value) {
                           return DropdownMenuItem<String>(
                             value: value,
                             child: Text(value),
@@ -137,22 +140,24 @@ class _AddActivityState extends State<AddActivity> {
                         }).toList(),
                       ),
                     ),
-
                     SizedBox(
-                      height: width*0.06,
+                      height: width * 0.06,
                     ),
                     Padding(
-                      padding: EdgeInsets.only(left: width*0.043,right: width*0.043),
+                      padding: EdgeInsets.only(
+                          left: width * 0.043, right: width * 0.043),
                       child: const AppInput(
-                          label: "Remark/Message", hintText: 'Write your message',
-                          maxLines: 6,
+                        label: "Remark/Message",
+                        hintText: 'Write your message',
+                        maxLines: 6,
                       ),
                     ),
                     SizedBox(
-                      height: width*0.1,
+                      height: width * 0.1,
                     ),
                     Padding(
-                      padding: EdgeInsets.only(left: width*0.043,right: width*0.043),
+                      padding: EdgeInsets.only(
+                          left: width * 0.043, right: width * 0.043),
                       child: const AppButton(title: "Send Update"),
                     )
                   ],
@@ -180,7 +185,9 @@ class _AddActivityState extends State<AddActivity> {
                       icon: Padding(
                         padding: const EdgeInsets.only(bottom: 5),
                         child: Image.asset(
-                          controller.currentBottomNavPage.value == 1 ? 'assets/images/chat_filled.png' : 'assets/images/chatIcon.png',
+                          controller.currentBottomNavPage.value == 1
+                              ? 'assets/images/chat_filled.png'
+                              : 'assets/images/chatIcon.png',
                           width: 22,
                           //color: controller.currentBottomNavPage.value == 1 ? AppColors.primary : AppColors.grey,
                         ),
@@ -229,8 +236,7 @@ class _AddActivityState extends State<AddActivity> {
                     controller.updateNewUser(controller.currentType);
                     Get.back();
                     Get.back();
-                  }
-              ),
+                  }),
             );
           }),
     );
@@ -243,14 +249,20 @@ class _TextButton extends StatelessWidget {
   final String? subtitle;
   final bool showArrow;
   final Function() onPressed;
-  const _TextButton({required this.imageAsset,required this.text, required this.onPressed, this.subtitle,this.showArrow = true});
+  const _TextButton(
+      {required this.imageAsset,
+      required this.text,
+      required this.onPressed,
+      this.subtitle,
+      this.showArrow = true});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onPressed,
       child: Padding(
-        padding: EdgeInsets.only(left: Get.width*0.03,right: Get.width*0.0),
+        padding:
+            EdgeInsets.only(left: Get.width * 0.03, right: Get.width * 0.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -271,44 +283,54 @@ class _TextButton extends StatelessWidget {
               ),
             ),
             SizedBox(
-              width: Get.width*0.7,
+              width: Get.width * 0.7,
               child: Padding(
-                padding: EdgeInsets.only(left: Get.width*0.01),
+                padding: EdgeInsets.only(left: Get.width * 0.01),
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       SizedBox(
-                        height: Get.height*0.01,
+                        height: Get.height * 0.01,
                       ),
                       Text(
                         text,
                         maxLines: 1,
                         overflow: TextOverflow.clip,
-                        style: AppTextStyle.subtitle1.copyWith(color: text == "Log Out" ? AppColors.bostonUniRed : Colors.black,fontSize: Get.width*0.04,fontWeight: FontWeight.w500),
+                        style: AppTextStyle.subtitle1.copyWith(
+                            color: text == "Log Out"
+                                ? AppColors.bostonUniRed
+                                : Colors.black,
+                            fontSize: Get.width * 0.04,
+                            fontWeight: FontWeight.w500),
                       ),
                       SizedBox(
-                        height: Get.height*0.01,
+                        height: Get.height * 0.01,
                       ),
-                      if(subtitle!=null)
+                      if (subtitle != null)
                         Text(
                           subtitle!,
                           maxLines: 1,
                           overflow: TextOverflow.clip,
-                          style: AppTextStyle.subtitle1.copyWith(color: Colors.black),
+                          style: AppTextStyle.subtitle1
+                              .copyWith(color: Colors.black),
                         ),
-                      if(subtitle!=null)
+                      if (subtitle != null)
                         SizedBox(
-                          height: Get.height*0.01,
+                          height: Get.height * 0.01,
                         ),
-                    ]
-                ),
+                    ]),
               ),
             ),
-
             IconButton(
               onPressed: onPressed,
               padding: EdgeInsets.zero,
-              icon: showArrow ? Icon(Icons.arrow_forward_ios_rounded, color: Colors.black, size: Get.width*0.04,) : Container(),
+              icon: showArrow
+                  ? Icon(
+                      Icons.arrow_forward_ios_rounded,
+                      color: Colors.black,
+                      size: Get.width * 0.04,
+                    )
+                  : Container(),
             )
           ],
         ),

@@ -7,7 +7,7 @@ import 'api_response.dart';
 import 'my_pref.dart';
 
 class Api {
-  static const String baseUrl = 'https://bog-application.herokuapp.com/api';
+  static const String baseUrl = 'https://bog.greenmouseproperties.com/api';
 
   static const String imgUrl = 'http://imgURl';
   CancelToken token = CancelToken();
@@ -56,9 +56,9 @@ class Api {
   }
 
   Future<ApiResponse> deleteData(
-      String url, {
-        bool hasHeader = false,
-      }) async {
+    String url, {
+    bool hasHeader = false,
+  }) async {
     token = CancelToken();
     var head = {
       'Authorization': MyPref.authToken.val,
@@ -88,10 +88,10 @@ class Api {
   }
 
   Future<ApiResponse> putData(
-      String url, {
-        bool hasHeader = false,
-        body,
-      }) async {
+    String url, {
+    bool hasHeader = false,
+    body,
+  }) async {
     token = CancelToken();
     var head = {
       'Authorization': MyPref.authToken.val,
@@ -123,10 +123,10 @@ class Api {
   }
 
   Future<ApiResponse> patchData(
-      String url, {
-        bool hasHeader = false,
-        body,
-      }) async {
+    String url, {
+    bool hasHeader = false,
+    body,
+  }) async {
     token = CancelToken();
     var head = {
       'Authorization': MyPref.authToken.val,
@@ -189,7 +189,8 @@ class Api {
       var head = {
         'Authorization': MyPref.authToken.val,
       };
-      var response = await http.get(Uri.parse(baseUrl+url), headers: hasHeader ? head : null);
+      var response = await http.get(Uri.parse(baseUrl + url),
+          headers: hasHeader ? head : null);
       return ApiResponse.responseFromBody(response.body, response.statusCode);
       //return ApiResponse.response(request);
     } on DioError catch (e) {

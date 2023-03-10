@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_styles.dart';
 import '../../../controllers/home_controller.dart';
-import '../../../data/model/ProjectListModel.dart';
+import '../../../data/model/project_list_model.dart';
 import '../../../data/providers/api_response.dart';
 import '../../../global_widgets/app_input.dart';
 import '../../../global_widgets/page_dropdown.dart';
@@ -512,8 +512,13 @@ class ProjectTab extends StatelessWidget {
                       padding: const EdgeInsets.all(0),
                       itemBuilder: (BuildContext context, int index) {
                         return currentOrder == "Ongoing Orders"
-                            ? OrderItem()
-                            : OrderRequestItem();
+                            ? OrderItem(
+                                price: '203000',
+                                date: DateTime.now(),
+                                status: 'Pending',
+                                orderItemName: '10 tons of coconut',
+                              )
+                            : const OrderRequestItem();
                       },
                     ),
                   ),

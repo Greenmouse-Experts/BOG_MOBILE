@@ -5,6 +5,7 @@ import 'package:bog/app/data/providers/api_response.dart';
 import 'package:bog/app/global_widgets/app_base_view.dart';
 import 'package:bog/app/global_widgets/app_loader.dart';
 import 'package:bog/app/global_widgets/bottom_widget.dart';
+import 'package:bog/app/global_widgets/my_orders_widget.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_svg/svg.dart';
@@ -47,7 +48,13 @@ class _MyOrderScreenState extends State<MyOrderScreen>
     var width = Get.width;
     final Size size = MediaQuery.of(context).size;
     double multiplier = 25 * size.height * 0.01;
-    List<MyOrdersModel> myOrders = [];
+
+    List<MyOrderItem> getAllOrderItems(List<MyOrdersModel> orders) {
+      for (var i in orders) {
+        print(i.orderItems);
+      }
+      return orders.expand((order) => order.orderItems!).toList();
+    }
 
     return AppBaseView(
       child: GetBuilder<HomeController>(
@@ -155,116 +162,166 @@ class _MyOrderScreenState extends State<MyOrderScreen>
                           future:
                               controller.userRepo.getData("/orders/my-orders"),
                           builder: (context, snapshot) {
-                            // if (snapshot.connectionState ==
-                            //     ConnectionState.waiting) {
-                            //   return const AppLoader();
-                            // } else if (snapshot.connectionState ==
-                            //     ConnectionState.done) {
-                            //   if (snapshot.hasData) {
-                            //      final my2po = jsonDecode(snapshot.data);
-                            //     // myOrders = MyOrdersModel.fromJsonList(
-                            //     //     snapshot.data!.data as List<dynamic>);
-                            //     final my2Orders =
-                            //         snapshot.data!.data.toString();
-                            //     return Text('Result: ${my2Orders.toString()}');
-                            //   } else if (snapshot.hasError) {
-                            //     return Text('Error: ${snapshot.error}');
-                            //   } else {
-                            //     return const Text('No result');
-                            //   }
-                            // } else {
-                            //   return const Text('Active');
-                            // }
-                            return SizedBox(
-                              height: Get.height * 0.78,
-                              child: TabBarView(
-                                controller: tabController,
-                                children: [
-                                  SingleChildScrollView(
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        SizedBox(
-                                          height: Get.height * 0.75,
-                                          child: ListView.builder(
-                                            itemCount: 4,
-                                            scrollDirection: Axis.vertical,
-                                            shrinkWrap: false,
-                                            padding: EdgeInsets.only(
-                                                left: width * 0.02,
-                                                right: width * 0.02),
-                                            itemBuilder: (BuildContext context,
-                                                int index) {
-                                              return const OrderItem();
-                                            },
-                                          ),
-                                        )
-                                      ],
-                                    ),
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const AppLoader();
+                            } else if (snapshot.connectionState ==
+                                ConnectionState.done) {
+                              if (snapshot.hasData) {
+                                // myOrders = MyOrdersModel.fromJsonList(
+                                //     snapshot.data!.data as List<dynamic>);
+                                final res =
+                                    snapshot.data!.data as List<dynamic>;
+                                final myOrdersData = <MyOrdersModel>[];
+                                for (var element in res) {
+                                  myOrdersData
+                                      .add(MyOrdersModel.fromJson(element));
+                                }
+                                final orderItems =
+                                    getAllOrderItems(myOrdersData);
+                                for (var i in myOrdersData) {
+                                  print(i.orderSlug);
+                                }
+                                return SizedBox(
+                                  height: Get.height * 0.78,
+                                  child: TabBarView(
+                                    controller: tabController,
+                                    children: [
+                                      SingleChildScrollView(
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            SizedBox(
+                                              height: Get.height * 0.75,
+                                              child: ListView.builder(
+                                                itemCount: orderItems.length,
+                                                scrollDirection: Axis.vertical,
+                                                shrinkWrap: false,
+                                                padding: EdgeInsets.only(
+                                                    left: width * 0.02,
+                                                    right: width * 0.02),
+                                                itemBuilder:
+                                                    (BuildContext context,
+                                                        int i) {
+                                                  return MyOrdersWidget(
+                                                    statusColor:
+                                                        const Color(0xFFEC8B20),
+                                                    image: orderItems[i]
+                                                            .product!
+                                                            .image ??
+                                                        '',
+                                                    date: orderItems[i]
+                                                            .createdAt ??
+                                                        DateTime.now(),
+                                                    orderItemName: orderItems[i]
+                                                            .product!
+                                                            .name ??
+                                                        '',
+                                                    status: myOrdersData
+                                                            .firstWhere((element) =>
+                                                                element
+                                                                    .orderItems!
+                                                                    .contains(
+                                                                        orderItems[
+                                                                            i]))
+                                                            .status ??
+                                                        '',
+                                                    price: orderItems[i]
+                                                        .amount
+                                                        .toString(),
+
+                                                    // orderItems[i].status ??
+                                                    //     'Pending',
+                                                  );
+                                                },
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                      SingleChildScrollView(
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            SizedBox(
+                                              height: Get.height * 0.75,
+                                              child: ListView.builder(
+                                                itemCount: 4,
+                                                scrollDirection: Axis.vertical,
+                                                shrinkWrap: false,
+                                                padding: EdgeInsets.only(
+                                                    left: width * 0.02,
+                                                    right: width * 0.02),
+                                                itemBuilder:
+                                                    (BuildContext context,
+                                                        int index) {
+                                                  return OrderItem(
+                                                    price: '115,000',
+                                                    date: DateTime.now(),
+                                                    orderItemName:
+                                                        '20 tons of cement',
+                                                    status: 'Completed',
+                                                    statusColor: Colors.green,
+                                                  );
+                                                },
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                      SingleChildScrollView(
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            SizedBox(
+                                              height: Get.height * 0.75,
+                                              child: ListView.builder(
+                                                itemCount: 4,
+                                                scrollDirection: Axis.vertical,
+                                                shrinkWrap: false,
+                                                padding: EdgeInsets.only(
+                                                    left: width * 0.02,
+                                                    right: width * 0.02),
+                                                itemBuilder:
+                                                    (BuildContext context,
+                                                        int index) {
+                                                  return OrderItem(
+                                                    price: '115,000',
+                                                    date: DateTime.now(),
+                                                    orderItemName:
+                                                        '20 tons of cement',
+                                                    status: 'Cancelled',
+                                                    statusColor:
+                                                        AppColors.bostonUniRed,
+                                                  );
+                                                },
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                  SingleChildScrollView(
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        SizedBox(
-                                          height: Get.height * 0.75,
-                                          child: ListView.builder(
-                                            itemCount: 4,
-                                            scrollDirection: Axis.vertical,
-                                            shrinkWrap: false,
-                                            padding: EdgeInsets.only(
-                                                left: width * 0.02,
-                                                right: width * 0.02),
-                                            itemBuilder: (BuildContext context,
-                                                int index) {
-                                              return const OrderItem(
-                                                status: 'Completed',
-                                                statusColor: Colors.green,
-                                              );
-                                            },
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  SingleChildScrollView(
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        SizedBox(
-                                          height: Get.height * 0.75,
-                                          child: ListView.builder(
-                                            itemCount: 4,
-                                            scrollDirection: Axis.vertical,
-                                            shrinkWrap: false,
-                                            padding: EdgeInsets.only(
-                                                left: width * 0.02,
-                                                right: width * 0.02),
-                                            itemBuilder: (BuildContext context,
-                                                int index) {
-                                              return const OrderItem(
-                                                status: 'Cancelled',
-                                                statusColor:
-                                                    AppColors.bostonUniRed,
-                                              );
-                                            },
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            );
+                                );
+
+                                //Text('Result: ${orderItems[1].amount}');
+                              } else if (snapshot.hasError) {
+                                return Text('Error: ${snapshot.error}');
+                              } else {
+                                return const Text('No Orders yet');
+                              }
+                            } else {
+                              return const Text('Active');
+                            }
                           })
                     ],
                   ),
