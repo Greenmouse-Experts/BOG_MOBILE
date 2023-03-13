@@ -107,6 +107,13 @@ class HomeController extends GetxController {
   int totalPrice = 0;
   bool isBuyNow = false;
   MyProducts? myProducts;
+  int get cartLength => productsList.length;
   List<MyProducts> productsList = [];
   Map<String, int> productsMap = {};
+
+
+  void addProductToCart (MyProducts product){
+      productsList.add(product);
+      update();
+  }
 }

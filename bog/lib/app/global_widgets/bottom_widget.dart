@@ -1,18 +1,64 @@
-import 'package:bog/app/controllers/home_controller.dart';
+// import 'dart:convert';
+
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:badges/badges.dart' as badges;
 
 import '../../core/theme/app_colors.dart';
+import '../controllers/home_controller.dart';
+// import '../data/model/log_in_model.dart';
+// import '../data/providers/my_pref.dart';
 
-class HomeBottomWidget extends StatelessWidget {
+class HomeBottomWidget extends StatefulWidget {
   final bool isHome;
   final HomeController controller;
   const HomeBottomWidget(
       {super.key, required this.controller, required this.isHome});
 
   @override
+  State<HomeBottomWidget> createState() => _HomeBottomWidgetState();
+}
+
+class _HomeBottomWidgetState extends State<HomeBottomWidget> {
+  //   var homeController = Get.find<HomeController>();
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   var logInDetails = LogInModel.fromJson(jsonDecode(MyPref.logInDetail.val));
+   
+  //   var type = logInDetails.userType;
+  //       // .toString()
+  //       // .replaceAll("_", " ")
+  //       // .capitalizeFirst
+  //       // .toString();
+  //       // print('fhdhoef');
+  //       //  print('fhdhwvwoef'); print('fhdhoreef');
+  //       //  print(type);
+  //   if (type == "private_client") {
+  //     homeController.currentType = "Client";
+  //   } else if (type == "vendor") {
+  //     homeController.currentType = "Product Partner";
+  //   } else if (type == 'professional'){
+  //     homeController.currentType = 'Service Partner';
+  //   }
+  //   else {
+  //     homeController.currentType = "Corporate Client";
+  //   }
+  //   homeController.updateNewUser(
+  //       logInDetails.userType
+  //           .toString()
+  //           .replaceAll("_", " ")
+  //           .capitalizeFirst
+  //           .toString(),
+  //       updatePages: true);
+  // }
+
+  
+  @override
   Widget build(BuildContext context) {
-    return isHome
+    return widget.isHome
         ? BottomNavigationBar(
             backgroundColor: AppColors.backgroundVariant2,
             showSelectedLabels: true,
@@ -23,19 +69,19 @@ class HomeBottomWidget extends StatelessWidget {
                 icon: Padding(
                   padding: const EdgeInsets.only(bottom: 5),
                   child: Image.asset(
-                    controller.homeIcon,
+                    widget.controller.homeIcon,
                     width: 20,
                     //color: controller.currentBottomNavPage.value == 0 ? AppColors.primary : AppColors.grey,
                   ),
                 ),
-                label: controller.homeTitle,
+                label: widget.controller.homeTitle,
                 backgroundColor: AppColors.background,
               ),
               BottomNavigationBarItem(
                 icon: Padding(
                   padding: const EdgeInsets.only(bottom: 5),
                   child: Image.asset(
-                    controller.currentBottomNavPage.value == 1
+                    widget.controller.currentBottomNavPage.value == 1
                         ? 'assets/images/chat_filled.png'
                         : 'assets/images/chatIcon.png',
                     width: 22,
@@ -48,29 +94,33 @@ class HomeBottomWidget extends StatelessWidget {
                 icon: Padding(
                   padding: const EdgeInsets.only(bottom: 5),
                   child: Image.asset(
-                    controller.projectIcon,
+                    widget.controller.projectIcon,
                     width: 20,
                     //color: controller.currentBottomNavPage.value == 2 ? AppColors.primary : AppColors.grey,
                   ),
                 ),
-                label: controller.projectTitle,
+                label: widget.controller.projectTitle,
               ),
               BottomNavigationBarItem(
                 icon: Padding(
                   padding: const EdgeInsets.only(bottom: 5),
-                  child: Image.asset(
-                    controller.cartIcon,
-                    width: 25,
-                    //color: controller.currentBottomNavPage.value == 3 ? AppColors.primary : AppColors.grey,
+                  child: badges.Badge(
+                    badgeContent: Text(widget.controller.cartLength.toString()),
+                    badgeStyle: const badges.BadgeStyle(badgeColor: AppColors.primary,padding: EdgeInsets.all(5)),
+                    child: Image.asset(
+                      widget.controller.cartIcon,
+                      width: 25,
+                      //color: controller.currentBottomNavPage.value == 3 ? AppColors.primary : AppColors.grey,
+                    ),
                   ),
                 ),
-                label: controller.cartTitle,
+                label: widget.controller.cartTitle,
               ),
               BottomNavigationBarItem(
                 icon: Padding(
                   padding: const EdgeInsets.only(bottom: 5),
                   child: Image.asset(
-                    controller.profileIcon,
+                    widget.controller.profileIcon,
                     width: 25,
                     //color: controller.currentBottomNavPage.value == 4 ? AppColors.primary : AppColors.grey,
                   ),
@@ -78,13 +128,13 @@ class HomeBottomWidget extends StatelessWidget {
                 label: 'Profile',
               ),
             ],
-            currentIndex: controller.currentBottomNavPage.value,
+            currentIndex: widget.controller.currentBottomNavPage.value,
             selectedItemColor: AppColors.primary,
             unselectedItemColor: Colors.grey,
             onTap: (index) {
-              controller.currentBottomNavPage.value = index;
-              controller.updateNewUser(controller.currentType);
-              controller.update(['home']);
+              widget.controller.currentBottomNavPage.value = index;
+              widget.controller.updateNewUser(widget.controller.currentType);
+              widget.controller.update(['home']);
             })
         : BottomNavigationBar(
             backgroundColor: AppColors.backgroundVariant2,
@@ -96,19 +146,19 @@ class HomeBottomWidget extends StatelessWidget {
                 icon: Padding(
                   padding: const EdgeInsets.only(bottom: 5),
                   child: Image.asset(
-                    controller.homeIcon,
+                    widget.controller.homeIcon,
                     width: 20,
                     //color: controller.currentBottomNavPage.value == 0 ? AppColors.primary : AppColors.grey,
                   ),
                 ),
-                label: controller.homeTitle,
+                label: widget.controller.homeTitle,
                 backgroundColor: AppColors.background,
               ),
               BottomNavigationBarItem(
                 icon: Padding(
                   padding: const EdgeInsets.only(bottom: 5),
                   child: Image.asset(
-                    controller.currentBottomNavPage.value == 1
+                    widget.controller.currentBottomNavPage.value == 1
                         ? 'assets/images/chat_filled.png'
                         : 'assets/images/chatIcon.png',
                     width: 22,
@@ -121,29 +171,33 @@ class HomeBottomWidget extends StatelessWidget {
                 icon: Padding(
                   padding: const EdgeInsets.only(bottom: 5),
                   child: Image.asset(
-                    controller.projectIcon,
+                    widget.controller.projectIcon,
                     width: 20,
                     //color: controller.currentBottomNavPage.value == 2 ? AppColors.primary : AppColors.grey,
                   ),
                 ),
-                label: controller.projectTitle,
+                label: widget.controller.projectTitle,
               ),
               BottomNavigationBarItem(
                 icon: Padding(
                   padding: const EdgeInsets.only(bottom: 5),
-                  child: Image.asset(
-                    controller.cartIcon,
-                    width: 25,
-                    //color: controller.currentBottomNavPage.value == 3 ? AppColors.primary : AppColors.grey,
+                  child: badges.Badge(
+                    badgeContent: Text(widget.controller.cartLength.toString()),
+                    badgeStyle: const badges.BadgeStyle(badgeColor: AppColors.primary,padding: EdgeInsets.all(5)),
+                    child: Image.asset(
+                      widget.controller.cartIcon,
+                      width: 25,
+                      //color: controller.currentBottomNavPage.value == 3 ? AppColors.primary : AppColors.grey,
+                    ),
                   ),
                 ),
-                label: controller.cartTitle,
+                label: widget.controller.cartTitle,
               ),
               BottomNavigationBarItem(
                 icon: Padding(
                   padding: const EdgeInsets.only(bottom: 5),
                   child: Image.asset(
-                    controller.profileIcon,
+                    widget.controller.profileIcon,
                     width: 25,
                     //color: controller.currentBottomNavPage.value == 4 ? AppColors.primary : AppColors.grey,
                   ),
@@ -151,12 +205,12 @@ class HomeBottomWidget extends StatelessWidget {
                 label: 'Profile',
               ),
             ],
-            currentIndex: controller.currentBottomNavPage.value,
+            currentIndex: widget.controller.currentBottomNavPage.value,
             selectedItemColor: AppColors.primary,
             unselectedItemColor: Colors.grey,
             onTap: (index) {
-              controller.currentBottomNavPage.value = index;
-              controller.updateNewUser(controller.currentType);
+              widget.controller.currentBottomNavPage.value = index;
+              widget.controller.updateNewUser(widget.controller.currentType);
               Get.back();
             });
   }
