@@ -37,6 +37,7 @@ class UserRepository {
   }
   Future<ApiResponse> getData(String url,{hasHeader = true}) async {
     final response = await api.getData(url,hasHeader: hasHeader);
+    print('object');
     print(response.message);
     return response;
   }

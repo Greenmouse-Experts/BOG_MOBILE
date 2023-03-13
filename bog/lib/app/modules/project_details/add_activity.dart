@@ -16,7 +16,7 @@ import '../../data/model/project_list_model.dart';
 import '../../data/providers/api.dart';
 import '../../global_widgets/app_input.dart';
 import '../../global_widgets/page_dropdown.dart';
-import '../home/pages/CartTab.dart';
+import '../home/pages/cart_tab.dart';
 
 class AddActivity extends StatefulWidget {
   const AddActivity({Key? key}) : super(key: key);

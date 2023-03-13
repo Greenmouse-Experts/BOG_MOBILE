@@ -55,6 +55,8 @@ dependencies:
   url_launcher: ^6.1.10
   expandable: ^5.0.1
   badges: ^3.0.2
+  flutter_paystack: ^1.0.7
+ 
 
 dev_dependencies:
   flutter_test:

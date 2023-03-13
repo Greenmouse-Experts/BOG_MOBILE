@@ -1,11 +1,12 @@
-import 'package:bog/app/modules/home/pages/CartTab.dart';
+import 'package:bog/app/modules/home/pages/cart_tab.dart';
 import 'package:bog/app/modules/home/pages/ChatTab.dart';
 import 'package:bog/app/modules/home/pages/ProfileTab.dart';
 import 'package:bog/app/modules/home/pages/project_tab.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:feather_icons/feather_icons.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-// import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 
+import '../data/model/cart_model.dart';
 import '../data/model/my_products.dart';
 import '../modules/home/pages/home_tab.dart';
 import '../repository/user_repo.dart';
@@ -104,16 +105,96 @@ class HomeController extends GetxController {
     ProfileTab()
   ];
 
-  int totalPrice = 0;
+
   bool isBuyNow = false;
   MyProducts? myProducts;
-  int get cartLength => productsList.length;
+   RxInt get cartLength => productsList.length.obs;
+ 
   List<MyProducts> productsList = [];
   Map<String, int> productsMap = {};
 
+  final Map<String, CartModel> _cartItems = {};
+  Map<String, CartModel> get cartItems  => _cartItems.obs;
 
-  void addProductToCart (MyProducts product){
+
+
+   void addItem(MyProducts product,) {
+    if (_cartItems.containsKey(product.id!)) {
+
+          Get.snackbar(
+                                      'Already in Cart',
+                                      'Product is already in Cart',
+                                      snackPosition: SnackPosition.TOP,
+                                      backgroundColor: Colors.red,
+                                      colorText: Colors.white,
+                                      margin: EdgeInsets.only(
+                                          bottom: Get.height * 0.1),
+                                      borderRadius: 0,
+                                      icon: const Icon(
+                                        FeatherIcons.shoppingCart,
+                                        color: Colors.white,
+                                      ),
+                                      duration: const Duration(seconds: 2),
+                                    );
+    } else {
       productsList.add(product);
-      update();
+      _cartItems.putIfAbsent(
+        product.id!,
+        () => CartModel(product: product, quantity: 1)
+      );
+
+          Get.snackbar(
+                                      'Added to Cart',
+                                      'Product added to Cart Successfully',
+                                      snackPosition: SnackPosition.TOP,
+                                      backgroundColor: Colors.green,
+                                      colorText: Colors.white,
+                                      margin: EdgeInsets.only(
+                                          bottom: Get.height * 0.1),
+                                      borderRadius: 0,
+                                      icon: const Icon(
+                                        FeatherIcons.shoppingCart,
+                                        color: Colors.white,
+                                      ),
+                                      duration: const Duration(seconds: 2),
+                                    );
+    }
+    update();
+  }
+
+
+  void cartItemIncrement(String productId) {
+    if (_cartItems.containsKey(productId)) {
+      _cartItems.update(
+          productId,
+          (existingCartItem) => CartModel(
+               product: existingCartItem.product,
+                quantity: existingCartItem.quantity + 1,
+          
+              ));
+    }
+   update();
+  }
+  
+
+  int get subTotalPrice {
+    var total = 0;
+    _cartItems.forEach((key, cartItem) {
+      total += int.parse(cartItem.product.price!) * cartItem.quantity;
+    });
+    return total;
+  }
+
+  void cartItemDecrement(String productId) {
+    if (_cartItems.containsKey(productId)) {
+      _cartItems.update(
+          productId,
+          (existingCartItem) => CartModel(
+               product: existingCartItem.product,
+                quantity: existingCartItem.quantity - 1,
+          
+              ));
+    }
+   update();
   }
 }

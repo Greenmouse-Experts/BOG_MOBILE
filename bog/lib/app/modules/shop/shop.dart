@@ -43,7 +43,7 @@ class Shop extends GetView<HomeController> {
                         children: [
                           InkWell(
                             onTap: () {
-                              Navigator.pop(context);
+                             Get.back();
                             },
                             child: SvgPicture.asset(
                               "assets/images/back.svg",
@@ -97,6 +97,7 @@ class Shop extends GetView<HomeController> {
                               snapshot.data!.isSuccessful) {
                             final posts =
                                 ShopCategory.fromJsonList(snapshot.data!.data);
+                            
                             List<Tab> tabs = [];
                             List<Widget> contents = [];
                             for (var element in posts) {
@@ -105,7 +106,7 @@ class Shop extends GetView<HomeController> {
 
                               contents.add(FutureBuilder<ApiResponse>(
                                   future:
-                                      controller.userRepo.getData("/products"),
+                                      controller.userRepo.getData("/products/all"),
                                   builder: (context, snapshot) {
                                     if (snapshot.connectionState ==
                                             ConnectionState.done &&
@@ -450,7 +451,7 @@ class Shop extends GetView<HomeController> {
                   ],
                 ),
               ),
-              bottomNavigationBar: HomeBottomWidget(controller: controller, isHome: false),
+              bottomNavigationBar:  HomeBottomWidget(controller: controller, isHome: false, doubleNavigate: false,),
               
             
             );

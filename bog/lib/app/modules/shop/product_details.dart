@@ -1,22 +1,19 @@
-// import 'dart:convert';
-
-
 import 'package:bog/app/global_widgets/bottom_widget.dart';
 import 'package:feather_icons/feather_icons.dart';
 import 'package:flutter/material.dart';
-// import 'package:flutter/services.dart';
+
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-// import 'package:toggle_switch/toggle_switch.dart';
+
 
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_styles.dart';
 import '../../controllers/home_controller.dart';
 import '../../data/model/my_products.dart';
-// import '../../global_widgets/app_avatar.dart';
+
 import '../../global_widgets/app_base_view.dart';
 import '../../global_widgets/app_button.dart';
-// import '../../global_widgets/app_input.dart';
+
 import '../../global_widgets/app_ratings.dart';
 import '../../global_widgets/item_counter.dart';
 
@@ -55,7 +52,7 @@ class ProductDetails extends GetView<HomeController> {
                             children: [
                               InkWell(
                                 onTap: () {
-                                  Navigator.pop(context);
+                                  Get.back();
                                 },
                                 child: SvgPicture.asset(
                                   "assets/images/back.svg",
@@ -234,6 +231,12 @@ class ProductDetails extends GetView<HomeController> {
                                     padding:
                                         EdgeInsets.only(right: Get.width * 0.0),
                                     child: ItemCounter(
+                                      itemIncrement: () {
+                                        controller.cartItemIncrement(product.id!);
+                                      },
+                                      itemDecrement: (){
+                                        controller.cartItemDecrement(product.id!);
+                                      },
                                       initialCount: 1,
                                       onCountChanged: (count) {
                                         if (count == 0) {
@@ -321,31 +324,17 @@ class ProductDetails extends GetView<HomeController> {
                                 child: AppButton(
                                   title: 'Add To Cart',
                                   onPressed: () {
-                                    controller.addProductToCart(product);
+                                    controller.addItem(product);
                                   
-                                    controller.productsMap.putIfAbsent(
-                                        product.id.toString(),
-                                        () => currentQuantity);
-                                    for (var element in controller.productsList) {
-                                      controller.totalPrice +=
-                                          int.parse(element.price.toString());
-                                    }
+                                    // controller.productsMap.putIfAbsent(
+                                    //     product.id.toString(),
+                            //            () => currentQuantity);
+                                    // for (var element in controller.productsList) {
+                                    //   controller.totalPrice +=
+                                    //       int.parse(element.price.toString());
+                                    // }
                                  //   Get.back();
-                                    Get.snackbar(
-                                      'Added To Cart',
-                                      'Product Added To Cart Successfully',
-                                      snackPosition: SnackPosition.TOP,
-                                      backgroundColor: Colors.green,
-                                      colorText: Colors.white,
-                                      margin: EdgeInsets.only(
-                                          bottom: Get.height * 0.1),
-                                      borderRadius: 0,
-                                      icon: const Icon(
-                                        FeatherIcons.shoppingCart,
-                                        color: Colors.white,
-                                      ),
-                                      duration: const Duration(seconds: 2),
-                                    );
+                                 
                                   },
                                   borderRadius: 10,
                                   padding: EdgeInsets.symmetric(
@@ -377,7 +366,7 @@ class ProductDetails extends GetView<HomeController> {
                     ),
                   ),
                 ),
-                bottomNavigationBar: HomeBottomWidget(controller: controller, isHome: false),
+                bottomNavigationBar: HomeBottomWidget(controller: controller, isHome: false, doubleNavigate: true,),
                 
                 
                

@@ -319,7 +319,7 @@ class _MyOrderScreenState extends State<MyOrderScreen>
                   ),
                 ),
                 bottomNavigationBar:
-                    HomeBottomWidget(controller: controller, isHome: false));
+               HomeBottomWidget(controller: controller, isHome: false, doubleNavigate: false,));
           }),
     );
   }
