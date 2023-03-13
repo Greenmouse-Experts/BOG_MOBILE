@@ -29,13 +29,6 @@ class _HomeState extends State<Home> {
     var logInDetails = LogInModel.fromJson(jsonDecode(MyPref.logInDetail.val));
    
     var type = logInDetails.userType;
-        // .toString()
-        // .replaceAll("_", " ")
-        // .capitalizeFirst
-        // .toString();
-        // print('fhdhoef');
-        //  print('fhdhwvwoef'); print('fhdhoreef');
-        //  print(type);
     if (type == "private_client") {
       homeController.currentType = "Client";
     } else if (type == "vendor") {
@@ -73,7 +66,7 @@ class _HomeState extends State<Home> {
                   ),
                 ),
                 bottomNavigationBar:
-                    HomeBottomWidget(controller: controller, isHome: true),
+                  HomeBottomWidget(controller: controller, isHome: true, doubleNavigate: false,),
                 drawer: const AppDrawer(),
               );
             }),

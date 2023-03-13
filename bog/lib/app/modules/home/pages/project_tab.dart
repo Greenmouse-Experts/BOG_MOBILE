@@ -12,7 +12,7 @@ import '../../../global_widgets/app_input.dart';
 import '../../../global_widgets/page_dropdown.dart';
 import '../../create/create.dart';
 import '../../project_details/project_details.dart';
-import 'CartTab.dart';
+import 'cart_tab.dart';
 
 class ProjectTab extends StatelessWidget {
   const ProjectTab({Key? key}) : super(key: key);

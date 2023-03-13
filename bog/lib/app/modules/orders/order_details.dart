@@ -15,7 +15,7 @@ import '../../controllers/home_controller.dart';
 import '../../data/providers/api.dart';
 import '../../global_widgets/app_input.dart';
 import '../../global_widgets/page_dropdown.dart';
-import '../home/pages/CartTab.dart';
+import '../home/pages/cart_tab.dart';
 
 
 class OrderDetails extends StatefulWidget {

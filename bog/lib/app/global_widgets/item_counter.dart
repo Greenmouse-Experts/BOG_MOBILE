@@ -5,11 +5,13 @@ import '../../core/theme/app_colors.dart';
 
 class ItemCounter extends StatefulWidget {
   const ItemCounter({
-    Key? key, this.onCountChanged, this.initialCount,this.maxCount
+    Key? key, this.onCountChanged, this.initialCount,this.maxCount, required this.itemIncrement,required this.itemDecrement
   }) : super(key: key);
 
   final int? initialCount;
   final int? maxCount;
+  final VoidCallback itemIncrement;
+  final VoidCallback itemDecrement;
   final Function(int count)? onCountChanged;
 
   @override
@@ -37,6 +39,7 @@ class _ItemCounterState extends State<ItemCounter> {
               if(widget.maxCount != null){
                 if (count > 1 ) {
                   count--;
+                  widget.itemDecrement();
                   if(widget.onCountChanged != null) {
                     widget.onCountChanged!(count);
                   }
@@ -44,6 +47,7 @@ class _ItemCounterState extends State<ItemCounter> {
               }else{
                 if (count > 1) {
                   count--;
+                  widget.itemDecrement();
                   if(widget.onCountChanged != null) {
                     widget.onCountChanged!(count);
                   }
@@ -64,12 +68,14 @@ class _ItemCounterState extends State<ItemCounter> {
               if(widget.maxCount != null){
                 if (count < widget.maxCount! ) {
                   count++;
+                  widget.itemIncrement();
                   if(widget.onCountChanged != null) {
                     widget.onCountChanged!(count);
                   }
                 }
               }else{
                 count++;
+                 widget.itemIncrement();
                 if(widget.onCountChanged != null) {
                   widget.onCountChanged!(count);
                 }

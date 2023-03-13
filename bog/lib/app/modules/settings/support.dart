@@ -124,7 +124,7 @@ class Support extends GetView<HomeController> {
                   ),
                 ),
                 bottomNavigationBar:
-                    HomeBottomWidget(controller: controller, isHome: false));
+              HomeBottomWidget(controller: controller, isHome: false, doubleNavigate: false,));
           }),
     );
   }

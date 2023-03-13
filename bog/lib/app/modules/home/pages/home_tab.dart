@@ -318,7 +318,7 @@ class _HomeTabState extends State<HomeTab> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            'Create A Project',
+                                            'Request for a Service Partner',
                                             style:
                                                 AppTextStyle.headline4.copyWith(
                                               color: Colors.black,

@@ -1,26 +1,20 @@
-import 'dart:convert';
-
-import 'package:bog/app/global_widgets/app_ratings.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:date_time_format/date_time_format.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
-import 'package:flutter_iconly/flutter_iconly.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:qr_flutter/qr_flutter.dart';
+
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_styles.dart';
 import '../../../controllers/home_controller.dart';
 import '../../../data/model/my_products.dart';
 import '../../../data/providers/api_response.dart';
-import '../../../data/providers/my_pref.dart';
+
 import '../../../global_widgets/app_button.dart';
 import '../../../global_widgets/app_input.dart';
-import '../../../global_widgets/horizontal_item_tile.dart';
+
+import '../../../global_widgets/app_loader.dart';
+import '../../../global_widgets/app_ratings.dart';
 import '../../../global_widgets/item_counter.dart';
 import '../../../global_widgets/page_dropdown.dart';
 import '../../../global_widgets/page_input.dart';
@@ -34,7 +28,6 @@ class CartTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String search = "";
-    var width = Get.width;
     final Size size = MediaQuery.of(context).size;
     double multiplier = 25 * size.height * 0.01;
 
@@ -126,6 +119,12 @@ class CartTab extends StatelessWidget {
                                       var product =
                                           controller.productsList[index];
                                       return CartItem(
+                                        itemDecrement: (){
+                                          controller.cartItemDecrement(product.id!);
+                                        },
+                                        itemIncrement: (){
+                                          controller.cartItemIncrement(product.id!);
+                                        },
                                         title: product.name.toString(),
                                         image: product.image.toString(),
                                         price: "N ${product.price}",
@@ -133,9 +132,11 @@ class CartTab extends StatelessWidget {
                                                 product.id.toString()] ??
                                             1,
                                         quantityChanged: (value) {
-                                          controller.productsMap[
-                                              product.id.toString()] = value;
-                                          controller.update();
+                                      //    controller.cartItemIncrement(product.id!);
+                                         // controller.addProductToCart(product);
+                                          // controller.productsMap[
+                                          //     product.id.toString()] = value;
+                                          // controller.update();
                                         },
                                       );
                                     }),
@@ -143,7 +144,6 @@ class CartTab extends StatelessWidget {
                           SizedBox(
                             height: Get.height * 0.025,
                           ),
-                          //Divider
                           Container(
                             height: 1,
                             color: Colors.grey[300],
@@ -183,7 +183,7 @@ class CartTab extends StatelessWidget {
                                         ),
                                       ),
                                       Text(
-                                        "N ${controller.totalPrice}",
+                                        "N ${controller.subTotalPrice}",
                                         style: AppTextStyle.subtitle1.copyWith(
                                           color: Colors.black,
                                           fontSize: Get.width * 0.035,
@@ -263,7 +263,7 @@ class CartTab extends StatelessWidget {
                                         ),
                                       ),
                                       Text(
-                                        "N ${controller.totalPrice + 5000}",
+                                        "N ${controller.subTotalPrice+ 5000}",
                                         style: AppTextStyle.subtitle1.copyWith(
                                           color: AppColors.primary,
                                           fontSize: Get.width * 0.04,
@@ -278,7 +278,7 @@ class CartTab extends StatelessWidget {
                                   AppButton(
                                     title: 'Proceed To Checkout',
                                     onPressed: () {
-                                      Get.to(() => Checkout());
+                                      Get.to(() => const Checkout());
                                     },
                                     borderRadius: 10,
                                     enabled: controller.productsList.isNotEmpty,
@@ -379,15 +379,7 @@ class CartTab extends StatelessWidget {
                             }
                             return SizedBox(
                               height: Get.height * 0.7,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const CircularProgressIndicator(
-                                    color: AppColors.primary,
-                                  ),
-                                ],
-                              ),
+                              child: const AppLoader()
                             );
                           }
                         }),
@@ -434,7 +426,7 @@ class CartTab extends StatelessWidget {
                       shrinkWrap: true,
                       padding: const EdgeInsets.all(0),
                       itemBuilder: (BuildContext context, int index) {
-                        return ServiceRequestItem();
+                        return const ServiceRequestItem();
                       },
                     ),
                   )
@@ -478,7 +470,7 @@ class CartItem extends StatelessWidget {
       this.subTitle = "",
       this.price = "N 115,000",
       this.quantity = 1,
-      this.quantityChanged})
+      this.quantityChanged,required this.itemIncrement,required this.itemDecrement})
       : super(key: key);
 
   final String image;
@@ -486,6 +478,8 @@ class CartItem extends StatelessWidget {
   final String subTitle;
   final String price;
   final int quantity;
+  final VoidCallback itemIncrement;
+  final VoidCallback itemDecrement;
   final Function(int)? quantityChanged;
 
   @override
@@ -566,6 +560,12 @@ class CartItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 ItemCounter(
+                  itemDecrement: (){
+                    itemDecrement();
+                  },
+                  itemIncrement: (){
+                    itemIncrement();
+                  },
                   initialCount: quantity,
                   onCountChanged: (count) {
                     if (quantityChanged != null) {
@@ -759,7 +759,7 @@ class ProductItem extends StatelessWidget {
                     child: Text(
                       date ?? 'Monday, 31 October 2022 ',
                       style: AppTextStyle.caption.copyWith(
-                        color: Color(0xFF9A9A9A),
+                        color: const Color(0xFF9A9A9A),
                         fontSize: Get.width * 0.033,
                         fontWeight: FontWeight.w400,
                       ),
@@ -788,8 +788,8 @@ class ProductItem extends StatelessWidget {
                     child: AppButton(
                       title: "Pending",
                       padding: const EdgeInsets.symmetric(vertical: 5),
-                      border: Border.all(color: Color(0xFFECF6FC)),
-                      bckgrndColor: Color(0xFFECF6FC),
+                      border: Border.all(color:const Color(0xFFECF6FC)),
+                      bckgrndColor: const Color(0xFFECF6FC),
                       fontColor: AppColors.primary,
                     ),
                   ),
