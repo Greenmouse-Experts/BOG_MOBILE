@@ -13,7 +13,6 @@ import '../../global_widgets/app_loader.dart';
 import '../../global_widgets/bottom_widget.dart';
 import '../../global_widgets/my_orders_widget.dart';
 
-
 class MyOrderScreen extends StatefulWidget {
   const MyOrderScreen({Key? key}) : super(key: key);
 
@@ -48,8 +47,7 @@ class _MyOrderScreenState extends State<MyOrderScreen>
     double multiplier = 25 * size.height * 0.01;
 
     List<MyOrderItem> getAllOrderItems(List<MyOrdersModel> orders) {
-      
-      return orders.expand((order) => order.orderItems!).toList();
+      return orders.expand((order) => order.orderItems).toList();
     }
 
     return AppBaseView(
@@ -164,25 +162,34 @@ class _MyOrderScreenState extends State<MyOrderScreen>
                             } else if (snapshot.connectionState ==
                                 ConnectionState.done) {
                               if (snapshot.hasData) {
-                            
                                 final res =
                                     snapshot.data!.data as List<dynamic>;
+                                print(res);
                                 final myOrdersData = <MyOrdersModel>[];
                                 for (var element in res) {
                                   myOrdersData
                                       .add(MyOrdersModel.fromJson(element));
                                 }
 
-                               final pendingOrders = myOrdersData.where((element) => element.status == 'pending').toList();
-                                final completedOrders = myOrdersData.where((element) => element.status == 'completed').toList();
-                                 final cancelledOrders = myOrdersData.where((element) => element.status == 'cancelled').toList();
+                                final pendingOrders = myOrdersData
+                                    .where((element) =>
+                                        element.status == 'pending')
+                                    .toList();
+                                final completedOrders = myOrdersData
+                                    .where((element) =>
+                                        element.status == 'completed')
+                                    .toList();
+                                final cancelledOrders = myOrdersData
+                                    .where((element) =>
+                                        element.status == 'cancelled')
+                                    .toList();
                                 final pendingItems =
                                     getAllOrderItems(pendingOrders);
-                                final completedItems = getAllOrderItems(completedOrders);
-                                final cancelledItems = getAllOrderItems(cancelledOrders);
+                                final completedItems =
+                                    getAllOrderItems(completedOrders);
+                                final cancelledItems =
+                                    getAllOrderItems(cancelledOrders);
 
-                                
-                             
                                 return SizedBox(
                                   height: Get.height * 0.78,
                                   child: TabBarView(
@@ -196,9 +203,20 @@ class _MyOrderScreenState extends State<MyOrderScreen>
                                               CrossAxisAlignment.start,
                                           children: [
                                             SizedBox(
-                                              height: Get.height * 0.75,
-                                              child: pendingItems.isEmpty ? const Center(child: Text('No pending Orders'),): MyOrderWidgetList(orderItemsList: pendingItems, status: 'Pending', statusColor: const Color(0xFFEC8B20),)
-                                            )
+                                                height: Get.height * 0.75,
+                                                child: pendingItems.isEmpty
+                                                    ? const Center(
+                                                        child: Text(
+                                                            'No pending Orders'),
+                                                      )
+                                                    : MyOrderWidgetList(
+                                                        orderItemsList:
+                                                            pendingItems,
+                                                        status: 'Pending',
+                                                        statusColor:
+                                                            const Color(
+                                                                0xFFEC8B20),
+                                                      ))
                                           ],
                                         ),
                                       ),
@@ -210,13 +228,18 @@ class _MyOrderScreenState extends State<MyOrderScreen>
                                               CrossAxisAlignment.start,
                                           children: [
                                             SizedBox(
-                                              height: Get.height * 0.75,
-                                              child: completedOrders.isEmpty ? const Center(child: Text('No Completed Orders'),): MyOrderWidgetList(orderItemsList: completedItems, status: 'completed', statusColor: Colors.green)
-                                              
-                                              
-                                              
-                                          
-                                            )
+                                                height: Get.height * 0.75,
+                                                child: completedOrders.isEmpty
+                                                    ? const Center(
+                                                        child: Text(
+                                                            'No Completed Orders'),
+                                                      )
+                                                    : MyOrderWidgetList(
+                                                        orderItemsList:
+                                                            completedItems,
+                                                        status: 'completed',
+                                                        statusColor:
+                                                            Colors.green))
                                           ],
                                         ),
                                       ),
@@ -228,11 +251,18 @@ class _MyOrderScreenState extends State<MyOrderScreen>
                                               CrossAxisAlignment.start,
                                           children: [
                                             SizedBox(
-                                              height: Get.height * 0.75,
-                                              child:     cancelledOrders.isEmpty ? const Center(child: Text('No cancelled Orders'),): MyOrderWidgetList(orderItemsList: cancelledItems, status: 'cancelled', statusColor: Colors.red)
-                                              
-                          
-                                            )
+                                                height: Get.height * 0.75,
+                                                child: cancelledOrders.isEmpty
+                                                    ? const Center(
+                                                        child: Text(
+                                                            'No cancelled Orders'),
+                                                      )
+                                                    : MyOrderWidgetList(
+                                                        orderItemsList:
+                                                            cancelledItems,
+                                                        status: 'cancelled',
+                                                        statusColor:
+                                                            Colors.red))
                                           ],
                                         ),
                                       ),
@@ -243,15 +273,25 @@ class _MyOrderScreenState extends State<MyOrderScreen>
                                 //Text('Result: ${orderItems[1].amount}');
                               } else if (snapshot.hasError) {
                                 return TabBarView(
-                                  controller: tabController, children: [
-                                    Center(child: Text('Error: ${snapshot.error.toString()}'),),
-                                         Center(child: Text('Error: ${snapshot.error.toString()}'),),
-                                              Center(child: Text('Error: ${snapshot.error.toString()}'),),
-                                  ]);
+                                    controller: tabController,
+                                    children: [
+                                      Center(
+                                        child: Text(
+                                            'Error: ${snapshot.error.toString()}'),
+                                      ),
+                                      Center(
+                                        child: Text(
+                                            'Error: ${snapshot.error.toString()}'),
+                                      ),
+                                      Center(
+                                        child: Text(
+                                            'Error: ${snapshot.error.toString()}'),
+                                      ),
+                                    ]);
 
                                 //return Text('Error: ${snapshot.error}');
                               } else {
-                             return   SizedBox(
+                                return SizedBox(
                                   height: Get.height * 0.78,
                                   child: TabBarView(
                                     controller: tabController,
@@ -264,9 +304,11 @@ class _MyOrderScreenState extends State<MyOrderScreen>
                                               CrossAxisAlignment.start,
                                           children: [
                                             SizedBox(
-                                              height: Get.height * 0.75,
-                                              child: const Center(child: Text('No pending Orders'),)
-                                            )
+                                                height: Get.height * 0.75,
+                                                child: const Center(
+                                                  child:
+                                                      Text('No pending Orders'),
+                                                ))
                                           ],
                                         ),
                                       ),
@@ -278,12 +320,11 @@ class _MyOrderScreenState extends State<MyOrderScreen>
                                               CrossAxisAlignment.start,
                                           children: [
                                             SizedBox(
-                                              height: Get.height * 0.75,
-                                              child:  const Center(child: Text('No Completed Orders'),)
-                                              
-                                              
-                                          
-                                            )
+                                                height: Get.height * 0.75,
+                                                child: const Center(
+                                                  child: Text(
+                                                      'No Completed Orders'),
+                                                ))
                                           ],
                                         ),
                                       ),
@@ -295,20 +336,18 @@ class _MyOrderScreenState extends State<MyOrderScreen>
                                               CrossAxisAlignment.start,
                                           children: [
                                             SizedBox(
-                                              height: Get.height * 0.75,
-                                              child:     const Center(child: Text('No cancelled Orders'),)
-                                              
-                          
-                                            )
+                                                height: Get.height * 0.75,
+                                                child: const Center(
+                                                  child: Text(
+                                                      'No cancelled Orders'),
+                                                ))
                                           ],
                                         ),
                                       ),
                                     ],
                                   ),
                                 );
-                                
-                                
-                                
+
                                 //return const Text('No Orders yet');
                               }
                             } else {
@@ -318,8 +357,11 @@ class _MyOrderScreenState extends State<MyOrderScreen>
                     ],
                   ),
                 ),
-                bottomNavigationBar:
-               HomeBottomWidget(controller: controller, isHome: false, doubleNavigate: false,));
+                bottomNavigationBar: HomeBottomWidget(
+                  controller: controller,
+                  isHome: false,
+                  doubleNavigate: false,
+                ));
           }),
     );
   }

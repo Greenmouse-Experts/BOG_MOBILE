@@ -1,11 +1,9 @@
-
 import 'package:feather_icons/feather_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
+// import 'package:get/get_core/src/get_main.dart';
 import '../../core/theme/theme.dart';
-
 
 class AppInput extends StatefulWidget {
   const AppInput({
@@ -82,7 +80,8 @@ class _AppInputState extends State<AppInput> {
   Widget build(BuildContext context) {
     OutlineInputBorder outlineInputBorder = OutlineInputBorder(
       borderRadius: BorderRadius.circular(widget.borderRadius),
-      borderSide: widget.borderSide.copyWith(color: const Color(0xFF828282).withOpacity(.3)),
+      borderSide: widget.borderSide
+          .copyWith(color: const Color(0xFF828282).withOpacity(.3)),
     );
 
     var contentPadding = widget.contentPadding;
@@ -92,15 +91,16 @@ class _AppInputState extends State<AppInput> {
       children: [
         widget.label != null
             ? Padding(
-          padding: EdgeInsets.only(left: widget.borderSide == BorderSide.none ? 15 : 5),
-              child: Text(
+                padding: EdgeInsets.only(
+                    left: widget.borderSide == BorderSide.none ? 15 : 5),
+                child: Text(
                   widget.label!,
                   style: AppTextStyle.bodyText2.copyWith(
                     fontWeight: FontWeight.w500,
                     color: Colors.black,
                   ),
                 ),
-            )
+              )
             : const SizedBox.shrink(),
         SizedBox(
           height: widget.label != null ? 3 : 0,
@@ -120,7 +120,9 @@ class _AppInputState extends State<AppInput> {
           focusNode: widget.focusNode,
           keyboardType: widget.keyboardType,
           style: AppTextStyle.bodyText2.copyWith(
-            fontWeight: widget.borderSide == BorderSide.none ? FontWeight.w600 : FontWeight.w500,
+            fontWeight: widget.borderSide == BorderSide.none
+                ? FontWeight.w600
+                : FontWeight.w500,
             fontSize: Get.width * .035,
           ),
           cursorColor: AppColors.primary,
@@ -146,7 +148,9 @@ class _AppInputState extends State<AppInput> {
             hintStyle: AppTextStyle.bodyText2.copyWith(
               color: const Color(0xFFC4C4C4),
               fontSize: Get.width * .035,
-              fontWeight: widget.borderSide == BorderSide.none ? FontWeight.w600 : FontWeight.normal,
+              fontWeight: widget.borderSide == BorderSide.none
+                  ? FontWeight.w600
+                  : FontWeight.normal,
             ),
             focusedBorder: outlineInputBorder,
             enabledBorder: outlineInputBorder,

@@ -8,7 +8,7 @@ import 'my_pref.dart';
 
 class Api {
   static const String baseUrl = 'https://bog.greenmouseproperties.com/api';
-
+  // static const String baseUrl = 'https://bog-project-new.netlify.app';
   static const String imgUrl = 'http://imgURl';
   CancelToken token = CancelToken();
 

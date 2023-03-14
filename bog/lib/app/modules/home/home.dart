@@ -27,25 +27,27 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
     var logInDetails = LogInModel.fromJson(jsonDecode(MyPref.logInDetail.val));
-   
+
     var type = logInDetails.userType;
     if (type == "private_client") {
       homeController.currentType = "Client";
+      homeController.update();
+      homeController.updateNewUser('Client');
     } else if (type == "vendor") {
       homeController.currentType = "Product Partner";
-    } else if (type == 'professional'){
+      homeController.update();
+      homeController.updateNewUser('Product Partner');
+    } else if (type == 'professional') {
       homeController.currentType = 'Service Partner';
-    }
-    else {
+      homeController.update();
+      homeController.updateNewUser('Service Partner');
+    } else {
       homeController.currentType = "Corporate Client";
+      homeController.update();
+      homeController.updateNewUser('Corporate Client');
     }
-    homeController.updateNewUser(
-        logInDetails.userType
-            .toString()
-            .replaceAll("_", " ")
-            .capitalizeFirst
-            .toString(),
-        updatePages: true);
+
+    homeController.update();
   }
 
   @override
@@ -65,8 +67,11 @@ class _HomeState extends State<Home> {
                     ],
                   ),
                 ),
-                bottomNavigationBar:
-                  HomeBottomWidget(controller: controller, isHome: true, doubleNavigate: false,),
+                bottomNavigationBar: HomeBottomWidget(
+                  controller: controller,
+                  isHome: true,
+                  doubleNavigate: false,
+                ),
                 drawer: const AppDrawer(),
               );
             }),

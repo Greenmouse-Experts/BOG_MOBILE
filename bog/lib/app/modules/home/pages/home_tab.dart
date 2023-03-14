@@ -34,7 +34,6 @@ class _HomeTabState extends State<HomeTab> {
 
   @override
   void initState() {
-    
     super.initState();
   }
 
@@ -43,9 +42,6 @@ class _HomeTabState extends State<HomeTab> {
     String title = "N 300,000";
     String subTitle = "Monthly Earnings";
     String icon = "";
-
-
-  
 
     return GetBuilder<HomeController>(builder: (controller) {
       return SizedBox(
@@ -318,7 +314,7 @@ class _HomeTabState extends State<HomeTab> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            'Request for a Service Partner',
+                                            'Request for Service Provider',
                                             style:
                                                 AppTextStyle.headline4.copyWith(
                                               color: Colors.black,
