@@ -1,13 +1,19 @@
+import 'package:bog/app/data/model/order_details.dart';
+import 'package:bog/app/data/providers/api_response.dart';
+import 'package:bog/app/global_widgets/app_loader.dart';
+import 'package:bog/app/global_widgets/custom_app_bar.dart';
+import 'package:bog/app/global_widgets/global_widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_styles.dart';
 import '../../controllers/home_controller.dart';
 import '../../global_widgets/app_base_view.dart';
-import '../../global_widgets/app_button.dart';
 import '../../global_widgets/bottom_widget.dart';
+import '../../global_widgets/order_details_builder.dart';
 
 class OrderDetails extends StatefulWidget {
   final String id;
@@ -18,23 +24,21 @@ class OrderDetails extends StatefulWidget {
 }
 
 class _OrderDetailsState extends State<OrderDetails> {
-  var pageController = PageController();
-  var formKey = GlobalKey<FormState>();
-
-  var nameController = TextEditingController();
-  var locationController = TextEditingController();
-  var lgaController = TextEditingController(text: 'Eti Osa');
-  var sizeController = TextEditingController(text: '0 - 1000 sq.m');
-  var typeController = TextEditingController(text: 'Residential');
-  var surveyController = TextEditingController(text: 'Perimeter Survey');
-
+  // var pageController = PageController();
+ late Future<ApiResponse> orderFuture;
+  @override
+  void initState() {
+    final controller = Get.find<HomeController>();
+   orderFuture = controller.userRepo.getData('/orders/order-detail/${widget.id}');
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     //  var title = Get.arguments as String?;
     var width = Get.width;
     final Size size = MediaQuery.of(context).size;
     double multiplier = 25 * size.height * 0.01;
-    print(widget.id);
+ 
     return AppBaseView(
       child: GetBuilder<HomeController>(
           id: 'OrderDetails',
@@ -46,213 +50,111 @@ class _OrderDetailsState extends State<OrderDetails> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Padding(
+                  const  CustomAppBar(title: 'Order Details'),
+                  FutureBuilder<ApiResponse>(
+                    future: orderFuture ,
+                    builder: (context,snapshot){
+                            if (snapshot.connectionState ==
+                                            ConnectionState.done &&
+                                        snapshot.data!.isSuccessful) {
+              
+                                final orderDetail =  OrderDetailsModel.fromJson(snapshot.data!.data);
+                                print(orderDetail);
+                                          return   Padding(
                       padding: EdgeInsets.only(
-                          right: width * 0.05,
-                          left: width * 0.045,
-                          top: kToolbarHeight),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
+                          right: width * 0.05, left: width * 0.045, top: 10),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          InkWell(
-                            onTap: () {
-                              Navigator.pop(context);
-                            },
-                            child: SvgPicture.asset(
-                              "assets/images/back.svg",
-                              height: width * 0.045,
-                              width: width * 0.045,
-                              color: Colors.black,
+                          Text(
+                            
+                                 'Order ID: ${orderDetail.orderSlug}',
+                            style: AppTextStyle.subtitle1.copyWith(
+                                fontSize: multiplier * 0.07,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w600),
+                            textAlign: TextAlign.center,
+                          ),
+                       const   SizedBox(height: 5),
+                        // PageInput(hint: 'Leave review', label: 'Order Review', isTextArea: true, controller: controller.orderReview,),
+                            Container(
+                              padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 6),
+                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(5),
+                               color: AppColors.primary.withOpacity(0.25)),
+                              child: Text(                  
+                                   'Status: ${orderDetail.status}',
+                              style: AppTextStyle.subtitle1.copyWith(
+                                  fontSize: multiplier * 0.07,
+                                  color: AppColors.primary,
+                                  fontWeight: FontWeight.w600),
+                              textAlign: TextAlign.center,
+                                                      ),
                             ),
-                          ),
-                          SizedBox(
-                            width: width * 0.04,
-                          ),
-                          Expanded(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "Order Details",
-                                  style: AppTextStyle.subtitle1.copyWith(
-                                      fontSize: multiplier * 0.07,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w600),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            width: width * 0.04,
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: width * 0.04,
-                    ),
-                    Container(
-                      height: 1,
-                      width: width,
+                             const   SizedBox(height: 5),
+                          const  Text('Item(s)'),
+                              const   SizedBox(height: 5),
+                          OrderDetailsBuilder(orderItems: orderDetail.orderItems!,),
+                          Divider(
+                      thickness: 1,
                       color: AppColors.grey.withOpacity(0.1),
                     ),
-                    SizedBox(
-                      height: width * 0.04,
+                    FeeSection(leading: 'Sub Total', content: '₦ ${orderDetail.totalAmount}'),
+                    FeeSection(leading: 'Delivery Fee', content: '₦ ${orderDetail.deliveryFee}'),
+                    FeeSection(leading: 'Discount', content: '₦ ${orderDetail.discount}'),
+                     Divider(
+                      thickness: 1,
+                      color: AppColors.grey.withOpacity(0.1),
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                          right: width * 0.05, left: width * 0.045, top: 10),
-                      child: Text(
-                        controller.currentType == "Service Partner"
-                            ? "Project ID :  LAN -SUV -132"
-                            : "Order ID :  SAN - 123- NDS ",
-                        style: AppTextStyle.subtitle1.copyWith(
-                            fontSize: multiplier * 0.07,
-                            color: Colors.black,
-                            fontWeight: FontWeight.w600),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                    SizedBox(
-                      height: width * 0.04,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                          right: width * 0.05, left: width * 0.045, top: 10),
-                      child: Text(
-                        "Project Name ",
-                        style: AppTextStyle.subtitle1.copyWith(
-                            fontSize: multiplier * 0.065,
-                            color: Colors.black.withOpacity(0.5),
-                            fontWeight: FontWeight.normal),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                    SizedBox(
-                      height: width * 0.01,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                          right: width * 0.05, left: width * 0.045, top: 10),
-                      child: Text(
-                        "Land Survey Project",
-                        style: AppTextStyle.subtitle1.copyWith(
-                            fontSize: multiplier * 0.068,
-                            color: Colors.black,
-                            fontWeight: FontWeight.normal),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                    SizedBox(
-                      height: width * 0.04,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                          right: width * 0.05, left: width * 0.045, top: 10),
-                      child: Text(
-                        "Service type",
-                        style: AppTextStyle.subtitle1.copyWith(
-                            fontSize: multiplier * 0.065,
-                            color: Colors.black.withOpacity(0.5),
-                            fontWeight: FontWeight.normal),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                    SizedBox(
-                      height: width * 0.01,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                          right: width * 0.05, left: width * 0.045, top: 10),
-                      child: Text(
-                        "Land Survey",
-                        style: AppTextStyle.subtitle1.copyWith(
-                            fontSize: multiplier * 0.068,
-                            color: Colors.black,
-                            fontWeight: FontWeight.normal),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                    SizedBox(
-                      height: width * 0.04,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                          right: width * 0.05, left: width * 0.045, top: 10),
-                      child: Text(
-                        "Service Location",
-                        style: AppTextStyle.subtitle1.copyWith(
-                            fontSize: multiplier * 0.065,
-                            color: Colors.black.withOpacity(0.5),
-                            fontWeight: FontWeight.normal),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                    SizedBox(
-                      height: width * 0.01,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                          right: width * 0.05, left: width * 0.045, top: 10),
-                      child: Text(
-                        "No 7, Street close, Ogba Ikeja, Lagos",
-                        style: AppTextStyle.subtitle1.copyWith(
-                            fontSize: multiplier * 0.068,
-                            color: Colors.black,
-                            fontWeight: FontWeight.normal),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                    SizedBox(
-                      height: width * 0.15,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                          right: width * 0.05, left: width * 0.045, top: 10),
-                      child: Container(
-                        height: 1,
-                        width: width,
-                        color: AppColors.grey.withOpacity(0.1),
-                      ),
-                    ),
-                    SizedBox(
-                      height: width * 0.08,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                          right: width * 0.05, left: width * 0.045, top: 10),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          SizedBox(
-                            width: Get.width * 0.4,
-                            child: AppButton(
-                              title: "Decline",
-                              padding: const EdgeInsets.symmetric(vertical: 15),
-                              border:
-                                  Border.all(color: const Color(0xFFDC1515)),
-                              bckgrndColor: Colors.white,
-                              fontColor: const Color(0xFFDC1515),
-                            ),
+                    FeeSection(leading: 'Order Total', content: '₦ ${orderDetail.totalAmount}'),
+                  const  SizedBox(height: 5),
+                      Text(                        
+                                 'Transaction Reference',
+                            style: AppTextStyle.subtitle1.copyWith(
+                                fontSize: multiplier * 0.07,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w600),
+                            textAlign: TextAlign.center,
                           ),
-                          SizedBox(
-                            width: Get.width * 0.4,
-                            child: AppButton(
-                              title: "Accept",
-                              padding: const EdgeInsets.symmetric(vertical: 15),
-                              border:
-                                  Border.all(color: const Color(0xFF24B53D)),
-                              bckgrndColor: Colors.white,
-                              fontColor: const Color(0xFF24B53D),
-                            ),
+                            const  SizedBox(height: 5),
+                         
+                  Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                   children: [
+                    SizedBox(
+                      width: Get.width * 0.3,
+                      child: Text('Payment Ref: ${orderDetail.orderItems![0].paymentInfo!.reference}', maxLines: 2,)),
+                    Text( DateFormat.yMd().format(orderDetail.createdAt!) ),
+                    Padding(padding: const EdgeInsets.symmetric(horizontal: 8 ), child: Text('${orderDetail.orderItems![0].paymentInfo!.amount}'),)
+                   ],
+                  ),
+                ),
+                     const  SizedBox(height: 5),
+                          Text(                        
+                                 'Review Order',
+                            style: AppTextStyle.subtitle1.copyWith(
+                                fontSize: multiplier * 0.07,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w600),
+                            textAlign: TextAlign.center,
                           ),
+                          PageInput(hint: 'Leave review', label: '', isTextArea: true, controller: controller.orderReview)
                         ],
                       ),
-                    )
+                    ) ;
+                    
+                                        }
+                  else {
+                      if (snapshot.connectionState ==
+                                          ConnectionState.done) {
+                                            return const Text('No order detail');
+                                          }
+                      return const AppLoader();
+                  }
+                  }),
+                   
                   ],
                 ),
               ),
@@ -261,5 +163,21 @@ class _OrderDetailsState extends State<OrderDetails> {
             );
           }),
     );
+  }
+}
+
+class OrderReview extends StatefulWidget {
+  const OrderReview({super.key});
+
+  @override
+  State<OrderReview> createState() => _OrderReviewState();
+}
+
+class _OrderReviewState extends State<OrderReview> {
+  final reviewController = TextEditingController();
+  @override
+  Widget build(BuildContext context) {
+ 
+    return        PageInput(hint: 'Leave review', label: '', isTextArea: true, controller: reviewController,);
   }
 }

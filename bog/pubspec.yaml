@@ -57,6 +57,7 @@ dependencies:
   badges: ^3.0.2
   flutter_paystack: ^1.0.7
   json_to_form: ^0.0.5
+  intl: ^0.17.0
  
 
 dev_dependencies:

@@ -229,6 +229,8 @@ class SwitchUser extends GetView<HomeController> {
                                   };
                                   var response = await controller.userRepo
                                       .postData("/user/switch-account", body);
+                                      print(response.token);
+                                
                                 },
                                 child: Stack(
                                   alignment: Alignment.center,

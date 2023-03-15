@@ -67,17 +67,17 @@ class MyOrdersWidget extends StatelessWidget {
                       padding: EdgeInsets.only(left: Get.width * 0.015),
                       child: Text(orderItemName),
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(left: Get.width * 0.015),
-                      child: Text(
-                        date.format(AmericanDateFormats.dayOfWeek),
-                        style: AppTextStyle.caption.copyWith(
-                          color: const Color(0xFF9A9A9A),
-                          fontSize: Get.width * 0.033,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                    ),
+                    // Padding(
+                    //   padding: EdgeInsets.only(left: Get.width * 0.015),
+                    //   child: Text(
+                    //     date.format(AmericanDateFormats.abbrShort),
+                    //     style: AppTextStyle.caption.copyWith(
+                    //       color: const Color(0xFF9A9A9A),
+                    //       fontSize: Get.width * 0.033,
+                    //       fontWeight: FontWeight.w400,
+                    //     ),
+                    //   ),
+                    // ),
                     Padding(
                       padding: EdgeInsets.only(left: Get.width * 0.015),
                       child: Text(

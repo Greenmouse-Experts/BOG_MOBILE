@@ -173,7 +173,7 @@ class _MyOrderScreenState extends State<MyOrderScreen>
 
                                 final pendingOrders = myOrdersData
                                     .where((element) =>
-                                        element.status == 'pending')
+                                        element.status == 'pending' || element.status == 'approved')
                                     .toList();
                                 final completedOrders = myOrdersData
                                     .where((element) =>

@@ -22,6 +22,17 @@ class JsonForm extends StatefulWidget {
 }
 
 class _JsonFormState extends State<JsonForm> {
+  
+
+  late Future<ApiResponse> formBuilder;
+  @override
+  void initState() {
+    final controller = Get.find<HomeController>();
+    formBuilder = controller.userRepo
+                        .getData('/service/form-builder/${widget.id}');
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     // String form = json.encode({
@@ -134,15 +145,14 @@ class _JsonFormState extends State<JsonForm> {
     };
     return AppBaseView(
       child: GetBuilder<HomeController>(builder: (controller) {
-        print(widget.id);
+       
         return Scaffold(
           body: SingleChildScrollView(
             child: Column(
               children: [
                 const CustomAppBar(title: 'Service Provider Form'),
                 FutureBuilder<ApiResponse>(
-                    future: controller.userRepo
-                        .getData('/service/form-builder/${widget.id}'),
+                    future: formBuilder,
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const AppLoader();
@@ -153,15 +163,17 @@ class _JsonFormState extends State<JsonForm> {
                             child: Text('An error occured'),
                           );
                         } else if (snapshot.hasData) {
-                          print('object23');
-                          print(snapshot.data!.data);
+                    
                           String forms = json.encode(snapshot.data!.data);
-                          return NewJsonSchema(
-                            decorations: decorations,
-                            form: forms,
-                            onChanged: (dynamic response) {
-                              response1 = response;
-                            },
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: NewJsonSchema(
+                              decorations: decorations,
+                              form: forms,
+                              onChanged: (dynamic response) {
+                                response1 = response;
+                              },
+                            ),
                           );
                         } else {
                           return const Center(

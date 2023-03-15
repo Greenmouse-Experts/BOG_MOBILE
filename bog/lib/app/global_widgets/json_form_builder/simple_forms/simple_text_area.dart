@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 // import '../../../../core/theme/app_styles.dart';
 // import '../helpers/function.dart';
 
-class SimpleText extends StatefulWidget {
-  const SimpleText({
+class SimpleTextArea extends StatefulWidget {
+  const SimpleTextArea({
     Key? key,
     required this.item,
     required this.onChange,
@@ -26,10 +26,10 @@ class SimpleText extends StatefulWidget {
   final Map keyboardTypes;
 
   @override
-  State<SimpleText> createState() => _SimpleTextState();
+  State<SimpleTextArea> createState() => _SimpleTextAreaState();
 }
 
-class _SimpleTextState extends State<SimpleText> {
+class _SimpleTextAreaState extends State<SimpleTextArea> {
   dynamic item;
 
   String? isRequired(item, value) {
@@ -61,7 +61,7 @@ class _SimpleTextState extends State<SimpleText> {
     //     ),
     //   );
     // }
-    return PageInput(hint: item['value'] ?? '', label:  item['label']);
+    return PageInput(hint: item['value'] ?? '', label:  item['label'], isTextArea: true,);
     
     
     // Container(

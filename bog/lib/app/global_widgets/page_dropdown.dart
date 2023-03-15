@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
-import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_styles.dart';
 
 class PageDropButton extends StatelessWidget {

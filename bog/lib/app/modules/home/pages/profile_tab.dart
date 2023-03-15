@@ -3,6 +3,7 @@ import 'dart:convert';
 // import 'package:bog/app/global_widgets/app_base_view.dart';
 // import 'package:bog/app/global_widgets/bottom_widget.dart';
 // import 'package:bog/app/modules/onboarding/onboarding.dart';
+import 'package:bog/app/modules/settings/view_kyc.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -44,163 +45,165 @@ class ProfileTab extends StatelessWidget {
     }
 
     return GetBuilder<HomeController>(builder: (controller) {
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          const SizedBox(
-            height: kToolbarHeight,
-          ),
-          Padding(
-            padding: EdgeInsets.only(
-                left: Get.width * 0.03, right: Get.width * 0.03, top: 10),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
-                  "Accounts",
-                  style: AppTextStyle.subtitle1.copyWith(
-                    color: Colors.black,
-                    fontSize: Get.width * 0.045,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ],
+      return SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const SizedBox(
+              height: kToolbarHeight,
             ),
-          ),
-          const SizedBox(
-            height: kToolbarHeight / 2,
-          ),
-          Container(
-            width: Get.width,
-            height: Get.height * 0.25,
-            color: const Color(0xffFFF8F0),
-            child: Center(
-              child: Column(
+            Padding(
+              padding: EdgeInsets.only(
+                  left: Get.width * 0.03, right: Get.width * 0.03, top: 10),
+              child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  SizedBox(
-                    width: Get.width * 0.28,
-                    height: Get.width * 0.28,
-                    child: IconButton(
-                      icon: AppAvatar(
-                        imgUrl: (logInDetails.photo).toString(),
-                        radius: Get.width * 0.16,
-                        name: "${logInDetails.fname} ${logInDetails.lname}",
-                      ),
-                      onPressed: () {},
-                    ),
-                  ),
                   Text(
-                    "${logInDetails.fname} ${logInDetails.lname}",
+                    "Accounts",
                     style: AppTextStyle.subtitle1.copyWith(
                       color: Colors.black,
                       fontSize: Get.width * 0.045,
-                    ),
-                  ),
-                  Text(
-                    controller.currentType,
-                    style: AppTextStyle.subtitle1.copyWith(
-                      color: Colors.black.withOpacity(0.5),
-                      fontSize: Get.width * 0.035,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ],
               ),
             ),
-          ),
-          Column(
-            children: [
-              const SizedBox(
-                height: kToolbarHeight / 3,
+            const SizedBox(
+              height: kToolbarHeight / 2,
+            ),
+            Container(
+              width: Get.width,
+              height: Get.height * 0.25,
+              color: const Color(0xffFFF8F0),
+              child: Center(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: Get.width * 0.28,
+                      height: Get.width * 0.28,
+                      child: IconButton(
+                        icon: AppAvatar(
+                          imgUrl: (logInDetails.photo).toString(),
+                          radius: Get.width * 0.16,
+                          name: "${logInDetails.fname} ${logInDetails.lname}",
+                        ),
+                        onPressed: () {},
+                      ),
+                    ),
+                    Text(
+                      "${logInDetails.fname} ${logInDetails.lname}",
+                      style: AppTextStyle.subtitle1.copyWith(
+                        color: Colors.black,
+                        fontSize: Get.width * 0.045,
+                      ),
+                    ),
+                    Text(
+                      controller.currentType,
+                      style: AppTextStyle.subtitle1.copyWith(
+                        color: Colors.black.withOpacity(0.5),
+                        fontSize: Get.width * 0.035,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              _TextButton(
-                text: "Profile Info",
-                onPressed: () {
-                  Get.to(() => const ProfileInfo());
-                },
-                imageAsset: "assets/images/prifile.png",
-              ),
-              if (controller.currentType == "Product Partner" ||
-                  controller.currentType == "Service Partner")
+            ),
+            Column(
+              children: [
                 const SizedBox(
                   height: kToolbarHeight / 3,
                 ),
-              if (controller.currentType == "Product Partner" ||
-                  controller.currentType == "Service Partner")
                 _TextButton(
-                  text: controller.currentType == "Product Partner"
-                      ? "Uploaded Document"
-                      : "KYC",
+                  text: "Profile Info",
                   onPressed: () {
-                    Get.to(() => const UpdateKyc());
+                    Get.to(() => const ProfileInfo());
                   },
-                  imageAsset: "assets/images/kyc.png",
+                  imageAsset: "assets/images/prifile.png",
                 ),
-              if (controller.currentType == "Product Partner" ||
-                  controller.currentType == "Service Partner")
+                if (controller.currentType == "Product Partner" ||
+                    controller.currentType == "Service Partner")
+                  const SizedBox(
+                    height: kToolbarHeight / 3,
+                  ),
+                if (controller.currentType == "Product Partner" ||
+                    controller.currentType == "Service Partner")
+                  _TextButton(
+                    text: controller.currentType == "Product Partner"
+                        ? "Uploaded Document"
+                        : "KYC",
+                    onPressed: () {
+                      Get.to(() => const KYCPage());
+                    },
+                    imageAsset: "assets/images/kyc.png",
+                  ),
+                if (controller.currentType == "Product Partner" ||
+                    controller.currentType == "Service Partner")
+                  const SizedBox(
+                    height: kToolbarHeight / 3,
+                  ),
+                if (controller.currentType == "Product Partner" ||
+                    controller.currentType == "Service Partner")
+                  _TextButton(
+                    text: "Bank Details",
+                    onPressed: () {
+                      Get.to(() => const UpdateBank());
+                    },
+                    imageAsset: "assets/images/bank.png",
+                  ),
                 const SizedBox(
                   height: kToolbarHeight / 3,
                 ),
-              if (controller.currentType == "Product Partner" ||
-                  controller.currentType == "Service Partner")
                 _TextButton(
-                  text: "Bank Details",
+                  text: "Security ",
                   onPressed: () {
-                    Get.to(() => const UpdateBank());
+                    Get.to(() => const UpdatePassword());
                   },
-                  imageAsset: "assets/images/bank.png",
+                  imageAsset: "assets/images/sheild.png",
                 ),
-              const SizedBox(
-                height: kToolbarHeight / 3,
-              ),
-              _TextButton(
-                text: "Security ",
-                onPressed: () {
-                  Get.to(() => const UpdatePassword());
-                },
-                imageAsset: "assets/images/sheild.png",
-              ),
-              const SizedBox(
-                height: kToolbarHeight / 3,
-              ),
-              _TextButton(
-                text: "About ",
-                onPressed: () {
-                  launchURL(about);
-                },
-                imageAsset: "assets/images/i.png",
-              ),
-              const SizedBox(
-                height: kToolbarHeight / 3,
-              ),
-              _TextButton(
-                text: "Terms & Conditions",
-                onPressed: () {
-                  launchURL(terms);
-                },
-                imageAsset: "assets/images/tac.png",
-              ),
-              const SizedBox(
-                height: kToolbarHeight / 3,
-              ),
-              _TextButton(
-                text: "Log Out",
-                onPressed: () {
-                  showDialog(
-                      context: context,
-                      barrierDismissible: false,
-                      builder: (BuildContext context) => const ConfirmLogout());
-                  // Get.toNamed(OnboardingPage.route);
-                },
-                imageAsset: "assets/images/log_out.png",
-                showArrow: false,
-              ),
-            ],
-          ),
-        ],
+                const SizedBox(
+                  height: kToolbarHeight / 3,
+                ),
+                _TextButton(
+                  text: "About ",
+                  onPressed: () {
+                    launchURL(about);
+                  },
+                  imageAsset: "assets/images/i.png",
+                ),
+                const SizedBox(
+                  height: kToolbarHeight / 3,
+                ),
+                _TextButton(
+                  text: "Terms & Conditions",
+                  onPressed: () {
+                    launchURL(terms);
+                  },
+                  imageAsset: "assets/images/tac.png",
+                ),
+                const SizedBox(
+                  height: kToolbarHeight / 3,
+                ),
+                _TextButton(
+                  text: "Log Out",
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (BuildContext context) => const ConfirmLogout());
+                    // Get.toNamed(OnboardingPage.route);
+                  },
+                  imageAsset: "assets/images/log_out.png",
+                  showArrow: false,
+                ),
+              ],
+            ),
+          ],
+        ),
       );
     });
   }

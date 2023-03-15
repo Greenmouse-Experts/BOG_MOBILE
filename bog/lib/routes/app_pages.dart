@@ -1,4 +1,4 @@
-import 'package:bog/app/modules/home/pages/ProfileTab.dart';
+import 'package:bog/app/modules/home/pages/profile_tab.dart';
 import 'package:get/get.dart';
 
 import '../app/bindings/auth_binding.dart';

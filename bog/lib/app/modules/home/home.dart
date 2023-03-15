@@ -61,8 +61,17 @@ class _HomeState extends State<Home> {
               return Scaffold(
                 body: SizedBox(
                   width: Get.width,
-                  child: Column(
+                  child:        controller.currentBottomNavPage.value == 4  || controller.currentBottomNavPage.value == 0? 
+                  SingleChildScrollView(
+                    child: Column(
+                      children: [
+                                 
+                        controller.pages[controller.currentBottomNavPage.value],
+                      ],
+                    ),
+                  ) : Column(
                     children: [
+               
                       controller.pages[controller.currentBottomNavPage.value],
                     ],
                   ),

@@ -5,8 +5,7 @@ import 'package:dart_countries/dart_countries.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:image_picker/image_picker.dart';
+
 
 import '../../core/theme/theme.dart';
 import 'app_input.dart';
@@ -21,6 +20,7 @@ class PageInput extends StatefulWidget {
     this.controller,
     this.keyboardType = TextInputType.text,
     this.obscureText = false,
+    this.isTextArea = false,
     this.validator,
     this.autovalidateMode,
     this.readOnly = false,
@@ -51,6 +51,7 @@ class PageInput extends StatefulWidget {
   final bool isPhoneNumber;
   final bool isReferral;
   final bool showInfo;
+  final bool isTextArea;
   final bool isFilePicker;
   final BorderSide borderSide;
   final String? Function(String?)? validator;
@@ -102,6 +103,7 @@ class _PageInputState extends State<PageInput> {
                   style: AppTextStyle.bodyText2.copyWith(
                     fontWeight: FontWeight.w500,
                     color: Colors.black,
+                    
                   ),
                 ),
               ),
@@ -192,6 +194,7 @@ class _PageInputState extends State<PageInput> {
         if((!widget.isPhoneNumber && !showText) || widget.obscureText)
           AppInput(
             hintText: !widget.isFilePicker ? widget.hint : 'Click to open file picker',
+            maxLines: widget.isTextArea ? 5 : 1,
             keyboardType: widget.keyboardType,
             controller: widget.controller,
             validator: widget.validator,

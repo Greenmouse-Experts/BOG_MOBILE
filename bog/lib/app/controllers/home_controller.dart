@@ -1,6 +1,6 @@
 import 'package:bog/app/modules/home/pages/cart_tab.dart';
 import 'package:bog/app/modules/home/pages/ChatTab.dart';
-import 'package:bog/app/modules/home/pages/ProfileTab.dart';
+import 'package:bog/app/modules/home/pages/profile_tab.dart';
 import 'package:bog/app/modules/home/pages/project_tab.dart';
 import 'package:feather_icons/feather_icons.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +17,8 @@ class HomeController extends GetxController {
 
   RxInt currentBottomNavPage = 0.obs;
   String currentType = "Client";
+
+  TextEditingController orderReview = TextEditingController();
 
   String homeIcon = 'assets/images/homeIcon.png';
   String chatIcon = 'assets/images/homeIcon.png';

@@ -7,6 +7,7 @@ import './simple_forms/simple_checkbox.dart';
 import './simple_forms/simple_radios.dart';
 // import './simple_forms/simple_select.dart';
 import './simple_forms/simple_date.dart';
+import 'simple_forms/simple_text_area.dart';
 
 class NewJsonSchema extends StatefulWidget {
   const NewJsonSchema({
@@ -55,19 +56,18 @@ class _CoreFormState extends State<NewJsonSchema> {
         style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
       ));
     }
-    if (formGeneral['serviceType'] != null) {
-      listWidget.add(Text(
-        formGeneral['serviceType']['title'],
-        style: const TextStyle(fontSize: 14.0, fontStyle: FontStyle.italic),
-      ));
-    }
+    // if (formGeneral['serviceType'] != null) {
+    //   listWidget.add(Text(
+    //     formGeneral['serviceType']['title'],
+    //     style: const TextStyle(fontSize: 14.0, fontStyle: FontStyle.italic),
+    //   ));
+    // }
 
     for (var count = 0; count < formGeneral['formData'].length; count++) {
       Map item = formGeneral['formData'][count];
 
       if (item['inputType'] == "text" ||
           item['inputType'] == "button" ||
-          item['inputType'] == "textarea" ||
           item['inputType'] == "number" ||
           item['inputType'] == "TextInput") {
         listWidget.add(SimpleText(
@@ -79,6 +79,10 @@ class _CoreFormState extends State<NewJsonSchema> {
           validations: widget.validations,
           keyboardTypes: widget.keyboardTypes,
         ));
+      }
+
+      if ( item['inputType'] == "textarea" ){
+        listWidget.add(SimpleTextArea(item: item, onChange: onChange, position: count));
       }
 
       if (item['inputType'] == "radio-group") {

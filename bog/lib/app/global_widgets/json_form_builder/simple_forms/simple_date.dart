@@ -1,3 +1,4 @@
+import 'package:bog/app/global_widgets/page_input.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -56,7 +57,10 @@ class _SimpleDateState extends State<SimpleDate> {
         ),
       );
     }
-    return Container(
+    return
+    // PageInput(hint: '', label: item['label'], );
+    
+    Container(
       margin: const EdgeInsets.only(top: 5.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

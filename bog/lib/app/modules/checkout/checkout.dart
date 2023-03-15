@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:bog/app/data/model/order_response.dart' as order_response;
 import 'package:bog/app/data/model/post_order.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -19,6 +20,8 @@ import '../home/pages/cart_tab.dart';
 import 'package:flutter_paystack/flutter_paystack.dart';
 
 import 'receipt.dart';
+
+// import 'receipt.dart';
 
 class Checkout extends StatefulWidget {
   const Checkout({Key? key}) : super(key: key);
@@ -113,10 +116,14 @@ class _CheckoutState extends State<Checkout> {
                   totalAmount: cost + 5000)
               .toJson();
 
+              print(postOrder);
+
           final respose = await controller.userRepo
               .postData('/orders/submit-order', postOrder);
-
-          Get.to(() => AppReceipt(message: ' ${respose.data}'));
+         
+         final order = order_response.OrderResponse.fromJson(respose.order);
+        Get.to(AppReceipt(id: order.id!));
+          //Get.to(() => AppReceipt(message: ' ${respose.isSuccessful.toString()} and ${respose}'));
         },
       );
     } else {
