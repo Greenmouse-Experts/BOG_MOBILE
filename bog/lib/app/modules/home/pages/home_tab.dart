@@ -1276,13 +1276,13 @@ class _HomeTabState extends State<HomeTab> {
       ),
       borderData: FlBorderData(
         show: true,
-        border: Border(
+        border: const Border(
           bottom: BorderSide(
-            color: const Color(0xffDEDEDE),
+            color: Color(0xffDEDEDE),
             width: 1,
           ),
           left: BorderSide(
-            color: const Color(0xffDEDEDE),
+            color: Color(0xffDEDEDE),
             width: 1,
           ),
           right: BorderSide.none,
@@ -1344,11 +1344,11 @@ class _HomeTabState extends State<HomeTab> {
     );
     String valueToDisplay = value.toInt().toString();
     if (valueToDisplay.length == 4) {
-      valueToDisplay = valueToDisplay.substring(0, 2) + "M";
+      valueToDisplay = "${valueToDisplay.substring(0, 2)}M";
     } else if (valueToDisplay.length == 5) {
-      valueToDisplay = valueToDisplay.substring(0, 2) + "K";
+      valueToDisplay = "${valueToDisplay.substring(0, 2)}K";
     } else {
-      valueToDisplay = valueToDisplay + "K";
+      valueToDisplay = "${valueToDisplay}K";
     }
     Widget text = Text(
       valueToDisplay == "0K" ? "0" : valueToDisplay,

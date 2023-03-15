@@ -9,6 +9,7 @@ class AppInput extends StatefulWidget {
   const AppInput({
     Key? key,
     this.label,
+    this.initalValue,
     required this.hintText,
     this.keyboardType = TextInputType.text,
     this.obscureText = false,
@@ -56,6 +57,7 @@ class AppInput extends StatefulWidget {
   final TextEditingController? controller;
   final String? Function(String?)? validator;
   final AutovalidateMode? autovalidateMode;
+  final String? initalValue;
 
   @override
   State<AppInput> createState() => _AppInputState();
@@ -106,6 +108,7 @@ class _AppInputState extends State<AppInput> {
           height: widget.label != null ? 3 : 0,
         ),
         TextFormField(
+          initialValue: widget.initalValue,
           maxLengthEnforcement: MaxLengthEnforcement.enforced,
           onFieldSubmitted: widget.onFieldSubmitted,
           onChanged: widget.onChanged,

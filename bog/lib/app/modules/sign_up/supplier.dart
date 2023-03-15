@@ -1,10 +1,8 @@
-import 'package:dart_countries/dart_countries.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+
 import 'package:get/get.dart';
-import 'package:nigerian_states_and_lga/nigerian_states_and_lga.dart';
-import 'package:toggle_switch/toggle_switch.dart';
+
 import '../../../core/theme/app_colors.dart';
 
 import '../../../core/theme/app_styles.dart';
@@ -15,7 +13,6 @@ import '../../global_widgets/app_button.dart';
 import '../../global_widgets/page_dropdown.dart';
 import '../../global_widgets/page_input.dart';
 import '../sign_in/sign_in.dart';
-import '../verify_otp/verify_otp.dart';
 
 class SupplierSignUp extends GetView<AuthController> {
   const SupplierSignUp({Key? key}) : super(key: key);
@@ -56,7 +53,8 @@ class SupplierSignUp extends GetView<AuthController> {
                 children: [
                   SizedBox(height: Get.height * 0.04),
                   Padding(
-                    padding: const EdgeInsets.only(left: AppThemes.appPaddingVal),
+                    padding:
+                        const EdgeInsets.only(left: AppThemes.appPaddingVal),
                     child: Text(
                       'Sign Up As A Product Partner',
                       style: AppTextStyle.headline4.copyWith(
@@ -71,14 +69,14 @@ class SupplierSignUp extends GetView<AuthController> {
                     height: Get.height * 0.010,
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left: AppThemes.appPaddingVal),
+                    padding:
+                        const EdgeInsets.only(left: AppThemes.appPaddingVal),
                     child: Text(
                       'Sell products to clients online',
                       style: AppTextStyle.headline4.copyWith(
                           color: Colors.black.withOpacity(.5),
                           fontWeight: FontWeight.normal,
-                          fontSize: 16
-                      ),
+                          fontSize: 16),
                     ),
                   ),
                   SizedBox(height: Get.height * 0.04),
@@ -87,7 +85,8 @@ class SupplierSignUp extends GetView<AuthController> {
                       child: Container(
                         color: Colors.white,
                         child: Padding(
-                          padding: const EdgeInsets.all(AppThemes.appPaddingVal),
+                          padding:
+                              const EdgeInsets.all(AppThemes.appPaddingVal),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -152,7 +151,7 @@ class SupplierSignUp extends GetView<AuthController> {
                               PageInput(
                                 hint: '',
                                 label: 'Referral Code (Optional)',
-                               // obscureText: true,
+                                // obscureText: true,
                                 validator: (value) {
                                   return null;
                                 },
@@ -175,12 +174,20 @@ class SupplierSignUp extends GetView<AuthController> {
                               PageDropButton(
                                 label: "",
                                 hint: '',
-                                padding: const EdgeInsets.symmetric(horizontal: 10),
-                                onChanged: (val) {
-
-                                },
-                                value:  "Apple App Store",
-                                items: ["Apple App Store","Google Play Store","Google         ","Email         ","Facebook         ","Twitter         ","Instagram         ","Whatsapp         "].map<DropdownMenuItem<String>>((String value) {
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 10),
+                                onChanged: (val) {},
+                                value: "Apple App Store",
+                                items: [
+                                  "Apple App Store",
+                                  "Google Play Store",
+                                  "Google         ",
+                                  "Email         ",
+                                  "Facebook         ",
+                                  "Twitter         ",
+                                  "Instagram         ",
+                                  "Whatsapp         "
+                                ].map<DropdownMenuItem<String>>((String value) {
                                   return DropdownMenuItem<String>(
                                     value: value,
                                     child: Text(value),
@@ -192,13 +199,16 @@ class SupplierSignUp extends GetView<AuthController> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   Checkbox(
-                                      value: controller.isTermsAndConditionsChecked,
-                                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                      visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-                                      onChanged: (val){
-                                        controller.toggleTermsAndConditions(val == true);
-                                      }
-                                  ),
+                                      value: controller
+                                          .isTermsAndConditionsChecked,
+                                      materialTapTargetSize:
+                                          MaterialTapTargetSize.shrinkWrap,
+                                      visualDensity: const VisualDensity(
+                                          horizontal: -4, vertical: -4),
+                                      onChanged: (val) {
+                                        controller.toggleTermsAndConditions(
+                                            val == true);
+                                      }),
                                   SizedBox(
                                     width: Get.width * 0.02,
                                   ),
@@ -207,24 +217,27 @@ class SupplierSignUp extends GetView<AuthController> {
                                       text: TextSpan(
                                         children: [
                                           TextSpan(
-                                            text: 'By creating an account, you agree to BOG’s ',
-                                            style: AppTextStyle.headline4.copyWith(
-                                              color: Colors.black.withOpacity(.5),
+                                            text:
+                                                'By creating an account, you agree to BOG’s ',
+                                            style:
+                                                AppTextStyle.headline4.copyWith(
+                                              color:
+                                                  Colors.black.withOpacity(.5),
                                               fontWeight: FontWeight.normal,
                                               fontSize: 14,
                                             ),
                                           ),
                                           TextSpan(
-                                              text: ' Privacy Policy, Terms and Conditions',
-                                              style: AppTextStyle.headline4.copyWith(
+                                              text:
+                                                  ' Privacy Policy, Terms and Conditions',
+                                              style: AppTextStyle.headline4
+                                                  .copyWith(
                                                 color: AppColors.primary,
                                                 fontWeight: FontWeight.normal,
                                                 fontSize: 14,
                                               ),
-                                              recognizer:  TapGestureRecognizer()..onTap = () {
-
-                                              }
-                                          ),
+                                              recognizer: TapGestureRecognizer()
+                                                ..onTap = () {}),
                                         ],
                                       ),
                                     ),
@@ -234,7 +247,8 @@ class SupplierSignUp extends GetView<AuthController> {
                               SizedBox(height: Get.height * 0.025),
                               AppButton(
                                 title: 'Sign Up As A Product Partner',
-                                onPressed: () async => await controller.signupSupplier(_formKey),
+                                onPressed: () async =>
+                                    await controller.signupSupplier(_formKey),
                                 borderRadius: 10,
                                 enabled: controller.isTermsAndConditionsChecked,
                               ),
@@ -259,7 +273,6 @@ class SupplierSignUp extends GetView<AuthController> {
               ),
             ),
           );
-        })
-    );
+        }));
   }
 }

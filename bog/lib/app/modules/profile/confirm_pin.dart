@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:otp_text_field/otp_field.dart';
-import 'package:otp_text_field/style.dart';
-import '../sign_in/sign_in.dart';
-import '../sign_up/sign_up.dart';
+
 import '../../../core/theme/app_colors.dart';
 
 import '../../../core/theme/app_styles.dart';
 import '../../../core/theme/app_themes.dart';
-import '../../controllers/auth_controller.dart';
+
 import '../../global_widgets/app_button.dart';
-import '../profile/update_profile.dart';
+
 import '../setup/interests.dart';
 
 class ConfirmPIN extends StatelessWidget {
@@ -64,9 +61,6 @@ class ConfirmPIN extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: Get.height * 0.07),
-
-
-
                 SizedBox(height: Get.height * 0.07),
                 AppButton(
                   title: 'Next',

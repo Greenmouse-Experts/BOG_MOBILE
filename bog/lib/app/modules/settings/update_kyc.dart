@@ -1,25 +1,21 @@
 import 'dart:convert';
 
 import 'package:bog/app/global_widgets/app_button.dart';
-import 'package:feather_icons/feather_icons.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:toggle_switch/toggle_switch.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_styles.dart';
-import '../../../core/utils/validator.dart';
+
 import '../../controllers/home_controller.dart';
-import '../../data/model/BankListModel.dart';
+import '../../data/model/bank_list_model.dart';
 import '../../data/model/log_in_model.dart';
 import '../../data/providers/my_pref.dart';
-import '../../global_widgets/app_avatar.dart';
-import '../../global_widgets/app_input.dart';
 import '../../global_widgets/page_dropdown.dart';
 import '../../global_widgets/page_input.dart';
-import '../../global_widgets/tabs.dart';
 
 class UpdateKyc extends StatefulWidget {
   const UpdateKyc({Key? key}) : super(key: key);
@@ -31,14 +27,16 @@ class UpdateKyc extends StatefulWidget {
 }
 
 class _UpdateKycState extends State<UpdateKyc> {
-  var bankList = BankListModel.fromJsonList(jsonDecode(MyPref.bankListDetail.val));
+  var bankList =
+      BankListModel.fromJsonList(jsonDecode(MyPref.bankListDetail.val));
   var homeController = Get.find<HomeController>();
   var formKey = GlobalKey<FormState>();
   var logInDetails = LogInModel.fromJson(jsonDecode(MyPref.logInDetail.val));
   TextEditingController bankName = TextEditingController();
   TextEditingController bankAcct = TextEditingController();
   TextEditingController bankCode = TextEditingController(text: '120001');
-  TextEditingController chosenBankName = TextEditingController(text: '9mobile 9Payment Service Bank');
+  TextEditingController chosenBankName =
+      TextEditingController(text: '9mobile 9Payment Service Bank');
 
   @override
   Widget build(BuildContext context) {
@@ -46,15 +44,13 @@ class _UpdateKycState extends State<UpdateKyc> {
     final Size size = MediaQuery.of(context).size;
     double multiplier = 25 * size.height * 0.01;
 
-
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
           statusBarColor: AppColors.backgroundVariant2,
           statusBarIconBrightness: Brightness.dark,
           statusBarBrightness: Brightness.dark,
           systemNavigationBarColor: AppColors.backgroundVariant2,
-          systemNavigationBarIconBrightness: Brightness.dark
-      ),
+          systemNavigationBarIconBrightness: Brightness.dark),
       child: GetBuilder<HomeController>(
           id: 'UpdateKyc',
           builder: (controller) {
@@ -67,24 +63,27 @@ class _UpdateKycState extends State<UpdateKyc> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: EdgeInsets.only(right: width*0.05,left: width*0.045,top: kToolbarHeight),
+                        padding: EdgeInsets.only(
+                            right: width * 0.05,
+                            left: width * 0.045,
+                            top: kToolbarHeight),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             InkWell(
-                              onTap: (){
+                              onTap: () {
                                 Navigator.pop(context);
                               },
                               child: SvgPicture.asset(
                                 "assets/images/back.svg",
-                                height: width*0.045,
-                                width: width*0.045,
+                                height: width * 0.045,
+                                width: width * 0.045,
                                 color: Colors.black,
                               ),
                             ),
                             SizedBox(
-                              width: width*0.04,
+                              width: width * 0.04,
                             ),
                             Expanded(
                               child: Row(
@@ -93,20 +92,23 @@ class _UpdateKycState extends State<UpdateKyc> {
                                 children: [
                                   Text(
                                     "KYC",
-                                    style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.07,color: Colors.black,fontWeight: FontWeight.w500),
+                                    style: AppTextStyle.subtitle1.copyWith(
+                                        fontSize: multiplier * 0.07,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w500),
                                     textAlign: TextAlign.center,
                                   ),
                                 ],
                               ),
                             ),
                             SizedBox(
-                              width: width*0.04,
+                              width: width * 0.04,
                             ),
                           ],
                         ),
                       ),
                       SizedBox(
-                        height: width*0.04,
+                        height: width * 0.04,
                       ),
                       Container(
                         height: 1,
@@ -114,12 +116,12 @@ class _UpdateKycState extends State<UpdateKyc> {
                         color: AppColors.grey.withOpacity(0.1),
                       ),
                       SizedBox(
-                        height: width*0.04,
+                        height: width * 0.04,
                       ),
                       Row(
                         children: [
                           SizedBox(
-                            width: width*0.03,
+                            width: width * 0.03,
                           ),
                           Text(
                             "Complete your KYC",
@@ -134,7 +136,7 @@ class _UpdateKycState extends State<UpdateKyc> {
                       Row(
                         children: [
                           SizedBox(
-                            width: width*0.03,
+                            width: width * 0.03,
                           ),
                           Text(
                             "Get verified by completing your KYC \ntoday",
@@ -147,10 +149,11 @@ class _UpdateKycState extends State<UpdateKyc> {
                         ],
                       ),
                       SizedBox(
-                        height: width*0.05,
+                        height: width * 0.05,
                       ),
                       Padding(
-                        padding: EdgeInsets.only(left: width*0.03,right: width*0.03),
+                        padding: EdgeInsets.only(
+                            left: width * 0.03, right: width * 0.03),
                         child: Form(
                           key: formKey,
                           child: Column(
@@ -169,7 +172,7 @@ class _UpdateKycState extends State<UpdateKyc> {
                                 showInfo: false,
                               ),
                               SizedBox(
-                                height: width*0.04,
+                                height: width * 0.04,
                               ),
                               PageInput(
                                 hint: '',
@@ -179,7 +182,7 @@ class _UpdateKycState extends State<UpdateKyc> {
                                 isFilePicker: true,
                               ),
                               SizedBox(
-                                height: width*0.1,
+                                height: width * 0.1,
                               ),
                               Text(
                                 "Bank Details",
@@ -190,7 +193,7 @@ class _UpdateKycState extends State<UpdateKyc> {
                                 ),
                               ),
                               SizedBox(
-                                height: width*0.04,
+                                height: width * 0.04,
                               ),
                               PageInput(
                                 hint: '',
@@ -206,7 +209,7 @@ class _UpdateKycState extends State<UpdateKyc> {
                                 showInfo: false,
                               ),
                               SizedBox(
-                                height: width*0.04,
+                                height: width * 0.04,
                               ),
                               PageInput(
                                 hint: '',
@@ -217,25 +220,31 @@ class _UpdateKycState extends State<UpdateKyc> {
                                 validator: (value) {
                                   if (value!.isEmpty) {
                                     return 'Please enter your account number';
-                                  }else if(GetUtils.isNumericOnly(value) == false){
+                                  } else if (GetUtils.isNumericOnly(value) ==
+                                      false) {
                                     return 'Please enter a valid account number';
                                   }
                                   return null;
                                 },
                               ),
                               SizedBox(
-                                height: width*0.04,
+                                height: width * 0.04,
                               ),
                               PageDropButton(
                                 label: "Bank",
                                 hint: '',
-                                padding: const EdgeInsets.symmetric(horizontal: 10),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 10),
                                 onChanged: (val) {
-                                  bankCode.text = (val! as BankListModel).code.toString();
-                                  chosenBankName.text = (val as BankListModel).name.toString();
+                                  bankCode.text =
+                                      (val! as BankListModel).code.toString();
+                                  chosenBankName.text =
+                                      (val as BankListModel).name.toString();
                                 },
-                                value:  bankList.first,
-                                items: bankList.map<DropdownMenuItem<BankListModel>>((BankListModel value) {
+                                value: bankList.first,
+                                items: bankList
+                                    .map<DropdownMenuItem<BankListModel>>(
+                                        (BankListModel value) {
                                   return DropdownMenuItem<BankListModel>(
                                     value: value,
                                     child: Text(value.name.toString()),
@@ -243,14 +252,12 @@ class _UpdateKycState extends State<UpdateKyc> {
                                 }).toList(),
                               ),
                               SizedBox(
-                                height: Get.height*0.05,
+                                height: Get.height * 0.05,
                               ),
                               AppButton(
                                 title: "Submit KYC",
                                 onPressed: () async {
-                                  if(formKey.currentState!.validate()){
-
-                                  }
+                                  if (formKey.currentState!.validate()) {}
                                 },
                               )
                             ],
@@ -283,7 +290,9 @@ class _UpdateKycState extends State<UpdateKyc> {
                       icon: Padding(
                         padding: const EdgeInsets.only(bottom: 5),
                         child: Image.asset(
-                          controller.currentBottomNavPage.value == 1 ? 'assets/images/chat_filled.png' : 'assets/images/chatIcon.png',
+                          controller.currentBottomNavPage.value == 1
+                              ? 'assets/images/chat_filled.png'
+                              : 'assets/images/chatIcon.png',
                           width: 22,
                           //color: controller.currentBottomNavPage.value == 1 ? AppColors.primary : AppColors.grey,
                         ),
@@ -331,9 +340,7 @@ class _UpdateKycState extends State<UpdateKyc> {
                     controller.currentBottomNavPage.value = index;
                     controller.updateNewUser(controller.currentType);
                     Get.back();
-                  }
-              ),
-
+                  }),
             );
           }),
     );
@@ -359,12 +366,12 @@ class ServiceWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+      padding: EdgeInsets.only(left: width * 0.05, right: width * 0.05),
       child: InkWell(
         onTap: function,
         child: Container(
-          height: width*0.4,
-          width: width*0.4,
+          height: width * 0.4,
+          width: width * 0.4,
           decoration: const BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -382,8 +389,8 @@ class ServiceWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                height: width*0.15,
-                width: width*0.15,
+                height: width * 0.15,
+                width: width * 0.15,
                 decoration: BoxDecoration(
                   image: DecorationImage(
                     image: AssetImage(asset),
@@ -392,11 +399,14 @@ class ServiceWidget extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: width*0.04,
+                height: width * 0.04,
               ),
               Text(
                 title,
-                style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.065,color: Colors.black,fontWeight: FontWeight.normal),
+                style: AppTextStyle.subtitle1.copyWith(
+                    fontSize: multiplier * 0.065,
+                    color: Colors.black,
+                    fontWeight: FontWeight.normal),
                 textAlign: TextAlign.center,
               ),
             ],

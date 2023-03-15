@@ -49,17 +49,6 @@ class Support extends GetView<HomeController> {
       }
     }
 
-    // final String _url =
-    //     'https://www.example.com'; // Replace with the link you want to launch
-    final Uri url = Uri.parse('https://wa.me/09034248267');
-    launchURL() async {
-      if (await canLaunchUrl(url)) {
-        await launchUrl(url);
-      } else {
-        throw 'Could not launch $url';
-      }
-    }
-
     return AppBaseView(
       child: GetBuilder<HomeController>(
           id: 'Support',
@@ -123,8 +112,11 @@ class Support extends GetView<HomeController> {
                         ]),
                   ),
                 ),
-                bottomNavigationBar:
-              HomeBottomWidget(controller: controller, isHome: false, doubleNavigate: false,));
+                bottomNavigationBar: HomeBottomWidget(
+                  controller: controller,
+                  isHome: false,
+                  doubleNavigate: false,
+                ));
           }),
     );
   }

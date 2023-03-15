@@ -1,22 +1,15 @@
-import 'dart:convert';
-
-import 'package:bog/app/global_widgets/app_button.dart';
 import 'package:bog/app/global_widgets/global_widgets.dart';
-import 'package:feather_icons/feather_icons.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:toggle_switch/toggle_switch.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_styles.dart';
 import '../../controllers/home_controller.dart';
-import '../../data/model/project_list_model.dart';
-import '../../data/providers/api.dart';
-import '../../global_widgets/app_input.dart';
+
 import '../../global_widgets/page_dropdown.dart';
-import '../home/pages/cart_tab.dart';
 
 class AddActivity extends StatefulWidget {
   const AddActivity({Key? key}) : super(key: key);

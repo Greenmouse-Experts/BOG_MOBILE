@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+
 import 'package:get/get.dart';
 import 'package:otp_text_field/otp_field.dart';
 import 'package:otp_text_field/otp_field_style.dart';
 import 'package:otp_text_field/style.dart';
-import '../multiplexor/multiplexor.dart';
+
 import '../../../core/theme/app_colors.dart';
 
 import '../../../core/theme/app_styles.dart';
 import '../../../core/theme/app_themes.dart';
-import '../../../core/utils/validator.dart';
+
 import '../../controllers/auth_controller.dart';
 import '../../global_widgets/app_button.dart';
-import '../../global_widgets/page_input.dart';
 
 class VerifySignUpOTP extends GetView<AuthController> {
   const VerifySignUpOTP({Key? key}) : super(key: key);
@@ -21,8 +20,7 @@ class VerifySignUpOTP extends GetView<AuthController> {
 
   @override
   Widget build(BuildContext context) {
-
-    return  GetBuilder<AuthController>(builder: (controller) {
+    return GetBuilder<AuthController>(builder: (controller) {
       return Scaffold(
         appBar: AppBar(
           elevation: 0,
@@ -78,8 +76,7 @@ class VerifySignUpOTP extends GetView<AuthController> {
                           style: AppTextStyle.headline4.copyWith(
                               color: Colors.black.withOpacity(.5),
                               fontWeight: FontWeight.normal,
-                              fontSize: 16
-                          ),
+                              fontSize: 16),
                         ),
                         SizedBox(height: Get.height * 0.04),
                         OTPTextField(
@@ -92,9 +89,7 @@ class VerifySignUpOTP extends GetView<AuthController> {
                           ),
                           textFieldAlignment: MainAxisAlignment.spaceBetween,
                           fieldStyle: FieldStyle.box,
-                          onCompleted: (pin) {
-
-                          },
+                          onCompleted: (pin) {},
                           controller: controller.otpController,
                           obscureText: false,
                           onChanged: (value) {
@@ -109,7 +104,8 @@ class VerifySignUpOTP extends GetView<AuthController> {
                         SizedBox(height: Get.height * 0.03),
                         AppButton(
                           title: 'Verify OTP',
-                          onPressed: () async => controller.verifyOTPForSignUp(),
+                          onPressed: () async =>
+                              controller.verifyOTPForSignUp(),
                           borderRadius: 10,
                         ),
                         AppButton(
@@ -118,9 +114,7 @@ class VerifySignUpOTP extends GetView<AuthController> {
                           bckgrndColor: Colors.white,
                           fontColor: Colors.black,
                           trailingColor: AppColors.blue,
-                          onPressed: () {
-
-                          },
+                          onPressed: () {},
                           borderRadius: 10,
                           bold: false,
                         ),

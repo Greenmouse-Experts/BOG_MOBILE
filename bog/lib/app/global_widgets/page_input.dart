@@ -6,37 +6,37 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-
 import '../../core/theme/theme.dart';
 import 'app_input.dart';
 
 class PageInput extends StatefulWidget {
-  const PageInput({
-    Key? key,
-    required this.hint,
-    required this.label,
-    this.prefix,
-    this.suffix,
-    this.controller,
-    this.keyboardType = TextInputType.text,
-    this.obscureText = false,
-    this.isTextArea = false,
-    this.validator,
-    this.autovalidateMode,
-    this.readOnly = false,
-    this.isCompulsory = false,
-    this.isPhoneNumber = false,
-    this.dropDownItems,
-    this.onDropdownChanged,
-    this.isReferral = false,
-    this.showInfo = true,
-    this.isFilePicker = false,
-    this.borderSide = const BorderSide(
-      width: 1,
-      color: Color(0xFF828282),
-    ),
-    this.onFilePicked
-  }) : super(key: key);
+  const PageInput(
+      {Key? key,
+      required this.hint,
+      required this.label,
+      this.prefix,
+      this.initialValue,
+      this.suffix,
+      this.controller,
+      this.keyboardType = TextInputType.text,
+      this.obscureText = false,
+      this.isTextArea = false,
+      this.validator,
+      this.autovalidateMode,
+      this.readOnly = false,
+      this.isCompulsory = false,
+      this.isPhoneNumber = false,
+      this.dropDownItems,
+      this.onDropdownChanged,
+      this.isReferral = false,
+      this.showInfo = true,
+      this.isFilePicker = false,
+      this.borderSide = const BorderSide(
+        width: 1,
+        color: Color(0xFF828282),
+      ),
+      this.onFilePicked})
+      : super(key: key);
 
   final String hint;
   final String label;
@@ -58,6 +58,7 @@ class PageInput extends StatefulWidget {
   final List<DropdownMenuItem<dynamic>>? dropDownItems;
   final Function(dynamic)? onDropdownChanged;
   final Function(File)? onFilePicked;
+  final String? initialValue;
 
   @override
   State<PageInput> createState() => _PageInputState();
@@ -69,10 +70,10 @@ class _PageInputState extends State<PageInput> {
   @override
   void initState() {
     super.initState();
-    if(widget.obscureText){
-      if(widget.controller!= null) {
+    if (widget.obscureText) {
+      if (widget.controller != null) {
         widget.controller!.addListener(() {
-          if(widget.controller!.text.isNotEmpty) {
+          if (widget.controller!.text.isNotEmpty) {
             setState(() {
               showText = true;
             });
@@ -92,7 +93,8 @@ class _PageInputState extends State<PageInput> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: EdgeInsets.only(left: widget.borderSide == BorderSide.none ? 15 : 5),
+          padding: EdgeInsets.only(
+              left: widget.borderSide == BorderSide.none ? 15 : 5),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -103,24 +105,23 @@ class _PageInputState extends State<PageInput> {
                   style: AppTextStyle.bodyText2.copyWith(
                     fontWeight: FontWeight.w500,
                     color: Colors.black,
-                    
                   ),
                 ),
               ),
-              if(widget.isCompulsory)
-                const SizedBox(width: 5),
-              if(widget.isCompulsory)
+              if (widget.isCompulsory) const SizedBox(width: 5),
+              if (widget.isCompulsory)
                 Text(
-                "*",
-                style: AppTextStyle.bodyText2.copyWith(
-                  fontWeight: FontWeight.w600,
-                  color: Colors.red,
+                  "*",
+                  style: AppTextStyle.bodyText2.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: Colors.red,
+                  ),
                 ),
-              ),
-              if(widget.isReferral && widget.showInfo)
-                Expanded(child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
+              if (widget.isReferral && widget.showInfo)
+                Expanded(
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
                       InkWell(
                         onTap: () {
                           setState(() {
@@ -135,29 +136,30 @@ class _PageInputState extends State<PageInput> {
                         ),
                       ),
                       SizedBox(width: Get.width * 0.02),
-                    ]
-                ))
+                    ]))
             ],
           ),
         ),
         const SizedBox(height: 5),
-        if(widget.isPhoneNumber && !showText)
+        if (widget.isPhoneNumber && !showText)
           Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
               SizedBox(
                 width: Get.width * 0.2,
                 child: PageDropButton(
                   label: "",
                   hint: '',
                   onChanged: (val) {
-                    if(widget.onDropdownChanged != null) {
+                    if (widget.onDropdownChanged != null) {
                       widget.onDropdownChanged!(val);
                     }
                   },
-                  value: countries.firstWhere((element) => element.name.toLowerCase() == 'nigeria'),
-                  items: countries.map<DropdownMenuItem<Country>>((Country value) {
+                  value: countries.firstWhere(
+                      (element) => element.name.toLowerCase() == 'nigeria'),
+                  items:
+                      countries.map<DropdownMenuItem<Country>>((Country value) {
                     return DropdownMenuItem<Country>(
                       value: value,
                       child: Container(
@@ -189,11 +191,14 @@ class _PageInputState extends State<PageInput> {
                   borderSide: widget.borderSide,
                 ),
               ),
-          ],
-        ),
-        if((!widget.isPhoneNumber && !showText) || widget.obscureText)
+            ],
+          ),
+        if ((!widget.isPhoneNumber && !showText) || widget.obscureText)
           AppInput(
-            hintText: !widget.isFilePicker ? widget.hint : 'Click to open file picker',
+            initalValue: widget.initialValue,
+            hintText: !widget.isFilePicker
+                ? widget.hint
+                : 'Click to open file picker',
             maxLines: widget.isTextArea ? 5 : 1,
             keyboardType: widget.keyboardType,
             controller: widget.controller,
@@ -202,48 +207,53 @@ class _PageInputState extends State<PageInput> {
             autovalidateMode: widget.autovalidateMode,
             borderSide: widget.borderSide,
             readOnly: widget.readOnly || widget.isFilePicker,
-            prefexIcon: !widget.isFilePicker ? widget.prefix : InkWell(
-              onTap: () async {
-                FilePickerResult? result = await FilePicker.platform.pickFiles();
-                if (result != null) {
-                  File file = File(result.files.single.path.toString());
-                  if(widget.controller != null) {
-                    widget.controller!.text = file.path.split('/').last;
-                  }
-                  if(widget.onFilePicked != null) {
-                    widget.onFilePicked!(file);
-                  }
-                }
-              },
-              child: Padding(
-                padding: EdgeInsets.all(Get.width * 0.01),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.grey.shade200,
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(
-                      color: Colors.grey.shade300,
-                      width: 1,
-                    ),
-                  ),
-                  width: Get.width * 0.25,
-                  child: Center(
-                    child: Text(
-                      'Choose file',
-                      textAlign: TextAlign.center,
-                      style: AppTextStyle.bodyText2.copyWith(
-                        color: Colors.black,
-                        fontWeight: FontWeight.w500,
+            prefexIcon: !widget.isFilePicker
+                ? widget.prefix
+                : InkWell(
+                    onTap: () async {
+                      FilePickerResult? result =
+                          await FilePicker.platform.pickFiles();
+                      if (result != null) {
+                        File file = File(result.files.single.path.toString());
+                        if (widget.controller != null) {
+                          widget.controller!.text = file.path.split('/').last;
+                        }
+                        if (widget.onFilePicked != null) {
+                          widget.onFilePicked!(file);
+                        }
+                      }
+                    },
+                    child: Padding(
+                      padding: EdgeInsets.all(Get.width * 0.01),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade200,
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(
+                            color: Colors.grey.shade300,
+                            width: 1,
+                          ),
+                        ),
+                        width: Get.width * 0.25,
+                        child: Center(
+                          child: Text(
+                            'Choose file',
+                            textAlign: TextAlign.center,
+                            style: AppTextStyle.bodyText2.copyWith(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ),
-            ),
             suffixIcon: widget.suffix,
           ),
-        const SizedBox(height: 5,),
-        if(showText &&  widget.showInfo)
+        const SizedBox(
+          height: 5,
+        ),
+        if (showText && widget.showInfo)
           Container(
             decoration: BoxDecoration(
               color: const Color(0xffEAF3FB),
@@ -265,7 +275,9 @@ class _PageInputState extends State<PageInput> {
                   SizedBox(width: Get.width * 0.02),
                   Expanded(
                     child: Text(
-                      widget.isReferral ? 'Please, only enter the referral. Leave empty if you don\'t have a referral code.' : 'The password must contain minimum of 8 characters, uppercase character and a unique character',
+                      widget.isReferral
+                          ? 'Please, only enter the referral. Leave empty if you don\'t have a referral code.'
+                          : 'The password must contain minimum of 8 characters, uppercase character and a unique character',
                       style: AppTextStyle.bodyText2.copyWith(
                         fontWeight: FontWeight.w400,
                         color: Colors.black,

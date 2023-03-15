@@ -1,26 +1,14 @@
-import 'dart:convert';
-
-import 'package:bog/app/global_widgets/app_button.dart';
 import 'package:bog/app/global_widgets/global_widgets.dart';
-import 'package:bog/app/modules/create/inner_pages/building_approval.dart';
-import 'package:bog/app/modules/create/inner_pages/construction_drawing.dart';
-import 'package:bog/app/modules/create/inner_pages/contractor_or_smart_calculator.dart';
-import 'package:bog/app/modules/create/inner_pages/geotechnical_investigation.dart';
-import 'package:bog/app/modules/create/inner_pages/land_survey.dart';
+
 import 'package:feather_icons/feather_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:toggle_switch/toggle_switch.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_styles.dart';
 import '../../controllers/home_controller.dart';
-import '../../global_widgets/app_avatar.dart';
-import '../../global_widgets/app_input.dart';
-import '../../global_widgets/tabs.dart';
-import '../chat/chat.dart';
 
 class Reviews extends GetView<HomeController> {
   const Reviews({Key? key}) : super(key: key);
@@ -39,8 +27,7 @@ class Reviews extends GetView<HomeController> {
           statusBarIconBrightness: Brightness.dark,
           statusBarBrightness: Brightness.dark,
           systemNavigationBarColor: AppColors.backgroundVariant2,
-          systemNavigationBarIconBrightness: Brightness.dark
-      ),
+          systemNavigationBarIconBrightness: Brightness.dark),
       child: GetBuilder<HomeController>(
           id: 'Reviews',
           builder: (controller) {
@@ -56,24 +43,27 @@ class Reviews extends GetView<HomeController> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         Padding(
-                          padding: EdgeInsets.only(left: Get.width*0.04, right: Get.width*0.03,top: kToolbarHeight),
+                          padding: EdgeInsets.only(
+                              left: Get.width * 0.04,
+                              right: Get.width * 0.03,
+                              top: kToolbarHeight),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               InkWell(
-                                onTap: (){
+                                onTap: () {
                                   Navigator.pop(context);
                                 },
                                 child: SvgPicture.asset(
                                   "assets/images/back.svg",
-                                  height: width*0.045,
-                                  width: width*0.045,
+                                  height: width * 0.045,
+                                  width: width * 0.045,
                                   color: Colors.black,
                                 ),
                               ),
                               SizedBox(
-                                width: width*0.04,
+                                width: width * 0.04,
                               ),
                               Expanded(
                                 child: Row(
@@ -82,20 +72,23 @@ class Reviews extends GetView<HomeController> {
                                   children: [
                                     Text(
                                       "Reviews",
-                                      style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.07,color: Colors.black,fontWeight: FontWeight.w500),
+                                      style: AppTextStyle.subtitle1.copyWith(
+                                          fontSize: multiplier * 0.07,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w500),
                                       textAlign: TextAlign.center,
                                     ),
                                   ],
                                 ),
                               ),
                               SizedBox(
-                                width: width*0.04,
+                                width: width * 0.04,
                               ),
                             ],
                           ),
                         ),
                         SizedBox(
-                          height: width*0.04,
+                          height: width * 0.04,
                         ),
                         Container(
                           height: 1,
@@ -103,10 +96,11 @@ class Reviews extends GetView<HomeController> {
                           color: AppColors.background,
                         ),
                         SizedBox(
-                          height: width*0.04,
+                          height: width * 0.04,
                         ),
                         Padding(
-                          padding: EdgeInsets.only(left: Get.width*0.03, right: Get.width*0.03),
+                          padding: EdgeInsets.only(
+                              left: Get.width * 0.03, right: Get.width * 0.03),
                           child: AppInput(
                             hintText: 'Search with name or keyword ...',
                             filledColor: Colors.grey.withOpacity(.1),
@@ -129,7 +123,10 @@ class Reviews extends GetView<HomeController> {
                             physics: const BouncingScrollPhysics(),
                             itemBuilder: (context, index) {
                               return Padding(
-                                padding: EdgeInsets.only(bottom: Get.height * 0.02,left: Get.width*0.03, right: Get.width*0.03),
+                                padding: EdgeInsets.only(
+                                    bottom: Get.height * 0.02,
+                                    left: Get.width * 0.03,
+                                    right: Get.width * 0.03),
                                 child: Container(
                                   height: Get.height * 0.12,
                                   decoration: BoxDecoration(
@@ -140,46 +137,52 @@ class Reviews extends GetView<HomeController> {
                                         color: Colors.grey.withOpacity(0.2),
                                         spreadRadius: 1,
                                         blurRadius: 1,
-                                        offset: const Offset(0, 1), // changes position of shadow
+                                        offset: const Offset(
+                                            0, 1), // changes position of shadow
                                       ),
                                     ],
                                   ),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
                                     children: [
                                       Row(
-                                        crossAxisAlignment: CrossAxisAlignment.center,
-                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
                                         children: [
                                           SizedBox(
                                             width: Get.width * 0.14,
                                             height: Get.width * 0.14,
                                             child: IconButton(
                                               icon: AppAvatar(
-                                                imgUrl: "",
-                                                radius: Get.width * 0.14,
-                                                name: "Greenmouse"
-                                              ),
-                                              onPressed: () {
-
-                                              },
+                                                  imgUrl: "",
+                                                  radius: Get.width * 0.14,
+                                                  name: "Greenmouse"),
+                                              onPressed: () {},
                                             ),
                                           ),
                                           Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
                                             children: [
                                               SizedBox(
                                                 height: Get.height * 0.01,
                                               ),
                                               Text(
                                                 "Godson Oluwaseun",
-                                                style: AppTextStyle.subtitle1.copyWith(
-                                                    color: Colors.black,
-                                                    fontSize: Get.width * 0.04
-                                                ),
+                                                style: AppTextStyle.subtitle1
+                                                    .copyWith(
+                                                        color: Colors.black,
+                                                        fontSize:
+                                                            Get.width * 0.04),
                                               ),
-                                              AppRating(onRatingUpdate: (value) {}, rating: 4.5),
+                                              AppRating(
+                                                  onRatingUpdate: (value) {},
+                                                  rating: 4.5),
                                               //Divider
                                               SizedBox(
                                                 height: Get.height * 0.01,
@@ -188,15 +191,15 @@ class Reviews extends GetView<HomeController> {
                                           )
                                         ],
                                       ),
-
                                       Padding(
-                                        padding: EdgeInsets.only(left: Get.width * 0.025),
+                                        padding: EdgeInsets.only(
+                                            left: Get.width * 0.025),
                                         child: Text(
                                           "The product was of good quality. Always nice and easy doing business with you guys",
-                                          style: AppTextStyle.subtitle1.copyWith(
-                                              color: Colors.grey,
-                                              fontSize: Get.width * 0.035
-                                          ),
+                                          style: AppTextStyle.subtitle1
+                                              .copyWith(
+                                                  color: Colors.grey,
+                                                  fontSize: Get.width * 0.035),
                                         ),
                                       ),
                                       SizedBox(
@@ -236,7 +239,9 @@ class Reviews extends GetView<HomeController> {
                       icon: Padding(
                         padding: const EdgeInsets.only(bottom: 5),
                         child: Image.asset(
-                          controller.currentBottomNavPage.value == 1 ? 'assets/images/chat_filled.png' : 'assets/images/chatIcon.png',
+                          controller.currentBottomNavPage.value == 1
+                              ? 'assets/images/chat_filled.png'
+                              : 'assets/images/chatIcon.png',
                           width: 22,
                           //color: controller.currentBottomNavPage.value == 1 ? AppColors.primary : AppColors.grey,
                         ),
@@ -284,9 +289,7 @@ class Reviews extends GetView<HomeController> {
                     controller.currentBottomNavPage.value = index;
                     controller.updateNewUser(controller.currentType);
                     Get.back();
-                  }
-              ),
-
+                  }),
             );
           }),
     );

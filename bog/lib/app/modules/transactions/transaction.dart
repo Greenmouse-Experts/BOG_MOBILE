@@ -1,25 +1,16 @@
-import 'dart:convert';
-
-import 'package:bog/app/global_widgets/app_button.dart';
 import 'package:bog/app/global_widgets/global_widgets.dart';
-import 'package:bog/app/modules/create/inner_pages/building_approval.dart';
-import 'package:bog/app/modules/create/inner_pages/construction_drawing.dart';
-import 'package:bog/app/modules/create/inner_pages/contractor_or_smart_calculator.dart';
-import 'package:bog/app/modules/create/inner_pages/geotechnical_investigation.dart';
-import 'package:bog/app/modules/create/inner_pages/land_survey.dart';
+
 import 'package:feather_icons/feather_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:toggle_switch/toggle_switch.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_styles.dart';
 import '../../controllers/home_controller.dart';
-import '../../global_widgets/app_avatar.dart';
+
 import '../../global_widgets/app_input.dart';
-import '../../global_widgets/tabs.dart';
 
 class TransactionPage extends GetView<HomeController> {
   const TransactionPage({Key? key}) : super(key: key);

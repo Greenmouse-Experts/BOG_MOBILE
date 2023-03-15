@@ -1,22 +1,16 @@
-import 'dart:convert';
-
 import 'package:bog/app/modules/chat/chat.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
-import 'package:flutter_svg/svg.dart';
+
 import 'package:get/get.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_styles.dart';
 import '../../../controllers/home_controller.dart';
-import '../../../data/providers/api_response.dart';
-import '../../../data/providers/my_pref.dart';
+
 import '../../../global_widgets/app_avatar.dart';
 import '../../../global_widgets/app_input.dart';
-import '../../../global_widgets/horizontal_item_tile.dart';
-import '../../../global_widgets/page_input.dart';
 
 class ChatTab extends StatelessWidget {
   const ChatTab({Key? key}) : super(key: key);
@@ -25,7 +19,8 @@ class ChatTab extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<HomeController>(builder: (controller) {
       return Padding(
-        padding: EdgeInsets.only(left: Get.width*0.03, right: Get.width*0.03),
+        padding:
+            EdgeInsets.only(left: Get.width * 0.03, right: Get.width * 0.03),
         child: Stack(
           alignment: Alignment.bottomRight,
           children: [
@@ -39,7 +34,8 @@ class ChatTab extends StatelessWidget {
                     height: kToolbarHeight,
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 10.0,right: 10.0,top: 10.0),
+                    padding: const EdgeInsets.only(
+                        left: 10.0, right: 10.0, top: 10.0),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -89,13 +85,10 @@ class ChatTab extends StatelessWidget {
                                 height: Get.width * 0.16,
                                 child: IconButton(
                                   icon: AppAvatar(
-                                    imgUrl: "",
-                                    radius: Get.width * 0.16,
-                                    name:"BOG"
-                                  ),
-                                  onPressed: () {
-
-                                  },
+                                      imgUrl: "",
+                                      radius: Get.width * 0.16,
+                                      name: "BOG"),
+                                  onPressed: () {},
                                 ),
                               ),
                               Column(
@@ -105,16 +98,14 @@ class ChatTab extends StatelessWidget {
                                   Text(
                                     "BOG Engineer",
                                     style: AppTextStyle.subtitle1.copyWith(
-                                      color: Colors.black,
-                                      fontSize: Get.width * 0.04
-                                    ),
+                                        color: Colors.black,
+                                        fontSize: Get.width * 0.04),
                                   ),
                                   Text(
                                     "Have you seen the things i sent ?",
                                     style: AppTextStyle.subtitle1.copyWith(
                                         color: Colors.grey,
-                                        fontSize: Get.width * 0.035
-                                    ),
+                                        fontSize: Get.width * 0.035),
                                   ),
                                   //Divider
                                   SizedBox(
@@ -138,17 +129,16 @@ class ChatTab extends StatelessWidget {
             ),
             //floating action button
             FloatingActionButton(
-              onPressed: (){
+              onPressed: () {
                 Get.toNamed(Chat.route);
               },
               backgroundColor: AppColors.primary,
               child: Stack(
                 children: [
                   SizedBox(
-                    width: Get.width * 0.05,
-                    height: Get.width * 0.05,
-                      child: Image.asset("assets/images/chat_new.png")
-                  ),
+                      width: Get.width * 0.05,
+                      height: Get.width * 0.05,
+                      child: Image.asset("assets/images/chat_new.png")),
                 ],
               ),
             )

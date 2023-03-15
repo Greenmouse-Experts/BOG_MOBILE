@@ -20,7 +20,7 @@ import '../../../global_widgets/app_avatar.dart';
 import '../../../global_widgets/confirm_logout.dart';
 import '../../settings/profile_info.dart';
 import '../../settings/update_bank.dart';
-import '../../settings/update_kyc.dart';
+
 import '../../settings/update_password.dart';
 
 class ProfileTab extends StatelessWidget {
@@ -194,7 +194,8 @@ class ProfileTab extends StatelessWidget {
                     showDialog(
                         context: context,
                         barrierDismissible: false,
-                        builder: (BuildContext context) => const ConfirmLogout());
+                        builder: (BuildContext context) =>
+                            const ConfirmLogout());
                     // Get.toNamed(OnboardingPage.route);
                   },
                   imageAsset: "assets/images/log_out.png",

@@ -3,7 +3,13 @@ import 'package:flutter/material.dart';
 
 class AppRadioButton extends StatefulWidget {
   final List<String> options;
-  const AppRadioButton({super.key, required this.options});
+  final String label;
+  final String? option1;
+  const AppRadioButton(
+      {super.key,
+      required this.options,
+      required this.label,
+      required this.option1});
 
   @override
   State<AppRadioButton> createState() => _AppRadioButtonState();
@@ -14,28 +20,43 @@ class _AppRadioButtonState extends State<AppRadioButton> {
 
   @override
   void initState() {
-    option = widget.options[0];
+    option = widget.option1 ?? widget.options[1];
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: List.generate(widget.options.length, (index){
-        return ListTile(
-          title: Text(widget.options[index], style: AppTextStyle.subtitle1.copyWith(color: Colors.black87),),
-          leading:  Radio(  
-             activeColor: AppColors.primary,
-            value: widget.options[index],  
-            groupValue: option,  
-            onChanged: ( value) {  
-              setState(() {  
-                option = value.toString();  
-              });  
-            },  
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          widget.label,
+          style: AppTextStyle.bodyText2.copyWith(
+            fontWeight: FontWeight.w500,
+            color: Colors.black,
           ),
-        );
-      }),
+        ),
+        Column(
+          children: List.generate(widget.options.length, (index) {
+            return ListTile(
+              title: Text(
+                widget.options[index],
+                style: AppTextStyle.subtitle1.copyWith(color: Colors.black87),
+              ),
+              leading: Radio(
+                activeColor: AppColors.primary,
+                value: widget.options[index],
+                groupValue: option,
+                onChanged: (value) {
+                  setState(() {
+                    option = value.toString();
+                  });
+                },
+              ),
+            );
+          }),
+        ),
+      ],
     );
   }
 }

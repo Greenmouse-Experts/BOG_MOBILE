@@ -4,15 +4,13 @@ import 'package:get/get.dart';
 import 'package:otp_text_field/otp_field.dart';
 import 'package:otp_text_field/style.dart';
 import '../sign_in/sign_in.dart';
-import '../sign_up/sign_up.dart';
+
 import '../../../core/theme/app_colors.dart';
 
 import '../../../core/theme/app_styles.dart';
 import '../../../core/theme/app_themes.dart';
 import '../../controllers/auth_controller.dart';
 import '../../global_widgets/app_button.dart';
-import '../profile/create_pin.dart';
-import '../profile/update_profile.dart';
 
 class VerifyOTP extends GetView<AuthController> {
   const VerifyOTP({Key? key}) : super(key: key);
@@ -63,19 +61,14 @@ class VerifyOTP extends GetView<AuthController> {
                   ),
                 ),
                 SizedBox(height: Get.height * 0.05),
-
                 OTPTextField(
                   length: 4,
                   width: MediaQuery.of(context).size.width,
                   fieldWidth: Get.width * 0.1,
-                  style: const TextStyle(
-                      fontSize: 17
-                  ),
+                  style: const TextStyle(fontSize: 17),
                   textFieldAlignment: MainAxisAlignment.spaceAround,
                   fieldStyle: FieldStyle.underline,
-                  onCompleted: (pin) {
-
-                  },
+                  onCompleted: (pin) {},
                 ),
                 SizedBox(height: Get.height * 0.03),
                 AppButton(
@@ -91,7 +84,7 @@ class VerifyOTP extends GetView<AuthController> {
                 AppButton(
                   title: 'Submit',
                   onPressed: () {
-                   // Get.toNamed(UpdateProfile.route);
+                    // Get.toNamed(UpdateProfile.route);
                     //Get.toNamed(SignUp.route);
                     //Get.toNamed(CreatePIN.route);
                   },

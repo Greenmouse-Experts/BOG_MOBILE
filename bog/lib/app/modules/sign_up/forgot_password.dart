@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+
 import 'package:get/get.dart';
-import '../multiplexor/multiplexor.dart';
+
 import '../../../core/theme/app_colors.dart';
 
 import '../../../core/theme/app_styles.dart';
@@ -20,7 +20,7 @@ class ForgotPassword extends GetView<AuthController> {
   Widget build(BuildContext context) {
     GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-    return  Scaffold(
+    return Scaffold(
       appBar: AppBar(
         elevation: 0,
         leading: IconButton(
@@ -60,7 +60,8 @@ class ForgotPassword extends GetView<AuthController> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Reset Your Password', style: AppTextStyle.headline4.copyWith(
+                          'Reset Your Password',
+                          style: AppTextStyle.headline4.copyWith(
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
                             fontSize: 20,
@@ -83,11 +84,11 @@ class ForgotPassword extends GetView<AuthController> {
                           controller: controller.email,
                         ),
                         SizedBox(height: Get.height * 0.025),
-
                         SizedBox(height: Get.height * 0.03),
                         AppButton(
                           title: 'Send Reset Link',
-                          onPressed: () async => await controller.forgotPassword(_formKey),
+                          onPressed: () async =>
+                              await controller.forgotPassword(_formKey),
                           borderRadius: 10,
                         ),
                         AppButton(

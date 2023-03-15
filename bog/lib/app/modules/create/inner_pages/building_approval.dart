@@ -1,26 +1,20 @@
-import 'dart:convert';
 import 'dart:io';
 
-import 'package:bog/app/global_widgets/app_button.dart';
 import 'package:bog/app/global_widgets/global_widgets.dart';
-import 'package:feather_icons/feather_icons.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:toggle_switch/toggle_switch.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_styles.dart';
 import '../../../controllers/home_controller.dart';
 import '../../../data/providers/api.dart';
-import '../../../global_widgets/app_input.dart';
+
 import '../../../global_widgets/page_dropdown.dart';
-import '../../home/home.dart';
 
 import 'package:dio/dio.dart' as dio;
-
-
 
 class BuildingApproval extends StatefulWidget {
   const BuildingApproval({Key? key}) : super(key: key);
@@ -67,7 +61,7 @@ class _BuildingApprovalState extends State<BuildingApproval> {
 
   @override
   Widget build(BuildContext context) {
-    var title  = Get.arguments as String?;
+    var title = Get.arguments as String?;
     var width = Get.width;
     final Size size = MediaQuery.of(context).size;
     double multiplier = 25 * size.height * 0.01;
@@ -78,8 +72,7 @@ class _BuildingApprovalState extends State<BuildingApproval> {
           statusBarIconBrightness: Brightness.dark,
           statusBarBrightness: Brightness.dark,
           systemNavigationBarColor: AppColors.backgroundVariant2,
-          systemNavigationBarIconBrightness: Brightness.dark
-      ),
+          systemNavigationBarIconBrightness: Brightness.dark),
       child: GetBuilder<HomeController>(
           id: 'BuildingApproval',
           builder: (controller) {
@@ -92,24 +85,27 @@ class _BuildingApprovalState extends State<BuildingApproval> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: EdgeInsets.only(right: width*0.05,left: width*0.045,top: kToolbarHeight),
+                      padding: EdgeInsets.only(
+                          right: width * 0.05,
+                          left: width * 0.045,
+                          top: kToolbarHeight),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           InkWell(
-                            onTap: (){
+                            onTap: () {
                               Navigator.pop(context);
                             },
                             child: SvgPicture.asset(
                               "assets/images/back.svg",
-                              height: width*0.045,
-                              width: width*0.045,
+                              height: width * 0.045,
+                              width: width * 0.045,
                               color: Colors.black,
                             ),
                           ),
                           SizedBox(
-                            width: width*0.04,
+                            width: width * 0.04,
                           ),
                           Expanded(
                             child: Row(
@@ -118,20 +114,23 @@ class _BuildingApprovalState extends State<BuildingApproval> {
                               children: [
                                 Text(
                                   "Create A Project",
-                                  style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.07,color: Colors.black,fontWeight: FontWeight.w600),
+                                  style: AppTextStyle.subtitle1.copyWith(
+                                      fontSize: multiplier * 0.07,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w600),
                                   textAlign: TextAlign.center,
                                 ),
                               ],
                             ),
                           ),
                           SizedBox(
-                            width: width*0.04,
+                            width: width * 0.04,
                           ),
                         ],
                       ),
                     ),
                     SizedBox(
-                      height: width*0.04,
+                      height: width * 0.04,
                     ),
                     Container(
                       height: 1,
@@ -139,7 +138,7 @@ class _BuildingApprovalState extends State<BuildingApproval> {
                       color: AppColors.grey.withOpacity(0.1),
                     ),
                     SizedBox(
-                      height: width*0.04,
+                      height: width * 0.04,
                     ),
                     Expanded(
                       child: SizedBox(
@@ -155,34 +154,43 @@ class _BuildingApprovalState extends State<BuildingApproval> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Padding(
-                                    padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                    padding: EdgeInsets.only(
+                                        left: width * 0.05,
+                                        right: width * 0.05),
                                     child: Text(
                                       "Request for Building Approval",
-                                      style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.08,color: Colors.black,fontWeight: FontWeight.w600),
+                                      style: AppTextStyle.subtitle1.copyWith(
+                                          fontSize: multiplier * 0.08,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w600),
                                       textAlign: TextAlign.start,
                                     ),
                                   ),
                                   SizedBox(
-                                    height: width*0.015,
+                                    height: width * 0.015,
                                   ),
                                   Padding(
-                                    padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                    padding: EdgeInsets.only(
+                                        left: width * 0.05,
+                                        right: width * 0.05),
                                     child: Image.asset(
                                       "assets/images/line_coloured.png",
-                                      width: width*0.3,
+                                      width: width * 0.3,
                                     ),
                                   ),
                                   SizedBox(
-                                    height: width*0.08,
+                                    height: width * 0.08,
                                   ),
                                   Padding(
-                                    padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                    padding: EdgeInsets.only(
+                                        left: width * 0.05,
+                                        right: width * 0.05),
                                     child: PageInput(
                                       hint: "Enter your name  ",
                                       label: "Name of client",
                                       controller: nameController,
-                                      validator: (value){
-                                        if(value!.isEmpty){
+                                      validator: (value) {
+                                        if (value!.isEmpty) {
                                           return "Please enter your name";
                                         }
                                         return null;
@@ -190,19 +198,31 @@ class _BuildingApprovalState extends State<BuildingApproval> {
                                     ),
                                   ),
                                   SizedBox(
-                                    height: Get.height*0.04,
+                                    height: Get.height * 0.04,
                                   ),
                                   Padding(
-                                    padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                    padding: EdgeInsets.only(
+                                        left: width * 0.05,
+                                        right: width * 0.05),
                                     child: PageDropButton(
                                       label: "Purpose of building",
                                       hint: '',
-                                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10),
                                       onChanged: (val) {
                                         typeController.text = val;
                                       },
-                                      value:  "Residential",
-                                      items: ["Residential","Commercial","Industrial","Religious","Educational","Recreational","Other"].map<DropdownMenuItem<String>>((String value) {
+                                      value: "Residential",
+                                      items: [
+                                        "Residential",
+                                        "Commercial",
+                                        "Industrial",
+                                        "Religious",
+                                        "Educational",
+                                        "Recreational",
+                                        "Other"
+                                      ].map<DropdownMenuItem<String>>(
+                                          (String value) {
                                         return DropdownMenuItem<String>(
                                           value: value,
                                           child: Text(value),
@@ -211,15 +231,20 @@ class _BuildingApprovalState extends State<BuildingApproval> {
                                     ),
                                   ),
                                   SizedBox(
-                                    height: Get.height*0.04,
+                                    height: Get.height * 0.04,
                                   ),
                                   Padding(
-                                    padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                    padding: EdgeInsets.only(
+                                        left: width * 0.05,
+                                        right: width * 0.05),
                                     child: AppButton(
                                       title: "Proceed to upload plans",
-                                      onPressed: (){
-                                        if(formKey.currentState!.validate()){
-                                          pageController.animateToPage(1, duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
+                                      onPressed: () {
+                                        if (formKey.currentState!.validate()) {
+                                          pageController.animateToPage(1,
+                                              duration: const Duration(
+                                                  milliseconds: 300),
+                                              curve: Curves.easeIn);
                                         }
                                       },
                                     ),
@@ -234,194 +259,220 @@ class _BuildingApprovalState extends State<BuildingApproval> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Padding(
-                                    padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                    padding: EdgeInsets.only(
+                                        left: width * 0.05,
+                                        right: width * 0.05),
                                     child: Text(
                                       "Request for Building Approval",
-                                      style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.08,color: Colors.black,fontWeight: FontWeight.w600),
+                                      style: AppTextStyle.subtitle1.copyWith(
+                                          fontSize: multiplier * 0.08,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w600),
                                       textAlign: TextAlign.start,
                                     ),
                                   ),
                                   SizedBox(
-                                    height: width*0.015,
+                                    height: width * 0.015,
                                   ),
                                   Padding(
-                                    padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                    padding: EdgeInsets.only(
+                                        left: width * 0.05,
+                                        right: width * 0.05),
                                     child: Image.asset(
                                       "assets/images/line_coloured.png",
-                                      width: width*0.3,
+                                      width: width * 0.3,
                                     ),
                                   ),
                                   SizedBox(
-                                    height: width*0.08,
+                                    height: width * 0.08,
                                   ),
                                   Expanded(
                                     child: SingleChildScrollView(
                                       child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
                                           Padding(
-                                            padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                            padding: EdgeInsets.only(
+                                                left: width * 0.05,
+                                                right: width * 0.05),
                                             child: PageInput(
                                               hint: "Enter your name  ",
                                               label: "Upload survey plan",
                                               isFilePicker: true,
                                               controller: surveyController,
-                                              validator: (value){
-                                                if(value!.isEmpty){
+                                              validator: (value) {
+                                                if (value!.isEmpty) {
                                                   return "Please upload survey plan";
                                                 }
                                                 return null;
                                               },
-                                              onFilePicked: (file){
+                                              onFilePicked: (file) {
                                                 surveyPlan = file;
                                               },
                                             ),
                                           ),
-
                                           SizedBox(
-                                            height: Get.height*0.04,
+                                            height: Get.height * 0.04,
                                           ),
                                           Padding(
-                                            padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                            padding: EdgeInsets.only(
+                                                left: width * 0.05,
+                                                right: width * 0.05),
                                             child: PageInput(
                                               hint: "Enter your name  ",
-                                              label: "Upload architectural plan",
+                                              label:
+                                                  "Upload architectural plan",
                                               isFilePicker: true,
-                                              controller: architecturalController,
-                                              validator: (value){
-                                                if(value!.isEmpty){
+                                              controller:
+                                                  architecturalController,
+                                              validator: (value) {
+                                                if (value!.isEmpty) {
                                                   return "Please upload architectural plan";
                                                 }
                                                 return null;
                                               },
-                                              onFilePicked: (file){
+                                              onFilePicked: (file) {
                                                 architecturalPlan = file;
                                               },
                                             ),
                                           ),
-
                                           SizedBox(
-                                            height: Get.height*0.04,
+                                            height: Get.height * 0.04,
                                           ),
                                           Padding(
-                                            padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                            padding: EdgeInsets.only(
+                                                left: width * 0.05,
+                                                right: width * 0.05),
                                             child: PageInput(
                                               hint: "Enter your name  ",
                                               label: "Upload mechanical plan",
                                               isFilePicker: true,
                                               controller: mechanicalController,
-                                              validator: (value){
-                                                if(value!.isEmpty){
+                                              validator: (value) {
+                                                if (value!.isEmpty) {
                                                   return "Please upload mechanical plan";
                                                 }
                                                 return null;
                                               },
-                                              onFilePicked: (file){
+                                              onFilePicked: (file) {
                                                 mechanicalPlan = file;
                                               },
                                             ),
                                           ),
-
                                           SizedBox(
-                                            height: Get.height*0.04,
+                                            height: Get.height * 0.04,
                                           ),
                                           Padding(
-                                            padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                            padding: EdgeInsets.only(
+                                                left: width * 0.05,
+                                                right: width * 0.05),
                                             child: PageInput(
                                               hint: "Enter your name  ",
                                               label: "Upload electric plan",
                                               isFilePicker: true,
                                               controller: electricalController,
-                                              validator: (value){
-                                                if(value!.isEmpty){
+                                              validator: (value) {
+                                                if (value!.isEmpty) {
                                                   return "Please upload electric plan";
                                                 }
                                                 return null;
                                               },
-                                              onFilePicked: (file){
+                                              onFilePicked: (file) {
                                                 electricalPlan = file;
                                               },
                                             ),
                                           ),
-
                                           SizedBox(
-                                            height: Get.height*0.04,
+                                            height: Get.height * 0.04,
                                           ),
                                           Padding(
-                                            padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                            padding: EdgeInsets.only(
+                                                left: width * 0.05,
+                                                right: width * 0.05),
                                             child: PageInput(
                                               hint: "Enter your name  ",
                                               label: "Upload soil test report",
                                               isFilePicker: true,
                                               controller: soilTestController,
-                                              validator: (value){
-                                                if(value!.isEmpty){
+                                              validator: (value) {
+                                                if (value!.isEmpty) {
                                                   return "Please upload soil test report";
                                                 }
                                                 return null;
                                               },
-                                              onFilePicked: (file){
+                                              onFilePicked: (file) {
                                                 soilTestPlan = file;
                                               },
                                             ),
                                           ),
-
                                           SizedBox(
-                                            height: Get.height*0.04,
+                                            height: Get.height * 0.04,
                                           ),
                                           Padding(
-                                            padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                            padding: EdgeInsets.only(
+                                                left: width * 0.05,
+                                                right: width * 0.05),
                                             child: PageInput(
                                               hint: "Enter your name  ",
                                               label: "Upload site plan",
                                               isFilePicker: true,
                                               controller: sitePlanController,
-                                              validator: (value){
-                                                if(value!.isEmpty){
+                                              validator: (value) {
+                                                if (value!.isEmpty) {
                                                   return "Please upload site plan";
                                                 }
                                                 return null;
                                               },
-                                              onFilePicked: (file){
+                                              onFilePicked: (file) {
                                                 sitePlan = file;
                                               },
                                             ),
                                           ),
-
                                           SizedBox(
-                                            height: Get.height*0.04,
+                                            height: Get.height * 0.04,
                                           ),
                                           Padding(
-                                            padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                            padding: EdgeInsets.only(
+                                                left: width * 0.05,
+                                                right: width * 0.05),
                                             child: PageInput(
                                               hint: "Enter your name  ",
                                               label: "Upload structural plan",
                                               isFilePicker: true,
                                               controller: structuralController,
-                                              validator: (value){
-                                                if(value!.isEmpty){
+                                              validator: (value) {
+                                                if (value!.isEmpty) {
                                                   return "Please upload structural plan";
                                                 }
                                                 return null;
                                               },
-                                              onFilePicked: (file){
+                                              onFilePicked: (file) {
                                                 structuralPlan = file;
                                               },
                                             ),
                                           ),
-
                                           SizedBox(
-                                            height: Get.height*0.04,
+                                            height: Get.height * 0.04,
                                           ),
                                           Padding(
-                                            padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                            padding: EdgeInsets.only(
+                                                left: width * 0.05,
+                                                right: width * 0.05),
                                             child: AppButton(
-                                              title: "Proceed to upload other documents",
+                                              title:
+                                                  "Proceed to upload other documents",
                                               onPressed: () {
-                                                if(formKey.currentState!.validate()){
-                                                  pageController.animateToPage(2, duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
+                                                if (formKey.currentState!
+                                                    .validate()) {
+                                                  pageController.animateToPage(
+                                                      2,
+                                                      duration: const Duration(
+                                                          milliseconds: 300),
+                                                      curve: Curves.easeIn);
                                                 }
                                               },
                                             ),
@@ -440,236 +491,337 @@ class _BuildingApprovalState extends State<BuildingApproval> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Padding(
-                                    padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                    padding: EdgeInsets.only(
+                                        left: width * 0.05,
+                                        right: width * 0.05),
                                     child: Text(
                                       "Request for Building Approval",
-                                      style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.08,color: Colors.black,fontWeight: FontWeight.w600),
+                                      style: AppTextStyle.subtitle1.copyWith(
+                                          fontSize: multiplier * 0.08,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w600),
                                       textAlign: TextAlign.start,
                                     ),
                                   ),
                                   SizedBox(
-                                    height: width*0.015,
+                                    height: width * 0.015,
                                   ),
                                   Padding(
-                                    padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                    padding: EdgeInsets.only(
+                                        left: width * 0.05,
+                                        right: width * 0.05),
                                     child: Image.asset(
                                       "assets/images/line_coloured.png",
-                                      width: width*0.3,
+                                      width: width * 0.3,
                                     ),
                                   ),
                                   SizedBox(
-                                    height: width*0.08,
+                                    height: width * 0.08,
                                   ),
                                   Expanded(
                                     child: SingleChildScrollView(
                                       child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
                                           Padding(
-                                            padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                            padding: EdgeInsets.only(
+                                                left: width * 0.05,
+                                                right: width * 0.05),
                                             child: PageInput(
                                               hint: "Enter your name  ",
-                                              label: "Upload C of O Deed of Agreement/ R of O",
+                                              label:
+                                                  "Upload C of O Deed of Agreement/ R of O",
                                               isFilePicker: true,
                                               controller: deedController,
-                                              validator: (value){
-                                                if(value!.isEmpty){
+                                              validator: (value) {
+                                                if (value!.isEmpty) {
                                                   return "Please upload C of O Deed of Agreement/ R of O";
                                                 }
                                                 return null;
                                               },
-                                              onFilePicked: (file){
+                                              onFilePicked: (file) {
                                                 deedPlan = file;
                                               },
                                             ),
                                           ),
-
                                           SizedBox(
-                                            height: Get.height*0.04,
+                                            height: Get.height * 0.04,
                                           ),
                                           Padding(
-                                            padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                            padding: EdgeInsets.only(
+                                                left: width * 0.05,
+                                                right: width * 0.05),
                                             child: PageInput(
                                               hint: "Enter your name  ",
-                                              label: "Upload site analysis report",
+                                              label:
+                                                  "Upload site analysis report",
                                               isFilePicker: true,
-                                              controller: siteAnalysisController,
-                                              validator: (value){
-                                                if(value!.isEmpty){
+                                              controller:
+                                                  siteAnalysisController,
+                                              validator: (value) {
+                                                if (value!.isEmpty) {
                                                   return "Please upload site analysis report";
                                                 }
                                                 return null;
                                               },
-                                              onFilePicked: (file){
+                                              onFilePicked: (file) {
                                                 siteAnalysisPlan = file;
                                               },
                                             ),
                                           ),
-
                                           SizedBox(
-                                            height: Get.height*0.04,
+                                            height: Get.height * 0.04,
                                           ),
                                           Padding(
-                                            padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                            padding: EdgeInsets.only(
+                                                left: width * 0.05,
+                                                right: width * 0.05),
                                             child: PageInput(
                                               hint: "Enter your name  ",
-                                              label: "Upload environmental impact \nassessment report",
+                                              label:
+                                                  "Upload environmental impact \nassessment report",
                                               isFilePicker: true,
-                                              controller: environmentalController,
-                                              validator: (value){
-                                                if(value!.isEmpty){
+                                              controller:
+                                                  environmentalController,
+                                              validator: (value) {
+                                                if (value!.isEmpty) {
                                                   return "Please upload environmental impact assessment report";
                                                 }
                                                 return null;
                                               },
-                                              onFilePicked: (file){
+                                              onFilePicked: (file) {
                                                 environmentalPlan = file;
                                               },
                                             ),
                                           ),
-
                                           SizedBox(
-                                            height: Get.height*0.04,
+                                            height: Get.height * 0.04,
                                           ),
                                           Padding(
-                                            padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                            padding: EdgeInsets.only(
+                                                left: width * 0.05,
+                                                right: width * 0.05),
                                             child: PageInput(
                                               hint: "Enter your name  ",
-                                              label: "Upload tax clearance certificate",
+                                              label:
+                                                  "Upload tax clearance certificate",
                                               isFilePicker: true,
                                               controller: taxController,
-                                              validator: (value){
-                                                if(value!.isEmpty){
+                                              validator: (value) {
+                                                if (value!.isEmpty) {
                                                   return "Please upload tax clearance certificate";
                                                 }
                                                 return null;
                                               },
-                                              onFilePicked: (file){
+                                              onFilePicked: (file) {
                                                 taxPlan = file;
                                               },
                                             ),
                                           ),
-
                                           SizedBox(
-                                            height: Get.height*0.04,
+                                            height: Get.height * 0.04,
                                           ),
                                           Padding(
-                                            padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                            padding: EdgeInsets.only(
+                                                left: width * 0.05,
+                                                right: width * 0.05),
                                             child: PageInput(
                                               hint: "Enter your name  ",
-                                              label: "Upload letter of supervision from \nCOREN registered engineers",
+                                              label:
+                                                  "Upload letter of supervision from \nCOREN registered engineers",
                                               isFilePicker: true,
                                               controller: corenController,
-                                              validator: (value){
-                                                if(value!.isEmpty){
+                                              validator: (value) {
+                                                if (value!.isEmpty) {
                                                   return "Please upload letter of supervision from COREN registered engineers";
                                                 }
                                                 return null;
                                               },
-                                              onFilePicked: (file){
+                                              onFilePicked: (file) {
                                                 corenPlan = file;
                                               },
                                             ),
                                           ),
-
                                           SizedBox(
-                                            height: Get.height*0.04,
+                                            height: Get.height * 0.04,
                                           ),
                                           Padding(
-                                            padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                            padding: EdgeInsets.only(
+                                                left: width * 0.05,
+                                                right: width * 0.05),
                                             child: PageInput(
                                               hint: "Enter your name  ",
-                                              label: "Upload stamped and sealed copy of \nstructural calculation sheet",
+                                              label:
+                                                  "Upload stamped and sealed copy of \nstructural calculation sheet",
                                               isFilePicker: true,
                                               controller: stampedController,
-                                              validator: (value){
-                                                if(value!.isEmpty){
+                                              validator: (value) {
+                                                if (value!.isEmpty) {
                                                   return "Please upload stamped and sealed copy of structural calculation sheet";
                                                 }
                                                 return null;
                                               },
-                                              onFilePicked: (file){
+                                              onFilePicked: (file) {
                                                 stampedPlan = file;
                                               },
                                             ),
                                           ),
-
                                           SizedBox(
-                                            height: Get.height*0.04,
+                                            height: Get.height * 0.04,
                                           ),
                                           Padding(
-                                            padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                            padding: EdgeInsets.only(
+                                                left: width * 0.05,
+                                                right: width * 0.05),
                                             child: AppButton(
                                               title: "Submit",
-                                              onPressed: ()async {
-                                                if(formKey.currentState!.validate()){
+                                              onPressed: () async {
+                                                if (formKey.currentState!
+                                                    .validate()) {
                                                   Map<String, dynamic> body = {
                                                     'title': title,
-                                                    'clientName': nameController.text,
-                                                    'projectLocation': locationController.text,
-                                                    "purpose": typeController.text,
+                                                    'clientName':
+                                                        nameController.text,
+                                                    'projectLocation':
+                                                        locationController.text,
+                                                    "purpose":
+                                                        typeController.text,
                                                   };
-                                                  body['surveyPlan'] = await dio.MultipartFile.fromFile(
+                                                  body['surveyPlan'] = await dio
+                                                      .MultipartFile.fromFile(
                                                     surveyPlan!.path,
-                                                    filename: surveyPlan!.path.split('/').last,
+                                                    filename: surveyPlan!.path
+                                                        .split('/')
+                                                        .last,
                                                   );
-                                                  body['structuralPlan'] = await dio.MultipartFile.fromFile(
+                                                  body['structuralPlan'] =
+                                                      await dio.MultipartFile
+                                                          .fromFile(
                                                     structuralPlan!.path,
-                                                    filename: structuralPlan!.path.split('/').last,
+                                                    filename: structuralPlan!
+                                                        .path
+                                                        .split('/')
+                                                        .last,
                                                   );
-                                                  body['architecturalPlan'] = await dio.MultipartFile.fromFile(
+                                                  body['architecturalPlan'] =
+                                                      await dio.MultipartFile
+                                                          .fromFile(
                                                     architecturalPlan!.path,
-                                                    filename: architecturalPlan!.path.split('/').last,
+                                                    filename: architecturalPlan!
+                                                        .path
+                                                        .split('/')
+                                                        .last,
                                                   );
-                                                  body['mechanicalPlan'] = await dio.MultipartFile.fromFile(
+                                                  body['mechanicalPlan'] =
+                                                      await dio.MultipartFile
+                                                          .fromFile(
                                                     mechanicalPlan!.path,
-                                                    filename: mechanicalPlan!.path.split('/').last,
+                                                    filename: mechanicalPlan!
+                                                        .path
+                                                        .split('/')
+                                                        .last,
                                                   );
-                                                  body['electricalPlan'] = await dio.MultipartFile.fromFile(
+                                                  body['electricalPlan'] =
+                                                      await dio.MultipartFile
+                                                          .fromFile(
                                                     electricalPlan!.path,
-                                                    filename: electricalPlan!.path.split('/').last,
+                                                    filename: electricalPlan!
+                                                        .path
+                                                        .split('/')
+                                                        .last,
                                                   );
 
-                                                  body['soilTestReport'] = await dio.MultipartFile.fromFile(
+                                                  body['soilTestReport'] =
+                                                      await dio.MultipartFile
+                                                          .fromFile(
                                                     soilTestPlan!.path,
-                                                    filename: soilTestPlan!.path.split('/').last,
+                                                    filename: soilTestPlan!.path
+                                                        .split('/')
+                                                        .last,
                                                   );
-                                                  body['sitePlan'] = await dio.MultipartFile.fromFile(
+                                                  body['sitePlan'] = await dio
+                                                      .MultipartFile.fromFile(
                                                     sitePlan!.path,
-                                                    filename: sitePlan!.path.split('/').last,
+                                                    filename: sitePlan!.path
+                                                        .split('/')
+                                                        .last,
                                                   );
-                                                  body['siteAnalysisReport'] = await dio.MultipartFile.fromFile(
+                                                  body['siteAnalysisReport'] =
+                                                      await dio.MultipartFile
+                                                          .fromFile(
                                                     siteAnalysisPlan!.path,
-                                                    filename: siteAnalysisPlan!.path.split('/').last,
+                                                    filename: siteAnalysisPlan!
+                                                        .path
+                                                        .split('/')
+                                                        .last,
                                                   );
-                                                  body['environmentImpactReport'] = await dio.MultipartFile.fromFile(
+                                                  body['environmentImpactReport'] =
+                                                      await dio.MultipartFile
+                                                          .fromFile(
                                                     environmentalPlan!.path,
-                                                    filename: environmentalPlan!.path.split('/').last,
+                                                    filename: environmentalPlan!
+                                                        .path
+                                                        .split('/')
+                                                        .last,
                                                   );
-                                                  body['clearanceCertificate'] = await dio.MultipartFile.fromFile(
+                                                  body['clearanceCertificate'] =
+                                                      await dio.MultipartFile
+                                                          .fromFile(
                                                     taxPlan!.path,
-                                                    filename: taxPlan!.path.split('/').last,
+                                                    filename: taxPlan!.path
+                                                        .split('/')
+                                                        .last,
                                                   );
-                                                  body['structuralCalculationSheet'] = await dio.MultipartFile.fromFile(
+                                                  body['structuralCalculationSheet'] =
+                                                      await dio.MultipartFile
+                                                          .fromFile(
                                                     structuralPlan!.path,
-                                                    filename: structuralPlan!.path.split('/').last,
+                                                    filename: structuralPlan!
+                                                        .path
+                                                        .split('/')
+                                                        .last,
                                                   );
-                                                  body['deedOfAgreement'] = await dio.MultipartFile.fromFile(
+                                                  body['deedOfAgreement'] =
+                                                      await dio.MultipartFile
+                                                          .fromFile(
                                                     deedPlan!.path,
-                                                    filename: deedPlan!.path.split('/').last,
+                                                    filename: deedPlan!.path
+                                                        .split('/')
+                                                        .last,
                                                   );
-                                                  body['supervisorLetter'] = await dio.MultipartFile.fromFile(
+                                                  body['supervisorLetter'] =
+                                                      await dio.MultipartFile
+                                                          .fromFile(
                                                     corenPlan!.path,
-                                                    filename: corenPlan!.path.split('/').last,
+                                                    filename: corenPlan!.path
+                                                        .split('/')
+                                                        .last,
                                                   );
-                                                  var formData = dio.FormData.fromMap(body);
-                                                  var response = await Api().postData("/projects/building-approval/request",body: formData,hasHeader: true);
-                                                  if(response.isSuccessful){
-                                                    pageController.animateToPage(3, duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
-                                                  }else{
-                                                    Get.snackbar("Error", response.data.toString());
+                                                  var formData =
+                                                      dio.FormData.fromMap(
+                                                          body);
+                                                  var response = await Api()
+                                                      .postData(
+                                                          "/projects/building-approval/request",
+                                                          body: formData,
+                                                          hasHeader: true);
+                                                  if (response.isSuccessful) {
+                                                    pageController.animateToPage(
+                                                        3,
+                                                        duration:
+                                                            const Duration(
+                                                                milliseconds:
+                                                                    300),
+                                                        curve: Curves.easeIn);
+                                                  } else {
+                                                    Get.snackbar(
+                                                        "Error",
+                                                        response.data
+                                                            .toString());
                                                   }
                                                 }
                                               },
@@ -691,27 +843,38 @@ class _BuildingApprovalState extends State<BuildingApproval> {
                                   children: [
                                     Text(
                                       "Project Created",
-                                      style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.07,color: Colors.black,fontWeight: FontWeight.w600),
+                                      style: AppTextStyle.subtitle1.copyWith(
+                                          fontSize: multiplier * 0.07,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w600),
                                       textAlign: TextAlign.center,
                                     ),
                                     SizedBox(
-                                      height: Get.height*0.02,
+                                      height: Get.height * 0.02,
                                     ),
                                     Padding(
-                                      padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                      padding: EdgeInsets.only(
+                                          left: width * 0.05,
+                                          right: width * 0.05),
                                       child: Text(
                                         "Your project has been created. You would be notified when you get a Service Partner.  ",
-                                        style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.06,color: Colors.black,fontWeight: FontWeight.normal),
+                                        style: AppTextStyle.subtitle1.copyWith(
+                                            fontSize: multiplier * 0.06,
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.normal),
                                         textAlign: TextAlign.center,
                                       ),
                                     ),
                                   ],
                                 ),
                                 Padding(
-                                  padding: EdgeInsets.only(left: width*0.05,right: width*0.05,bottom: width*0.2),
+                                  padding: EdgeInsets.only(
+                                      left: width * 0.05,
+                                      right: width * 0.05,
+                                      bottom: width * 0.2),
                                   child: AppButton(
                                     title: "View My Projects",
-                                    onPressed: (){
+                                    onPressed: () {
                                       controller.currentBottomNavPage.value = 2;
                                       controller.update(['home']);
                                       Get.back();
@@ -750,7 +913,9 @@ class _BuildingApprovalState extends State<BuildingApproval> {
                       icon: Padding(
                         padding: const EdgeInsets.only(bottom: 5),
                         child: Image.asset(
-                          controller.currentBottomNavPage.value == 1 ? 'assets/images/chat_filled.png' : 'assets/images/chatIcon.png',
+                          controller.currentBottomNavPage.value == 1
+                              ? 'assets/images/chat_filled.png'
+                              : 'assets/images/chatIcon.png',
                           width: 22,
                           //color: controller.currentBottomNavPage.value == 1 ? AppColors.primary : AppColors.grey,
                         ),
@@ -799,8 +964,7 @@ class _BuildingApprovalState extends State<BuildingApproval> {
                     controller.updateNewUser(controller.currentType);
                     Get.back();
                     Get.back();
-                  }
-              ),
+                  }),
             );
           }),
     );

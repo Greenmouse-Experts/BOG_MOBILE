@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 /// id : 302
 /// name : "9mobile 9Payment Service Bank"
 /// slug : "9mobile-9payment-service-bank-ng"
@@ -14,24 +15,27 @@ import 'dart:convert';
 /// createdAt : "2022-05-31T06:50:27.000Z"
 /// updatedAt : "2022-06-23T09:33:55.000Z"
 
-BankListModel bankListModelFromJson(String str) => BankListModel.fromJson(json.decode(str));
+BankListModel bankListModelFromJson(String str) =>
+    BankListModel.fromJson(json.decode(str));
 String bankListModelToJson(BankListModel data) => json.encode(data.toJson());
+
 class BankListModel {
   BankListModel({
-      num? id, 
-      String? name, 
-      String? slug, 
-      String? code, 
-      String? longcode, 
-      String? gateway, 
-      bool? payWithBank, 
-      bool? active, 
-      String? country, 
-      String? currency, 
-      String? type, 
-      bool? isDeleted, 
-      String? createdAt, 
-      String? updatedAt,}){
+    num? id,
+    String? name,
+    String? slug,
+    String? code,
+    String? longcode,
+    String? gateway,
+    bool? payWithBank,
+    bool? active,
+    String? country,
+    String? currency,
+    String? type,
+    bool? isDeleted,
+    String? createdAt,
+    String? updatedAt,
+  }) {
     _id = id;
     _name = name;
     _slug = slug;
@@ -46,7 +50,7 @@ class BankListModel {
     _isDeleted = isDeleted;
     _createdAt = createdAt;
     _updatedAt = updatedAt;
-}
+  }
 
   BankListModel.fromJson(dynamic json) {
     _id = json['id'];
@@ -78,35 +82,38 @@ class BankListModel {
   bool? _isDeleted;
   String? _createdAt;
   String? _updatedAt;
-BankListModel copyWith({  num? id,
-  String? name,
-  String? slug,
-  String? code,
-  String? longcode,
-  String? gateway,
-  bool? payWithBank,
-  bool? active,
-  String? country,
-  String? currency,
-  String? type,
-  bool? isDeleted,
-  String? createdAt,
-  String? updatedAt,
-}) => BankListModel(  id: id ?? _id,
-  name: name ?? _name,
-  slug: slug ?? _slug,
-  code: code ?? _code,
-  longcode: longcode ?? _longcode,
-  gateway: gateway ?? _gateway,
-  payWithBank: payWithBank ?? _payWithBank,
-  active: active ?? _active,
-  country: country ?? _country,
-  currency: currency ?? _currency,
-  type: type ?? _type,
-  isDeleted: isDeleted ?? _isDeleted,
-  createdAt: createdAt ?? _createdAt,
-  updatedAt: updatedAt ?? _updatedAt,
-);
+  BankListModel copyWith({
+    num? id,
+    String? name,
+    String? slug,
+    String? code,
+    String? longcode,
+    String? gateway,
+    bool? payWithBank,
+    bool? active,
+    String? country,
+    String? currency,
+    String? type,
+    bool? isDeleted,
+    String? createdAt,
+    String? updatedAt,
+  }) =>
+      BankListModel(
+        id: id ?? _id,
+        name: name ?? _name,
+        slug: slug ?? _slug,
+        code: code ?? _code,
+        longcode: longcode ?? _longcode,
+        gateway: gateway ?? _gateway,
+        payWithBank: payWithBank ?? _payWithBank,
+        active: active ?? _active,
+        country: country ?? _country,
+        currency: currency ?? _currency,
+        type: type ?? _type,
+        isDeleted: isDeleted ?? _isDeleted,
+        createdAt: createdAt ?? _createdAt,
+        updatedAt: updatedAt ?? _updatedAt,
+      );
   num? get id => _id;
   String? get name => _name;
   String? get slug => _slug;

@@ -914,9 +914,9 @@ class OrderRequestItem extends StatelessWidget {
                   child: AppButton(
                     title: "Decline",
                     padding: const EdgeInsets.symmetric(vertical: 10),
-                    border: Border.all(color: Color(0xFFDC1515)),
+                    border: Border.all(color: const Color(0xFFDC1515)),
                     bckgrndColor: Colors.white,
-                    fontColor: Color(0xFFDC1515),
+                    fontColor: const Color(0xFFDC1515),
                   ),
                 ),
                 SizedBox(
@@ -924,7 +924,7 @@ class OrderRequestItem extends StatelessWidget {
                   child: AppButton(
                     title: "Accept",
                     padding: const EdgeInsets.symmetric(vertical: 10),
-                    border: Border.all(color: Color(0xFF24B53D)),
+                    border: Border.all(color: const Color(0xFF24B53D)),
                     bckgrndColor: Colors.white,
                     fontColor: const Color(0xFF24B53D),
                   ),
@@ -1018,9 +1018,9 @@ class ServiceRequestItem extends StatelessWidget {
                   child: AppButton(
                     title: "Decline",
                     padding: const EdgeInsets.symmetric(vertical: 10),
-                    border: Border.all(color: Color(0xFFDC1515)),
+                    border: Border.all(color: const Color(0xFFDC1515)),
                     bckgrndColor: Colors.white,
-                    fontColor: Color(0xFFDC1515),
+                    fontColor: const Color(0xFFDC1515),
                   ),
                 ),
                 SizedBox(
@@ -1028,7 +1028,7 @@ class ServiceRequestItem extends StatelessWidget {
                   child: AppButton(
                     title: "Accept",
                     padding: const EdgeInsets.symmetric(vertical: 10),
-                    border: Border.all(color: Color(0xFF24B53D)),
+                    border: Border.all(color: const Color(0xFF24B53D)),
                     bckgrndColor: Colors.white,
                     fontColor: const Color(0xFF24B53D),
                   ),

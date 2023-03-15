@@ -1,31 +1,28 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:bog/app/global_widgets/app_button.dart';
-import 'package:feather_icons/feather_icons.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:toggle_switch/toggle_switch.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_styles.dart';
 import '../../../controllers/home_controller.dart';
 import '../../../data/providers/api.dart';
-import '../../../global_widgets/app_input.dart';
+
 import '../../../global_widgets/page_dropdown.dart';
 import '../../../global_widgets/page_input.dart';
-import '../../home/home.dart';
 
 import 'package:dio/dio.dart' as dio;
-
 
 class GeotechnicalInvestigation extends StatefulWidget {
   const GeotechnicalInvestigation({Key? key}) : super(key: key);
 
   @override
-  State<GeotechnicalInvestigation> createState() => _GeotechnicalInvestigationState();
+  State<GeotechnicalInvestigation> createState() =>
+      _GeotechnicalInvestigationState();
 }
 
 class _GeotechnicalInvestigationState extends State<GeotechnicalInvestigation> {
@@ -51,7 +48,7 @@ class _GeotechnicalInvestigationState extends State<GeotechnicalInvestigation> {
 
   @override
   Widget build(BuildContext context) {
-    var title  = Get.arguments as String?;
+    var title = Get.arguments as String?;
 
     var width = Get.width;
     final Size size = MediaQuery.of(context).size;
@@ -63,8 +60,7 @@ class _GeotechnicalInvestigationState extends State<GeotechnicalInvestigation> {
           statusBarIconBrightness: Brightness.dark,
           statusBarBrightness: Brightness.dark,
           systemNavigationBarColor: AppColors.backgroundVariant2,
-          systemNavigationBarIconBrightness: Brightness.dark
-      ),
+          systemNavigationBarIconBrightness: Brightness.dark),
       child: GetBuilder<HomeController>(
           id: 'GeotechnicalInvestigation',
           builder: (controller) {
@@ -76,24 +72,27 @@ class _GeotechnicalInvestigationState extends State<GeotechnicalInvestigation> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: EdgeInsets.only(right: width*0.05,left: width*0.045,top: kToolbarHeight),
+                      padding: EdgeInsets.only(
+                          right: width * 0.05,
+                          left: width * 0.045,
+                          top: kToolbarHeight),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           InkWell(
-                            onTap: (){
+                            onTap: () {
                               Navigator.pop(context);
                             },
                             child: SvgPicture.asset(
                               "assets/images/back.svg",
-                              height: width*0.045,
-                              width: width*0.045,
+                              height: width * 0.045,
+                              width: width * 0.045,
                               color: Colors.black,
                             ),
                           ),
                           SizedBox(
-                            width: width*0.04,
+                            width: width * 0.04,
                           ),
                           Expanded(
                             child: Row(
@@ -102,20 +101,23 @@ class _GeotechnicalInvestigationState extends State<GeotechnicalInvestigation> {
                               children: [
                                 Text(
                                   "Create A Project",
-                                  style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.07,color: Colors.black,fontWeight: FontWeight.w600),
+                                  style: AppTextStyle.subtitle1.copyWith(
+                                      fontSize: multiplier * 0.07,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w600),
                                   textAlign: TextAlign.center,
                                 ),
                               ],
                             ),
                           ),
                           SizedBox(
-                            width: width*0.04,
+                            width: width * 0.04,
                           ),
                         ],
                       ),
                     ),
                     SizedBox(
-                      height: width*0.04,
+                      height: width * 0.04,
                     ),
                     Container(
                       height: 1,
@@ -123,11 +125,11 @@ class _GeotechnicalInvestigationState extends State<GeotechnicalInvestigation> {
                       color: AppColors.grey.withOpacity(0.1),
                     ),
                     SizedBox(
-                      height: width*0.04,
+                      height: width * 0.04,
                     ),
                     Expanded(
                       child: SizedBox(
-                        height: Get.height*1.2,
+                        height: Get.height * 1.2,
                         child: PageView(
                           controller: pageController,
                           physics: const NeverScrollableScrollPhysics(),
@@ -139,41 +141,52 @@ class _GeotechnicalInvestigationState extends State<GeotechnicalInvestigation> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Padding(
-                                    padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                    padding: EdgeInsets.only(
+                                        left: width * 0.05,
+                                        right: width * 0.05),
                                     child: Text(
                                       "Request for Geotechnical \nAnd Geophysical Information",
-                                      style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.08,color: Colors.black,fontWeight: FontWeight.w600),
+                                      style: AppTextStyle.subtitle1.copyWith(
+                                          fontSize: multiplier * 0.08,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w600),
                                       textAlign: TextAlign.start,
                                     ),
                                   ),
                                   SizedBox(
-                                    height: width*0.015,
+                                    height: width * 0.015,
                                   ),
                                   Padding(
-                                    padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                    padding: EdgeInsets.only(
+                                        left: width * 0.05,
+                                        right: width * 0.05),
                                     child: Image.asset(
                                       "assets/images/line_coloured.png",
-                                      width: width*0.3,
+                                      width: width * 0.3,
                                     ),
                                   ),
                                   SizedBox(
-                                    height: width*0.08,
+                                    height: width * 0.08,
                                   ),
                                   Expanded(
                                     child: SingleChildScrollView(
                                       child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
                                           Padding(
-                                            padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                            padding: EdgeInsets.only(
+                                                left: width * 0.05,
+                                                right: width * 0.05),
                                             child: PageInput(
                                               hint: "Enter your name  ",
                                               label: "Name of client",
                                               controller: nameController,
-                                              validator: (value){
-                                                if(value!.isEmpty){
+                                              validator: (value) {
+                                                if (value!.isEmpty) {
                                                   return "Please enter your name";
                                                 }
                                                 return null;
@@ -181,16 +194,18 @@ class _GeotechnicalInvestigationState extends State<GeotechnicalInvestigation> {
                                             ),
                                           ),
                                           SizedBox(
-                                            height: Get.height*0.04,
+                                            height: Get.height * 0.04,
                                           ),
                                           Padding(
-                                            padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                            padding: EdgeInsets.only(
+                                                left: width * 0.05,
+                                                right: width * 0.05),
                                             child: PageInput(
                                               hint: "Enter location  ",
                                               label: "Location Of Site",
                                               controller: locationController,
-                                              validator: (value){
-                                                if(value!.isEmpty){
+                                              validator: (value) {
+                                                if (value!.isEmpty) {
                                                   return "Please enter location";
                                                 }
                                                 return null;
@@ -198,16 +213,18 @@ class _GeotechnicalInvestigationState extends State<GeotechnicalInvestigation> {
                                             ),
                                           ),
                                           SizedBox(
-                                            height: Get.height*0.04,
+                                            height: Get.height * 0.04,
                                           ),
                                           Padding(
-                                            padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                            padding: EdgeInsets.only(
+                                                left: width * 0.05,
+                                                right: width * 0.05),
                                             child: PageInput(
                                               hint: "Enter land size  ",
                                               label: "Size Of Land",
                                               controller: sizeController,
-                                              validator: (value){
-                                                if(value!.isEmpty){
+                                              validator: (value) {
+                                                if (value!.isEmpty) {
                                                   return "Please enter land size";
                                                 }
                                                 return null;
@@ -215,19 +232,32 @@ class _GeotechnicalInvestigationState extends State<GeotechnicalInvestigation> {
                                             ),
                                           ),
                                           SizedBox(
-                                            height: Get.height*0.04,
+                                            height: Get.height * 0.04,
                                           ),
                                           Padding(
-                                            padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                            padding: EdgeInsets.only(
+                                                left: width * 0.05,
+                                                right: width * 0.05),
                                             child: PageDropButton(
                                               label: "Intended Project",
                                               hint: '',
-                                              padding: const EdgeInsets.symmetric(horizontal: 10),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 10),
                                               onChanged: (val) {
                                                 intendedController.text = val;
                                               },
-                                              value:  "Residential Building",
-                                              items: ["Residential Building","Industrial Building","High Rise Building","Road","Estate","Dumping Site","Water Borehole"].map<DropdownMenuItem<String>>((String value) {
+                                              value: "Residential Building",
+                                              items: [
+                                                "Residential Building",
+                                                "Industrial Building",
+                                                "High Rise Building",
+                                                "Road",
+                                                "Estate",
+                                                "Dumping Site",
+                                                "Water Borehole"
+                                              ].map<DropdownMenuItem<String>>(
+                                                  (String value) {
                                                 return DropdownMenuItem<String>(
                                                   value: value,
                                                   child: Text(value),
@@ -236,19 +266,28 @@ class _GeotechnicalInvestigationState extends State<GeotechnicalInvestigation> {
                                             ),
                                           ),
                                           SizedBox(
-                                            height: Get.height*0.04,
+                                            height: Get.height * 0.04,
                                           ),
                                           Padding(
-                                            padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                            padding: EdgeInsets.only(
+                                                left: width * 0.05,
+                                                right: width * 0.05),
                                             child: PageDropButton(
-                                              label: "Is there a building on the site?",
+                                              label:
+                                                  "Is there a building on the site?",
                                               hint: '',
-                                              padding: const EdgeInsets.symmetric(horizontal: 10),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 10),
                                               onChanged: (val) {
                                                 isController.text = val;
                                               },
-                                              value:  "Yes",
-                                              items: ["Yes","No"].map<DropdownMenuItem<String>>((String value) {
+                                              value: "Yes",
+                                              items: [
+                                                "Yes",
+                                                "No"
+                                              ].map<DropdownMenuItem<String>>(
+                                                  (String value) {
                                                 return DropdownMenuItem<String>(
                                                   value: value,
                                                   child: Text(value),
@@ -257,15 +296,22 @@ class _GeotechnicalInvestigationState extends State<GeotechnicalInvestigation> {
                                             ),
                                           ),
                                           SizedBox(
-                                            height: Get.height*0.04,
+                                            height: Get.height * 0.04,
                                           ),
                                           Padding(
-                                            padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                            padding: EdgeInsets.only(
+                                                left: width * 0.05,
+                                                right: width * 0.05),
                                             child: AppButton(
                                               title: "Proceed",
-                                              onPressed: (){
-                                                if(formKey.currentState!.validate()){
-                                                  pageController.animateToPage(1, duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
+                                              onPressed: () {
+                                                if (formKey.currentState!
+                                                    .validate()) {
+                                                  pageController.animateToPage(
+                                                      1,
+                                                      duration: const Duration(
+                                                          milliseconds: 300),
+                                                      curve: Curves.easeIn);
                                                 }
                                               },
                                             ),
@@ -284,124 +330,151 @@ class _GeotechnicalInvestigationState extends State<GeotechnicalInvestigation> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Padding(
-                                    padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                    padding: EdgeInsets.only(
+                                        left: width * 0.05,
+                                        right: width * 0.05),
                                     child: Text(
                                       "Request for Geotechnical \nAnd Geophysical Information",
-                                      style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.08,color: Colors.black,fontWeight: FontWeight.w600),
+                                      style: AppTextStyle.subtitle1.copyWith(
+                                          fontSize: multiplier * 0.08,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w600),
                                       textAlign: TextAlign.start,
                                     ),
                                   ),
                                   SizedBox(
-                                    height: width*0.015,
+                                    height: width * 0.015,
                                   ),
                                   Padding(
-                                    padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                    padding: EdgeInsets.only(
+                                        left: width * 0.05,
+                                        right: width * 0.05),
                                     child: Image.asset(
                                       "assets/images/line_coloured.png",
-                                      width: width*0.3,
+                                      width: width * 0.3,
                                     ),
                                   ),
                                   SizedBox(
-                                    height: width*0.08,
+                                    height: width * 0.08,
                                   ),
-
                                   Expanded(
                                     child: SingleChildScrollView(
                                       child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
                                           Padding(
-                                            padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                            padding: EdgeInsets.only(
+                                                left: width * 0.05,
+                                                right: width * 0.05),
                                             child: PageInput(
                                               hint: "Enter your name  ",
-                                              label: "Upload available picture of the land or property",
+                                              label:
+                                                  "Upload available picture of the land or property",
                                               isFilePicker: true,
                                               controller: picture,
-                                              validator: (value){
-                                                if(value!.isEmpty){
+                                              validator: (value) {
+                                                if (value!.isEmpty) {
                                                   return "Please pick a picture to upload";
                                                 }
                                                 return null;
                                               },
-                                              onFilePicked: (file){
+                                              onFilePicked: (file) {
                                                 picturePlan = file;
                                               },
                                             ),
                                           ),
-
                                           SizedBox(
-                                            height: Get.height*0.04,
+                                            height: Get.height * 0.04,
                                           ),
                                           Padding(
-                                            padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                            padding: EdgeInsets.only(
+                                                left: width * 0.05,
+                                                right: width * 0.05),
                                             child: PageInput(
                                               hint: "Enter number  ",
-                                              label: "Number of intended geotechnical borehole",
-                                              keyboardType: TextInputType.number,
+                                              label:
+                                                  "Number of intended geotechnical borehole",
+                                              keyboardType:
+                                                  TextInputType.number,
                                               controller: boreholeController,
-                                              validator: (value){
-                                                if(value!.isEmpty){
+                                              validator: (value) {
+                                                if (value!.isEmpty) {
                                                   return "Please enter number of borehole";
                                                 }
                                                 return null;
                                               },
                                             ),
                                           ),
-
                                           SizedBox(
-                                            height: Get.height*0.04,
+                                            height: Get.height * 0.04,
                                           ),
                                           Padding(
-                                            padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                            padding: EdgeInsets.only(
+                                                left: width * 0.05,
+                                                right: width * 0.05),
                                             child: PageInput(
                                               hint: "Enter depth  ",
                                               label: "Depth of borehole",
-                                              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                                              keyboardType: const TextInputType
+                                                      .numberWithOptions(
+                                                  decimal: true),
                                               controller: depthController,
-                                              validator: (value){
-                                                if(value!.isEmpty){
+                                              validator: (value) {
+                                                if (value!.isEmpty) {
                                                   return "Please enter depth of borehole";
                                                 }
                                                 return null;
                                               },
                                             ),
                                           ),
-
                                           SizedBox(
-                                            height: Get.height*0.04,
+                                            height: Get.height * 0.04,
                                           ),
                                           Padding(
-                                            padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                            padding: EdgeInsets.only(
+                                                left: width * 0.05,
+                                                right: width * 0.05),
                                             child: PageInput(
                                               hint: "Enter CPT number  ",
                                               label: "Number of CPT",
-                                              keyboardType: TextInputType.number,
+                                              keyboardType:
+                                                  TextInputType.number,
                                               controller: cptController,
-                                              validator: (value){
-                                                if(value!.isEmpty){
+                                              validator: (value) {
+                                                if (value!.isEmpty) {
                                                   return "Please enter number of CPT";
                                                 }
                                                 return null;
                                               },
                                             ),
                                           ),
-
                                           SizedBox(
-                                            height: Get.height*0.04,
+                                            height: Get.height * 0.04,
                                           ),
                                           Padding(
-                                            padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                            padding: EdgeInsets.only(
+                                                left: width * 0.05,
+                                                right: width * 0.05),
                                             child: PageDropButton(
                                               label: "Tonnage of CPT",
                                               hint: '',
-                                              padding: const EdgeInsets.symmetric(horizontal: 10),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 10),
                                               onChanged: (val) {
                                                 tonnageController.text = val;
                                               },
-                                              value:  "2.5 Tons",
-                                              items: ["2.5 Tons","10 Tons","20 Tons"].map<DropdownMenuItem<String>>((String value) {
+                                              value: "2.5 Tons",
+                                              items: [
+                                                "2.5 Tons",
+                                                "10 Tons",
+                                                "20 Tons"
+                                              ].map<DropdownMenuItem<String>>(
+                                                  (String value) {
                                                 return DropdownMenuItem<String>(
                                                   value: value,
                                                   child: Text(value),
@@ -409,21 +482,29 @@ class _GeotechnicalInvestigationState extends State<GeotechnicalInvestigation> {
                                               }).toList(),
                                             ),
                                           ),
-
                                           SizedBox(
-                                            height: Get.height*0.04,
+                                            height: Get.height * 0.04,
                                           ),
                                           Padding(
-                                            padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                            padding: EdgeInsets.only(
+                                                left: width * 0.05,
+                                                right: width * 0.05),
                                             child: PageDropButton(
                                               label: "Types of CPT",
                                               hint: '',
-                                              padding: const EdgeInsets.symmetric(horizontal: 10),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 10),
                                               onChanged: (val) {
                                                 typeController.text = val;
                                               },
-                                              value:  "Mechanical",
-                                              items: ["Mechanical","Electrical","Dynamic"].map<DropdownMenuItem<String>>((String value) {
+                                              value: "Mechanical",
+                                              items: [
+                                                "Mechanical",
+                                                "Electrical",
+                                                "Dynamic"
+                                              ].map<DropdownMenuItem<String>>(
+                                                  (String value) {
                                                 return DropdownMenuItem<String>(
                                                   value: value,
                                                   child: Text(value),
@@ -431,21 +512,29 @@ class _GeotechnicalInvestigationState extends State<GeotechnicalInvestigation> {
                                               }).toList(),
                                             ),
                                           ),
-
                                           SizedBox(
-                                            height: Get.height*0.04,
+                                            height: Get.height * 0.04,
                                           ),
                                           Padding(
-                                            padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                            padding: EdgeInsets.only(
+                                                left: width * 0.05,
+                                                right: width * 0.05),
                                             child: PageDropButton(
-                                              label: "Apart from borehole and CPT, are there any special test or \ninvestigation you intend to run?",
+                                              label:
+                                                  "Apart from borehole and CPT, are there any special test or \ninvestigation you intend to run?",
                                               hint: '',
-                                              padding: const EdgeInsets.symmetric(horizontal: 10),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 10),
                                               onChanged: (val) {
                                                 specialController.text = val;
                                               },
-                                              value:  "Yes",
-                                              items: ["Yes","No"].map<DropdownMenuItem<String>>((String value) {
+                                              value: "Yes",
+                                              items: [
+                                                "Yes",
+                                                "No"
+                                              ].map<DropdownMenuItem<String>>(
+                                                  (String value) {
                                                 return DropdownMenuItem<String>(
                                                   value: value,
                                                   child: Text(value),
@@ -453,53 +542,93 @@ class _GeotechnicalInvestigationState extends State<GeotechnicalInvestigation> {
                                               }).toList(),
                                             ),
                                           ),
-
                                           SizedBox(
-                                            height: Get.height*0.04,
+                                            height: Get.height * 0.04,
                                           ),
                                           Padding(
-                                            padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                            padding: EdgeInsets.only(
+                                                left: width * 0.05,
+                                                right: width * 0.05),
                                             child: PageInput(
                                               hint: "",
                                               label: "If yes, please specify",
                                               controller: specifyController,
                                             ),
                                           ),
-
                                           SizedBox(
-                                            height: Get.height*0.04,
+                                            height: Get.height * 0.04,
                                           ),
                                           Padding(
-                                            padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                            padding: EdgeInsets.only(
+                                                left: width * 0.05,
+                                                right: width * 0.05),
                                             child: AppButton(
                                               title: "Submit",
                                               onPressed: () async {
-                                                if(formKey1.currentState!.validate()){
+                                                if (formKey1.currentState!
+                                                    .validate()) {
                                                   Map<String, dynamic> body = {
                                                     'title': title,
-                                                    'clientName': nameController.text,
-                                                    'projectLocation': locationController.text,
-                                                    "projectType": intendedController.text,
-                                                    "siteHasBuilding": isController.text == "Yes" ? true : false,
-                                                    "noOfIntentendedBorehole": boreholeController.text,
-                                                    "depthOfBorehole": depthController.text,
-                                                    "noOfCpt": cptController.text,
-                                                    "tonnageOfCpt": tonnageController.text,
-                                                    "typeOfCpt": typeController.text,
-                                                    "anySpecialInvestigation": specialController.text == "Yes" ? true : false,
-                                                    "comment": specifyController.text,
+                                                    'clientName':
+                                                        nameController.text,
+                                                    'projectLocation':
+                                                        locationController.text,
+                                                    "projectType":
+                                                        intendedController.text,
+                                                    "siteHasBuilding":
+                                                        isController.text ==
+                                                                "Yes"
+                                                            ? true
+                                                            : false,
+                                                    "noOfIntentendedBorehole":
+                                                        boreholeController.text,
+                                                    "depthOfBorehole":
+                                                        depthController.text,
+                                                    "noOfCpt":
+                                                        cptController.text,
+                                                    "tonnageOfCpt":
+                                                        tonnageController.text,
+                                                    "typeOfCpt":
+                                                        typeController.text,
+                                                    "anySpecialInvestigation":
+                                                        specialController
+                                                                    .text ==
+                                                                "Yes"
+                                                            ? true
+                                                            : false,
+                                                    "comment":
+                                                        specifyController.text,
                                                   };
-                                                  body['propertyPicture'] = await dio.MultipartFile.fromFile(
+                                                  body['propertyPicture'] =
+                                                      await dio.MultipartFile
+                                                          .fromFile(
                                                     picturePlan!.path,
-                                                    filename: picturePlan!.path.split('/').last,
+                                                    filename: picturePlan!.path
+                                                        .split('/')
+                                                        .last,
                                                   );
-                                                  var formData = dio.FormData.fromMap(body);
-                                                  var response = await Api().postData("/projects/geotechnical/request",body: formData,hasHeader: true);
-                                                  if(response.isSuccessful){
-                                                    pageController.animateToPage(2, duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
-                                                  }else{
+                                                  var formData =
+                                                      dio.FormData.fromMap(
+                                                          body);
+                                                  var response = await Api()
+                                                      .postData(
+                                                          "/projects/geotechnical/request",
+                                                          body: formData,
+                                                          hasHeader: true);
+                                                  if (response.isSuccessful) {
+                                                    pageController.animateToPage(
+                                                        2,
+                                                        duration:
+                                                            const Duration(
+                                                                milliseconds:
+                                                                    300),
+                                                        curve: Curves.easeIn);
+                                                  } else {
                                                     print(response.code);
-                                                    Get.snackbar("Error", response.data.toString());
+                                                    Get.snackbar(
+                                                        "Error",
+                                                        response.data
+                                                            .toString());
                                                   }
                                                 }
                                               },
@@ -521,29 +650,41 @@ class _GeotechnicalInvestigationState extends State<GeotechnicalInvestigation> {
                                   children: [
                                     Text(
                                       "Project Created",
-                                      style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.07,color: Colors.black,fontWeight: FontWeight.w600),
+                                      style: AppTextStyle.subtitle1.copyWith(
+                                          fontSize: multiplier * 0.07,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w600),
                                       textAlign: TextAlign.center,
                                     ),
                                     SizedBox(
-                                      height: Get.height*0.02,
+                                      height: Get.height * 0.02,
                                     ),
                                     Padding(
-                                      padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+                                      padding: EdgeInsets.only(
+                                          left: width * 0.05,
+                                          right: width * 0.05),
                                       child: Text(
                                         "Your project has been created. You would be notified when you get a service provider.  ",
-                                        style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.06,color: Colors.black,fontWeight: FontWeight.normal),
+                                        style: AppTextStyle.subtitle1.copyWith(
+                                            fontSize: multiplier * 0.06,
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.normal),
                                         textAlign: TextAlign.center,
                                       ),
                                     ),
                                   ],
                                 ),
                                 Padding(
-                                  padding: EdgeInsets.only(left: width*0.05,right: width*0.05,bottom: width*0.2),
+                                  padding: EdgeInsets.only(
+                                      left: width * 0.05,
+                                      right: width * 0.05,
+                                      bottom: width * 0.2),
                                   child: AppButton(
                                     title: "View My Projects",
-                                    onPressed: (){
+                                    onPressed: () {
                                       controller.currentBottomNavPage.value = 2;
-                                      controller.updateNewUser(controller.currentType);
+                                      controller.updateNewUser(
+                                          controller.currentType);
                                       Get.back();
                                       Get.back();
                                     },
@@ -580,7 +721,9 @@ class _GeotechnicalInvestigationState extends State<GeotechnicalInvestigation> {
                       icon: Padding(
                         padding: const EdgeInsets.only(bottom: 5),
                         child: Image.asset(
-                          controller.currentBottomNavPage.value == 1 ? 'assets/images/chat_filled.png' : 'assets/images/chatIcon.png',
+                          controller.currentBottomNavPage.value == 1
+                              ? 'assets/images/chat_filled.png'
+                              : 'assets/images/chatIcon.png',
                           width: 22,
                           //color: controller.currentBottomNavPage.value == 1 ? AppColors.primary : AppColors.grey,
                         ),
@@ -629,8 +772,7 @@ class _GeotechnicalInvestigationState extends State<GeotechnicalInvestigation> {
                     controller.update(['home']);
                     Get.back();
                     Get.back();
-                  }
-              ),
+                  }),
             );
           }),
     );

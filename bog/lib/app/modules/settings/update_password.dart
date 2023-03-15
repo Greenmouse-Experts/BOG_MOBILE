@@ -1,12 +1,11 @@
 import 'dart:convert';
 
 import 'package:bog/app/global_widgets/app_button.dart';
-import 'package:feather_icons/feather_icons.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:toggle_switch/toggle_switch.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_styles.dart';
@@ -14,10 +13,8 @@ import '../../../core/utils/validator.dart';
 import '../../controllers/home_controller.dart';
 import '../../data/model/log_in_model.dart';
 import '../../data/providers/my_pref.dart';
-import '../../global_widgets/app_avatar.dart';
-import '../../global_widgets/app_input.dart';
+
 import '../../global_widgets/page_input.dart';
-import '../../global_widgets/tabs.dart';
 
 class UpdatePassword extends StatefulWidget {
   const UpdatePassword({Key? key}) : super(key: key);
@@ -42,15 +39,13 @@ class _UpdatePasswordState extends State<UpdatePassword> {
     final Size size = MediaQuery.of(context).size;
     double multiplier = 25 * size.height * 0.01;
 
-
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
           statusBarColor: AppColors.backgroundVariant2,
           statusBarIconBrightness: Brightness.dark,
           statusBarBrightness: Brightness.dark,
           systemNavigationBarColor: AppColors.backgroundVariant2,
-          systemNavigationBarIconBrightness: Brightness.dark
-      ),
+          systemNavigationBarIconBrightness: Brightness.dark),
       child: GetBuilder<HomeController>(
           id: 'UpdatePassword',
           builder: (controller) {
@@ -63,24 +58,27 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: EdgeInsets.only(right: width*0.05,left: width*0.045,top: kToolbarHeight),
+                        padding: EdgeInsets.only(
+                            right: width * 0.05,
+                            left: width * 0.045,
+                            top: kToolbarHeight),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             InkWell(
-                              onTap: (){
+                              onTap: () {
                                 Navigator.pop(context);
                               },
                               child: SvgPicture.asset(
                                 "assets/images/back.svg",
-                                height: width*0.045,
-                                width: width*0.045,
+                                height: width * 0.045,
+                                width: width * 0.045,
                                 color: Colors.black,
                               ),
                             ),
                             SizedBox(
-                              width: width*0.04,
+                              width: width * 0.04,
                             ),
                             Expanded(
                               child: Row(
@@ -89,20 +87,23 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                                 children: [
                                   Text(
                                     "Security",
-                                    style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.07,color: Colors.black,fontWeight: FontWeight.w500),
+                                    style: AppTextStyle.subtitle1.copyWith(
+                                        fontSize: multiplier * 0.07,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w500),
                                     textAlign: TextAlign.center,
                                   ),
                                 ],
                               ),
                             ),
                             SizedBox(
-                              width: width*0.04,
+                              width: width * 0.04,
                             ),
                           ],
                         ),
                       ),
                       SizedBox(
-                        height: width*0.04,
+                        height: width * 0.04,
                       ),
                       Container(
                         height: 1,
@@ -110,12 +111,12 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                         color: AppColors.grey.withOpacity(0.1),
                       ),
                       SizedBox(
-                        height: width*0.04,
+                        height: width * 0.04,
                       ),
                       Row(
                         children: [
                           SizedBox(
-                            width: width*0.03,
+                            width: width * 0.03,
                           ),
                           Text(
                             "Reset Password",
@@ -128,10 +129,11 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                         ],
                       ),
                       SizedBox(
-                        height: width*0.04,
+                        height: width * 0.04,
                       ),
                       Padding(
-                        padding: EdgeInsets.only(left: width*0.03,right: width*0.03),
+                        padding: EdgeInsets.only(
+                            left: width * 0.03, right: width * 0.03),
                         child: Form(
                           key: formKey,
                           child: Column(
@@ -151,7 +153,7 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                                 showInfo: false,
                               ),
                               SizedBox(
-                                height: width*0.04,
+                                height: width * 0.04,
                               ),
                               PageInput(
                                 hint: '',
@@ -162,7 +164,7 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                                 validator: Validator.passwordValidation,
                               ),
                               SizedBox(
-                                height: width*0.04,
+                                height: width * 0.04,
                               ),
                               PageInput(
                                 hint: '',
@@ -182,26 +184,34 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                                 showInfo: false,
                               ),
                               SizedBox(
-                                height: Get.height*0.05,
+                                height: Get.height * 0.05,
                               ),
                               AppButton(
                                 title: "Save Changes",
                                 onPressed: () async {
-                                  if(formKey.currentState!.validate()){
+                                  if (formKey.currentState!.validate()) {
                                     var body = {
                                       "oldPassword": oldPassword.text,
                                       "newPassword": newNumber.text,
                                       "confirmPassword": confirmPassword.text,
                                     };
-                                    var response = await controller.userRepo.patchData("/user/change-password", body);
-                                    if(response.isSuccessful){
+                                    var response = await controller.userRepo
+                                        .patchData(
+                                            "/user/change-password", body);
+                                    if (response.isSuccessful) {
                                       Get.back();
-                                      Get.snackbar("Success", "Password changed successfully",backgroundColor: Colors.green);
-                                    }else{
-                                      if(response.message != null){
-                                        Get.snackbar("Error", response.message.toString(),backgroundColor: Colors.red);
-                                      }else{
-                                        Get.snackbar("Error", "Something went wrong, please try again",backgroundColor: Colors.red);
+                                      Get.snackbar("Success",
+                                          "Password changed successfully",
+                                          backgroundColor: Colors.green);
+                                    } else {
+                                      if (response.message != null) {
+                                        Get.snackbar("Error",
+                                            response.message.toString(),
+                                            backgroundColor: Colors.red);
+                                      } else {
+                                        Get.snackbar("Error",
+                                            "Something went wrong, please try again",
+                                            backgroundColor: Colors.red);
                                       }
                                     }
                                   }
@@ -237,7 +247,9 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                       icon: Padding(
                         padding: const EdgeInsets.only(bottom: 5),
                         child: Image.asset(
-                          controller.currentBottomNavPage.value == 1 ? 'assets/images/chat_filled.png' : 'assets/images/chatIcon.png',
+                          controller.currentBottomNavPage.value == 1
+                              ? 'assets/images/chat_filled.png'
+                              : 'assets/images/chatIcon.png',
                           width: 22,
                           //color: controller.currentBottomNavPage.value == 1 ? AppColors.primary : AppColors.grey,
                         ),
@@ -285,9 +297,7 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                     controller.currentBottomNavPage.value = index;
                     controller.updateNewUser(controller.currentType);
                     Get.back();
-                  }
-              ),
-
+                  }),
             );
           }),
     );
@@ -313,12 +323,12 @@ class ServiceWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+      padding: EdgeInsets.only(left: width * 0.05, right: width * 0.05),
       child: InkWell(
         onTap: function,
         child: Container(
-          height: width*0.4,
-          width: width*0.4,
+          height: width * 0.4,
+          width: width * 0.4,
           decoration: const BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -336,8 +346,8 @@ class ServiceWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                height: width*0.15,
-                width: width*0.15,
+                height: width * 0.15,
+                width: width * 0.15,
                 decoration: BoxDecoration(
                   image: DecorationImage(
                     image: AssetImage(asset),
@@ -346,11 +356,14 @@ class ServiceWidget extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: width*0.04,
+                height: width * 0.04,
               ),
               Text(
                 title,
-                style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.065,color: Colors.black,fontWeight: FontWeight.normal),
+                style: AppTextStyle.subtitle1.copyWith(
+                    fontSize: multiplier * 0.065,
+                    color: Colors.black,
+                    fontWeight: FontWeight.normal),
                 textAlign: TextAlign.center,
               ),
             ],

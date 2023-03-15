@@ -1,5 +1,8 @@
 import 'dart:convert';
 
+import 'package:bog/app/data/model/gen_kyc.dart';
+import 'package:bog/app/global_widgets/global_widgets.dart';
+import 'package:bog/app/modules/settings/view_kyc.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -37,10 +40,14 @@ class _HomeState extends State<Home> {
       homeController.currentType = "Product Partner";
       homeController.update();
       homeController.updateNewUser('Product Partner');
+      verifyKycComplete('vendor', () {});
     } else if (type == 'professional') {
       homeController.currentType = 'Service Partner';
       homeController.update();
       homeController.updateNewUser('Service Partner');
+      verifyKycComplete('professional', () {
+        Get.to(() => const KYCPage());
+      });
     } else {
       homeController.currentType = "Corporate Client";
       homeController.update();
@@ -50,8 +57,31 @@ class _HomeState extends State<Home> {
     homeController.update();
   }
 
+  void verifyKycComplete(String type, VoidCallback onPressed) async {
+    final controller = Get.find<HomeController>();
+    var logInDetails = LogInModel.fromJson(jsonDecode(MyPref.logInDetail.val));
+    final res = await controller.userRepo
+        .getData('/kyc/user-kyc/${logInDetails.id}?userType=$type');
+    final kyc = GenKyc.fromJson(res.data);
+    if (kyc.isKycCompleted != true) {
+      AppOverlay.showInfoDialog(
+          title: 'Kyc Not Complete',
+          buttonText: 'Complete KYC',
+          content:
+              "You haven't completed your KYC yet, Kindly Complete your KYC now",
+          onPressed: onPressed);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    // verifyKycComplete();
+    // var logInDetails = LogInModel.fromJson(jsonDecode(MyPref.logInDetail.val));
+    // if (logInDetails.userType == 'vendor' ||
+    //     logInDetails.userType == 'professional') {
+    //   verifyKycComplete(logInDetails.userType!);
+    // }
+
     return WillPopScope(
       onWillPop: () async => false,
       child: AppBaseView(
@@ -61,20 +91,22 @@ class _HomeState extends State<Home> {
               return Scaffold(
                 body: SizedBox(
                   width: Get.width,
-                  child:        controller.currentBottomNavPage.value == 4  || controller.currentBottomNavPage.value == 0? 
-                  SingleChildScrollView(
-                    child: Column(
-                      children: [
-                                 
-                        controller.pages[controller.currentBottomNavPage.value],
-                      ],
-                    ),
-                  ) : Column(
-                    children: [
-               
-                      controller.pages[controller.currentBottomNavPage.value],
-                    ],
-                  ),
+                  child: controller.currentBottomNavPage.value == 4 ||
+                          controller.currentBottomNavPage.value == 0
+                      ? SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              controller
+                                  .pages[controller.currentBottomNavPage.value],
+                            ],
+                          ),
+                        )
+                      : Column(
+                          children: [
+                            controller
+                                .pages[controller.currentBottomNavPage.value],
+                          ],
+                        ),
                 ),
                 bottomNavigationBar: HomeBottomWidget(
                   controller: controller,

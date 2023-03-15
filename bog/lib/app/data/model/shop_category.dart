@@ -1,22 +1,26 @@
 import 'dart:convert';
+
 /// id : "42e9e3c9-e4d7-4af8-8041-68cc2b0bb42c"
 /// name : "Ramadan"
 /// description : "Ram ram ramoski Ayinde keke Alhaji Ramadan Fawaz Olamilekan Timileyin"
 /// totalProducts : 0
 
-ShopCategory shopCategoryFromJson(String str) => ShopCategory.fromJson(json.decode(str));
+ShopCategory shopCategoryFromJson(String str) =>
+    ShopCategory.fromJson(json.decode(str));
 String shopCategoryToJson(ShopCategory data) => json.encode(data.toJson());
+
 class ShopCategory {
   ShopCategory({
-      String? id, 
-      String? name, 
-      String? description, 
-      num? totalProducts,}){
+    String? id,
+    String? name,
+    String? description,
+    num? totalProducts,
+  }) {
     _id = id;
     _name = name;
     _description = description;
     _totalProducts = totalProducts;
-}
+  }
 
   ShopCategory.fromJson(dynamic json) {
     _id = json['id'];
@@ -28,15 +32,18 @@ class ShopCategory {
   String? _name;
   String? _description;
   num? _totalProducts;
-ShopCategory copyWith({  String? id,
-  String? name,
-  String? description,
-  num? totalProducts,
-}) => ShopCategory(  id: id ?? _id,
-  name: name ?? _name,
-  description: description ?? _description,
-  totalProducts: totalProducts ?? _totalProducts,
-);
+  ShopCategory copyWith({
+    String? id,
+    String? name,
+    String? description,
+    num? totalProducts,
+  }) =>
+      ShopCategory(
+        id: id ?? _id,
+        name: name ?? _name,
+        description: description ?? _description,
+        totalProducts: totalProducts ?? _totalProducts,
+      );
   String? get id => _id;
   String? get name => _name;
   String? get description => _description;

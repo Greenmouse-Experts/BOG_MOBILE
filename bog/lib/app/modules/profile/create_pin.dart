@@ -3,15 +3,14 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:otp_text_field/otp_field.dart';
 import 'package:otp_text_field/style.dart';
-import '../sign_in/sign_in.dart';
-import '../sign_up/sign_up.dart';
+
 import '../../../core/theme/app_colors.dart';
 
 import '../../../core/theme/app_styles.dart';
 import '../../../core/theme/app_themes.dart';
-import '../../controllers/auth_controller.dart';
+
 import '../../global_widgets/app_button.dart';
-import '../profile/update_profile.dart';
+
 import 'confirm_pin.dart';
 
 class CreatePIN extends StatelessWidget {
@@ -63,7 +62,6 @@ class CreatePIN extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: Get.height * 0.07),
-
                 SizedBox(
                   width: Get.width * 0.8,
                   child: Text(
@@ -79,18 +77,12 @@ class CreatePIN extends StatelessWidget {
                   length: 4,
                   width: MediaQuery.of(context).size.width,
                   fieldWidth: Get.width * 0.1,
-                  style: const TextStyle(
-                      fontSize: 17
-                  ),
+                  style: const TextStyle(fontSize: 17),
                   textFieldAlignment: MainAxisAlignment.spaceAround,
                   fieldStyle: FieldStyle.box,
-                  onCompleted: (pin) {
-
-                  },
+                  onCompleted: (pin) {},
                 ),
-
                 SizedBox(height: Get.height * 0.03),
-
                 SizedBox(
                   width: Get.width * 0.8,
                   child: Text(
@@ -106,16 +98,11 @@ class CreatePIN extends StatelessWidget {
                   length: 4,
                   width: MediaQuery.of(context).size.width,
                   fieldWidth: Get.width * 0.1,
-                  style: const TextStyle(
-                      fontSize: 17
-                  ),
+                  style: const TextStyle(fontSize: 17),
                   textFieldAlignment: MainAxisAlignment.spaceAround,
                   fieldStyle: FieldStyle.box,
-                  onCompleted: (pin) {
-
-                  },
+                  onCompleted: (pin) {},
                 ),
-
                 SizedBox(height: Get.height * 0.07),
                 AppButton(
                   title: 'Continue',

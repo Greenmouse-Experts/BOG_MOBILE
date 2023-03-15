@@ -1,5 +1,5 @@
 import 'package:bog/app/modules/home/pages/cart_tab.dart';
-import 'package:bog/app/modules/home/pages/ChatTab.dart';
+import 'package:bog/app/modules/home/pages/chat_tab.dart';
 import 'package:bog/app/modules/home/pages/profile_tab.dart';
 import 'package:bog/app/modules/home/pages/project_tab.dart';
 import 'package:feather_icons/feather_icons.dart';
@@ -107,77 +107,68 @@ class HomeController extends GetxController {
     ProfileTab()
   ];
 
-
   bool isBuyNow = false;
   MyProducts? myProducts;
-   RxInt get cartLength => productsList.length.obs;
- 
+  RxInt get cartLength => productsList.length.obs;
+
   List<MyProducts> productsList = [];
   Map<String, int> productsMap = {};
 
   final Map<String, CartModel> _cartItems = {};
-  Map<String, CartModel> get cartItems  => _cartItems.obs;
+  Map<String, CartModel> get cartItems => _cartItems.obs;
 
-
-
-   void addItem(MyProducts product,) {
+  void addItem(
+    MyProducts product,
+  ) {
     if (_cartItems.containsKey(product.id!)) {
-
-          Get.snackbar(
-                                      'Already in Cart',
-                                      'Product is already in Cart',
-                                      snackPosition: SnackPosition.TOP,
-                                      backgroundColor: Colors.red,
-                                      colorText: Colors.white,
-                                      margin: EdgeInsets.only(
-                                          bottom: Get.height * 0.1),
-                                      borderRadius: 0,
-                                      icon: const Icon(
-                                        FeatherIcons.shoppingCart,
-                                        color: Colors.white,
-                                      ),
-                                      duration: const Duration(seconds: 2),
-                                    );
+      Get.snackbar(
+        'Already in Cart',
+        'Product is already in Cart',
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+        margin: EdgeInsets.only(bottom: Get.height * 0.1),
+        borderRadius: 0,
+        icon: const Icon(
+          FeatherIcons.shoppingCart,
+          color: Colors.white,
+        ),
+        duration: const Duration(seconds: 2),
+      );
     } else {
       productsList.add(product);
       _cartItems.putIfAbsent(
-        product.id!,
-        () => CartModel(product: product, quantity: 1)
-      );
+          product.id!, () => CartModel(product: product, quantity: 1));
 
-          Get.snackbar(
-                                      'Added to Cart',
-                                      'Product added to Cart Successfully',
-                                      snackPosition: SnackPosition.TOP,
-                                      backgroundColor: Colors.green,
-                                      colorText: Colors.white,
-                                      margin: EdgeInsets.only(
-                                          bottom: Get.height * 0.1),
-                                      borderRadius: 0,
-                                      icon: const Icon(
-                                        FeatherIcons.shoppingCart,
-                                        color: Colors.white,
-                                      ),
-                                      duration: const Duration(seconds: 2),
-                                    );
+      Get.snackbar(
+        'Added to Cart',
+        'Product added to Cart Successfully',
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+        margin: EdgeInsets.only(bottom: Get.height * 0.1),
+        borderRadius: 0,
+        icon: const Icon(
+          FeatherIcons.shoppingCart,
+          color: Colors.white,
+        ),
+        duration: const Duration(seconds: 2),
+      );
     }
     update();
   }
-
 
   void cartItemIncrement(String productId) {
     if (_cartItems.containsKey(productId)) {
       _cartItems.update(
           productId,
           (existingCartItem) => CartModel(
-               product: existingCartItem.product,
+                product: existingCartItem.product,
                 quantity: existingCartItem.quantity + 1,
-          
               ));
     }
-   update();
+    update();
   }
-  
 
   int get subTotalPrice {
     var total = 0;
@@ -192,11 +183,10 @@ class HomeController extends GetxController {
       _cartItems.update(
           productId,
           (existingCartItem) => CartModel(
-               product: existingCartItem.product,
+                product: existingCartItem.product,
                 quantity: existingCartItem.quantity - 1,
-          
               ));
     }
-   update();
+    update();
   }
 }

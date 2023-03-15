@@ -1,24 +1,11 @@
-import 'dart:convert';
-
-import 'package:bog/app/global_widgets/app_button.dart';
-import 'package:bog/app/modules/create/inner_pages/building_approval.dart';
-import 'package:bog/app/modules/create/inner_pages/construction_drawing.dart';
-import 'package:bog/app/modules/create/inner_pages/contractor_or_smart_calculator.dart';
-import 'package:bog/app/modules/create/inner_pages/geotechnical_investigation.dart';
-import 'package:bog/app/modules/create/inner_pages/land_survey.dart';
-import 'package:feather_icons/feather_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:toggle_switch/toggle_switch.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_styles.dart';
 import '../../controllers/home_controller.dart';
-import '../../global_widgets/app_avatar.dart';
-import '../../global_widgets/app_input.dart';
-import '../../global_widgets/tabs.dart';
 
 class NotificationPage extends GetView<HomeController> {
   const NotificationPage({Key? key}) : super(key: key);
@@ -37,8 +24,7 @@ class NotificationPage extends GetView<HomeController> {
           statusBarIconBrightness: Brightness.dark,
           statusBarBrightness: Brightness.dark,
           systemNavigationBarColor: AppColors.backgroundVariant2,
-          systemNavigationBarIconBrightness: Brightness.dark
-      ),
+          systemNavigationBarIconBrightness: Brightness.dark),
       child: GetBuilder<HomeController>(
           id: 'Notification',
           builder: (controller) {
@@ -51,24 +37,27 @@ class NotificationPage extends GetView<HomeController> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Padding(
-                      padding: EdgeInsets.only(right: width*0.05,left: width*0.045,top: kToolbarHeight),
+                      padding: EdgeInsets.only(
+                          right: width * 0.05,
+                          left: width * 0.045,
+                          top: kToolbarHeight),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           InkWell(
-                            onTap: (){
+                            onTap: () {
                               Navigator.pop(context);
                             },
                             child: SvgPicture.asset(
                               "assets/images/back.svg",
-                              height: width*0.045,
-                              width: width*0.045,
+                              height: width * 0.045,
+                              width: width * 0.045,
                               color: Colors.black,
                             ),
                           ),
                           SizedBox(
-                            width: width*0.04,
+                            width: width * 0.04,
                           ),
                           Expanded(
                             child: Row(
@@ -77,20 +66,23 @@ class NotificationPage extends GetView<HomeController> {
                               children: [
                                 Text(
                                   "Notification",
-                                  style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.07,color: Colors.black,fontWeight: FontWeight.w500),
+                                  style: AppTextStyle.subtitle1.copyWith(
+                                      fontSize: multiplier * 0.07,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w500),
                                   textAlign: TextAlign.center,
                                 ),
                               ],
                             ),
                           ),
                           SizedBox(
-                            width: width*0.04,
+                            width: width * 0.04,
                           ),
                         ],
                       ),
                     ),
                     SizedBox(
-                      height: width*0.04,
+                      height: width * 0.04,
                     ),
                     Container(
                       height: 1,
@@ -98,39 +90,43 @@ class NotificationPage extends GetView<HomeController> {
                       color: AppColors.grey.withOpacity(0.1),
                     ),
                     SizedBox(
-                      height: width*0.04,
+                      height: width * 0.04,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Padding(
-                          padding: EdgeInsets.only(left: width*0.06),
+                          padding: EdgeInsets.only(left: width * 0.06),
                           child: Text(
                             "All",
-                            style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.07,color: AppColors.grey.withOpacity(0.8),fontWeight: FontWeight.w500),
+                            style: AppTextStyle.subtitle1.copyWith(
+                                fontSize: multiplier * 0.07,
+                                color: AppColors.grey.withOpacity(0.8),
+                                fontWeight: FontWeight.w500),
                             textAlign: TextAlign.center,
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.only(right: width*0.06),
+                          padding: EdgeInsets.only(right: width * 0.06),
                           child: Image.asset(
                             "assets/images/Group 47358.png",
-                            height: width*0.08,
-                            width: width*0.08,
+                            height: width * 0.08,
+                            width: width * 0.08,
                           ),
                         ),
                       ],
                     ),
                     SizedBox(
-                      height: width*0.02,
+                      height: width * 0.02,
                     ),
                     SizedBox(
                       height: Get.height * 0.77,
                       child: ListView.builder(
                         itemCount: 51,
                         shrinkWrap: true,
-                        padding: EdgeInsets.only(left: width*0.02,right: width*0.02),
+                        padding: EdgeInsets.only(
+                            left: width * 0.02, right: width * 0.02),
                         physics: const BouncingScrollPhysics(),
                         itemBuilder: (context, index) {
                           return SizedBox(
@@ -147,14 +143,13 @@ class NotificationPage extends GetView<HomeController> {
                                       "assets/images/Ellipse 956.png",
                                       fit: BoxFit.cover,
                                     ),
-                                    onPressed: () {
-
-                                    },
+                                    onPressed: () {},
                                   ),
                                 ),
                                 RichText(
                                   text: TextSpan(
-                                    text: "BOG added a file to your Building \nproject",
+                                    text:
+                                        "BOG added a file to your Building \nproject",
                                     style: AppTextStyle.subtitle1.copyWith(
                                         fontSize: multiplier * 0.07,
                                         color: Colors.black,
@@ -201,7 +196,9 @@ class NotificationPage extends GetView<HomeController> {
                       icon: Padding(
                         padding: const EdgeInsets.only(bottom: 5),
                         child: Image.asset(
-                          controller.currentBottomNavPage.value == 1 ? 'assets/images/chat_filled.png' : 'assets/images/chatIcon.png',
+                          controller.currentBottomNavPage.value == 1
+                              ? 'assets/images/chat_filled.png'
+                              : 'assets/images/chatIcon.png',
                           width: 22,
                           //color: controller.currentBottomNavPage.value == 1 ? AppColors.primary : AppColors.grey,
                         ),
@@ -249,9 +246,7 @@ class NotificationPage extends GetView<HomeController> {
                     controller.currentBottomNavPage.value = index;
                     controller.updateNewUser(controller.currentType);
                     Get.back();
-                  }
-              ),
-
+                  }),
             );
           }),
     );
@@ -277,12 +272,12 @@ class ServiceWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(left: width*0.05,right: width*0.05),
+      padding: EdgeInsets.only(left: width * 0.05, right: width * 0.05),
       child: InkWell(
         onTap: function,
         child: Container(
-          height: width*0.4,
-          width: width*0.4,
+          height: width * 0.4,
+          width: width * 0.4,
           decoration: const BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -300,8 +295,8 @@ class ServiceWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                height: width*0.15,
-                width: width*0.15,
+                height: width * 0.15,
+                width: width * 0.15,
                 decoration: BoxDecoration(
                   image: DecorationImage(
                     image: AssetImage(asset),
@@ -310,11 +305,14 @@ class ServiceWidget extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: width*0.04,
+                height: width * 0.04,
               ),
               Text(
                 title,
-                style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.065,color: Colors.black,fontWeight: FontWeight.normal),
+                style: AppTextStyle.subtitle1.copyWith(
+                    fontSize: multiplier * 0.065,
+                    color: Colors.black,
+                    fontWeight: FontWeight.normal),
                 textAlign: TextAlign.center,
               ),
             ],
