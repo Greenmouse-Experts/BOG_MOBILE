@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:get/get.dart';
 
-
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_styles.dart';
 import '../../../controllers/home_controller.dart';
@@ -119,11 +118,13 @@ class CartTab extends StatelessWidget {
                                       var product =
                                           controller.productsList[index];
                                       return CartItem(
-                                        itemDecrement: (){
-                                          controller.cartItemDecrement(product.id!);
+                                        itemDecrement: () {
+                                          controller
+                                              .cartItemDecrement(product.id!);
                                         },
-                                        itemIncrement: (){
-                                          controller.cartItemIncrement(product.id!);
+                                        itemIncrement: () {
+                                          controller
+                                              .cartItemIncrement(product.id!);
                                         },
                                         title: product.name.toString(),
                                         image: product.image.toString(),
@@ -132,8 +133,8 @@ class CartTab extends StatelessWidget {
                                                 product.id.toString()] ??
                                             1,
                                         quantityChanged: (value) {
-                                      //    controller.cartItemIncrement(product.id!);
-                                         // controller.addProductToCart(product);
+                                          //    controller.cartItemIncrement(product.id!);
+                                          // controller.addProductToCart(product);
                                           // controller.productsMap[
                                           //     product.id.toString()] = value;
                                           // controller.update();
@@ -263,7 +264,7 @@ class CartTab extends StatelessWidget {
                                         ),
                                       ),
                                       Text(
-                                        "N ${controller.subTotalPrice+ 5000}",
+                                        "N ${controller.subTotalPrice + 5000}",
                                         style: AppTextStyle.subtitle1.copyWith(
                                           color: AppColors.primary,
                                           fontSize: Get.width * 0.04,
@@ -378,9 +379,8 @@ class CartTab extends StatelessWidget {
                               );
                             }
                             return SizedBox(
-                              height: Get.height * 0.7,
-                              child: const AppLoader()
-                            );
+                                height: Get.height * 0.7,
+                                child: const AppLoader());
                           }
                         }),
                   ),
@@ -470,7 +470,9 @@ class CartItem extends StatelessWidget {
       this.subTitle = "",
       this.price = "N 115,000",
       this.quantity = 1,
-      this.quantityChanged,required this.itemIncrement,required this.itemDecrement})
+      this.quantityChanged,
+      required this.itemIncrement,
+      required this.itemDecrement})
       : super(key: key);
 
   final String image;
@@ -560,10 +562,10 @@ class CartItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 ItemCounter(
-                  itemDecrement: (){
+                  itemDecrement: () {
                     itemDecrement();
                   },
-                  itemIncrement: (){
+                  itemIncrement: () {
                     itemIncrement();
                   },
                   initialCount: quantity,
@@ -788,7 +790,7 @@ class ProductItem extends StatelessWidget {
                     child: AppButton(
                       title: "Pending",
                       padding: const EdgeInsets.symmetric(vertical: 5),
-                      border: Border.all(color:const Color(0xFFECF6FC)),
+                      border: Border.all(color: const Color(0xFFECF6FC)),
                       bckgrndColor: const Color(0xFFECF6FC),
                       fontColor: AppColors.primary,
                     ),
@@ -831,7 +833,9 @@ class OrderRequestItem extends StatelessWidget {
       ),
       child: InkWell(
         onTap: () {
-          Get.to(() => const OrderDetails());
+          Get.to(() => const OrderDetails(
+                id: '',
+              ));
         },
         child: Column(
           children: [
@@ -962,7 +966,9 @@ class ServiceRequestItem extends StatelessWidget {
       ),
       child: InkWell(
         onTap: () {
-          Get.to(() => const OrderDetails());
+          Get.to(() => const OrderDetails(
+                id: '',
+              ));
         },
         child: Column(
           children: [

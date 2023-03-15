@@ -133,7 +133,7 @@ class _MyOrderScreenState extends State<MyOrderScreen>
                         ),
                         tabs: const [
                           Tab(
-                            text: 'Ongoing',
+                            text: 'Pending',
                             iconMargin: EdgeInsets.zero,
                           ),
                           Tab(

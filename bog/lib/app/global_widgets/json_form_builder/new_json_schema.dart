@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import './simple_forms/simple_text.dart';
 import './simple_forms/simple_checkbox.dart';
 import './simple_forms/simple_radios.dart';
-import './simple_forms/simple_select.dart';
+// import './simple_forms/simple_select.dart';
 import './simple_forms/simple_date.dart';
 
 class NewJsonSchema extends StatefulWidget {
