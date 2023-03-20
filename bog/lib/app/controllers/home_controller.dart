@@ -158,6 +158,14 @@ class HomeController extends GetxController {
     update();
   }
 
+  void removeItem(String productId, MyProducts product) {
+    if (_cartItems.containsKey(productId)) {
+      _cartItems.remove(productId);
+      productsList.remove(product);
+    }
+    update();
+  }
+
   void cartItemIncrement(String productId) {
     if (_cartItems.containsKey(productId)) {
       _cartItems.update(
@@ -188,5 +196,11 @@ class HomeController extends GetxController {
               ));
     }
     update();
+  }
+
+  void clearCart() {
+    productsList.clear();
+    productsMap.clear();
+    _cartItems.clear();
   }
 }

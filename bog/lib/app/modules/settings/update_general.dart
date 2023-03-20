@@ -67,40 +67,46 @@ class _UpdateGeneralInfoState extends State<UpdateGeneralInfo> {
                               label: 'Name of Organization',
                               initialValue: orgData.organisationName,
                             ),
+                            const SizedBox(height: 10),
                             PageInput(
                               hint: '',
                               label: 'Email Address',
                               initialValue: orgData.emailAddress,
                             ),
+                            const SizedBox(height: 10),
                             AppRadioButton(
                               option1: orgData.regType,
                               options: options,
                               label: 'Type of Registration',
                             ),
+                            const SizedBox(height: 10),
                             PageInput(
                               hint: '',
                               label: 'Office Telephone',
                               keyboardType: TextInputType.phone,
                               initialValue: orgData.contactNumber.toString(),
                             ),
+                            const SizedBox(height: 10),
                             PageInput(
                               hint: '',
                               label: 'Registration Number',
                               initialValue:
                                   orgData.registrationNumber.toString(),
                             ),
+                            const SizedBox(height: 10),
                             PageInput(
                               hint: '',
                               label: 'Business Address',
                               initialValue: orgData.businessAddress,
                             ),
+                            const SizedBox(height: 10),
                             PageInput(
                               hint: '',
                               label: 'Other Significant Address',
                               isTextArea: true,
                               initialValue: orgData.operationalAddress,
                             ),
-                            const SizedBox(height: 5),
+                            const SizedBox(height: 15),
                             AppButton(
                               title: 'Submit',
                               onPressed: () {

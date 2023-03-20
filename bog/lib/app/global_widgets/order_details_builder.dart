@@ -11,38 +11,46 @@ class OrderDetailsBuilder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      padding: EdgeInsets.zero,
-      itemCount: orderItems.length,
-      shrinkWrap: true,
-      itemBuilder: (context, i){
-        return Padding(
-          padding: const EdgeInsets.symmetric(vertical:2.0),
-          child: Row(
-            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                height: Get.width * 0.175,
-                width: Get.width * 0.175,
-                decoration: BoxDecoration(
-                  border: Border.all(),
-                  borderRadius: BorderRadius.circular(8),
-                  image: DecorationImage(image: NetworkImage(orderItems[i].product!.image ?? 'https://res.cloudinary.com/greenmouse-tech/image/upload/v1669563824/BOG/logo_1_1_ubgtnr.png', ),fit: BoxFit.cover)
+        padding: EdgeInsets.zero,
+        itemCount: orderItems.length,
+        shrinkWrap: true,
+        itemBuilder: (context, i) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 2.0),
+            child: Row(
+              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  height: Get.width * 0.175,
+                  width: Get.width * 0.175,
+                  decoration: BoxDecoration(
+                      border: Border.all(),
+                      borderRadius: BorderRadius.circular(8),
+                      image: DecorationImage(
+                          image: NetworkImage(
+                            orderItems[i].product!.image ??
+                                'https://res.cloudinary.com/greenmouse-tech/image/upload/v1669563824/BOG/logo_1_1_ubgtnr.png',
+                          ),
+                          fit: BoxFit.cover)),
                 ),
-              ),
-            const  SizedBox(width: 5),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [Text('Name: ${orderItems[i].product!.name}'),Text('QTY: ${orderItems[i].quantity.toString()}') ],
-              ),
-            const  Spacer(),
-              Text('Price: ${orderItems[i].amount.toString()}')
-            ],
-          ),
-        );
-    });
+                const SizedBox(width: 5),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                        width: Get.width * 0.5,
+                        child: Text('Name: ${orderItems[i].product!.name}')),
+                    Text('QTY: ${orderItems[i].quantity.toString()}')
+                  ],
+                ),
+                const Spacer(),
+                Text('Price: ${orderItems[i].amount.toString()}')
+              ],
+            ),
+          );
+        });
   }
 }
-
 
 class FeeSection extends StatelessWidget {
   final String leading;
@@ -55,10 +63,13 @@ class FeeSection extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 4.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-       children: [
-        Text(leading),
-        Padding(padding: const EdgeInsets.symmetric(horizontal: 8 ), child: Text(content),)
-       ],
+        children: [
+          Text(leading),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: Text(content),
+          )
+        ],
       ),
     );
   }

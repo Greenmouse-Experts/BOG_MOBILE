@@ -1,3 +1,4 @@
+import 'package:bog/app/global_widgets/global_widgets.dart';
 import 'package:date_time_format/date_time_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
@@ -118,6 +119,10 @@ class CartTab extends StatelessWidget {
                                       var product =
                                           controller.productsList[index];
                                       return CartItem(
+                                        deleteItem: () {
+                                          controller.removeItem(
+                                              product.id!, product);
+                                        },
                                         itemDecrement: () {
                                           controller
                                               .cartItemDecrement(product.id!);
@@ -201,7 +206,7 @@ class CartTab extends StatelessWidget {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        "Delivery Fee :",
+                                        "Estimated Delivery Fee :",
                                         style: AppTextStyle.subtitle1.copyWith(
                                           color: Colors.black,
                                           fontSize: Get.width * 0.035,
@@ -209,7 +214,7 @@ class CartTab extends StatelessWidget {
                                         ),
                                       ),
                                       Text(
-                                        "N 5,000",
+                                        "TBD",
                                         style: AppTextStyle.subtitle1.copyWith(
                                           color: Colors.black,
                                           fontSize: Get.width * 0.035,
@@ -226,7 +231,7 @@ class CartTab extends StatelessWidget {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        "Discount :",
+                                        "Estimated Sales Tax :",
                                         style: AppTextStyle.subtitle1.copyWith(
                                           color: Colors.black,
                                           fontSize: Get.width * 0.035,
@@ -234,7 +239,7 @@ class CartTab extends StatelessWidget {
                                         ),
                                       ),
                                       Text(
-                                        "0%",
+                                        "TBD",
                                         style: AppTextStyle.subtitle1.copyWith(
                                           color: Colors.black,
                                           fontSize: Get.width * 0.035,
@@ -472,7 +477,8 @@ class CartItem extends StatelessWidget {
       this.quantity = 1,
       this.quantityChanged,
       required this.itemIncrement,
-      required this.itemDecrement})
+      required this.itemDecrement,
+      required this.deleteItem})
       : super(key: key);
 
   final String image;
@@ -482,6 +488,7 @@ class CartItem extends StatelessWidget {
   final int quantity;
   final VoidCallback itemIncrement;
   final VoidCallback itemDecrement;
+  final VoidCallback deleteItem;
   final Function(int)? quantityChanged;
 
   @override
@@ -558,9 +565,24 @@ class CartItem extends StatelessWidget {
             ),
             const SizedBox(width: 8),
             Column(
-              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
+                IconButton(
+                    onPressed: () {
+                      AppOverlay.showInfoDialog(
+                          title: 'Delete Item from Cart',
+                          buttonText: 'Delete Item',
+                          content: 'Are you sure you want to delete this item?',
+                          doubleFunction: true,
+                          onPressed: () {
+                            deleteItem();
+                          });
+                    },
+                    icon: const Icon(
+                      Icons.delete,
+                      color: Colors.red,
+                    )),
                 ItemCounter(
                   itemDecrement: () {
                     itemDecrement();

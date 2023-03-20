@@ -358,6 +358,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.0+1"
+  flutter_file_downloader:
+    dependency: "direct main"
+    description:
+      name: flutter_file_downloader
+      sha256: "55be61a6bde21ec6225f220f0ba38ab58b925c082f522dab8238e9ef0c2ed19a"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.0+1"
   flutter_iconly:
     dependency: "direct main"
     description:
@@ -398,6 +406,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.7"
+  flutter_pdfview:
+    dependency: "direct main"
+    description:
+      name: flutter_pdfview
+      sha256: "1a0e065689f2e0f4a795aef8ddfc3bb40387f24333290b62b4d3f1dfd6bef5fa"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.9"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:
@@ -881,10 +897,10 @@ packages:
     dependency: transitive
     description:
       name: syncfusion_flutter_core
-      sha256: ab3eac31638e80663eae19c71e362012e1e2f67dfd527dc5c07d9397cd4238f2
+      sha256: "3979f0b1c5a97422cadae52d476c21fa3e0fb671ef51de6cae1d646d8b99fe1f"
       url: "https://pub.dev"
     source: hosted
-    version: "20.4.53"
+    version: "20.4.54"
   synchronized:
     dependency: transitive
     description:

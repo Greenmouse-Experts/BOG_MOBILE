@@ -1,3 +1,5 @@
+// import 'dart:io';
+
 import 'dart:io';
 
 import 'package:bog/app/data/model/order_details.dart';
@@ -5,7 +7,11 @@ import 'package:bog/app/data/providers/api_response.dart';
 import 'package:bog/app/global_widgets/app_loader.dart';
 import 'package:bog/app/global_widgets/custom_app_bar.dart';
 import 'package:bog/app/global_widgets/global_widgets.dart';
+import 'package:bog/app/modules/checkout/pdf_page.dart';
+
+import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_file_downloader/flutter_file_downloader.dart';
 
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -27,20 +33,23 @@ class AppReceipt extends StatefulWidget {
 
 class _AppReceiptState extends State<AppReceipt> {
   // var pageController = PageController();
- late Future<ApiResponse> orderFuture;
+  late Future<ApiResponse> orderFuture;
   @override
   void initState() {
     final controller = Get.find<HomeController>();
-   orderFuture = controller.userRepo.getData('/orders/order-detail/${widget.id}');
+    orderFuture =
+        controller.userRepo.getData('/orders/order-detail/${widget.id}');
     super.initState();
   }
+
+  double? _progress;
+
   @override
   Widget build(BuildContext context) {
-    //  var title = Get.arguments as String?;
     var width = Get.width;
     final Size size = MediaQuery.of(context).size;
     double multiplier = 25 * size.height * 0.01;
-   
+
     return AppBaseView(
       child: GetBuilder<HomeController>(
           id: 'OrderDetails',
@@ -49,118 +58,200 @@ class _AppReceiptState extends State<AppReceipt> {
               backgroundColor: AppColors.backgroundVariant2,
               body: SizedBox(
                 width: Get.width,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                  const  CustomAppBar(title: 'Order Details'),
-                  FutureBuilder<ApiResponse>(
-                    future: orderFuture ,
-                    builder: (context,snapshot){
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const CustomAppBar(title: 'Order Details'),
+                      FutureBuilder<ApiResponse>(
+                          future: orderFuture,
+                          builder: (context, snapshot) {
                             if (snapshot.connectionState ==
-                                            ConnectionState.done &&
-                                        snapshot.data!.isSuccessful) {
-              
-                                final orderDetail =  OrderDetailsModel.fromJson(snapshot.data!.data);
-                              
-                                          return   Padding(
-                      padding: EdgeInsets.only(
-                          right: width * 0.05, left: width * 0.045, top: 10),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            
-                                 'Order ID: ${orderDetail.orderSlug}',
-                            style: AppTextStyle.subtitle1.copyWith(
-                                fontSize: multiplier * 0.07,
-                                color: Colors.black,
-                                fontWeight: FontWeight.w600),
-                            textAlign: TextAlign.center,
-                          ),
-                      //  const   SizedBox(height: 5),
-                      //   // PageInput(hint: 'Leave review', label: 'Order Review', isTextArea: true, controller: controller.orderReview,),
-                      //       Container(
-                      //         padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 6),
-                      //         decoration: BoxDecoration(borderRadius: BorderRadius.circular(5),
-                      //          color: AppColors.primary.withOpacity(0.25)),
-                      //         child: Text(                  
-                      //              'Status: ${orderDetail.status}',
-                      //         style: AppTextStyle.subtitle1.copyWith(
-                      //             fontSize: multiplier * 0.07,
-                      //             color: AppColors.primary,
-                      //             fontWeight: FontWeight.w600),
-                      //         textAlign: TextAlign.center,
-                      //                                 ),
-                      //       ),
-                             const   SizedBox(height: 5),
-                          const  Text('Item(s)'),
-                              const   SizedBox(height: 5),
-                          OrderDetailsBuilder(orderItems: orderDetail.orderItems!,),
-                          Divider(
-                      thickness: 1,
-                      color: AppColors.grey.withOpacity(0.1),
-                    ),
-                    FeeSection(leading: 'Sub Total', content: '₦ ${orderDetail.totalAmount}'),
-                    FeeSection(leading: 'Delivery Fee', content: '₦ ${orderDetail.deliveryFee}'),
-                    FeeSection(leading: 'Discount', content: '₦ ${orderDetail.discount}'),
-                     Divider(
-                      thickness: 1,
-                      color: AppColors.grey.withOpacity(0.1),
-                    ),
-                    FeeSection(leading: 'Order Total', content: '₦ ${orderDetail.totalAmount}'),
-                  const  SizedBox(height: 5),
-                      Text(                        
-                                 'Transaction Reference',
-                            style: AppTextStyle.subtitle1.copyWith(
-                                fontSize: multiplier * 0.07,
-                                color: Colors.black,
-                                fontWeight: FontWeight.w600),
-                            textAlign: TextAlign.center,
-                          ),
-                            const  SizedBox(height: 5),
-                         
-                  Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                   children: [
-                    SizedBox(
-                      width: Get.width * 0.3,
-                      child: Text('Payment Ref: ${orderDetail.orderItems![0].paymentInfo!.reference}', maxLines: 2,)),
-                    Text( DateFormat.yMd().format(orderDetail.createdAt!) ),
-                    Padding(padding: const EdgeInsets.symmetric(horizontal: 8 ), child: Text('${orderDetail.orderItems![0].paymentInfo!.amount}'),)
-                   ],
+                                    ConnectionState.done &&
+                                snapshot.data!.isSuccessful) {
+                              final orderDetail = OrderDetailsModel.fromJson(
+                                  snapshot.data!.data);
+
+                              return Padding(
+                                padding: EdgeInsets.only(
+                                    right: width * 0.05,
+                                    left: width * 0.045,
+                                    top: 10),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  // crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Center(
+                                      child: Icon(
+                                        Icons.check_circle_rounded,
+                                        size: Get.width * 0.35,
+                                        color: AppColors.primary,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 10),
+                                    Text(
+                                      'Thank You for Your Order',
+                                      style: AppTextStyle.subtitle1.copyWith(
+                                          fontSize: multiplier * 0.15,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w600),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    const SizedBox(height: 10),
+                                    Text(
+                                      'The order confimation email with details of your order and a link to track the progress has been sent to your email address.',
+                                      style: AppTextStyle.subtitle1.copyWith(
+                                          fontSize: multiplier * 0.07,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.normal),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    const SizedBox(height: 10),
+                                    Text(
+                                      'Order ID: ${orderDetail.orderSlug}',
+                                      style: AppTextStyle.subtitle1.copyWith(
+                                          fontSize: multiplier * 0.07,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w600),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    const SizedBox(height: 5),
+                                    const Text('Item(s)'),
+                                    const SizedBox(height: 5),
+                                    OrderDetailsBuilder(
+                                      orderItems: orderDetail.orderItems!,
+                                    ),
+                                    Divider(
+                                      thickness: 1,
+                                      color: AppColors.grey.withOpacity(0.1),
+                                    ),
+                                    FeeSection(
+                                        leading: 'Sub Total',
+                                        content:
+                                            '₦ ${orderDetail.totalAmount}'),
+                                    FeeSection(
+                                        leading: 'Delivery Fee',
+                                        content:
+                                            '₦ ${orderDetail.deliveryFee}'),
+                                    FeeSection(
+                                        leading: 'Discount',
+                                        content: '₦ ${orderDetail.discount}'),
+                                    Divider(
+                                      thickness: 1,
+                                      color: AppColors.grey.withOpacity(0.1),
+                                    ),
+                                    FeeSection(
+                                        leading: 'Order Total',
+                                        content:
+                                            '₦ ${orderDetail.totalAmount}'),
+                                    const SizedBox(height: 5),
+                                    Text(
+                                      'Transaction Reference',
+                                      style: AppTextStyle.subtitle1.copyWith(
+                                          fontSize: multiplier * 0.07,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w600),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    const SizedBox(height: 5),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 4.0),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          SizedBox(
+                                              width: Get.width * 0.3,
+                                              child: Text(
+                                                'Payment Ref: ${orderDetail.orderItems![0].paymentInfo!.reference}',
+                                                maxLines: 2,
+                                              )),
+                                          Text(DateFormat.yMd()
+                                              .format(orderDetail.createdAt!)),
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 8),
+                                            child: Text(
+                                                '${orderDetail.orderItems![0].paymentInfo!.amount}'),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(height: 5),
+                                    Center(
+                                      child: _progress != null
+                                          ? const CircularProgressIndicator(
+                                              color: AppColors.primary,
+                                            )
+                                          : AppButton(
+                                              title: 'Print Receipt',
+                                              onPressed: () {
+                                                final link =
+                                                    orderDetail.orderSlug!;
+                                                String strippedLink =
+                                                    link.replaceAll(
+                                                        RegExp(r'[^\d]+'), '');
+                                                final finalLink =
+                                                    'https://bog.greenmouseproperties.com/uploads/$strippedLink.pdf';
+                                                FileDownloader.downloadFile(
+                                                  url: finalLink,
+                                                  onProgress:
+                                                      (fileName, progress) {
+                                                    setState(() {
+                                                      _progress = progress;
+                                                    });
+                                                  },
+                                                  onDownloadCompleted: (path) {
+                                                    AppOverlay.showInfoDialog(
+                                                      title:
+                                                          'Download Complete',
+                                                      content:
+                                                          'Your receipt has downloaded successfully',
+                                                      onPressed: () {
+                                                        Get.to(() => PDFScreen(
+                                                              path: path,
+                                                            ));
+                                                        PDFView(
+                                                          filePath: path,
+                                                          enableSwipe: true,
+                                                          swipeHorizontal: true,
+                                                          autoSpacing: false,
+                                                          pageFling: false,
+                                                        );
+                                                      },
+                                                    );
+                                                    setState(() {
+                                                      _progress = null;
+                                                    });
+                                                  },
+                                                  onDownloadError:
+                                                      (errorMessage) {
+                                                    AppOverlay.showInfoDialog(
+                                                        title: errorMessage,
+                                                        content:
+                                                            'Please try again later!');
+                                                    setState(() {
+                                                      _progress = null;
+                                                    });
+                                                  },
+                                                );
+                                              },
+                                            ),
+                                    )
+                                  ],
+                                ),
+                              );
+                            } else {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.done) {
+                                return const Text('No order detail');
+                              }
+                              return const AppLoader();
+                            }
+                          }),
+                    ],
                   ),
-                ),
-                     const  SizedBox(height: 5),
-                          // Text(                        
-                          //        'Review Order',
-                          //   style: AppTextStyle.subtitle1.copyWith(
-                          //       fontSize: multiplier * 0.07,
-                          //       color: Colors.black,
-                          //       fontWeight: FontWeight.w600),
-                          //   textAlign: TextAlign.center,
-                          // ),
-                          Center(child: AppButton(title: 'Print Receipt',onPressed: () {
-                            
-                          }, ),)
-                       //   PageInput(hint: 'Leave review', label: '', isTextArea: true, controller: controller.orderReview)
-                        ],
-                      ),
-                    ) ;
-                    
-                                        }
-                  else {
-                      if (snapshot.connectionState ==
-                                          ConnectionState.done) {
-                                            return const Text('No order detail');
-                                          }
-                      return const AppLoader();
-                  }
-                  }),
-                   
-                  ],
                 ),
               ),
               bottomNavigationBar: HomeBottomWidget(
@@ -182,7 +273,11 @@ class _OrderReviewState extends State<OrderReview> {
   final reviewController = TextEditingController();
   @override
   Widget build(BuildContext context) {
- 
-    return        PageInput(hint: 'Leave review', label: '', isTextArea: true, controller: reviewController,);
+    return PageInput(
+      hint: 'Leave review',
+      label: '',
+      isTextArea: true,
+      controller: reviewController,
+    );
   }
 }

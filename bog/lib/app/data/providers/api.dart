@@ -7,6 +7,7 @@ import 'api_response.dart';
 import 'my_pref.dart';
 
 class Api {
+  static const publicKey = 'pk_test_0c79398dba746ce329d163885dd3fe5bc7e1f243';
   static const String baseUrl = 'https://bog.greenmouseproperties.com/api';
   // static const String baseUrl = 'https://bog-project-new.netlify.app';
   static const String imgUrl = 'http://imgURl';

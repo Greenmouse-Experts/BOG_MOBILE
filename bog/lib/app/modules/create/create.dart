@@ -1,17 +1,21 @@
 import 'package:bog/app/data/providers/api_response.dart';
+import 'package:bog/app/global_widgets/app_base_view.dart';
 import 'package:bog/app/global_widgets/app_loader.dart';
 import 'package:bog/app/global_widgets/bottom_widget.dart';
 import 'package:bog/app/global_widgets/global_widgets.dart';
 import 'package:bog/app/modules/create/json_form.dart';
+import 'package:bog/app/modules/create/testjson.dart';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_styles.dart';
 import '../../controllers/home_controller.dart';
+// import '../../data/model/all_service_model.dart';
+import '../../data/model/all_service_model.dart';
 import '../../data/model/get_services_model.dart';
 
 class Create extends StatefulWidget {
@@ -25,17 +29,20 @@ class Create extends StatefulWidget {
 
 class _CreateState extends State<Create> {
   // var chosen = -1;
+
+  late Future<ApiResponse> allServices;
+  late Future<ApiResponse> typeOfService;
+
+  @override
+  void initState() {
+    final controller = Get.find<HomeController>();
+    allServices = controller.userRepo.getData('/services/all');
+    typeOfService = controller.userRepo.getData('/service/type');
+    super.initState();
+  }
+
   var titleController = TextEditingController();
   var searchController = TextEditingController();
-
-  // Map<String, String> assetImage = {
-  //   "Land Surveyor": "assets/images/oneS.png",
-  //   "Construction Drawing": "assets/images/twoS.png",
-  //   "Geotechnical \nInvestigation": "assets/images/threeS.png",
-  //   "Smart Calculator": "assets/images/fourS.png",
-  //   "Building Approval": "assets/images/fiveS.png",
-  //   "Contractor": "assets/images/Group 47136.png"
-  // };
 
   List<String> titles = [
     "Land Surveyor",
@@ -55,6 +62,18 @@ class _CreateState extends State<Create> {
     "Contractor"
   ];
 
+  GetServices? searchService(List<GetServices> getServices, String id) {
+    try {
+      GetServices response = getServices.firstWhere((getService) {
+        return getService.serviceId == id;
+      });
+
+      return response;
+    } catch (e) {
+      return null;
+    }
+  }
+
   void onServceTap({required String service, required VoidCallback onTap}) {
     AppOverlay.showInfoDialog(
         title: 'Select Service Type',
@@ -69,13 +88,7 @@ class _CreateState extends State<Create> {
     final Size size = MediaQuery.of(context).size;
     double multiplier = 25 * size.height * 0.01;
 
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: const SystemUiOverlayStyle(
-          statusBarColor: AppColors.backgroundVariant2,
-          statusBarIconBrightness: Brightness.dark,
-          statusBarBrightness: Brightness.dark,
-          systemNavigationBarColor: AppColors.backgroundVariant2,
-          systemNavigationBarIconBrightness: Brightness.dark),
+    return AppBaseView(
       child: GetBuilder<HomeController>(
           id: 'Create',
           builder: (controller) {
@@ -99,7 +112,7 @@ class _CreateState extends State<Create> {
                           children: [
                             InkWell(
                               onTap: () {
-                                Navigator.pop(context);
+                                Get.back();
                               },
                               child: SvgPicture.asset(
                                 "assets/images/back.svg",
@@ -117,7 +130,7 @@ class _CreateState extends State<Create> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Text(
-                                    "Create",
+                                    "Request Service Provider",
                                     style: AppTextStyle.subtitle1.copyWith(
                                         fontSize: multiplier * 0.07,
                                         color: Colors.black,
@@ -204,8 +217,8 @@ class _CreateState extends State<Create> {
                       SizedBox(
                         height: width * 0.05,
                       ),
-                      FutureBuilder<ApiResponse>(
-                          future: controller.userRepo.getData('/service/type'),
+                      FutureBuilder<List<ApiResponse>>(
+                          future: Future.wait([allServices, typeOfService]),
                           builder: (context, snapshot) {
                             if (snapshot.connectionState ==
                                 ConnectionState.done) {
@@ -214,20 +227,37 @@ class _CreateState extends State<Create> {
                                   child: Text('An error occured'),
                                 );
                               } else if (snapshot.hasData) {
-                                print(snapshot.data!.data);
-                                final res =
-                                    snapshot.data!.data as List<dynamic>;
+                                // final allService = snapshot.data![0].data;
+                                final serviceType = snapshot.data![0].data;
 
-                                final servicesData = <GetServices>[];
-                                for (var element in res) {
-                                  servicesData
+                                final newRes = serviceType as List<dynamic>;
+
+                                final serviceTypeData = <AllService>[];
+                                for (var element in newRes) {
+                                  serviceTypeData
+                                      .add(AllService.fromJson(element));
+                                }
+
+                                final serviceType2 = snapshot.data![1].data;
+
+                                final newRes2 = serviceType2 as List<dynamic>;
+
+                                final serviceTypeData2 = <GetServices>[];
+                                for (var element in newRes2) {
+                                  serviceTypeData2
                                       .add(GetServices.fromJson(element));
                                 }
-                                print(servicesData.length);
+
+                                if (serviceTypeData.isEmpty) {
+                                  return const Center(
+                                    child:
+                                        Text('No service provider available'),
+                                  );
+                                }
                                 return SizedBox(
                                   height: Get.height * 0.62,
                                   child: GridView.builder(
-                                    itemCount: servicesData.length,
+                                    itemCount: serviceTypeData.length,
                                     gridDelegate:
                                         const SliverGridDelegateWithFixedCrossAxisCount(
                                             crossAxisCount: 2,
@@ -237,71 +267,35 @@ class _CreateState extends State<Create> {
                                     padding: const EdgeInsets.all(0),
                                     itemBuilder:
                                         (BuildContext context, int index) {
-                                      final service = servicesData[index];
+                                      final service = serviceTypeData[index];
                                       return Padding(
                                         padding: const EdgeInsets.only(
                                             top: 5, bottom: 5),
                                         child: ServiceWidget(
                                           width: width,
                                           function: () {
-                                            //  chosen = index + 1;
-                                            // controller.update(['Create']);
-                                            // titleController.text =
-                                            //     titlesToUse[index];
-                                            onServceTap(
-                                                service: service.title,
-                                                onTap: () {
-                                                  Get.off(
-                                                      JsonForm(id: service.id));
-                                                });
-                                            // Get.to(JsonForm(
-                                            //   id: service.id,
-                                            // ));
-                                            // if (titlesToUse[index] ==
-                                            //     "Land Surveyor") {
-                                            //   Get.to(() => const LandSurvey(),
-                                            //       arguments:
-                                            //           titleController.text);
-                                            // } else if (titlesToUse[index] ==
-                                            //     "Construction Drawing") {
-                                            //   Get.to(
-                                            //       () =>
-                                            //           const ConstructionDrawing(),
-                                            //       arguments:
-                                            //           titleController.text);
-                                            // } else if (titlesToUse[index] ==
-                                            //     "Geotechnical \nInvestigation") {
-                                            //   Get.to(
-                                            //       () =>
-                                            //           const GeotechnicalInvestigation(),
-                                            //       arguments:
-                                            //           titleController.text);
-                                            // } else if (titlesToUse[index] ==
-                                            //     "Smart Calculator") {
-                                            //   Get.to(
-                                            //       () =>
-                                            //           const ContractorOrSmartCalculator(),
-                                            //       arguments:
-                                            //           titleController.text);
-                                            // } else if (titlesToUse[index] ==
-                                            //     "Building Approval") {
-                                            //   Get.to(
-                                            //       () => const BuildingApproval(),
-                                            //       arguments:
-                                            //           titleController.text);
-                                            // } else if (titlesToUse[index] ==
-                                            //     "Contractor") {
-                                            //   Get.to(
-                                            //       () =>
-                                            //           const ContractorOrSmartCalculator(),
-                                            //       arguments:
-                                            //           titleController.text);
-                                            // }
+                                            final gottenService = searchService(
+                                                serviceTypeData2, service.id!);
+                                            if (gottenService == null) {
+                                              AppOverlay.showInfoDialog(
+                                                  title: 'No Service Provider',
+                                                  content:
+                                                      'No Service Providers currently available');
+                                            } else {
+                                              onServceTap(
+                                                  service:
+                                                      gottenService.title ?? '',
+                                                  onTap: () {
+                                                    // Get.to(() => AllFields());
+                                                    Get.off(JsonForm(
+                                                        id: gottenService.id ??
+                                                            ''));
+                                                  });
+                                            }
                                           },
-                                          //  asset: assetImage[titlesToUse[index]]!,
-                                          asset: service.service.icon ??
+                                          asset: service.icon ??
                                               "https://res.cloudinary.com/greenmouse-tech/image/upload/v1678743452/cgsguxufoibnah3gvz81.png",
-                                          title: service.service.name,
+                                          title: service.name ?? '',
                                           multiplier: multiplier,
                                           hasBorder: false,
                                           selectedText: searchController.text,

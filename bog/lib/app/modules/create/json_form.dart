@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:bog/app/controllers/home_controller.dart';
+import 'package:bog/app/data/model/form_builder_model.dart';
+import 'package:bog/app/data/model/form_response.dart';
 import 'package:bog/app/data/providers/api_response.dart';
 import 'package:bog/app/global_widgets/app_base_view.dart';
 import 'package:bog/app/global_widgets/app_loader.dart';
@@ -22,19 +24,18 @@ class JsonForm extends StatefulWidget {
 }
 
 class _JsonFormState extends State<JsonForm> {
-  
-
   late Future<ApiResponse> formBuilder;
   @override
   void initState() {
     final controller = Get.find<HomeController>();
-    formBuilder = controller.userRepo
-                        .getData('/service/form-builder/${widget.id}');
+    formBuilder =
+        controller.userRepo.getData('/service/form-builder/${widget.id}');
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    print(widget.id);
     // String form = json.encode({
     //   'title': 'Test Form Json Schema',
     //   'description': 'My Description',
@@ -145,7 +146,6 @@ class _JsonFormState extends State<JsonForm> {
     };
     return AppBaseView(
       child: GetBuilder<HomeController>(builder: (controller) {
-       
         return Scaffold(
           body: SingleChildScrollView(
             child: Column(
@@ -163,16 +163,38 @@ class _JsonFormState extends State<JsonForm> {
                             child: Text('An error occured'),
                           );
                         } else if (snapshot.hasData) {
-                    
                           String forms = json.encode(snapshot.data!.data);
-                          return Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: NewJsonSchema(
-                              decorations: decorations,
-                              form: forms,
-                              onChanged: (dynamic response) {
-                                response1 = response;
-                              },
+                          final ans = jsonDecode(forms);
+
+                          if (ans['formTitle'] == null) {
+                            return const Center(
+                              child: Text('No Service Provider Available'),
+                            );
+                          }
+                          final FormBuilderModel formBuilder =
+                              FormBuilderModel.fromJson(ans);
+                          final formBuilderData = formBuilder.formData!;
+                          final List<FormAnswer> pid = [];
+                          for (var i in formBuilderData) {
+                            pid.add(FormAnswer(id: i.id, value: i.placeholder));
+                          }
+                          final FormResponse ddd = FormResponse(form: pid);
+                          final formResponse = ddd.toJson();
+                          print(formResponse);
+                          return SingleChildScrollView(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: NewJsonSchema(
+                                decorations: decorations,
+                                form: forms,
+                                formResponse: formResponse,
+                                onChanged: (dynamic response) {
+                                  // response1 = response;
+                                  // print('kssk');
+                                  print(response);
+                                  // print(response1);
+                                },
+                              ),
                             ),
                           );
                         } else {

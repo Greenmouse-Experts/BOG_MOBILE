@@ -56,12 +56,14 @@ class _UpdateTaxDetailsState extends State<UpdateTaxDetails> {
                             keyboardType: TextInputType.number,
                             initialValue: taxData.vat,
                           ),
+                          const SizedBox(height: 8),
                           PageInput(
                             hint: '',
                             label: 'TAX Identification Number',
                             keyboardType: TextInputType.number,
                             initialValue: taxData.tin,
                           ),
+                          const SizedBox(height: 8),
                           PageInput(
                             hint: '',
                             label:
@@ -69,7 +71,7 @@ class _UpdateTaxDetailsState extends State<UpdateTaxDetails> {
                             isTextArea: true,
                             initialValue: taxData.relevantStatutory,
                           ),
-                          const SizedBox(height: 10),
+                          const SizedBox(height: 15),
                           AppButton(
                             title: 'Submit',
                             onPressed: () {},

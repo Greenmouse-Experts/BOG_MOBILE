@@ -78,30 +78,33 @@ class _UpdateFinancialDetailsState extends State<UpdateFinancialDetails> {
                             );
                           }).toList(),
                         ),
-                        const SizedBox(height: 5),
+                        const SizedBox(height: 10),
                         PageInput(
                           hint: '',
                           label: 'Bank Account Number',
                           keyboardType: TextInputType.number,
                           initialValue: finData.accountNumber,
                         ),
+                        const SizedBox(height: 10),
                         PageInput(
                           hint: '',
                           label: 'Bank Account Name',
                           initialValue: finData.accountName,
                         ),
+                        const SizedBox(height: 10),
                         PageInput(
                           hint: '',
                           label: 'Name and Address of References',
                           isTextArea: true,
                           initialValue: finData.bankName,
                         ),
+                        const SizedBox(height: 10),
                         PageInput(
                           hint: '',
                           label: 'Level of current Overdraft Facility',
                           initialValue: finData.overdraftFacility,
                         ),
-                        const SizedBox(height: 5),
+                        const SizedBox(height: 12),
                         AppButton(
                           title: 'Submit',
                           onPressed: () {},

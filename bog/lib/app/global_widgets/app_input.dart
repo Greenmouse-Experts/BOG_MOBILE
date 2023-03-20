@@ -86,7 +86,7 @@ class _AppInputState extends State<AppInput> {
           .copyWith(color: const Color(0xFF828282).withOpacity(.3)),
     );
 
-    var contentPadding = widget.contentPadding;
+    // var contentPadding = widget.contentPadding;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

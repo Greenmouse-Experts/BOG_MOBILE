@@ -58,6 +58,10 @@ dependencies:
   flutter_paystack: ^1.0.7
   json_to_form: ^0.0.5
   intl: ^0.17.0
+
+  flutter_file_downloader: ^1.1.0+1
+ 
+  flutter_pdfview: ^1.2.9
  
 
 dev_dependencies:

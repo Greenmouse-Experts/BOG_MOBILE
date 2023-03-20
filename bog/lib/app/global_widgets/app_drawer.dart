@@ -164,9 +164,16 @@ class _AppDrawerState extends State<AppDrawer> {
                             },
                             imageAsset: "assets/images/three1.png",
                             showArrow: true),
-                            _TextButton(imageAsset: "assets/images/four1.png", text: 'Receipt', onPressed: (){
-                              Get.to(AppReceipt(id: 'bd4cf8c4-fb38-4a32-9833-f62071384786'));
-                            }),
+                        _TextButton(
+                            text: "Receipt",
+                            onPressed: () {
+                              Get.back();
+                              Get.to(() => AppReceipt(
+                                    id: '5c991f0d-92ed-459c-b990-72c7fd9b1fd4',
+                                  ));
+                            },
+                            imageAsset: "assets/images/three1.png",
+                            showArrow: true),
                         _TextButton(
                             text: "Meetings",
                             onPressed: () {

@@ -1,7 +1,9 @@
 import 'dart:convert';
 
+import 'package:bog/app/data/model/nearest_address.dart';
 import 'package:bog/app/data/model/order_response.dart' as order_response;
 import 'package:bog/app/data/model/post_order.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -10,7 +12,9 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_styles.dart';
 import '../../controllers/home_controller.dart';
 import '../../data/model/log_in_model.dart';
+import '../../data/providers/api.dart';
 import '../../data/providers/my_pref.dart';
+import '../../global_widgets/address_picker.dart';
 import '../../global_widgets/app_base_view.dart';
 import '../../global_widgets/app_button.dart';
 import '../../global_widgets/bottom_widget.dart';
@@ -33,7 +37,7 @@ class Checkout extends StatefulWidget {
 }
 
 class _CheckoutState extends State<Checkout> {
-  var publicKey = 'pk_test_0c79398dba746ce329d163885dd3fe5bc7e1f243';
+  var publicKey = Api.publicKey;
   //pk_test_0c79398dba746ce329d163885dd3fe5bc7e1f2436Lc45b0kAAAAAG7i0eNmGK8ubUOQl3_FVlJarVb7
   final plugin = PaystackPlugin();
   String successMessage = '';
@@ -44,8 +48,10 @@ class _CheckoutState extends State<Checkout> {
   var formKey1 = GlobalKey<FormState>();
   var formKey2 = GlobalKey<FormState>();
   var formKey3 = GlobalKey<FormState>();
+
   var logInDetails = LogInModel.fromJson(jsonDecode(MyPref.logInDetail.val));
 
+  NearestAddress? deliveryFee;
   TextEditingController address = TextEditingController();
   TextEditingController city = TextEditingController();
   TextEditingController state = TextEditingController();
@@ -59,19 +65,44 @@ class _CheckoutState extends State<Checkout> {
   TextEditingController date = TextEditingController();
   TextEditingController cvv = TextEditingController();
 
+  List<NearestAddress> nearStateAddress = <NearestAddress>[];
+
   @override
   void initState() {
     plugin.initialize(publicKey: publicKey);
-
+    state.addListener(() {
+      setState(() {});
+    });
     super.initState();
+  }
+
+  Future<List<NearestAddress>> getNearestAddress(String state) async {
+    final controller = Get.find<HomeController>();
+    final response =
+        await controller.userRepo.getData('/address/view/all?q=$state');
+    final nearestAddresses = <NearestAddress>[];
+    for (var element in response.data as List<dynamic>) {
+      nearestAddresses.add(NearestAddress.fromJson(element));
+    }
+
+    setState(() {
+      nearStateAddress = nearestAddresses;
+    });
+    return nearestAddresses;
+  }
+
+  void updateDeliveryFee(String newDeliveryFee) {
+    final answer = NearestAddress.fromJson(jsonDecode(newDeliveryFee));
+    deliveryFee = answer;
   }
 
   checkout(
       {required int cost,
       required String email,
-      required HomeController controller}) async {
+      required HomeController controller,
+      required int deliveryFee}) async {
     var logInDetails = LogInModel.fromJson(jsonDecode(MyPref.logInDetail.val));
-    int price = cost * 100;
+    int price = (cost + deliveryFee) * 100;
     final List<OrderProduct> orderProducts = [];
     for (var item in controller.cartItems.values.toList()) {
       orderProducts.add(
@@ -99,11 +130,10 @@ class _CheckoutState extends State<Checkout> {
       charge: charge,
       fullscreen: true,
     );
-    print(response);
+
     if (response.status == true) {
       AppOverlay.loadingOverlay(
         asyncFunction: () async {
-          print(response);
           successMessage = 'Payment was successful. Ref: ${response.reference}';
 
           final postOrder = PostOrder(
@@ -112,18 +142,18 @@ class _CheckoutState extends State<Checkout> {
                   paymentInfo:
                       PaymentInfo(reference: response.reference!, amount: cost),
                   discount: 0,
-                  deliveryFee: 5000,
+                  deliveryFee: deliveryFee,
                   totalAmount: cost + 5000)
               .toJson();
 
-              print(postOrder);
-
           final respose = await controller.userRepo
               .postData('/orders/submit-order', postOrder);
-         
-         final order = order_response.OrderResponse.fromJson(respose.order);
-        Get.to(AppReceipt(id: order.id!));
-          //Get.to(() => AppReceipt(message: ' ${respose.isSuccessful.toString()} and ${respose}'));
+
+          if (respose.isSuccessful) {
+            final order = order_response.OrderResponse.fromJson(respose.order);
+
+            Get.to(AppReceipt(id: order.id!));
+          }
         },
       );
     } else {
@@ -170,7 +200,7 @@ class _CheckoutState extends State<Checkout> {
                           children: [
                             InkWell(
                               onTap: () {
-                                Navigator.pop(context);
+                                Get.back();
                               },
                               child: SvgPicture.asset(
                                 "assets/images/back.svg",
@@ -254,9 +284,9 @@ class _CheckoutState extends State<Checkout> {
                                     SizedBox(
                                       height: width * 0.015,
                                     ),
-                                    SizedBox(
-                                      height: width * 0.08,
-                                    ),
+                                    // SizedBox(
+                                    //   height: width * 0.08,
+                                    // ),
                                     Expanded(
                                       child: SingleChildScrollView(
                                         child: Column(
@@ -385,6 +415,21 @@ class _CheckoutState extends State<Checkout> {
                                             SizedBox(
                                               height: width * 0.1,
                                             ),
+                                            state.text.isEmpty
+                                                ? const Center(
+                                                    child: Text('Enter State'))
+                                                : Padding(
+                                                    padding: const EdgeInsets
+                                                            .symmetric(
+                                                        vertical: 8.0,
+                                                        horizontal: 12),
+                                                    child: AddressPicker(
+                                                      updateDeliveryFee,
+                                                      textController: state,
+                                                      controller: controller,
+                                                    ),
+                                                  ),
+                                            const SizedBox(height: 10),
                                             Padding(
                                               padding: EdgeInsets.only(
                                                   left: width * 0.04,
@@ -465,6 +510,12 @@ class _CheckoutState extends State<Checkout> {
                                                       var product = controller
                                                           .productsList[index];
                                                       return CartItem(
+                                                        deleteItem: () {
+                                                          controller.removeItem(
+                                                              product.id!,
+                                                              product);
+                                                          Get.back();
+                                                        },
                                                         itemDecrement: () {
                                                           controller
                                                               .cartItemDecrement(
@@ -558,7 +609,7 @@ class _CheckoutState extends State<Checkout> {
                                                                 .spaceBetween,
                                                         children: [
                                                           Text(
-                                                            "Delivery Fee :",
+                                                            "Estimated Delivery Fee :",
                                                             style: AppTextStyle
                                                                 .subtitle1
                                                                 .copyWith(
@@ -573,7 +624,11 @@ class _CheckoutState extends State<Checkout> {
                                                             ),
                                                           ),
                                                           Text(
-                                                            "N 5,000",
+                                                            deliveryFee == null
+                                                                ? '0'
+                                                                : deliveryFee!
+                                                                    .charge
+                                                                    .toString(),
                                                             style: AppTextStyle
                                                                 .subtitle1
                                                                 .copyWith(
@@ -599,7 +654,7 @@ class _CheckoutState extends State<Checkout> {
                                                                 .spaceBetween,
                                                         children: [
                                                           Text(
-                                                            "Discount :",
+                                                            "Estimated Sales Tax :",
                                                             style: AppTextStyle
                                                                 .subtitle1
                                                                 .copyWith(
@@ -689,6 +744,12 @@ class _CheckoutState extends State<Checkout> {
                                                           checkout(
                                                             cost: controller
                                                                 .subTotalPrice,
+                                                            deliveryFee:
+                                                                deliveryFee ==
+                                                                        null
+                                                                    ? 5000
+                                                                    : deliveryFee!
+                                                                        .charge!,
                                                             email: logInDetails
                                                                 .email!,
                                                             controller:

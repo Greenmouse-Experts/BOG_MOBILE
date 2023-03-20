@@ -2,12 +2,14 @@ import 'dart:convert';
 import 'package:bog/app/global_widgets/json_form_builder/simple_file.dart';
 import 'package:flutter/material.dart';
 
+import '../app_button.dart';
 import './simple_forms/simple_text.dart';
-import './simple_forms/simple_checkbox.dart';
+// import './simple_forms/simple_checkbox.dart';
 import './simple_forms/simple_radios.dart';
 // import './simple_forms/simple_select.dart';
 import './simple_forms/simple_date.dart';
-import 'simple_forms/simple_text_area.dart';
+import 'simple_forms/simple_checkbox.dart';
+import 'simple_forms/simple_select.dart';
 
 class NewJsonSchema extends StatefulWidget {
   const NewJsonSchema({
@@ -23,6 +25,7 @@ class NewJsonSchema extends StatefulWidget {
     this.keyboardTypes = const {},
     this.buttonSave,
     this.actionSave,
+    required this.formResponse,
   });
 
   final Map errorMessages;
@@ -31,6 +34,7 @@ class NewJsonSchema extends StatefulWidget {
   final Map keyboardTypes;
   final String? form;
   final Map? formMap;
+  final Map formResponse;
   final double? padding;
   final Widget? buttonSave;
   final Function? actionSave;
@@ -44,9 +48,15 @@ class NewJsonSchema extends StatefulWidget {
 
 class _CoreFormState extends State<NewJsonSchema> {
   final dynamic formGeneral;
-
+  late dynamic formAnswer;
   late int radioValue;
   _CoreFormState(this.formGeneral);
+
+  @override
+  initState() {
+    formAnswer = widget.formResponse;
+    super.initState();
+  }
 
   List<Widget> jsonToForm() {
     List<Widget> listWidget = [];
@@ -65,47 +75,68 @@ class _CoreFormState extends State<NewJsonSchema> {
 
     for (var count = 0; count < formGeneral['formData'].length; count++) {
       Map item = formGeneral['formData'][count];
+      final answer = formAnswer['form'][count];
 
+      // print(widget.formResponse);
+      // print(formAnswer);
+      // print('akos');
       if (item['inputType'] == "text" ||
           item['inputType'] == "button" ||
           item['inputType'] == "number" ||
-          item['inputType'] == "TextInput") {
-        listWidget.add(SimpleText(
-          item: item,
-          onChange: onChange,
-          position: count,
-          decorations: widget.decorations,
-          errorMessages: widget.errorMessages,
-          validations: widget.validations,
-          keyboardTypes: widget.keyboardTypes,
+          item['inputType'] == "paragraph" ||
+          item['inputType'] == 'textarea' ||
+          item['inputType'] == "header") {
+        listWidget.add(Padding(
+          padding: const EdgeInsets.all(4),
+          child: SimpleTexts(
+            answer: answer,
+            item: item,
+            onChange: onChange,
+            position: count,
+            decorations: widget.decorations,
+            errorMessages: widget.errorMessages,
+            validations: widget.validations,
+            keyboardTypes: widget.keyboardTypes,
+          ),
         ));
       }
 
-      if ( item['inputType'] == "textarea" ){
-        listWidget.add(SimpleTextArea(item: item, onChange: onChange, position: count));
-      }
+      // if (item['inputType'] == "textarea") {
+      //   listWidget.add(Padding(
+      //     padding: const EdgeInsets.all(4),
+      //     child:
+      //         SimpleTextArea(item: item, onChange: onChange, position: count),
+      //   ));
+      // }
 
       if (item['inputType'] == "radio-group") {
-        listWidget.add(SimpleRadios(
-          item: item,
-          onChange: onChangeRadio,
-          position: count,
-          decorations: widget.decorations,
-          errorMessages: widget.errorMessages,
-          validations: widget.validations,
-          keyboardTypes: widget.keyboardTypes,
+        listWidget.add(Padding(
+          padding: const EdgeInsets.all(4),
+          child: SimpleRadio(
+            item: item,
+            answer: answer,
+            onChange: onChange,
+            position: count,
+            decorations: widget.decorations,
+            errorMessages: widget.errorMessages,
+            validations: widget.validations,
+            keyboardTypes: widget.keyboardTypes,
+          ),
         ));
       }
 
       if (item['inputType'] == "file") {
-        listWidget.add(SimpleFile(
-          item: item,
-          onChange: onChangeRadio,
-          position: count,
-          decorations: widget.decorations,
-          errorMessages: widget.errorMessages,
-          validations: widget.validations,
-          keyboardTypes: widget.keyboardTypes,
+        listWidget.add(Padding(
+          padding: const EdgeInsets.all(4),
+          child: SimpleFile(
+            item: item,
+            onChange: onChange,
+            position: count,
+            decorations: widget.decorations,
+            errorMessages: widget.errorMessages,
+            validations: widget.validations,
+            keyboardTypes: widget.keyboardTypes,
+          ),
         ));
       }
 
@@ -122,38 +153,49 @@ class _CoreFormState extends State<NewJsonSchema> {
       // }
 
       if (item['inputType'] == "checkbox-group") {
-        listWidget.add(SimpleListCheckbox(
-          item: item,
-          onChange: onChange,
-          position: count,
-          decorations: widget.decorations,
-          errorMessages: widget.errorMessages,
-          validations: widget.validations,
-          keyboardTypes: widget.keyboardTypes,
+        listWidget.add(Padding(
+          padding: const EdgeInsets.all(4),
+          child: SimpleListCheckbox(
+            answer: answer,
+            item: item,
+            onChange: onChange,
+            position: count,
+            decorations: widget.decorations,
+            errorMessages: widget.errorMessages,
+            validations: widget.validations,
+            keyboardTypes: widget.keyboardTypes,
+          ),
         ));
       }
 
-      // if (item['inputType'] == "select") {
-      //   listWidget.add(SimpleSelect(
-      //     item: item,
-      //     onChange: onChange,
-      //     position: count,
-      //     decorations: widget.decorations,
-      //     errorMessages: widget.errorMessages,
-      //     validations: widget.validations,
-      //     keyboardTypes: widget.keyboardTypes,
-      //   ));
-      // }
+      if (item['inputType'] == "select") {
+        listWidget.add(Padding(
+          padding: const EdgeInsets.all(4),
+          child: SimpleSelects(
+            answer: answer,
+            item: item,
+            onChange: onChange,
+            position: count,
+            decorations: widget.decorations,
+            errorMessages: widget.errorMessages,
+            validations: widget.validations,
+            keyboardTypes: widget.keyboardTypes,
+          ),
+        ));
+      }
 
       if (item['inputType'] == "date") {
-        listWidget.add(SimpleDate(
-          item: item,
-          onChange: onChangeDate,
-          position: count,
-          decorations: widget.decorations,
-          errorMessages: widget.errorMessages,
-          validations: widget.validations,
-          keyboardTypes: widget.keyboardTypes,
+        listWidget.add(Padding(
+          padding: const EdgeInsets.all(4),
+          child: SimpleDate(
+            item: item,
+            onChange: onChangeDate,
+            position: count,
+            decorations: widget.decorations,
+            errorMessages: widget.errorMessages,
+            validations: widget.validations,
+            keyboardTypes: widget.keyboardTypes,
+          ),
         ));
       }
     }
@@ -176,22 +218,23 @@ class _CoreFormState extends State<NewJsonSchema> {
   }
 
   void _handleChanged() {
-    widget.onChanged(formGeneral);
+    widget.onChanged(formAnswer);
   }
 
   void onChange(int position, dynamic value) {
     setState(() {
-      formGeneral['fields'][position]['value'] = value;
+      formAnswer['form'][position]['value'] = value;
+      // print(value);
       _handleChanged();
     });
   }
 
-  void onChangeRadio(int position, dynamic value) {
-    setState(() {
-      formGeneral['formData'][position]['placeholder'] = value;
-      _handleChanged();
-    });
-  }
+  // void onChangeRadio(int position, dynamic value) {
+  //   setState(() {
+  //     formAnswer['form'][position]['value'] = value;
+  //     _handleChanged();
+  //   });
+  // }
 
   void onChangeDate(int position, dynamic value) {
     setState(() {
@@ -212,7 +255,14 @@ class _CoreFormState extends State<NewJsonSchema> {
         padding: EdgeInsets.all(widget.padding ?? 8.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: jsonToForm(),
+          children: [
+            Column(
+              children: jsonToForm(),
+            ),
+            const AppButton(
+              title: 'Submit',
+            )
+          ],
         ),
       ),
     );

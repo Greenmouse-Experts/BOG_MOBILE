@@ -12,6 +12,7 @@ class AppRating extends StatelessWidget {
   }) : super(key: key);
 
   final double size;
+  // final String asa;
   final Function(double) onRatingUpdate;
   final double? rating;
 

@@ -4,18 +4,18 @@ import 'package:get/get.dart';
 import '../../core/theme/app_styles.dart';
 
 class PageDropButton extends StatelessWidget {
-  const PageDropButton({
-    Key? key,
-    required this.label,
-    required this.hint,
-    this.padding = const EdgeInsets.fromLTRB(5, 0, 0, 0),
-    this.validator,
-    this.items,
-    this.value,
-    this.onChanged,
-    this.bckgrndColor,
-    this.style
-  }) : super(key: key);
+  const PageDropButton(
+      {Key? key,
+      required this.label,
+      required this.hint,
+      this.padding = const EdgeInsets.fromLTRB(5, 0, 0, 0),
+      this.validator,
+      this.items,
+      this.value,
+      this.onChanged,
+      this.bckgrndColor,
+      this.style})
+      : super(key: key);
 
   final TextStyle? style;
   final String label;
@@ -38,10 +38,12 @@ class PageDropButton extends StatelessWidget {
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(left: 5),
-                    child: Text(label,style: style ?? AppTextStyle.bodyText2.copyWith(
-                      fontWeight: FontWeight.w500,
-                      color: Colors.black,
-                    )),
+                    child: Text(label,
+                        style: style ??
+                            AppTextStyle.bodyText2.copyWith(
+                              fontWeight: FontWeight.w500,
+                              color: Colors.black,
+                            )),
                   ),
                   const SizedBox(
                     height: 10,
@@ -68,18 +70,18 @@ class PageDropButton extends StatelessWidget {
 }
 
 class PageDropButtonWithoutBackground extends StatelessWidget {
-  const PageDropButtonWithoutBackground({
-    Key? key,
-    required this.label,
-    required this.hint,
-    this.padding = const EdgeInsets.fromLTRB(5, 0, 0, 0),
-    this.validator,
-    this.items,
-    this.value,
-    this.onChanged,
-    this.bckgrndColor,
-    this.style
-  }) : super(key: key);
+  const PageDropButtonWithoutBackground(
+      {Key? key,
+      required this.label,
+      required this.hint,
+      this.padding = const EdgeInsets.fromLTRB(5, 0, 0, 0),
+      this.validator,
+      this.items,
+      this.value,
+      this.onChanged,
+      this.bckgrndColor,
+      this.style})
+      : super(key: key);
 
   final TextStyle? style;
   final String label;
@@ -98,17 +100,17 @@ class PageDropButtonWithoutBackground extends StatelessWidget {
       children: [
         label.isNotEmpty
             ? Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 5),
-              child: Text(label,style: style),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-          ],
-        )
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 5),
+                    child: Text(label, style: style),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                ],
+              )
             : const SizedBox.shrink(),
         AppDropdownButtonWithoutBackground(
           value: value,
@@ -166,9 +168,11 @@ class AppDropdownButton<T> extends StatelessWidget {
       decoration: InputDecoration(
           enabledBorder: outlineInputBorder,
           border: outlineInputBorder,
-          contentPadding: padding
+          contentPadding: padding),
+      icon: const Icon(
+        Icons.arrow_drop_down,
+        color: Colors.black,
       ),
-      icon:  const Icon(Icons.arrow_drop_down,color: Colors.black,),
       dropdownColor: Colors.white,
     );
   }
@@ -219,13 +223,11 @@ class AppDropdownButtonWithoutBackground<T> extends StatelessWidget {
         decoration: InputDecoration(
             enabledBorder: outlineInputBorder,
             border: outlineInputBorder,
-            contentPadding: padding
-        ),
+            contentPadding: padding),
         iconSize: Get.height * .04,
-        icon:  Image.asset('assets/images/filter.png'),
+        icon: Image.asset('assets/images/filter.png'),
         dropdownColor: Colors.white,
       ),
     );
   }
 }
-

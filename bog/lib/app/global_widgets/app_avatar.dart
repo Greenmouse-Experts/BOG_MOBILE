@@ -1,17 +1,16 @@
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_iconly/flutter_iconly.dart';
 
 class AppAvatar extends StatelessWidget {
-  const AppAvatar({
-    Key? key,
-    this.imgUrl = '',
-    this.selectedImg,
-    this.radius = 55,
-    this.backgroundColor = const Color(0xffEEF5FE),
-    required this.name
-  }) : super(key: key);
+  const AppAvatar(
+      {Key? key,
+      this.imgUrl = '',
+      this.selectedImg,
+      this.radius = 55,
+      this.backgroundColor = const Color(0xffEEF5FE),
+      required this.name})
+      : super(key: key);
 
   final String imgUrl;
   final String? selectedImg;

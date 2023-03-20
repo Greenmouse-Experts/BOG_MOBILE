@@ -1,6 +1,6 @@
 import 'package:get_storage/get_storage.dart';
 
-class MyPref  {
+class MyPref {
   static final _box = () => GetStorage('MyPref');
 
   static final userId = ReadWriteValue('userId', '', _box);
@@ -8,9 +8,9 @@ class MyPref  {
   static final logInDetail = ReadWriteValue('logInDeatail', '', _box);
   static final userDetail = ReadWriteValue('userProfile', '', _box);
   static final bankListDetail = ReadWriteValue('bankListDeatail', '', _box);
+  static final genKyc = ReadWriteValue('genKyc', '', _box);
 
   static Future<void> clearBoxes() async {
     await _box().erase();
   }
 }
-

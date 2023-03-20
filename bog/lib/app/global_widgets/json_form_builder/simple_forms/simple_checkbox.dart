@@ -7,6 +7,7 @@ class SimpleListCheckbox extends StatefulWidget {
     Key? key,
     required this.item,
     required this.onChange,
+    required this.answer,
     required this.position,
     this.errorMessages = const {},
     this.validations = const {},
@@ -16,6 +17,7 @@ class SimpleListCheckbox extends StatefulWidget {
   final dynamic item;
   final Function onChange;
   final int position;
+  final dynamic answer;
   final Map errorMessages;
   final Map validations;
   final Map decorations;
@@ -28,20 +30,22 @@ class SimpleListCheckbox extends StatefulWidget {
 class _SimpleListCheckbox extends State<SimpleListCheckbox> {
   dynamic item;
   List<dynamic> selectItems = [];
+  dynamic answer;
 
-  String? isRequired(item, value) {
-    if (value.isEmpty) {
-      return widget.errorMessages[item['key']] ?? 'Please enter some text';
-    }
-    return null;
-  }
+  // String? isRequired(item, value) {
+  //   if (value.isEmpty) {
+  //     return widget.errorMessages[item['key']] ?? 'Please enter some text';
+  //   }
+  //   return null;
+  // }
 
   @override
   void initState() {
     super.initState();
+    answer = widget.answer;
     item = widget.item;
-    for (var i = 0; i < item['items'].length; i++) {
-      if (item['items'][i]['value'] == true) {
+    for (var i = 0; i < item['_values'].length; i++) {
+      if (item['_values'][i]['value'] == true) {
         selectItems.add(i);
       }
     }
@@ -54,21 +58,24 @@ class _SimpleListCheckbox extends State<SimpleListCheckbox> {
       checkboxes.add(Text(item['label'],
           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)));
     }
-    for (var i = 0; i < item['items'].length; i++) {
+    for (var i = 0; i < item['_values'].length; i++) {
       checkboxes.add(
         Row(
           children: <Widget>[
-            Expanded(child: Text(item['items'][i]['label'])),
+            Expanded(child: Text(item['_values'][i]['label'])),
             Checkbox(
-              value: item['items'][i]['value'],
+              //value: true,
+              value: selectItems.contains(item['_values'][i]['value']),
               onChanged: (bool? value) {
                 setState(
                   () {
-                    item['items'][i]['value'] = value;
+                    //   item['_values'][i]['value'] = value;
                     if (value!) {
-                      selectItems.add(i);
+                      selectItems.add(item['_values'][i]['value']);
+                      //  answer.add(item['_values'][i]['value']);
                     } else {
-                      selectItems.remove(i);
+                      selectItems.remove(item['_values'][i]['value']);
+                      //  answer.remove(item['_values'][i]['value']);
                     }
                     widget.onChange(widget.position, selectItems);
                     //_handleChanged();

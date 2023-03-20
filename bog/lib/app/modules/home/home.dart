@@ -63,7 +63,8 @@ class _HomeState extends State<Home> {
     final res = await controller.userRepo
         .getData('/kyc/user-kyc/${logInDetails.id}?userType=$type');
     final kyc = GenKyc.fromJson(res.data);
-    if (kyc.isKycCompleted != true) {
+    MyPref.genKyc.val = jsonEncode(kyc);
+    if (kyc.isKycCompleted == true) {
       AppOverlay.showInfoDialog(
           title: 'Kyc Not Complete',
           buttonText: 'Complete KYC',

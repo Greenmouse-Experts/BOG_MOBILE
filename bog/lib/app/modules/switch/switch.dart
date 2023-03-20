@@ -34,8 +34,9 @@ class SwitchUser extends GetView<HomeController> {
       final res = await controller.userRepo
           .getData('/kyc/user-kyc/${logInDetails.id}?userType=$type');
       final kyc = GenKyc.fromJson(res.data);
-      if (kyc.isKycCompleted != true) {
-        AppOverlay.showInfoDialog(
+      MyPref.genKyc.val = jsonEncode(kyc);
+      if (kyc.isKycCompleted == true) {
+        AppOverlay.showKycDialog(
             title: 'Kyc Not Complete',
             buttonText: 'Complete KYC',
             content:

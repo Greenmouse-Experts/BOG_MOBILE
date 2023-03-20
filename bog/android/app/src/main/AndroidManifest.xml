@@ -1,8 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.bog.app.bog">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-
+    <uses-permission android:name="android.permission.INTERNET"/> 
+    <!-- <uses-permission android:name="android.permission.INTERNET"/> -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    
    <application
        android:label="BOG"
         android:name="${applicationName}"
@@ -53,5 +56,6 @@
     <action android:name="android.intent.action.VIEW" />
     <data android:scheme="https" />
   </intent>
+ 
 </queries>
 </manifest>
