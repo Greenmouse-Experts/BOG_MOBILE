@@ -21,6 +21,10 @@ class _UpdateTaxDetailsState extends State<UpdateTaxDetails> {
   late Future<ApiResponse> getTaxInfo;
   final _formKey = GlobalKey<FormState>();
 
+  TextEditingController vatRegNum = TextEditingController();
+  TextEditingController taxIdNum = TextEditingController();
+  TextEditingController professionalBodies = TextEditingController();
+
   @override
   void initState() {
     final controller = Get.find<HomeController>();
@@ -44,6 +48,11 @@ class _UpdateTaxDetailsState extends State<UpdateTaxDetails> {
                     snapshot.data!.isSuccessful) {
                   final response = snapshot.data!.data;
                   final taxData = TaxDataModel.fromJson(response);
+
+                  vatRegNum.text = taxData.vat ?? '';
+                  taxIdNum.text = taxData.tin ?? '';
+                  professionalBodies.text = taxData.relevantStatutory ?? '';
+                  
                   return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: Form(
@@ -54,14 +63,14 @@ class _UpdateTaxDetailsState extends State<UpdateTaxDetails> {
                             hint: '',
                             label: 'VAT Registration Number',
                             keyboardType: TextInputType.number,
-                            initialValue: taxData.vat,
+                            controller: vatRegNum,
                           ),
                           const SizedBox(height: 8),
                           PageInput(
                             hint: '',
                             label: 'TAX Identification Number',
                             keyboardType: TextInputType.number,
-                            initialValue: taxData.tin,
+                            controller: taxIdNum,
                           ),
                           const SizedBox(height: 8),
                           PageInput(
@@ -69,7 +78,7 @@ class _UpdateTaxDetailsState extends State<UpdateTaxDetails> {
                             label:
                                 'List of Professional Bodies registered with',
                             isTextArea: true,
-                            initialValue: taxData.relevantStatutory,
+                            controller: professionalBodies,
                           ),
                           const SizedBox(height: 15),
                           AppButton(

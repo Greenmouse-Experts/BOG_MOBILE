@@ -23,6 +23,15 @@ class _UpdateOrganisationInfoState extends State<UpdateOrganisationInfo> {
   late Future<ApiResponse> getOrganizationInfo;
   final _formKey = GlobalKey<FormState>();
 
+  TextEditingController directorsName = TextEditingController();
+  TextEditingController directorDesignation = TextEditingController();
+  TextEditingController directorPhone = TextEditingController();
+  TextEditingController directorEmail = TextEditingController();
+  TextEditingController contactPhone = TextEditingController();
+  TextEditingController contactEmail = TextEditingController();
+  TextEditingController dateOfIncorporation = TextEditingController();
+  TextEditingController otherOperations = TextEditingController();
+
   @override
   void initState() {
     final controller = Get.find<HomeController>();
@@ -54,6 +63,15 @@ class _UpdateOrganisationInfoState extends State<UpdateOrganisationInfo> {
                       snapshot.data!.isSuccessful) {
                     final response = snapshot.data!.data;
                     final orgData = OrgInfoModel.fromJson(response);
+
+                    directorsName.text = orgData.directorFullname ?? '';
+                    directorDesignation.text = orgData.directorDesignation ?? '';
+                    directorPhone.text = orgData.directorPhone.toString();
+                    directorEmail.text = orgData.directorEmail ?? '';
+                    contactPhone.text = orgData.contactPhone.toString();
+                    contactEmail.text = orgData.contactEmail ?? '';
+                    otherOperations.text = orgData.othersOperations ?? '';
+
                     return Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Form(
@@ -72,49 +90,49 @@ class _UpdateOrganisationInfoState extends State<UpdateOrganisationInfo> {
                             const SizedBox(height: 10),
                             PageInput(
                               hint: 'Full Name',
-                              label: 'Directors Name',
-                              initialValue: orgData.directorFullname,
+                              label: 'Directors Full Name',
+                              controller: directorsName,
                             ),
                             const SizedBox(height: 10),
                             PageInput(
                               hint: '',
                               label: 'Directors Designation',
-                              initialValue: orgData.directorDesignation,
+                              controller: directorDesignation,
                             ),
                             const SizedBox(height: 10),
                             PageInput(
                               hint: '',
                               label: 'Directors Phone Number',
                               keyboardType: TextInputType.phone,
-                              initialValue: orgData.directorPhone.toString(),
+                              controller: directorPhone,
                             ),
                             const SizedBox(height: 10),
                             PageInput(
                               hint: '',
                               label: 'Directors Email',
                               keyboardType: TextInputType.emailAddress,
-                              initialValue: orgData.directorEmail,
+                              controller: directorEmail,
                             ),
                             const SizedBox(height: 10),
                             PageInput(
                               hint: '',
                               label: 'Contact Person Phone Number',
                               keyboardType: TextInputType.phone,
-                              initialValue: orgData.contactPhone.toString(),
+                              controller: contactPhone,
                             ),
                             const SizedBox(height: 10),
                             PageInput(
                               hint: '',
                               label: 'Contact Person Email',
                               keyboardType: TextInputType.emailAddress,
-                              initialValue: orgData.contactPhone.toString(),
+                              controller: contactEmail,
                             ),
                             const SizedBox(height: 10),
                             PageInput(
                               hint: '',
                               label: 'Mention Other Companies Operated',
                               isTextArea: true,
-                              initialValue: orgData.othersOperations,
+                              controller: otherOperations,
                             ),
                             const SizedBox(height: 15),
                             AppButton(title: 'Submit', onPressed: () {}),

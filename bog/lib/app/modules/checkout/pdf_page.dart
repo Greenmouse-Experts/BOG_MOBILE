@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:bog/app/global_widgets/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:get/get.dart';
@@ -8,9 +7,10 @@ import 'package:get/get.dart';
 class PDFScreen extends StatefulWidget {
   final String? path;
 
-  PDFScreen({Key? key, this.path}) : super(key: key);
+  const PDFScreen({Key? key, this.path}) : super(key: key);
 
-  _PDFScreenState createState() => _PDFScreenState();
+  @override
+  State<PDFScreen> createState() => _PDFScreenState();
 }
 
 class _PDFScreenState extends State<PDFScreen> with WidgetsBindingObserver {
@@ -45,9 +45,9 @@ class _PDFScreenState extends State<PDFScreen> with WidgetsBindingObserver {
             fitPolicy: FitPolicy.BOTH,
             preventLinkNavigation:
                 false, // if set to true the link is handled in flutter
-            onRender: (_pages) {
+            onRender: (pages) {
               setState(() {
-                pages = _pages;
+                pages = pages;
                 isReady = true;
               });
             },
@@ -61,16 +61,16 @@ class _PDFScreenState extends State<PDFScreen> with WidgetsBindingObserver {
               setState(() {
                 errorMessage = '$page: ${error.toString()}';
               });
-              // print('$page: ${error.toString()}');
+              
             },
             onViewCreated: (PDFViewController pdfViewController) {
               _controller.complete(pdfViewController);
             },
             onLinkHandler: (String? uri) {
-              // print('goto uri: $uri');
+            
             },
             onPageChanged: (int? page, int? total) {
-              // print('page change: $page/$total');
+        
               setState(() {
                 currentPage = page;
               });
@@ -87,21 +87,7 @@ class _PDFScreenState extends State<PDFScreen> with WidgetsBindingObserver {
                 )
         ],
       ),
-      // floatingActionButton: FutureBuilder<PDFViewController>(
-      //   future: _controller.future,
-      //   builder: (context, AsyncSnapshot<PDFViewController> snapshot) {
-      //     if (snapshot.hasData) {
-      //       return FloatingActionButton.extended(
-      //         label: Text("Go to ${pages! ~/ 2}"),
-      //         onPressed: () async {
-      //           await snapshot.data!.setPage(pages! ~/ 2);
-      //         },
-      //       );
-      //     }
-
-      //     return Container();
-      //   },
-      // ),
+    
     );
   }
 }

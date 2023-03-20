@@ -45,6 +45,8 @@ class UserRepository {
     return response;
   }
 
+ 
+
   Future<ApiResponse> postData(String url, dynamic body,
       {hasHeader = true}) async {
     var logInDetails = LogInModel.fromJson(jsonDecode(MyPref.logInDetail.val));
@@ -81,6 +83,12 @@ class UserRepository {
     print(response.message);
     return response;
   }
+
+   Future<ApiResponse> deleteData(String url,
+      {hasHeader = true})async{
+        final response = await api.deleteData(url, hasHeader: hasHeader);
+        return response;
+      }
 
   Future<ApiResponse> putData(String url, dynamic body,
       {hasHeader = true, sso = true}) async {

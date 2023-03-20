@@ -4,6 +4,7 @@ import 'package:bog/app/modules/settings/update_financial_data.dart';
 import 'package:bog/app/modules/settings/update_general.dart';
 import 'package:bog/app/modules/settings/update_organisation_info.dart';
 import 'package:bog/app/modules/settings/update_tax_details.dart';
+import 'package:bog/app/modules/settings/update_work_experience.dart';
 import 'package:bog/app/modules/settings/upload_documents.dart';
 import 'package:bog/core/theme/app_styles.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +30,9 @@ class KYCPage extends StatelessWidget {
    _TextButton(iconData: Icons.info, text: 'General Information', onPressed: (){ Get.to(()=>const UpdateGeneralInfo());}),
    _TextButton(iconData: Icons.info_outline_sharp, text: 'Organisational Info', onPressed: (){Get.to(()=>const UpdateOrganisationInfo());}),
    _TextButton(iconData: Icons.credit_score_outlined, text: 'Tax Details & Permit', onPressed: (){Get.to(()=>const UpdateTaxDetails());}),
-   _TextButton(iconData: Icons.work, text: 'Work/Job Execution Experience', onPressed: (){}),
+   _TextButton(iconData: Icons.work, text: 'Work/Job Execution Experience', onPressed: (){
+    Get.to(()=>  UpdateWorkExperience(isNewWork: true,));
+   }),
    _TextButton(iconData: Icons.money, text: 'Financial Data', onPressed: (){Get.to(()=>const UpdateFinancialDetails());}),
    _TextButton(iconData: Icons.upload_file, text: 'Upload Documents', onPressed: (){Get.to(()=>const UploadDocuments());})
          ],

@@ -1,3 +1,4 @@
+import 'package:bog/app/data/model/projetcs_model.dart';
 import 'package:bog/app/global_widgets/bottom_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -27,7 +28,7 @@ class _ProjectInfoState extends State<ProjectInfo> {
 
   @override
   Widget build(BuildContext context) {
-    var project = Get.arguments as ProjectListModel;
+    var project = Get.arguments as MyProjects;
     var width = Get.width;
     final Size size = MediaQuery.of(context).size;
     double multiplier = 25 * size.height * 0.01;

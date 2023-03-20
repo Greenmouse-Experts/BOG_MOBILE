@@ -10,21 +10,24 @@ import '../../../controllers/home_controller.dart';
 import '../../../data/model/my_products.dart';
 import '../../../data/providers/api_response.dart';
 
-import '../../../global_widgets/app_button.dart';
-import '../../../global_widgets/app_input.dart';
+
 
 import '../../../global_widgets/app_loader.dart';
-import '../../../global_widgets/app_ratings.dart';
-import '../../../global_widgets/item_counter.dart';
+
 import '../../../global_widgets/page_dropdown.dart';
-import '../../../global_widgets/page_input.dart';
+
 import '../../add_products/add_products.dart';
 import '../../checkout/checkout.dart';
 import '../../orders/order_details.dart';
 
-class CartTab extends StatelessWidget {
+class CartTab extends StatefulWidget {
   const CartTab({Key? key}) : super(key: key);
 
+  @override
+  State<CartTab> createState() => _CartTabState();
+}
+
+class _CartTabState extends State<CartTab> {
   @override
   Widget build(BuildContext context) {
     String search = "";
@@ -328,7 +331,7 @@ class CartTab extends StatelessWidget {
                                   ConnectionState.done &&
                               snapshot.data!.isSuccessful) {
                             final posts =
-                                MyProducts.fromJsonList(snapshot.data!.data);
+                                MyProducts.fromJsonList(snapshot.data!.data).obs;
                             if (posts.isEmpty) {
                               return SizedBox(
                                 height: Get.height * 0.7,
@@ -356,6 +359,22 @@ class CartTab extends StatelessWidget {
                               itemBuilder: (BuildContext context, int index) {
                                 return ProductItem(
                                   title: posts[index].name,
+                                  deleteProd: () async{
+                                    print(posts[index].id);
+                                    final response = await controller.userRepo.deleteData('/product/${posts[index].id}');
+
+                                    if (response.isSuccessful){
+                                      posts.removeAt(index);
+                                      setState(() {
+                                        
+                                      });
+                                      Get.back();
+                                      Get.showSnackbar(const GetSnackBar(message: 'Product Deleted Successfully', backgroundColor: Colors.green,));
+                                    } else{
+                                      Get.back();
+                                      Get.showSnackbar(const GetSnackBar(message: "Product wasn't deleted",backgroundColor: Colors.red,));
+                                    }
+                                  },
                                   subTitle: "N ${posts[index].price}",
                                   date: posts[index].createdAt,
                                   image: posts[index].image,
@@ -711,12 +730,14 @@ class ProductItem extends StatelessWidget {
     this.subTitle,
     this.date,
     this.image,
+   required this.deleteProd,
   }) : super(key: key);
 
   final String? title;
   final String? subTitle;
   final String? date;
   final String? image;
+  final VoidCallback deleteProd;
   @override
   Widget build(BuildContext context) {
     /*CachedNetworkImageProvider(
@@ -797,12 +818,24 @@ class ProductItem extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Padding(
-                  padding: EdgeInsets.only(left: Get.width * 0.015, top: 5),
-                  child: Image.asset(
-                    'assets/images/Group 47403.png',
-                    height: Get.width * 0.07,
-                    width: Get.width * 0.07,
+                InkWell(
+                  onTap: (){
+                     AppOverlay.showInfoDialog(
+                          title: 'Delete This Product',
+                          buttonText: 'Delete Product',
+                          content: 'Are you sure you want to delete this PRODUCT',
+                          doubleFunction: true,
+                          onPressed: () {
+                            deleteProd();
+                          });
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.only(left: Get.width * 0.015, top: 5),
+                    child: Image.asset(
+                      'assets/images/Group 47403.png',
+                      height: Get.width * 0.07,
+                      width: Get.width * 0.07,
+                    ),
                   ),
                 ),
                 Padding(
