@@ -41,28 +41,20 @@ class _UpdateGeneralInfoState extends State<UpdateGeneralInfo> {
   @override
   void initState() {
     final controller = Get.find<HomeController>();
-    getGenrealInfo =
-        controller.userRepo.getData('/kyc-general-info/fetch?userType=vendor');
     userType =
         controller.currentType == 'Product Partner' ? 'vendor' : 'professional';
+    getGenrealInfo =
+        controller.userRepo.getData('/kyc-general-info/fetch?userType=vendor');
+      
     super.initState();
   }
 
-  Future<GeneralInfoModel> getGenKyc() async {
-    final controller = Get.find<HomeController>();
-    final getGenrealInfoData = await controller.userRepo
-        .getData('/kyc-general-info/fetch?userType=vendor');
-
-    final response = getGenrealInfoData.data;
-    final orgData = GeneralInfoModel.fromJson(response);
-    return orgData;
-  }
 
   @override
   Widget build(BuildContext context) {
     final options = ['Incorporation', 'Registered Business Name'];
 
-    //var logInDetails = LogInModel.fromJson(jsonDecode(MyPref.logInDetail.val));
+    var logInDetails = LogInModel.fromJson(jsonDecode(MyPref.logInDetail.val));
     return AppBaseView(
         child: Scaffold(
       body: SingleChildScrollView(
@@ -172,16 +164,16 @@ class _UpdateGeneralInfoState extends State<UpdateGeneralInfo> {
                                         int.parse(officeTelController.text),
                                     "reg_type": orgData.regType,
                                     "registration_number":
-                                        regNumController.text,
+                                        int.parse(regNumController.text),
                                     "business_address":
                                         busAddressController.text,
                                     "operational_address":
                                         otherAddressController.text,
-                                    "id":
-                                        "41f31ce7-4864-446d-9a27-3a102e1690fb",
+                                    "id":logInDetails.profile!.id,
+                                        
                                     "userType": userType
                                   };
-
+                                  print(newGeneralInfo);
                                   final controller = Get.find<HomeController>();
                                   final res = await controller.userRepo
                                       .postData('/kyc-general-info/create',
@@ -189,6 +181,7 @@ class _UpdateGeneralInfoState extends State<UpdateGeneralInfo> {
                                   if (res.isSuccessful) {
                                     Get.back();
                                   } else {
+                                  
                                     Get.showSnackbar(const GetSnackBar(
                                       message: 'Error occured',
                                       backgroundColor: Colors.red,

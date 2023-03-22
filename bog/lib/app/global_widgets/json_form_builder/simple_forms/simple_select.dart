@@ -1,5 +1,4 @@
-import 'package:bog/app/global_widgets/app_drop_down_button.dart';
-import 'package:bog/core/theme/app_colors.dart';
+
 import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_styles.dart';
@@ -34,15 +33,10 @@ class SimpleSelects extends StatefulWidget {
 class _SimpleSelectsState extends State<SimpleSelects> {
   dynamic item;
   dynamic answer;
-  dynamic id;
+   dynamic id;
   dynamic initial;
 
-  // String? isRequired(item, value) {
-  //   if (value.isEmpty) {
-  //     return widget.errorMessages[item['key']] ?? 'Please enter some text';
-  //   }
-  //   return null;
-  // }
+  
 
   @override
   void initState() {

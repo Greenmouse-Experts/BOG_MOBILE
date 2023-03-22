@@ -62,7 +62,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                                 snapshot.data!.isSuccessful) {
                               final orderDetail = OrderDetailsModel.fromJson(
                                   snapshot.data!.data);
-                              print(orderDetail.orderSlug);
+                            
                               return Padding(
                                 padding: EdgeInsets.only(
                                     right: width * 0.05,
@@ -81,7 +81,6 @@ class _OrderDetailsState extends State<OrderDetails> {
                                       textAlign: TextAlign.center,
                                     ),
                                     const SizedBox(height: 5),
-                                    // PageInput(hint: 'Leave review', label: 'Order Review', isTextArea: true, controller: controller.orderReview,),
                                     Container(
                                       padding: const EdgeInsets.symmetric(
                                           vertical: 3, horizontal: 6),

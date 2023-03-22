@@ -71,9 +71,10 @@ class _AppDatePickerState extends State<AppDatePicker> {
                 lastDate: DateTime(2101));
 
             if (pickedDate != null) {
-              String formattedDate =
+             
+              final formattedDate =
                   DateFormat('yyyy-MM-dd').format(pickedDate);
-              widget.onChanged(pickedDate);
+              widget.onChanged(formattedDate);
 
               setState(() {
                 dateinput.text = formattedDate;

@@ -52,6 +52,14 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
     return newList;
   }
 
+  
+  List<MyProjects> getProjectsByCustomerStatus(
+      String status, List<MyProjects> projects) {
+    final newList =
+        projects.where((element) => element.status == status).toList();
+    return newList;
+  }
+
   @override
   Widget build(BuildContext context) {
     return GetBuilder<HomeController>(builder: (controller) {
@@ -196,13 +204,13 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
                           final pendingProjects =
                               getProjectsByStatus('pending', postsToUse);
                           final cancelledProjects =
-                              getProjectsByStatus('disapproved', postsToUse);
+                              getProjectsByCustomerStatus('completed', postsToUse);
 
                           List<Widget> contents = [
-                            getGroupedProjects(postsToUse, controller),
-                            getGroupedProjects(pendingProjects, controller),
-                            getGroupedProjects(approvedProjects, controller),
-                            getGroupedProjects(cancelledProjects, controller)
+                            getAllProjects(postsToUse, controller,),
+                            getGroupedProjects(pendingProjects, controller, isPending: true, isOngoing: false ),
+                            getGroupedProjects(approvedProjects, controller, isPending: false, isOngoing: true),
+                            getGroupedProjects(cancelledProjects, controller, isPending: false, isOngoing: true)
                           ];
 
                           return SizedBox(
@@ -899,168 +907,45 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
     });
   }
 
-  Padding getGroupedProjects(
-      List<MyProjects> postsToUse, HomeController controller) {
-    return Padding(
+
+
+  Widget getGroupedProjects(
+      List<MyProjects> postsToUse, HomeController controller, {required bool isPending, required bool isOngoing}) {
+    return postsToUse.isEmpty? const Center(child: Text('No Projects Available'),) : Padding(
         padding: const EdgeInsets.only(left: 8, right: 8),
         child: ListView.builder(
             itemCount: postsToUse.length,
             itemBuilder: (ctx, i) {
               return MyProjectWidget(
+                isCancelled: false,
+                isOngoing: isOngoing,
+                isPending: isPending,
                 id: postsToUse[i].id ?? '',
                 controller: controller,
                 projectType: postsToUse[i].projectTypes ?? '',
                 orderSlug: postsToUse[i].projectSlug ?? '',
               );
             })
-        // GridView.builder(
-        //   itemCount: postsToUse.length,
-        //   gridDelegate:
-        //       const SliverGridDelegateWithFixedCrossAxisCount(
-        //           crossAxisCount: 2,
-        //           mainAxisSpacing: 15,
-        //           crossAxisSpacing: 15),
-        //   scrollDirection: Axis.vertical,
-        //   padding: const EdgeInsets.all(0),
-        //   shrinkWrap: true,
-        //   itemBuilder: (BuildContext context, int index) {
-        //     return InkWell(
-        //       onTap: () {
-        //         Get.to(() => const ProjectDetails(),
-        //             arguments: postsToUse[index]);
-        //       },
-        //       child: Container(
-        //         width: Get.width * 0.35,
-        //         height: Get.height * 0.35,
-        //         decoration: BoxDecoration(
-        //           color: AppColors.backgroundVariant2,
-        //           borderRadius: BorderRadius.circular(10),
-        //           border: Border.all(
-        //               color:
-        //                   AppColors.grey.withOpacity(0.1),
-        //               width: 1),
-        //         ),
-        //         child: Column(
-        //           crossAxisAlignment:
-        //               CrossAxisAlignment.stretch,
-        //           children: [
-        //             Container(
-        //               height: Get.height * 0.1,
-        //               decoration: BoxDecoration(
-        //                 color:
-        //                     AppColors.grey.withOpacity(0.1),
-        //                 borderRadius:
-        //                     BorderRadius.circular(10),
-        //                 border: Border.all(
-        //                     color: AppColors.grey
-        //                         .withOpacity(0.1),
-        //                     width: 1),
-        //               ),
-        //               child: Padding(
-        //                 padding: EdgeInsets.only(
-        //                     top: Get.width * 0.01,
-        //                     left: Get.width * 0.01,
-        //                     right: Get.width * 0.01),
-        //                 child: ClipRRect(
-        //                   borderRadius:
-        //                       BorderRadius.circular(10),
-        //                   child: Image.network(
-        //                     "",
-        //                     fit: BoxFit.cover,
-        //                     color: Colors.black
-        //                         .withOpacity(0.2),
-        //                     errorBuilder: (context, error,
-        //                         stackTrace) {
-        //                       return const Icon(
-        //                         Icons.tab_rounded,
-        //                         color: AppColors.primary,
-        //                         size: 25,
-        //                       );
-        //                     },
-        //                   ),
-        //                 ),
-        //               ),
-        //             ),
-        //             SizedBox(
-        //               height: Get.width * 0.02,
-        //             ),
-        //             Padding(
-        //               padding: EdgeInsets.only(
-        //                   left: Get.width * 0.01,
-        //                   right: Get.width * 0.01),
-        //               child: Text.rich(
-        //                   style: AppTextStyle.subtitle1
-        //                       .copyWith(
-        //                           fontSize:
-        //                               multiplier * 0.065,
-        //                           color: Colors.black,
-        //                           fontWeight:
-        //                               FontWeight.w600),
-        //                   textAlign: TextAlign.start,
-        //                   maxLines: 1,
-        //                   overflow: TextOverflow.ellipsis,
-        //                   TextSpan(
-        //                       text: '',
-        //                       children:
-        //                           highlightOccurrences(
-        //                               postsToUse[index]
-        //                                   .title
-        //                                   .toString(),
-        //                               search))),
-        //             ),
-        //             SizedBox(
-        //               height: Get.width * 0.02,
-        //             ),
-        //             Padding(
-        //               padding: EdgeInsets.only(
-        //                   left: Get.width * 0.01,
-        //                   right: Get.width * 0.01),
-        //               child: Text(
-        //                 postsToUse[index]
-        //                     .projectTypes
-        //                     .toString()
-        //                     .capitalizeFirst!
-        //                     .replaceAll("_", " "),
-        //                 style: AppTextStyle.subtitle1
-        //                     .copyWith(
-        //                         fontSize:
-        //                             multiplier * 0.055,
-        //                         color: AppColors.primary,
-        //                         fontWeight:
-        //                             FontWeight.normal),
-        //                 textAlign: TextAlign.start,
-        //                 maxLines: 1,
-        //                 overflow: TextOverflow.ellipsis,
-        //               ),
-        //             ),
-        //             SizedBox(
-        //               height: Get.width * 0.02,
-        //             ),
-        //             Padding(
-        //               padding: EdgeInsets.only(
-        //                   left: Get.width * 0.01,
-        //                   right: Get.width * 0.01),
-        //               child: Text(
-        //                 postsToUse[index]
-        //                     .createdAt
-        //                     .toString(),
-        //                 style: AppTextStyle.subtitle1
-        //                     .copyWith(
-        //                         fontSize: multiplier * 0.05,
-        //                         color: AppColors.grey,
-        //                         fontWeight:
-        //                             FontWeight.normal),
-        //                 textAlign: TextAlign.start,
-        //                 maxLines: 1,
-        //                 overflow: TextOverflow.ellipsis,
-        //               ),
-        //             ),
-        //           ],
-        //         ),
-        //       ),
-        //     );
-        //   },
-        // ),
+        );
+  }
+
+  Widget getAllProjects(
+      List<MyProjects> postsToUse, HomeController controller, ) {
+    return postsToUse.isEmpty? const Center(child: Text('No Projects Available'),) :Padding(
+        padding: const EdgeInsets.only(left: 8, right: 8),
+        child: ListView.builder(
+            itemCount: postsToUse.length,
+            itemBuilder: (ctx, i) {
+              return MyProjectWidget(
+                isCancelled: postsToUse[i].approvalStatus == 'disapproved',
+                isOngoing: postsToUse[i].approvalStatus == 'approved',
+                 isPending: postsToUse[i].approvalStatus == 'pending',
+                id: postsToUse[i].id ?? '',
+                controller: controller,
+                projectType: postsToUse[i].projectTypes ?? '',
+                orderSlug: postsToUse[i].projectSlug ?? '',
+              );
+            })
         );
   }
 

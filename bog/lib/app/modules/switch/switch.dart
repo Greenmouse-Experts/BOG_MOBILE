@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+
 // import 'package:bog/app/modules/home/home.dart';
 import 'package:bog/app/modules/settings/view_kyc.dart';
 import 'package:flutter/material.dart';
@@ -37,7 +38,9 @@ class SwitchUser extends GetView<HomeController> {
       final kyc = GenKyc.fromJson(res.data);
       MyPref.genKyc.val = jsonEncode(kyc);
       MyPref.genKyc.val = jsonEncode(kyc);
+     
       if (kyc.isKycCompleted != true) {
+         MyPref.setOverlay.val = true;
         AppOverlay.showKycDialog(
             title: 'Kyc Not Complete',
             buttonText: 'Complete KYC',
@@ -170,17 +173,32 @@ class SwitchUser extends GetView<HomeController> {
                                 controller.currentType = "Client";
                                 controller.update();
                                 controller.updateNewUser("Client");
-                                if (oldUser == 'Product Partner' ||
-                                    oldUser == 'Service Partner' &&
-                                        kyc.isKycCompleted != true) {
-                                  Get.back();
-                                }
-                                Get.back();
-                                var body = {
+                                  var body = {
                                   "userType": "private_client",
                                 };
-                                var response = await controller.userRepo
+                                AppOverlay.loadingOverlay(asyncFunction: ()async{
+                                 var response = await controller.userRepo
                                     .postData("/user/switch-account", body);
+                                if (response.isSuccessful){
+                                    // var token = response.token;
+                                    //  MyPref.authToken.val = token.toString();
+                                   var logInInfo = LogInModel.fromJson(response.user);
+                                    MyPref.logInDetail.val = jsonEncode(logInInfo);
+                                    print(MyPref.setOverlay.val);
+                                   if ((oldUser == 'Product Partner' ||
+                                    oldUser == 'Service Partner') &&
+                                       ( MyPref.setOverlay.val == true)) {
+                                  Get.back();
+                                }
+                               
+                                Get.back();
+                                }
+                                });
+                                 
+
+                               
+                              
+                               
                               },
                               child: Stack(
                                 alignment: Alignment.center,
@@ -250,19 +268,28 @@ class SwitchUser extends GetView<HomeController> {
                                 controller.currentType = "Service Partner";
                                 controller.update();
                                 controller.updateNewUser("Service Partner");
+                              
+                                  var body = {
+                                  "userType": "professional",
+                                };
+                              
+                                  AppOverlay.loadingOverlay(asyncFunction: ()async{
+                                 var response = await controller.userRepo
+                                    .postData("/user/switch-account", body);
+                                if (response.isSuccessful){
+                             
+                                   var logInInfo = LogInModel.fromJson(response.user);
+                                    MyPref.logInDetail.val = jsonEncode(logInInfo);
+                                  
+                               
                                 Get.back();
+                                }
+                                });
                                 verifyKycComplete('professional', () {
                                   Get.to(() => const KYCPage());
                                 });
-                                //  Get.to(() => Home());
-                                // Navigator.of(context).push(MaterialPageRoute(
-                                //     builder: (ctx) => Home()));
-                                var body = {
-                                  "userType": "professional",
-                                };
-                                var response = await controller.userRepo
-                                    .postData("/user/switch-account", body);
-                                print(response.token);
+                               
+                              
                               },
                               child: Stack(
                                 alignment: Alignment.center,
@@ -332,15 +359,25 @@ class SwitchUser extends GetView<HomeController> {
                                 controller.currentType = "Product Partner";
                                 controller.update();
                                 controller.updateNewUser("Product Partner");
+                                 var body = {
+                                  "userType": "vendor",
+                                };
+                                 AppOverlay.loadingOverlay(asyncFunction: ()async{
+                                 var response = await controller.userRepo
+                                    .postData("/user/switch-account", body);
+                                if (response.isSuccessful){
+                                 
+                                   var logInInfo = LogInModel.fromJson(response.user);
+                                    MyPref.logInDetail.val = jsonEncode(logInInfo);
+                                  
+                            
                                 Get.back();
+                                }
+                                });
                                 verifyKycComplete('vendor', () {
                                   Get.to(() => const KYCPage());
                                 });
-                                var body = {
-                                  "userType": "vendor",
-                                };
-                                var response = await controller.userRepo
-                                    .postData("/user/switch-account", body);
+                               
                               },
                               child: Stack(
                                 alignment: Alignment.center,
@@ -415,17 +452,40 @@ class SwitchUser extends GetView<HomeController> {
                                 controller.update();
                                 controller.updateNewUser("Corporate Client");
 
-                                if (oldUser == 'Product Partner' ||
-                                    oldUser == 'Service Partner' &&
-                                        kyc.isKycCompleted != true) {
-                                  Get.back();
-                                }
-                                Get.back();
-                                var body = {
+                                   var body = {
                                   "userType": "corporate_client",
                                 };
-                                var response = await controller.userRepo
+                                AppOverlay.loadingOverlay(asyncFunction: ()async{
+                                 var response = await controller.userRepo
                                     .postData("/user/switch-account", body);
+                                if (response.isSuccessful){
+                                    // var token = response.token;
+                                    //  MyPref.authToken.val = token.toString();
+                                   var logInInfo = LogInModel.fromJson(response.user);
+                                    MyPref.logInDetail.val = jsonEncode(logInInfo);
+                                     print(MyPref.setOverlay.val);
+                                   if ((oldUser == 'Product Partner' ||
+                                    oldUser == 'Service Partner' )&&
+                                       MyPref.setOverlay.val == true) {
+                                  Get.back();
+                                }
+                               
+                                Get.back();
+                                }
+                                });
+                                 
+
+                                // if (oldUser == 'Product Partner' ||
+                                //     oldUser == 'Service Partner' &&
+                                //         kyc.isKycCompleted != true) {
+                                //   Get.back();
+                                // }
+                                // Get.back();
+                                // var body = {
+                                //   "userType": "corporate_client",
+                                // };
+                                // var response = await controller.userRepo
+                                //     .postData("/user/switch-account", body);
                               },
                               child: Stack(
                                 alignment: Alignment.center,

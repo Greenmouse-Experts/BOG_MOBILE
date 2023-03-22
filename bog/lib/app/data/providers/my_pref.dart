@@ -9,6 +9,7 @@ class MyPref {
   static final userDetail = ReadWriteValue('userProfile', '', _box);
   static final bankListDetail = ReadWriteValue('bankListDeatail', '', _box);
   static final genKyc = ReadWriteValue('genKyc', '', _box);
+  static final setOverlay = ReadWriteValue('setOverlay', false, _box);
 
   static Future<void> clearBoxes() async {
     await _box().erase();

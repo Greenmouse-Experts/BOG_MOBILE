@@ -55,6 +55,7 @@ class _JsonFormState extends State<JsonForm> {
                     future: formBuilder,
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
+                    
                         return const AppLoader();
                       } else if (snapshot.connectionState ==
                           ConnectionState.done) {
@@ -65,6 +66,9 @@ class _JsonFormState extends State<JsonForm> {
                         } else if (snapshot.hasData) {
                           String forms = json.encode(snapshot.data!.data);
                           final ans = jsonDecode(forms);
+                          print('dchsisdc');
+                          print(snapshot.data!.data);
+                          print('cnsncksnc');
                           //   print(forms);
 
                           if (ans['formTitle'] == null) {
@@ -93,7 +97,7 @@ class _JsonFormState extends State<JsonForm> {
                                     AutovalidateMode.onUserInteraction,
                                 onChanged: (dynamic response) {
                                   response1 = response;
-                                  //   print(response);
+                                    print(response);
                                 },
                                 actionSave: (data) {
                                   print(data);
@@ -109,46 +113,7 @@ class _JsonFormState extends State<JsonForm> {
                                     child: Text('Submit'),
                                   ),
                                 ),
-                                // buttonSave: Column(
-                                //   children: const [
-                                //     SizedBox(height: 10),
-                                //     AppButton(
-                                //       title: 'Submit',
-                                //       // onPressed: () {
-                                //       //   print(response1);
-                                //       // }
-                                //       // onPressed: () async {
-                                //       //   if (response1 == null) {
-                                //       //     Get.snackbar(
-                                //       //       'Incomplete',
-                                //       //       'Please fill the form above',
-                                //       //       backgroundColor: Colors.red,
-                                //       //     );
-                                //       //     return;
-                                //       //   }
-                                //       //   print(jsonEncode(response1));
-
-                                //       //   final res = await controller.userRepo
-                                //       //       .postData('/projects/request',
-                                //       //           jsonEncode(response1));
-                                //       //   if (res.isSuccessful) {
-                                //       //     Get.back();
-                                //       //     Get.showSnackbar(const GetSnackBar(
-                                //       //       message:
-                                //       //           'Service requested successfully',
-                                //       //       duration: Duration(seconds: 2),
-                                //       //     ));
-                                //       //   } else {
-                                //       //     print(res.message);
-
-                                //       //     Get.showSnackbar(const GetSnackBar(
-                                //       //       message: 'An error occured',
-                                //       //       duration: Duration(seconds: 2),
-                                //       //     ));
-                                //       //   }
-                                //       //  }
-                                //     )
-                                // ],
+                            
                               ),
                             ),
                           );

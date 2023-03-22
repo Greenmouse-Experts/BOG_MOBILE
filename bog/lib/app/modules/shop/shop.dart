@@ -1,4 +1,5 @@
 import 'package:bog/app/global_widgets/app_ratings.dart';
+import 'package:bog/app/global_widgets/page_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -46,6 +47,7 @@ class _ShopState extends State<Shop> {
             body: SizedBox(
               width: Get.width,
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Padding(
@@ -117,6 +119,10 @@ class _ShopState extends State<Shop> {
                               child: Text('All'),
                             )
                           ];
+                          List<String> dropDownItem = [
+                            'All',
+
+                          ];
                           List<Widget> contents = [];
                           contents.add(getProducts(controller, posts[0],
                               multiplier, width, true, getAllProducts));
@@ -127,23 +133,58 @@ class _ShopState extends State<Shop> {
                             }
 
                             if (element.totalProducts != 0) {
+                              dropDownItem.add(element.name!);
                               contents.add(getProducts(controller, element,
                                   multiplier, width, false, getAllProducts));
                             }
                           }
 
+                          print('bajdd');
+                          print('finoref');
+                          print(dropDownItem);
+
                           return SizedBox(
                             height: Get.height * 0.8,
-                            child: VerticalTabs(
-                              backgroundColor: AppColors.backgroundVariant2,
-                              tabBackgroundColor: AppColors.backgroundVariant2,
-                              indicatorColor: AppColors.primary,
-                              tabsShadowColor: AppColors.backgroundVariant2,
-                              tabsWidth: Get.width * 0.25,
-                              initialIndex: 0,
-                              tabs: tabs,
-                              contents: contents,
-                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                children: [
+                                  PageDropButton(
+                                      onChanged: (val){
+
+                                                         print(val);
+                                                },
+                                    label: '', hint: 'Categories',padding: const EdgeInsets.symmetric(
+                                                horizontal: 10), value: dropDownItem.first,items: 
+                                                dropDownItem.map(
+                                                    (value) {
+                                              return DropdownMenuItem<String>(
+                                              
+                                                value: value,
+                                                child: Text(value.toString()),
+                                              );
+                                            }).toList(),
+                            
+                                                ),
+                                            const    SizedBox(height: 20),
+                                                Column(
+                                                  children: [contents[0]],
+                                                )
+                                            
+                                ],
+                              ),
+                            )
+                                          ,
+                            // VerticalTabs(
+                            //   backgroundColor: AppColors.backgroundVariant2,
+                            //   tabBackgroundColor: AppColors.backgroundVariant2,
+                            //   indicatorColor: AppColors.primary,
+                            //   tabsShadowColor: AppColors.backgroundVariant2,
+                            //   tabsWidth: Get.width * 0.25,
+                            //   initialIndex: 0,
+                            //   tabs: tabs,
+                            //   contents: contents,
+                            // ),
                           );
                         } else {
                           if (snapshot.connectionState ==
@@ -210,14 +251,14 @@ class _ShopState extends State<Shop> {
                 : posts.removeWhere((e) => e.categoryId != element.id);
 
             return SizedBox(
-              height: Get.height * 0.75,
-              width: Get.width * 0.7,
+              height: Get.height * 0.73,
+              width: Get.width * 0.92,
               child: GridView.builder(
                 itemCount: posts.length,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    childAspectRatio: 4 / 5,
+                    childAspectRatio: 4/ 4.5,
                     crossAxisCount: 2,
-                    mainAxisSpacing: 5),
+                    mainAxisSpacing: 15),
                 scrollDirection: Axis.vertical,
                 padding: const EdgeInsets.all(0),
                 itemBuilder: (BuildContext context, int index) {
@@ -230,8 +271,8 @@ class _ShopState extends State<Shop> {
                             arguments: posts[index]);
                       },
                       child: Container(
-                        width: width * 0.35,
-                        height: Get.height * 0.35,
+                        width: width * 0.45,
+                        height: Get.height * 0.45,
                         decoration: BoxDecoration(
                           color: AppColors.backgroundVariant2,
                           borderRadius: BorderRadius.circular(10),
@@ -240,15 +281,15 @@ class _ShopState extends State<Shop> {
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             SizedBox(
                               height: Get.height * 0.1,
                               child: Padding(
                                 padding: EdgeInsets.only(
-                                    top: width * 0.01,
-                                    left: width * 0.01,
-                                    right: width * 0.01),
+                                    top: width * 0.03,
+                                    left: width * 0.03,
+                                    right: width * 0.03),
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10),
                                   child: Image.network(
@@ -262,7 +303,7 @@ class _ShopState extends State<Shop> {
                                     alignment: Alignment.center,
                                     errorBuilder: (context, error, stackTrace) {
                                       return Container(
-                                        width: width * 0.35,
+                                        width: width * 0.45,
                                         height: Get.height * 0.1,
                                         decoration: BoxDecoration(
                                           color: AppColors.primary,
@@ -291,7 +332,7 @@ class _ShopState extends State<Shop> {
                             ),
                             Padding(
                               padding: EdgeInsets.only(
-                                  left: width * 0.01, right: width * 0.01),
+                                  left: width * 0.03, right: width * 0.03),
                               child: Text(
                                 posts[index].name.toString(),
                                 style: AppTextStyle.subtitle1.copyWith(
@@ -307,8 +348,9 @@ class _ShopState extends State<Shop> {
                               height: width * 0.02,
                             ),
                             Padding(
+                              
                               padding: EdgeInsets.only(
-                                  left: width * 0.01, right: width * 0.01),
+                                  left: width * 0.03, right: width * 0.03),
                               child: Text(
                                 "NGN ${posts[index].price} ",
                                 // /${posts[index].unit
@@ -324,10 +366,13 @@ class _ShopState extends State<Shop> {
                             SizedBox(
                               height: width * 0.02,
                             ),
-                            FittedBox(
-                              child: AppRating(
-                                onRatingUpdate: (val) {},
-                                rating: 5,
+                            Padding(
+                              padding:  EdgeInsets.all(width * 0.03),
+                              child: FittedBox(
+                                child: AppRating(
+                                  onRatingUpdate: (val) {},
+                                  rating: 5,
+                                ),
                               ),
                             )
                             // Padding(

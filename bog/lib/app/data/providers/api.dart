@@ -25,7 +25,7 @@ class Api {
   final Dio _uploadClient = Dio(BaseOptions(
     baseUrl: uploadUrl,
     headers: {
-      'Content-Type': 'multipart/form-data;',
+      'Content-Type': 'multipart/form-data',
     },
     receiveTimeout: 10000,
   ));
@@ -67,19 +67,19 @@ class Api {
 
   Future<ApiResponse> uploadData(
     String url, {
-    bool hasHeader = false,
+   
     body,
   }) async {
     token = CancelToken();
     try {
-      var head = {
-        'Authorization': MyPref.authToken.val,
-      };
+      // var head = {
+      //   'Authorization': MyPref.authToken.val,
+      // };
       var request = await _uploadClient.request(
         url,
         data: body,
         cancelToken: token,
-        options: Options(method: 'POST', headers: hasHeader ? head : null),
+        options: Options(method: 'POST', headers:  null),
       );
 
       return ApiResponse.response(request);

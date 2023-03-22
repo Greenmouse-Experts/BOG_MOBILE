@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:bog/app/global_widgets/global_widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:dio/dio.dart' as dio;
+import 'package:dio/dio.dart' ;
 
 import '../../data/providers/api.dart';
 
@@ -35,6 +35,8 @@ class _SimpleFileState extends State<SimpleFile> {
   dynamic item;
   File? pickedFile;
   TextEditingController fileController = TextEditingController();
+
+  Dio dio = Dio();
   @override
   void initState() {
     super.initState();
@@ -64,15 +66,28 @@ class _SimpleFileState extends State<SimpleFile> {
         return null;
       },
       onFilePicked: (file) async {
+        pickedFile = file;
+        print(pickedFile!.path);
+        print('sjcoc');
         var body = {
-          "image": await dio.MultipartFile.fromFile(file.path,
-              filename: file.path.split('/').last),
+          "image": [
+                                            await MultipartFile.fromFile(
+                                                pickedFile!.path,
+                                                filename: pickedFile!.path.split('/').last,)
+                                          ],
         };
-        final formData = dio.FormData.fromMap(body);
-        final response =
-            await Api().uploadData('/upload', body: formData, hasHeader: true);
-        if (response.isSuccessful) {
+        final formData = FormData.fromMap(body);
+        print('letst');
+        final response = await dio.post('https://bog.greenmouseproperties.com/upload',data: formData);
+            
+            print('no issue');
+        if (response.statusCode == 200) {
+          print(response.data);
           widget.onChange(widget.position, response.data[0]);
+          print(response.data[0]);
+        } else{
+          print(response.statusCode);
+          print('ndlds');
         }
         pickedFile = file;
       },

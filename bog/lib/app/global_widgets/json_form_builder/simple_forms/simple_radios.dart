@@ -33,6 +33,7 @@ class SimpleRadio extends StatefulWidget {
 class _SimpleRadioState extends State<SimpleRadio> {
   dynamic answer;
   dynamic item;
+  dynamic id;
   late dynamic radioValue;
 
   String? isRequired(item, value) {
@@ -78,7 +79,9 @@ class _SimpleRadioState extends State<SimpleRadio> {
                     radioValue = value;
                     item['value'] = value;
                     answer['value'] = value;
-                    widget.onChange(widget.position, value);
+                     final resolver = widget.item['_values'] as List<dynamic>;
+                    id = resolver.firstWhere((element) => element['value'] == value);
+                    widget.onChange(widget.position, value, id['id']);
                   });
                 })
           ],
@@ -152,8 +155,9 @@ class _AppRadioButtonFormState extends State<AppRadioButtonForm> {
                 groupValue: option,
                 onChanged: (value) {
                   setState(() {
-                    widget.onChange(widget.position, value.toString());
+                    widget.onChange(widget.position, value.toString(), );
                     answer['value'] = value.toString();
+                   
                     option = value.toString();
                   });
                 },

@@ -47,6 +47,6 @@ class FormAnswer {
 
   Map<String, dynamic> toJson() => {
         "_id": id ?? 0,
-        "value": value ?? '',
+        "value": value ?? 'val',
       };
 }

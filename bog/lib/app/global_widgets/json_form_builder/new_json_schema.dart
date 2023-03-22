@@ -1,12 +1,15 @@
 import 'dart:convert';
-import 'dart:io';
+
+
+import 'package:bog/app/controllers/home_controller.dart';
 
 import 'package:bog/app/global_widgets/json_form_builder/simple_file.dart';
 import 'package:bog/app/global_widgets/json_form_builder/simple_forms/simple_header.dart';
+import 'package:bog/app/global_widgets/overlays.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-// import '../app_button.dart';
-import '../../data/providers/api.dart';
+
 import './simple_forms/simple_text.dart';
 // import './simple_forms/simple_checkbox.dart';
 import './simple_forms/simple_radios.dart';
@@ -14,7 +17,7 @@ import './simple_forms/simple_radios.dart';
 import './simple_forms/simple_date.dart';
 import 'simple_forms/simple_checkbox.dart';
 import 'simple_forms/simple_select.dart';
-import 'package:dio/dio.dart' as dio;
+
 
 class NewJsonSchema extends StatefulWidget {
   const NewJsonSchema({
@@ -55,8 +58,10 @@ class _CoreFormState extends State<NewJsonSchema> {
   final dynamic formGeneral;
   late dynamic formAnswer;
   late int radioValue;
-  List<File> fileValues = [];
-  List<int> filePosition = [];
+
+  List<int> headerInts = [];
+
+
   _CoreFormState(this.formGeneral);
   final _formKey = GlobalKey<FormState>();
 
@@ -83,8 +88,18 @@ class _CoreFormState extends State<NewJsonSchema> {
       // print(formAnswer);
       // print('akos');
 
+      // if (formAnswer['form'][count]['_id'] == 0){
+      //   formAnswer['form'].remove([count]);
+      // }
+
+
+
       if (item['inputType'] == "header") {
+        //formAnswer['form'].remove([count]);
+        headerInts.add(count);
         listWidget.add(SimpleHeader(
+          position: count,
+          onChange: onChange,
           item: item,
         ));
       }
@@ -109,13 +124,13 @@ class _CoreFormState extends State<NewJsonSchema> {
       }
 
       if (item['inputType'] == "radio-group") {
-        print(answer);
+   ;
         listWidget.add(Padding(
           padding: const EdgeInsets.all(4),
           child: SimpleRadio(
             item: item,
             answer: answer,
-            onChange: onChange,
+            onChange: onChangeOthers,
             position: count,
             decorations: widget.decorations,
             errorMessages: widget.errorMessages,
@@ -130,7 +145,7 @@ class _CoreFormState extends State<NewJsonSchema> {
           padding: const EdgeInsets.all(4),
           child: SimpleFile(
             item: item,
-            onChange: onChangeFile,
+            onChange: onChange,
             position: count,
             decorations: widget.decorations,
             errorMessages: widget.errorMessages,
@@ -194,36 +209,35 @@ class _CoreFormState extends State<NewJsonSchema> {
         children: [
           InkWell(
             onTap: () async {
-              print('object');
-              print('working');
+        
               if (_formKey.currentState!.validate()) {
-                // if (fileValues.isNotEmpty) {
-                //   print('objecdsfrt');
-                //   for (int i = 0; i < fileValues.length; i++) {
-                //     final pickedFile = fileValues[i];
-                //     final image = pickedFile;
-                //     var body = {
-                //       "image": [
-                //         await dio.MultipartFile.fromFile(pickedFile.path,
-                //             filename: pickedFile.path.split('/').last),
-                //       ],
-                //     };
-
-                //     final formData = dio.FormData.fromMap(body);
-
-                //     print('balablu');
-                //     final response = await Api()
-                //         .uploadData('/upload', body: formData, hasHeader: true);
-                //     print('dj');
-                //     if (response.isSuccessful) {
-                //       // formAnswer['form'][filePosition[i]]['value'] =
-                //       //     response.data[0];
-                //     } else {
-                //       print(response.message);
-                //     }
-                //   }
-                // }
+              
+                final controller = Get.find<HomeController>();
+     
                 widget.actionSave(formAnswer);
+            
+
+             final jsonString = jsonEncode(formAnswer);
+             final jsonMap = jsonDecode(jsonString);
+  List<dynamic> filteredForm = jsonMap["form"].where((formValue) {
+    return formValue["_id"] != 0 && formValue["value"] != "val";
+  }).toList();
+  Map<String, dynamic> newJsonMap = {"form": filteredForm};
+ 
+  AppOverlay.loadingOverlay(asyncFunction: ()async{
+           final response  = await controller.userRepo.postData('/projects/request', newJsonMap);
+     
+                if (response.isSuccessful){
+                  Get.back();
+                  Get.snackbar('Form Posted Successfully', '', backgroundColor: Colors.green);
+                } else {
+          
+                  Get.snackbar('Error occured', 'An error occurred', backgroundColor: Colors.red);
+                }
+  });
+               
+              } else {
+                Get.snackbar('Incomplete Form', 'Complete form before submitiing');
               }
             },
             child: widget.buttonSave,
@@ -247,15 +261,7 @@ class _CoreFormState extends State<NewJsonSchema> {
     });
   }
 
-  void onChangeFile(int position, File value) {
-    setState(() {
-      formAnswer['form'][position]['value'] = value;
-      fileValues.add(value);
-      filePosition.add(position);
-      // print(value);
-      _handleChanged();
-    });
-  }
+ 
 
   void onChangeOthers(int position, dynamic value, dynamic id) {
     setState(() {
