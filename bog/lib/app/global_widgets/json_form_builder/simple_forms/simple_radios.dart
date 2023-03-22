@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_styles.dart';
-// import '../../app_radio_button.dart';
+
 import '../helpers/function.dart';
 
 class SimpleRadio extends StatefulWidget {
@@ -46,32 +46,37 @@ class _SimpleRadioState extends State<SimpleRadio> {
   void initState() {
     super.initState();
     item = widget.item;
+    answer = widget.answer;
   }
 
   @override
   Widget build(BuildContext context) {
     List<Widget> radios = [];
 
-    List<String> options = [];
-
     if (Fun.labelHidden(item)) {
       radios.add(Text(item['label'],
           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)));
     }
     //  radioValue = item['_values'][0]['value'];
-    radioValue = item['placeholder'];
+
+    radioValue = item['value'];
     for (var i = 0; i < item['_values'].length; i++) {
-      options.add(item['_values'][i]['value']);
+      //options.add(item['_values'][i]['value']);
       radios.add(
         Row(
           children: <Widget>[
             Expanded(child: Text(item['_values'][i]['label'])),
             Radio<dynamic>(
+                activeColor: AppColors.primary,
+                fillColor: MaterialStateColor.resolveWith((states) {
+                  return AppColors.primary;
+                }),
                 value: item['_values'][i]['value'],
-                groupValue: radioValue ?? true,
+                groupValue: radioValue,
                 onChanged: (dynamic value) {
                   setState(() {
                     radioValue = value;
+                    item['value'] = value;
                     answer['value'] = value;
                     widget.onChange(widget.position, value);
                   });
@@ -81,27 +86,13 @@ class _SimpleRadioState extends State<SimpleRadio> {
       );
     }
 
-    return AppRadioButtonForm(
-      answer: answer,
-      position: widget.position,
-      onChange: (position, value) {
-        setState(() {
-          answer['value'] = value.toString();
-          widget.onChange(widget.position, answer['value']);
-        });
-      },
-      label: item['label'],
-      option1: item['_values'][0]['value'],
-      options: options,
+    return Container(
+      margin: const EdgeInsets.only(top: 5.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: radios,
+      ),
     );
-
-    //     Container(
-    //   margin: const EdgeInsets.only(top: 5.0),
-    //   child: Column(
-    //     crossAxisAlignment: CrossAxisAlignment.start,
-    //     children: radios,
-    //   ),
-    // );
   }
 }
 

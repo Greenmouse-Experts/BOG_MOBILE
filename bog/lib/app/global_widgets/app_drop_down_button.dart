@@ -8,13 +8,16 @@ class AppDropDownButton extends StatefulWidget {
   final List<String> options;
   final String label;
   final Function? action;
+  final Function? onChanged;
   final int? position;
+
   const AppDropDownButton(
       {super.key,
       required this.options,
       required this.label,
       this.action,
-      this.position});
+      this.position,
+      this.onChanged});
 
   @override
   State<AppDropDownButton> createState() => _AppDropDownButtonState();
@@ -46,6 +49,9 @@ class _AppDropDownButtonState extends State<AppDropDownButton> {
         );
       }).toList(),
       onChanged: (newValue) {
+        if (widget.onChanged != null) {
+          widget.onChanged!(newValue);
+        }
         if (widget.action != null) {
           widget.action!(widget.position!, newValue);
         }

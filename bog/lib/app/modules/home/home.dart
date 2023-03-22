@@ -64,7 +64,7 @@ class _HomeState extends State<Home> {
         .getData('/kyc/user-kyc/${logInDetails.id}?userType=$type');
     final kyc = GenKyc.fromJson(res.data);
     MyPref.genKyc.val = jsonEncode(kyc);
-    if (kyc.isKycCompleted == true) {
+    if (kyc.isKycCompleted != true) {
       AppOverlay.showInfoDialog(
           title: 'Kyc Not Complete',
           buttonText: 'Complete KYC',

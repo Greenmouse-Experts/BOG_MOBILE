@@ -33,7 +33,7 @@ class FormAnswer {
   });
 
   int? id;
-  String? value;
+  dynamic value;
 
   factory FormAnswer.fromRawJson(String str) =>
       FormAnswer.fromJson(json.decode(str));
@@ -41,12 +41,12 @@ class FormAnswer {
   String toRawJson() => json.encode(toJson());
 
   factory FormAnswer.fromJson(Map<String, dynamic> json) => FormAnswer(
-        id: json["_id"],
-        value: json["value"],
+        id: json["_id"] ?? 0,
+        value: json["value"] ?? '',
       );
 
   Map<String, dynamic> toJson() => {
-        "_id": id,
-        "value": value,
+        "_id": id ?? 0,
+        "value": value ?? '',
       };
 }

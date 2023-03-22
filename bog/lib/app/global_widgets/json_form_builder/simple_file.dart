@@ -1,5 +1,10 @@
+import 'dart:io';
+
 import 'package:bog/app/global_widgets/global_widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:dio/dio.dart' as dio;
+
+import '../../data/providers/api.dart';
 
 // import 'helpers/function.dart';
 
@@ -28,7 +33,8 @@ class SimpleFile extends StatefulWidget {
 
 class _SimpleFileState extends State<SimpleFile> {
   dynamic item;
-
+  File? pickedFile;
+  TextEditingController fileController = TextEditingController();
   @override
   void initState() {
     super.initState();
@@ -46,10 +52,30 @@ class _SimpleFileState extends State<SimpleFile> {
     //     ),
     //   );
     // }
-    return const PageInput(
+    return PageInput(
       hint: 'Pick a text',
-      label: 'Choose a file',
+      label: item['label'],
       isFilePicker: true,
+      controller: fileController,
+      validator: (value) {
+        if (value!.isEmpty) {
+          return "Please pick a picture to upload";
+        }
+        return null;
+      },
+      onFilePicked: (file) async {
+        var body = {
+          "image": await dio.MultipartFile.fromFile(file.path,
+              filename: file.path.split('/').last),
+        };
+        final formData = dio.FormData.fromMap(body);
+        final response =
+            await Api().uploadData('/upload', body: formData, hasHeader: true);
+        if (response.isSuccessful) {
+          widget.onChange(widget.position, response.data[0]);
+        }
+        pickedFile = file;
+      },
     );
   }
 }

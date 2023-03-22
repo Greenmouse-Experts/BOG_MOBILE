@@ -143,14 +143,16 @@ class _CheckoutState extends State<Checkout> {
                       PaymentInfo(reference: response.reference!, amount: cost),
                   discount: 0,
                   deliveryFee: deliveryFee,
-                  totalAmount: cost + 5000)
+                  totalAmount: cost)
               .toJson();
 
           final respose = await controller.userRepo
               .postData('/orders/submit-order', postOrder);
 
           if (respose.isSuccessful) {
+            controller.clearCart();
             final order = order_response.OrderResponse.fromJson(respose.order);
+            Get.back();
 
             Get.to(AppReceipt(id: order.id!));
           }
@@ -417,7 +419,8 @@ class _CheckoutState extends State<Checkout> {
                                             ),
                                             state.text.isEmpty
                                                 ? const Center(
-                                                    child: Text('Enter State'))
+                                                    child: Text(
+                                                        'Select Nearest Address'))
                                                 : Padding(
                                                     padding: const EdgeInsets
                                                             .symmetric(
@@ -718,7 +721,7 @@ class _CheckoutState extends State<Checkout> {
                                                             ),
                                                           ),
                                                           Text(
-                                                            "N ${controller.subTotalPrice + 5000}",
+                                                            "N ${controller.subTotalPrice}",
                                                             style: AppTextStyle
                                                                 .subtitle1
                                                                 .copyWith(
@@ -745,11 +748,9 @@ class _CheckoutState extends State<Checkout> {
                                                             cost: controller
                                                                 .subTotalPrice,
                                                             deliveryFee:
-                                                                deliveryFee ==
-                                                                        null
-                                                                    ? 5000
-                                                                    : deliveryFee!
-                                                                        .charge!,
+                                                                deliveryFee!
+                                                                        .charge ??
+                                                                    5000,
                                                             email: logInDetails
                                                                 .email!,
                                                             controller:

@@ -7,7 +7,9 @@ import '../../core/theme/app_styles.dart';
 
 class AppDatePicker extends StatefulWidget {
   final String label;
-  const AppDatePicker({super.key, required this.label});
+  final Function onChanged;
+  const AppDatePicker(
+      {super.key, required this.label, required this.onChanged});
 
   @override
   State<AppDatePicker> createState() => _AppDatePickerState();
@@ -43,6 +45,7 @@ class _AppDatePickerState extends State<AppDatePicker> {
         const SizedBox(height: 5),
         TextFormField(
           controller: dateinput,
+          style: const TextStyle(color: Colors.black),
           decoration: InputDecoration(
             icon: const Icon(
               Icons.calendar_today,
@@ -50,9 +53,9 @@ class _AppDatePickerState extends State<AppDatePicker> {
             ),
             border: outlineInputBorder,
             filled: true,
-            focusColor: AppColors.spanishGray,
+            focusColor: Colors.black,
             hintStyle: AppTextStyle.bodyText2.copyWith(
-              color: const Color(0xFFC4C4C4),
+              color: Colors.black,
               fontSize: Get.width * .035,
               fontWeight: FontWeight.normal,
             ),
@@ -70,6 +73,7 @@ class _AppDatePickerState extends State<AppDatePicker> {
             if (pickedDate != null) {
               String formattedDate =
                   DateFormat('yyyy-MM-dd').format(pickedDate);
+              widget.onChanged(pickedDate);
 
               setState(() {
                 dateinput.text = formattedDate;

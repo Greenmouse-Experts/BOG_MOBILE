@@ -112,14 +112,14 @@ class _OrderDetailsState extends State<OrderDetails> {
                                     FeeSection(
                                         leading: 'Sub Total',
                                         content:
-                                            '₦ ${orderDetail.totalAmount}'),
+                                            'NGN ${orderDetail.totalAmount}'),
                                     FeeSection(
                                         leading: 'Delivery Fee',
                                         content:
-                                            '₦ ${orderDetail.deliveryFee}'),
+                                            'NGN ${orderDetail.deliveryFee}'),
                                     FeeSection(
                                         leading: 'Discount',
-                                        content: '₦ ${orderDetail.discount}'),
+                                        content: 'NGN ${orderDetail.discount}'),
                                     Divider(
                                       thickness: 1,
                                       color: AppColors.grey.withOpacity(0.1),
@@ -127,7 +127,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                                     FeeSection(
                                         leading: 'Order Total',
                                         content:
-                                            '₦ ${orderDetail.totalAmount}'),
+                                            'NGN ${orderDetail.totalAmount}'),
                                     const SizedBox(height: 5),
                                     Text(
                                       'Transaction Reference',

@@ -5,11 +5,13 @@ class AppRadioButton extends StatefulWidget {
   final List<String> options;
   final String label;
   final String? option1;
+  final Function onchanged;
   const AppRadioButton(
       {super.key,
       required this.options,
       required this.label,
-      required this.option1});
+      required this.option1,
+      required this.onchanged});
 
   @override
   State<AppRadioButton> createState() => _AppRadioButtonState();
@@ -48,6 +50,7 @@ class _AppRadioButtonState extends State<AppRadioButton> {
                 value: widget.options[index],
                 groupValue: option,
                 onChanged: (value) {
+                  widget.onchanged(value);
                   setState(() {
                     option = value.toString();
                   });

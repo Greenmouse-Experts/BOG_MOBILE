@@ -9,7 +9,8 @@ import 'my_pref.dart';
 class Api {
   static const publicKey = 'pk_test_0c79398dba746ce329d163885dd3fe5bc7e1f243';
   static const String baseUrl = 'https://bog.greenmouseproperties.com/api';
-  // static const String baseUrl = 'https://bog-project-new.netlify.app';
+  static const String uploadUrl = 'https://bog.greenmouseproperties.com';
+
   static const String imgUrl = 'http://imgURl';
   CancelToken token = CancelToken();
 
@@ -17,6 +18,14 @@ class Api {
     baseUrl: baseUrl,
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    receiveTimeout: 10000,
+  ));
+
+  final Dio _uploadClient = Dio(BaseOptions(
+    baseUrl: uploadUrl,
+    headers: {
+      'Content-Type': 'multipart/form-data;',
     },
     receiveTimeout: 10000,
   ));
@@ -32,6 +41,41 @@ class Api {
         'Authorization': MyPref.authToken.val,
       };
       var request = await _client.request(
+        url,
+        data: body,
+        cancelToken: token,
+        options: Options(method: 'POST', headers: hasHeader ? head : null),
+      );
+
+      return ApiResponse.response(request);
+    } on DioError catch (e) {
+      return e.toApiError(cancelToken: token);
+    } on SocketException {
+      return ApiResponse(
+        data: null,
+        isSuccessful: false,
+        message: 'No Internet connection',
+      );
+    } on Exception catch (e) {
+      return ApiResponse(
+        data: null,
+        isSuccessful: false,
+        message: e.toString(),
+      );
+    }
+  }
+
+  Future<ApiResponse> uploadData(
+    String url, {
+    bool hasHeader = false,
+    body,
+  }) async {
+    token = CancelToken();
+    try {
+      var head = {
+        'Authorization': MyPref.authToken.val,
+      };
+      var request = await _uploadClient.request(
         url,
         data: body,
         cancelToken: token,

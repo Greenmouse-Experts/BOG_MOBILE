@@ -30,6 +30,7 @@ class SimpleListCheckbox extends StatefulWidget {
 class _SimpleListCheckbox extends State<SimpleListCheckbox> {
   dynamic item;
   List<dynamic> selectItems = [];
+  List<int> selectedIds = [];
   dynamic answer;
 
   // String? isRequired(item, value) {
@@ -72,12 +73,15 @@ class _SimpleListCheckbox extends State<SimpleListCheckbox> {
                     //   item['_values'][i]['value'] = value;
                     if (value!) {
                       selectItems.add(item['_values'][i]['value']);
+                      selectedIds.add(item['_values'][i]['id']);
                       //  answer.add(item['_values'][i]['value']);
                     } else {
                       selectItems.remove(item['_values'][i]['value']);
                       //  answer.remove(item['_values'][i]['value']);
+                      selectedIds.remove(item['_values'][i]['id']);
                     }
-                    widget.onChange(widget.position, selectItems);
+
+                    widget.onChange(widget.position, selectItems, selectedIds);
                     //_handleChanged();
                   },
                 );

@@ -1,5 +1,6 @@
 import 'package:bog/core/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:form_field_validator/form_field_validator.dart';
 
 import '../helpers/function.dart';
 
@@ -69,7 +70,7 @@ class _SimpleTextsState extends State<SimpleTexts> {
         label,
         const SizedBox(height: 5),
         if (item['inputType'] == 'number')
-          TextField(
+          TextFormField(
             style: AppTextStyle.bodyText2,
             decoration: InputDecoration(
                 border: outlineInputBorder,
@@ -77,13 +78,14 @@ class _SimpleTextsState extends State<SimpleTexts> {
                 focusedBorder: outlineInputBorder,
                 enabledBorder: outlineInputBorder),
             controller: null,
+            validator: MinLengthValidator(1, errorText: 'Enter a valid number'),
             keyboardType: TextInputType.number,
             onChanged: (value) {
               widget.onChange(widget.position, value);
             },
           ),
         if (item['inputType'] != 'number')
-          TextField(
+          TextFormField(
             style: AppTextStyle.bodyText2,
             decoration: InputDecoration(
                 border: outlineInputBorder,
@@ -92,6 +94,7 @@ class _SimpleTextsState extends State<SimpleTexts> {
                 enabledBorder: outlineInputBorder),
             controller: null,
             maxLines: item['inputType'] == 'textarea' ? 5 : 1,
+            validator: MinLengthValidator(3, errorText: 'Enter a valid text'),
             onChanged: (value) {
               widget.onChange(widget.position, value);
             },

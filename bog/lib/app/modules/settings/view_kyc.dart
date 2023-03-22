@@ -1,16 +1,16 @@
-import 'package:bog/app/global_widgets/app_base_view.dart';
-import 'package:bog/app/global_widgets/custom_app_bar.dart';
-import 'package:bog/app/modules/settings/update_financial_data.dart';
-import 'package:bog/app/modules/settings/update_general.dart';
-import 'package:bog/app/modules/settings/update_organisation_info.dart';
-import 'package:bog/app/modules/settings/update_tax_details.dart';
-import 'package:bog/app/modules/settings/update_work_experience.dart';
-import 'package:bog/app/modules/settings/upload_documents.dart';
-import 'package:bog/core/theme/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_styles.dart';
+import '../../global_widgets/app_base_view.dart';
+import '../../global_widgets/custom_app_bar.dart';
+import 'update_financial_data.dart';
+import 'update_general.dart';
+import 'update_organisation_info.dart';
+import 'update_tax_details.dart';
+import 'upload_documents.dart';
+import 'view_work_experience.dart';
 
 class KYCPage extends StatelessWidget {
   const KYCPage({super.key});
@@ -18,29 +18,56 @@ class KYCPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppBaseView(
-      child: Scaffold(
-        body: Column(
-         crossAxisAlignment: CrossAxisAlignment.start,
-         children: [
-      const CustomAppBar(title: 'KYC'),
-  //    Header(header: 'General Information', onPressed: () {
-  //      Get.to(()=>const UpdateGeneralInfo());
-  //    },) ,
-  //  const  KYCDetails(),
-   _TextButton(iconData: Icons.info, text: 'General Information', onPressed: (){ Get.to(()=>const UpdateGeneralInfo());}),
-   _TextButton(iconData: Icons.info_outline_sharp, text: 'Organisational Info', onPressed: (){Get.to(()=>const UpdateOrganisationInfo());}),
-   _TextButton(iconData: Icons.credit_score_outlined, text: 'Tax Details & Permit', onPressed: (){Get.to(()=>const UpdateTaxDetails());}),
-   _TextButton(iconData: Icons.work, text: 'Work/Job Execution Experience', onPressed: (){
-    Get.to(()=>  UpdateWorkExperience(isNewWork: true,));
-   }),
-   _TextButton(iconData: Icons.money, text: 'Financial Data', onPressed: (){Get.to(()=>const UpdateFinancialDetails());}),
-   _TextButton(iconData: Icons.upload_file, text: 'Upload Documents', onPressed: (){Get.to(()=>const UploadDocuments());})
-         ],
-        ),
-      ));
+        child: Scaffold(
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const CustomAppBar(title: 'KYC'),
+          //    Header(header: 'General Information', onPressed: () {
+          //      Get.to(()=>const UpdateGeneralInfo());
+          //    },) ,
+          //  const  KYCDetails(),
+          _TextButton(
+              iconData: Icons.info,
+              text: 'General Information',
+              onPressed: () {
+                Get.to(() => const UpdateGeneralInfo());
+              }),
+          _TextButton(
+              iconData: Icons.info_outline_sharp,
+              text: 'Organisational Info',
+              onPressed: () {
+                Get.to(() => const UpdateOrganisationInfo());
+              }),
+          _TextButton(
+              iconData: Icons.credit_score_outlined,
+              text: 'Tax Details & Permit',
+              onPressed: () {
+                Get.to(() => const UpdateTaxDetails());
+              }),
+          _TextButton(
+              iconData: Icons.work,
+              text: 'Work/Job Execution Experience',
+              onPressed: () {
+                Get.to(() => const WorkExperience());
+              }),
+          _TextButton(
+              iconData: Icons.money,
+              text: 'Financial Data',
+              onPressed: () {
+                Get.to(() => const UpdateFinancialDetails());
+              }),
+          _TextButton(
+              iconData: Icons.upload_file,
+              text: 'Upload Documents',
+              onPressed: () {
+                Get.to(() => const UploadDocuments());
+              })
+        ],
+      ),
+    ));
   }
 }
-
 
 class Header extends StatelessWidget {
   final String header;
@@ -49,15 +76,23 @@ class Header extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  Padding(
+    return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 5.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(header, style: AppTextStyle.headline5.copyWith(color: Colors.black),),
-          IconButton(onPressed: (){
-            onPressed();
-          }, icon:const Icon(Icons.edit, color: Colors.black,))
+          Text(
+            header,
+            style: AppTextStyle.headline5.copyWith(color: Colors.black),
+          ),
+          IconButton(
+              onPressed: () {
+                onPressed();
+              },
+              icon: const Icon(
+                Icons.edit,
+                color: Colors.black,
+              ))
         ],
       ),
     );
@@ -69,9 +104,12 @@ class KYCDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  Padding(
+    return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
-      child: Text('data: Paol', style: AppTextStyle.bodyText2.copyWith(fontSize: 18),),
+      child: Text(
+        'data: Paol',
+        style: AppTextStyle.bodyText2.copyWith(fontSize: 18),
+      ),
     );
   }
 }
@@ -112,7 +150,7 @@ class _TextButton extends StatelessWidget {
                   iconData,
                   size: Get.width * 0.05,
                   color: AppColors.primary,
-                 // height: Get.width * 0.05,
+                  // height: Get.width * 0.05,
                 ),
               ),
             ),

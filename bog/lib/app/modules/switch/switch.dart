@@ -33,9 +33,11 @@ class SwitchUser extends GetView<HomeController> {
           LogInModel.fromJson(jsonDecode(MyPref.logInDetail.val));
       final res = await controller.userRepo
           .getData('/kyc/user-kyc/${logInDetails.id}?userType=$type');
+
       final kyc = GenKyc.fromJson(res.data);
       MyPref.genKyc.val = jsonEncode(kyc);
-      if (kyc.isKycCompleted == true) {
+      MyPref.genKyc.val = jsonEncode(kyc);
+      if (kyc.isKycCompleted != true) {
         AppOverlay.showKycDialog(
             title: 'Kyc Not Complete',
             buttonText: 'Complete KYC',
@@ -49,8 +51,6 @@ class SwitchUser extends GetView<HomeController> {
       child: GetBuilder<HomeController>(
           id: 'Switch',
           builder: (controller) {
-            // var logInDetails =
-            //     LogInModel.fromJson(jsonDecode(MyPref.logInDetail.val));
             return Scaffold(
               backgroundColor: AppColors.backgroundVariant2,
               body: SizedBox(
@@ -164,9 +164,17 @@ class SwitchUser extends GetView<HomeController> {
                                 left: width * 0.05, right: width * 0.05),
                             child: InkWell(
                               onTap: () async {
+                                var kyc = GenKyc.fromJson(
+                                    jsonDecode(MyPref.genKyc.val));
+                                final oldUser = controller.currentType;
                                 controller.currentType = "Client";
                                 controller.update();
                                 controller.updateNewUser("Client");
+                                if (oldUser == 'Product Partner' ||
+                                    oldUser == 'Service Partner' &&
+                                        kyc.isKycCompleted != true) {
+                                  Get.back();
+                                }
                                 Get.back();
                                 var body = {
                                   "userType": "private_client",
@@ -325,7 +333,9 @@ class SwitchUser extends GetView<HomeController> {
                                 controller.update();
                                 controller.updateNewUser("Product Partner");
                                 Get.back();
-                                verifyKycComplete('vendor', () {});
+                                verifyKycComplete('vendor', () {
+                                  Get.to(() => const KYCPage());
+                                });
                                 var body = {
                                   "userType": "vendor",
                                 };
@@ -397,9 +407,19 @@ class SwitchUser extends GetView<HomeController> {
                                 left: width * 0.05, right: width * 0.05),
                             child: InkWell(
                               onTap: () async {
+                                var kyc = GenKyc.fromJson(
+                                    jsonDecode(MyPref.genKyc.val));
+                                final oldUser = controller.currentType;
                                 controller.currentType = "Corporate Client";
+
                                 controller.update();
                                 controller.updateNewUser("Corporate Client");
+
+                                if (oldUser == 'Product Partner' ||
+                                    oldUser == 'Service Partner' &&
+                                        kyc.isKycCompleted != true) {
+                                  Get.back();
+                                }
                                 Get.back();
                                 var body = {
                                   "userType": "corporate_client",

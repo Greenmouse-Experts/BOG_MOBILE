@@ -34,6 +34,7 @@ class SimpleSelects extends StatefulWidget {
 class _SimpleSelectsState extends State<SimpleSelects> {
   dynamic item;
   dynamic answer;
+  dynamic id;
   dynamic initial;
 
   // String? isRequired(item, value) {
@@ -87,7 +88,9 @@ class _SimpleSelectsState extends State<SimpleSelects> {
             );
           }).toList(),
           onChanged: (newValue) {
-            widget.onChange(widget.position, newValue);
+            final resolver = widget.item['_values'] as List<dynamic>;
+            id = resolver.firstWhere((element) => element['value'] == newValue);
+            widget.onChange(widget.position, newValue, id['id']);
 
             setState(() {
               initial = newValue!;

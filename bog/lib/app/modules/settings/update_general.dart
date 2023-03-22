@@ -1,6 +1,5 @@
-
-
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:bog/app/data/model/general_info_model.dart';
 import 'package:bog/app/global_widgets/app_base_view.dart';
@@ -14,7 +13,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../controllers/home_controller.dart';
+import '../../data/model/log_in_model.dart';
 import '../../data/providers/api_response.dart';
+import '../../data/providers/my_pref.dart';
 
 class UpdateGeneralInfo extends StatefulWidget {
   const UpdateGeneralInfo({super.key});
@@ -34,6 +35,7 @@ class _UpdateGeneralInfoState extends State<UpdateGeneralInfo> {
   TextEditingController regNumController = TextEditingController();
   TextEditingController busAddressController = TextEditingController();
   TextEditingController otherAddressController = TextEditingController();
+  late String userType;
 
   //StreamController<ApiResponse> _formController = StreamController<ApiResponse>();
   @override
@@ -41,26 +43,26 @@ class _UpdateGeneralInfoState extends State<UpdateGeneralInfo> {
     final controller = Get.find<HomeController>();
     getGenrealInfo =
         controller.userRepo.getData('/kyc-general-info/fetch?userType=vendor');
+    userType =
+        controller.currentType == 'Product Partner' ? 'vendor' : 'professional';
     super.initState();
   }
 
-
   Future<GeneralInfoModel> getGenKyc() async {
     final controller = Get.find<HomeController>();
-    final getGenrealInfoData = await
-    controller.userRepo.getData('/kyc-general-info/fetch?userType=vendor');
+    final getGenrealInfoData = await controller.userRepo
+        .getData('/kyc-general-info/fetch?userType=vendor');
+
     final response = getGenrealInfoData.data;
     final orgData = GeneralInfoModel.fromJson(response);
     return orgData;
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     final options = ['Incorporation', 'Registered Business Name'];
 
-    
+    //var logInDetails = LogInModel.fromJson(jsonDecode(MyPref.logInDetail.val));
     return AppBaseView(
         child: Scaffold(
       body: SingleChildScrollView(
@@ -74,14 +76,15 @@ class _UpdateGeneralInfoState extends State<UpdateGeneralInfo> {
                   if (snapshot.connectionState == ConnectionState.done &&
                       snapshot.data!.isSuccessful) {
                     final response = snapshot.data!.data;
-                    final orgData = GeneralInfoModel.fromJson(response);  
-                    nameOfOrgController.text = orgData.organisationName ?? '';   
+                    final orgData = GeneralInfoModel.fromJson(response);
+                    nameOfOrgController.text = orgData.organisationName ?? '';
                     emailController.text = orgData.emailAddress ?? '';
-                    officeTelController.text = orgData.contactNumber.toString() ;
-                    regNumController.text = orgData.registrationNumber.toString();
+                    officeTelController.text = orgData.contactNumber.toString();
+                    regNumController.text =
+                        orgData.registrationNumber.toString();
                     busAddressController.text = orgData.businessAddress ?? '';
-                    otherAddressController.text = orgData.operationalAddress ?? '';
-
+                    otherAddressController.text =
+                        orgData.operationalAddress ?? '';
 
                     return Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -92,20 +95,25 @@ class _UpdateGeneralInfoState extends State<UpdateGeneralInfo> {
                             PageInput(
                               hint: '',
                               label: 'Name of Organization',
-                          //    initialValue: orgData.organisationName,
-                              validator: MinLengthValidator(3,errorText: 'Enter a Valid Organization Name'),
-                              controller: nameOfOrgController,                            
+                              //    initialValue: orgData.organisationName,
+                              validator: MinLengthValidator(3,
+                                  errorText: 'Enter a Valid Organization Name'),
+                              controller: nameOfOrgController,
                             ),
                             const SizedBox(height: 10),
                             PageInput(
-                              hint: '',                          
+                              hint: '',
                               label: 'Email Address',
                               controller: emailController,
-                          //    initialValue: orgData.emailAddress,
-                              validator: EmailValidator(errorText: 'Enter a valid email address'),
+                              //    initialValue: orgData.emailAddress,
+                              validator: EmailValidator(
+                                  errorText: 'Enter a valid email address'),
                             ),
                             const SizedBox(height: 10),
                             AppRadioButton(
+                              onchanged: (value) {
+                                orgData.regType = value;
+                              },
                               option1: orgData.regType,
                               options: options,
                               label: 'Type of Registration',
@@ -116,26 +124,32 @@ class _UpdateGeneralInfoState extends State<UpdateGeneralInfo> {
                               label: 'Office Telephone',
                               controller: officeTelController,
                               keyboardType: TextInputType.phone,
-                           //   initialValue: orgData.contactNumber.toString(),
-                              validator: LengthRangeValidator(max: 11, min: 11, errorText: 'Enter a valid phone number'),
+                              //   initialValue: orgData.contactNumber.toString(),
+                              validator: LengthRangeValidator(
+                                  max: 11,
+                                  min: 11,
+                                  errorText: 'Enter a valid phone number'),
                             ),
                             const SizedBox(height: 10),
                             PageInput(
                               hint: '',
                               label: 'Registration Number',
                               controller: regNumController,
-                            //  initialValue:
-                             //     orgData.registrationNumber.toString(),
-                                  keyboardType: TextInputType.number,
-                                  validator: MinLengthValidator(1,errorText: 'Enter a valid registration number'),
+                              //  initialValue:
+                              //     orgData.registrationNumber.toString(),
+                              keyboardType: TextInputType.number,
+                              validator: MinLengthValidator(1,
+                                  errorText:
+                                      'Enter a valid registration number'),
                             ),
                             const SizedBox(height: 10),
                             PageInput(
                               hint: '',
                               label: 'Business Address',
                               controller: busAddressController,
-                        //      initialValue: orgData.businessAddress,
-                              validator: MinLengthValidator(6, errorText: 'Enter a valid address'),
+                              //      initialValue: orgData.businessAddress,
+                              validator: MinLengthValidator(6,
+                                  errorText: 'Enter a valid address'),
                             ),
                             const SizedBox(height: 10),
                             PageInput(
@@ -143,29 +157,43 @@ class _UpdateGeneralInfoState extends State<UpdateGeneralInfo> {
                               label: 'Other Significant Address',
                               controller: otherAddressController,
                               isTextArea: true,
-                          //    initialValue: orgData.operationalAddress,
+                              //    initialValue: orgData.operationalAddress,
                             ),
                             const SizedBox(height: 15),
                             AppButton(
                               title: 'Submit',
-                              onPressed: () {
+                              onPressed: () async {
                                 if (_formKey.currentState!.validate()) {
-                                   print(nameOfOrgController.text);
-                                   final GeneralInfoModel newGeneralInfo = GeneralInfoModel(
-                                     organisationName: nameOfOrgController.text,
-                                     emailAddress:  emailController.text,
-                                     contactNumber: int.parse(officeTelController.text),
-                                   );
+                                  final newGeneralInfo = {
+                                    "organisation_name":
+                                        nameOfOrgController.text,
+                                    "email_address": emailController.text,
+                                    "contact_number":
+                                        int.parse(officeTelController.text),
+                                    "reg_type": orgData.regType,
+                                    "registration_number":
+                                        regNumController.text,
+                                    "business_address":
+                                        busAddressController.text,
+                                    "operational_address":
+                                        otherAddressController.text,
+                                    "id":
+                                        "41f31ce7-4864-446d-9a27-3a102e1690fb",
+                                    "userType": userType
+                                  };
+
                                   final controller = Get.find<HomeController>();
-                            //      controller.userRepo.postData('/kyc-general-info/create','');
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                        content: Text('Processing Data')),
-                                  );
-                                } else {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(content: Text(' Data')),
-                                  );
+                                  final res = await controller.userRepo
+                                      .postData('/kyc-general-info/create',
+                                          newGeneralInfo);
+                                  if (res.isSuccessful) {
+                                    Get.back();
+                                  } else {
+                                    Get.showSnackbar(const GetSnackBar(
+                                      message: 'Error occured',
+                                      backgroundColor: Colors.red,
+                                    ));
+                                  }
                                 }
                               },
                             ),

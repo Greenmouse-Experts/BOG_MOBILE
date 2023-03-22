@@ -84,7 +84,7 @@ class _AppReceiptState extends State<AppReceipt> {
                                     Center(
                                       child: Icon(
                                         Icons.check_circle_rounded,
-                                        size: Get.width * 0.35,
+                                        size: Get.width * 0.25,
                                         color: AppColors.primary,
                                       ),
                                     ),
@@ -92,7 +92,7 @@ class _AppReceiptState extends State<AppReceipt> {
                                     Text(
                                       'Thank You for Your Order',
                                       style: AppTextStyle.subtitle1.copyWith(
-                                          fontSize: multiplier * 0.15,
+                                          fontSize: multiplier * 0.1,
                                           color: Colors.black,
                                           fontWeight: FontWeight.w600),
                                       textAlign: TextAlign.center,
@@ -128,14 +128,14 @@ class _AppReceiptState extends State<AppReceipt> {
                                     FeeSection(
                                         leading: 'Sub Total',
                                         content:
-                                            '₦ ${orderDetail.totalAmount}'),
+                                            'NGN ${orderDetail.totalAmount}'),
                                     FeeSection(
                                         leading: 'Delivery Fee',
                                         content:
-                                            '₦ ${orderDetail.deliveryFee}'),
+                                            'NGN ${orderDetail.deliveryFee}'),
                                     FeeSection(
                                         leading: 'Discount',
-                                        content: '₦ ${orderDetail.discount}'),
+                                        content: 'NGN ${orderDetail.discount}'),
                                     Divider(
                                       thickness: 1,
                                       color: AppColors.grey.withOpacity(0.1),
@@ -143,7 +143,7 @@ class _AppReceiptState extends State<AppReceipt> {
                                     FeeSection(
                                         leading: 'Order Total',
                                         content:
-                                            '₦ ${orderDetail.totalAmount}'),
+                                            'NGN ${orderDetail.totalAmount}'),
                                     const SizedBox(height: 5),
                                     Text(
                                       'Transaction Reference',

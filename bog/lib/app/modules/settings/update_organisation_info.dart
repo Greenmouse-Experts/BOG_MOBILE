@@ -65,7 +65,8 @@ class _UpdateOrganisationInfoState extends State<UpdateOrganisationInfo> {
                     final orgData = OrgInfoModel.fromJson(response);
 
                     directorsName.text = orgData.directorFullname ?? '';
-                    directorDesignation.text = orgData.directorDesignation ?? '';
+                    directorDesignation.text =
+                        orgData.directorDesignation ?? '';
                     directorPhone.text = orgData.directorPhone.toString();
                     directorEmail.text = orgData.directorEmail ?? '';
                     contactPhone.text = orgData.contactPhone.toString();
@@ -79,12 +80,15 @@ class _UpdateOrganisationInfoState extends State<UpdateOrganisationInfo> {
                         child: Column(
                           children: [
                             AppDropDownButton(
+                              onChanged: (value) {},
                               options: options,
                               label: 'Type of organisation',
                             ),
                             const SizedBox(height: 10),
-                            const AppDatePicker(
-                                label: 'Date of Incorporation/Registration'),
+                            AppDatePicker(
+                              label: 'Date of Incorporation/Registration',
+                              onChanged: () {},
+                            ),
                             const SizedBox(height: 10),
                             const PageInput(hint: '', label: 'Others(Specify)'),
                             const SizedBox(height: 10),
@@ -135,7 +139,40 @@ class _UpdateOrganisationInfoState extends State<UpdateOrganisationInfo> {
                               controller: otherOperations,
                             ),
                             const SizedBox(height: 15),
-                            AppButton(title: 'Submit', onPressed: () {}),
+                            AppButton(
+                              title: 'Submit',
+                              onPressed: () async {
+                                if (_formKey.currentState!.validate()) {
+                                  final newOrgInfo = {
+                                    "organisation_type": "Partnership",
+                                    "others": "Others",
+                                    "Incorporation_date": "2023-01-29",
+                                    "director_fullname": "Test director",
+                                    "director_designation": "Director",
+                                    "director_phone": "0810173664",
+                                    "director_email": "testdir@yopmail.com",
+                                    "contact_phone": "091838743",
+                                    "contact_email": "test3567@test.com",
+                                    "others_operations": "Google\nFacebook",
+                                    "userType": "professional",
+                                    "id": "f303e149-623a-428b-879d-583a99d38b47"
+                                  };
+
+                                  final controller = Get.find<HomeController>();
+                                  final res = await controller.userRepo
+                                      .postData('/kyc-general-info/create',
+                                          newOrgInfo);
+                                  if (res.isSuccessful) {
+                                    Get.back();
+                                  } else {
+                                    Get.showSnackbar(const GetSnackBar(
+                                      message: 'Error occured',
+                                      backgroundColor: Colors.red,
+                                    ));
+                                  }
+                                }
+                              },
+                            ),
                           ],
                         ),
                       ),

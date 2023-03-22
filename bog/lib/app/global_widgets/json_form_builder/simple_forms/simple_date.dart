@@ -1,9 +1,6 @@
 // import 'package:bog/app/global_widgets/page_input.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
-import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_styles.dart';
 import '../../app_date_picker.dart';
 import '../helpers/function.dart';
 
@@ -59,6 +56,9 @@ class _SimpleDateState extends State<SimpleDate> {
       );
     }
     return AppDatePicker(
+      onChanged: (value) {
+        widget.onChange(widget.position, value);
+      },
       label: item['label'],
     );
     // PageInput(hint: '', label: item['label'], );

@@ -5,15 +5,14 @@ import 'package:bog/app/data/model/form_builder_model.dart';
 import 'package:bog/app/data/model/form_response.dart';
 import 'package:bog/app/data/providers/api_response.dart';
 import 'package:bog/app/global_widgets/app_base_view.dart';
+import 'package:bog/app/global_widgets/app_button.dart';
 import 'package:bog/app/global_widgets/app_loader.dart';
 import 'package:bog/app/global_widgets/custom_app_bar.dart';
+import 'package:bog/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-// import 'package:json_to_form/json_schema.dart';
-// import 'package:json_to_form/json_schema.dart';
 
 import '../../global_widgets/json_form_builder/new_json_schema.dart';
-// import 'new_json_schema.dart';
 
 class JsonForm extends StatefulWidget {
   final String id;
@@ -35,105 +34,6 @@ class _JsonFormState extends State<JsonForm> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.id);
-    // String form = json.encode({
-    //   'title': 'Test Form Json Schema',
-    //   'description': 'My Description',
-    //   'fields': [
-    //     {
-    //       'key': 'input1',
-    //       'type': 'Input',
-    //       'label': 'Hi Group',
-    //       'placeholder': "Hi Group flutter",
-    //       'value': 'defaultValue',
-    //       'required': true
-    //     },
-    //     {
-    //       'key': 'password1',
-    //       'type': 'Password',
-    //       'label': 'Password',
-    //       'required': true
-    //     },
-    //     {
-    //       'key': 'email1',
-    //       'type': 'Email',
-    //       'label': 'Email test',
-    //       'placeholder': "hola a todos"
-    //     },
-    //     {
-    //       'key': 'tareatext1',
-    //       'type': 'TareaText',
-    //       'label': 'TareaText test',
-    //       'placeholder': "hola a todos"
-    //     },
-    //     {
-    //       'key': 'radiobutton1',
-    //       'type': 'RadioButton',
-    //       'label': 'Radio Button tests',
-    //       'value': 2,
-    //       'items': [
-    //         {
-    //           'label': "product 1",
-    //           'value': 1,
-    //         },
-    //         {
-    //           'label': "product 2",
-    //           'value': 2,
-    //         },
-    //         {
-    //           'label': "product 3",
-    //           'value': 3,
-    //         }
-    //       ]
-    //     },
-    //     {
-    //       'key': 'switch1',
-    //       'type': 'Switch',
-    //       'label': 'Switch test',
-    //       'value': false,
-    //     },
-    //     {
-    //       'key': 'checkbox1',
-    //       'type': 'Checkbox',
-    //       'label': 'Checkbox test',
-    //       'items': [
-    //         {
-    //           'label': "product 1",
-    //           'value': true,
-    //         },
-    //         {
-    //           'label': "product 2",
-    //           'value': false,
-    //         },
-    //         {
-    //           'label': "product 3",
-    //           'value': false,
-    //         }
-    //       ]
-    //     },
-    //     {
-    //       'key': 'select1',
-    //       'type': 'Select',
-    //       'label': 'Select test',
-    //       'value': 'product 1',
-    //       'items': [
-    //         {
-    //           'label': "product 1",
-    //           'value': "product 1",
-    //         },
-    //         {
-    //           'label': "product 2",
-    //           'value': "product 2",
-    //         },
-    //         {
-    //           'label': "product 3",
-    //           'value': "product 3",
-    //         }
-    //       ]
-    //     },
-    //     {'key': 'date', 'type': 'Date', 'label': 'Select test'}
-    //   ]
-    // });
     dynamic response1;
 
     Map decorations = {
@@ -165,6 +65,7 @@ class _JsonFormState extends State<JsonForm> {
                         } else if (snapshot.hasData) {
                           String forms = json.encode(snapshot.data!.data);
                           final ans = jsonDecode(forms);
+                          //   print(forms);
 
                           if (ans['formTitle'] == null) {
                             return const Center(
@@ -180,7 +81,7 @@ class _JsonFormState extends State<JsonForm> {
                           }
                           final FormResponse ddd = FormResponse(form: pid);
                           final formResponse = ddd.toJson();
-                          print(formResponse);
+                          //  print(formResponse);
                           return SingleChildScrollView(
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
@@ -188,12 +89,66 @@ class _JsonFormState extends State<JsonForm> {
                                 decorations: decorations,
                                 form: forms,
                                 formResponse: formResponse,
+                                autovalidateMode:
+                                    AutovalidateMode.onUserInteraction,
                                 onChanged: (dynamic response) {
-                                  // response1 = response;
-                                  // print('kssk');
-                                  print(response);
-                                  // print(response1);
+                                  response1 = response;
+                                  //   print(response);
                                 },
+                                actionSave: (data) {
+                                  print(data);
+                                },
+                                buttonSave: Container(
+                                  width: Get.width,
+                                  height: 35,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12),
+                                    color: AppColors.primary,
+                                  ),
+                                  child: const Center(
+                                    child: Text('Submit'),
+                                  ),
+                                ),
+                                // buttonSave: Column(
+                                //   children: const [
+                                //     SizedBox(height: 10),
+                                //     AppButton(
+                                //       title: 'Submit',
+                                //       // onPressed: () {
+                                //       //   print(response1);
+                                //       // }
+                                //       // onPressed: () async {
+                                //       //   if (response1 == null) {
+                                //       //     Get.snackbar(
+                                //       //       'Incomplete',
+                                //       //       'Please fill the form above',
+                                //       //       backgroundColor: Colors.red,
+                                //       //     );
+                                //       //     return;
+                                //       //   }
+                                //       //   print(jsonEncode(response1));
+
+                                //       //   final res = await controller.userRepo
+                                //       //       .postData('/projects/request',
+                                //       //           jsonEncode(response1));
+                                //       //   if (res.isSuccessful) {
+                                //       //     Get.back();
+                                //       //     Get.showSnackbar(const GetSnackBar(
+                                //       //       message:
+                                //       //           'Service requested successfully',
+                                //       //       duration: Duration(seconds: 2),
+                                //       //     ));
+                                //       //   } else {
+                                //       //     print(res.message);
+
+                                //       //     Get.showSnackbar(const GetSnackBar(
+                                //       //       message: 'An error occured',
+                                //       //       duration: Duration(seconds: 2),
+                                //       //     ));
+                                //       //   }
+                                //       //  }
+                                //     )
+                                // ],
                               ),
                             ),
                           );

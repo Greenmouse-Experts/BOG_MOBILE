@@ -10,8 +10,6 @@ import '../../../controllers/home_controller.dart';
 import '../../../data/model/my_products.dart';
 import '../../../data/providers/api_response.dart';
 
-
-
 import '../../../global_widgets/app_loader.dart';
 
 import '../../../global_widgets/page_dropdown.dart';
@@ -168,14 +166,14 @@ class _CartTabState extends State<CartTab> {
                             child: SingleChildScrollView(
                               child: Column(
                                 children: [
-                                  const PageInput(
-                                    hint: 'Enter your coupon code',
-                                    label:
-                                        'Do you have a coupon ? Enter it here',
-                                    validator: null,
-                                    isCompulsory: true,
-                                    obscureText: false,
-                                  ),
+                                  // const PageInput(
+                                  //   hint: 'Enter your coupon code',
+                                  //   label:
+                                  //       'Do you have a coupon ? Enter it here',
+                                  //   validator: null,
+                                  //   isCompulsory: true,
+                                  //   obscureText: false,
+                                  // ),
                                   SizedBox(
                                     height: Get.height * 0.05,
                                   ),
@@ -272,7 +270,7 @@ class _CartTabState extends State<CartTab> {
                                         ),
                                       ),
                                       Text(
-                                        "N ${controller.subTotalPrice + 5000}",
+                                        "NGN ${controller.subTotalPrice}",
                                         style: AppTextStyle.subtitle1.copyWith(
                                           color: AppColors.primary,
                                           fontSize: Get.width * 0.04,
@@ -282,7 +280,7 @@ class _CartTabState extends State<CartTab> {
                                     ],
                                   ),
                                   SizedBox(
-                                    height: Get.height * 0.025,
+                                    height: Get.height * 0.035,
                                   ),
                                   AppButton(
                                     title: 'Proceed To Checkout',
@@ -331,7 +329,8 @@ class _CartTabState extends State<CartTab> {
                                   ConnectionState.done &&
                               snapshot.data!.isSuccessful) {
                             final posts =
-                                MyProducts.fromJsonList(snapshot.data!.data).obs;
+                                MyProducts.fromJsonList(snapshot.data!.data)
+                                    .obs;
                             if (posts.isEmpty) {
                               return SizedBox(
                                 height: Get.height * 0.7,
@@ -359,20 +358,24 @@ class _CartTabState extends State<CartTab> {
                               itemBuilder: (BuildContext context, int index) {
                                 return ProductItem(
                                   title: posts[index].name,
-                                  deleteProd: () async{
-                                    print(posts[index].id);
-                                    final response = await controller.userRepo.deleteData('/product/${posts[index].id}');
+                                  deleteProd: () async {
+                                    final response = await controller.userRepo
+                                        .deleteData(
+                                            '/product/${posts[index].id}');
 
-                                    if (response.isSuccessful){
-                                      posts.removeAt(index);
-                                      setState(() {
-                                        
-                                      });
+                                    if (response.isSuccessful) {
+                                      setState(() {});
                                       Get.back();
-                                      Get.showSnackbar(const GetSnackBar(message: 'Product Deleted Successfully', backgroundColor: Colors.green,));
-                                    } else{
+                                      Get.showSnackbar(const GetSnackBar(
+                                        message: 'Product Deleted Successfully',
+                                        backgroundColor: Colors.green,
+                                      ));
+                                    } else {
                                       Get.back();
-                                      Get.showSnackbar(const GetSnackBar(message: "Product wasn't deleted",backgroundColor: Colors.red,));
+                                      Get.showSnackbar(const GetSnackBar(
+                                        message: "Product wasn't deleted",
+                                        backgroundColor: Colors.red,
+                                      ));
                                     }
                                   },
                                   subTitle: "N ${posts[index].price}",
@@ -730,7 +733,7 @@ class ProductItem extends StatelessWidget {
     this.subTitle,
     this.date,
     this.image,
-   required this.deleteProd,
+    required this.deleteProd,
   }) : super(key: key);
 
   final String? title;
@@ -819,15 +822,15 @@ class ProductItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 InkWell(
-                  onTap: (){
-                     AppOverlay.showInfoDialog(
-                          title: 'Delete This Product',
-                          buttonText: 'Delete Product',
-                          content: 'Are you sure you want to delete this PRODUCT',
-                          doubleFunction: true,
-                          onPressed: () {
-                            deleteProd();
-                          });
+                  onTap: () {
+                    AppOverlay.showInfoDialog(
+                        title: 'Delete This Product',
+                        buttonText: 'Delete Product',
+                        content: 'Are you sure you want to delete this PRODUCT',
+                        doubleFunction: true,
+                        onPressed: () async {
+                          deleteProd();
+                        });
                   },
                   child: Padding(
                     padding: EdgeInsets.only(left: Get.width * 0.015, top: 5),

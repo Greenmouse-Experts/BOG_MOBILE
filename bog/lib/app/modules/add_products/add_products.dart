@@ -6,7 +6,6 @@ import 'package:bog/app/modules/add_products/add_product_success.dart';
 
 import 'package:flutter/material.dart';
 
-
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:get/get.dart';
 
@@ -30,8 +29,6 @@ class AddProject extends StatefulWidget {
   State<AddProject> createState() => _AddProjectState();
 }
 
-
-
 class _AddProjectState extends State<AddProject> {
   List<ShopCategory> savedPosts = [];
   ShopCategory selectedCategory = ShopCategory();
@@ -53,12 +50,12 @@ class _AddProjectState extends State<AddProject> {
 
   late Future<ApiResponse> createProd;
 
- File? pickedFile;
+  File? pickedFile;
 
- @override
+  @override
   void initState() {
     final controller = Get.find<HomeController>();
-    createProd =controller.userRepo.getData("/product/category");
+    createProd = controller.userRepo.getData("/product/category");
     super.initState();
   }
 
@@ -71,664 +68,481 @@ class _AddProjectState extends State<AddProject> {
 
     return AppBaseView(
       child: GetBuilder<HomeController>(
-            id: 'AddProject',
-            builder: (controller) {
-              return Scaffold(
-                appBar: AppBar(
-                  bottom: PreferredSize(
-                    preferredSize: const Size.fromHeight(1),
-                    child:  Divider(color: AppColors.grey.withOpacity(0.3),),
+          id: 'AddProject',
+          builder: (controller) {
+            return Scaffold(
+              appBar: AppBar(
+                bottom: PreferredSize(
+                  preferredSize: const Size.fromHeight(1),
+                  child: Divider(
+                    color: AppColors.grey.withOpacity(0.3),
                   ),
-                  title:  Text(
-                                    "Add Product",
-                                    style: AppTextStyle.subtitle1.copyWith(
-                                        fontSize: multiplier * 0.07,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w600),
-                                    textAlign: TextAlign.center,
-                                  ),
-                  leading: IconButton(onPressed: (){
-                    Get.back();
-                  }, icon: const Icon(Icons.arrow_back_ios_new_outlined)),
                 ),
-                backgroundColor: AppColors.backgroundVariant2,
-                body: FutureBuilder<ApiResponse>(
-                    future: createProd,                       
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState ==
-                              ConnectionState.done &&
-                          snapshot.data!.isSuccessful) {
-                        final posts =
-                            ShopCategory.fromJsonList(snapshot.data!.data);
-                        savedPosts = posts;
-                        selectedCategory = savedPosts[0];
-                        return  Form(
-                                key: formKey,
-                                child: SingleChildScrollView(
-                                  child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment
-                                                .start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment
-                                                .start,
-                                        mainAxisSize:
-                                            MainAxisSize.min,
-                                        children: [
-                                          SizedBox(
-                                            height: width * 0.04,
-                                          ),
-                                          Padding(
-                                            padding:
-                                                EdgeInsets.only(
-                                                    left: width *
-                                                        0.05,
-                                                    right: width *
-                                                        0.05),
-                                            child: PageInput(
-                                              hint:
-                                                  "Enter your product name ",
-                                              label:
-                                                  "Product Name",
-                                              validator: (value) {
-                                                if (value!
-                                                    .isEmpty) {
-                                                  return "Please enter the name of your property";
-                                                }
-                                                return null;
-                                              },
-                                              controller:
-                                                  nameController,
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height:
-                                                Get.height * 0.04,
-                                          ),
-                                          Padding(
-                                            padding:
-                                                EdgeInsets.only(
-                                                    left: width *
-                                                        0.05,
-                                                    right: width *
-                                                        0.05),
-                                            child: AppInput(
-                                              hintText:
-                                                  "Tell us about your product",
-                                              label:
-                                                  "Product Description",
-                                              validator: (value) {
-                                                if (value!
-                                                    .isEmpty) {
-                                                  return "Please enter the location of your property";
-                                                }
-                                                return null;
-                                              },
-                                              controller:
-                                                  productController,
-                                              maxLines: 10,
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height:
-                                                Get.height * 0.04,
-                                          ),
-                                          Padding(
-                                            padding:
-                                                EdgeInsets.only(
-                                                    left: width *
-                                                        0.05,
-                                                    right: width *
-                                                        0.05),
-                                            child: PageInput(
-                                              hint:
-                                                  "Enter your product price",
-                                              label:
-                                                  "Product Price",
-                                              validator: (value) {
-                                                if (value!
-                                                    .isEmpty) {
-                                                  return "Please enter the location of your property";
-                                                }
-                                                return null;
-                                              },
-                                              controller:
-                                                  priceController,
-                                              keyboardType:
-                                                  TextInputType
-                                                      .number,
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height:
-                                                Get.height * 0.04,
-                                          ),
-                                          Padding(
-                                            padding:
-                                                EdgeInsets.only(
-                                                    left: width *
-                                                        0.05,
-                                                    right: width *
-                                                        0.05),
-                                            child: PageDropButton(
-                                              label:
-                                                  "Product Category",
-                                              hint: '',
-                                              padding:
-                                                  const EdgeInsets
-                                                          .symmetric(
-                                                      horizontal:
-                                                          10),
-                                              onChanged: (val) {
-                                                selectedCategory =
-                                                    val;
-                                              },
-                                              value: posts.first,
-                                              items: posts.map<
-                                                      DropdownMenuItem<
-                                                          ShopCategory>>(
-                                                  (ShopCategory
-                                                      value) {
-                                                return DropdownMenuItem<
-                                                    ShopCategory>(
-                                                  value: value,
-                                                  child: Text(value
-                                                      .name
-                                                      .toString()),
-                                                );
-                                              }).toList(),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height:
-                                                Get.height * 0.04,
-                                          ),
-                                          Padding(
-                                            padding:
-                                                EdgeInsets.only(
-                                                    left: width *
-                                                        0.05,
-                                                    right: width *
-                                                        0.05),
-                                            child: PageInput(
-                                              hint:
-                                                  "Pick a photo to upload",
-                                              label:
-                                                  "Upload Product Photo",
-                                              controller:
-                                                  fileController,
-                                              validator: (value) {
-                                                if (value!
-                                                    .isEmpty) {
-                                                  return "Please pick a picture to upload";
-                                                }
-                                                return null;
-                                              },
-                                              onFilePicked:
-                                                  (file) {
-                                                pickedFile = file;
-                                              },
-                                              isFilePicker: true,
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height:
-                                                Get.height * 0.04,
-                                          ),
-                                          Padding(
-                                            padding: EdgeInsets.only(
-                                                    left: width *
-                                                        0.05,
-                                                    right: width *
-                                                        0.05),
-                                            child: PageInput(hint: 'Input a unit type, e.g bags', 
-                                            label: 'Unit of Measurement',
-                                            controller: unitController,
-                                            validator: MinLengthValidator(3, errorText: 'Enter a valid unit'),),
-                                          ),
-                                          SizedBox(
-                                            height:
-                                                Get.height * 0.04,
-                                          ),
-                                           Padding(
-                                            padding: EdgeInsets.only(
-                                                    left: width *
-                                                        0.05,
-                                                    right: width *
-                                                        0.05),
-                                            child: PageInput(hint: 'Enter quantity available', 
-                                            label: 'Product Quantity',
-                                            controller: quantityController,
-                                            keyboardType: TextInputType.number,
-                                            validator:  MinLengthValidator(1, errorText: 'Minimum quantity is 1'),),
-                                          ),
-                                          SizedBox(
-                                            height:
-                                                Get.height * 0.04,
-                                          ),
-                                          Padding(
-                                            padding:
-                                                EdgeInsets.only(
-                                                    left: width *
-                                                        0.05,
-                                                    right: width *
-                                                        0.05),
-                                            child: AppButton(
-                                              title:
-                                                  "Submit Product",
-                                              onPressed:
-                                                  () async {
-                                                if (formKey
-                                                    .currentState!
-                                                    .validate()) {
-                                                  var body = {
-                                                    "categoryId":
-                                                        selectedCategory
-                                                            .id
-                                                            .toString(),
-                                                    "name":
-                                                        nameController
-                                                            .text,
-                                                    "price":
-                                                        priceController.text,
-                                                    "photos": [
-                                                      await dio.MultipartFile.fromFile(
-                                                        pickedFile!.path,
-                                                        filename: pickedFile!.path.split('/').last
-                                                      ),
-                                                    ],
-                                                    "quantity":
-                                                        quantityController.text,
-                                                    "unit":
-                                                        unitController.text,
-                                                    "status":
-                                                        "draft",
-                                                    "description":
-                                                        productController
-                                                            .text,
-                                                  };
-                                             
-                                                  var formData =
-                                                      dio.FormData
-                                                          .fromMap(
-                                                              body);
-                                                  var response = await Api().postData(
-                                                      "/products",
-                                                      body:
-                                                          formData,
-                                                      hasHeader:
-                                                          true);
-                                                  print(response
-                                                      .message);
-                                                  if (response
-                                                      .isSuccessful) {
-                                                        Get.to(() => const AddProductSuccess());
-                                                 
-                                                  } else {
-                                                    Get.snackbar(
-                                                        "Error",
-                                                        response
-                                                            .data
-                                                            .toString());
-                                                  }
-                                                }
-                                              },
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ],
+                title: Text(
+                  "Add Product",
+                  style: AppTextStyle.subtitle1.copyWith(
+                      fontSize: multiplier * 0.07,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w600),
+                  textAlign: TextAlign.center,
+                ),
+                leading: IconButton(
+                    onPressed: () {
+                      Get.back();
+                    },
+                    icon: const Icon(Icons.arrow_back_ios_new_outlined)),
+              ),
+              backgroundColor: AppColors.backgroundVariant2,
+              body: FutureBuilder<ApiResponse>(
+                  future: createProd,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done &&
+                        snapshot.data!.isSuccessful) {
+                      final posts =
+                          ShopCategory.fromJsonList(snapshot.data!.data);
+                      savedPosts = posts;
+                      selectedCategory = savedPosts[0];
+                      return Form(
+                        key: formKey,
+                        child: SingleChildScrollView(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  SizedBox(
+                                    height: width * 0.04,
                                   ),
-                                ),
-                              );
-                      } else {
-                        if (savedPosts.isNotEmpty) {
-                          final posts = savedPosts;
-                          return     Form(
-                                  key: formKey,
-                                  child: SingleChildScrollView(
-                                    child: Column(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment
-                                        .start,
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment
-                                        .start,
-                                    mainAxisSize:
-                                    MainAxisSize.min,
-                                    children: [
-                                      SizedBox(
-                                    height:
-                                        width * 0.04,
-                                      ),
-                                      Padding(
-                                    padding:
-                                        EdgeInsets.only(
-                                            left:
-                                                width *
-                                                    0.05,
-                                            right: width *
-                                                0.05),
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                        left: width * 0.05,
+                                        right: width * 0.05),
                                     child: PageInput(
-                                      hint:
-                                          "Enter your product name ",
-                                      label:
-                                          "Product Name",
-                                      validator:
-                                          (value) {
-                                        if (value!
-                                            .isEmpty) {
+                                      hint: "Enter your product name ",
+                                      label: "Product Name",
+                                      validator: (value) {
+                                        if (value!.isEmpty) {
                                           return "Please enter the name of your property";
                                         }
                                         return null;
                                       },
-                                      controller:
-                                          nameController,
+                                      controller: nameController,
                                     ),
-                                      ),
-                                      SizedBox(
-                                    height: Get.height *
-                                        0.04,
-                                      ),
-                                      Padding(
-                                    padding:
-                                        EdgeInsets.only(
-                                            left:
-                                                width *
-                                                    0.05,
-                                            right: width *
-                                                0.05),
+                                  ),
+                                  SizedBox(
+                                    height: Get.height * 0.04,
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                        left: width * 0.05,
+                                        right: width * 0.05),
                                     child: AppInput(
-                                      hintText:
-                                          "Tell us about your product",
-                                      label:
-                                          "Product Description",
-                                      validator:
-                                          (value) {
-                                        if (value!
-                                            .isEmpty) {
+                                      hintText: "Tell us about your product",
+                                      label: "Product Description",
+                                      validator: (value) {
+                                        if (value!.isEmpty) {
                                           return "Please enter the location of your property";
                                         }
                                         return null;
                                       },
-                                      controller:
-                                          productController,
+                                      controller: productController,
                                       maxLines: 10,
                                     ),
-                                      ),
-                                      SizedBox(
-                                    height: Get.height *
-                                        0.04,
-                                      ),
-                                      Padding(
-                                    padding:
-                                        EdgeInsets.only(
-                                            left:
-                                                width *
-                                                    0.05,
-                                            right: width *
-                                                0.05),
+                                  ),
+                                  SizedBox(
+                                    height: Get.height * 0.04,
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                        left: width * 0.05,
+                                        right: width * 0.05),
                                     child: PageInput(
-                                      hint:
-                                          "Enter your product price",
-                                      label:
-                                          "Product Price",
-                                      validator:
-                                          (value) {
-                                        if (value!
-                                            .isEmpty) {
+                                      hint: "Enter your product price",
+                                      label: "Product Price",
+                                      validator: (value) {
+                                        if (value!.isEmpty) {
                                           return "Please enter the location of your property";
                                         }
                                         return null;
                                       },
-                                      controller:
-                                          priceController,
-                                      keyboardType:
-                                          TextInputType
-                                              .number,
+                                      controller: priceController,
+                                      keyboardType: TextInputType.number,
                                     ),
-                                      ),
-                                      SizedBox(
-                                    height: Get.height *
-                                        0.04,
-                                      ),
-                                      Padding(
-                                    padding:
-                                        EdgeInsets.only(
-                                            left:
-                                                width *
-                                                    0.05,
-                                            right: width *
-                                                0.05),
-                                    child:
-                                        PageDropButton(
-                                      label:
-                                          "Product Category",
+                                  ),
+                                  SizedBox(
+                                    height: Get.height * 0.04,
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                        left: width * 0.05,
+                                        right: width * 0.05),
+                                    child: PageDropButton(
+                                      label: "Product Category",
                                       hint: '',
-                                      padding: const EdgeInsets
-                                              .symmetric(
-                                          horizontal:
-                                              10),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10),
                                       onChanged: (val) {
-                                        selectedCategory =
-                                            val;
+                                        selectedCategory = val;
                                       },
-                                      value:
-                                          posts.first,
-                                      items: posts.map<
-                                              DropdownMenuItem<
-                                                  ShopCategory>>(
-                                          (ShopCategory
-                                              value) {
-                                        return DropdownMenuItem<
-                                            ShopCategory>(
+                                      value: posts.first,
+                                      items: posts
+                                          .map<DropdownMenuItem<ShopCategory>>(
+                                              (ShopCategory value) {
+                                        return DropdownMenuItem<ShopCategory>(
                                           value: value,
-                                          child: Text(value
-                                              .name
-                                              .toString()),
+                                          child: Text(value.name.toString()),
                                         );
                                       }).toList(),
                                     ),
-                                      ),
-                                      SizedBox(
-                                    height: Get.height *
-                                        0.04,
-                                      ),
-                                      Padding(
-                                    padding:
-                                        EdgeInsets.only(
-                                            left:
-                                                width *
-                                                    0.05,
-                                            right: width *
-                                                0.05),
+                                  ),
+                                  SizedBox(
+                                    height: Get.height * 0.04,
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                        left: width * 0.05,
+                                        right: width * 0.05),
                                     child: PageInput(
-                                      hint:
-                                          "Pick a photo to upload",
-                                      label:
-                                          "Upload Product Photo",
-                                      controller:
-                                          fileController,
-                                      validator:
-                                          (value) {
-                                        if (value!
-                                            .isEmpty) {
+                                      hint: "Pick a photo to upload",
+                                      label: "Upload Product Photo",
+                                      controller: fileController,
+                                      validator: (value) {
+                                        if (value!.isEmpty) {
                                           return "Please pick a picture to upload";
                                         }
                                         return null;
                                       },
-                                      onFilePicked:
-                                          (file) {
-                                        pickedFile =
-                                            file;
+                                      onFilePicked: (file) {
+                                        pickedFile = file;
                                       },
-                                      isFilePicker:
-                                          true,
+                                      isFilePicker: true,
                                     ),
-                                      ),
-                                       SizedBox(
-                                            height:
-                                                Get.height * 0.04,
-                                          ),
-                                          Padding(
-                                            padding: EdgeInsets.only(
-                                                    left: width *
-                                                        0.05,
-                                                    right: width *
-                                                        0.05),
-                                            child: PageInput(hint: 'Input a unit type, e.g bags', 
-                                            label: 'Unit of Measurement',
-                                            controller: unitController,
-                                            validator: MinLengthValidator(3, errorText: 'Enter a valid unit'),),
-                                          ),
-                                          SizedBox(
-                                            height:
-                                                Get.height * 0.04,
-                                          ),
-                                           Padding(
-                                            padding: EdgeInsets.only(
-                                                    left: width *
-                                                        0.05,
-                                                    right: width *
-                                                        0.05),
-                                            child: PageInput(hint: 'Enter quantity available', 
-                                            label: 'Product Quantity',
-                                            controller: quantityController,
-                                            keyboardType: TextInputType.number,
-                                            validator:  MinLengthValidator(1, errorText: 'Minimum quantity is 1'),),
-                                          ),
-                                          SizedBox(
-                                            height:
-                                                Get.height * 0.04,
-                                          ),
-                                    
-                                      Padding(
-                                    padding:
-                                        EdgeInsets.only(
-                                            left:
-                                                width *
-                                                    0.05,
-                                            right: width *
-                                                0.05),
+                                  ),
+                                  SizedBox(
+                                    height: Get.height * 0.04,
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                        left: width * 0.05,
+                                        right: width * 0.05),
+                                    child: PageInput(
+                                      hint: 'Input a unit type, e.g bags',
+                                      label: 'Unit of Measurement',
+                                      controller: unitController,
+                                      validator: MinLengthValidator(3,
+                                          errorText: 'Enter a valid unit'),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: Get.height * 0.04,
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                        left: width * 0.05,
+                                        right: width * 0.05),
+                                    child: PageInput(
+                                      hint: 'Enter quantity available',
+                                      label: 'Product Quantity',
+                                      controller: quantityController,
+                                      keyboardType: TextInputType.number,
+                                      validator: MinLengthValidator(1,
+                                          errorText: 'Minimum quantity is 1'),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: Get.height * 0.04,
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                        left: width * 0.05,
+                                        right: width * 0.05),
                                     child: AppButton(
-                                      title:
-                                          "Submit Product",
-                                      onPressed:
-                                          () async {
-                                        if (formKey
-                                            .currentState!
-                                            .validate()) {
+                                      title: "Submit Product",
+                                      onPressed: () async {
+                                        if (formKey.currentState!.validate()) {
                                           var body = {
                                             "categoryId":
-                                                selectedCategory
-                                                    .id
-                                                    .toString(),
-                                            "name":
-                                                nameController
-                                                    .text,
-                                            "price":
-                                                priceController.text,                                      
+                                                selectedCategory.id.toString(),
+                                            "name": nameController.text,
+                                            "price": priceController.text,
                                             "photos": [
-                                            await dio.MultipartFile.fromFile(
-                                              pickedFile!.path,
-                                              filename: pickedFile!.path.split('/').last
-                                            ),
-                                          ],
-                                              "quantity":
-                                                        quantityController.text,
-                                            
-                                            "unit":
-                                                        unitController.text,
-                                            "status":
-                                                "draft",
+                                              await dio.MultipartFile.fromFile(
+                                                  pickedFile!.path,
+                                                  filename: pickedFile!.path
+                                                      .split('/')
+                                                      .last),
+                                            ],
+                                            "quantity": quantityController.text,
+                                            "unit": unitController.text,
+                                            "status": "draft",
                                             "description":
-                                                productController
-                                                    .text,
-                                              
+                                                productController.text,
                                           };
-                                          /*body['photos'] = await dio.MultipartFile.fromFile(
-                                            pickedFile!.path,
-                                            filename: pickedFile!.path.split('/').last,
-                                          );*/
-                                          var formData = dio
-                                                  .FormData
-                                              .fromMap(
-                                                  body);
+
+                                          var formData =
+                                              dio.FormData.fromMap(body);
                                           var response = await Api().postData(
                                               "/products",
-                                              body:
-                                                  formData,
-                                              hasHeader:
-                                                  true);
-                                          print(response
-                                              .message);
-                                          if (response
-                                              .isSuccessful) {
-                                            Get.to(()=> const AddProductSuccess());
+                                              body: formData,
+                                              hasHeader: true);
+                                          print(response.message);
+                                          if (response.isSuccessful) {
+                                            Get.to(() =>
+                                                const AddProductSuccess());
                                           } else {
-                                            Get.snackbar(
-                                                "Error",
-                                                response
-                                                    .data
-                                                    .toString());
+                                            Get.snackbar("Error",
+                                                response.data.toString());
                                           }
                                         }
                                       },
                                     ),
-                                      )
-                                    ],
-                                    ),
-                                  ),
-                                );
-                        }
-                        if (snapshot.connectionState ==
-                            ConnectionState.done) {
-                          return SizedBox(
-                            width: Get.width,
-                            height: Get.height * 0.7,
+                                  )
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    } else {
+                      if (savedPosts.isNotEmpty) {
+                        final posts = savedPosts;
+                        return Form(
+                          key: formKey,
+                          child: SingleChildScrollView(
                             child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
                               children: [
-                                Text(
-                                  "No Products Categories Found",
-                                  style: AppTextStyle.subtitle1.copyWith(
-                                      fontSize: multiplier * 0.07,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w500),
-                                  textAlign: TextAlign.center,
+                                SizedBox(
+                                  height: width * 0.04,
                                 ),
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                      left: width * 0.05, right: width * 0.05),
+                                  child: PageInput(
+                                    hint: "Enter your product name ",
+                                    label: "Product Name",
+                                    validator: (value) {
+                                      if (value!.isEmpty) {
+                                        return "Please enter the name of your property";
+                                      }
+                                      return null;
+                                    },
+                                    controller: nameController,
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: Get.height * 0.04,
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                      left: width * 0.05, right: width * 0.05),
+                                  child: AppInput(
+                                    hintText: "Tell us about your product",
+                                    label: "Product Description",
+                                    validator: (value) {
+                                      if (value!.isEmpty) {
+                                        return "Please enter the location of your property";
+                                      }
+                                      return null;
+                                    },
+                                    controller: productController,
+                                    maxLines: 10,
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: Get.height * 0.04,
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                      left: width * 0.05, right: width * 0.05),
+                                  child: PageInput(
+                                    hint: "Enter your product price",
+                                    label: "Product Price",
+                                    validator: (value) {
+                                      if (value!.isEmpty) {
+                                        return "Please enter the location of your property";
+                                      }
+                                      return null;
+                                    },
+                                    controller: priceController,
+                                    keyboardType: TextInputType.number,
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: Get.height * 0.04,
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                      left: width * 0.05, right: width * 0.05),
+                                  child: PageDropButton(
+                                    label: "Product Category",
+                                    hint: '',
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10),
+                                    onChanged: (val) {
+                                      selectedCategory = val;
+                                    },
+                                    value: posts.first,
+                                    items: posts
+                                        .map<DropdownMenuItem<ShopCategory>>(
+                                            (ShopCategory value) {
+                                      return DropdownMenuItem<ShopCategory>(
+                                        value: value,
+                                        child: Text(value.name.toString()),
+                                      );
+                                    }).toList(),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: Get.height * 0.04,
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                      left: width * 0.05, right: width * 0.05),
+                                  child: PageInput(
+                                    hint: "Pick a photo to upload",
+                                    label: "Upload Product Photo",
+                                    controller: fileController,
+                                    validator: (value) {
+                                      if (value!.isEmpty) {
+                                        return "Please pick a picture to upload";
+                                      }
+                                      return null;
+                                    },
+                                    onFilePicked: (file) {
+                                      pickedFile = file;
+                                    },
+                                    isFilePicker: true,
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: Get.height * 0.04,
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                      left: width * 0.05, right: width * 0.05),
+                                  child: PageInput(
+                                    hint: 'Input a unit type, e.g bags',
+                                    label: 'Unit of Measurement',
+                                    controller: unitController,
+                                    validator: MinLengthValidator(3,
+                                        errorText: 'Enter a valid unit'),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: Get.height * 0.04,
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                      left: width * 0.05, right: width * 0.05),
+                                  child: PageInput(
+                                    hint: 'Enter quantity available',
+                                    label: 'Product Quantity',
+                                    controller: quantityController,
+                                    keyboardType: TextInputType.number,
+                                    validator: MinLengthValidator(1,
+                                        errorText: 'Minimum quantity is 1'),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: Get.height * 0.04,
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                      left: width * 0.05, right: width * 0.05),
+                                  child: AppButton(
+                                    title: "Submit Product",
+                                    onPressed: () async {
+                                      if (formKey.currentState!.validate()) {
+                                        var body = {
+                                          "categoryId":
+                                              selectedCategory.id.toString(),
+                                          "name": nameController.text,
+                                          "price": priceController.text,
+                                          "photos": [
+                                            await dio.MultipartFile.fromFile(
+                                                pickedFile!.path,
+                                                filename: pickedFile!.path
+                                                    .split('/')
+                                                    .last),
+                                          ],
+                                          "quantity": quantityController.text,
+                                          "unit": unitController.text,
+                                          "status": "draft",
+                                          "description": productController.text,
+                                        };
+                                        /*body['photos'] = await dio.MultipartFile.fromFile(
+                                            pickedFile!.path,
+                                            filename: pickedFile!.path.split('/').last,
+                                          );*/
+                                        var formData =
+                                            dio.FormData.fromMap(body);
+                                        var response = await Api().postData(
+                                            "/products",
+                                            body: formData,
+                                            hasHeader: true);
+                                        print(response.message);
+                                        if (response.isSuccessful) {
+                                          Get.to(
+                                              () => const AddProductSuccess());
+                                        } else {
+                                          Get.snackbar("Error",
+                                              response.data.toString());
+                                        }
+                                      }
+                                    },
+                                  ),
+                                )
                               ],
                             ),
-                          );
-                        }
+                          ),
+                        );
+                      }
+                      if (snapshot.connectionState == ConnectionState.done) {
                         return SizedBox(
-                          height: Get.height * 0.7,
                           width: Get.width,
+                          height: Get.height * 0.7,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
-                              CircularProgressIndicator(
-                                color: AppColors.primary,
+                            children: [
+                              Text(
+                                "No Products Categories Found",
+                                style: AppTextStyle.subtitle1.copyWith(
+                                    fontSize: multiplier * 0.07,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w500),
+                                textAlign: TextAlign.center,
                               ),
                             ],
                           ),
                         );
                       }
-                    }),
-                bottomNavigationBar: HomeBottomWidget(isHome: false, controller: controller, doubleNavigate: false),
-                
-                
-              
-              );
-            }),
+                      return SizedBox(
+                        height: Get.height * 0.7,
+                        width: Get.width,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            CircularProgressIndicator(
+                              color: AppColors.primary,
+                            ),
+                          ],
+                        ),
+                      );
+                    }
+                  }),
+              bottomNavigationBar: HomeBottomWidget(
+                  isHome: false, controller: controller, doubleNavigate: false),
+            );
+          }),
     );
   }
 }

@@ -130,94 +130,97 @@ class AppOverlay {
       String? buttonText}) {
     showDialog(
       context: Get.context!,
-      builder: (context) => Material(
-        elevation: 10,
-        color: Colors.black.withOpacity(0.2),
-        child: IntrinsicHeight(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                width: Get.width * 0.8,
-                padding: const EdgeInsets.symmetric(
-                  vertical: 15,
-                  horizontal: 20,
-                ),
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(6),
-                  color: Colors.white,
-                ),
-                child: Column(
-                  children: [
-                    Text(
-                      title,
-                      textAlign: TextAlign.center,
-                      style: Get.textTheme.bodyText1!.copyWith(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 17 * Get.textScaleFactor * 0.90,
-                          color: Colors.black),
-                    ),
-                    const SizedBox(height: 11),
-                    Center(
-                      child: contentReplacement ??
-                          Text(
-                            content ?? "",
-                            textAlign: TextAlign.center,
-                            style: AppTextStyle.bodyText2.copyWith(
-                              fontWeight: FontWeight.w500,
-                              color: Colors.black,
+      builder: (context) => WillPopScope(
+        onWillPop: () async => false,
+        child: Material(
+          elevation: 10,
+          color: Colors.black.withOpacity(0.2),
+          child: IntrinsicHeight(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  width: Get.width * 0.8,
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 15,
+                    horizontal: 20,
+                  ),
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(6),
+                    color: Colors.white,
+                  ),
+                  child: Column(
+                    children: [
+                      Text(
+                        title,
+                        textAlign: TextAlign.center,
+                        style: Get.textTheme.bodyText1!.copyWith(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 17 * Get.textScaleFactor * 0.90,
+                            color: Colors.black),
+                      ),
+                      const SizedBox(height: 11),
+                      Center(
+                        child: contentReplacement ??
+                            Text(
+                              content ?? "",
+                              textAlign: TextAlign.center,
+                              style: AppTextStyle.bodyText2.copyWith(
+                                fontWeight: FontWeight.w500,
+                                color: Colors.black,
+                              ),
                             ),
-                          ),
-                    ),
-                    const SizedBox(height: 22),
-                    SizedBox(
-                      width: double.infinity,
-                      child: AppButton(
-                          title: 'Switch Account',
-                          borderRadius: 100,
-                          bckgrndColor: Color.fromRGBO(244, 67, 54, 1),
-                          onPressed: () {
-                            Get.back();
-                            Get.to(() => const SwitchUser());
-                          }),
-                    ),
-                    const SizedBox(height: 10),
-                    SizedBox(
-                      width: double.infinity,
-                      child: doubleFunction != null && doubleFunction
-                          ? Row(
-                              children: [
-                                Expanded(
-                                  child: AppButton(
-                                    title: 'No',
-                                    onPressed: () {
-                                      Get.back();
-                                    },
+                      ),
+                      const SizedBox(height: 22),
+                      SizedBox(
+                        width: double.infinity,
+                        child: AppButton(
+                            title: 'Switch Account',
+                            borderRadius: 100,
+                            bckgrndColor: Color.fromRGBO(244, 67, 54, 1),
+                            onPressed: () {
+                              // Get.back();
+                              Get.to(() => const SwitchUser());
+                            }),
+                      ),
+                      const SizedBox(height: 10),
+                      SizedBox(
+                        width: double.infinity,
+                        child: doubleFunction != null && doubleFunction
+                            ? Row(
+                                children: [
+                                  Expanded(
+                                    child: AppButton(
+                                      title: 'No',
+                                      onPressed: () {
+                                        Get.back();
+                                      },
+                                    ),
                                   ),
-                                ),
-                                const SizedBox(width: 5),
-                                Expanded(
-                                  child: AppButton(
-                                    bckgrndColor: Colors.red,
-                                    title: buttonText ?? 'Yes',
-                                    onPressed: onPressed ?? Get.back,
-                                  ),
-                                )
-                              ],
-                            )
-                          : AppButton(
-                              title: buttonText ?? "Okay",
-                              /*   padding: const EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 25), */
-                              borderRadius: 100,
-                              onPressed: onPressed ?? Get.back),
-                    ),
-                  ],
+                                  const SizedBox(width: 5),
+                                  Expanded(
+                                    child: AppButton(
+                                      bckgrndColor: Colors.red,
+                                      title: buttonText ?? 'Yes',
+                                      onPressed: onPressed ?? Get.back,
+                                    ),
+                                  )
+                                ],
+                              )
+                            : AppButton(
+                                title: buttonText ?? "Okay",
+                                /*   padding: const EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 25), */
+                                borderRadius: 100,
+                                onPressed: onPressed ?? Get.back),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
