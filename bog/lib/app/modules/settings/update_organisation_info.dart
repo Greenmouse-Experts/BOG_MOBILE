@@ -37,13 +37,13 @@ class _UpdateOrganisationInfoState extends State<UpdateOrganisationInfo> {
   TextEditingController otherOperations = TextEditingController();
   TextEditingController otherSpecify = TextEditingController();
 
-   late String userType;
-   String orgType ='';
+  late String userType;
+  String orgType = '';
 
   @override
   void initState() {
     final controller = Get.find<HomeController>();
-     userType =
+    userType =
         controller.currentType == 'Product Partner' ? 'vendor' : 'professional';
     getOrganizationInfo = controller.userRepo
         .getData('/kyc-organisation-info/fetch?userType=$userType');
@@ -106,7 +106,11 @@ class _UpdateOrganisationInfoState extends State<UpdateOrganisationInfo> {
                               },
                             ),
                             const SizedBox(height: 10),
-                          PageInput(hint: '', label: 'Others(Specify)', controller: otherSpecify,),
+                            PageInput(
+                              hint: '',
+                              label: 'Others(Specify)',
+                              controller: otherSpecify,
+                            ),
                             const SizedBox(height: 10),
                             PageInput(
                               hint: 'Full Name',
@@ -162,9 +166,11 @@ class _UpdateOrganisationInfoState extends State<UpdateOrganisationInfo> {
                                   final newOrgInfo = {
                                     "organisation_type": orgType,
                                     "others": otherSpecify.text,
-                                    "Incorporation_date": dateOfIncorporation.text,
+                                    "Incorporation_date":
+                                        dateOfIncorporation.text,
                                     "director_fullname": directorsName.text,
-                                    "director_designation": directorDesignation.text,
+                                    "director_designation":
+                                        directorDesignation.text,
                                     "director_phone": directorPhone.text,
                                     "director_email": directorEmail.text,
                                     "contact_phone": contactPhone.text,

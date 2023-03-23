@@ -19,8 +19,11 @@ class FAQ extends StatelessWidget {
       id: 'faq',
       builder: (controller) {
         return Scaffold(
-          bottomNavigationBar:
-       HomeBottomWidget(controller: controller, isHome: false, doubleNavigate: false,),
+          bottomNavigationBar: HomeBottomWidget(
+            controller: controller,
+            isHome: false,
+            doubleNavigate: false,
+          ),
           backgroundColor: AppColors.backgroundVariant2,
           body: SingleChildScrollView(
             child: Column(

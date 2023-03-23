@@ -52,7 +52,6 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
     return newList;
   }
 
-  
   List<MyProjects> getProjectsByCustomerStatus(
       String status, List<MyProjects> projects) {
     final newList =
@@ -203,14 +202,20 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
                               getProjectsByStatus('approved', postsToUse);
                           final pendingProjects =
                               getProjectsByStatus('pending', postsToUse);
-                          final cancelledProjects =
-                              getProjectsByCustomerStatus('completed', postsToUse);
+                          final cancelledProjects = getProjectsByCustomerStatus(
+                              'completed', postsToUse);
 
                           List<Widget> contents = [
-                            getAllProjects(postsToUse, controller,),
-                            getGroupedProjects(pendingProjects, controller, isPending: true, isOngoing: false ),
-                            getGroupedProjects(approvedProjects, controller, isPending: false, isOngoing: true),
-                            getGroupedProjects(cancelledProjects, controller, isPending: false, isOngoing: true)
+                            getAllProjects(
+                              postsToUse,
+                              controller,
+                            ),
+                            getGroupedProjects(pendingProjects, controller,
+                                isPending: true, isOngoing: false),
+                            getGroupedProjects(approvedProjects, controller,
+                                isPending: false, isOngoing: true),
+                            getGroupedProjects(cancelledProjects, controller,
+                                isPending: false, isOngoing: true)
                           ];
 
                           return SizedBox(
@@ -907,46 +912,53 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
     });
   }
 
-
-
   Widget getGroupedProjects(
-      List<MyProjects> postsToUse, HomeController controller, {required bool isPending, required bool isOngoing}) {
-    return postsToUse.isEmpty? const Center(child: Text('No Projects Available'),) : Padding(
-        padding: const EdgeInsets.only(left: 8, right: 8),
-        child: ListView.builder(
-            itemCount: postsToUse.length,
-            itemBuilder: (ctx, i) {
-              return MyProjectWidget(
-                isCancelled: false,
-                isOngoing: isOngoing,
-                isPending: isPending,
-                id: postsToUse[i].id ?? '',
-                controller: controller,
-                projectType: postsToUse[i].projectTypes ?? '',
-                orderSlug: postsToUse[i].projectSlug ?? '',
-              );
-            })
-        );
+      List<MyProjects> postsToUse, HomeController controller,
+      {required bool isPending, required bool isOngoing}) {
+    return postsToUse.isEmpty
+        ? const Center(
+            child: Text('No Projects Available'),
+          )
+        : Padding(
+            padding: const EdgeInsets.only(left: 8, right: 8),
+            child: ListView.builder(
+                itemCount: postsToUse.length,
+                itemBuilder: (ctx, i) {
+                  return MyProjectWidget(
+                    isCancelled: false,
+                    isOngoing: isOngoing,
+                    isPending: isPending,
+                    id: postsToUse[i].id ?? '',
+                    controller: controller,
+                    projectType: postsToUse[i].projectTypes ?? '',
+                    orderSlug: postsToUse[i].projectSlug ?? '',
+                  );
+                }));
   }
 
   Widget getAllProjects(
-      List<MyProjects> postsToUse, HomeController controller, ) {
-    return postsToUse.isEmpty? const Center(child: Text('No Projects Available'),) :Padding(
-        padding: const EdgeInsets.only(left: 8, right: 8),
-        child: ListView.builder(
-            itemCount: postsToUse.length,
-            itemBuilder: (ctx, i) {
-              return MyProjectWidget(
-                isCancelled: postsToUse[i].approvalStatus == 'disapproved',
-                isOngoing: postsToUse[i].approvalStatus == 'approved',
-                 isPending: postsToUse[i].approvalStatus == 'pending',
-                id: postsToUse[i].id ?? '',
-                controller: controller,
-                projectType: postsToUse[i].projectTypes ?? '',
-                orderSlug: postsToUse[i].projectSlug ?? '',
-              );
-            })
-        );
+    List<MyProjects> postsToUse,
+    HomeController controller,
+  ) {
+    return postsToUse.isEmpty
+        ? const Center(
+            child: Text('No Projects Available'),
+          )
+        : Padding(
+            padding: const EdgeInsets.only(left: 8, right: 8),
+            child: ListView.builder(
+                itemCount: postsToUse.length,
+                itemBuilder: (ctx, i) {
+                  return MyProjectWidget(
+                    isCancelled: postsToUse[i].approvalStatus == 'disapproved',
+                    isOngoing: postsToUse[i].approvalStatus == 'approved',
+                    isPending: postsToUse[i].approvalStatus == 'pending',
+                    id: postsToUse[i].id ?? '',
+                    controller: controller,
+                    projectType: postsToUse[i].projectTypes ?? '',
+                    orderSlug: postsToUse[i].projectSlug ?? '',
+                  );
+                }));
   }
 
   List<TextSpan> highlightOccurrences(String source, String query) {

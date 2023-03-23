@@ -9,7 +9,6 @@ import 'package:get/get.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_styles.dart';
 import '../../controllers/home_controller.dart';
-import '../../data/model/project_list_model.dart';
 
 import 'add_activity.dart';
 

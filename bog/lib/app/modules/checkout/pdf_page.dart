@@ -61,16 +61,12 @@ class _PDFScreenState extends State<PDFScreen> with WidgetsBindingObserver {
               setState(() {
                 errorMessage = '$page: ${error.toString()}';
               });
-              
             },
             onViewCreated: (PDFViewController pdfViewController) {
               _controller.complete(pdfViewController);
             },
-            onLinkHandler: (String? uri) {
-            
-            },
+            onLinkHandler: (String? uri) {},
             onPageChanged: (int? page, int? total) {
-        
               setState(() {
                 currentPage = page;
               });
@@ -87,7 +83,6 @@ class _PDFScreenState extends State<PDFScreen> with WidgetsBindingObserver {
                 )
         ],
       ),
-    
     );
   }
 }

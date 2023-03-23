@@ -143,11 +143,8 @@ class _AllFields extends State<AllFields> {
               form: form,
               onChanged: (dynamic response) {
                 this.response = response;
-                print(jsonEncode(response));
               },
-              actionSave: (data) {
-                print(jsonEncode(data));
-              },
+              actionSave: (data) {},
               autovalidateMode: AutovalidateMode.always,
               buttonSave: Container(
                 height: 40.0,

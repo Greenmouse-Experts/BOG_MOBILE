@@ -5,7 +5,6 @@ import 'package:bog/app/data/model/form_builder_model.dart';
 import 'package:bog/app/data/model/form_response.dart';
 import 'package:bog/app/data/providers/api_response.dart';
 import 'package:bog/app/global_widgets/app_base_view.dart';
-import 'package:bog/app/global_widgets/app_button.dart';
 import 'package:bog/app/global_widgets/app_loader.dart';
 import 'package:bog/app/global_widgets/custom_app_bar.dart';
 import 'package:bog/core/theme/app_colors.dart';
@@ -55,7 +54,6 @@ class _JsonFormState extends State<JsonForm> {
                     future: formBuilder,
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                    
                         return const AppLoader();
                       } else if (snapshot.connectionState ==
                           ConnectionState.done) {
@@ -66,9 +64,7 @@ class _JsonFormState extends State<JsonForm> {
                         } else if (snapshot.hasData) {
                           String forms = json.encode(snapshot.data!.data);
                           final ans = jsonDecode(forms);
-                          print('dchsisdc');
-                          print(snapshot.data!.data);
-                          print('cnsncksnc');
+
                           //   print(forms);
 
                           if (ans['formTitle'] == null) {
@@ -85,7 +81,7 @@ class _JsonFormState extends State<JsonForm> {
                           }
                           final FormResponse ddd = FormResponse(form: pid);
                           final formResponse = ddd.toJson();
-                          //  print(formResponse);
+
                           return SingleChildScrollView(
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
@@ -97,7 +93,6 @@ class _JsonFormState extends State<JsonForm> {
                                     AutovalidateMode.onUserInteraction,
                                 onChanged: (dynamic response) {
                                   response1 = response;
-                                    print(response);
                                 },
                                 actionSave: (data) {
                                   print(data);
@@ -113,7 +108,6 @@ class _JsonFormState extends State<JsonForm> {
                                     child: Text('Submit'),
                                   ),
                                 ),
-                            
                               ),
                             ),
                           );

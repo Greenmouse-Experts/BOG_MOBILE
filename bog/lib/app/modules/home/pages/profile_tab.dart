@@ -1,8 +1,5 @@
 import 'dart:convert';
 
-// import 'package:bog/app/global_widgets/app_base_view.dart';
-// import 'package:bog/app/global_widgets/bottom_widget.dart';
-// import 'package:bog/app/modules/onboarding/onboarding.dart';
 import 'package:bog/app/modules/settings/view_kyc.dart';
 import 'package:flutter/material.dart';
 

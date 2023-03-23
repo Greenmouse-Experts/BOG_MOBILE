@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-
 // import 'package:bog/app/modules/home/home.dart';
 import 'package:bog/app/modules/settings/view_kyc.dart';
 import 'package:flutter/material.dart';
@@ -38,9 +37,9 @@ class SwitchUser extends GetView<HomeController> {
       final kyc = GenKyc.fromJson(res.data);
       MyPref.genKyc.val = jsonEncode(kyc);
       MyPref.genKyc.val = jsonEncode(kyc);
-     
+
       if (kyc.isKycCompleted != true) {
-         MyPref.setOverlay.val = true;
+        MyPref.setOverlay.val = true;
         AppOverlay.showKycDialog(
             title: 'Kyc Not Complete',
             buttonText: 'Complete KYC',
@@ -173,32 +172,30 @@ class SwitchUser extends GetView<HomeController> {
                                 controller.currentType = "Client";
                                 controller.update();
                                 controller.updateNewUser("Client");
-                                  var body = {
+                                var body = {
                                   "userType": "private_client",
                                 };
-                                AppOverlay.loadingOverlay(asyncFunction: ()async{
-                                 var response = await controller.userRepo
-                                    .postData("/user/switch-account", body);
-                                if (response.isSuccessful){
+                                AppOverlay.loadingOverlay(
+                                    asyncFunction: () async {
+                                  var response = await controller.userRepo
+                                      .postData("/user/switch-account", body);
+                                  if (response.isSuccessful) {
                                     // var token = response.token;
                                     //  MyPref.authToken.val = token.toString();
-                                   var logInInfo = LogInModel.fromJson(response.user);
-                                    MyPref.logInDetail.val = jsonEncode(logInInfo);
+                                    var logInInfo =
+                                        LogInModel.fromJson(response.user);
+                                    MyPref.logInDetail.val =
+                                        jsonEncode(logInInfo);
                                     print(MyPref.setOverlay.val);
-                                   if ((oldUser == 'Product Partner' ||
-                                    oldUser == 'Service Partner') &&
-                                       ( MyPref.setOverlay.val == true)) {
-                                  Get.back();
-                                }
-                               
-                                Get.back();
-                                }
-                                });
-                                 
+                                    if ((oldUser == 'Product Partner' ||
+                                            oldUser == 'Service Partner') &&
+                                        (MyPref.setOverlay.val == true)) {
+                                      Get.back();
+                                    }
 
-                               
-                              
-                               
+                                    Get.back();
+                                  }
+                                });
                               },
                               child: Stack(
                                 alignment: Alignment.center,
@@ -268,28 +265,27 @@ class SwitchUser extends GetView<HomeController> {
                                 controller.currentType = "Service Partner";
                                 controller.update();
                                 controller.updateNewUser("Service Partner");
-                              
-                                  var body = {
+
+                                var body = {
                                   "userType": "professional",
                                 };
-                              
-                                  AppOverlay.loadingOverlay(asyncFunction: ()async{
-                                 var response = await controller.userRepo
-                                    .postData("/user/switch-account", body);
-                                if (response.isSuccessful){
-                             
-                                   var logInInfo = LogInModel.fromJson(response.user);
-                                    MyPref.logInDetail.val = jsonEncode(logInInfo);
-                                  
-                               
-                                Get.back();
-                                }
+
+                                AppOverlay.loadingOverlay(
+                                    asyncFunction: () async {
+                                  var response = await controller.userRepo
+                                      .postData("/user/switch-account", body);
+                                  if (response.isSuccessful) {
+                                    var logInInfo =
+                                        LogInModel.fromJson(response.user);
+                                    MyPref.logInDetail.val =
+                                        jsonEncode(logInInfo);
+
+                                    Get.back();
+                                  }
                                 });
                                 verifyKycComplete('professional', () {
                                   Get.to(() => const KYCPage());
                                 });
-                               
-                              
                               },
                               child: Stack(
                                 alignment: Alignment.center,
@@ -359,25 +355,25 @@ class SwitchUser extends GetView<HomeController> {
                                 controller.currentType = "Product Partner";
                                 controller.update();
                                 controller.updateNewUser("Product Partner");
-                                 var body = {
+                                var body = {
                                   "userType": "vendor",
                                 };
-                                 AppOverlay.loadingOverlay(asyncFunction: ()async{
-                                 var response = await controller.userRepo
-                                    .postData("/user/switch-account", body);
-                                if (response.isSuccessful){
-                                 
-                                   var logInInfo = LogInModel.fromJson(response.user);
-                                    MyPref.logInDetail.val = jsonEncode(logInInfo);
-                                  
-                            
-                                Get.back();
-                                }
+                                AppOverlay.loadingOverlay(
+                                    asyncFunction: () async {
+                                  var response = await controller.userRepo
+                                      .postData("/user/switch-account", body);
+                                  if (response.isSuccessful) {
+                                    var logInInfo =
+                                        LogInModel.fromJson(response.user);
+                                    MyPref.logInDetail.val =
+                                        jsonEncode(logInInfo);
+
+                                    Get.back();
+                                  }
                                 });
                                 verifyKycComplete('vendor', () {
                                   Get.to(() => const KYCPage());
                                 });
-                               
                               },
                               child: Stack(
                                 alignment: Alignment.center,
@@ -452,28 +448,30 @@ class SwitchUser extends GetView<HomeController> {
                                 controller.update();
                                 controller.updateNewUser("Corporate Client");
 
-                                   var body = {
+                                var body = {
                                   "userType": "corporate_client",
                                 };
-                                AppOverlay.loadingOverlay(asyncFunction: ()async{
-                                 var response = await controller.userRepo
-                                    .postData("/user/switch-account", body);
-                                if (response.isSuccessful){
+                                AppOverlay.loadingOverlay(
+                                    asyncFunction: () async {
+                                  var response = await controller.userRepo
+                                      .postData("/user/switch-account", body);
+                                  if (response.isSuccessful) {
                                     // var token = response.token;
                                     //  MyPref.authToken.val = token.toString();
-                                   var logInInfo = LogInModel.fromJson(response.user);
-                                    MyPref.logInDetail.val = jsonEncode(logInInfo);
-                                     print(MyPref.setOverlay.val);
-                                   if ((oldUser == 'Product Partner' ||
-                                    oldUser == 'Service Partner' )&&
-                                       MyPref.setOverlay.val == true) {
-                                  Get.back();
-                                }
-                               
-                                Get.back();
-                                }
+                                    var logInInfo =
+                                        LogInModel.fromJson(response.user);
+                                    MyPref.logInDetail.val =
+                                        jsonEncode(logInInfo);
+
+                                    if ((oldUser == 'Product Partner' ||
+                                            oldUser == 'Service Partner') &&
+                                        MyPref.setOverlay.val == true) {
+                                      Get.back();
+                                    }
+
+                                    Get.back();
+                                  }
                                 });
-                                 
 
                                 // if (oldUser == 'Product Partner' ||
                                 //     oldUser == 'Service Partner' &&

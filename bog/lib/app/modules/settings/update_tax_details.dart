@@ -52,7 +52,7 @@ class _UpdateTaxDetailsState extends State<UpdateTaxDetails> {
                   vatRegNum.text = taxData.vat ?? '';
                   taxIdNum.text = taxData.tin ?? '';
                   professionalBodies.text = taxData.relevantStatutory ?? '';
-                  
+
                   return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: Form(

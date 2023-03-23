@@ -62,7 +62,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                                 snapshot.data!.isSuccessful) {
                               final orderDetail = OrderDetailsModel.fromJson(
                                   snapshot.data!.data);
-                            
+
                               return Padding(
                                 padding: EdgeInsets.only(
                                     right: width * 0.05,
@@ -137,7 +137,6 @@ class _OrderDetailsState extends State<OrderDetails> {
                                       textAlign: TextAlign.center,
                                     ),
                                     const SizedBox(height: 5),
-
                                     Padding(
                                       padding: const EdgeInsets.symmetric(
                                           vertical: 4.0),

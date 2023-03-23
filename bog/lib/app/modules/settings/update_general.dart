@@ -45,10 +45,9 @@ class _UpdateGeneralInfoState extends State<UpdateGeneralInfo> {
         controller.currentType == 'Product Partner' ? 'vendor' : 'professional';
     getGenrealInfo =
         controller.userRepo.getData('/kyc-general-info/fetch?userType=vendor');
-      
+
     super.initState();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -169,8 +168,7 @@ class _UpdateGeneralInfoState extends State<UpdateGeneralInfo> {
                                         busAddressController.text,
                                     "operational_address":
                                         otherAddressController.text,
-                                    "id":logInDetails.profile!.id,
-                                        
+                                    "id": logInDetails.profile!.id,
                                     "userType": userType
                                   };
                                   print(newGeneralInfo);
@@ -181,7 +179,6 @@ class _UpdateGeneralInfoState extends State<UpdateGeneralInfo> {
                                   if (res.isSuccessful) {
                                     Get.back();
                                   } else {
-                                  
                                     Get.showSnackbar(const GetSnackBar(
                                       message: 'Error occured',
                                       backgroundColor: Colors.red,

@@ -1,10 +1,7 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:toggle_switch/toggle_switch.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_styles.dart';
@@ -28,8 +25,7 @@ class Chat extends GetView<HomeController> {
           statusBarIconBrightness: Brightness.dark,
           statusBarBrightness: Brightness.dark,
           systemNavigationBarColor: AppColors.backgroundVariant2,
-          systemNavigationBarIconBrightness: Brightness.dark
-      ),
+          systemNavigationBarIconBrightness: Brightness.dark),
       child: GetBuilder<HomeController>(
           id: 'Chat',
           builder: (controller) {
@@ -40,24 +36,27 @@ class Chat extends GetView<HomeController> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Padding(
-                      padding: EdgeInsets.only(right: width*0.05,left: width*0.03,top: kToolbarHeight),
+                      padding: EdgeInsets.only(
+                          right: width * 0.05,
+                          left: width * 0.03,
+                          top: kToolbarHeight),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           InkWell(
-                            onTap: (){
+                            onTap: () {
                               Navigator.pop(context);
                             },
                             child: SvgPicture.asset(
                               "assets/images/back.svg",
-                              height: width*0.05,
-                              width: width*0.05,
+                              height: width * 0.05,
+                              width: width * 0.05,
                               color: Colors.black,
                             ),
                           ),
                           SizedBox(
-                            width: width*0.04,
+                            width: width * 0.04,
                           ),
                           Expanded(
                             child: Row(
@@ -69,25 +68,26 @@ class Chat extends GetView<HomeController> {
                                   height: Get.width * 0.12,
                                   child: IconButton(
                                     icon: AppAvatar(
-                                      imgUrl: "",
-                                      radius: Get.width * 0.12,
-                                      name:"BOG"
-                                    ),
-                                    onPressed: () {
-
-                                    },
+                                        imgUrl: "",
+                                        radius: Get.width * 0.12,
+                                        name: "BOG"),
+                                    onPressed: () {},
                                   ),
                                 ),
                                 SizedBox(
-                                  width: width*0.02,
+                                  width: width * 0.02,
                                 ),
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
                                     children: [
                                       Text(
                                         "BOG Engineer",
-                                        style: AppTextStyle.subtitle1.copyWith(fontSize: multiplier * 0.065,color: Colors.black,fontWeight: FontWeight.w400),
+                                        style: AppTextStyle.subtitle1.copyWith(
+                                            fontSize: multiplier * 0.065,
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.w400),
                                         textAlign: TextAlign.start,
                                       ),
                                     ],
