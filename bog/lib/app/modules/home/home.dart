@@ -40,7 +40,9 @@ class _HomeState extends State<Home> {
       homeController.currentType = "Product Partner";
       homeController.update();
       homeController.updateNewUser('Product Partner');
-      verifyKycComplete('vendor', () {});
+      verifyKycComplete('vendor', () {
+        Get.to(() => const KYCPage());
+      });
     } else if (type == 'professional') {
       homeController.currentType = 'Service Partner';
       homeController.update();
@@ -64,26 +66,22 @@ class _HomeState extends State<Home> {
         .getData('/kyc/user-kyc/${logInDetails.id}?userType=$type');
     final kyc = GenKyc.fromJson(res.data);
     MyPref.genKyc.val = jsonEncode(kyc);
+  
     if (kyc.isKycCompleted != true) {
       MyPref.setOverlay.val = true;
-      AppOverlay.showInfoDialog(
-          title: 'Kyc Not Complete',
+  
+      AppOverlay.showKycDialog(
+          title: 'KYC NOT COMPLETE',
           buttonText: 'Complete KYC',
           content:
-              "You haven't completed your KYC yet, Kindly Complete your KYC now",
+              "You haven't completed your KYC yet, Kindly Complete your KYC and subscribe to access all features",
           onPressed: onPressed);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    // verifyKycComplete();
-    // var logInDetails = LogInModel.fromJson(jsonDecode(MyPref.logInDetail.val));
-    // if (logInDetails.userType == 'vendor' ||
-    //     logInDetails.userType == 'professional') {
-    //   verifyKycComplete(logInDetails.userType!);
-    // }
-
+    
     return WillPopScope(
       onWillPop: () async => false,
       child: AppBaseView(

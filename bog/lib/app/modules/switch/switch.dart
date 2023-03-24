@@ -15,11 +15,9 @@ import 'package:get/get.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_styles.dart';
 import '../../controllers/home_controller.dart';
-import '../../data/model/gen_kyc.dart';
-import '../../data/model/log_in_model.dart';
-import '../../data/providers/my_pref.dart';
+
 import '../../global_widgets/app_base_view.dart';
-import '../../global_widgets/overlays.dart';
+
 
 class SwitchUser extends StatefulWidget {
   const SwitchUser({Key? key}) : super(key: key);
@@ -41,27 +39,6 @@ class _SwitchUserState extends State<SwitchUser> {
     final controller = Get.find<HomeController>();
     getAccounts = controller.userRepo.getData('/user/get-accounts');
     super.initState();
-  }
-
-  void verifyKycComplete(String type, VoidCallback onPressed) async {
-    final controller = Get.find<HomeController>();
-    var logInDetails = LogInModel.fromJson(jsonDecode(MyPref.logInDetail.val));
-    final res = await controller.userRepo
-        .getData('/kyc/user-kyc/${logInDetails.id}?userType=$type');
-
-    final kyc = GenKyc.fromJson(res.data);
-    MyPref.genKyc.val = jsonEncode(kyc);
-    MyPref.genKyc.val = jsonEncode(kyc);
-
-    if (kyc.isKycCompleted != true) {
-      MyPref.setOverlay.val = true;
-      AppOverlay.showKycDialog(
-          title: 'Kyc Not Complete',
-          buttonText: 'Complete KYC',
-          content:
-              "You haven't completed your KYC yet, Kindly Complete your KYC now",
-          onPressed: onPressed);
-    }
   }
 
   @override
@@ -128,11 +105,26 @@ class _SwitchUserState extends State<SwitchUser> {
                                     return controller.currentType ==
                                             newAccountTypes[i].userType!
                                         ? MainSwitchWidget(
+                                          image: newAccountTypes[i]
+                                                        .userType ==
+                                                    'Client'
+                                                ? 'assets/icons/private.png'
+                                                : newAccountTypes[i].userType ==
+                                                        'Corporate Client'
+                                                    ? 'assets/icons/people.png'
+                                                    : newAccountTypes[i]
+                                                                .userType ==
+                                                            'Product Partner'
+                                                        ? 'assets/icons/product_partner.png'
+                                                        : 'assets/icons/service_partner.png',
                                             accountType:
                                                 newAccountTypes[i].userType ??
                                                     '')
                                         : const SizedBox.shrink();
                                   }),
+                                //const  SizedBox(height: 10),
+                              const    Divider(color: AppColors.newAsh,),
+                               const  SizedBox(height: 15),
                               Padding(
                                 padding: EdgeInsets.only(
                                     left: width * 0.05, right: width * 0.05),
@@ -161,7 +153,7 @@ class _SwitchUserState extends State<SwitchUser> {
                                         )
                                       ],
                                     )
-                                  : const SizedBox.shrink(),
+                                  : const SizedBox(height: 20),
                               ListView.builder(
                                   shrinkWrap: true,
                                   physics: const NeverScrollableScrollPhysics(),
@@ -172,30 +164,19 @@ class _SwitchUserState extends State<SwitchUser> {
                                         ? const SizedBox.shrink()
                                         : PrimarySwitchWidget(
                                             sendType: accountTypes[i].userType!,
-                                            iconAsset: newAccountTypes[i]
+                                            iconAsset:  newAccountTypes[i]
                                                         .userType ==
                                                     'Client'
-                                                ? 'assets/images/m2.png'
+                                                ? 'assets/icons/private.png'
                                                 : newAccountTypes[i].userType ==
                                                         'Corporate Client'
-                                                    ? 'assets/images/m2.png'
+                                                    ? 'assets/icons/people.png'
                                                     : newAccountTypes[i]
                                                                 .userType ==
                                                             'Product Partner'
-                                                        ? 'assets/images/m3.png'
-                                                        : 'assets/images/m1.png',
-                                            backgroundAsset: newAccountTypes[i]
-                                                        .userType ==
-                                                    'Client'
-                                                ? 'assets/images/client_bg.png'
-                                                : newAccountTypes[i].userType ==
-                                                        'Corporate Client'
-                                                    ? 'assets/images/client_bg.png'
-                                                    : newAccountTypes[i]
-                                                                .userType ==
-                                                            'Product Partner'
-                                                        ? 'assets/images/rect3.png'
-                                                        : 'assets/images/service_provider.png',
+                                                        ? 'assets/icons/product_partner.png'
+                                                        : 'assets/icons/service_partner.png',
+                                        
                                             newCurrentType:
                                                 newAccountTypes[i].userType!,
                                             detail: newAccountTypes[i]

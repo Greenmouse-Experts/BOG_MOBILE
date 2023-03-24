@@ -12,6 +12,7 @@ import 'package:get/get.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_styles.dart';
+import '../../../../core/utils/formatter.dart';
 import '../../../controllers/home_controller.dart';
 
 import '../../../data/model/log_in_model.dart';
@@ -585,7 +586,7 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
                                       AvailableProjectsModel.fromJson(element));
                                 }
                                 return SizedBox(
-                                  height: Get.height * 0.71,
+                                  height: Get.height * 0.735,
                                   child: TabBarView(
                                       controller: tabController,
                                       children: [
@@ -600,32 +601,68 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
                                                     serviceProjects.length,
                                                 itemBuilder: (ctx, i) {
                                                   return ListTile(
-                                                    title: Text(
-                                                      serviceProjects[i]
-                                                              .projectTypes
-                                                              ?.capitalizeFirst ??
-                                                          '',
-                                                      style: AppTextStyle
-                                                          .headline5
-                                                          .copyWith(
-                                                              color:
-                                                                  Colors.black),
-                                                    ),
-                                                    subtitle: Text(
-                                                      (serviceProjects[i]
-                                                              .projectSlug
-                                                              ?.capitalizeFirst ??
-                                                          ''),
-                                                      style: AppTextStyle
-                                                          .bodyText2,
-                                                    ),
-                                                    trailing: IconButton(
-                                                        onPressed: () {},
-                                                        icon: const Icon(
-                                                          Icons.more_vert,
-                                                          color: Colors.black,
-                                                        )),
-                                                  );
+                                                      title: Text(
+                                                        serviceProjects[i]
+                                                                .projectTypes
+                                                                ?.capitalizeFirst ??
+                                                            '',
+                                                        style: AppTextStyle
+                                                            .headline5
+                                                            .copyWith(
+                                                                color: Colors
+                                                                    .black),
+                                                      ),
+                                                      subtitle: Text(
+                                                        (serviceProjects[i]
+                                                                .projectSlug
+                                                                ?.capitalizeFirst ??
+                                                            ''),
+                                                        style: AppTextStyle
+                                                            .bodyText2,
+                                                      ),
+                                                      trailing: PopupMenuButton(
+                                                          color: Colors.white,
+                                                          child: const Icon(
+                                                            Icons.more_vert,
+                                                            color: Colors.black,
+                                                          ),
+                                                          itemBuilder:
+                                                              (context) {
+                                                            return [
+                                                              PopupMenuItem(
+                                                                child:
+                                                                    TextButton(
+                                                                  onPressed:
+                                                                      () {},
+                                                                  child:
+                                                                      const Text(
+                                                                    'View Details',
+                                                                    style: TextStyle(
+                                                                        color: Colors
+                                                                            .grey,
+                                                                        fontSize:
+                                                                            12),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              PopupMenuItem(
+                                                                child:
+                                                                    TextButton(
+                                                                  onPressed:
+                                                                      () {},
+                                                                  child:
+                                                                      const Text(
+                                                                    'Update Details',
+                                                                    style: TextStyle(
+                                                                        color: Colors
+                                                                            .grey,
+                                                                        fontSize:
+                                                                            12),
+                                                                  ),
+                                                                ),
+                                                              )
+                                                            ];
+                                                          }));
                                                 }),
                                         availableProjects.isEmpty
                                             ? const Center(
@@ -634,21 +671,28 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
                                             : ListView.builder(
                                                 itemCount:
                                                     availableProjects.length,
-                                                itemBuilder: (ctx, i) {
-                                                  return ListTile(
-                                                    title: Text(
-                                                      availableProjects[i]
-                                                              .projectId
-                                                              ?.capitalizeFirst ??
-                                                          '',
-                                                      style: AppTextStyle
-                                                          .headline5
-                                                          .copyWith(
-                                                              color:
-                                                                  Colors.black),
-                                                    ),
+                                                scrollDirection: Axis.vertical,
+                                                shrinkWrap: true,
+                                                padding:
+                                                    const EdgeInsets.all(0),
+                                                itemBuilder:
+                                                    (BuildContext context,
+                                                        int index) {
+                                                  return ServiceRequestItem(
+                                                    projectId: (availableProjects[
+                                                                    index]
+                                                                .project!
+                                                                .projectSlug ??
+                                                            '')
+                                                        .toUpperCase(),
+                                                    location: capitalizeFirst(
+                                                        availableProjects[index]
+                                                                .project!
+                                                                .projectTypes ??
+                                                            ''),
                                                   );
-                                                }),
+                                                },
+                                              )
                                       ]),
                                 );
                               } else {

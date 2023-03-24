@@ -38,7 +38,6 @@ class Checkout extends StatefulWidget {
 
 class _CheckoutState extends State<Checkout> {
   var publicKey = Api.publicKey;
-  //pk_test_0c79398dba746ce329d163885dd3fe5bc7e1f2436Lc45b0kAAAAAG7i0eNmGK8ubUOQl3_FVlJarVb7
   final plugin = PaystackPlugin();
   String successMessage = '';
   var currentPos = 0;

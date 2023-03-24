@@ -7,7 +7,9 @@ import 'package:bog/app/global_widgets/custom_app_bar.dart';
 import 'package:bog/app/global_widgets/global_widgets.dart';
 
 import 'package:flutter/material.dart';
+import 'package:form_field_validator/form_field_validator.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../../controllers/home_controller.dart';
 import '../../data/model/log_in_model.dart';
@@ -73,19 +75,8 @@ class _UpdateOrganisationInfoState extends State<UpdateOrganisationInfo> {
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.done &&
                       snapshot.data!.isSuccessful) {
-                    final response = snapshot.data!.data;
-                    final orgData = OrgInfoModel.fromJson(response);
-
-                    directorsName.text = orgData.directorFullname ?? '';
-                    directorDesignation.text =
-                        orgData.directorDesignation ?? '';
-                    directorPhone.text = orgData.directorPhone.toString();
-                    directorEmail.text = orgData.directorEmail ?? '';
-                    contactPhone.text = orgData.contactPhone.toString();
-                    contactEmail.text = orgData.contactEmail ?? '';
-                    otherOperations.text = orgData.othersOperations ?? '';
-
-                    return Padding(
+                    if (snapshot.data!.data == null){
+                         return Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Form(
                         key: _formKey,
@@ -100,6 +91,7 @@ class _UpdateOrganisationInfoState extends State<UpdateOrganisationInfo> {
                             ),
                             const SizedBox(height: 10),
                             AppDatePicker(
+                              
                               label: 'Date of Incorporation/Registration',
                               onChanged: (value) {
                                 dateOfIncorporation.text = value;
@@ -110,18 +102,26 @@ class _UpdateOrganisationInfoState extends State<UpdateOrganisationInfo> {
                               hint: '',
                               label: 'Others(Specify)',
                               controller: otherSpecify,
+                              validator: (p0) {
+                                if (orgType == 'Others(Specify)'){
+                                  return 'Please specify other';
+                                }
+                                return null;
+                              },
                             ),
                             const SizedBox(height: 10),
                             PageInput(
                               hint: 'Full Name',
                               label: 'Directors Full Name',
                               controller: directorsName,
+                              validator: MinLengthValidator(6, errorText: 'Enter a valid name'),
                             ),
                             const SizedBox(height: 10),
                             PageInput(
                               hint: '',
                               label: 'Directors Designation',
                               controller: directorDesignation,
+                              validator: MinLengthValidator(2, errorText: 'Enter a valid designation'),
                             ),
                             const SizedBox(height: 10),
                             PageInput(
@@ -129,6 +129,7 @@ class _UpdateOrganisationInfoState extends State<UpdateOrganisationInfo> {
                               label: 'Directors Phone Number',
                               keyboardType: TextInputType.phone,
                               controller: directorPhone,
+                               validator: LengthRangeValidator(min: 11, max: 11, errorText: 'Enter a valid phone number'),
                             ),
                             const SizedBox(height: 10),
                             PageInput(
@@ -136,6 +137,7 @@ class _UpdateOrganisationInfoState extends State<UpdateOrganisationInfo> {
                               label: 'Directors Email',
                               keyboardType: TextInputType.emailAddress,
                               controller: directorEmail,
+                              validator: EmailValidator(errorText: 'Enter a valid email'),
                             ),
                             const SizedBox(height: 10),
                             PageInput(
@@ -143,6 +145,7 @@ class _UpdateOrganisationInfoState extends State<UpdateOrganisationInfo> {
                               label: 'Contact Person Phone Number',
                               keyboardType: TextInputType.phone,
                               controller: contactPhone,
+                              validator: LengthRangeValidator(min: 11, max: 11, errorText: 'Enter a valid phone number'),
                             ),
                             const SizedBox(height: 10),
                             PageInput(
@@ -150,6 +153,7 @@ class _UpdateOrganisationInfoState extends State<UpdateOrganisationInfo> {
                               label: 'Contact Person Email',
                               keyboardType: TextInputType.emailAddress,
                               controller: contactEmail,
+                              validator: EmailValidator(errorText: 'Enter a valid email address'),
                             ),
                             const SizedBox(height: 10),
                             PageInput(
@@ -179,13 +183,156 @@ class _UpdateOrganisationInfoState extends State<UpdateOrganisationInfo> {
                                     "userType": userType,
                                     "id": logInDetails.profile!.id
                                   };
-
+                               print(newOrgInfo.toString());
                                   final controller = Get.find<HomeController>();
                                   final res = await controller.userRepo
                                       .postData('/kyc-organisation-info/create',
                                           newOrgInfo);
                                   if (res.isSuccessful) {
                                     Get.back();
+                                    Get.snackbar('Success', 'Organizational Info Updated Successfully', backgroundColor: Colors.green);
+                                  } else {
+                                    print(res.message);
+                                    Get.showSnackbar(const GetSnackBar(
+                                      message: 'Error occured',
+                                      backgroundColor: Colors.red,
+                                    ));
+                                 }
+                                }
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                    }
+                    final response = snapshot.data!.data;
+                    final orgData = OrgInfoModel.fromJson(response);
+
+                    directorsName.text = orgData.directorFullname ?? '';
+                    directorDesignation.text =
+                        orgData.directorDesignation ?? '';
+                    directorPhone.text = orgData.directorPhone.toString();
+                    directorEmail.text = orgData.directorEmail ?? '';
+                    contactPhone.text = orgData.contactPhone.toString();
+                    contactEmail.text = orgData.contactEmail ?? '';
+                    otherOperations.text = orgData.othersOperations ?? '';
+
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          children: [
+                            AppDropDownButton(
+                              onChanged: (value) {
+                                orgType = value;
+                              },
+                              options: options,
+                              label: 'Type of organisation',
+                            ),
+                            const SizedBox(height: 10),
+                            AppDatePicker(
+                              initialDate: orgData.incorporationDate ==  null ? '' : DateFormat('yyyy-MM-dd').format(orgData.incorporationDate!),
+                              label: 'Date of Incorporation/Registration',
+                              onChanged: (value) {
+                                dateOfIncorporation.text = value;
+                              },
+                            ),
+                            const SizedBox(height: 10),
+                            PageInput(
+                              hint: '',
+                              label: 'Others(Specify)',
+                              controller: otherSpecify,
+                               validator: (p0) {
+                                if (orgType == 'Others(Specify)'){
+                                  return 'Please specify other';
+                                }
+                                return null;
+                              },
+                            ),
+                            const SizedBox(height: 10),
+                            PageInput(
+                              hint: 'Full Name',
+                              label: 'Directors Full Name',
+                              controller: directorsName,
+                               validator: MinLengthValidator(6, errorText: 'Enter a valid name'),
+                            ),
+                            const SizedBox(height: 10),
+                            PageInput(
+                              hint: '',
+                              label: 'Directors Designation',
+                              controller: directorDesignation,
+                               validator: MinLengthValidator(2, errorText: 'Enter a valid designation'),
+                            ),
+                            const SizedBox(height: 10),
+                            PageInput(
+                              hint: '',
+                              label: 'Directors Phone Number',
+                              keyboardType: TextInputType.phone,
+                              controller: directorPhone,
+                               validator: LengthRangeValidator(min: 11, max: 11, errorText: 'Enter a valid phone number'),
+                            ),
+                            const SizedBox(height: 10),
+                            PageInput(
+                              hint: '',
+                              label: 'Directors Email',
+                              keyboardType: TextInputType.emailAddress,
+                              controller: directorEmail,
+                               validator: EmailValidator(errorText: 'Enter a valid email'),
+                            ),
+                            const SizedBox(height: 10),
+                            PageInput(
+                              hint: '',
+                              label: 'Contact Person Phone Number',
+                              keyboardType: TextInputType.phone,
+                              controller: contactPhone,
+                              validator: LengthRangeValidator(min: 11, max: 11, errorText: 'Enter a valid phone number'),
+                            ),
+                            const SizedBox(height: 10),
+                            PageInput(
+                              hint: '',
+                              label: 'Contact Person Email',
+                              keyboardType: TextInputType.emailAddress,
+                              controller: contactEmail,
+                               validator: EmailValidator(errorText: 'Enter a valid email'),
+                            ),
+                            const SizedBox(height: 10),
+                            PageInput(
+                              hint: '',
+                              label: 'Mention Other Companies Operated',
+                              isTextArea: true,
+                              controller: otherOperations,
+                            ),
+                            const SizedBox(height: 15),
+                            AppButton(
+                              title: 'Submit',
+                              onPressed: () async {
+                                if (_formKey.currentState!.validate()) {
+                                  final newOrgInfo = {
+                                    "organisation_type": orgType,
+                                    "others": otherSpecify.text,
+                                    "Incorporation_date":
+                                        dateOfIncorporation.text,
+                                    "director_fullname": directorsName.text,
+                                    "director_designation":
+                                        directorDesignation.text,
+                                    "director_phone": directorPhone.text,
+                                    "director_email": directorEmail.text,
+                                    "contact_phone": contactPhone.text,
+                                    "contact_email": contactEmail.text,
+                                    "others_operations": otherOperations.text,
+                                    "userType": userType,
+                                    "id": logInDetails.profile!.id
+                                  };
+                                  print(newOrgInfo.toString());
+                                  final controller = Get.find<HomeController>();
+                                  final res = await controller.userRepo
+                                      .postData('/kyc-organisation-info/create',
+                                          newOrgInfo);
+                                  if (res.isSuccessful) {
+                                    Get.back();
+                                    Get.snackbar('Success', 'Organizational Info Updated Successfully', backgroundColor: Colors.green);
                                   } else {
                                     print(res.message);
                                     Get.showSnackbar(const GetSnackBar(

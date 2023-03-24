@@ -8,8 +8,9 @@ import '../../core/theme/app_styles.dart';
 class AppDatePicker extends StatefulWidget {
   final String label;
   final Function onChanged;
+  final String? initialDate;
   const AppDatePicker(
-      {super.key, required this.label, required this.onChanged});
+      {super.key, required this.label, required this.onChanged, this.initialDate = ''});
 
   @override
   State<AppDatePicker> createState() => _AppDatePickerState();
@@ -21,7 +22,7 @@ class _AppDatePickerState extends State<AppDatePicker> {
 
   @override
   void initState() {
-    dateinput.text = ""; //set the initial value of text field
+    dateinput.text = widget.initialDate ?? ''; //set the initial value of text field
     super.initState();
   }
 

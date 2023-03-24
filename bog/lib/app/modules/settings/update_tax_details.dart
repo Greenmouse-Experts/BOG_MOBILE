@@ -3,6 +3,7 @@ import 'package:bog/app/global_widgets/custom_app_bar.dart';
 import 'package:bog/app/global_widgets/global_widgets.dart';
 
 import 'package:flutter/material.dart';
+import 'package:form_field_validator/form_field_validator.dart';
 import 'package:get/get.dart';
 
 import '../../controllers/home_controller.dart';
@@ -49,13 +50,16 @@ class _UpdateTaxDetailsState extends State<UpdateTaxDetails> {
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.done &&
                     snapshot.data!.isSuccessful) {
+                      if (snapshot.data!.data != null){
+
+                      
                   final response = snapshot.data!.data;
                   final taxData = TaxDataModel.fromJson(response);
 
                   vatRegNum.text = taxData.vat ?? '';
                   taxIdNum.text = taxData.tin ?? '';
                   professionalBodies.text = taxData.relevantStatutory ?? '';
-
+                      }
                   return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: Form(
@@ -67,6 +71,7 @@ class _UpdateTaxDetailsState extends State<UpdateTaxDetails> {
                             label: 'VAT Registration Number',
                             keyboardType: TextInputType.number,
                             controller: vatRegNum,
+                            validator: MinLengthValidator(1, errorText: 'Enter a valid registration numbers'),
                           ),
                           const SizedBox(height: 8),
                           PageInput(
@@ -74,6 +79,7 @@ class _UpdateTaxDetailsState extends State<UpdateTaxDetails> {
                             label: 'TAX Identification Number',
                             keyboardType: TextInputType.number,
                             controller: taxIdNum,
+                            validator: MinLengthValidator(1, errorText: 'Enter a valid TIN Number'),
                           ),
                           const SizedBox(height: 8),
                           PageInput(
@@ -86,7 +92,30 @@ class _UpdateTaxDetailsState extends State<UpdateTaxDetails> {
                           const SizedBox(height: 15),
                           AppButton(
                             title: 'Submit',
-                            onPressed: () {},
+                            onPressed: ()async {
+                               if (_formKey.currentState!.validate()) {
+                                final newTaxDetails = {
+                                  "VAT": vatRegNum.text,
+                                  "TIN" : taxIdNum.text,
+                                  "relevant_statutory" : professionalBodies.text,
+                                  "userType": userType
+                                };
+                                print(newTaxDetails.toString());
+                                 final controller = Get.find<HomeController>();
+                                final res = await controller.userRepo
+                                      .postData('/kyc-tax-permits/create',
+                                          newTaxDetails);
+                                  if (res.isSuccessful) {
+                                    Get.back();
+                                    Get.snackbar('Success', 'Tax Details Updated Successfully', backgroundColor: Colors.green);
+                                  } else {
+                                    Get.showSnackbar(const GetSnackBar(
+                                      message: 'Error occured',
+                                      backgroundColor: Colors.red,
+                                    ));
+                                  }
+                               }
+                            },
                           )
                         ],
                       ),

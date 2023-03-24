@@ -12,7 +12,8 @@ class AppColors {
   static const Color fadedPrimary = Color(0xFFFFCFBB);
   static const Color bostonUniRed = Color(0xFFC50000);
   static const Color darkChocolate = Color(0xFF410101);
-  static const Color blue = Color(0xFF064A72);
+  static const Color blue = Color(0xFF064A72);  
+  static const Color newAsh = Color(0xffB9B9B9);
   static const Color grey = Color(0xFF4F4F4F);
   static const Color platinum = Color(0xFFE5E5E5);
   static const Color onyx = Color(0xFF3C3C3A);

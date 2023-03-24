@@ -1,3 +1,4 @@
+import 'package:bog/app/global_widgets/overlays.dart';
 import 'package:bog/app/modules/settings/update_work_experience.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -25,6 +26,7 @@ class _WorkExperienceState extends State<WorkExperience> {
     final controller = Get.find<HomeController>();
     final userType =
         controller.currentType == 'Product Partner' ? 'vendor' : 'professional';
+    //print(userType);
     getWorkExperiences = controller.userRepo
         .getData('/kyc-work-experience/fetch?userType=$userType');
     super.initState();
@@ -78,14 +80,34 @@ class _WorkExperienceState extends State<WorkExperience> {
                           itemBuilder: (ctx, i) {
                             return ListTile(
                               title: Text(
-                                'Job entry $i',
+                                'Job entry ${i + 1}',
                                 style: const TextStyle(color: Colors.black),
                               ),
                               trailing: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   IconButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      AppOverlay.showInfoDialog(title: 'Delete Experience', 
+                                      content: 'Are you sure you want to delete this work experience?',
+                                      doubleFunction: true,
+                                      onPressed: () async{
+                                        final controller = Get.find<HomeController>();
+                                        final response = await controller.userRepo.deleteData('/kyc-work-experience/delete/${experience[i].id}');
+                                        if (response.isSuccessful){
+                                          Get.back();
+                                          Get.back();
+                                          Get.snackbar('Success', 'Work experience deleted successfullys', backgroundColor: Colors.green);
+                                          setState(() {
+                                            
+                                          });
+                                        } else{
+                                          Get.back();
+                                          Get.snackbar('Error', 'An error occurred');
+                                        }
+                                      });
+                                      
+                                    },
                                     icon: const Icon(
                                       Icons.delete,
                                       color: Colors.red,
@@ -99,7 +121,7 @@ class _WorkExperienceState extends State<WorkExperience> {
                                           ));
                                     },
                                     icon: const Icon(
-                                      Icons.edit,
+                                      Icons.visibility_outlined,
                                       color: AppColors.primary,
                                     ),
                                   ),

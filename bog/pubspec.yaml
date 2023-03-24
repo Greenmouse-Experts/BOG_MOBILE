@@ -38,7 +38,7 @@ dependencies:
   flutter_feather_icons: ^2.0.0+1
   qr_code_scanner: ^1.0.0
   flutter_barcode_scanner: ^2.0.0
-  path_provider: ^2.0.5
+  path_provider: ^2.0.14
   hive: ^2.0.4
   hive_flutter: ^1.1.0
   toggle_switch: ^2.0.1
@@ -63,6 +63,8 @@ dependencies:
  
   flutter_pdfview: ^1.2.9
   form_field_validator: ^1.1.0
+  photo_view: ^0.14.0
+  path: ^1.8.2
  
 
 dev_dependencies:
@@ -84,6 +86,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/
+    - assets/icons/
   fonts:
     - family: PP Telegraf
       fonts:

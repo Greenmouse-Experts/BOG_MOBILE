@@ -1,7 +1,9 @@
 import 'dart:convert';
 
 import 'package:bog/app/global_widgets/app_button.dart';
+import 'package:bog/app/global_widgets/bank_name.dart';
 import 'package:flutter/material.dart';
+import 'package:form_field_validator/form_field_validator.dart';
 import 'package:get/get.dart';
 
 import '../../controllers/home_controller.dart';
@@ -26,6 +28,7 @@ class _UpdateFinancialDetailsState extends State<UpdateFinancialDetails> {
   late Future<ApiResponse> getFinData;
   late String userType;
   final _formKey = GlobalKey<FormState>();
+   TextEditingController accountNumberController = TextEditingController();
 
   @override
   void initState() {
@@ -34,97 +37,135 @@ class _UpdateFinancialDetailsState extends State<UpdateFinancialDetails> {
         controller.currentType == 'Product Partner' ? 'vendor' : 'professional';
     getFinData = controller.userRepo
         .getData('/kyc-financial-data/fetch?userType=$userType');
+            accountNumberController.addListener(() { 
+          setState(() {
+          
+        }); });
     super.initState();
+
   }
 
   TextEditingController bankCode = TextEditingController(text: '120001');
   TextEditingController chosenBankName =
       TextEditingController(text: '9mobile 9Payment Service Bank');
+ 
+  TextEditingController accountNameController = TextEditingController();
+  TextEditingController referenceNameController =   TextEditingController();
+  TextEditingController overdraftController = TextEditingController();
   var bankList =
       BankListModel.fromJsonList(jsonDecode(MyPref.bankListDetail.val));
+  var previousBank;
   @override
   Widget build(BuildContext context) {
+    final controller = Get.find<HomeController>();
     return AppBaseView(
         child: Scaffold(
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const CustomAppBar(title: 'Financial Details'),
-          FutureBuilder<ApiResponse>(
-              future: getFinData,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.done &&
-                    snapshot.data!.isSuccessful) {
-                  final response = snapshot.data!.data;
-                  final finData = FinDataModel.fromJson(response);
-
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: Column(
-                      children: [
-                        PageDropButton(
-                          label: "Bank",
-                          hint: '',
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                          onChanged: (val) {
-                            bankCode.text =
-                                (val! as BankListModel).code.toString();
-                            chosenBankName.text =
-                                (val as BankListModel).name.toString();
-                          },
-                          value: bankList.first,
-                          items: bankList.map<DropdownMenuItem<BankListModel>>(
-                              (BankListModel value) {
-                            return DropdownMenuItem<BankListModel>(
-                              value: value,
-                              child: Text(value.name.toString()),
-                            );
-                          }).toList(),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const CustomAppBar(title: 'Financial Details'),
+            FutureBuilder<ApiResponse>(
+                future: getFinData,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done &&
+                      snapshot.data!.isSuccessful) {
+                        if (snapshot.data!.data != null){
+                        final response = snapshot.data!.data;
+                        final finData = FinDataModel.fromJson(response);
+                     
+                        final newBank = bankList.firstWhere((element) => element.name!.toLowerCase().contains(finData.bankName!.toLowerCase()));
+      
+                      
+                        previousBank = newBank;
+                       
+                        bankCode.text = newBank.code!;
+                        accountNumberController.text = finData.accountNumber ?? '';
+                        accountNameController.text = finData.accountName ?? '';
+                        referenceNameController.text = finData.bankerAddress ?? '';
+                        overdraftController.text = finData.overdraftFacility ?? '';
+                        chosenBankName.text = finData.bankName  ?? '';
+                        }
+                 
+      
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                        //  crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            PageDropButton(
+                              label: "Bank",
+                              hint: '',
+                              padding: const EdgeInsets.symmetric(horizontal: 10),
+                              onChanged: (val) {
+                                bankCode.text =
+                                    (val! as BankListModel).code.toString();
+                                chosenBankName.text =
+                                    (val as BankListModel).name.toString();
+                              },
+                              value: previousBank ?? bankList.first,
+                              items: bankList.map<DropdownMenuItem<BankListModel>>(
+                                  (BankListModel value) {
+                                return DropdownMenuItem<BankListModel>(
+                                  value: value,
+                                  child: Text(value.name.toString()),
+                                );
+                              }).toList(),
+                            ),
+                            const SizedBox(height: 10),
+                            PageInput(
+                              hint: '',
+                              label: 'Bank Account Number',
+                              keyboardType: TextInputType.number,
+                              controller: accountNumberController,
+                              // autovalidateMode: AutovalidateMode.onUserInteraction,
+                              // validator: LengthRangeValidator(min: 10, max: 10, errorText: 'Enter a valid account number'),
+                            ),
+                            const SizedBox(height: 10),
+                          accountNumberController.text.length != 10 ? const Text('Enter a vali account number') :
+                            BankNameWidget(nameController: accountNameController, controller: controller,
+                            bankCode: bankCode.text, accountController: accountNumberController ,),
+                      //  DisabledPageInput(
+                      //         hint: '',
+                      //         label: 'Bank Account Name',
+                      //         controller: accountNameController,
+                      //         validator: MinLengthValidator(3, errorText: 'Enter a valid account number'),
+                      //       ),   
+                            const SizedBox(height: 10),
+                            PageInput(
+                              hint: '',
+                              label: 'Name and Address of References',
+                              isTextArea: true,
+                              controller: referenceNameController,
+                            ),
+                            const SizedBox(height: 10),
+                            PageInput(
+                              hint: '',
+                              label: 'Level of current Overdraft Facility',
+                              controller: overdraftController,
+                            ),
+                            const SizedBox(height: 12),
+                            AppButton(
+                              title: 'Submit',
+                              onPressed: () {},
+                            )
+                          ],
                         ),
-                        const SizedBox(height: 10),
-                        PageInput(
-                          hint: '',
-                          label: 'Bank Account Number',
-                          keyboardType: TextInputType.number,
-                          initialValue: finData.accountNumber,
-                        ),
-                        const SizedBox(height: 10),
-                        PageInput(
-                          hint: '',
-                          label: 'Bank Account Name',
-                          initialValue: finData.accountName,
-                        ),
-                        const SizedBox(height: 10),
-                        PageInput(
-                          hint: '',
-                          label: 'Name and Address of References',
-                          isTextArea: true,
-                          initialValue: finData.bankName,
-                        ),
-                        const SizedBox(height: 10),
-                        PageInput(
-                          hint: '',
-                          label: 'Level of current Overdraft Facility',
-                          initialValue: finData.overdraftFacility,
-                        ),
-                        const SizedBox(height: 12),
-                        AppButton(
-                          title: 'Submit',
-                          onPressed: () {},
-                        )
-                      ],
-                    ),
-                  );
-                } else {
-                  if (snapshot.connectionState == ConnectionState.done) {
-                    return const Center(
-                      child: Text('Network Error Occurred'),
+                      ),
                     );
+                  } else {
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      return const Center(
+                        child: Text('Network Error Occurred'),
+                      );
+                    }
+                    return const AppLoader();
                   }
-                  return const AppLoader();
-                }
-              })
-        ],
+                })
+          ],
+        ),
       ),
     ));
   }

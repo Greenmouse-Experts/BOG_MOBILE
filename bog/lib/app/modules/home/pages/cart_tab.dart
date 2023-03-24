@@ -453,7 +453,7 @@ class _CartTabState extends State<CartTab> {
                       shrinkWrap: true,
                       padding: const EdgeInsets.all(0),
                       itemBuilder: (BuildContext context, int index) {
-                        return const ServiceRequestItem();
+                        return const ServiceRequestItem(projectId: 'Lan dihd',location: 'Ogba Lahos',);
                       },
                     ),
                   )
@@ -997,8 +997,10 @@ class OrderRequestItem extends StatelessWidget {
 }
 
 class ServiceRequestItem extends StatelessWidget {
+  final String projectId;
+  final String location;
   const ServiceRequestItem({
-    Key? key,
+    Key? key, required this.projectId, required this.location,
   }) : super(key: key);
 
   @override
@@ -1039,20 +1041,27 @@ class ServiceRequestItem extends StatelessWidget {
                     children: [
                       Padding(
                         padding: EdgeInsets.only(left: Get.width * 0.005),
-                        child: Text(
-                          "Project ID : LAN -SUV-132  ",
-                          style: AppTextStyle.caption.copyWith(
-                            color: Colors.black,
-                            fontSize: Get.width * 0.035,
-                            fontWeight: FontWeight.w600,
-                          ),
+                        child: Row(
+                          
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Project ID :  $projectId",
+                              style: AppTextStyle.caption.copyWith(
+                                color: Colors.black,
+                                fontSize: Get.width * 0.035,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            IconButton(onPressed: (){}, icon: const Icon(Icons.visibility_outlined, color: AppColors.primary,))
+                          ],
                         ),
                       ),
-                      const SizedBox(height: 10),
+                  
                       Padding(
                         padding: EdgeInsets.only(left: Get.width * 0.005),
                         child: Text(
-                          'Location : Ogba-Ikeja, Lagos',
+                          'Project Type: $location',
                           style: AppTextStyle.caption.copyWith(
                             color: Colors.black.withOpacity(0.6),
                             fontSize: Get.width * 0.033,
