@@ -1,7 +1,7 @@
 import 'package:bog/app/global_widgets/app_ratings.dart';
 import 'package:bog/app/global_widgets/page_dropdown.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+
 import 'package:get/get.dart';
 
 import '../../../core/theme/app_colors.dart';
@@ -13,6 +13,8 @@ import '../../data/providers/api_response.dart';
 import '../../global_widgets/bottom_widget.dart';
 
 import 'product_details.dart';
+
+final loadedProducts = <Widget>[];
 
 class Shop extends StatefulWidget {
   const Shop({Key? key}) : super(key: key);
@@ -27,6 +29,7 @@ class _ShopState extends State<Shop> {
   late Future<ApiResponse> getProductCategory;
   late Future<ApiResponse> getAllProducts;
   Widget prods = Container();
+  var contentIndex = 0.obs;
 
   @override
   void initState() {
@@ -41,180 +44,147 @@ class _ShopState extends State<Shop> {
     var width = Get.width;
     final Size size = MediaQuery.of(context).size;
     double multiplier = 25 * size.height * 0.01;
+
     return GetBuilder<HomeController>(
         id: 'shop',
         builder: (controller) {
           return Scaffold(
+            appBar: AppBar(
+              bottom: PreferredSize(
+                preferredSize: const Size.fromHeight(1),
+                child: Divider(
+                  color: AppColors.grey.withOpacity(0.3),
+                ),
+              ),
+              title: Text(
+                "Shop",
+                style: AppTextStyle.subtitle1.copyWith(
+                    fontSize: multiplier * 0.07,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w600),
+                textAlign: TextAlign.center,
+              ),
+              leading: IconButton(
+                  onPressed: () {
+                    Get.back();
+                  },
+                  icon: const Icon(Icons.arrow_back_ios_new_outlined)),
+            ),
             body: SizedBox(
               width: Get.width,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(
-                        right: width * 0.05,
-                        left: width * 0.03,
-                        top: kToolbarHeight),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            Get.back();
-                          },
-                          child: SvgPicture.asset(
-                            "assets/images/back.svg",
-                            height: width * 0.045,
-                            width: width * 0.045,
-                            color: Colors.black,
-                          ),
-                        ),
-                        SizedBox(
-                          width: width * 0.04,
-                        ),
-                        Expanded(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                "Shop",
-                                style: AppTextStyle.subtitle1.copyWith(
-                                    fontSize: multiplier * 0.07,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w500),
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          width: width * 0.04,
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    height: width * 0.04,
-                  ),
-                  Container(
-                    height: 1,
-                    width: width,
-                    color: AppColors.grey.withOpacity(0.1),
-                  ),
-                  SizedBox(
-                    height: width * 0.04,
-                  ),
-                  FutureBuilder<ApiResponse>(
-                      future: getProductCategory,
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.done &&
-                            snapshot.data!.isSuccessful) {
-                          final posts =
-                              ShopCategory.fromJsonList(snapshot.data!.data);
-
-                          List<Tab> tabs = [
-                            const Tab(
-                              child: Text('All'),
-                            )
-                          ];
-                          List<String> dropDownItem = [
-                            'All',
-                          ];
-                          List<Widget> contents = [];
-                          contents.add(getProducts(controller, posts[0],
-                              multiplier, width, true, getAllProducts));
-                          for (var element in posts) {
-                            if (element.totalProducts != 0) {
-                              tabs.add(
-                                  Tab(child: Text(element.name.toString())));
-                            }
-
-                            if (element.totalProducts != 0) {
-                              dropDownItem.add(element.name!);
-                              contents.add(getProducts(controller, element,
-                                  multiplier, width, false, getAllProducts));
-                            }
-                          }
-
-                          prods = contents[0];
-                          //   String selectedValue = dropDownItem[0];
-
-                          return SizedBox(
-                            height: Get.height * 0.8,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                children: [
-                                  PageDropButton(
-                                    onChanged: (val) {
-                                      setState(() {
-                                        //   selectedValue = val;
-                                        final index = dropDownItem.indexWhere(
-                                            (element) => element == val);
-
-                                        prods = contents[index];
-                                        print(prods);
-                                      });
-                                    },
-                                    label: '',
-                                    hint: 'Categories',
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 10),
-                                    value: dropDownItem.first,
-                                    items: dropDownItem.map((value) {
-                                      return DropdownMenuItem<String>(
-                                        value: value,
-                                        child: Text(value.toString()),
-                                      );
-                                    }).toList(),
-                                  ),
-                                  const SizedBox(height: 20),
-                                  Column(
-                                    children: [prods],
-                                  )
-                                ],
-                              ),
-                            ),
-                          );
-                        } else {
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    FutureBuilder<ApiResponse>(
+                        future: getProductCategory,
+                        builder: (context, snapshot) {
                           if (snapshot.connectionState ==
-                              ConnectionState.done) {
+                                  ConnectionState.done &&
+                              snapshot.data!.isSuccessful) {
+                            final posts =
+                                ShopCategory.fromJsonList(snapshot.data!.data);
+
+                            List<String> dropDownItem = [
+                              'All',
+                            ];
+                            final contents = <Widget>[].obs;
+                            contents.add(getProducts(controller, posts[0],
+                                multiplier, width, true, getAllProducts));
+                            for (var element in posts) {
+                              if (element.totalProducts != 0) {
+                                // tabs.add(
+                                //     Tab(child: Text(element.name.toString())));
+                              }
+
+                              if (element.totalProducts != 0) {
+                                dropDownItem.add(element.name!);
+                                contents.add(getProducts(controller, element,
+                                    multiplier, width, false, getAllProducts));
+                              }
+                            }
+
+                            prods = contents[0];
+
+                            return SizedBox(
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  children: [
+                                    PageDropButton(
+                                      onChanged: (val) {
+                                        setState(() {
+                                          final index = dropDownItem.indexWhere(
+                                              (element) => element == val);
+                                          contentIndex.value = index;
+                                          prods = contents[index];
+                                        });
+                                      },
+                                      label: '',
+                                      hint: 'Categories',
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10),
+                                      value: dropDownItem.first,
+                                      items: dropDownItem.map((value) {
+                                        return DropdownMenuItem<String>(
+                                          value: value,
+                                          child: Text(value.toString()),
+                                        );
+                                      }).toList(),
+                                    ),
+                                    const SizedBox(height: 10),
+                                    ListView.builder(
+                                        shrinkWrap: true,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        itemCount: contents.length,
+                                        itemBuilder: (context, i) {
+                                          return contentIndex.value == i
+                                              ? contents[i]
+                                              : const SizedBox.shrink();
+                                        })
+                                  ],
+                                ),
+                              ),
+                            );
+                          } else {
+                            if (snapshot.connectionState ==
+                                ConnectionState.done) {
+                              return SizedBox(
+                                height: Get.height * 0.7,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      "No Products Categories Found",
+                                      style: AppTextStyle.subtitle1.copyWith(
+                                          fontSize: multiplier * 0.07,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w500),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }
                             return SizedBox(
                               height: Get.height * 0.7,
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    "No Products Categories Found",
-                                    style: AppTextStyle.subtitle1.copyWith(
-                                        fontSize: multiplier * 0.07,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w500),
-                                    textAlign: TextAlign.center,
+                                children: const [
+                                  CircularProgressIndicator(
+                                    color: AppColors.primary,
                                   ),
                                 ],
                               ),
                             );
                           }
-                          return SizedBox(
-                            height: Get.height * 0.7,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: const [
-                                CircularProgressIndicator(
-                                  color: AppColors.primary,
-                                ),
-                              ],
-                            ),
-                          );
-                        }
-                      }),
-                ],
+                        }),
+                  ],
+                ),
               ),
             ),
             bottomNavigationBar: HomeBottomWidget(
@@ -243,10 +213,12 @@ class _ShopState extends State<Shop> {
                 ? null
                 : posts.removeWhere((e) => e.categoryId != element.id);
 
-            return SizedBox(
-              height: Get.height * 0.73,
+            final newProduct = SizedBox(
+              height: Get.height * 0.7,
               width: Get.width * 0.92,
               child: GridView.builder(
+                shrinkWrap: true,
+                //  physics: const NeverScrollableScrollPhysics(),
                 itemCount: posts.length,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     childAspectRatio: 4 / 4.5,
@@ -275,6 +247,7 @@ class _ShopState extends State<Shop> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          mainAxisSize: MainAxisSize.min,
                           children: [
                             SizedBox(
                               height: Get.height * 0.1,
@@ -375,6 +348,8 @@ class _ShopState extends State<Shop> {
                 },
               ),
             );
+            //oducts.add(newProduct);
+            return newProduct;
           } else {
             if (snapshot.connectionState == ConnectionState.done) {
               return SizedBox(

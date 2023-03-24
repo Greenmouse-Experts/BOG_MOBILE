@@ -1,4 +1,5 @@
 import 'package:bog/app/modules/switch/switch.dart';
+import 'package:bog/core/loading_widget/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
@@ -23,6 +24,31 @@ class AppOverlay {
                   borderRadius: BorderRadius.circular(10)),
               child: LoadingAnimationWidget.staggeredDotsWave(
                 color: AppColors.bostonUniRed,
+                size: 35,
+              ),
+            ),
+          ],
+        ),
+      );
+
+  static Future<void> newLoadingOverlay({
+    required Future<dynamic> Function() asyncFunction,
+  }) async =>
+      await Get.showOverlay(
+        asyncFunction: asyncFunction,
+        loadingWidget: //const LoadingScreen(),
+
+            Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                  color: const Color.fromARGB(255, 26, 26, 25),
+                  borderRadius: BorderRadius.circular(10)),
+              child: LoadingAnimationWidget.discreteCircle(
+                color: AppColors.background,
+                secondRingColor: AppColors.primary,
                 size: 35,
               ),
             ),

@@ -24,12 +24,15 @@ class _UpdateTaxDetailsState extends State<UpdateTaxDetails> {
   TextEditingController vatRegNum = TextEditingController();
   TextEditingController taxIdNum = TextEditingController();
   TextEditingController professionalBodies = TextEditingController();
+  late String userType;
 
   @override
   void initState() {
     final controller = Get.find<HomeController>();
-    getTaxInfo =
-        controller.userRepo.getData('/kyc-tax-permits/fetch?userType=vendor');
+    userType =
+        controller.currentType == 'Product Partner' ? 'vendor' : 'professional';
+    getTaxInfo = controller.userRepo
+        .getData('/kyc-tax-permits/fetch?userType=$userType');
     super.initState();
   }
 

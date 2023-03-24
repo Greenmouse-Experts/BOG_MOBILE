@@ -11,44 +11,46 @@ class ApiResponse {
   final int? code;
   dynamic data;
   dynamic order;
+  dynamic accounts;
   dynamic user;
   final bool isSuccessful;
   String? message;
   String? token;
 
-  ApiResponse({this.code,
+  ApiResponse(
+      {this.code,
       this.message,
       this.data,
       this.order,
+      this.accounts,
       required this.isSuccessful,
       this.token,
-    this.user
-      });
+      this.user});
 
   static ApiResponse response(Response response) {
     var json = response.data;
 
     return ApiResponse(
-      message: json['message'],
-      isSuccessful: json['success'],
-      data: json['data'],
-      user: json['user'],
-      token: json['token'],
-      order: json['order']
-    );
+        message: json['message'],
+        isSuccessful: json['success'],
+        data: json['data'],
+        user: json['user'],
+        token: json['token'],
+        accounts: json['accounts'],
+        order: json['order']);
   }
 
-  static ApiResponse responseFromBody(String json,int isSuccessful) {
+  static ApiResponse responseFromBody(String json, int isSuccessful) {
     var jsonD = jsonDecode(json);
     //print(jsonD['status']);
     return ApiResponse(
-      message: jsonD['message'],
-      isSuccessful: jsonD['success'],
-      data: jsonD['data'],
-      user: jsonD['user'],
-      token: jsonD['token'],
-      order: jsonD['order']
-    );
+        message: jsonD['message'],
+        isSuccessful: jsonD['success'],
+        data: jsonD['data'],
+        user: jsonD['user'],
+        token: jsonD['token'],
+        accounts: jsonD['accounts'],
+        order: jsonD['order']);
   }
 
   factory ApiResponse.timout(Response response) {

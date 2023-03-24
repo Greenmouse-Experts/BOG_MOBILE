@@ -1,6 +1,11 @@
+import 'dart:convert';
+
+import 'package:bog/app/data/model/available_projects_model.dart';
 import 'package:bog/app/data/model/projetcs_model.dart';
+import 'package:bog/app/data/model/service_projects_model.dart';
 import 'package:bog/app/global_widgets/app_loader.dart';
-import 'package:bog/app/global_widgets/tabs.dart';
+import 'package:bog/app/global_widgets/new_app_bar.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:get/get.dart';
@@ -9,11 +14,14 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_styles.dart';
 import '../../../controllers/home_controller.dart';
 
+import '../../../data/model/log_in_model.dart';
 import '../../../data/providers/api_response.dart';
 
+import '../../../data/providers/my_pref.dart';
 import '../../../global_widgets/app_input.dart';
 import '../../../global_widgets/my_project_widget.dart';
 import '../../../global_widgets/page_dropdown.dart';
+import '../../../global_widgets/tabs.dart';
 import '../../create/create.dart';
 import '../../project_details/project_details.dart';
 import 'cart_tab.dart';
@@ -30,19 +38,31 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
   String currentOrder = "New Order Requests";
   List<MyProjects> savedPosts = [];
 
-  late Future<ApiResponse> getMyProjects;
+  late TabController tabController;
 
+  late Future<ApiResponse> getMyProjects;
+  late Future<ApiResponse> getAvailableProjects;
+  late Future<ApiResponse> getServiceProjects;
+
+  Widget prods = Container();
+  var contentIndex = 0.obs;
   double multiplier = 25 * Get.height * 0.01;
 
   @override
   void initState() {
     super.initState();
     final controller = Get.find<HomeController>();
+    var logInDetails = LogInModel.fromJson(jsonDecode(MyPref.logInDetail.val));
     final userType = controller.currentType == 'Client'
         ? 'private_client'
         : 'corporate_client';
     getMyProjects =
         controller.userRepo.getData("/projects/my-request/?userType=$userType");
+    getServiceProjects = controller.userRepo
+        .getData("/projects/service-request?userType=professional");
+    getAvailableProjects = controller.userRepo
+        .getData("/projects/dispatched-projects/${logInDetails.profile!.id}");
+    tabController = TabController(length: 2, vsync: this);
   }
 
   List<MyProjects> getProjectsByStatus(
@@ -64,38 +84,36 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
     return GetBuilder<HomeController>(builder: (controller) {
       return Expanded(
         child: Scaffold(
+          appBar: newAppBar(context, "My ${controller.projectTitle}", false),
           body: SizedBox(
             height: Get.height * 0.91,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const SizedBox(
-                  height: kToolbarHeight,
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                      left: Get.width * 0.035,
-                      right: Get.width * 0.03,
-                      top: 10),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text(
-                        "My ${controller.projectTitle}",
-                        style: AppTextStyle.subtitle1.copyWith(
-                          color: Colors.black,
-                          fontSize: Get.width * 0.045,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: Get.height * 0.03,
-                ),
+                // Padding(
+                //   padding: EdgeInsets.only(
+                //       left: Get.width * 0.035,
+                //       right: Get.width * 0.03,
+                //       top: 10),
+                //   child: Row(
+                //     crossAxisAlignment: CrossAxisAlignment.center,
+                //     mainAxisAlignment: MainAxisAlignment.start,
+                //     children: [
+                //       Text(
+                //         "My ${controller.projectTitle}",
+                //         style: AppTextStyle.subtitle1.copyWith(
+                //           color: Colors.black,
+                //           fontSize: Get.width * 0.045,
+                //           fontWeight: FontWeight.w600,
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // ),
+                // SizedBox(
+                //   height: Get.height * 0.03,
+                // ),
                 if (controller.currentType == "Product Partner")
                   Padding(
                     padding: EdgeInsets.only(
@@ -126,8 +144,7 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
                       }).toList(),
                     ),
                   ),
-                if (controller.currentType == 'Product' ||
-                    controller.currentType == 'Service Partner')
+                if (controller.currentType == 'Product')
                   Padding(
                     padding: EdgeInsets.only(
                         left: Get.width * 0.03, right: Get.width * 0.03),
@@ -145,8 +162,7 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
                       },
                     ),
                   ),
-                if (controller.currentType == 'Product' ||
-                    controller.currentType == 'Service Partner')
+                if (controller.currentType == 'Product')
                   SizedBox(
                     height: Get.height * 0.03,
                   ),
@@ -161,7 +177,7 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
                               MyProjects.fromJsonList(snapshot.data!.data);
                           savedPosts.clear();
                           savedPosts.addAll(posts);
-                          print(savedPosts);
+
                           if (posts.isEmpty) {
                             return SizedBox(
                               height: Get.height * 0.65,
@@ -198,6 +214,13 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
                             const Tab(child: Text('Completed'))
                           ];
 
+                          List<String> dropDownItem = [
+                            'All',
+                            'Pending',
+                            'Ongoing',
+                            'Completed'
+                          ];
+
                           final approvedProjects =
                               getProjectsByStatus('approved', postsToUse);
                           final pendingProjects =
@@ -216,10 +239,53 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
                                 isPending: false, isOngoing: true),
                             getGroupedProjects(cancelledProjects, controller,
                                 isPending: false, isOngoing: true)
-                          ];
+                          ].obs;
 
+                          prods = contents[0];
                           return SizedBox(
-                              height: Get.height * 0.78,
+                              height: Get.height * 0.8,
+                              //     child: Padding(
+                              //       padding: const EdgeInsets.all(8),
+                              //       child: Column(
+                              //         children: [
+                              //           PageDropButton(
+                              //             onChanged: (val) {
+                              //               setState(() {
+                              //                 final index = dropDownItem.indexWhere(
+                              //                     (element) => element == val);
+                              //                 contentIndex.value = index;
+                              //                 prods = contents[index];
+                              //               });
+                              //             },
+                              //             label: '',
+                              //             hint: 'Status',
+                              //             padding: const EdgeInsets.symmetric(
+                              //                 horizontal: 10),
+                              //             value: dropDownItem.first,
+                              //             items: dropDownItem.map((value) {
+                              //               return DropdownMenuItem<String>(
+                              //                 value: value,
+                              //                 child: Text(value.toString()),
+                              //               );
+                              //             }).toList(),
+                              //           ),
+                              //           const SizedBox(height: 10),
+                              //           ListView.builder(
+                              //               shrinkWrap: true,
+                              //               physics:
+                              //                   const NeverScrollableScrollPhysics(),
+                              //               itemCount: contents.length,
+                              //               itemBuilder: (context, i) {
+                              //                 return
+                              //                     //contentIndex.value == i
+                              //                     //      ?
+                              //                     contents[i];
+                              //                 //   : const SizedBox.shrink();
+                              //               })
+                              //         ],
+                              //       ),
+                              //     )
+
                               child: VerticalTabs(
                                   backgroundColor: AppColors.backgroundVariant2,
                                   tabBackgroundColor:
@@ -456,413 +522,166 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
                     ),
                   ),
                 if (controller.currentType == "Service Partner")
-                  Expanded(
-                    child: FutureBuilder<ApiResponse>(
-                        future:
-                            controller.userRepo.getData("/projects/my-request"),
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                                  ConnectionState.done &&
-                              snapshot.data!.isSuccessful) {
-                            final posts =
-                                MyProjects.fromJsonList(snapshot.data!.data);
-                            savedPosts.clear();
-                            savedPosts.addAll(posts);
-                            if (posts.isEmpty) {
-                              return SizedBox(
-                                height: Get.height * 0.65,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "No Projects Available",
-                                      style: AppTextStyle.subtitle1.copyWith(
-                                          fontSize: multiplier * 0.07,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w500),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ],
-                                ),
-                              );
-                            }
-                            final postsToUse = posts
-                                .where((post) => post.title
-                                    .toString()
-                                    .toLowerCase()
-                                    .contains(search.toLowerCase()))
-                                .toList();
-                            return Padding(
-                              padding: EdgeInsets.only(
-                                  left: Get.width * 0.03,
-                                  right: Get.width * 0.03),
-                              child: GridView.builder(
-                                itemCount: postsToUse.length,
-                                gridDelegate:
-                                    const SliverGridDelegateWithFixedCrossAxisCount(
-                                        crossAxisCount: 2,
-                                        mainAxisSpacing: 15,
-                                        crossAxisSpacing: 15),
-                                scrollDirection: Axis.vertical,
-                                padding: const EdgeInsets.all(0),
-                                shrinkWrap: true,
-                                itemBuilder: (BuildContext context, int index) {
-                                  return InkWell(
-                                    onTap: () {
-                                      Get.to(() => const ProjectDetails(),
-                                          arguments: postsToUse[index]);
-                                    },
-                                    child: Container(
-                                      width: Get.width * 0.35,
-                                      height: Get.height * 0.35,
-                                      decoration: BoxDecoration(
-                                        color: AppColors.backgroundVariant2,
-                                        borderRadius: BorderRadius.circular(10),
-                                        border: Border.all(
-                                            color:
-                                                AppColors.grey.withOpacity(0.1),
-                                            width: 1),
-                                      ),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.stretch,
-                                        children: [
-                                          Container(
-                                            height: Get.height * 0.1,
-                                            decoration: BoxDecoration(
-                                              color: AppColors.grey
-                                                  .withOpacity(0.1),
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                              border: Border.all(
-                                                  color: AppColors.grey
-                                                      .withOpacity(0.1),
-                                                  width: 1),
-                                            ),
-                                            child: Padding(
-                                              padding: EdgeInsets.only(
-                                                  top: Get.width * 0.01,
-                                                  left: Get.width * 0.01,
-                                                  right: Get.width * 0.01),
-                                              child: ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                child: Image.network(
-                                                  "",
-                                                  fit: BoxFit.cover,
-                                                  color: Colors.black
-                                                      .withOpacity(0.2),
-                                                  errorBuilder: (context, error,
-                                                      stackTrace) {
-                                                    return const Icon(
-                                                      Icons.tab_rounded,
-                                                      color: AppColors.primary,
-                                                      size: 25,
-                                                    );
-                                                  },
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: Get.width * 0.02,
-                                          ),
-                                          Padding(
-                                            padding: EdgeInsets.only(
-                                                left: Get.width * 0.01,
-                                                right: Get.width * 0.01),
-                                            child: Text.rich(
-                                                style: AppTextStyle.subtitle1
-                                                    .copyWith(
-                                                        fontSize:
-                                                            multiplier * 0.065,
-                                                        color: Colors.black,
-                                                        fontWeight:
-                                                            FontWeight.w600),
-                                                textAlign: TextAlign.start,
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                                TextSpan(
-                                                    text: '',
-                                                    children:
-                                                        highlightOccurrences(
-                                                            postsToUse[index]
-                                                                .title
-                                                                .toString(),
-                                                            search))),
-                                          ),
-                                          SizedBox(
-                                            height: Get.width * 0.02,
-                                          ),
-                                          Padding(
-                                            padding: EdgeInsets.only(
-                                                left: Get.width * 0.01,
-                                                right: Get.width * 0.01),
-                                            child: Text(
-                                              postsToUse[index]
-                                                  .projectTypes
-                                                  .toString()
-                                                  .capitalizeFirst!
-                                                  .replaceAll("_", " "),
-                                              style: AppTextStyle.subtitle1
-                                                  .copyWith(
-                                                      fontSize:
-                                                          multiplier * 0.055,
-                                                      color: AppColors.primary,
-                                                      fontWeight:
-                                                          FontWeight.normal),
-                                              textAlign: TextAlign.start,
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: Get.width * 0.02,
-                                          ),
-                                          Padding(
-                                            padding: EdgeInsets.only(
-                                                left: Get.width * 0.01,
-                                                right: Get.width * 0.01),
-                                            child: Text(
-                                              postsToUse[index]
-                                                  .createdAt
-                                                  .toString(),
-                                              style: AppTextStyle.subtitle1
-                                                  .copyWith(
-                                                      fontSize:
-                                                          multiplier * 0.05,
-                                                      color: AppColors.grey,
-                                                      fontWeight:
-                                                          FontWeight.normal),
-                                              textAlign: TextAlign.start,
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  );
-                                },
-                              ),
-                            );
-                          } else if (savedPosts.isNotEmpty) {
-                            final posts = savedPosts;
-                            if (posts.isEmpty) {
-                              return SizedBox(
-                                height: Get.height * 0.65,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "No Projects Available",
-                                      style: AppTextStyle.subtitle1.copyWith(
-                                          fontSize: multiplier * 0.07,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w500),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ],
-                                ),
-                              );
-                            }
-                            final postsToUse = posts
-                                .where((post) => post.title
-                                    .toString()
-                                    .toLowerCase()
-                                    .contains(search.toLowerCase()))
-                                .toList();
-                            return Padding(
-                              padding: EdgeInsets.only(
-                                  left: Get.width * 0.03,
-                                  right: Get.width * 0.03),
-                              child: GridView.builder(
-                                itemCount: postsToUse.length,
-                                gridDelegate:
-                                    const SliverGridDelegateWithFixedCrossAxisCount(
-                                        crossAxisCount: 2,
-                                        mainAxisSpacing: 15,
-                                        crossAxisSpacing: 15),
-                                scrollDirection: Axis.vertical,
-                                padding: const EdgeInsets.all(0),
-                                shrinkWrap: true,
-                                itemBuilder: (BuildContext context, int index) {
-                                  return InkWell(
-                                    onTap: () {
-                                      Get.to(() => const ProjectDetails(),
-                                          arguments: postsToUse[index]);
-                                    },
-                                    child: Container(
-                                      width: Get.width * 0.35,
-                                      height: Get.height * 0.35,
-                                      decoration: BoxDecoration(
-                                        color: AppColors.backgroundVariant2,
-                                        borderRadius: BorderRadius.circular(10),
-                                        border: Border.all(
-                                            color:
-                                                AppColors.grey.withOpacity(0.1),
-                                            width: 1),
-                                      ),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.stretch,
-                                        children: [
-                                          Container(
-                                            height: Get.height * 0.1,
-                                            decoration: BoxDecoration(
-                                              color: AppColors.grey
-                                                  .withOpacity(0.1),
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                              border: Border.all(
-                                                  color: AppColors.grey
-                                                      .withOpacity(0.1),
-                                                  width: 1),
-                                            ),
-                                            child: Padding(
-                                              padding: EdgeInsets.only(
-                                                  top: Get.width * 0.01,
-                                                  left: Get.width * 0.01,
-                                                  right: Get.width * 0.01),
-                                              child: ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                child: Image.network(
-                                                  "",
-                                                  fit: BoxFit.cover,
-                                                  color: Colors.black
-                                                      .withOpacity(0.2),
-                                                  errorBuilder: (context, error,
-                                                      stackTrace) {
-                                                    return const Icon(
-                                                      Icons.tab_rounded,
-                                                      color: AppColors.primary,
-                                                      size: 25,
-                                                    );
-                                                  },
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: Get.width * 0.02,
-                                          ),
-                                          Padding(
-                                            padding: EdgeInsets.only(
-                                                left: Get.width * 0.01,
-                                                right: Get.width * 0.01),
-                                            child: Text.rich(
-                                                style: AppTextStyle.subtitle1
-                                                    .copyWith(
-                                                        fontSize:
-                                                            multiplier * 0.065,
-                                                        color: Colors.black,
-                                                        fontWeight:
-                                                            FontWeight.w600),
-                                                textAlign: TextAlign.start,
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                                TextSpan(
-                                                    text: '',
-                                                    children:
-                                                        highlightOccurrences(
-                                                            postsToUse[index]
-                                                                .title
-                                                                .toString(),
-                                                            search))),
-                                          ),
-                                          SizedBox(
-                                            height: Get.width * 0.02,
-                                          ),
-                                          Padding(
-                                            padding: EdgeInsets.only(
-                                                left: Get.width * 0.01,
-                                                right: Get.width * 0.01),
-                                            child: Text(
-                                              postsToUse[index]
-                                                  .projectTypes
-                                                  .toString()
-                                                  .capitalizeFirst!
-                                                  .replaceAll("_", " "),
-                                              style: AppTextStyle.subtitle1
-                                                  .copyWith(
-                                                      fontSize:
-                                                          multiplier * 0.055,
-                                                      color: AppColors.primary,
-                                                      fontWeight:
-                                                          FontWeight.normal),
-                                              textAlign: TextAlign.start,
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: Get.width * 0.02,
-                                          ),
-                                          Padding(
-                                            padding: EdgeInsets.only(
-                                                left: Get.width * 0.01,
-                                                right: Get.width * 0.01),
-                                            child: Text(
-                                              postsToUse[index]
-                                                  .createdAt
-                                                  .toString(),
-                                              style: AppTextStyle.subtitle1
-                                                  .copyWith(
-                                                      fontSize:
-                                                          multiplier * 0.05,
-                                                      color: AppColors.grey,
-                                                      fontWeight:
-                                                          FontWeight.normal),
-                                              textAlign: TextAlign.start,
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  );
-                                },
-                              ),
-                            );
-                          } else {
+                  Column(
+                    children: [
+                      TabBar(
+                        controller: tabController,
+                        padding: EdgeInsets.zero,
+                        labelColor: Colors.black,
+                        unselectedLabelColor: const Color(0xff9A9A9A),
+                        indicatorColor: AppColors.primary,
+                        indicatorSize: TabBarIndicatorSize.tab,
+                        indicatorPadding: EdgeInsets.only(
+                            left: Get.width * 0.045, right: Get.width * 0.045),
+                        labelStyle: TextStyle(
+                          fontSize: Get.width * 0.035,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        unselectedLabelStyle: TextStyle(
+                          fontSize: Get.width * 0.035,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        tabs: const [
+                          Tab(
+                            text: 'My Projects',
+                            iconMargin: EdgeInsets.zero,
+                          ),
+                          Tab(
+                            text: 'Available Projects',
+                            iconMargin: EdgeInsets.zero,
+                          ),
+                        ],
+                        onTap: (index) {},
+                      ),
+                      Container(
+                        height: 1,
+                        width: Get.width,
+                        color: AppColors.grey.withOpacity(0.1),
+                      ),
+                      FutureBuilder<List<ApiResponse>>(
+                          future: Future.wait(
+                              [getServiceProjects, getAvailableProjects]),
+                          builder: (context, snapshot) {
                             if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const AppLoader();
+                            } else if (snapshot.connectionState ==
                                 ConnectionState.done) {
-                              return SizedBox(
-                                height: Get.height * 0.65,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "No Projects Available",
-                                      style: AppTextStyle.subtitle1.copyWith(
-                                          fontSize: multiplier * 0.07,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w500),
-                                      textAlign: TextAlign.center,
+                              if (snapshot.hasData) {
+                                final response1 =
+                                    snapshot.data![0].data as List<dynamic>;
+                                final response2 =
+                                    snapshot.data![1].data as List<dynamic>;
+                                final serviceProjects =
+                                    <ServiceProjectsModel>[];
+                                final availableProjects =
+                                    <AvailableProjectsModel>[];
+                                for (var element in response1) {
+                                  serviceProjects.add(
+                                      ServiceProjectsModel.fromJson(element));
+                                }
+                                for (var element in response2) {
+                                  availableProjects.add(
+                                      AvailableProjectsModel.fromJson(element));
+                                }
+                                return SizedBox(
+                                  height: Get.height * 0.71,
+                                  child: TabBarView(
+                                      controller: tabController,
+                                      children: [
+                                        serviceProjects.isEmpty
+                                            ? const Center(
+                                                child: Text(
+                                                    'No projects available'),
+                                              )
+                                            : ListView.builder(
+                                                shrinkWrap: true,
+                                                itemCount:
+                                                    serviceProjects.length,
+                                                itemBuilder: (ctx, i) {
+                                                  return ListTile(
+                                                    title: Text(
+                                                      serviceProjects[i]
+                                                              .projectTypes
+                                                              ?.capitalizeFirst ??
+                                                          '',
+                                                      style: AppTextStyle
+                                                          .headline5
+                                                          .copyWith(
+                                                              color:
+                                                                  Colors.black),
+                                                    ),
+                                                    subtitle: Text(
+                                                      (serviceProjects[i]
+                                                              .projectSlug
+                                                              ?.capitalizeFirst ??
+                                                          ''),
+                                                      style: AppTextStyle
+                                                          .bodyText2,
+                                                    ),
+                                                    trailing: IconButton(
+                                                        onPressed: () {},
+                                                        icon: const Icon(
+                                                          Icons.more_vert,
+                                                          color: Colors.black,
+                                                        )),
+                                                  );
+                                                }),
+                                        availableProjects.isEmpty
+                                            ? const Center(
+                                                child: Text(
+                                                    'No Available projects currently'))
+                                            : ListView.builder(
+                                                itemCount:
+                                                    availableProjects.length,
+                                                itemBuilder: (ctx, i) {
+                                                  return ListTile(
+                                                    title: Text(
+                                                      availableProjects[i]
+                                                              .projectId
+                                                              ?.capitalizeFirst ??
+                                                          '',
+                                                      style: AppTextStyle
+                                                          .headline5
+                                                          .copyWith(
+                                                              color:
+                                                                  Colors.black),
+                                                    ),
+                                                  );
+                                                }),
+                                      ]),
+                                );
+                              } else {
+                                return const Center(
+                                  child: Text('No Projects Available'),
+                                );
+                              }
+                            } else if (snapshot.hasError) {
+                              return TabBarView(
+                                  controller: tabController,
+                                  children: const [
+                                    Center(
+                                      child: Text(
+                                          'An error occurred, please try again later'),
                                     ),
-                                  ],
-                                ),
-                              );
+                                    Center(
+                                      child: Text(
+                                          'An error occurred, please try again later'),
+                                    )
+                                  ]);
+                            } else {
+                              return TabBarView(
+                                  controller: tabController,
+                                  children: const [
+                                    Center(
+                                        child: Text('No projects currently')),
+                                    Center(
+                                        child: Text(
+                                            'No Available projects currently'))
+                                  ]);
                             }
-                            return SizedBox(
-                              height: Get.height * 0.65,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: const [
-                                  CircularProgressIndicator(
-                                    color: AppColors.primary,
-                                  ),
-                                ],
-                              ),
-                            );
-                          }
-                        }),
+                          }),
+                    ],
                   ),
               ],
             ),
@@ -922,6 +741,8 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
         : Padding(
             padding: const EdgeInsets.only(left: 8, right: 8),
             child: ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
                 itemCount: postsToUse.length,
                 itemBuilder: (ctx, i) {
                   return MyProjectWidget(

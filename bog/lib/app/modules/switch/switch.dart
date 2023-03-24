@@ -1,10 +1,15 @@
 import 'dart:convert';
 
 // import 'package:bog/app/modules/home/home.dart';
-import 'package:bog/app/modules/settings/view_kyc.dart';
+import 'package:bog/app/data/model/get_account_model.dart';
+import 'package:bog/app/data/providers/api_response.dart';
+import 'package:bog/app/global_widgets/app_loader.dart';
+import 'package:bog/app/global_widgets/bottom_widget.dart';
+import 'package:bog/app/global_widgets/new_app_bar.dart';
+import 'package:bog/app/global_widgets/switch_widget.dart';
+
 import 'package:flutter/material.dart';
 
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../../../core/theme/app_colors.dart';
@@ -16,602 +21,218 @@ import '../../data/providers/my_pref.dart';
 import '../../global_widgets/app_base_view.dart';
 import '../../global_widgets/overlays.dart';
 
-class SwitchUser extends GetView<HomeController> {
+class SwitchUser extends StatefulWidget {
   const SwitchUser({Key? key}) : super(key: key);
 
   static const route = '/create';
 
   @override
+  State<SwitchUser> createState() => _SwitchUserState();
+}
+
+class _SwitchUserState extends State<SwitchUser> {
+  late Future<ApiResponse> getAccounts;
+
+  final width = Get.width;
+  final height = Get.height;
+
+  @override
+  void initState() {
+    final controller = Get.find<HomeController>();
+    getAccounts = controller.userRepo.getData('/user/get-accounts');
+    super.initState();
+  }
+
+  void verifyKycComplete(String type, VoidCallback onPressed) async {
+    final controller = Get.find<HomeController>();
+    var logInDetails = LogInModel.fromJson(jsonDecode(MyPref.logInDetail.val));
+    final res = await controller.userRepo
+        .getData('/kyc/user-kyc/${logInDetails.id}?userType=$type');
+
+    final kyc = GenKyc.fromJson(res.data);
+    MyPref.genKyc.val = jsonEncode(kyc);
+    MyPref.genKyc.val = jsonEncode(kyc);
+
+    if (kyc.isKycCompleted != true) {
+      MyPref.setOverlay.val = true;
+      AppOverlay.showKycDialog(
+          title: 'Kyc Not Complete',
+          buttonText: 'Complete KYC',
+          content:
+              "You haven't completed your KYC yet, Kindly Complete your KYC now",
+          onPressed: onPressed);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    var width = Get.width;
     final Size size = MediaQuery.of(context).size;
     double multiplier = 25 * size.height * 0.01;
-
-    void verifyKycComplete(String type, VoidCallback onPressed) async {
-      final controller = Get.find<HomeController>();
-      var logInDetails =
-          LogInModel.fromJson(jsonDecode(MyPref.logInDetail.val));
-      final res = await controller.userRepo
-          .getData('/kyc/user-kyc/${logInDetails.id}?userType=$type');
-
-      final kyc = GenKyc.fromJson(res.data);
-      MyPref.genKyc.val = jsonEncode(kyc);
-      MyPref.genKyc.val = jsonEncode(kyc);
-
-      if (kyc.isKycCompleted != true) {
-        MyPref.setOverlay.val = true;
-        AppOverlay.showKycDialog(
-            title: 'Kyc Not Complete',
-            buttonText: 'Complete KYC',
-            content:
-                "You haven't completed your KYC yet, Kindly Complete your KYC now",
-            onPressed: onPressed);
-      }
-    }
-
     return AppBaseView(
       child: GetBuilder<HomeController>(
           id: 'Switch',
           builder: (controller) {
             return Scaffold(
-              backgroundColor: AppColors.backgroundVariant2,
-              body: SizedBox(
-                width: Get.width,
-                child: SingleChildScrollView(
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(
-                              right: width * 0.05,
-                              left: width * 0.045,
-                              top: kToolbarHeight),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.center,
+                appBar: newAppBar(context, 'Switch', true),
+                backgroundColor: AppColors.backgroundVariant2,
+                body: FutureBuilder<ApiResponse>(
+                    future: getAccounts,
+                    builder: (ctx, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        if (snapshot.hasError) {
+                          return SingleChildScrollView(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: const [
+                                Center(
+                                  child: Text('An error occured'),
+                                )
+                              ],
+                            ),
+                          );
+                        } else {
+                          final response =
+                              snapshot.data!.accounts as List<dynamic>;
+                          final accountTypes = <GetAccountModel>[];
+                          final newAccountTypes = <GetAccountModel>[];
+                          for (var element in response) {
+                            accountTypes.add(GetAccountModel.fromJson(element));
+                          }
+                          for (GetAccountModel element in accountTypes) {
+                            final newElement = GetAccountModel(
+                                id: element.id,
+                                userId: element.userId,
+                                userType: element.userType == 'private_client'
+                                    ? 'Client'
+                                    : element.userType == 'corporate_client'
+                                        ? 'Corporate Client'
+                                        : element.userType == 'vendor'
+                                            ? 'Product Partner'
+                                            : 'Service Partner');
+                            newAccountTypes.add(newElement);
+                          }
+
+                          final finalAccountTypes = newAccountTypes
+                              .where((element) =>
+                                  controller.currentType != element.userType!)
+                              .toList();
+
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              InkWell(
-                                onTap: () {
-                                  Navigator.pop(context);
-                                },
-                                child: SvgPicture.asset(
-                                  "assets/images/back.svg",
-                                  height: width * 0.045,
-                                  width: width * 0.045,
-                                  color: Colors.black,
+                              ListView.builder(
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemCount: newAccountTypes.length,
+                                  itemBuilder: (ctx, i) {
+                                    return controller.currentType ==
+                                            newAccountTypes[i].userType!
+                                        ? MainSwitchWidget(
+                                            accountType:
+                                                newAccountTypes[i].userType ??
+                                                    '')
+                                        : const SizedBox.shrink();
+                                  }),
+                              Padding(
+                                padding: EdgeInsets.only(
+                                    left: width * 0.05, right: width * 0.05),
+                                child: Text(
+                                  "Switch To :",
+                                  style: AppTextStyle.subtitle1.copyWith(
+                                      fontSize: multiplier * 0.08,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w600),
+                                  textAlign: TextAlign.start,
                                 ),
                               ),
-                              SizedBox(
-                                width: width * 0.04,
-                              ),
-                              Expanded(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "Switch Account",
-                                      style: AppTextStyle.subtitle1.copyWith(
-                                          fontSize: multiplier * 0.07,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w500),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(
-                                width: width * 0.04,
-                              ),
+                              finalAccountTypes.isEmpty
+                                  ? Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        SizedBox(
+                                          height: 100,
+                                          child: Center(
+                                            child: Text(
+                                              'You have no other accounts',
+                                              style: AppTextStyle.bodyText2,
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    )
+                                  : const SizedBox.shrink(),
+                              ListView.builder(
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemCount: newAccountTypes.length,
+                                  itemBuilder: (ctx, i) {
+                                    return controller.currentType ==
+                                            newAccountTypes[i].userType!
+                                        ? const SizedBox.shrink()
+                                        : PrimarySwitchWidget(
+                                            sendType: accountTypes[i].userType!,
+                                            iconAsset: newAccountTypes[i]
+                                                        .userType ==
+                                                    'Client'
+                                                ? 'assets/images/m2.png'
+                                                : newAccountTypes[i].userType ==
+                                                        'Corporate Client'
+                                                    ? 'assets/images/m2.png'
+                                                    : newAccountTypes[i]
+                                                                .userType ==
+                                                            'Product Partner'
+                                                        ? 'assets/images/m3.png'
+                                                        : 'assets/images/m1.png',
+                                            backgroundAsset: newAccountTypes[i]
+                                                        .userType ==
+                                                    'Client'
+                                                ? 'assets/images/client_bg.png'
+                                                : newAccountTypes[i].userType ==
+                                                        'Corporate Client'
+                                                    ? 'assets/images/client_bg.png'
+                                                    : newAccountTypes[i]
+                                                                .userType ==
+                                                            'Product Partner'
+                                                        ? 'assets/images/rect3.png'
+                                                        : 'assets/images/service_provider.png',
+                                            newCurrentType:
+                                                newAccountTypes[i].userType!,
+                                            detail: newAccountTypes[i]
+                                                        .userType ==
+                                                    'Client'
+                                                ? 'Access services and products'
+                                                : newAccountTypes[i].userType ==
+                                                        'Corporate Client'
+                                                    ? 'Access services and products'
+                                                    : newAccountTypes[i]
+                                                                .userType ==
+                                                            'Product Partner'
+                                                        ? 'Sell your products online'
+                                                        : 'Render services to users in need',
+                                          );
+                                  }),
                             ],
-                          ),
-                        ),
-                        SizedBox(
-                          height: width * 0.04,
-                        ),
-                        Container(
-                          height: 1,
-                          width: width,
-                          color: AppColors.grey.withOpacity(0.1),
-                        ),
-                        SizedBox(
-                          height: width * 0.04,
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(
-                              left: width * 0.05, right: width * 0.05),
-                          child: Row(
-                            children: [
-                              Text(
-                                "Currently logged in as : ",
-                                style: AppTextStyle.subtitle1.copyWith(
-                                    fontSize: multiplier * 0.08,
-                                    color: Colors.black.withOpacity(.7),
-                                    fontWeight: FontWeight.w500),
-                                textAlign: TextAlign.start,
-                              ),
-                              Text(
-                                controller.currentType,
-                                style: AppTextStyle.subtitle1.copyWith(
-                                    fontSize: multiplier * 0.08,
-                                    color: AppColors.primary,
-                                    fontWeight: FontWeight.w500),
-                                textAlign: TextAlign.start,
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          height: width * 0.1,
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(
-                              left: width * 0.05, right: width * 0.05),
-                          child: Text(
-                            "Switch To :",
-                            style: AppTextStyle.subtitle1.copyWith(
-                                fontSize: multiplier * 0.08,
-                                color: Colors.black,
-                                fontWeight: FontWeight.w600),
-                            textAlign: TextAlign.start,
-                          ),
-                        ),
-                        if (controller.currentType != "Client")
-                          SizedBox(
-                            height: Get.height * 0.04,
-                          ),
-                        if (controller.currentType != "Client")
-                          Padding(
-                            padding: EdgeInsets.only(
-                                left: width * 0.05, right: width * 0.05),
-                            child: InkWell(
-                              onTap: () async {
-                                var kyc = GenKyc.fromJson(
-                                    jsonDecode(MyPref.genKyc.val));
-                                final oldUser = controller.currentType;
-                                controller.currentType = "Client";
-                                controller.update();
-                                controller.updateNewUser("Client");
-                                var body = {
-                                  "userType": "private_client",
-                                };
-                                AppOverlay.loadingOverlay(
-                                    asyncFunction: () async {
-                                  var response = await controller.userRepo
-                                      .postData("/user/switch-account", body);
-                                  if (response.isSuccessful) {
-                                    // var token = response.token;
-                                    //  MyPref.authToken.val = token.toString();
-                                    var logInInfo =
-                                        LogInModel.fromJson(response.user);
-                                    MyPref.logInDetail.val =
-                                        jsonEncode(logInInfo);
-                                    print(MyPref.setOverlay.val);
-                                    if ((oldUser == 'Product Partner' ||
-                                            oldUser == 'Service Partner') &&
-                                        (MyPref.setOverlay.val == true)) {
-                                      Get.back();
-                                    }
-
-                                    Get.back();
-                                  }
-                                });
-                              },
-                              child: Stack(
-                                alignment: Alignment.center,
-                                children: [
-                                  Image.asset(
-                                    'assets/images/client_bg.png',
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      SizedBox(
-                                        width: Get.width * 0.05,
-                                      ),
-                                      Image.asset(
-                                        'assets/images/m2.png',
-                                        width: Get.width * 0.15,
-                                        height: Get.width * 0.15,
-                                      ),
-                                      SizedBox(
-                                        width: Get.width * 0.02,
-                                      ),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            'Client',
-                                            style:
-                                                AppTextStyle.headline4.copyWith(
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 20,
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                            height: 10,
-                                          ),
-                                          Text(
-                                            'Access services and products',
-                                            style:
-                                                AppTextStyle.headline4.copyWith(
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.normal,
-                                              fontSize: 14,
-                                            ),
-                                          ),
-                                        ],
-                                      )
-                                    ],
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                        if (controller.currentType != "Service Partner")
-                          SizedBox(
-                            height: Get.height * 0.02,
-                          ),
-                        if (controller.currentType != "Service Partner")
-                          Padding(
-                            padding: EdgeInsets.only(
-                                left: width * 0.05, right: width * 0.05),
-                            child: InkWell(
-                              onTap: () async {
-                                controller.currentType = "Service Partner";
-                                controller.update();
-                                controller.updateNewUser("Service Partner");
-
-                                var body = {
-                                  "userType": "professional",
-                                };
-
-                                AppOverlay.loadingOverlay(
-                                    asyncFunction: () async {
-                                  var response = await controller.userRepo
-                                      .postData("/user/switch-account", body);
-                                  if (response.isSuccessful) {
-                                    var logInInfo =
-                                        LogInModel.fromJson(response.user);
-                                    MyPref.logInDetail.val =
-                                        jsonEncode(logInInfo);
-
-                                    Get.back();
-                                  }
-                                });
-                                verifyKycComplete('professional', () {
-                                  Get.to(() => const KYCPage());
-                                });
-                              },
-                              child: Stack(
-                                alignment: Alignment.center,
-                                children: [
-                                  Image.asset(
-                                    'assets/images/service_provider.png',
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      SizedBox(
-                                        width: Get.width * 0.05,
-                                      ),
-                                      Image.asset(
-                                        'assets/images/m1.png',
-                                        width: Get.width * 0.15,
-                                        height: Get.width * 0.15,
-                                      ),
-                                      SizedBox(
-                                        width: Get.width * 0.02,
-                                      ),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            'Service Partner',
-                                            style:
-                                                AppTextStyle.headline4.copyWith(
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 20,
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                            height: 10,
-                                          ),
-                                          Text(
-                                            'Render services to users in need ',
-                                            style:
-                                                AppTextStyle.headline4.copyWith(
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.normal,
-                                              fontSize: 14,
-                                            ),
-                                          ),
-                                        ],
-                                      )
-                                    ],
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                        if (controller.currentType != "Product Partner")
-                          SizedBox(
-                            height: Get.height * 0.02,
-                          ),
-                        if (controller.currentType != "Product Partner")
-                          Padding(
-                            padding: EdgeInsets.only(
-                                left: width * 0.05, right: width * 0.05),
-                            child: InkWell(
-                              onTap: () async {
-                                controller.currentType = "Product Partner";
-                                controller.update();
-                                controller.updateNewUser("Product Partner");
-                                var body = {
-                                  "userType": "vendor",
-                                };
-                                AppOverlay.loadingOverlay(
-                                    asyncFunction: () async {
-                                  var response = await controller.userRepo
-                                      .postData("/user/switch-account", body);
-                                  if (response.isSuccessful) {
-                                    var logInInfo =
-                                        LogInModel.fromJson(response.user);
-                                    MyPref.logInDetail.val =
-                                        jsonEncode(logInInfo);
-
-                                    Get.back();
-                                  }
-                                });
-                                verifyKycComplete('vendor', () {
-                                  Get.to(() => const KYCPage());
-                                });
-                              },
-                              child: Stack(
-                                alignment: Alignment.center,
-                                children: [
-                                  Image.asset(
-                                    'assets/images/rect3.png',
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      SizedBox(
-                                        width: Get.width * 0.05,
-                                      ),
-                                      Image.asset(
-                                        'assets/images/m3.png',
-                                        width: Get.width * 0.15,
-                                        height: Get.width * 0.15,
-                                      ),
-                                      SizedBox(
-                                        width: Get.width * 0.02,
-                                      ),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            'Product Partner',
-                                            style:
-                                                AppTextStyle.headline4.copyWith(
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 20,
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                            height: 10,
-                                          ),
-                                          Text(
-                                            'Sell your products online ',
-                                            style:
-                                                AppTextStyle.headline4.copyWith(
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.normal,
-                                              fontSize: 14,
-                                            ),
-                                          ),
-                                        ],
-                                      )
-                                    ],
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                        if (controller.currentType != "Corporate Client")
-                          SizedBox(
-                            height: Get.height * 0.02,
-                          ),
-                        if (controller.currentType != "Corporate Client")
-                          Padding(
-                            padding: EdgeInsets.only(
-                                left: width * 0.05, right: width * 0.05),
-                            child: InkWell(
-                              onTap: () async {
-                                var kyc = GenKyc.fromJson(
-                                    jsonDecode(MyPref.genKyc.val));
-                                final oldUser = controller.currentType;
-                                controller.currentType = "Corporate Client";
-
-                                controller.update();
-                                controller.updateNewUser("Corporate Client");
-
-                                var body = {
-                                  "userType": "corporate_client",
-                                };
-                                AppOverlay.loadingOverlay(
-                                    asyncFunction: () async {
-                                  var response = await controller.userRepo
-                                      .postData("/user/switch-account", body);
-                                  if (response.isSuccessful) {
-                                    // var token = response.token;
-                                    //  MyPref.authToken.val = token.toString();
-                                    var logInInfo =
-                                        LogInModel.fromJson(response.user);
-                                    MyPref.logInDetail.val =
-                                        jsonEncode(logInInfo);
-
-                                    if ((oldUser == 'Product Partner' ||
-                                            oldUser == 'Service Partner') &&
-                                        MyPref.setOverlay.val == true) {
-                                      Get.back();
-                                    }
-
-                                    Get.back();
-                                  }
-                                });
-
-                                // if (oldUser == 'Product Partner' ||
-                                //     oldUser == 'Service Partner' &&
-                                //         kyc.isKycCompleted != true) {
-                                //   Get.back();
-                                // }
-                                // Get.back();
-                                // var body = {
-                                //   "userType": "corporate_client",
-                                // };
-                                // var response = await controller.userRepo
-                                //     .postData("/user/switch-account", body);
-                              },
-                              child: Stack(
-                                alignment: Alignment.center,
-                                children: [
-                                  Image.asset(
-                                    'assets/images/client_bg.png',
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      SizedBox(
-                                        width: Get.width * 0.05,
-                                      ),
-                                      Image.asset(
-                                        'assets/images/m2.png',
-                                        width: Get.width * 0.15,
-                                        height: Get.width * 0.15,
-                                      ),
-                                      SizedBox(
-                                        width: Get.width * 0.02,
-                                      ),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            'Corporate Client',
-                                            style:
-                                                AppTextStyle.headline4.copyWith(
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 20,
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                            height: 10,
-                                          ),
-                                          Text(
-                                            'Access services and products',
-                                            style:
-                                                AppTextStyle.headline4.copyWith(
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.normal,
-                                              fontSize: 14,
-                                            ),
-                                          ),
-                                        ],
-                                      )
-                                    ],
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                      ]),
-                ),
-              ),
-              bottomNavigationBar: BottomNavigationBar(
-                  backgroundColor: AppColors.backgroundVariant2,
-                  showSelectedLabels: true,
-                  showUnselectedLabels: true,
-                  type: BottomNavigationBarType.fixed,
-                  items: <BottomNavigationBarItem>[
-                    BottomNavigationBarItem(
-                      icon: Image.asset(
-                        'assets/images/homeIcon.png',
-                        width: 25,
-                        color: controller.currentBottomNavPage.value == 0
-                            ? AppColors.primary
-                            : AppColors.grey,
-                      ),
-                      label: 'Home',
-                      backgroundColor: AppColors.background,
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Image.asset(
-                        controller.currentBottomNavPage.value == 1
-                            ? 'assets/images/chat_filled.png'
-                            : 'assets/images/chatIcon.png',
-                        width: 25,
-                        color: controller.currentBottomNavPage.value == 1
-                            ? AppColors.primary
-                            : AppColors.grey,
-                      ),
-                      label: 'Chat',
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Image.asset(
-                        'assets/images/projectIcon.png',
-                        width: 25,
-                        color: controller.currentBottomNavPage.value == 2
-                            ? AppColors.primary
-                            : AppColors.grey,
-                      ),
-                      label: 'Project',
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Image.asset(
-                        'assets/images/cartIcon.png',
-                        width: 25,
-                        color: controller.currentBottomNavPage.value == 3
-                            ? AppColors.primary
-                            : AppColors.grey,
-                      ),
-                      label: 'Cart',
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Image.asset(
-                        'assets/images/profileIcon.png',
-                        width: 25,
-                        color: controller.currentBottomNavPage.value == 4
-                            ? AppColors.primary
-                            : AppColors.grey,
-                      ),
-                      label: 'Profile',
-                    ),
-                  ],
-                  currentIndex: controller.currentBottomNavPage.value,
-                  selectedItemColor: AppColors.primary,
-                  unselectedItemColor: Colors.grey,
-                  onTap: (index) {
-                    controller.currentBottomNavPage.value = index;
-                    controller.update(['home']);
-                    Get.back();
-                  }),
-            );
+                          );
+                        }
+                      } else if (snapshot.connectionState ==
+                          ConnectionState.waiting) {
+                        return const AppLoader();
+                      } else {
+                        return Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            Center(
+                              child: Text('An error occured'),
+                            )
+                          ],
+                        );
+                      }
+                    }),
+                bottomNavigationBar: HomeBottomWidget(
+                    isHome: false,
+                    controller: controller,
+                    doubleNavigate: false));
           }),
     );
   }

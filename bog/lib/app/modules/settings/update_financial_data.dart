@@ -24,13 +24,16 @@ class UpdateFinancialDetails extends StatefulWidget {
 
 class _UpdateFinancialDetailsState extends State<UpdateFinancialDetails> {
   late Future<ApiResponse> getFinData;
+  late String userType;
   final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     final controller = Get.find<HomeController>();
+    userType =
+        controller.currentType == 'Product Partner' ? 'vendor' : 'professional';
     getFinData = controller.userRepo
-        .getData('/kyc-financial-data/fetch?userType=vendor');
+        .getData('/kyc-financial-data/fetch?userType=$userType');
     super.initState();
   }
 
@@ -54,7 +57,7 @@ class _UpdateFinancialDetailsState extends State<UpdateFinancialDetails> {
                     snapshot.data!.isSuccessful) {
                   final response = snapshot.data!.data;
                   final finData = FinDataModel.fromJson(response);
-                  //   print(finData.bankName);
+
                   return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: Column(

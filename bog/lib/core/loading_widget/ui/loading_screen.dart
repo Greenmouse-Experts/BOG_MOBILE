@@ -14,7 +14,7 @@ class LoadingScreen extends StatefulWidget {
 class LoadingScreenState extends State<LoadingScreen> {
   late StreamSubscription streamSubscription;
 
-  bool showLoading = false;
+  bool showLoading = true;
   String? message;
   bool cancelable = true;
   bool showBack = false;
@@ -25,7 +25,7 @@ class LoadingScreenState extends State<LoadingScreen> {
   void initState() {
     super.initState();
 
-    streamSubscription = LoadingController.instance.stream.listen((event) {
+    streamSubscription = AppLoadingController.instance.stream.listen((event) {
       bool show = !event.hideLoading;
       message = event.message;
       cancelable = event.loadingType == LoadingType.normal;

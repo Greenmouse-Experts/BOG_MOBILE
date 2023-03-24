@@ -1,164 +1,452 @@
-import 'dart:convert';
 
-import 'package:flutter/material.dart';
-import 'package:json_to_form/json_schema.dart';
 
-class AllFields extends StatefulWidget {
-  AllFields({Key? key}) : super(key: key);
+// import 'dart:convert';
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
+// import 'package:bog/app/controllers/home_controller.dart';
+// import 'package:flutter/material.dart';
+// import 'package:get/get.dart';
 
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
+// import '../../../core/theme/app_colors.dart';
+// import '../../../core/theme/app_styles.dart';
+// import '../../data/model/gen_kyc.dart';
+// import '../../data/model/log_in_model.dart';
+// import '../../data/providers/my_pref.dart';
+// import '../../global_widgets/overlays.dart';
+// import '../settings/view_kyc.dart';
 
-  @override
-  _AllFields createState() => _AllFields();
-}
+// class Teststs extends StatelessWidget {
+//   final HomeController controller;
+//   const Teststs({super.key, required this.controller});
 
-class _AllFields extends State<AllFields> {
-  String form = json.encode({
-    'title': 'Test Form Json Schema',
-    'description': 'My Description',
-    'fields': [
-      {
-        'key': 'input1',
-        'type': 'Input',
-        'label': 'Hi Group',
-        'placeholder': "Hi Group flutter",
-        'value': 'defaultValue',
-        'required': true
-      },
-      {
-        'key': 'password1',
-        'type': 'Password',
-        'label': 'Password',
-        'required': true
-      },
-      {
-        'key': 'email1',
-        'type': 'Email',
-        'label': 'Email test',
-        'placeholder': "hola a todos"
-      },
-      {
-        'key': 'tareatext1',
-        'type': 'TareaText',
-        'label': 'TareaText test',
-        'placeholder': "hola a todos"
-      },
-      {
-        'key': 'radiobutton1',
-        'type': 'RadioButton',
-        'label': 'Radio Button tests',
-        'value': 2,
-        'items': [
-          {
-            'label': "product 1",
-            'value': 1,
-          },
-          {
-            'label': "product 2",
-            'value': 2,
-          },
-          {
-            'label': "product 3",
-            'value': 3,
-          }
-        ]
-      },
-      {
-        'key': 'switch1',
-        'type': 'Switch',
-        'label': 'Switch test',
-        'value': false,
-      },
-      {
-        'key': 'checkbox1',
-        'type': 'Checkbox',
-        'label': 'Checkbox test',
-        'items': [
-          {
-            'label': "product 1",
-            'value': true,
-          },
-          {
-            'label': "product 2",
-            'value': false,
-          },
-          {
-            'label': "product 3",
-            'value': false,
-          }
-        ]
-      },
-      {
-        'key': 'select1',
-        'type': 'Select',
-        'label': 'Select test',
-        'value': 'product 1',
-        'items': [
-          {
-            'label': "product 1",
-            'value': "product 1",
-          },
-          {
-            'label': "product 2",
-            'value': "product 2",
-          },
-          {
-            'label': "product 3",
-            'value': "product 3",
-          }
-        ]
-      },
-      {'key': 'date', 'type': 'Date', 'label': 'Select test'}
-    ]
-  });
-  dynamic response;
 
-  @override
-  Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: const Text("All Fields"),
-      ),
-      body: SingleChildScrollView(
-        child: Container(
-          // Center is a layout widget. It takes a single child and positions it
-          // in the middle of the parent.
-          child: Column(children: <Widget>[
-            JsonSchema(
-              form: form,
-              onChanged: (dynamic response) {
-                this.response = response;
-              },
-              actionSave: (data) {},
-              autovalidateMode: AutovalidateMode.always,
-              buttonSave: Container(
-                height: 40.0,
-                color: Colors.blueAccent,
-                child: const Center(
-                  child: Text("Send",
-                      style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold)),
-                ),
-              ),
-            ),
-          ]),
-        ),
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     final width = Get.width;
+//      final Size size = MediaQuery.of(context).size;
+//   double multiplier = 25 * size.height * 0.01;
+//     return    SizedBox(
+//                   width: Get.width,
+//                   child: SingleChildScrollView(
+//                     child: Column(
+//                         crossAxisAlignment: CrossAxisAlignment.start,
+//                         children: [
+//                           Padding(
+//                             padding: EdgeInsets.only(
+//                                 left: width * 0.05, right: width * 0.05),
+//                             child: Row(
+//                               children: [
+//                                 Text(
+//                                   "Currently logged in as : ",
+//                                   style: AppTextStyle.subtitle1.copyWith(
+//                                       fontSize: multiplier * 0.08,
+//                                       color: Colors.black.withOpacity(.7),
+//                                       fontWeight: FontWeight.w500),
+//                                   textAlign: TextAlign.start,
+//                                 ),
+//                                 Text(
+//                                   controller.currentType,
+//                                   style: AppTextStyle.subtitle1.copyWith(
+//                                       fontSize: multiplier * 0.08,
+//                                       color: AppColors.primary,
+//                                       fontWeight: FontWeight.w500),
+//                                   textAlign: TextAlign.start,
+//                                 ),
+//                               ],
+//                             ),
+//                           ),
+//                           SizedBox(
+//                             height: width * 0.1,
+//                           ),
+                        
+//                           if (controller.currentType != "Client")
+//                             SizedBox(
+//                               height: Get.height * 0.04,
+//                             ),
+//                           if (controller.currentType != "Client")
+//                             Padding(
+//                               padding: EdgeInsets.only(
+//                                   left: width * 0.05, right: width * 0.05),
+//                               child: InkWell(
+//                                 onTap: () async {
+//                                   var kyc = GenKyc.fromJson(
+//                                       jsonDecode(MyPref.genKyc.val));
+//                                   final oldUser = controller.currentType;
+//                                   controller.currentType = "Client";
+//                                   controller.update();
+//                                   controller.updateNewUser("Client");
+//                                   var body = {
+//                                     "userType": "private_client",
+//                                   };
+//                                   AppOverlay.loadingOverlay(
+//                                       asyncFunction: () async {
+//                                     var response = await controller.userRepo
+//                                         .postData("/user/switch-account", body);
+//                                     if (response.isSuccessful) {
+                                    
+//                                       var logInInfo =
+//                                           LogInModel.fromJson(response.user);
+//                                       MyPref.logInDetail.val =
+//                                           jsonEncode(logInInfo);
+//                                       print(MyPref.setOverlay.val);
+//                                       if ((oldUser == 'Product Partner' ||
+//                                               oldUser == 'Service Partner') &&
+//                                           (MyPref.setOverlay.val == true)) {
+//                                         Get.back();
+//                                       }
+
+//                                       Get.back();
+//                                     }
+//                                   });
+//                                 },
+//                                 child: Stack(
+//                                   alignment: Alignment.center,
+//                                   children: [
+//                                     Image.asset(
+//                                       'assets/images/client_bg.png',
+//                                     ),
+//                                     Row(
+//                                       mainAxisAlignment:
+//                                           MainAxisAlignment.start,
+//                                       crossAxisAlignment:
+//                                           CrossAxisAlignment.center,
+//                                       children: [
+//                                         SizedBox(
+//                                           width: Get.width * 0.05,
+//                                         ),
+//                                         Image.asset(
+//                                           'assets/images/m2.png',
+//                                           width: Get.width * 0.15,
+//                                           height: Get.width * 0.15,
+//                                         ),
+//                                         SizedBox(
+//                                           width: Get.width * 0.02,
+//                                         ),
+//                                         Column(
+//                                           crossAxisAlignment:
+//                                               CrossAxisAlignment.start,
+//                                           children: [
+//                                             Text(
+//                                               'Client',
+//                                               style: AppTextStyle.headline4
+//                                                   .copyWith(
+//                                                 color: Colors.black,
+//                                                 fontWeight: FontWeight.w500,
+//                                                 fontSize: 20,
+//                                               ),
+//                                             ),
+//                                             const SizedBox(
+//                                               height: 10,
+//                                             ),
+//                                             Text(
+//                                               'Access services and products',
+//                                               style: AppTextStyle.headline4
+//                                                   .copyWith(
+//                                                 color: Colors.black,
+//                                                 fontWeight: FontWeight.normal,
+//                                                 fontSize: 14,
+//                                               ),
+//                                             ),
+//                                           ],
+//                                         )
+//                                       ],
+//                                     )
+//                                   ],
+//                                 ),
+//                               ),
+//                             ),
+//                           if (controller.currentType != "Service Partner")
+//                             SizedBox(
+//                               height: Get.height * 0.02,
+//                             ),
+//                           if (controller.currentType != "Service Partner")
+//                             Padding(
+//                               padding: EdgeInsets.only(
+//                                   left: width * 0.05, right: width * 0.05),
+//                               child: InkWell(
+//                                 onTap: () async {
+//                                   controller.currentType = "Service Partner";
+//                                   controller.update();
+//                                   controller.updateNewUser("Service Partner");
+
+//                                   var body = {
+//                                     "userType": "professional",
+//                                   };
+
+//                                   AppOverlay.loadingOverlay(
+//                                       asyncFunction: () async {
+//                                     var response = await controller.userRepo
+//                                         .postData("/user/switch-account", body);
+//                                     if (response.isSuccessful) {
+//                                       var logInInfo =
+//                                           LogInModel.fromJson(response.user);
+//                                       MyPref.logInDetail.val =
+//                                           jsonEncode(logInInfo);
+
+//                                       Get.back();
+//                                     }
+//                                   });
+//                                   verifyKycComplete('professional', () {
+//                                     Get.to(() => const KYCPage());
+//                                   });
+//                                 },
+//                                 child: Stack(
+//                                   alignment: Alignment.center,
+//                                   children: [
+//                                     Image.asset(
+//                                       'assets/images/service_provider.png',
+//                                     ),
+//                                     Row(
+//                                       mainAxisAlignment:
+//                                           MainAxisAlignment.start,
+//                                       crossAxisAlignment:
+//                                           CrossAxisAlignment.center,
+//                                       children: [
+//                                         SizedBox(
+//                                           width: Get.width * 0.05,
+//                                         ),
+//                                         Image.asset(
+//                                           'assets/images/m1.png',
+//                                           width: Get.width * 0.15,
+//                                           height: Get.width * 0.15,
+//                                         ),
+//                                         SizedBox(
+//                                           width: Get.width * 0.02,
+//                                         ),
+//                                         Column(
+//                                           crossAxisAlignment:
+//                                               CrossAxisAlignment.start,
+//                                           children: [
+//                                             Text(
+//                                               'Service Partner',
+//                                               style: AppTextStyle.headline4
+//                                                   .copyWith(
+//                                                 color: Colors.black,
+//                                                 fontWeight: FontWeight.w500,
+//                                                 fontSize: 20,
+//                                               ),
+//                                             ),
+//                                             const SizedBox(
+//                                               height: 10,
+//                                             ),
+//                                             Text(
+//                                               'Render services to users in need ',
+//                                               style: AppTextStyle.headline4
+//                                                   .copyWith(
+//                                                 color: Colors.black,
+//                                                 fontWeight: FontWeight.normal,
+//                                                 fontSize: 14,
+//                                               ),
+//                                             ),
+//                                           ],
+//                                         )
+//                                       ],
+//                                     )
+//                                   ],
+//                                 ),
+//                               ),
+//                             ),
+//                           if (controller.currentType != "Product Partner")
+//                             SizedBox(
+//                               height: Get.height * 0.02,
+//                             ),
+//                           if (controller.currentType != "Product Partner")
+//                             Padding(
+//                               padding: EdgeInsets.only(
+//                                   left: width * 0.05, right: width * 0.05),
+//                               child: InkWell(
+//                                 onTap: () async {
+//                                   controller.currentType = "Product Partner";
+//                                   controller.update();
+//                                   controller.updateNewUser("Product Partner");
+//                                   var body = {
+//                                     "userType": "vendor",
+//                                   };
+//                                   AppOverlay.loadingOverlay(
+//                                       asyncFunction: () async {
+//                                     var response = await controller.userRepo
+//                                         .postData("/user/switch-account", body);
+//                                     if (response.isSuccessful) {
+//                                       var logInInfo =
+//                                           LogInModel.fromJson(response.user);
+//                                       MyPref.logInDetail.val =
+//                                           jsonEncode(logInInfo);
+
+//                                       Get.back();
+//                                     }
+//                                   });
+//                                   verifyKycComplete('vendor', () {
+//                                     Get.to(() => const KYCPage());
+//                                   });
+//                                 },
+//                                 child: Stack(
+//                                   alignment: Alignment.center,
+//                                   children: [
+//                                     Image.asset(
+//                                       'assets/images/rect3.png',
+//                                     ),
+//                                     Row(
+//                                       mainAxisAlignment:
+//                                           MainAxisAlignment.start,
+//                                       crossAxisAlignment:
+//                                           CrossAxisAlignment.center,
+//                                       children: [
+//                                         SizedBox(
+//                                           width: Get.width * 0.05,
+//                                         ),
+//                                         Image.asset(
+//                                           'assets/images/m3.png',
+//                                           width: Get.width * 0.15,
+//                                           height: Get.width * 0.15,
+//                                         ),
+//                                         SizedBox(
+//                                           width: Get.width * 0.02,
+//                                         ),
+//                                         Column(
+//                                           crossAxisAlignment:
+//                                               CrossAxisAlignment.start,
+//                                           children: [
+//                                             Text(
+//                                               'Product Partner',
+//                                               style: AppTextStyle.headline4
+//                                                   .copyWith(
+//                                                 color: Colors.black,
+//                                                 fontWeight: FontWeight.w500,
+//                                                 fontSize: 20,
+//                                               ),
+//                                             ),
+//                                             const SizedBox(
+//                                               height: 10,
+//                                             ),
+//                                             Text(
+//                                               'Sell your products online ',
+//                                               style: AppTextStyle.headline4
+//                                                   .copyWith(
+//                                                 color: Colors.black,
+//                                                 fontWeight: FontWeight.normal,
+//                                                 fontSize: 14,
+//                                               ),
+//                                             ),
+//                                           ],
+//                                         )
+//                                       ],
+//                                     )
+//                                   ],
+//                                 ),
+//                               ),
+//                             ),
+//                           if (controller.currentType != "Corporate Client")
+//                             SizedBox(
+//                               height: Get.height * 0.02,
+//                             ),
+//                           if (controller.currentType != "Corporate Client")
+//                             Padding(
+//                               padding: EdgeInsets.only(
+//                                   left: width * 0.05, right: width * 0.05),
+//                               child: InkWell(
+//                                 onTap: () async {
+//                                   var kyc = GenKyc.fromJson(
+//                                       jsonDecode(MyPref.genKyc.val));
+//                                   final oldUser = controller.currentType;
+//                                   controller.currentType = "Corporate Client";
+
+//                                   controller.update();
+//                                   controller.updateNewUser("Corporate Client");
+
+//                                   var body = {
+//                                     "userType": "corporate_client",
+//                                   };
+//                                   AppOverlay.loadingOverlay(
+//                                       asyncFunction: () async {
+//                                     var response = await controller.userRepo
+//                                         .postData("/user/switch-account", body);
+//                                     if (response.isSuccessful) {
+//                                       // var token = response.token;
+//                                       //  MyPref.authToken.val = token.toString();
+//                                       var logInInfo =
+//                                           LogInModel.fromJson(response.user);
+//                                       MyPref.logInDetail.val =
+//                                           jsonEncode(logInInfo);
+
+//                                       if ((oldUser == 'Product Partner' ||
+//                                               oldUser == 'Service Partner') &&
+//                                           MyPref.setOverlay.val == true) {
+//                                         Get.back();
+//                                       }
+
+//                                       Get.back();
+//                                     }
+//                                   });
+
+//                                   // if (oldUser == 'Product Partner' ||
+//                                   //     oldUser == 'Service Partner' &&
+//                                   //         kyc.isKycCompleted != true) {
+//                                   //   Get.back();
+//                                   // }
+//                                   // Get.back();
+//                                   // var body = {
+//                                   //   "userType": "corporate_client",
+//                                   // };
+//                                   // var response = await controller.userRepo
+//                                   //     .postData("/user/switch-account", body);
+//                                 },
+//                                 child: Stack(
+//                                   alignment: Alignment.center,
+//                                   children: [
+//                                     Image.asset(
+//                                       'assets/images/client_bg.png',
+//                                     ),
+//                                     Row(
+//                                       mainAxisAlignment:
+//                                           MainAxisAlignment.start,
+//                                       crossAxisAlignment:
+//                                           CrossAxisAlignment.center,
+//                                       children: [
+//                                         SizedBox(
+//                                           width: Get.width * 0.05,
+//                                         ),
+//                                         Image.asset(
+//                                           'assets/images/m2.png',
+//                                           width: Get.width * 0.15,
+//                                           height: Get.width * 0.15,
+//                                         ),
+//                                         SizedBox(
+//                                           width: Get.width * 0.02,
+//                                         ),
+//                                         Column(
+//                                           crossAxisAlignment:
+//                                               CrossAxisAlignment.start,
+//                                           children: [
+//                                             Text(
+//                                               'Corporate Client',
+//                                               style: AppTextStyle.headline4
+//                                                   .copyWith(
+//                                                 color: Colors.black,
+//                                                 fontWeight: FontWeight.w500,
+//                                                 fontSize: 20,
+//                                               ),
+//                                             ),
+//                                             const SizedBox(
+//                                               height: 10,
+//                                             ),
+//                                             Text(
+//                                               'Access services and products',
+//                                               style: AppTextStyle.headline4
+//                                                   .copyWith(
+//                                                 color: Colors.black,
+//                                                 fontWeight: FontWeight.normal,
+//                                                 fontSize: 14,
+//                                               ),
+//                                             ),
+//                                           ],
+//                                         )
+//                                       ],
+//                                     )
+//                                   ],
+//                                 ),
+//                               ),
+//                             ),
+//                         ]),
+//                   ),
+//                 );
+//   }
+// }

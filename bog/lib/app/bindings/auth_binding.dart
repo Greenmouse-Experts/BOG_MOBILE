@@ -1,3 +1,4 @@
+import 'package:bog/core/loading_widget/bloc/loading_controller.dart';
 import 'package:get/get.dart';
 
 import '../controllers/auth_controller.dart';
@@ -10,5 +11,6 @@ class AuthBinding implements Bindings {
   void dependencies() {
     Get.lazyPut<AuthController>(() => AuthController(UserRepository(Api())));
     Get.lazyPut<HomeController>(() => HomeController(UserRepository(Api())));
+    Get.lazyPut<AppLoadingController>(() => AppLoadingController());
   }
 }

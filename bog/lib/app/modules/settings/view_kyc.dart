@@ -1,3 +1,6 @@
+import 'package:bog/app/controllers/home_controller.dart';
+import 'package:bog/app/global_widgets/new_app_bar.dart';
+import 'package:bog/app/modules/home/home.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -17,53 +20,60 @@ class KYCPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.find<HomeController>();
+    final userType =
+        controller.currentType == 'Product Partner' ? 'vendor' : 'professional';
     return AppBaseView(
         child: Scaffold(
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const CustomAppBar(title: 'KYC'),
-          //    Header(header: 'General Information', onPressed: () {
-          //      Get.to(()=>const UpdateGeneralInfo());
-          //    },) ,
-          //  const  KYCDetails(),
-          _TextButton(
-              iconData: Icons.info,
-              text: 'General Information',
-              onPressed: () {
-                Get.to(() => const UpdateGeneralInfo());
-              }),
-          _TextButton(
-              iconData: Icons.info_outline_sharp,
-              text: 'Organisational Info',
-              onPressed: () {
-                Get.to(() => const UpdateOrganisationInfo());
-              }),
-          _TextButton(
-              iconData: Icons.credit_score_outlined,
-              text: 'Tax Details & Permit',
-              onPressed: () {
-                Get.to(() => const UpdateTaxDetails());
-              }),
-          _TextButton(
-              iconData: Icons.work,
-              text: 'Work/Job Execution Experience',
-              onPressed: () {
-                Get.to(() => const WorkExperience());
-              }),
-          _TextButton(
-              iconData: Icons.money,
-              text: 'Financial Data',
-              onPressed: () {
-                Get.to(() => const UpdateFinancialDetails());
-              }),
-          _TextButton(
-              iconData: Icons.upload_file,
-              text: 'Upload Documents',
-              onPressed: () {
-                Get.to(() => const UploadDocuments());
-              })
-        ],
+      appBar: newAppBar(context, 'KYC', true),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            FutureBuilder(
+                future:
+                    controller.userRepo.getData('/user/me?userType=$userType'),
+                builder: (ctx, snapshot) {
+                  return Text(snapshot.connectionState.toString());
+                }),
+            _TextButton(
+                iconData: Icons.info,
+                text: 'General Information',
+                onPressed: () {
+                  Get.to(() => const UpdateGeneralInfo());
+                }),
+            _TextButton(
+                iconData: Icons.info_outline_sharp,
+                text: 'Organisational Info',
+                onPressed: () {
+                  Get.to(() => const UpdateOrganisationInfo());
+                }),
+            _TextButton(
+                iconData: Icons.credit_score_outlined,
+                text: 'Tax Details & Permit',
+                onPressed: () {
+                  Get.to(() => const UpdateTaxDetails());
+                }),
+            _TextButton(
+                iconData: Icons.work,
+                text: 'Work/Job Execution Experience',
+                onPressed: () {
+                  Get.to(() => const WorkExperience());
+                }),
+            _TextButton(
+                iconData: Icons.money,
+                text: 'Financial Data',
+                onPressed: () {
+                  Get.to(() => const UpdateFinancialDetails());
+                }),
+            _TextButton(
+                iconData: Icons.upload_file,
+                text: 'Upload Documents',
+                onPressed: () {
+                  Get.to(() => const UploadDocuments());
+                })
+          ],
+        ),
       ),
     ));
   }

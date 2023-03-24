@@ -135,7 +135,7 @@ class _CheckoutState extends State<Checkout> {
       AppOverlay.loadingOverlay(
         asyncFunction: () async {
           successMessage = 'Payment was successful. Ref: ${response.reference}';
-
+          final total = cost + deliveryFee;
           final postOrder = PostOrder(
                   products: orderProducts,
                   shippingAddress: shippingAddress,
@@ -143,7 +143,7 @@ class _CheckoutState extends State<Checkout> {
                       PaymentInfo(reference: response.reference!, amount: cost),
                   discount: 0,
                   deliveryFee: deliveryFee,
-                  totalAmount: cost)
+                  totalAmount: total)
               .toJson();
 
           final respose = await controller.userRepo
@@ -432,7 +432,7 @@ class _CheckoutState extends State<Checkout> {
                                                       controller: controller,
                                                     ),
                                                   ),
-                                            const SizedBox(height: 10),
+                                            const SizedBox(height: 80),
                                             Padding(
                                               padding: EdgeInsets.only(
                                                   left: width * 0.04,
@@ -721,7 +721,13 @@ class _CheckoutState extends State<Checkout> {
                                                             ),
                                                           ),
                                                           Text(
-                                                            "N ${controller.subTotalPrice}",
+                                                            deliveryFee == null
+                                                                ? "N ${controller.subTotalPrice}"
+                                                                : (deliveryFee!
+                                                                            .charge! +
+                                                                        controller
+                                                                            .subTotalPrice)
+                                                                    .toString(),
                                                             style: AppTextStyle
                                                                 .subtitle1
                                                                 .copyWith(

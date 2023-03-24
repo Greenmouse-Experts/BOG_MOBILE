@@ -318,6 +318,9 @@ class AuthController extends GetxController {
     if (formKey.currentState!.validate()) {
       var message = "";
       var buttonMessage = "";
+      // print('shown');
+      // Loader.showLoading();
+      // print('afetr jkdp');
       ApiResponse response = await userRepo.signIn(_signInPayload);
       if (response.isSuccessful) {
         var logInInfo = LogInModel.fromJson(response.user);
@@ -327,6 +330,7 @@ class AuthController extends GetxController {
         MyPref.logInDetail.val = jsonEncode(response.user);
         MyPref.authToken.val = token.toString();
         ApiResponse bankListResponse = await userRepo.getBanks();
+        // Loader.hideLoading();
         if (bankListResponse.isSuccessful) {
           MyPref.bankListDetail.val = jsonEncode(bankListResponse.data);
           //var bankList = BankListModel.fromJsonList(bankListResponse.data);

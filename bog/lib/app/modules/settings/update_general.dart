@@ -43,8 +43,8 @@ class _UpdateGeneralInfoState extends State<UpdateGeneralInfo> {
     final controller = Get.find<HomeController>();
     userType =
         controller.currentType == 'Product Partner' ? 'vendor' : 'professional';
-    getGenrealInfo =
-        controller.userRepo.getData('/kyc-general-info/fetch?userType=vendor');
+    getGenrealInfo = controller.userRepo
+        .getData('/kyc-general-info/fetch?userType=$userType');
 
     super.initState();
   }

@@ -26,7 +26,10 @@ class MyProjectWidget extends StatefulWidget {
       required this.projectType,
       required this.orderSlug,
       required this.controller,
-      required this.id, required this.isPending, required this.isOngoing, required this.isCancelled});
+      required this.id,
+      required this.isPending,
+      required this.isOngoing,
+      required this.isCancelled});
 
   @override
   State<MyProjectWidget> createState() => _MyProjectWidgetState();
@@ -74,23 +77,23 @@ class _MyProjectWidgetState extends State<MyProjectWidget> {
         ListTile(
           minLeadingWidth: 4,
           leading: Column(
-            mainAxisAlignment: MainAxisAlignment.center,  
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               if (widget.isPending)
-          const    CircleAvatar(
-                radius: 3,
-                backgroundColor: Colors.black,
-              ),
+                const CircleAvatar(
+                  radius: 3,
+                  backgroundColor: Colors.black,
+                ),
               if (widget.isOngoing)
-           const     CircleAvatar(
-                radius: 3,
-                backgroundColor: Colors.green,
-              ),
+                const CircleAvatar(
+                  radius: 3,
+                  backgroundColor: Colors.green,
+                ),
               if (widget.isCancelled)
-                const     CircleAvatar(
-                radius: 3,
-                backgroundColor: Colors.red,
-              ),
+                const CircleAvatar(
+                  radius: 3,
+                  backgroundColor: Colors.red,
+                ),
             ],
           ),
           title: Text(
@@ -106,17 +109,19 @@ class _MyProjectWidgetState extends State<MyProjectWidget> {
               itemBuilder: (context) {
                 return [
                   if (!widget.isPending)
-                  PopupMenuItem<int>(
-                    value: 1,
-                    child: TextButton(
-                        onPressed: () {
-                          Get.to(() => NewProjectDetailPage(id: widget.id,));
-                        },
-                        child: const Text(
-                          'View Details',
-                          style: TextStyle(color: Colors.grey, fontSize : 12),
-                        )),
-                  ),
+                    PopupMenuItem<int>(
+                      value: 1,
+                      child: TextButton(
+                          onPressed: () {
+                            Get.to(() => NewProjectDetailPage(
+                                  id: widget.id,
+                                ));
+                          },
+                          child: const Text(
+                            'View Details',
+                            style: TextStyle(color: Colors.grey, fontSize: 12),
+                          )),
+                    ),
                   PopupMenuItem<int>(
                     value: 2,
                     child: TextButton(
@@ -126,35 +131,35 @@ class _MyProjectWidgetState extends State<MyProjectWidget> {
                         },
                         child: const Text(
                           'View Form',
-                          style: TextStyle(color: Colors.grey, fontSize : 12),
+                          style: TextStyle(color: Colors.grey, fontSize: 12),
                         )),
                   ),
                   if (!widget.isOngoing)
-                  PopupMenuItem<int>(
-                    value: 3,
-                    child: TextButton(
-                        onPressed: () {
-                          Get.back();
-                          AppOverlay.showInfoDialog(
-                            title: 'Commence Project',
-                            content:
-                                'To proceed, a commitment fee of NGN 20,000 must be paid. This will be deducted from total cost of this project if approved.You will be refunded if this project is declined by the service partner',
-                            doubleFunction: true,
-                            onPressed: () {
-                              Get.back();
-                            },
-                          );
-                        },
-                        child: const Text(
-                          'Commence Project',
-                          style: TextStyle(color: Colors.grey, fontSize : 12),
-                        )),
-                  ),
+                    PopupMenuItem<int>(
+                      value: 3,
+                      child: TextButton(
+                          onPressed: () {
+                            Get.back();
+                            AppOverlay.showInfoDialog(
+                              title: 'Commence Project',
+                              content:
+                                  'To proceed, a commitment fee of NGN 20,000 must be paid. This will be deducted from total cost of this project if approved.You will be refunded if this project is declined by the service partner',
+                              doubleFunction: true,
+                              onPressed: () {
+                                checkOut();
+                              },
+                            );
+                          },
+                          child: const Text(
+                            'Commence Project',
+                            style: TextStyle(color: Colors.grey, fontSize: 12),
+                          )),
+                    ),
                   PopupMenuItem<int>(
                     value: 4,
                     child: ElevatedButton(
-                        style:
-                            ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.red),
                         onPressed: () async {
                           final response = await widget.controller.userRepo
                               .deleteData('/projects/delete/${widget.id}');
@@ -181,8 +186,9 @@ class _MyProjectWidgetState extends State<MyProjectWidget> {
                 color: Colors.black,
               )),
         ),
-       
-        Divider(color: Colors.grey.withOpacity(0.3),)
+        Divider(
+          color: Colors.grey.withOpacity(0.3),
+        )
       ],
     );
   }
