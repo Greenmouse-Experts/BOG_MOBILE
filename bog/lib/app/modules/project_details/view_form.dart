@@ -23,6 +23,7 @@ class _ViewFormPageState extends State<ViewFormPage> {
   @override
   void initState() {
     final controller = Get.find<HomeController>();
+
     getFormDetails =
         controller.userRepo.getData('/projects/v2/view-project/${widget.id}');
     super.initState();
@@ -89,14 +90,18 @@ class _ViewFormPageState extends State<ViewFormPage> {
                                     projectData[i].serviceForm!.label == 'PHOTO'
                                         ? Padding(
                                             padding: const EdgeInsets.all(8.0),
-                                            child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(12),
-                                              child: Image.network(
-                                                projectData[i].value!,
-                                                height: 40,
-                                                // width: 40,
-                                                fit: BoxFit.cover,
+                                            child: SizedBox(
+                                              height: Get.width * 0.25,
+                                              width: Get.width * 0.25,
+                                              child: ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(12),
+                                                child: Image.network(
+                                                  projectData[i].value!,
+                                                  height: Get.width * 0.25,
+                                                  width: Get.width * 0.25,
+                                                  fit: BoxFit.cover,
+                                                ),
                                               ),
                                             ),
                                           )

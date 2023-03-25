@@ -1,4 +1,4 @@
-import 'dart:convert';
+// import 'dart:convert';
 
 // import 'package:bog/app/modules/home/home.dart';
 import 'package:bog/app/data/model/get_account_model.dart';
@@ -17,7 +17,6 @@ import '../../../core/theme/app_styles.dart';
 import '../../controllers/home_controller.dart';
 
 import '../../global_widgets/app_base_view.dart';
-
 
 class SwitchUser extends StatefulWidget {
   const SwitchUser({Key? key}) : super(key: key);
@@ -105,7 +104,7 @@ class _SwitchUserState extends State<SwitchUser> {
                                     return controller.currentType ==
                                             newAccountTypes[i].userType!
                                         ? MainSwitchWidget(
-                                          image: newAccountTypes[i]
+                                            image: newAccountTypes[i]
                                                         .userType ==
                                                     'Client'
                                                 ? 'assets/icons/private.png'
@@ -122,9 +121,11 @@ class _SwitchUserState extends State<SwitchUser> {
                                                     '')
                                         : const SizedBox.shrink();
                                   }),
-                                //const  SizedBox(height: 10),
-                              const    Divider(color: AppColors.newAsh,),
-                               const  SizedBox(height: 15),
+                              //const  SizedBox(height: 10),
+                              const Divider(
+                                color: AppColors.newAsh,
+                              ),
+                              const SizedBox(height: 15),
                               Padding(
                                 padding: EdgeInsets.only(
                                     left: width * 0.05, right: width * 0.05),
@@ -164,7 +165,7 @@ class _SwitchUserState extends State<SwitchUser> {
                                         ? const SizedBox.shrink()
                                         : PrimarySwitchWidget(
                                             sendType: accountTypes[i].userType!,
-                                            iconAsset:  newAccountTypes[i]
+                                            iconAsset: newAccountTypes[i]
                                                         .userType ==
                                                     'Client'
                                                 ? 'assets/icons/private.png'
@@ -176,7 +177,6 @@ class _SwitchUserState extends State<SwitchUser> {
                                                             'Product Partner'
                                                         ? 'assets/icons/product_partner.png'
                                                         : 'assets/icons/service_partner.png',
-                                        
                                             newCurrentType:
                                                 newAccountTypes[i].userType!,
                                             detail: newAccountTypes[i]

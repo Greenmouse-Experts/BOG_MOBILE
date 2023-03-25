@@ -130,27 +130,11 @@ class ProfileTab extends StatelessWidget {
                 if (controller.currentType == "Product Partner" ||
                     controller.currentType == "Service Partner")
                   _TextButton(
-                    text: controller.currentType == "Product Partner"
-                        ? "Uploaded Document"
-                        : "KYC",
+                    text: "KYC",
                     onPressed: () {
                       Get.to(() => const KYCPage());
                     },
                     imageAsset: "assets/images/kyc.png",
-                  ),
-                if (controller.currentType == "Product Partner" ||
-                    controller.currentType == "Service Partner")
-                  const SizedBox(
-                    height: kToolbarHeight / 3,
-                  ),
-                if (controller.currentType == "Product Partner" ||
-                    controller.currentType == "Service Partner")
-                  _TextButton(
-                    text: "Bank Details",
-                    onPressed: () {
-                      Get.to(() => const UpdateBank());
-                    },
-                    imageAsset: "assets/images/bank.png",
                   ),
                 const SizedBox(
                   height: kToolbarHeight / 3,

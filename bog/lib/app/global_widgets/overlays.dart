@@ -1,3 +1,4 @@
+import 'package:bog/app/global_widgets/app_input.dart';
 import 'package:bog/app/modules/switch/switch.dart';
 import 'package:bog/core/loading_widget/loading_widget.dart';
 import 'package:flutter/material.dart';
@@ -105,6 +106,117 @@ class AppOverlay {
                               color: Colors.black,
                             ),
                           ),
+                    ),
+                    const SizedBox(height: 22),
+                    SizedBox(
+                      width: double.infinity,
+                      child: doubleFunction != null && doubleFunction
+                          ? Row(
+                              children: [
+                                Expanded(
+                                  child: AppButton(
+                                    title: 'No',
+                                    onPressed: () {
+                                      Get.back();
+                                    },
+                                  ),
+                                ),
+                                const SizedBox(width: 5),
+                                Expanded(
+                                  child: AppButton(
+                                    bckgrndColor: Colors.red,
+                                    title: buttonText ?? 'Yes',
+                                    onPressed: onPressed ?? Get.back,
+                                  ),
+                                )
+                              ],
+                            )
+                          : AppButton(
+                              title: buttonText ?? "Okay",
+                              /*   padding: const EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 25), */
+                              borderRadius: 100,
+                              onPressed: onPressed ?? Get.back),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  static void showPercentageDialog(
+      {required String title,
+      required TextEditingController controller,
+      String? content,
+      Widget? contentReplacement,
+      bool? doubleFunction,
+      Function()? onPressed,
+      String? buttonText}) {
+    showDialog(
+      context: Get.context!,
+      builder: (context) => Material(
+        elevation: 10,
+        color: Colors.black.withOpacity(0.2),
+        child: IntrinsicHeight(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: Get.width * 0.8,
+                padding: const EdgeInsets.symmetric(
+                  vertical: 15,
+                  horizontal: 20,
+                ),
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(6),
+                  color: Colors.white,
+                ),
+                child: Column(
+                  children: [
+                    Text(
+                      title,
+                      textAlign: TextAlign.center,
+                      style: Get.textTheme.bodyLarge!.copyWith(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 17 * Get.textScaleFactor * 0.90,
+                          color: Colors.black),
+                    ),
+                    const SizedBox(height: 11),
+                    Center(
+                      child: contentReplacement ??
+                          Text(
+                            content ?? "",
+                            textAlign: TextAlign.center,
+                            style: AppTextStyle.bodyText2.copyWith(
+                              fontWeight: FontWeight.w500,
+                              color: Colors.black,
+                            ),
+                          ),
+                    ),
+                    const SizedBox(height: 11),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        SizedBox(
+                          width: Get.width * 0.5,
+                          child: AppInput(
+                            borderRadius: 50,
+                            hintText: '',
+                            controller: controller,
+                          ),
+                        ),
+                        SizedBox(width: Get.width * 0.01),
+                        const Text(
+                          '%',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        )
+                      ],
                     ),
                     const SizedBox(height: 22),
                     SizedBox(

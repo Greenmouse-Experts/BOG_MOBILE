@@ -1,13 +1,13 @@
 import 'package:bog/app/controllers/home_controller.dart';
 import 'package:bog/app/global_widgets/new_app_bar.dart';
-import 'package:bog/app/modules/home/home.dart';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_styles.dart';
 import '../../global_widgets/app_base_view.dart';
-import '../../global_widgets/custom_app_bar.dart';
+
 import 'update_financial_data.dart';
 import 'update_general.dart';
 import 'update_organisation_info.dart';

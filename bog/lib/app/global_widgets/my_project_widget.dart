@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:bog/app/global_widgets/global_widgets.dart';
 import 'package:bog/app/modules/project_details/new_project_details.dart';
 import 'package:bog/app/modules/project_details/view_form.dart';
+import 'package:bog/core/theme/app_colors.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_paystack/flutter_paystack.dart';
@@ -18,6 +19,7 @@ class MyProjectWidget extends StatefulWidget {
   final String orderSlug;
   final HomeController controller;
   final String id;
+  final bool inReview;
   final bool isPending;
   final bool isOngoing;
   final bool isCancelled;
@@ -29,7 +31,8 @@ class MyProjectWidget extends StatefulWidget {
       required this.id,
       required this.isPending,
       required this.isOngoing,
-      required this.isCancelled});
+      required this.isCancelled,
+      required this.inReview});
 
   @override
   State<MyProjectWidget> createState() => _MyProjectWidgetState();
@@ -46,7 +49,8 @@ class _MyProjectWidgetState extends State<MyProjectWidget> {
     super.initState();
   }
 
-  void checkOut() async {
+  void checkOut(String id) async {
+    print(id);
     var logInDetails = LogInModel.fromJson(jsonDecode(MyPref.logInDetail.val));
     const price = 20000 * 100;
     final email = logInDetails.email;
@@ -64,9 +68,21 @@ class _MyProjectWidgetState extends State<MyProjectWidget> {
     );
 
     if (response.status == true) {
-      Get.snackbar('Sucess', 'Payment was successful');
+      AppOverlay.loadingOverlay(asyncFunction: () async {
+        final controller = Get.find<HomeController>();
+        final response = await controller.userRepo
+            .patchData('/projects/request-for-approval/$id', {"amount": 20000});
+        if (response.isSuccessful) {
+          Get.snackbar('Success', 'Review sent', backgroundColor: Colors.red);
+        } else {
+          Get.snackbar('Error', response.message ?? 'An error occurred');
+        }
+      });
+
+      // Get.snackbar('Sucess', 'Payment was successful',
+      //     backgroundColor: Colors.green);
     } else {
-      Get.snackbar('Error', 'An error occcurred');
+      Get.snackbar('Error', 'An error occcurred', backgroundColor: Colors.red);
     }
   }
 
@@ -79,6 +95,11 @@ class _MyProjectWidgetState extends State<MyProjectWidget> {
           leading: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              if (widget.inReview)
+                const CircleAvatar(
+                  radius: 3,
+                  backgroundColor: AppColors.primary,
+                ),
               if (widget.isPending)
                 const CircleAvatar(
                   radius: 3,
@@ -102,13 +123,13 @@ class _MyProjectWidgetState extends State<MyProjectWidget> {
           ),
           subtitle: Text(
             widget.orderSlug,
-            style: const TextStyle(fontSize: 10),
+            style: const TextStyle(fontSize: 10, color: Colors.grey),
           ),
           trailing: PopupMenuButton(
               color: Colors.white,
               itemBuilder: (context) {
                 return [
-                  if (!widget.isPending)
+                  if (!widget.inReview)
                     PopupMenuItem<int>(
                       value: 1,
                       child: TextButton(
@@ -146,7 +167,7 @@ class _MyProjectWidgetState extends State<MyProjectWidget> {
                                   'To proceed, a commitment fee of NGN 20,000 must be paid. This will be deducted from total cost of this project if approved.You will be refunded if this project is declined by the service partner',
                               doubleFunction: true,
                               onPressed: () {
-                                checkOut();
+                                checkOut(widget.id);
                               },
                             );
                           },

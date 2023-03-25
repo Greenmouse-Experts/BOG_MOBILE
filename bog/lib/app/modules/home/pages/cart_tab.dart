@@ -1,4 +1,5 @@
 import 'package:bog/app/global_widgets/global_widgets.dart';
+import 'package:bog/app/modules/project_details/view_form.dart';
 import 'package:date_time_format/date_time_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
@@ -453,7 +454,11 @@ class _CartTabState extends State<CartTab> {
                       shrinkWrap: true,
                       padding: const EdgeInsets.all(0),
                       itemBuilder: (BuildContext context, int index) {
-                        return const ServiceRequestItem(projectId: 'Lan dihd',location: 'Ogba Lahos',);
+                        return const ServiceRequestItem(
+                          id: 'ofof',
+                          projectId: 'Lan dihd',
+                          location: 'Ogba Lahos',
+                        );
                       },
                     ),
                   )
@@ -999,8 +1004,12 @@ class OrderRequestItem extends StatelessWidget {
 class ServiceRequestItem extends StatelessWidget {
   final String projectId;
   final String location;
+  final String id;
   const ServiceRequestItem({
-    Key? key, required this.projectId, required this.location,
+    Key? key,
+    required this.projectId,
+    required this.location,
+    required this.id,
   }) : super(key: key);
 
   @override
@@ -1024,86 +1033,84 @@ class ServiceRequestItem extends StatelessWidget {
           ),
         ],
       ),
-      child: InkWell(
-        onTap: () {
-          Get.to(() => const OrderDetails(
-                id: '',
-              ));
-        },
-        child: Column(
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(left: Get.width * 0.005),
-                        child: Row(
-                          
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Project ID :  $projectId",
-                              style: AppTextStyle.caption.copyWith(
-                                color: Colors.black,
-                                fontSize: Get.width * 0.035,
-                                fontWeight: FontWeight.w600,
-                              ),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(left: Get.width * 0.005),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Project ID :  $projectId",
+                            style: AppTextStyle.caption.copyWith(
+                              color: Colors.black,
+                              fontSize: Get.width * 0.035,
+                              fontWeight: FontWeight.w600,
                             ),
-                            IconButton(onPressed: (){}, icon: const Icon(Icons.visibility_outlined, color: AppColors.primary,))
-                          ],
-                        ),
-                      ),
-                  
-                      Padding(
-                        padding: EdgeInsets.only(left: Get.width * 0.005),
-                        child: Text(
-                          'Project Type: $location',
-                          style: AppTextStyle.caption.copyWith(
-                            color: Colors.black.withOpacity(0.6),
-                            fontSize: Get.width * 0.033,
-                            fontWeight: FontWeight.w500,
                           ),
+                          IconButton(
+                              onPressed: () {
+                                Get.to(() => ViewFormPage(id: id));
+                              },
+                              icon: const Icon(
+                                Icons.visibility_outlined,
+                                color: AppColors.primary,
+                              ))
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: Get.width * 0.005),
+                      child: Text(
+                        'Project Type: $location',
+                        style: AppTextStyle.caption.copyWith(
+                          color: Colors.black.withOpacity(0.6),
+                          fontSize: Get.width * 0.033,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-                const SizedBox(width: 8),
-              ],
-            ),
-            const SizedBox(height: 10),
-            Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                SizedBox(
-                  width: Get.width * 0.4,
-                  child: AppButton(
-                    title: "Decline",
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    border: Border.all(color: const Color(0xFFDC1515)),
-                    bckgrndColor: Colors.white,
-                    fontColor: const Color(0xFFDC1515),
-                  ),
+              ),
+              const SizedBox(width: 8),
+            ],
+          ),
+          const SizedBox(height: 10),
+          Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              SizedBox(
+                width: Get.width * 0.4,
+                child: AppButton(
+                  title: "Decline",
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  border: Border.all(color: const Color(0xFFDC1515)),
+                  bckgrndColor: Colors.white,
+                  fontColor: const Color(0xFFDC1515),
                 ),
-                SizedBox(
-                  width: Get.width * 0.4,
-                  child: AppButton(
-                    title: "Accept",
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    border: Border.all(color: const Color(0xFF24B53D)),
-                    bckgrndColor: Colors.white,
-                    fontColor: const Color(0xFF24B53D),
-                  ),
+              ),
+              SizedBox(
+                width: Get.width * 0.4,
+                child: AppButton(
+                  title: "Accept",
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  border: Border.all(color: const Color(0xFF24B53D)),
+                  bckgrndColor: Colors.white,
+                  fontColor: const Color(0xFF24B53D),
                 ),
-              ],
-            )
-          ],
-        ),
+              ),
+            ],
+          )
+        ],
       ),
     );
   }

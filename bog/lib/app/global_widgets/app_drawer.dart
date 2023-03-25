@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:bog/app/global_widgets/app_base_view.dart';
 import 'package:bog/app/global_widgets/confirm_logout.dart';
-import 'package:bog/app/modules/checkout/receipt.dart';
+// import 'package:bog/app/modules/checkout/receipt.dart';
 
 import 'package:bog/app/modules/meetings/meeting.dart';
 
@@ -156,9 +156,12 @@ class _AppDrawerState extends State<AppDrawer> {
                               },
                               imageAsset: "assets/images/two1.png",
                               showArrow: true),
-                            if (controller.currentType == "Client" ||
+                        if (controller.currentType == "Client" ||
                             controller.currentType == "Corporate Client")
-                       _TextButton(imageAsset: 'assets/images/project_icon.png', text: 'Projects', onPressed: (){}),
+                          _TextButton(
+                              imageAsset: 'assets/images/project_icon.png',
+                              text: 'Projects',
+                              onPressed: () {}),
                         _TextButton(
                             text: "Transactions",
                             onPressed: () {
