@@ -1,10 +1,10 @@
 import 'dart:convert';
-import 'dart:math';
 
 import 'package:bog/app/modules/settings/faq.dart';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:pie_chart/pie_chart.dart' as pie_chart;
 
 import 'package:get/get.dart';
 
@@ -14,8 +14,10 @@ import '../../../controllers/home_controller.dart';
 import '../../../data/model/log_in_model.dart';
 
 import '../../../data/providers/my_pref.dart';
+import '../../../global_widgets/activity_widget.dart';
 import '../../../global_widgets/app_avatar.dart';
 
+import '../../../global_widgets/sp_project_preview.dart';
 import '../../create/create.dart';
 import '../../notifications/notification.dart';
 import '../../settings/support.dart';
@@ -31,6 +33,18 @@ class HomeTab extends StatefulWidget {
 class _HomeTabState extends State<HomeTab> {
   final HomeController controller = Get.find<HomeController>();
   var logInDetails = LogInModel.fromJson(jsonDecode(MyPref.logInDetail.val));
+
+   final dataMap = <String, double>{
+    "Approved Projects": 52,
+    "Projects in review": 38,
+    "Disapproved Projects": 18,
+  };
+
+    final labelMap = <String, String>{
+    "Approved Projects": '52',
+    "Projects in review": '38',
+    "Disapproved Projects":'18',
+  };
 
   @override
   void initState() {
@@ -86,7 +100,7 @@ class _HomeTabState extends State<HomeTab> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "Hello,",
+                              "Welcome back,",
                               style: AppTextStyle.subtitle1.copyWith(
                                 color: Colors.grey,
                               ),
@@ -117,9 +131,11 @@ class _HomeTabState extends State<HomeTab> {
                 ],
               ),
             ),
+           const Divider(
+              color: AppColors.newAsh,
+            ),
             if (controller.currentType == "Client" ||
-                controller.currentType == "Corporate Client" ||
-                controller.currentType == "Product Partner")
+                controller.currentType == "Corporate Client" )
               SizedBox(
                 height: Get.height * 0.015,
               ),
@@ -146,67 +162,9 @@ class _HomeTabState extends State<HomeTab> {
                   ],
                 ),
               ),
-            if (controller.currentType == "Product Partner")
-              Padding(
-                padding: EdgeInsets.only(
-                    left: Get.width * 0.05, right: Get.width * 0.05, top: 10.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Text(
-                      "Overview",
-                      style: AppTextStyle.subtitle1.copyWith(
-                        color: Colors.black,
-                        fontSize: Get.width * 0.04,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10.0,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        buildOverViewContainer(
-                          "assets/images/earnings.png",
-                          title,
-                          subTitle,
-                          const Color(0xffD3DDFE),
-                        ),
-                        buildOverViewContainer(
-                          "assets/images/sales.png",
-                          "N 2,000,000",
-                          "Total Sales",
-                          const Color(0xffDEFEFE),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 20.0,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        buildOverViewContainer(
-                          "assets/images/products.png",
-                          "150",
-                          "Products",
-                          const Color(0xffF6DEFE),
-                        ),
-                        buildOverViewContainer(
-                          "assets/images/orders.png",
-                          "52",
-                          "Orders",
-                          const Color(0xffFED8D5),
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-              ),
-            //indicator
+        
             if (controller.currentType == "Client" ||
-                controller.currentType == "Corporate Client" ||
-                controller.currentType == "Product Partner")
+                controller.currentType == "Corporate Client" )
               SizedBox(
                 height: Get.height * 0.01,
               ),
@@ -225,12 +183,8 @@ class _HomeTabState extends State<HomeTab> {
                   ),
                 ],
               ),
-            if (controller.currentType == "Client" ||
-                controller.currentType == "Corporate Client" ||
-                controller.currentType == "Product Partner")
-              SizedBox(
-                height: Get.height * 0.01,
-              ),
+       
+            
             Expanded(
               child: SingleChildScrollView(
                 child: Column(
@@ -258,15 +212,167 @@ class _HomeTabState extends State<HomeTab> {
                         padding: EdgeInsets.only(
                             left: Get.width * 0.05,
                             right: Get.width * 0.05,
-                            top: 10.0),
-                        child: Text(
-                          "Sales",
-                          style: AppTextStyle.subtitle1.copyWith(
-                            color: Colors.black,
-                            fontSize: Get.width * 0.04,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
+                           ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                              Card(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+            color: AppColors.primary,
+            margin: const EdgeInsets.all(8),
+            child: Padding(
+              padding: const EdgeInsets.symmetric
+              (vertical: 20.0, horizontal: 15),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Text('NGN 3,180,000', style: AppTextStyle.mid1.copyWith(color: AppColors.white)),
+                      IconButton(onPressed: (){}, icon: Icon(Icons.visibility, size: 15 * Get.textScaleFactor,)),
+                      const  Spacer(),
+                      Image.asset('assets/icons/verified.png'),
+                      const  SizedBox(width: 5),
+                      Text('Verified', style: AppTextStyle.caption.copyWith(color: AppColors.white),),
+                    ],
+                  ),
+                 Text('Total Earnings', style: AppTextStyle.caption2.copyWith(color: AppColors.white), ),
+                 const SizedBox(height: 10),
+                 Row(
+                  children: [
+                    ElevatedButton(onPressed: (){}, style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.white,
+                    ), child:  Text('Request Payout', 
+                    style: AppTextStyle.caption.copyWith(color: AppColors.blackShade.withOpacity(0.8)),),),
+                   const  Spacer(),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Validity Date', style: AppTextStyle.caption.copyWith(color: AppColors.white),),
+                        Text('11 months, 3 days',style: AppTextStyle.caption.copyWith(color: AppColors.white),)
+                      ],
+                    )
+                  ],
+                 )
+                ],
+              ),
+            ),
+           ),
+              Row(
+                
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text('KYC Score', style: AppTextStyle.caption2.copyWith(color: AppColors.blackShade.withOpacity(0.8)),),
+                                SizedBox(width:  Get.width * 0.01),
+                                TweenAnimationBuilder(
+                                  tween: Tween<double>(
+                                    begin: 0,
+                                    end: 0.96, 
+                                  ),
+                                  duration: const Duration(milliseconds: 1000),
+                                  builder: (context,double val, _){
+                                    return SizedBox(
+                                      width: Get.width * 0.55,
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(18),
+                                        child: LinearProgressIndicator(
+                                          
+                                          color: AppColors.successGreen,
+                                          value: val,
+                                          minHeight: 12,
+                                          backgroundColor: AppColors.backgroundGrey,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                               Container(
+                                width: Get.width * 0.15,
+                                height: Get.width * 0.15,
+                                padding: EdgeInsets.all(Get.width * 0.015),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(100),
+                                  color: AppColors.successGreen.withOpacity(0.1),
+                                ),
+                                child: Container(
+                                width: Get.width * 0.1,
+                                height: Get.width * 0.1,
+                                padding: EdgeInsets.all(Get.width * 0.015),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(100),
+                                  color: AppColors.successGreen.withOpacity(0.3),
+                                ),
+                                child: Container(
+                                  alignment: Alignment.center,
+                                width: Get.width * 0.05,
+                                height: Get.width * 0.05,
+                                padding: EdgeInsets.all(Get.width * 0.01),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(100),
+                                  color: AppColors.successGreen,
+                                ),
+                                child: Text('96%', style: AppTextStyle.caption.copyWith(fontWeight: FontWeight.w600, color: AppColors.white),),
+                               ),
+                               ),
+                               ),
+                              ],
+                            ),
+                             Padding(
+                               padding: const EdgeInsets.all(8.0),
+                               child: Text('Key Activities',style: AppTextStyle.caption2
+                               .copyWith(color: AppColors.blackShade.withOpacity(0.8)),),
+                             ),
+                             Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                               children:  [
+                               const  ActivityWidget(
+                                  title: 'Total Products',
+                                  subTitle: 'Total Products on sale.',
+                                  image: 'assets/activity/products.png',
+                                  color: AppColors.productPurple,
+                                  isProduct: true,
+                                 ),
+                                  ActivityWidget(
+                                    isProduct: false,
+                                   title: 'Products in Store',
+                                   subTitle: 'Total Sales made.',
+                                   image: 'assets/activity/sales.png', 
+                                    color: AppColors.productGreen.withOpacity(0.7),
+                                  ),
+                               ],
+                             ),
+                              SizedBox(height: Get.height * 0.015),
+                              Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                               children:  [
+                              ActivityWidget(
+                                isProduct: false,
+                                  title: 'Order Requests',
+                                  subTitle: 'Total Order requests',
+                                  image: 'assets/activity/requests.png',
+                                  color: AppColors.productYellow.withOpacity(0.7),
+                                 ),
+                                 const ActivityWidget(
+                                  isProduct: false,
+                                   title: 'Deliveries',
+                                   subTitle: 'Successful deliveries made',
+                                   image: 'assets/activity/delivery.png', 
+                                    color: AppColors.productBlue,
+                                  ),
+                               ],
+                             ),
+                               SizedBox(height: Get.height * 0.03),
+
+                          pie_chart.PieChart(dataMap: dataMap, chartType: pie_chart.ChartType.ring,chartRadius: Get.width * 0.25, colorList: const [AppColors.primary, AppColors.successGreen, AppColors.serviceYellow],
+                          animationDuration:const Duration(seconds: 2),
+                          centerText: 'Total: 68',
+                          totalValue: 100,
+                          ringStrokeWidth: 12  ,
+                          legendOptions: pie_chart.LegendOptions(legendLabels: labelMap, showLegends:true),
+                          chartValuesOptions: const pie_chart.ChartValuesOptions(showChartValues: false),
+                          centerTextStyle: AppTextStyle.caption2.copyWith(color: AppColors.blackShade.withOpacity(0.8)),)
+                          ],
+                        )
                       ),
                     SizedBox(
                       height: Get.height * 0.015,
@@ -275,7 +381,7 @@ class _HomeTabState extends State<HomeTab> {
                         controller.currentType == "Corporate Client")
                       Padding(
                         padding: EdgeInsets.only(
-                            left: Get.width * 0.05, right: Get.width * 0.05),
+                            left: Get.width * 0.03, right: Get.width * 0.03),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
@@ -429,698 +535,185 @@ class _HomeTabState extends State<HomeTab> {
                           ],
                         ),
                       ),
-                    if (controller.currentType == "Product Partner")
-                      Padding(
-                        padding: EdgeInsets.only(
-                            left: Get.width * 0.0,
-                            right: Get.width * 0.05,
-                            top: 10.0),
-                        child: SizedBox(
-                          width: Get.width,
-                          height: Get.height * 0.3,
-                          child: BarChart(
-                            mainBarData(),
-                            swapAnimationDuration:
-                                const Duration(milliseconds: 150), // Optional
-                            swapAnimationCurve: Curves.linear, // Optional
-                          ),
-                        ),
-                      ),
+               
                     if (controller.currentType == "Service Partner")
                       Padding(
                         padding: EdgeInsets.only(
                             left: Get.width * 0.05,
                             right: Get.width * 0.05,
-                            top: 10.0),
-                        child: Text(
-                          "Overview",
-                          style: AppTextStyle.subtitle1.copyWith(
-                            color: Colors.black,
-                            fontSize: Get.width * 0.04,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ),
-                    if (controller.currentType == "Service Partner")
-                      Padding(
-                        padding: EdgeInsets.only(
-                            left: Get.width * 0.05,
-                            right: Get.width * 0.05,
-                            top: 10.0),
-                        child: SizedBox(
-                          width: Get.width,
-                          height: Get.height * 0.13,
-                          child: SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Row(
+                           ),
+                        child: 
+                        Column(
+                          children: [
+                             Card(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+            color: AppColors.primary,
+            margin: const EdgeInsets.all(8),
+            child: Padding(
+              padding: const EdgeInsets.symmetric
+              (vertical: 20.0, horizontal: 15),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Text('NGN 3,180,000', style: AppTextStyle.mid1.copyWith(color: AppColors.white)),
+                      IconButton(onPressed: (){}, icon: Icon(Icons.visibility, size: 15 * Get.textScaleFactor,)),
+                      const  Spacer(),
+                      Image.asset('assets/icons/verified.png'),
+                      const  SizedBox(width: 5),
+                      Text('Verified', style: AppTextStyle.caption.copyWith(color: AppColors.white),),
+                    ],
+                  ),
+                 Text('Total Earnings', style: AppTextStyle.caption2.copyWith(color: AppColors.white), ),
+                 const SizedBox(height: 10),
+                 Row(
+                  children: [
+                    ElevatedButton(onPressed: (){}, style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.white,
+                    ), child:  Text('Request Payout', 
+                    style: AppTextStyle.caption.copyWith(color: AppColors.blackShade.withOpacity(0.8)),),),
+                   const  Spacer(),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Validity Date', style: AppTextStyle.caption.copyWith(color: AppColors.white),),
+                        Text('11 months, 3 days',style: AppTextStyle.caption.copyWith(color: AppColors.white),)
+                      ],
+                    )
+                  ],
+                 )
+                ],
+              ),
+            ),
+           ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Container(
-                                  height: Get.height * 0.13,
-                                  width: Get.width * 0.5,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(10.0),
-                                    border: Border.all(
-                                      color: const Color(0xff4CD964),
-                                      width: 1,
-                                    ),
+                                Text('KYC Score', style: AppTextStyle.caption2.copyWith(color: AppColors.blackShade.withOpacity(0.8)),),
+                                SizedBox(width:  Get.width * 0.01),
+                                TweenAnimationBuilder(
+                                  tween: Tween<double>(
+                                    begin: 0,
+                                    end: 0.96, 
                                   ),
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Column(
-                                        mainAxisSize: MainAxisSize.max,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Padding(
-                                            padding: EdgeInsets.only(
-                                                left: Get.width * 0.025),
-                                            child: Text(
-                                              "02",
-                                              style: AppTextStyle.headline4
-                                                  .copyWith(
-                                                color: Colors.black,
-                                                fontSize: Get.width * 0.04,
-                                                fontWeight: FontWeight.w600,
-                                              ),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: Get.height * 0.01,
-                                          ),
-                                          Padding(
-                                            padding: EdgeInsets.only(
-                                                left: Get.width * 0.025),
-                                            child: Text(
-                                              "Current Projects",
-                                              style: AppTextStyle.headline4
-                                                  .copyWith(
-                                                color: Colors.black
-                                                    .withOpacity(0.5),
-                                                fontSize: Get.width * 0.035,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(right: 10.0),
-                                        child: Container(
-                                          height: Get.height * 0.05,
-                                          width: Get.height * 0.05,
-                                          decoration: BoxDecoration(
-                                            color: const Color(0xff00E396)
-                                                .withOpacity(0.1),
-                                            borderRadius:
-                                                const BorderRadius.all(
-                                                    Radius.circular(100.0)),
-                                          ),
-                                          child: Center(
-                                            child: Image.asset(
-                                              'assets/images/image 804.png',
-                                              width: Get.width * 0.05,
-                                              height: Get.width * 0.05,
-                                            ),
-                                          ),
+                                  duration: const Duration(milliseconds: 1000),
+                                  builder: (context,double val, _){
+                                    return SizedBox(
+                                      width: Get.width * 0.55,
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(18),
+                                        child: LinearProgressIndicator(
+                                          
+                                          color: AppColors.successGreen,
+                                          value: val,
+                                          minHeight: 12,
+                                          backgroundColor: AppColors.backgroundGrey,
                                         ),
                                       ),
-                                    ],
-                                  ),
+                                    );
+                                  },
                                 ),
-                                const SizedBox(
-                                  width: 10.0,
+                               Container(
+                                width: Get.width * 0.15,
+                                height: Get.width * 0.15,
+                                padding: EdgeInsets.all(Get.width * 0.015),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(100),
+                                  color: AppColors.successGreen.withOpacity(0.1),
                                 ),
-                                Container(
-                                  height: Get.height * 0.13,
-                                  width: Get.width * 0.5,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(10.0),
-                                    border: Border.all(
-                                      color: const Color(0xff4C52D9),
-                                      width: 1,
-                                    ),
-                                  ),
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Column(
-                                        mainAxisSize: MainAxisSize.max,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Padding(
-                                            padding: EdgeInsets.only(
-                                                left: Get.width * 0.025),
-                                            child: Text(
-                                              "N 2,300,000",
-                                              style: AppTextStyle.headline4
-                                                  .copyWith(
-                                                color: Colors.black,
-                                                fontSize: Get.width * 0.04,
-                                                fontWeight: FontWeight.w600,
-                                              ),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: Get.height * 0.01,
-                                          ),
-                                          Padding(
-                                            padding: EdgeInsets.only(
-                                                left: Get.width * 0.025),
-                                            child: Text(
-                                              "Total Earning",
-                                              style: AppTextStyle.headline4
-                                                  .copyWith(
-                                                color: Colors.black
-                                                    .withOpacity(0.5),
-                                                fontSize: Get.width * 0.035,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(right: 10.0),
-                                        child: Container(
-                                          height: Get.height * 0.05,
-                                          width: Get.height * 0.05,
-                                          decoration: BoxDecoration(
-                                            color: const Color(0xff4C52D9)
-                                                .withOpacity(0.1),
-                                            borderRadius:
-                                                const BorderRadius.all(
-                                                    Radius.circular(100.0)),
-                                          ),
-                                          child: Center(
-                                            child: Image.asset(
-                                              'assets/images/image 804.png',
-                                              width: Get.width * 0.05,
-                                              height: Get.width * 0.05,
-                                              color: const Color(0xff4C52D9),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+                                child: Container(
+                                width: Get.width * 0.1,
+                                height: Get.width * 0.1,
+                                padding: EdgeInsets.all(Get.width * 0.015),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(100),
+                                  color: AppColors.successGreen.withOpacity(0.3),
                                 ),
+                                child: Container(
+                                  alignment: Alignment.center,
+                                width: Get.width * 0.05,
+                                height: Get.width * 0.05,
+                                padding: EdgeInsets.all(Get.width * 0.01),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(100),
+                                  color: AppColors.successGreen,
+                                ),
+                                child: Text('96%', style: AppTextStyle.caption.copyWith(fontWeight: FontWeight.w600, color: AppColors.white),),
+                               ),
+                               ),
+                               ),
                               ],
                             ),
-                          ),
-                        ),
+                        
+                         Column(
+                           
+                           children: [
+                             Row(
+                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                               children: const [
+                                 SPProjectPreview(
+                                   title: 'Available Projects',
+                                   image: 'assets/icons/available_projects.png',
+                                   color: AppColors.servicePurple,
+                                 ),
+                                 SPProjectPreview(
+                                   title: 'Assigned Projects',
+                                   image: 'assets/icons/assigned_project.png',
+                                    color: AppColors.serviceYellow,
+                                 ),
+                               ],
+                             ),
+                             SizedBox(height: Get.width * 0.04),
+                                Row(
+                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                               children: const [
+                                 SPProjectPreview(
+                                   title: 'Completed Projects',
+                                   image: 'assets/icons/complete_projects.png',
+                                    color: AppColors.serviceBlue,
+                                 ),
+                                 SPProjectPreview(
+                                   title: 'Ongoing Projects',
+                                   image: 'assets/icons/ongoing_projects.png',
+                                    color: AppColors.serviceRed,
+                                 ),
+                               ],
+                             ),  
+                             SizedBox(height: Get.height * 0.02),
+                           SizedBox(
+                           
+                             child: pie_chart.PieChart(dataMap: dataMap, chartType: pie_chart.ChartType.ring,chartRadius: Get.width * 0.25, colorList: const [AppColors.primary, AppColors.successGreen, AppColors.serviceYellow],
+                             animationDuration:const Duration(seconds: 2),
+                             centerText: 'Total: 68',
+                             totalValue: 100,
+                             ringStrokeWidth: 12  ,
+                             legendOptions: pie_chart.LegendOptions(legendLabels: labelMap, showLegends:true),
+                             chartValuesOptions: const pie_chart.ChartValuesOptions(showChartValues: false),
+                             centerTextStyle: AppTextStyle.caption2.copyWith(color: AppColors.blackShade.withOpacity(0.8)),),
+                           )
+                           ],
+                         ),
+                          ],
+                        )
                       ),
+                  
                     if (controller.currentType == "Service Partner")
                       SizedBox(
                         height: Get.height * 0.01,
                       ),
-                    if (controller.currentType == "Service Partner")
-                      Padding(
-                        padding: EdgeInsets.only(
-                            left: Get.width * 0.05,
-                            right: Get.width * 0.05,
-                            top: 10.0),
-                        child: Text(
-                          "Upcoming Deadlines",
-                          style: AppTextStyle.subtitle1.copyWith(
-                            color: Colors.black,
-                            fontSize: Get.width * 0.04,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ),
-                    if (controller.currentType == "Service Partner")
-                      Padding(
-                        padding: EdgeInsets.only(
-                            left: Get.width * 0.05,
-                            right: Get.width * 0.05,
-                            top: 20.0),
-                        child: Container(
-                          width: Get.width,
-                          height: Get.height * 0.13,
-                          decoration: BoxDecoration(
-                            color: const Color(0xffFFF9F9),
-                            borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(0.0),
-                              topRight: Radius.circular(10.0),
-                              bottomLeft: Radius.circular(0.0),
-                              bottomRight: Radius.circular(10.0),
-                            ),
-                            border: Border.all(
-                              color: const Color(0xffFFF9F9),
-                              width: 1,
-                            ),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Container(
-                                width: Get.width * 0.01,
-                                color: const Color(0xffDC1515),
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                        left: Get.width * 0.025),
-                                    child: Text(
-                                      "Land Survey Project",
-                                      style: AppTextStyle.headline4.copyWith(
-                                        color: Colors.black,
-                                        fontSize: Get.width * 0.04,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      Padding(
-                                        padding: EdgeInsets.only(
-                                            left: Get.width * 0.025),
-                                        child: Icon(
-                                          Icons.calendar_today_rounded,
-                                          color: Colors.black.withOpacity(0.5),
-                                          size: Get.width * 0.045,
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.only(
-                                            left: Get.width * 0.01),
-                                        child: Text(
-                                          "Start  : 12 - 10- 22 ",
-                                          style:
-                                              AppTextStyle.headline4.copyWith(
-                                            color: Colors.black,
-                                            fontSize: Get.width * 0.035,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.only(
-                                            left: Get.width * 0.03),
-                                        child: Icon(
-                                          Icons.calendar_today_rounded,
-                                          color: Colors.black.withOpacity(0.5),
-                                          size: Get.width * 0.045,
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.only(
-                                            left: Get.width * 0.01),
-                                        child: Text(
-                                          "Due  : 12 - 01- 23  ",
-                                          style:
-                                              AppTextStyle.headline4.copyWith(
-                                            color: Colors.black,
-                                            fontSize: Get.width * 0.035,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Padding(
-                                        padding: EdgeInsets.only(
-                                            left: Get.width * 0.025),
-                                        child: Text(
-                                          "Project Status :",
-                                          style:
-                                              AppTextStyle.headline4.copyWith(
-                                            color:
-                                                Colors.black.withOpacity(0.5),
-                                            fontSize: Get.width * 0.035,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.only(
-                                            left: Get.width * 0.025),
-                                        child: Container(
-                                          decoration: const BoxDecoration(
-                                            color: Color(0xffE8F4FE),
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(10.0)),
-                                          ),
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(
-                                                left: 10.0,
-                                                right: 10.0,
-                                                top: 5.0,
-                                                bottom: 5.0),
-                                            child: Text(
-                                              "Ongoing",
-                                              style: AppTextStyle.headline4
-                                                  .copyWith(
-                                                color: AppColors.primary,
-                                                fontSize: Get.width * 0.035,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    if (controller.currentType == "Service Partner")
-                      Padding(
-                        padding: EdgeInsets.only(
-                            left: Get.width * 0.05,
-                            right: Get.width * 0.05,
-                            top: 20.0),
-                        child: Container(
-                          width: Get.width,
-                          height: Get.height * 0.13,
-                          decoration: BoxDecoration(
-                            color: const Color(0xffFFFFF9),
-                            borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(0.0),
-                              topRight: Radius.circular(10.0),
-                              bottomLeft: Radius.circular(0.0),
-                              bottomRight: Radius.circular(10.0),
-                            ),
-                            border: Border.all(
-                              color: const Color(0xffFFF9F9),
-                              width: 1,
-                            ),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Container(
-                                width: Get.width * 0.01,
-                                color: const Color(0xffFCE727),
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                        left: Get.width * 0.025),
-                                    child: Text(
-                                      "Land Survey Project",
-                                      style: AppTextStyle.headline4.copyWith(
-                                        color: Colors.black,
-                                        fontSize: Get.width * 0.04,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      Padding(
-                                        padding: EdgeInsets.only(
-                                            left: Get.width * 0.025),
-                                        child: Icon(
-                                          Icons.calendar_today_rounded,
-                                          color: Colors.black.withOpacity(0.5),
-                                          size: Get.width * 0.045,
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.only(
-                                            left: Get.width * 0.01),
-                                        child: Text(
-                                          "Start  : 12 - 10- 22 ",
-                                          style:
-                                              AppTextStyle.headline4.copyWith(
-                                            color: Colors.black,
-                                            fontSize: Get.width * 0.035,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.only(
-                                            left: Get.width * 0.03),
-                                        child: Icon(
-                                          Icons.calendar_today_rounded,
-                                          color: Colors.black.withOpacity(0.5),
-                                          size: Get.width * 0.045,
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.only(
-                                            left: Get.width * 0.01),
-                                        child: Text(
-                                          "Due  : 12 - 01- 23  ",
-                                          style:
-                                              AppTextStyle.headline4.copyWith(
-                                            color: Colors.black,
-                                            fontSize: Get.width * 0.035,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Padding(
-                                        padding: EdgeInsets.only(
-                                            left: Get.width * 0.025),
-                                        child: Text(
-                                          "Project Status :",
-                                          style:
-                                              AppTextStyle.headline4.copyWith(
-                                            color:
-                                                Colors.black.withOpacity(0.5),
-                                            fontSize: Get.width * 0.035,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.only(
-                                            left: Get.width * 0.025),
-                                        child: Container(
-                                          decoration: const BoxDecoration(
-                                            color: Color(0xffE8F4FE),
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(10.0)),
-                                          ),
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(
-                                                left: 10.0,
-                                                right: 10.0,
-                                                top: 5.0,
-                                                bottom: 5.0),
-                                            child: Text(
-                                              "Ongoing",
-                                              style: AppTextStyle.headline4
-                                                  .copyWith(
-                                                color: AppColors.primary,
-                                                fontSize: Get.width * 0.035,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    if (controller.currentType == "Service Partner")
-                      Padding(
-                        padding: EdgeInsets.only(
-                            left: Get.width * 0.05,
-                            right: Get.width * 0.05,
-                            top: 20.0),
-                        child: Container(
-                          width: Get.width,
-                          height: Get.height * 0.13,
-                          decoration: BoxDecoration(
-                            color: const Color(0xffFFF9F9),
-                            borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(0.0),
-                              topRight: Radius.circular(10.0),
-                              bottomLeft: Radius.circular(0.0),
-                              bottomRight: Radius.circular(10.0),
-                            ),
-                            border: Border.all(
-                              color: const Color(0xffF9FAFF),
-                              width: 1,
-                            ),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Container(
-                                width: Get.width * 0.01,
-                                color: const Color(0xff3F79AD),
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                        left: Get.width * 0.025),
-                                    child: Text(
-                                      "Land Survey Project",
-                                      style: AppTextStyle.headline4.copyWith(
-                                        color: Colors.black,
-                                        fontSize: Get.width * 0.04,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      Padding(
-                                        padding: EdgeInsets.only(
-                                            left: Get.width * 0.025),
-                                        child: Icon(
-                                          Icons.calendar_today_rounded,
-                                          color: Colors.black.withOpacity(0.5),
-                                          size: Get.width * 0.045,
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.only(
-                                            left: Get.width * 0.01),
-                                        child: Text(
-                                          "Start  : 12 - 10- 22 ",
-                                          style:
-                                              AppTextStyle.headline4.copyWith(
-                                            color: Colors.black,
-                                            fontSize: Get.width * 0.035,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.only(
-                                            left: Get.width * 0.03),
-                                        child: Icon(
-                                          Icons.calendar_today_rounded,
-                                          color: Colors.black.withOpacity(0.5),
-                                          size: Get.width * 0.045,
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.only(
-                                            left: Get.width * 0.01),
-                                        child: Text(
-                                          "Due  : 12 - 01- 23  ",
-                                          style:
-                                              AppTextStyle.headline4.copyWith(
-                                            color: Colors.black,
-                                            fontSize: Get.width * 0.035,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Padding(
-                                        padding: EdgeInsets.only(
-                                            left: Get.width * 0.025),
-                                        child: Text(
-                                          "Project Status :",
-                                          style:
-                                              AppTextStyle.headline4.copyWith(
-                                            color:
-                                                Colors.black.withOpacity(0.5),
-                                            fontSize: Get.width * 0.035,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.only(
-                                            left: Get.width * 0.025),
-                                        child: Container(
-                                          decoration: const BoxDecoration(
-                                            color: Color(0xffE8F4FE),
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(10.0)),
-                                          ),
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(
-                                                left: 10.0,
-                                                right: 10.0,
-                                                top: 5.0,
-                                                bottom: 5.0),
-                                            child: Text(
-                                              "Ongoing",
-                                              style: AppTextStyle.headline4
-                                                  .copyWith(
-                                                color: AppColors.primary,
-                                                fontSize: Get.width * 0.035,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
+                 
+                  
+                     
                     SizedBox(
                       height: Get.height * 0.01,
                     ),
-                    Padding(
+                    if (controller.currentType == "Client" ||
+                controller.currentType == "Corporate Client" )
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                         Padding(
                       padding: EdgeInsets.only(
                           left: Get.width * 0.05,
                           right: Get.width * 0.05,
@@ -1137,37 +730,39 @@ class _HomeTabState extends State<HomeTab> {
                     SizedBox(
                       height: Get.height * 0.015,
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                          left: Get.width * 0.05, right: Get.width * 0.05),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          InkWell(
-                            onTap: () {
-                              Get.to(() => const FAQ());
-                            },
-                            child: Image.asset(
-                              "assets/images/Group 47034.png",
-                              height: Get.height * 0.2,
-                              width: Get.width * 0.4,
-                              fit: BoxFit.fitWidth,
-                            ),
+                        Padding(
+                          padding: EdgeInsets.only(
+                              left: Get.width * 0.05, right: Get.width * 0.05),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              InkWell(
+                                onTap: () {
+                                  Get.to(() => const FAQ());
+                                },
+                                child: Image.asset(
+                                  "assets/images/Group 47034.png",
+                                  height: Get.height * 0.2,
+                                  width: Get.width * 0.4,
+                                  fit: BoxFit.fitWidth,
+                                ),
+                              ),
+                              InkWell(
+                                onTap: () {
+                                  Get.to(() => const Support());
+                                },
+                                child: Image.asset(
+                                  "assets/images/Group 47035.png",
+                                  height: Get.height * 0.2,
+                                  width: Get.width * 0.4,
+                                  fit: BoxFit.fitWidth,
+                                ),
+                              ),
+                            ],
                           ),
-                          InkWell(
-                            onTap: () {
-                              Get.to(() => const Support());
-                            },
-                            child: Image.asset(
-                              "assets/images/Group 47035.png",
-                              height: Get.height * 0.2,
-                              width: Get.width * 0.4,
-                              fit: BoxFit.fitWidth,
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                     SizedBox(
                       height: Get.height * 0.015,
@@ -1205,242 +800,7 @@ class _HomeTabState extends State<HomeTab> {
     );
   }
 
-  List<BarChartGroupData> showingGroups() => List.generate(7, (i) {
-        switch (i) {
-          case 0:
-            return makeGroupData(
-              0,
-              850,
-            );
-          case 1:
-            return makeGroupData(
-              1,
-              750,
-            );
-          case 2:
-            return makeGroupData(
-              2,
-              125,
-            );
-          case 3:
-            return makeGroupData(
-              3,
-              1250,
-            );
-          case 4:
-            return makeGroupData(
-              4,
-              500,
-            );
-          case 5:
-            return makeGroupData(
-              5,
-              750,
-            );
-          case 6:
-            return makeGroupData(
-              6,
-              110,
-            );
-          default:
-            return throw Error();
-        }
-      });
-
-  BarChartData mainBarData() {
-    return BarChartData(
-      minY: 0,
-      //maxY: 2000,
-      titlesData: FlTitlesData(
-        show: true,
-        rightTitles: AxisTitles(
-          sideTitles: SideTitles(showTitles: false),
-        ),
-        topTitles: AxisTitles(
-          sideTitles: SideTitles(showTitles: false),
-        ),
-        bottomTitles: AxisTitles(
-          sideTitles: SideTitles(
-            showTitles: true,
-            getTitlesWidget: getTitles,
-            reservedSize: 38,
-          ),
-        ),
-        leftTitles: AxisTitles(
-          sideTitles: SideTitles(
-            showTitles: true,
-            getTitlesWidget: getSideTitles,
-            reservedSize: 50,
-          ),
-        ),
-      ),
-      borderData: FlBorderData(
-        show: true,
-        border: const Border(
-          bottom: BorderSide(
-            color: Color(0xffDEDEDE),
-            width: 1,
-          ),
-          left: BorderSide(
-            color: Color(0xffDEDEDE),
-            width: 1,
-          ),
-          right: BorderSide.none,
-          top: BorderSide.none,
-        ),
-      ),
-      barGroups: showingGroups(),
-      gridData: FlGridData(
-        show: false,
-      ),
-    );
-  }
-
-  Widget getTitles(double value, TitleMeta meta) {
-    const style = TextStyle(
-      color: Color(0xff85858A),
-      fontWeight: FontWeight.normal,
-      fontSize: 14,
-    );
-    Widget text;
-    switch (value.toInt()) {
-      case 0:
-        text = const Text('Mon', style: style);
-        break;
-      case 1:
-        text = const Text('Tue', style: style);
-        break;
-      case 2:
-        text = const Text('Wed', style: style);
-        break;
-      case 3:
-        text = const Text('Thu', style: style);
-        break;
-      case 4:
-        text = const Text('Fri', style: style);
-        break;
-      case 5:
-        text = const Text('Sat', style: style);
-        break;
-      case 6:
-        text = const Text('Sun', style: style);
-        break;
-      default:
-        text = const Text('', style: style);
-        break;
-    }
-    return SideTitleWidget(
-      axisSide: meta.axisSide,
-      space: 16,
-      child: text,
-    );
-  }
-
-  Widget getSideTitles(double value, TitleMeta meta) {
-    const style = TextStyle(
-      color: Color(0xff85858A),
-      fontWeight: FontWeight.normal,
-      fontSize: 12,
-    );
-    String valueToDisplay = value.toInt().toString();
-    if (valueToDisplay.length == 4) {
-      valueToDisplay = "${valueToDisplay.substring(0, 2)}M";
-    } else if (valueToDisplay.length == 5) {
-      valueToDisplay = "${valueToDisplay.substring(0, 2)}K";
-    } else {
-      valueToDisplay = "${valueToDisplay}K";
-    }
-    Widget text = Text(
-      valueToDisplay == "0K" ? "0" : valueToDisplay,
-      style: style,
-      maxLines: 1,
-    );
-
-    return SideTitleWidget(
-      axisSide: meta.axisSide,
-      space: 4,
-      child: text,
-    );
-  }
-
-  BarChartData randomData() {
-    return BarChartData(
-      barTouchData: BarTouchData(
-        enabled: false,
-      ),
-      titlesData: FlTitlesData(
-        show: true,
-        bottomTitles: AxisTitles(
-          sideTitles: SideTitles(
-            showTitles: true,
-            getTitlesWidget: getTitles,
-            reservedSize: 38,
-          ),
-        ),
-        leftTitles: AxisTitles(
-          sideTitles: SideTitles(
-            showTitles: false,
-          ),
-        ),
-        topTitles: AxisTitles(
-          sideTitles: SideTitles(
-            showTitles: false,
-          ),
-        ),
-        rightTitles: AxisTitles(
-          sideTitles: SideTitles(
-            showTitles: false,
-          ),
-        ),
-      ),
-      borderData: FlBorderData(
-        show: false,
-      ),
-      barGroups: List.generate(7, (i) {
-        switch (i) {
-          case 0:
-            return makeGroupData(
-              0,
-              Random().nextInt(15).toDouble() + 6,
-            );
-          case 1:
-            return makeGroupData(
-              1,
-              Random().nextInt(15).toDouble() + 6,
-            );
-          case 2:
-            return makeGroupData(
-              2,
-              Random().nextInt(15).toDouble() + 6,
-            );
-          case 3:
-            return makeGroupData(
-              3,
-              Random().nextInt(15).toDouble() + 6,
-            );
-          case 4:
-            return makeGroupData(
-              4,
-              Random().nextInt(15).toDouble() + 6,
-            );
-          case 5:
-            return makeGroupData(
-              5,
-              Random().nextInt(15).toDouble() + 6,
-            );
-          case 6:
-            return makeGroupData(
-              6,
-              Random().nextInt(15).toDouble() + 6,
-            );
-          default:
-            return throw Error();
-        }
-      }),
-      gridData: FlGridData(show: false),
-    );
-  }
-
+  
   Container buildOverViewContainer(
       String icon, String title, String subTitle, Color color) {
     return Container(
@@ -1511,4 +871,6 @@ class _HomeTabState extends State<HomeTab> {
       ),
     );
   }
+
+  
 }

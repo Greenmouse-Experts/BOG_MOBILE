@@ -1,4 +1,7 @@
 import 'package:bog/app/controllers/home_controller.dart';
+import 'package:bog/app/data/model/user_details_model.dart';
+import 'package:bog/app/data/providers/api_response.dart';
+import 'package:bog/app/global_widgets/app_loader.dart';
 import 'package:bog/app/global_widgets/new_app_bar.dart';
 
 import 'package:flutter/material.dart';
@@ -25,54 +28,127 @@ class KYCPage extends StatelessWidget {
         controller.currentType == 'Product Partner' ? 'vendor' : 'professional';
     return AppBaseView(
         child: Scaffold(
-      appBar: newAppBar(context, 'KYC', true),
+      appBar: newAppBarBack(context, 'KYC'),
       body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            FutureBuilder(
-                future:
-                    controller.userRepo.getData('/user/me?userType=$userType'),
-                builder: (ctx, snapshot) {
-                  return Text(snapshot.connectionState.toString());
-                }),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: FutureBuilder<ApiResponse>(
+              future:
+                  controller.userRepo.getData('/user/me?userType=$userType'),
+              builder: (ctx, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done && snapshot.data!.isSuccessful){
+                 final userDetails = UserDetailsModel.fromJson(snapshot.data!.user);
+                 final kycPoint = userDetails.profile!.kycPoint;
+        
+                     return kycPoint == null ? 
+                     Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                       children: [
+                        Text('Your Kyc Score : $kycPoint'),
+                          const  SizedBox(height: 15),
+                        const LinearProgressIndicator(value: 0,),
+                          const  SizedBox(height: 15),
+                            _TextButton(
+              iconData: Icons.info,
+              text: 'General Information',
+              onPressed: () {
+                Get.to(() => const UpdateGeneralInfo());
+              }),
+          _TextButton(
+              iconData: Icons.info_outline_sharp,
+              text: 'Organisational Info',
+              onPressed: () {
+                Get.to(() => const UpdateOrganisationInfo());
+              }),
+          _TextButton(
+              iconData: Icons.credit_score_outlined,
+              text: 'Tax Details & Permit',
+              onPressed: () {
+                Get.to(() => const UpdateTaxDetails());
+              }),
+          _TextButton(
+              iconData: Icons.work,
+              text: 'Work/Job Execution Experience',
+              onPressed: () {
+                Get.to(() => const WorkExperience());
+              }),
+          _TextButton(
+              iconData: Icons.money,
+              text: 'Financial Data',
+              onPressed: () {
+                Get.to(() => const UpdateFinancialDetails());
+              }),
+          _TextButton(
+              iconData: Icons.upload_file,
+              text: 'Upload Documents',
+              onPressed: () {
+                Get.to(() => const UploadDocuments());
+              })
+                       ],
+                     ) :  Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                       children: [
+                        Text('Your Kyc Score : $kycPoint'),
+                      const  SizedBox(height: 15),
+                         TweenAnimationBuilder(tween:  Tween<double>(
+          begin: 0,
+          end: userDetails.profile!.kycPoint!.toDouble()
+            ), duration: const Duration(milliseconds: 1000), builder: (context,double value, _) =>
+          LinearProgressIndicator(
+            minHeight: 15,
+            color: (value / 100) < 0.5 ? Colors.red : Colors.green,
+            value: value / 100,),
+        ),
+          const  SizedBox(height: 15),
             _TextButton(
-                iconData: Icons.info,
-                text: 'General Information',
-                onPressed: () {
-                  Get.to(() => const UpdateGeneralInfo());
-                }),
-            _TextButton(
-                iconData: Icons.info_outline_sharp,
-                text: 'Organisational Info',
-                onPressed: () {
-                  Get.to(() => const UpdateOrganisationInfo());
-                }),
-            _TextButton(
-                iconData: Icons.credit_score_outlined,
-                text: 'Tax Details & Permit',
-                onPressed: () {
-                  Get.to(() => const UpdateTaxDetails());
-                }),
-            _TextButton(
-                iconData: Icons.work,
-                text: 'Work/Job Execution Experience',
-                onPressed: () {
-                  Get.to(() => const WorkExperience());
-                }),
-            _TextButton(
-                iconData: Icons.money,
-                text: 'Financial Data',
-                onPressed: () {
-                  Get.to(() => const UpdateFinancialDetails());
-                }),
-            _TextButton(
-                iconData: Icons.upload_file,
-                text: 'Upload Documents',
-                onPressed: () {
-                  Get.to(() => const UploadDocuments());
-                })
-          ],
+              iconData: Icons.info,
+              text: 'General Information',
+              onPressed: () {
+                Get.to(() => const UpdateGeneralInfo());
+              }),
+          _TextButton(
+              iconData: Icons.info_outline_sharp,
+              text: 'Organisational Info',
+              onPressed: () {
+                Get.to(() => const UpdateOrganisationInfo());
+              }),
+          _TextButton(
+              iconData: Icons.credit_score_outlined,
+              text: 'Tax Details & Permit',
+              onPressed: () {
+                Get.to(() => const UpdateTaxDetails());
+              }),
+          _TextButton(
+              iconData: Icons.work,
+              text: 'Work/Job Execution Experience',
+              onPressed: () {
+                Get.to(() => const WorkExperience());
+              }),
+          _TextButton(
+              iconData: Icons.money,
+              text: 'Financial Data',
+              onPressed: () {
+                Get.to(() => const UpdateFinancialDetails());
+              }),
+          _TextButton(
+              iconData: Icons.upload_file,
+              text: 'Upload Documents',
+              onPressed: () {
+                Get.to(() => const UploadDocuments());
+              })
+                       ],
+                     );
+                } else {
+                  return const AppLoader();
+                  // return Column(
+                  //   mainAxisAlignment: MainAxisAlignment.center,
+                  //   children: const [
+                  //     CircularProgressIndicator(color: AppColors.primary,),
+                  //   ],
+                  // );
+                }
+               
+              }),
         ),
       ),
     ));

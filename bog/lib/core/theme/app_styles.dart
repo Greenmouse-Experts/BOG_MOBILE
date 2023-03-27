@@ -32,6 +32,12 @@ class AppTextStyle {
     color: AppColors.platinum,
     fontSize: 12 * Get.textScaleFactor * 0.90,
   );
+  static  TextStyle caption2 = TextStyle(
+    fontFamily: _font,
+    fontWeight: FontWeight.w500,
+    color: AppColors.platinum,
+    fontSize: 13 * Get.textScaleFactor * 0.90,
+  );
   static  TextStyle subtitle1 = TextStyle(
     fontFamily: _font,
     fontWeight: FontWeight.normal,
@@ -55,6 +61,12 @@ class AppTextStyle {
     color: AppColors.platinum,
     fontWeight: FontWeight.w600,
     fontSize: 24 * Get.textScaleFactor * 0.90,
+  );
+   static  TextStyle mid1 = TextStyle(
+    fontFamily: _font,
+    color: AppColors.platinum,
+    fontWeight: FontWeight.w600,
+    fontSize: 22 * Get.textScaleFactor * 0.90,
   );
   static  TextStyle button = TextStyle(
     fontSize: 18 * Get.textScaleFactor * 0.90,

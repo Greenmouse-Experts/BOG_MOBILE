@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:bog/app/controllers/home_controller.dart';
+import 'package:bog/app/data/model/user_details_model.dart';
+import 'package:bog/app/modules/subscription/subscription_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -86,9 +88,14 @@ class _PrimarySwitchWidgetState extends State<PrimarySwitchWidget> {
           LogInModel.fromJson(jsonDecode(MyPref.logInDetail.val));
       final res = await controller.userRepo
           .getData('/kyc/user-kyc/${logInDetails.id}?userType=$type');
+      
+     final newRes = await controller.userRepo.getData('/user/me?userType=${logInDetails.userType}');
+
+     final userDetails = UserDetailsModel.fromJson(newRes.user);
 
       final kyc = GenKyc.fromJson(res.data);
       MyPref.genKyc.val = jsonEncode(kyc);
+      MyPref.userDetails.val = jsonEncode(userDetails);
     
       if (kyc.isKycCompleted != true) {
     
@@ -99,7 +106,14 @@ class _PrimarySwitchWidgetState extends State<PrimarySwitchWidget> {
             content:
                 "You haven't completed your KYC yet, Kindly Complete your KYC now",
             onPressed: onPressed);
+      } else if (userDetails.profile!.hasActiveSubscription != true) {
+        MyPref.setSubscribeOverlay.val = true;
+        AppOverlay.showKycDialog(title: 'No Active Subscriptions', buttonText: 'Subscribe', content: "You don't have an active subscription, select a subscription to enjoy full benefits", onPressed: ()=> Get.to(()=> const SubscriptionScreen()));    
+      } else{
+       MyPref.setOverlay.val = false;
+      MyPref.setSubscribeOverlay.val = false;
       }
+     
     }
 
     final width = Get.width;
@@ -169,12 +183,11 @@ class _PrimarySwitchWidgetState extends State<PrimarySwitchWidget> {
                 var logInInfo = LogInModel.fromJson(response.user);
                 MyPref.logInDetail.val = jsonEncode(logInInfo);
 
+
                 if ((oldUser == 'Product Partner' ||
                         oldUser == 'Service Partner') &&
-                    (MyPref.setOverlay.val == true)) {
-                      print(MyPref.setOverlay.val);
-                      print('dcjc d');
-                      print('cdch i');
+                    (MyPref.setOverlay.val == true || MyPref.setSubscribeOverlay.val == true)) {
+                 
                   Get.back();
                 }
                 Get.back();

@@ -11,7 +11,7 @@ class PhotoViewPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: newAppBar(context, 'View Document', true),
+      appBar: newAppBarBack(context, 'View Document'),
       body: SizedBox(
         child: PhotoView(imageProvider: NetworkImage(url)),
       )

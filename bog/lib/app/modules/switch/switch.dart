@@ -49,7 +49,7 @@ class _SwitchUserState extends State<SwitchUser> {
           id: 'Switch',
           builder: (controller) {
             return Scaffold(
-                appBar: newAppBar(context, 'Switch', true),
+                appBar: newAppBarBack(context, 'Switch'),
                 backgroundColor: AppColors.backgroundVariant2,
                 body: FutureBuilder<ApiResponse>(
                     future: getAccounts,

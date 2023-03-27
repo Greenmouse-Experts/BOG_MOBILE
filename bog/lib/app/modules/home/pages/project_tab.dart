@@ -88,7 +88,7 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
     return GetBuilder<HomeController>(builder: (controller) {
       return Expanded(
         child: Scaffold(
-          appBar: newAppBar(context, "My ${controller.projectTitle}", false),
+          appBar: newAppBar(context, "My ${controller.projectTitle}"),
           body: SizedBox(
             height: Get.height * 0.91,
             child: SingleChildScrollView(

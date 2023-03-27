@@ -133,7 +133,7 @@ class _CheckoutState extends State<Checkout> {
     if (response.status == true) {
       AppOverlay.loadingOverlay(
         asyncFunction: () async {
-          successMessage = 'Payment was successful. Ref: ${response.reference}';
+         successMessage = 'Payment was successful. Ref: ${response.reference}';
           final total = cost + deliveryFee;
           final postOrder = PostOrder(
                   products: orderProducts,

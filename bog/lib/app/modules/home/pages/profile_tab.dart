@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:bog/app/modules/settings/view_kyc.dart';
+import 'package:bog/app/modules/subscription/subscription_view.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -11,12 +12,13 @@ import '../../../../core/theme/app_styles.dart';
 import '../../../controllers/home_controller.dart';
 import '../../../data/model/log_in_model.dart';
 
+import '../../../data/model/user_details_model.dart';
 import '../../../data/providers/my_pref.dart';
 import '../../../global_widgets/app_avatar.dart';
 
 import '../../../global_widgets/confirm_logout.dart';
 import '../../settings/profile_info.dart';
-import '../../settings/update_bank.dart';
+
 
 import '../../settings/update_password.dart';
 
@@ -139,6 +141,27 @@ class ProfileTab extends StatelessWidget {
                 const SizedBox(
                   height: kToolbarHeight / 3,
                 ),
+                  if (controller.currentType == "Product Partner" ||
+                    controller.currentType == "Service Partner")
+
+                  _TextButton(
+                    text: "Subscribe",
+                    useIcon: true,
+                    onPressed: () {
+                   
+                        final userDetails = UserDetailsModel.fromJson(jsonDecode(MyPref.userDetails.val));
+                        if (userDetails.profile!.hasActiveSubscription == true){
+                          Get.snackbar('Error', 'You already have an active subscription');
+                        } else{
+                          Get.to(()=> const SubscriptionScreen());
+                        }
+                
+                    },
+                    imageAsset: "assets/images/sales.png",
+                  ),
+                const SizedBox(
+                  height: kToolbarHeight / 3,
+                ),
                 _TextButton(
                   text: "Security ",
                   onPressed: () {
@@ -197,10 +220,12 @@ class _TextButton extends StatelessWidget {
   final String? subtitle;
   final bool showArrow;
   final Function() onPressed;
+  final bool useIcon;
   const _TextButton(
       {required this.imageAsset,
       required this.text,
       required this.onPressed,
+      this.useIcon = false,
       this.subtitle,
       this.showArrow = true});
 
@@ -223,11 +248,11 @@ class _TextButton extends StatelessWidget {
                 borderRadius: BorderRadius.circular(100),
               ),
               child: Center(
-                child: Image.asset(
+                child: !useIcon ?  Image.asset(
                   imageAsset,
                   width: Get.width * 0.05,
                   height: Get.width * 0.05,
-                ),
+                ) : const Icon(Icons.subscriptions_outlined, color: Colors.black,),
               ),
             ),
             SizedBox(
