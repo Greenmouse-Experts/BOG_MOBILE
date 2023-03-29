@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 
 import 'package:bog/app/controllers/home_controller.dart';
@@ -13,6 +12,7 @@ import 'package:get/get.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../data/model/log_in_model.dart';
+import '../../data/model/user_details_model.dart';
 import '../../data/providers/api.dart';
 import '../../data/providers/api_response.dart';
 import '../../data/providers/my_pref.dart';
@@ -30,15 +30,16 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
   var publicKey = Api.publicKey;
   final plugin = PaystackPlugin();
 
-
-  void checkout({required String planId, required String userType, required int price}) async {
+  void checkout(
+      {required String planId,
+      required String userType,
+      required int price}) async {
     final controller = Get.find<HomeController>();
     var logInDetails = LogInModel.fromJson(jsonDecode(MyPref.logInDetail.val));
-    final userId =  logInDetails.id ?? '';
+    final userId = logInDetails.id ?? '';
     final newPrice = price * 100;
 
-
-     Charge charge = Charge()
+    Charge charge = Charge()
       ..amount = newPrice
       ..reference = 'ref_${DateTime.now().millisecondsSinceEpoch}'
       ..email = logInDetails.email ?? ''
@@ -51,26 +52,28 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
       fullscreen: true,
     );
 
-    if (response.status == true){
-      AppOverlay.loadingOverlay(asyncFunction: ()async {
-       final res= await controller.userRepo.postData('url', {
-        "planId": planId,
-        "reference": response.reference!,
-        "userId": userId,
-        "userType" : userType
-       });
-       if (res.isSuccessful){
-        Get.back();
-        Get.snackbar('Success', 'Subscription made successfully', backgroundColor: AppColors.successGreen);
-       } else{
-        Get.snackbar('Error', res.message ?? 'An error occurred, please try again later', backgroundColor: Colors.red);
-       }
+    if (response.status == true) {
+      AppOverlay.loadingOverlay(asyncFunction: () async {
+        final res =
+            await controller.userRepo.postData('/subscription/subscribe', {
+          "planId": planId,
+          "reference": response.reference!,
+          "userId": userId,
+          "userType": userType
+        });
+        if (res.isSuccessful) {
+          Get.back();
+          Get.snackbar('Success', 'Subscription made successfully',
+              backgroundColor: AppColors.successGreen);
+        } else {
+          Get.snackbar('Error',
+              res.message ?? 'An error occurred, please try again later',
+              backgroundColor: Colors.red);
+        }
       });
-    } else{
-       Get.snackbar('Error', response.message, backgroundColor: Colors.red );
+    } else {
+      Get.snackbar('Error', response.message, backgroundColor: Colors.red);
     }
-
-
   }
 
   @override
@@ -80,74 +83,98 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
     getSubscriptions = controller.userRepo.getData('/subscription/plans');
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
-    return AppBaseView(child: GetBuilder<HomeController>(
-      builder: (controller){
-      final  userType =
-        controller.currentType == 'Product Partner' ? 'vendor' : 'professional';
-        return Scaffold(
-          appBar: newAppBarBack(context, 'Subscriptions'),
-          body: SingleChildScrollView(
-            child: Padding(
-              padding:  EdgeInsets.symmetric(vertical:8.0, horizontal: Get.width * 0.05),
-              child: FutureBuilder<ApiResponse>(
-                future: getSubscriptions,
-                builder: (context, snapshot){
-                 if (snapshot.connectionState == ConnectionState.done && snapshot.data!.isSuccessful){
-                  final response = snapshot.data!.data as List<dynamic>;
-                  final subscriptionsList = <GetSubscriptionModel>[];
-          
-                  for (var element in response ){
-                    subscriptionsList.add(GetSubscriptionModel.fromJson(element));
-                  }
-          
-                  if (subscriptionsList.isEmpty){
-                    return const Center(child: Text('No Subscriptions Available Currently'),);
-                  } else{
-                   return ListView.builder(
-                      itemCount: subscriptionsList.length,
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemBuilder: (context, i){
-                        final subscription = subscriptionsList[i];
-                        final List<String> benefits = [];
-                        if (subscription.benefits != null){
-                          for (var element in subscription.benefits!){
-                                benefits.add(element.benefit ?? '');
+    return AppBaseView(
+      child: GetBuilder<HomeController>(
+        builder: (controller) {
+          final userType = controller.currentType == 'Product Partner'
+              ? 'vendor'
+              : 'professional';
+          return Scaffold(
+            appBar: newAppBarBack(context, 'Subscriptions'),
+            body: SingleChildScrollView(
+              child: Padding(
+                  padding: EdgeInsets.symmetric(
+                      vertical: 8.0, horizontal: Get.width * 0.05),
+                  child: FutureBuilder<ApiResponse>(
+                      future: getSubscriptions,
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.done &&
+                            snapshot.data!.isSuccessful) {
+                          final response = snapshot.data!.data as List<dynamic>;
+                          final subscriptionsList = <GetSubscriptionModel>[];
+
+                          for (var element in response) {
+                            subscriptionsList
+                                .add(GetSubscriptionModel.fromJson(element));
+                          }
+
+                          if (subscriptionsList.isEmpty) {
+                            return const Center(
+                              child:
+                                  Text('No Subscriptions Available Currently'),
+                            );
+                          } else {
+                            return ListView.builder(
+                                itemCount: subscriptionsList.length,
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemBuilder: (context, i) {
+                                  final subscription = subscriptionsList[i];
+                                  final List<String> benefits = [];
+                                  if (subscription.benefits != null) {
+                                    for (var element
+                                        in subscription.benefits!) {
+                                      benefits.add(element.benefit ?? '');
+                                    }
+                                  }
+
+                                  return SubscriptionWidget(
+                                    onPressed: () {
+                                      final userDetails =
+                                          UserDetailsModel.fromJson(jsonDecode(
+                                              MyPref.userDetails.val));
+                                      if (userDetails.profile!.isVerified !=
+                                          true) {
+                                        Get.snackbar('Error',
+                                            '“Your KYC is not verified by Admin, please try Subscribing later',
+                                            backgroundColor: Colors.red);
+                                      } else {
+                                        checkout(
+                                            planId: subscription.id ?? '',
+                                            userType: userType,
+                                            price: subscription.amount ?? 0);
+                                      }
+                                    },
+                                    name: subscription.name ?? '',
+                                    amount: subscription.amount ?? 0,
+                                    duration: subscription.duration ?? 0,
+                                    benefits: benefits,
+                                  );
+                                });
+                          }
+                        } else if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const AppLoader();
+                        } else {
+                          return const Center(
+                            child: Text('An error occurred'),
+                          );
                         }
-                        }
-                       
-                         return SubscriptionWidget(
-                          onPressed: (){
-                            checkout(planId: subscription.id ?? '', userType: userType, price: subscription.amount ?? 0);
-                          },
-                          name: subscription.name ?? '',
-                          amount: subscription.amount ?? 0,
-                          duration:  subscription.duration ?? 0,
-                          benefits: benefits,
-                         );
-                    });
-                  }
-                 } else if (snapshot.connectionState == ConnectionState.waiting){
-                   return const AppLoader();
-                  
-                 } else{
-                    return const Center(child: Text('An error occurred'),);
-                 }
-              })
-              
-              
-              // Column(
-              //   children: [
-              //     SubscriptionWidget()
-              //   ],
-              // ),
+                      })
+
+                  // Column(
+                  //   children: [
+                  //     SubscriptionWidget()
+                  //   ],
+                  // ),
+                  ),
             ),
-          ),
-        );
-      },
-     ),
+          );
+        },
+      ),
     );
   }
 }

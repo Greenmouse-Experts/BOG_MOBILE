@@ -207,7 +207,7 @@ class _UploadDocumentsState extends State<UploadDocuments> {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const CustomAppBar(title: 'Financial Details'),
+                      const CustomAppBar(title: 'Upload Document'),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
                         child: Column(

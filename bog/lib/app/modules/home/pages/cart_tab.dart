@@ -1,4 +1,5 @@
 import 'package:bog/app/global_widgets/global_widgets.dart';
+import 'package:bog/app/modules/meetings/meeting.dart';
 import 'package:bog/app/modules/project_details/view_form.dart';
 import 'package:date_time_format/date_time_format.dart';
 import 'package:flutter/material.dart';
@@ -12,8 +13,6 @@ import '../../../data/model/my_products.dart';
 import '../../../data/providers/api_response.dart';
 
 import '../../../global_widgets/app_loader.dart';
-
-import '../../../global_widgets/page_dropdown.dart';
 
 import '../../add_products/add_products.dart';
 import '../../checkout/checkout.dart';
@@ -413,55 +412,7 @@ class _CartTabState extends State<CartTab> {
                         }),
                   ),
                 if (controller.currentType == "Service Partner")
-                  Padding(
-                    padding: EdgeInsets.only(
-                        left: Get.width * 0.03, right: Get.width * 0.03),
-                    child: PageDropButtonWithoutBackground(
-                      label: "",
-                      hint: '',
-                      padding: const EdgeInsets.fromLTRB(10, 0, 5, 0),
-                      onChanged: (val) {
-                        //currentOrder = val;
-                        controller.update();
-                      },
-                      value: "All Service Orders",
-                      items: ["All Service Orders"]
-                          .map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(
-                            value,
-                            style: AppTextStyle.subtitle1.copyWith(
-                              color: AppColors.primary,
-                              fontSize: Get.width * 0.035,
-                              fontWeight: FontWeight.w500,
-                            ),
-                            textAlign: TextAlign.start,
-                          ),
-                        );
-                      }).toList(),
-                    ),
-                  ),
-                if (controller.currentType == "Service Partner")
-                  SizedBox(
-                    height: Get.height * 0.015,
-                  ),
-                if (controller.currentType == "Service Partner")
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: 4,
-                      scrollDirection: Axis.vertical,
-                      shrinkWrap: true,
-                      padding: const EdgeInsets.all(0),
-                      itemBuilder: (BuildContext context, int index) {
-                        return const ServiceRequestItem(
-                          id: 'ofof',
-                          projectId: 'Lan dihd',
-                          location: 'Ogba Lahos',
-                        );
-                      },
-                    ),
-                  )
+                  const Meetings(),
               ],
             ),
           ),

@@ -43,7 +43,7 @@ class _AddressPickerState extends State<AddressPicker> {
             // _selectedOption = nearestAddresses[0].address.toString();
             return PageDropButton(
               hint: '',
-              label: 'Select Address',
+              label: 'Select Nearest Address',
               value: _selectedOption,
               onChanged: (newValue) {
                 setState(() {

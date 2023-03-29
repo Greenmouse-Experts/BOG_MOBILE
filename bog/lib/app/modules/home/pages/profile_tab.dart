@@ -19,7 +19,6 @@ import '../../../global_widgets/app_avatar.dart';
 import '../../../global_widgets/confirm_logout.dart';
 import '../../settings/profile_info.dart';
 
-
 import '../../settings/update_password.dart';
 
 class ProfileTab extends StatelessWidget {
@@ -141,21 +140,21 @@ class ProfileTab extends StatelessWidget {
                 const SizedBox(
                   height: kToolbarHeight / 3,
                 ),
-                  if (controller.currentType == "Product Partner" ||
+                if (controller.currentType == "Product Partner" ||
                     controller.currentType == "Service Partner")
-
                   _TextButton(
                     text: "Subscribe",
                     useIcon: true,
                     onPressed: () {
-                   
-                        final userDetails = UserDetailsModel.fromJson(jsonDecode(MyPref.userDetails.val));
-                        if (userDetails.profile!.hasActiveSubscription == true){
-                          Get.snackbar('Error', 'You already have an active subscription');
-                        } else{
-                          Get.to(()=> const SubscriptionScreen());
-                        }
-                
+                      final userDetails = UserDetailsModel.fromJson(
+                          jsonDecode(MyPref.userDetails.val));
+                      if (userDetails.profile!.hasActiveSubscription == true) {
+                        Get.snackbar(
+                            'Error', 'You already have an active subscription',
+                            backgroundColor: Colors.red);
+                      } else {
+                        Get.to(() => const SubscriptionScreen());
+                      }
                     },
                     imageAsset: "assets/images/sales.png",
                   ),
@@ -248,11 +247,16 @@ class _TextButton extends StatelessWidget {
                 borderRadius: BorderRadius.circular(100),
               ),
               child: Center(
-                child: !useIcon ?  Image.asset(
-                  imageAsset,
-                  width: Get.width * 0.05,
-                  height: Get.width * 0.05,
-                ) : const Icon(Icons.subscriptions_outlined, color: Colors.black,),
+                child: !useIcon
+                    ? Image.asset(
+                        imageAsset,
+                        width: Get.width * 0.05,
+                        height: Get.width * 0.05,
+                      )
+                    : const Icon(
+                        Icons.subscriptions_outlined,
+                        color: Colors.black,
+                      ),
               ),
             ),
             SizedBox(

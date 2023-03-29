@@ -83,14 +83,14 @@ class HomeController extends GetxController {
           ? 'assets/images/Group 46942.png'
           : 'assets/images/projectIcon.png';
       cartIcon = currentBottomNavPage.value == 3
-          ? 'assets/images/Group (4).png'
-          : 'assets/images/Vector (8).png';
+          ? 'assets/icons/meeeting.png'
+          : 'assets/icons/meeeting.png';
       profileIcon = currentBottomNavPage.value == 4
           ? 'assets/images/Group (3).png'
           : 'assets/images/profileIcon.png';
 
       homeTitle = 'Home';
-      cartTitle = 'Orders';
+      cartTitle = 'Meetings';
       projectTitle = 'Project';
     }
     if (updatePages) {

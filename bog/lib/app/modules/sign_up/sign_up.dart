@@ -79,38 +79,6 @@ class SignUp extends GetView<AuthController> {
                   ),
                 ),
                 SizedBox(height: Get.height * 0.04),
-                /* Padding(
-                  padding: const EdgeInsets.only(left: AppThemes.appPaddingVal),
-                  child: ToggleSwitch(
-                    minWidth: Get.width * 0.4,
-                    initialLabelIndex: controller.isCorporate ? 1 : 0,
-                    totalSwitches: 2,
-                    inactiveBgColor: AppColors.backgroundVariant1,
-                    activeBgColor: const [AppColors.primary, AppColors.primary],
-                    labels: const ['Private Client', 'Corporate Client'],
-                    customTextStyles: [
-                      AppTextStyle.bodyText1.copyWith(
-                        color: controller.isCorporate ? Color(0xff064A72) : Colors.white,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 14,
-                      ),
-                      AppTextStyle.bodyText1.copyWith(
-                        color: controller.isCorporate ? Colors.white : Color(0xff064A72),
-                        fontWeight: FontWeight.w500,
-                        fontSize: 14,
-                      ),
-                    ],
-                    cornerRadius: 0,
-                    onToggle: (index) {
-                      controller.toggleBusiness(index!);
-                      if (index == 0) {
-                        //businessPageController.animateToPage(0, duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
-                      } else {
-                        //personalPageController.animateToPage(0, duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
-                      }
-                    },
-                  ),
-                ),*/
                 SizedBox(
                   height: Get.height * 0.045,
                   child: Padding(
@@ -145,11 +113,6 @@ class SignUp extends GetView<AuthController> {
                     ),
                   ),
                 ),
-                //Divider
-                /*Divider(
-                  color: Colors.black.withOpacity(.2),
-                  thickness: 1,
-                ),*/
                 SizedBox(height: Get.height * 0.03),
                 Expanded(
                   child: SingleChildScrollView(

@@ -210,6 +210,7 @@ class _UpdateWorkExperienceState extends State<UpdateWorkExperience> {
                                   hasHeader: true);
                               if (response.isSuccessful) {
                                 Get.back();
+                                Get.back();
                                 Get.snackbar('Success',
                                     'Work Experience Updated Successfully',
                                     backgroundColor: Colors.green);

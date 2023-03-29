@@ -66,38 +66,38 @@ class _HomeState extends State<Home> {
     var logInDetails = LogInModel.fromJson(jsonDecode(MyPref.logInDetail.val));
     final res = await controller.userRepo
         .getData('/kyc/user-kyc/${logInDetails.id}?userType=$type');
-        final newRes = await controller.userRepo.getData('/user/me?userType=${logInDetails.userType}');
+    final newRes = await controller.userRepo.getData('/user/me?userType=$type');
 
-     final userDetails = UserDetailsModel.fromJson(newRes.user);
+    final userDetails = UserDetailsModel.fromJson(newRes.user);
     final kyc = GenKyc.fromJson(res.data);
     MyPref.genKyc.val = jsonEncode(kyc);
     MyPref.userDetails.val = jsonEncode(userDetails);
 
- 
-  
     if (kyc.isKycCompleted != true) {
       MyPref.setOverlay.val = true;
-  
+
       AppOverlay.showKycDialog(
           title: 'KYC NOT COMPLETE',
           buttonText: 'Complete KYC',
           content:
               "You haven't completed your KYC yet, Kindly Complete your KYC and subscribe to access all features",
           onPressed: onPressed);
-    }  else if (userDetails.profile!.hasActiveSubscription != true) {
-        MyPref.setSubscribeOverlay.val = true;
-        AppOverlay.showKycDialog(title: 'No Active Subscriptions', buttonText: 'Subscribe', content: "You don't have an active subscription, select a subscription to enjoy full benefits", onPressed: ()=> Get.to(()=> const SubscriptionScreen()));    
-      }
-      else{
+    } else if (userDetails.profile!.hasActiveSubscription != true) {
+      MyPref.setSubscribeOverlay.val = true;
+      AppOverlay.showKycDialog(
+          title: 'No Active Subscriptions',
+          buttonText: 'Subscribe',
+          content:
+              "You don't have an active subscription, select a subscription to enjoy full benefits",
+          onPressed: () => Get.to(() => const SubscriptionScreen()));
+    } else {
       MyPref.setOverlay.val = false;
       MyPref.setSubscribeOverlay.val = false;
-  } 
-      }
-    
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    
     return WillPopScope(
       onWillPop: () async => false,
       child: AppBaseView(

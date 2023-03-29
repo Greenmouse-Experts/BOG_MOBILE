@@ -28,6 +28,7 @@ class AuthController extends GetxController {
   TextEditingController officeAddress = TextEditingController();
   TextEditingController certOfOperation = TextEditingController();
   TextEditingController proMemCert = TextEditingController();
+  TextEditingController serviceSelected = TextEditingController();
 
   TextEditingController otp = TextEditingController();
   TextEditingController referral = TextEditingController();
@@ -274,6 +275,7 @@ class AuthController extends GetxController {
         'phone': phone.text,
         'company_name': companyName.text,
         'password': password.text,
+        'serviceTypeId': serviceSelected.text,
         "userType": "professional",
         "platform": "mobile"
       };

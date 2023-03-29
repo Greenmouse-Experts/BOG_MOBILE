@@ -18,7 +18,8 @@ import 'overlays.dart';
 class MainSwitchWidget extends StatelessWidget {
   final String accountType;
   final String image;
-  const MainSwitchWidget({super.key, required this.accountType, required this.image});
+  const MainSwitchWidget(
+      {super.key, required this.accountType, required this.image});
 
   @override
   Widget build(BuildContext context) {
@@ -29,11 +30,10 @@ class MainSwitchWidget extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(
           horizontal: width * 0.05, vertical: height * 0.025),
-      child:  
-       Row(
+      child: Row(
         children: [
           Image.asset(image),
-          const  SizedBox(width: 20),
+          const SizedBox(width: 20),
           Text(
             accountType,
             style: AppTextStyle.subtitle1.copyWith(
@@ -42,18 +42,21 @@ class MainSwitchWidget extends StatelessWidget {
                 fontWeight: FontWeight.w500),
             textAlign: TextAlign.start,
           ),
-         const Spacer(),
-         SizedBox(
-           height: 26,
-           width: 52,
-           child: FittedBox(
-             child: CupertinoSwitch(value: true, onChanged: (val){
-                    Get.snackbar('Error', "You're already logged in as $accountType", backgroundColor: Colors.red);
-             },
-             
-             ),
-           ),
-         )
+          const Spacer(),
+          SizedBox(
+            height: 26,
+            width: 52,
+            child: FittedBox(
+              child: CupertinoSwitch(
+                value: true,
+                onChanged: (val) {
+                  Get.snackbar(
+                      'Error', "You're already logged in as $accountType",
+                      backgroundColor: Colors.red);
+                },
+              ),
+            ),
+          )
         ],
       ),
     );
@@ -84,21 +87,29 @@ class _PrimarySwitchWidgetState extends State<PrimarySwitchWidget> {
   Widget build(BuildContext context) {
     void verifyKycComplete(String type, VoidCallback onPressed) async {
       final controller = Get.find<HomeController>();
+
+      // final userType = controller.currentType == 'Client'
+      //     ? 'private_client'
+      //     : controller.currentType == 'Corporate Client'
+      //         ? 'corporate_client'
+      //         : controller.currentType == 'Product Partner'
+      //             ? 'vendor'
+      //             : 'professional';
       var logInDetails =
           LogInModel.fromJson(jsonDecode(MyPref.logInDetail.val));
       final res = await controller.userRepo
           .getData('/kyc/user-kyc/${logInDetails.id}?userType=$type');
-      
-     final newRes = await controller.userRepo.getData('/user/me?userType=${logInDetails.userType}');
 
-     final userDetails = UserDetailsModel.fromJson(newRes.user);
+      final newRes =
+          await controller.userRepo.getData('/user/me?userType=$type');
+
+      final userDetails = UserDetailsModel.fromJson(newRes.user);
 
       final kyc = GenKyc.fromJson(res.data);
       MyPref.genKyc.val = jsonEncode(kyc);
       MyPref.userDetails.val = jsonEncode(userDetails);
-    
+
       if (kyc.isKycCompleted != true) {
-    
         MyPref.setOverlay.val = true;
         AppOverlay.showKycDialog(
             title: 'Kyc Not Complete',
@@ -108,99 +119,104 @@ class _PrimarySwitchWidgetState extends State<PrimarySwitchWidget> {
             onPressed: onPressed);
       } else if (userDetails.profile!.hasActiveSubscription != true) {
         MyPref.setSubscribeOverlay.val = true;
-        AppOverlay.showKycDialog(title: 'No Active Subscriptions', buttonText: 'Subscribe', content: "You don't have an active subscription, select a subscription to enjoy full benefits", onPressed: ()=> Get.to(()=> const SubscriptionScreen()));    
-      } else{
-       MyPref.setOverlay.val = false;
-      MyPref.setSubscribeOverlay.val = false;
+        AppOverlay.showKycDialog(
+            title: 'No Active Subscriptions',
+            buttonText: 'Subscribe',
+            content:
+                "You don't have an active subscription, select a subscription to enjoy full benefits",
+            onPressed: () => Get.to(() => const SubscriptionScreen()));
+      } else {
+        MyPref.setOverlay.val = false;
+        MyPref.setSubscribeOverlay.val = false;
       }
-     
     }
 
     final width = Get.width;
     final height = Get.height;
-     final Size size = MediaQuery.of(context).size;
+    final Size size = MediaQuery.of(context).size;
     double multiplier = 25 * size.height * 0.01;
-    
 
     return GetBuilder<HomeController>(builder: (controller) {
       return Padding(
         padding: EdgeInsets.symmetric(
             horizontal: width * 0.05, vertical: height * 0.02),
         child: Row(
-         children: [
-           Image.asset(widget.iconAsset),
-           const  SizedBox(width: 20),
-           Text(
-             widget.newCurrentType,
-             style: AppTextStyle.subtitle1.copyWith(
-                 fontSize: multiplier * 0.08,
-                 color: AppColors.primary,
-                 fontWeight: FontWeight.w500),
-             textAlign: TextAlign.start,
-           ),
-          const Spacer(),
-          SizedBox(
-            height: 26,
-            width: 52,
-            child: FittedBox(
-              child: CupertinoSwitch(value: state, onChanged: (val){
-                setState(() {
-                  state = val;
-                });
-                if (widget.sendType == 'vendor' || widget.sendType == 'professional') {
-            controller.currentType = widget.newCurrentType;
-            controller.update();
-            controller.updateNewUser(widget.newCurrentType);
-            var body = {
-              "userType": widget.sendType,
-            };
-            AppOverlay.loadingOverlay(asyncFunction: () async {
-              var response = await controller.userRepo
-                  .postData("/user/switch-account", body);
-              if (response.isSuccessful) {
-                var logInInfo = LogInModel.fromJson(response.user);
-                MyPref.logInDetail.val = jsonEncode(logInInfo);
-
-                Get.back();
-              }
-            });
-            verifyKycComplete('vendor', () {
-              Get.to(() => const KYCPage());
-            });
-          } else {
-           // var kyc = GenKyc.fromJson(jsonDecode(MyPref.genKyc.val));
-            final oldUser = controller.currentType;
-            controller.currentType = widget.newCurrentType;
-            controller.update();
-            controller.updateNewUser(widget.newCurrentType);
-            var body = {
-              "userType": widget.sendType,
-            };
-            AppOverlay.loadingOverlay(asyncFunction: () async {
-              var response = await controller.userRepo
-                  .postData("/user/switch-account", body);
-              if (response.isSuccessful) {
-                var logInInfo = LogInModel.fromJson(response.user);
-                MyPref.logInDetail.val = jsonEncode(logInInfo);
-
-
-                if ((oldUser == 'Product Partner' ||
-                        oldUser == 'Service Partner') &&
-                    (MyPref.setOverlay.val == true || MyPref.setSubscribeOverlay.val == true)) {
-                 
-                  Get.back();
-                }
-                Get.back();
-              }
-            });
-          }
-              },
-              
-              ),
+          children: [
+            Image.asset(widget.iconAsset),
+            const SizedBox(width: 20),
+            Text(
+              widget.newCurrentType,
+              style: AppTextStyle.subtitle1.copyWith(
+                  fontSize: multiplier * 0.08,
+                  color: AppColors.primary,
+                  fontWeight: FontWeight.w500),
+              textAlign: TextAlign.start,
             ),
-          )
-         ],
-      ),
+            const Spacer(),
+            SizedBox(
+              height: 26,
+              width: 52,
+              child: FittedBox(
+                child: CupertinoSwitch(
+                  value: state,
+                  onChanged: (val) {
+                    setState(() {
+                      state = val;
+                    });
+                    if (widget.sendType == 'vendor' ||
+                        widget.sendType == 'professional') {
+                      controller.currentType = widget.newCurrentType;
+                      controller.update();
+                      controller.updateNewUser(widget.newCurrentType);
+                      var body = {
+                        "userType": widget.sendType,
+                      };
+                      AppOverlay.loadingOverlay(asyncFunction: () async {
+                        var response = await controller.userRepo
+                            .postData("/user/switch-account", body);
+                        if (response.isSuccessful) {
+                          var logInInfo = LogInModel.fromJson(response.user);
+
+                          MyPref.logInDetail.val = jsonEncode(logInInfo);
+
+                          Get.back();
+                        }
+                      });
+                      verifyKycComplete(widget.sendType, () {
+                        Get.to(() => const KYCPage());
+                      });
+                    } else {
+                      // var kyc = GenKyc.fromJson(jsonDecode(MyPref.genKyc.val));
+                      final oldUser = controller.currentType;
+                      controller.currentType = widget.newCurrentType;
+                      controller.update();
+                      controller.updateNewUser(widget.newCurrentType);
+                      var body = {
+                        "userType": widget.sendType,
+                      };
+                      AppOverlay.loadingOverlay(asyncFunction: () async {
+                        var response = await controller.userRepo
+                            .postData("/user/switch-account", body);
+                        if (response.isSuccessful) {
+                          var logInInfo = LogInModel.fromJson(response.user);
+                          MyPref.logInDetail.val = jsonEncode(logInInfo);
+
+                          if ((oldUser == 'Product Partner' ||
+                                  oldUser == 'Service Partner') &&
+                              (MyPref.setOverlay.val == true ||
+                                  MyPref.setSubscribeOverlay.val == true)) {
+                            Get.back();
+                          }
+                          Get.back();
+                        }
+                      });
+                    }
+                  },
+                ),
+              ),
+            )
+          ],
+        ),
       );
     });
   }

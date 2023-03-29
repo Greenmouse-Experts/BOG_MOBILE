@@ -61,19 +61,25 @@ class HomeBottomWidget extends StatelessWidget {
                   BottomNavigationBarItem(
                     icon: Padding(
                       padding: const EdgeInsets.only(bottom: 5),
-                      child: badges.Badge(
-                        badgeContent: Text(
-                          controller.cartLength.toString(),
-                          style: const TextStyle(color: Colors.white),
-                        ),
-                        badgeStyle: const badges.BadgeStyle(
-                            badgeColor: AppColors.primary,
-                            padding: EdgeInsets.all(5)),
-                        child: Image.asset(
-                          controller.cartIcon,
-                          width: 25,
-                        ),
-                      ),
+                      child: controller.currentType == 'Client' ||
+                              controller.currentType == 'Corporate Client'
+                          ? badges.Badge(
+                              badgeContent: Text(
+                                controller.cartLength.toString(),
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                              badgeStyle: const badges.BadgeStyle(
+                                  badgeColor: AppColors.primary,
+                                  padding: EdgeInsets.all(5)),
+                              child: Image.asset(
+                                controller.cartIcon,
+                                width: 25,
+                              ),
+                            )
+                          : Image.asset(
+                              controller.cartIcon,
+                              width: 25,
+                            ),
                     ),
                     label: controller.cartTitle,
                   ),
@@ -140,19 +146,25 @@ class HomeBottomWidget extends StatelessWidget {
                   BottomNavigationBarItem(
                     icon: Padding(
                       padding: const EdgeInsets.only(bottom: 5),
-                      child: badges.Badge(
-                        badgeContent: Text(
-                          controller.cartLength.toString(),
-                          style: const TextStyle(color: Colors.white),
-                        ),
-                        badgeStyle: const badges.BadgeStyle(
-                            badgeColor: AppColors.primary,
-                            padding: EdgeInsets.all(5)),
-                        child: Image.asset(
-                          controller.cartIcon,
-                          width: 25,
-                        ),
-                      ),
+                      child: controller.currentType == 'Client' ||
+                              controller.currentType == 'Corporate Client'
+                          ? badges.Badge(
+                              badgeContent: Text(
+                                controller.cartLength.toString(),
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                              badgeStyle: const badges.BadgeStyle(
+                                  badgeColor: AppColors.primary,
+                                  padding: EdgeInsets.all(5)),
+                              child: Image.asset(
+                                controller.cartIcon,
+                                width: 25,
+                              ),
+                            )
+                          : Image.asset(
+                              controller.cartIcon,
+                              width: 25,
+                            ),
                     ),
                     label: controller.cartTitle,
                   ),

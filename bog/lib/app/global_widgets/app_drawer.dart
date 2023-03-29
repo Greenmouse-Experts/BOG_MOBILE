@@ -174,7 +174,14 @@ class _AppDrawerState extends State<AppDrawer> {
                             text: "Meetings",
                             onPressed: () {
                               Get.back();
-                              Get.to(() => const Meetings());
+                              if (controller.currentType == 'Service Partner') {
+                                controller.currentBottomNavPage.value = 3;
+                                controller
+                                    .updateNewUser(controller.currentType);
+                                controller.update(['home']);
+                              } else {
+                                Get.to(() => const NewMeetings());
+                              }
                             },
                             imageAsset: "assets/images/four1.png",
                             showArrow: true),

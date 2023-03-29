@@ -8,6 +8,7 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_styles.dart';
 import 'app_button.dart';
+import 'confirm_logout.dart';
 
 class AppOverlay {
   static Future<void> loadingOverlay({
@@ -291,13 +292,36 @@ class AppOverlay {
                   ),
                   child: Column(
                     children: [
-                      Text(
-                        title,
-                        textAlign: TextAlign.center,
-                        style: Get.textTheme.bodyText1!.copyWith(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 17 * Get.textScaleFactor * 0.90,
-                            color: Colors.black),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Center(
+                              child: Text(
+                                title,
+                                textAlign: TextAlign.center,
+                                style: Get.textTheme.bodyText1!.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 17 * Get.textScaleFactor * 0.90,
+                                    color: Colors.black),
+                              ),
+                            ),
+                          ),
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: IconButton(
+                                onPressed: () {
+                                  showDialog(
+                                      context: context,
+                                      barrierDismissible: false,
+                                      builder: (BuildContext context) =>
+                                          const ConfirmLogout());
+                                },
+                                icon: const Icon(
+                                  Icons.logout_outlined,
+                                  color: Colors.red,
+                                )),
+                          )
+                        ],
                       ),
                       const SizedBox(height: 11),
                       Center(
@@ -312,18 +336,6 @@ class AppOverlay {
                             ),
                       ),
                       const SizedBox(height: 22),
-                      SizedBox(
-                        width: double.infinity,
-                        child: AppButton(
-                            title: 'Switch Account',
-                            borderRadius: 100,
-                            bckgrndColor: Color.fromRGBO(244, 67, 54, 1),
-                            onPressed: () {
-                              // Get.back();
-                              Get.to(() => const SwitchUser());
-                            }),
-                      ),
-                      const SizedBox(height: 10),
                       SizedBox(
                         width: double.infinity,
                         child: doubleFunction != null && doubleFunction
@@ -353,6 +365,18 @@ class AppOverlay {
                                 vertical: 10, horizontal: 25), */
                                 borderRadius: 100,
                                 onPressed: onPressed ?? Get.back),
+                      ),
+                      const SizedBox(height: 10),
+                      SizedBox(
+                        width: double.infinity,
+                        child: AppButton(
+                            title: 'Or Switch Account',
+                            borderRadius: 100,
+                            bckgrndColor: Color.fromRGBO(244, 67, 54, 1),
+                            onPressed: () {
+                              // Get.back();
+                              Get.to(() => const SwitchUser());
+                            }),
                       ),
                     ],
                   ),

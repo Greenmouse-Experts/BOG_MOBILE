@@ -1,171 +1,130 @@
 import 'dart:convert';
 
 import 'package:bog/app/global_widgets/app_button.dart';
+import 'package:bog/app/global_widgets/bottom_widget.dart';
+import 'package:bog/app/global_widgets/new_app_bar.dart';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:dio/dio.dart' as dio;
+import 'package:form_field_validator/form_field_validator.dart';
 import 'package:get/get.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_styles.dart';
 import '../../controllers/home_controller.dart';
-import '../../data/model/log_in_model.dart';
+
+import '../../data/model/user_details_model.dart';
 import '../../data/providers/my_pref.dart';
 import '../../global_widgets/app_avatar.dart';
 
 import '../../global_widgets/page_input.dart';
 
-class EditProfile extends GetView<HomeController> {
+class EditProfile extends StatefulWidget {
   const EditProfile({Key? key}) : super(key: key);
 
   static const route = '/EditProfile';
 
   @override
+  State<EditProfile> createState() => _EditProfileState();
+}
+
+class _EditProfileState extends State<EditProfile> {
+  final _formKey = GlobalKey<FormState>();
+
+  var logInDetails =
+      UserDetailsModel.fromJson(jsonDecode(MyPref.userDetails.val));
+  TextEditingController firstName = TextEditingController();
+  TextEditingController lastName = TextEditingController();
+
+  TextEditingController email = TextEditingController();
+  TextEditingController phoneNumber = TextEditingController();
+  TextEditingController address = TextEditingController();
+  TextEditingController state = TextEditingController();
+  TextEditingController city = TextEditingController();
+
+  @override
+  void initState() {
+    firstName.text = logInDetails.fname ?? '';
+    lastName.text = logInDetails.lname ?? '';
+    email.text = logInDetails.email ?? '';
+    phoneNumber.text = logInDetails.phone ?? '';
+    address.text = logInDetails.address ?? '';
+    state.text = logInDetails.state ?? '';
+    city.text = logInDetails.city ?? '';
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     var width = Get.width;
-    final Size size = MediaQuery.of(context).size;
-    double multiplier = 25 * size.height * 0.01;
 
-    var logInDetails = LogInModel.fromJson(jsonDecode(MyPref.logInDetail.val));
-    TextEditingController firstName =
-        TextEditingController(text: logInDetails.fname);
-    TextEditingController lastName =
-        TextEditingController(text: logInDetails.lname);
-    TextEditingController email =
-        TextEditingController(text: logInDetails.email);
-    TextEditingController phoneNumber =
-        TextEditingController(text: logInDetails.phone);
-    TextEditingController address =
-        TextEditingController(text: logInDetails.address);
-    TextEditingController state =
-        TextEditingController(text: logInDetails.state);
-    TextEditingController city = TextEditingController(text: logInDetails.city);
-
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: const SystemUiOverlayStyle(
-          statusBarColor: AppColors.backgroundVariant2,
-          statusBarIconBrightness: Brightness.dark,
-          statusBarBrightness: Brightness.dark,
-          systemNavigationBarColor: AppColors.backgroundVariant2,
-          systemNavigationBarIconBrightness: Brightness.dark),
-      child: GetBuilder<HomeController>(
-          id: 'EditProfile',
-          builder: (controller) {
-            return Scaffold(
-              backgroundColor: AppColors.backgroundVariant2,
-              body: SizedBox(
-                width: Get.width,
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(
-                            right: width * 0.05,
-                            left: width * 0.045,
-                            top: kToolbarHeight),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
+    return GetBuilder<HomeController>(
+        id: 'EditProfile',
+        builder: (controller) {
+          return Scaffold(
+            appBar: newAppBarBack(context, 'Edit Info'),
+            backgroundColor: AppColors.backgroundVariant2,
+            body: SizedBox(
+              width: Get.width,
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: Get.height * 0.02,
+                    ),
+                    Row(
+                      children: [
+                        SizedBox(
+                          width: width * 0.03,
+                        ),
+                        SizedBox(
+                          width: Get.width * 0.22,
+                          height: Get.width * 0.22,
+                          child: IconButton(
+                            icon: AppAvatar(
+                              imgUrl: (logInDetails.photo).toString(),
+                              radius: Get.width * 0.16,
+                              name:
+                                  "${logInDetails.fname} ${logInDetails.lname}",
+                            ),
+                            onPressed: () {},
+                          ),
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            InkWell(
-                              onTap: () {
-                                Navigator.pop(context);
-                              },
-                              child: SvgPicture.asset(
-                                "assets/images/back.svg",
-                                height: width * 0.045,
-                                width: width * 0.045,
+                            Text(
+                              "${logInDetails.fname} ${logInDetails.lname}",
+                              style: AppTextStyle.subtitle1.copyWith(
                                 color: Colors.black,
+                                fontSize: Get.width * 0.045,
                               ),
                             ),
-                            SizedBox(
-                              width: width * 0.04,
-                            ),
-                            Expanded(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    "Edit Info",
-                                    style: AppTextStyle.subtitle1.copyWith(
-                                        fontSize: multiplier * 0.07,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w500),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ],
+                            Text(
+                              logInDetails.userType
+                                  .toString()
+                                  .replaceAll("_", " ")
+                                  .capitalizeFirst
+                                  .toString(),
+                              style: AppTextStyle.subtitle1.copyWith(
+                                color: Colors.black.withOpacity(0.5),
+                                fontSize: Get.width * 0.035,
                               ),
-                            ),
-                            SizedBox(
-                              width: width * 0.04,
                             ),
                           ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: width * 0.04,
-                      ),
-                      Container(
-                        height: 1,
-                        width: width,
-                        color: AppColors.grey.withOpacity(0.1),
-                      ),
-                      SizedBox(
-                        height: width * 0.04,
-                      ),
-                      Row(
-                        children: [
-                          SizedBox(
-                            width: width * 0.03,
-                          ),
-                          SizedBox(
-                            width: Get.width * 0.22,
-                            height: Get.width * 0.22,
-                            child: IconButton(
-                              icon: AppAvatar(
-                                imgUrl: (logInDetails.photo).toString(),
-                                radius: Get.width * 0.16,
-                                name:
-                                    "${logInDetails.fname} ${logInDetails.lname}",
-                              ),
-                              onPressed: () {},
-                            ),
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                "${logInDetails.fname} ${logInDetails.lname}",
-                                style: AppTextStyle.subtitle1.copyWith(
-                                  color: Colors.black,
-                                  fontSize: Get.width * 0.045,
-                                ),
-                              ),
-                              Text(
-                                logInDetails.userType
-                                    .toString()
-                                    .replaceAll("_", " ")
-                                    .capitalizeFirst
-                                    .toString(),
-                                style: AppTextStyle.subtitle1.copyWith(
-                                  color: Colors.black.withOpacity(0.5),
-                                  fontSize: Get.width * 0.035,
-                                ),
-                              ),
-                            ],
-                          )
-                        ],
-                      ),
-                      SizedBox(
-                        height: width * 0.04,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                            left: width * 0.03, right: width * 0.03),
+                        )
+                      ],
+                    ),
+                    SizedBox(
+                      height: width * 0.04,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                          left: width * 0.03, right: width * 0.03),
+                      child: Form(
+                        key: _formKey,
                         child: Column(
                           children: [
                             Row(
@@ -178,6 +137,8 @@ class EditProfile extends GetView<HomeController> {
                                     label: 'First Name',
                                     isCompulsory: true,
                                     controller: firstName,
+                                    validator: MinLengthValidator(1,
+                                        errorText: 'Enter a valid first name'),
                                   ),
                                 ),
                                 SizedBox(
@@ -187,6 +148,8 @@ class EditProfile extends GetView<HomeController> {
                                     label: 'Last Name',
                                     isCompulsory: true,
                                     controller: lastName,
+                                    validator: MinLengthValidator(1,
+                                        errorText: 'Enter a valid last name'),
                                   ),
                                 ),
                               ],
@@ -205,11 +168,14 @@ class EditProfile extends GetView<HomeController> {
                               height: width * 0.04,
                             ),
                             PageInput(
-                              hint: '',
-                              label: 'Phone Number',
-                              isCompulsory: true,
-                              controller: phoneNumber,
-                            ),
+                                hint: '',
+                                label: 'Phone Number',
+                                isCompulsory: true,
+                                controller: phoneNumber,
+                                validator: LengthRangeValidator(
+                                    min: 11,
+                                    max: 11,
+                                    errorText: 'Enter a valid phone number')),
                             SizedBox(
                               height: width * 0.04,
                             ),
@@ -250,91 +216,69 @@ class EditProfile extends GetView<HomeController> {
                             ),
                             AppButton(
                               title: "Save Changes",
-                              onPressed: () {},
+                              onPressed: () async {
+                                if (_formKey.currentState!.validate()) {
+                                  var body = {
+                                    'fname': firstName.text,
+                                    "lname": lastName.text,
+                                    "phone": phoneNumber.text,
+                                    "address": address.text,
+                                    "state": state.text,
+                                    "city": city.text,
+                                  };
+                                  var formData = dio.FormData.fromMap(body);
+
+                                  final response = await controller.userRepo
+                                      .patchData(
+                                          '/user/update-account', formData);
+                                  if (response.isSuccessful) {
+                                    final type =
+                                        controller.currentType == 'Client'
+                                            ? 'private_client'
+                                            : controller.currentType ==
+                                                    'Corporate Client'
+                                                ? 'corporate_client'
+                                                : controller.currentType ==
+                                                        'Product Partner'
+                                                    ? 'vendor'
+                                                    : 'professional';
+                                    final newRes = await controller.userRepo
+                                        .getData('/user/me?userType=$type');
+                                    if (newRes.isSuccessful) {
+                                      final userDetails =
+                                          UserDetailsModel.fromJson(
+                                              newRes.user);
+                                      MyPref.userDetails.val =
+                                          jsonEncode(userDetails);
+                                      Get.back();
+                                      Get.back();
+                                      Get.snackbar('Success',
+                                          'Profile Updated Successfully',
+                                          backgroundColor:
+                                              AppColors.successGreen);
+                                    } else {
+                                      Get.snackbar('Error', 'An error occurred',
+                                          backgroundColor: Colors.red);
+                                    }
+                                  } else {
+                                    Get.snackbar('Error', 'An error occurred',
+                                        backgroundColor: Colors.red);
+                                  }
+                                }
+                              },
                             )
                           ],
                         ),
                       ),
-                    ],
-                  ),
-                ),
-              ),
-              bottomNavigationBar: BottomNavigationBar(
-                  backgroundColor: AppColors.backgroundVariant2,
-                  showSelectedLabels: true,
-                  showUnselectedLabels: true,
-                  type: BottomNavigationBarType.fixed,
-                  items: <BottomNavigationBarItem>[
-                    BottomNavigationBarItem(
-                      icon: Padding(
-                        padding: const EdgeInsets.only(bottom: 5),
-                        child: Image.asset(
-                          controller.homeIcon,
-                          width: 20,
-                          //color: controller.currentBottomNavPage.value == 0 ? AppColors.primary : AppColors.grey,
-                        ),
-                      ),
-                      label: controller.homeTitle,
-                      backgroundColor: AppColors.background,
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Padding(
-                        padding: const EdgeInsets.only(bottom: 5),
-                        child: Image.asset(
-                          controller.currentBottomNavPage.value == 1
-                              ? 'assets/images/chat_filled.png'
-                              : 'assets/images/chatIcon.png',
-                          width: 22,
-                          //color: controller.currentBottomNavPage.value == 1 ? AppColors.primary : AppColors.grey,
-                        ),
-                      ),
-                      label: 'Chat',
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Padding(
-                        padding: const EdgeInsets.only(bottom: 5),
-                        child: Image.asset(
-                          controller.projectIcon,
-                          width: 20,
-                          //color: controller.currentBottomNavPage.value == 2 ? AppColors.primary : AppColors.grey,
-                        ),
-                      ),
-                      label: controller.projectTitle,
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Padding(
-                        padding: const EdgeInsets.only(bottom: 5),
-                        child: Image.asset(
-                          controller.cartIcon,
-                          width: 25,
-                          //color: controller.currentBottomNavPage.value == 3 ? AppColors.primary : AppColors.grey,
-                        ),
-                      ),
-                      label: controller.cartTitle,
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Padding(
-                        padding: const EdgeInsets.only(bottom: 5),
-                        child: Image.asset(
-                          controller.profileIcon,
-                          width: 25,
-                          //color: controller.currentBottomNavPage.value == 4 ? AppColors.primary : AppColors.grey,
-                        ),
-                      ),
-                      label: 'Profile',
                     ),
                   ],
-                  currentIndex: controller.currentBottomNavPage.value,
-                  selectedItemColor: AppColors.primary,
-                  unselectedItemColor: Colors.grey,
-                  onTap: (index) {
-                    controller.currentBottomNavPage.value = index;
-                    controller.updateNewUser(controller.currentType);
-                    Get.back();
-                  }),
-            );
-          }),
-    );
+                ),
+              ),
+            ),
+            bottomNavigationBar: HomeBottomWidget(
+                isHome: false, controller: controller, doubleNavigate: true),
+          );
+        });
   }
 }
 

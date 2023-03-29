@@ -7,6 +7,7 @@ import 'package:form_field_validator/form_field_validator.dart';
 import 'package:get/get.dart';
 
 import '../../controllers/home_controller.dart';
+import '../../data/model/bank_details_model.dart';
 import '../../data/model/bank_list_model.dart';
 import '../../data/model/fin_data_model.dart';
 import '../../data/providers/api_response.dart';
@@ -28,7 +29,15 @@ class _UpdateFinancialDetailsState extends State<UpdateFinancialDetails> {
   late Future<ApiResponse> getFinData;
   late String userType;
   final _formKey = GlobalKey<FormState>();
-   TextEditingController accountNumberController = TextEditingController();
+  TextEditingController accountController = TextEditingController();
+  //TextEditingController accountNumberController = TextEditingController();
+  TextEditingController bankCode = TextEditingController(text: '120001');
+  TextEditingController chosenBankName =
+      TextEditingController(text: '9mobile 9Payment Service Bank');
+
+  TextEditingController accountNameController = TextEditingController();
+  TextEditingController referenceNameController = TextEditingController();
+  TextEditingController overdraftController = TextEditingController();
 
   @override
   void initState() {
@@ -37,21 +46,37 @@ class _UpdateFinancialDetailsState extends State<UpdateFinancialDetails> {
         controller.currentType == 'Product Partner' ? 'vendor' : 'professional';
     getFinData = controller.userRepo
         .getData('/kyc-financial-data/fetch?userType=$userType');
-            accountNumberController.addListener(() { 
-          setState(() {
-          
-        }); });
+    accountController.addListener(_verifyAccount);
     super.initState();
-
   }
 
-  TextEditingController bankCode = TextEditingController(text: '120001');
-  TextEditingController chosenBankName =
-      TextEditingController(text: '9mobile 9Payment Service Bank');
- 
-  TextEditingController accountNameController = TextEditingController();
-  TextEditingController referenceNameController =   TextEditingController();
-  TextEditingController overdraftController = TextEditingController();
+  void _verifyAccount() async {
+    final accountNumber = accountController.text;
+    final bank = bankCode.text;
+    print(bank + accountNumber);
+    if (accountNumber.length == 10) {
+      final controller = Get.find<HomeController>();
+      final response =
+          await controller.userRepo.postData('/bank/verify-account', {
+        "account_number": accountNumber,
+        "bank_code": bank,
+      });
+
+      if (response.isSuccessful) {
+        final bankDetail = BankDetailsModel.fromJson(response.data);
+
+        accountNameController.text = bankDetail.accountName ?? '';
+      } else {
+        // Verification failed, clear the output text field and show an error message
+        accountNameController.clear();
+        Get.snackbar('Error', 'Failed to verify account number',
+            backgroundColor: Colors.red);
+      }
+    } else {
+      accountNameController.clear();
+    }
+  }
+
   var bankList =
       BankListModel.fromJsonList(jsonDecode(MyPref.bankListDetail.val));
   var previousBank;
@@ -70,35 +95,40 @@ class _UpdateFinancialDetailsState extends State<UpdateFinancialDetails> {
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.done &&
                       snapshot.data!.isSuccessful) {
-                        if (snapshot.data!.data != null){
-                        final response = snapshot.data!.data;
-                        final finData = FinDataModel.fromJson(response);
-                     
-                        final newBank = bankList.firstWhere((element) => element.name!.toLowerCase().contains(finData.bankName!.toLowerCase()));
-      
-                      
-                        previousBank = newBank;
-                       
-                        bankCode.text = newBank.code!;
-                        accountNumberController.text = finData.accountNumber ?? '';
-                        accountNameController.text = finData.accountName ?? '';
-                        referenceNameController.text = finData.bankerAddress ?? '';
-                        overdraftController.text = finData.overdraftFacility ?? '';
-                        chosenBankName.text = finData.bankName  ?? '';
-                        }
-                 
-      
+                    if (snapshot.data!.data != null) {
+                      final response = snapshot.data!.data;
+                      final finData = FinDataModel.fromJson(response);
+
+                      final newBank = bankList.firstWhere((element) => element
+                          .name!
+                          .toLowerCase()
+                          .contains(finData.bankName!.toLowerCase()));
+
+                      previousBank = newBank;
+
+                      bankCode.text = newBank.code!;
+                      accountController.text = finData.accountNumber ?? '';
+                      // accountNumberController.text =
+                      //     finData.accountNumber ?? '';
+                      accountNameController.text = finData.accountName ?? '';
+                      referenceNameController.text =
+                          finData.bankerAddress ?? '';
+                      overdraftController.text =
+                          finData.overdraftFacility ?? '';
+                      chosenBankName.text = finData.bankName ?? '';
+                    }
+
                     return Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Form(
                         key: _formKey,
                         child: Column(
-                        //  crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             PageDropButton(
                               label: "Bank",
                               hint: '',
-                              padding: const EdgeInsets.symmetric(horizontal: 10),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
                               onChanged: (val) {
                                 bankCode.text =
                                     (val! as BankListModel).code.toString();
@@ -106,8 +136,9 @@ class _UpdateFinancialDetailsState extends State<UpdateFinancialDetails> {
                                     (val as BankListModel).name.toString();
                               },
                               value: previousBank ?? bankList.first,
-                              items: bankList.map<DropdownMenuItem<BankListModel>>(
-                                  (BankListModel value) {
+                              items: bankList
+                                  .map<DropdownMenuItem<BankListModel>>(
+                                      (BankListModel value) {
                                 return DropdownMenuItem<BankListModel>(
                                   value: value,
                                   child: Text(value.name.toString()),
@@ -119,20 +150,31 @@ class _UpdateFinancialDetailsState extends State<UpdateFinancialDetails> {
                               hint: '',
                               label: 'Bank Account Number',
                               keyboardType: TextInputType.number,
-                              controller: accountNumberController,
-                              // autovalidateMode: AutovalidateMode.onUserInteraction,
-                              // validator: LengthRangeValidator(min: 10, max: 10, errorText: 'Enter a valid account number'),
+                              controller: accountController,
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
+                              validator: LengthRangeValidator(
+                                  min: 10,
+                                  max: 10,
+                                  errorText: 'Enter a valid account number'),
                             ),
+                            // PageInput(
+                            //   hint: '',
+                            //   label: 'Bank Account Number',
+                            //   keyboardType: TextInputType.number,
+                            //   controller: accountNumberController,
+                            //   // autovalidateMode: AutovalidateMode.onUserInteraction,
+                            //   // validator: LengthRangeValidator(min: 10, max: 10, errorText: 'Enter a valid account number'),
+                            // ),
                             const SizedBox(height: 10),
-                          accountNumberController.text.length != 10 ? const Text('Enter a vali account number') :
-                            BankNameWidget(nameController: accountNameController, controller: controller,
-                            bankCode: bankCode.text, accountController: accountNumberController ,),
-                      //  DisabledPageInput(
-                      //         hint: '',
-                      //         label: 'Bank Account Name',
-                      //         controller: accountNameController,
-                      //         validator: MinLengthValidator(3, errorText: 'Enter a valid account number'),
-                      //       ),   
+
+                            DisabledPageInput(
+                              hint: '',
+                              label: 'Bank Account Name',
+                              controller: accountNameController,
+                              validator: MinLengthValidator(3,
+                                  errorText: 'Enter a valid account number'),
+                            ),
                             const SizedBox(height: 10),
                             PageInput(
                               hint: '',
