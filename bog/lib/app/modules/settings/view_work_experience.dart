@@ -19,7 +19,7 @@ class WorkExperience extends StatefulWidget {
 }
 
 class _WorkExperienceState extends State<WorkExperience> {
-  late Future<ApiResponse> getWorkExperiences;
+ // late Future<ApiResponse> getWorkExperiences;
 
   @override
   void initState() {
@@ -27,8 +27,8 @@ class _WorkExperienceState extends State<WorkExperience> {
     final userType =
         controller.currentType == 'Product Partner' ? 'vendor' : 'professional';
     //print(userType);
-    getWorkExperiences = controller.userRepo
-        .getData('/kyc-work-experience/fetch?userType=$userType');
+    // getWorkExperiences = controller.userRepo
+    //     .getData('/kyc-work-experience/fetch?userType=$userType');
     super.initState();
   }
 
@@ -36,6 +36,13 @@ class _WorkExperienceState extends State<WorkExperience> {
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     double multiplier = 25 * size.height * 0.01;
+
+    final controller = Get.find<HomeController>();
+    final userType =
+        controller.currentType == 'Product Partner' ? 'vendor' : 'professional';
+    //print(userType);
+   final getWorkExperiences = controller.userRepo
+        .getData('/kyc-work-experience/fetch?userType=$userType');
     return AppBaseView(
       child: Scaffold(
         appBar: AppBar(
@@ -132,9 +139,13 @@ class _WorkExperienceState extends State<WorkExperience> {
                       const SizedBox(height: 10),
                       AppButton(
                         title: 'Add new work experience',
-                        onPressed: () {
-                          Get.to(() =>
+                        onPressed: () async {
+                       
+                    final response =  await Get.to(() =>
                               const UpdateWorkExperience(isNewWork: true));
+                        
+                          
+                        
                         },
                       )
                     ],

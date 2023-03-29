@@ -85,16 +85,18 @@ class _PrimarySwitchWidgetState extends State<PrimarySwitchWidget> {
   bool state = false;
   @override
   Widget build(BuildContext context) {
+
+    void updateuser(String type) async{
+        final controller = Get.find<HomeController>();
+        final newRes = await controller.userRepo.getData('/user/me?userType=$type');
+       final userDetails = UserDetailsModel.fromJson(newRes.user);
+       MyPref.userDetails.val = jsonEncode(userDetails);
+    }
+
+
     void verifyKycComplete(String type, VoidCallback onPressed) async {
       final controller = Get.find<HomeController>();
 
-      // final userType = controller.currentType == 'Client'
-      //     ? 'private_client'
-      //     : controller.currentType == 'Corporate Client'
-      //         ? 'corporate_client'
-      //         : controller.currentType == 'Product Partner'
-      //             ? 'vendor'
-      //             : 'professional';
       var logInDetails =
           LogInModel.fromJson(jsonDecode(MyPref.logInDetail.val));
       final res = await controller.userRepo
@@ -197,6 +199,7 @@ class _PrimarySwitchWidgetState extends State<PrimarySwitchWidget> {
                       AppOverlay.loadingOverlay(asyncFunction: () async {
                         var response = await controller.userRepo
                             .postData("/user/switch-account", body);
+                        updateuser(widget.sendType);
                         if (response.isSuccessful) {
                           var logInInfo = LogInModel.fromJson(response.user);
                           MyPref.logInDetail.val = jsonEncode(logInInfo);

@@ -71,7 +71,7 @@ class ExpandableHeader extends StatelessWidget {
               overflow: TextOverflow.clip,
               style: AppTextStyle.subtitle1.copyWith(
                   color: Colors.black,
-                  fontSize: Get.width * 0.038,
+                  fontSize: Get.width * 0.03,
                   fontWeight: FontWeight.w600),
             ),
             SizedBox(

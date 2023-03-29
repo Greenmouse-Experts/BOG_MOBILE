@@ -137,6 +137,8 @@ class ProfileTab extends StatelessWidget {
                     },
                     imageAsset: "assets/images/kyc.png",
                   ),
+                 if (controller.currentType == "Product Partner" ||
+                    controller.currentType == "Service Partner")
                 const SizedBox(
                   height: kToolbarHeight / 3,
                 ),

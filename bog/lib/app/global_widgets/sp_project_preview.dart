@@ -12,8 +12,8 @@ class SPProjectPreview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: Get.width * 0.425,
-      height: Get.width * 0.425,
+      width: Get.width * 0.42,
+      height: Get.width * 0.36,
       decoration: BoxDecoration(
         color: color.withOpacity(0.05),
         borderRadius: BorderRadius.circular(18),
@@ -23,7 +23,7 @@ class SPProjectPreview extends StatelessWidget {
         )
       ),
       child: Padding(
-        padding: EdgeInsets.all(Get.width * 0.04),
+        padding: EdgeInsets.all(Get.width * 0.03),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,

@@ -61,6 +61,8 @@ class _HomeState extends State<Home> {
     homeController.update();
   }
 
+
+
   void verifyKycComplete(String type, VoidCallback onPressed) async {
     final controller = Get.find<HomeController>();
     var logInDetails = LogInModel.fromJson(jsonDecode(MyPref.logInDetail.val));

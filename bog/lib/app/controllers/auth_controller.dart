@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:otp_text_field/otp_field.dart';
 
 import '../data/model/log_in_model.dart';
+import '../data/model/user_details_model.dart';
 import '../data/providers/api_response.dart';
 import '../data/providers/my_pref.dart';
 import '../global_widgets/overlays.dart';
@@ -332,10 +333,18 @@ class AuthController extends GetxController {
         MyPref.logInDetail.val = jsonEncode(response.user);
         MyPref.authToken.val = token.toString();
         ApiResponse bankListResponse = await userRepo.getBanks();
+       
+
+ 
+       final newRes = await userRepo.getData('/user/me?userType=${logInInfo.profile!.userType}');
+       final userDetails = UserDetailsModel.fromJson(newRes.user);
+       MyPref.userDetails.val = jsonEncode(userDetails);
+  
+
         // Loader.hideLoading();
-        if (bankListResponse.isSuccessful) {
+        if (bankListResponse.isSuccessful && newRes.isSuccessful) {
           MyPref.bankListDetail.val = jsonEncode(bankListResponse.data);
-          //var bankList = BankListModel.fromJsonList(bankListResponse.data);
+           
           Get.offAndToNamed(Home.route);
         } else {
           AppOverlay.showInfoDialog(

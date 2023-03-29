@@ -20,7 +20,7 @@ import '../../../data/model/log_in_model.dart';
 import '../../../data/providers/api_response.dart';
 
 import '../../../data/providers/my_pref.dart';
-import '../../../global_widgets/app_input.dart';
+
 import '../../../global_widgets/my_project_widget.dart';
 import '../../../global_widgets/page_dropdown.dart';
 import '../../../global_widgets/tabs.dart';
@@ -85,7 +85,9 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<HomeController>(builder: (controller) {
+    return GetBuilder<HomeController>(
+      id: 'project',
+      builder: (controller) {
       return Expanded(
         child: Scaffold(
           appBar: newAppBar(context, "My ${controller.projectTitle}"),
@@ -96,29 +98,7 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  // Padding(
-                  //   padding: EdgeInsets.only(
-                  //       left: Get.width * 0.035,
-                  //       right: Get.width * 0.03,
-                  //       top: 10),
-                  //   child: Row(
-                  //     crossAxisAlignment: CrossAxisAlignment.center,
-                  //     mainAxisAlignment: MainAxisAlignment.start,
-                  //     children: [
-                  //       Text(
-                  //         "My ${controller.projectTitle}",
-                  //         style: AppTextStyle.subtitle1.copyWith(
-                  //           color: Colors.black,
-                  //           fontSize: Get.width * 0.045,
-                  //           fontWeight: FontWeight.w600,
-                  //         ),
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
-                  // SizedBox(
-                  //   height: Get.height * 0.03,
-                  // ),
+               
                   if (controller.currentType == "Product Partner")
                     Padding(
                       padding: EdgeInsets.only(

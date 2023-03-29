@@ -14,6 +14,7 @@ import '../data/model/log_in_model.dart';
 import '../data/providers/api.dart';
 import '../data/providers/my_pref.dart';
 
+
 class MyProjectWidget extends StatefulWidget {
   final String projectType;
   final String orderSlug;
@@ -73,14 +74,14 @@ class _MyProjectWidgetState extends State<MyProjectWidget> {
         final response = await controller.userRepo
             .patchData('/projects/request-for-approval/$id', {"amount": 20000});
         if (response.isSuccessful) {
-          Get.snackbar('Success', 'Review sent', backgroundColor: Colors.red);
+          Get.snackbar('Success', 'Review sent', backgroundColor: AppColors.successGreen);
+           controller.currentBottomNavPage.value = 1;
+           controller.updateNewUser(controller.currentType);
+           controller.update(['home']);
         } else {
           Get.snackbar('Error', response.message ?? 'An error occurred');
         }
       });
-
-      // Get.snackbar('Sucess', 'Payment was successful',
-      //     backgroundColor: Colors.green);
     } else {
       Get.snackbar('Error', 'An error occcurred', backgroundColor: Colors.red);
     }
@@ -155,7 +156,7 @@ class _MyProjectWidgetState extends State<MyProjectWidget> {
                           style: TextStyle(color: Colors.grey, fontSize: 12),
                         )),
                   ),
-                  if (!widget.isOngoing)
+                  if (!widget.isOngoing && !widget.isCancelled)
                     PopupMenuItem<int>(
                       value: 3,
                       child: TextButton(
@@ -167,6 +168,9 @@ class _MyProjectWidgetState extends State<MyProjectWidget> {
                                   'To proceed, a commitment fee of NGN 20,000 must be paid. This will be deducted from total cost of this project if approved.You will be refunded if this project is declined by the service partner',
                               doubleFunction: true,
                               onPressed: () {
+                                Get.back();
+                            
+                      
                                 checkOut(widget.id);
                               },
                             );
@@ -178,26 +182,29 @@ class _MyProjectWidgetState extends State<MyProjectWidget> {
                     ),
                   PopupMenuItem<int>(
                     value: 4,
-                    child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.red),
-                        onPressed: () async {
-                          final response = await widget.controller.userRepo
-                              .deleteData('/projects/delete/${widget.id}');
-                          if (response.isSuccessful) {
-                            Get.back();
-                            Get.snackbar(
-                                'Sucessful', 'Project Deleted Successfully',
-                                backgroundColor: Colors.green);
-                          } else {
-                            Get.back();
-                            Get.snackbar('Error', 'An error occurred');
-                          }
-                        },
-                        child: const Text(
-                          'Delete Project',
-                          style: TextStyle(color: Colors.white, fontSize: 12),
-                        )),
+                    child: SizedBox(
+                      height: 50,
+                      child: AppButton(
+                        title: 'Delete Project',
+                        
+                        bckgrndColor: Colors.red,
+                        
+                          onPressed: () async {
+                            final response = await widget.controller.userRepo
+                                .deleteData('/projects/delete/${widget.id}');
+                            if (response.isSuccessful) {
+                              Get.back();
+                              Get.snackbar(
+                                  'Sucessful', 'Project Deleted Successfully',
+                                  backgroundColor: Colors.green);
+                            } else {
+                              Get.back();
+                              Get.snackbar('Error', 'An error occurred');
+                            }
+                          },
+                     
+                      ),
+                    )
                   ),
                 ];
               },

@@ -1,10 +1,13 @@
 import 'dart:convert';
 
+import 'package:bog/app/data/model/notifications_model.dart';
+import 'package:bog/app/global_widgets/app_loader.dart';
 import 'package:bog/app/modules/settings/faq.dart';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:pie_chart/pie_chart.dart' as pie_chart;
+import 'package:badges/badges.dart' as badges;
 
 import 'package:get/get.dart';
 
@@ -13,6 +16,8 @@ import '../../../../core/theme/app_styles.dart';
 import '../../../controllers/home_controller.dart';
 import '../../../data/model/log_in_model.dart';
 
+import '../../../data/model/user_details_model.dart';
+import '../../../data/providers/api_response.dart';
 import '../../../data/providers/my_pref.dart';
 import '../../../global_widgets/activity_widget.dart';
 import '../../../global_widgets/app_avatar.dart';
@@ -33,6 +38,7 @@ class HomeTab extends StatefulWidget {
 class _HomeTabState extends State<HomeTab> {
   final HomeController controller = Get.find<HomeController>();
   var logInDetails = LogInModel.fromJson(jsonDecode(MyPref.logInDetail.val));
+      
 
    final dataMap = <String, double>{
     "Approved Projects": 52,
@@ -46,21 +52,46 @@ class _HomeTabState extends State<HomeTab> {
     "Disapproved Projects":'18',
   };
 
+  late Future<ApiResponse> getNotifications;
+
   @override
   void initState() {
+    final controller = Get.find<HomeController>();
+
+    var logInDetails =
+        UserDetailsModel.fromJson(jsonDecode(MyPref.userDetails.val));
+    getNotifications = controller.userRepo.getData('/notifications/user/${logInDetails.profile!.id}');
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    String title = "N 300,000";
-    String subTitle = "Monthly Earnings";
-    String icon = "";
+    var userDetails =
+        UserDetailsModel.fromJson(jsonDecode(MyPref.userDetails.val));
+
+   var kycScore = 0.0;
+    if (userDetails.profile!.kycPoint != null){
+      kycScore = userDetails.profile!.kycPoint!.toDouble();
+    }
+
 
     return GetBuilder<HomeController>(builder: (controller) {
       return SizedBox(
         height: Get.height * 0.93,
-        child: Column(
+        child:  FutureBuilder<ApiResponse>(
+          future: getNotifications,
+          builder: (context, snapshot){
+          if (snapshot.connectionState == ConnectionState.done){
+            
+            if (snapshot.data!.isSuccessful){
+               final response = snapshot.data!.data as List<dynamic>;
+               final notifications = <NotificationsModel>[];
+
+               for (var element in response){
+                notifications.add(NotificationsModel.fromJson(element));
+               }
+               return Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -119,10 +150,22 @@ class _HomeTabState extends State<HomeTab> {
                         ),
                         //Alarm Icon
                         IconButton(
-                          icon: const Icon(Icons.notifications,
-                              color: Colors.grey),
+                          icon: badges.Badge(
+                        //    position: badges.BadgePosition(),
+                         badgeContent:    Text(
+            notifications.length.toString(),
+              style: const TextStyle(color: Colors.white),
+          ),
+                         badgeStyle: const badges.BadgeStyle(
+                                badgeColor: AppColors.primary,
+                                 padding: EdgeInsets.all(5)
+                               ),
+                            child: const Icon(Icons.notifications,
+                                color: Colors.grey,),
+
+                          ),
                           onPressed: () {
-                            Get.to(() => const NotificationPage());
+                            Get.to(() =>  NotificationPage(notifications));
                           },
                         )
                       ],
@@ -267,7 +310,7 @@ class _HomeTabState extends State<HomeTab> {
                                 TweenAnimationBuilder(
                                   tween: Tween<double>(
                                     begin: 0,
-                                    end: 0.96, 
+                                    end: kycScore/100, 
                                   ),
                                   duration: const Duration(milliseconds: 1000),
                                   builder: (context,double val, _){
@@ -277,7 +320,7 @@ class _HomeTabState extends State<HomeTab> {
                                         borderRadius: BorderRadius.circular(18),
                                         child: LinearProgressIndicator(
                                           
-                                          color: AppColors.successGreen,
+                                          color: kycScore < 50 ? Colors.red : AppColors.successGreen,
                                           value: val,
                                           minHeight: 12,
                                           backgroundColor: AppColors.backgroundGrey,
@@ -292,7 +335,7 @@ class _HomeTabState extends State<HomeTab> {
                                 padding: EdgeInsets.all(Get.width * 0.015),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(100),
-                                  color: AppColors.successGreen.withOpacity(0.1),
+                                  color: kycScore < 50 ? Colors.red.withOpacity(0.1) : AppColors.successGreen.withOpacity(0.1),
                                 ),
                                 child: Container(
                                 width: Get.width * 0.1,
@@ -300,7 +343,7 @@ class _HomeTabState extends State<HomeTab> {
                                 padding: EdgeInsets.all(Get.width * 0.015),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(100),
-                                  color: AppColors.successGreen.withOpacity(0.3),
+                                  color:  kycScore < 50 ? Colors.red.withOpacity(0.3) : AppColors.successGreen.withOpacity(0.3),
                                 ),
                                 child: Container(
                                   alignment: Alignment.center,
@@ -309,9 +352,9 @@ class _HomeTabState extends State<HomeTab> {
                                 padding: EdgeInsets.all(Get.width * 0.01),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(100),
-                                  color: AppColors.successGreen,
+                                  color:  kycScore < 50 ? Colors.red : AppColors.successGreen,
                                 ),
-                                child: Text('96%', style: AppTextStyle.caption.copyWith(fontWeight: FontWeight.w600, color: AppColors.white),),
+                                child: Text('${kycScore.toInt()}%', style: AppTextStyle.caption.copyWith(fontWeight: FontWeight.w600, color: AppColors.white),),
                                ),
                                ),
                                ),
@@ -595,7 +638,7 @@ class _HomeTabState extends State<HomeTab> {
                                 TweenAnimationBuilder(
                                   tween: Tween<double>(
                                     begin: 0,
-                                    end: 0.96, 
+                                    end: kycScore / 100, 
                                   ),
                                   duration: const Duration(milliseconds: 1000),
                                   builder: (context,double val, _){
@@ -605,7 +648,7 @@ class _HomeTabState extends State<HomeTab> {
                                         borderRadius: BorderRadius.circular(18),
                                         child: LinearProgressIndicator(
                                           
-                                          color: AppColors.successGreen,
+                                          color: kycScore < 50 ? Colors.red : AppColors.successGreen,
                                           value: val,
                                           minHeight: 12,
                                           backgroundColor: AppColors.backgroundGrey,
@@ -620,7 +663,7 @@ class _HomeTabState extends State<HomeTab> {
                                 padding: EdgeInsets.all(Get.width * 0.015),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(100),
-                                  color: AppColors.successGreen.withOpacity(0.1),
+                                  color: kycScore < 50 ? Colors.red.withOpacity(0.1) :AppColors.successGreen.withOpacity(0.1),
                                 ),
                                 child: Container(
                                 width: Get.width * 0.1,
@@ -628,7 +671,7 @@ class _HomeTabState extends State<HomeTab> {
                                 padding: EdgeInsets.all(Get.width * 0.015),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(100),
-                                  color: AppColors.successGreen.withOpacity(0.3),
+                                  color:kycScore < 50 ? Colors.red.withOpacity(0.3) : AppColors.successGreen.withOpacity(0.3),
                                 ),
                                 child: Container(
                                   alignment: Alignment.center,
@@ -637,9 +680,9 @@ class _HomeTabState extends State<HomeTab> {
                                 padding: EdgeInsets.all(Get.width * 0.01),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(100),
-                                  color: AppColors.successGreen,
+                                  color:kycScore < 50 ? Colors.red : AppColors.successGreen,
                                 ),
-                                child: Text('96%', style: AppTextStyle.caption.copyWith(fontWeight: FontWeight.w600, color: AppColors.white),),
+                                child: Text('${kycScore.toInt()}%', style: AppTextStyle.caption.copyWith(fontWeight: FontWeight.w600, color: AppColors.white),),
                                ),
                                ),
                                ),
@@ -664,7 +707,7 @@ class _HomeTabState extends State<HomeTab> {
                                  ),
                                ],
                              ),
-                             SizedBox(height: Get.width * 0.04),
+                             SizedBox(height: Get.width * 0.06),
                                 Row(
                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                children: const [
@@ -772,7 +815,20 @@ class _HomeTabState extends State<HomeTab> {
               ),
             ),
           ],
-        ),
+        );
+               
+           
+            } else {
+              return const Center(child: Text('An error occurred'),);
+            }
+          } else {
+            return const AppLoader();
+          }
+        })
+        
+        
+        
+        
       );
     });
   }

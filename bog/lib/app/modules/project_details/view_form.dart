@@ -87,7 +87,7 @@ class _ViewFormPageState extends State<ViewFormPage> {
                               SizedBox(
                                 width: Get.width * 0.5,
                                 child:
-                                    projectData[i].serviceForm!.label == 'PHOTO'
+                                    projectData[i].serviceForm!.label == 'PHOTO' ||  projectData[i].serviceForm!.label == 'PASSPORT'
                                         ? Padding(
                                             padding: const EdgeInsets.all(8.0),
                                             child: SizedBox(
