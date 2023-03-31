@@ -4,6 +4,7 @@ import 'package:bog/core/loading_widget/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:path/path.dart';
 
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_styles.dart';
@@ -31,6 +32,68 @@ class AppOverlay {
           ],
         ),
       );
+
+  static void successOverlay({required String message}) {
+    showDialog(
+        context: Get.context!,
+        builder: (context) => WillPopScope(
+              onWillPop: () async => false,
+              child: Material(
+                  elevation: 10,
+                  color: Colors.black.withOpacity(0.2),
+                  child: IntrinsicHeight(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: Get.width * 0.8,
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 15,
+                            horizontal: 20,
+                          ),
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(6),
+                            color: Colors.white,
+                          ),
+                          child: Column(
+                            children: [
+                              Text(
+                                'Success',
+                                textAlign: TextAlign.center,
+                                style: Get.textTheme.bodyText1!.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 17 * Get.textScaleFactor * 0.90,
+                                    color: Colors.black),
+                              ),
+                              const SizedBox(height: 11),
+                              Center(
+                                child: Text(
+                                  message,
+                                  textAlign: TextAlign.center,
+                                  style: AppTextStyle.bodyText2.copyWith(
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 22),
+                              AppButton(
+                                title: 'Okay',
+                                onPressed: () {
+                                  Get.back();
+                                  Get.back();
+                                },
+                              )
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  )),
+            ));
+  }
 
   static Future<void> newLoadingOverlay({
     required Future<dynamic> Function() asyncFunction,

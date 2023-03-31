@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:bog/app/controllers/home_controller.dart';
 import 'package:bog/app/data/model/user_details_model.dart';
 import 'package:bog/app/data/providers/api_response.dart';
@@ -18,9 +20,14 @@ import 'update_tax_details.dart';
 import 'upload_documents.dart';
 import 'view_work_experience.dart';
 
-class KYCPage extends StatelessWidget {
+class KYCPage extends StatefulWidget {
   const KYCPage({super.key});
 
+  @override
+  State<KYCPage> createState() => _KYCPageState();
+}
+
+class _KYCPageState extends State<KYCPage> {
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<HomeController>();
@@ -36,108 +43,157 @@ class KYCPage extends StatelessWidget {
               future:
                   controller.userRepo.getData('/user/me?userType=$userType'),
               builder: (ctx, snapshot) {
-                if (snapshot.connectionState == ConnectionState.done && snapshot.data!.isSuccessful){
-                 final userDetails = UserDetailsModel.fromJson(snapshot.data!.user);
-                 final kycPoint = userDetails.profile!.kycPoint;
-        
-                     return kycPoint == null ? 
-                     Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                       children: [
-                        Text('Your Kyc Score : $kycPoint'),
-                          const  SizedBox(height: 15),
-                        const LinearProgressIndicator(value: 0,),
-                          const  SizedBox(height: 15),
+                if (snapshot.connectionState == ConnectionState.done &&
+                    snapshot.data!.isSuccessful) {
+                  final userDetails =
+                      UserDetailsModel.fromJson(snapshot.data!.user);
+                  final kycPoint = userDetails.profile!.kycPoint;
+                  final kycScore = userDetails.kycScore ?? '';
+                  final kycTotal = userDetails.kycTotal ?? '';
+                  print(kycTotal.toString());
+                  Map<String, dynamic> kycScoreMap = jsonDecode(kycScore);
+                  dynamic totalScore = 0;
+                  kycScoreMap.forEach((key, value) {
+                    totalScore += value;
+                  });
+                  //    print('Total KYC Score: $totalScore');
+
+                  Map<String, dynamic> kycTotalMap = jsonDecode(kycTotal);
+                  dynamic totalTotal = 0;
+                  kycTotalMap.forEach((key, value) {
+                    totalTotal += value;
+                  });
+                  print('Total KYC Score: $totalTotal');
+                  final kycNewPoint = (totalScore / totalTotal) * 100;
+
+                  //   print();
+
+                  return kycPoint == null
+                      ? Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Your Kyc Score : $kycNewPoint'),
+                            const SizedBox(height: 15),
+                            const LinearProgressIndicator(
+                              value: 0,
+                            ),
+                            const SizedBox(height: 15),
                             _TextButton(
-              iconData: Icons.info,
-              text: 'General Information',
-              onPressed: () {
-                Get.to(() => const UpdateGeneralInfo());
-              }),
-          _TextButton(
-              iconData: Icons.info_outline_sharp,
-              text: 'Organisational Info',
-              onPressed: () {
-                Get.to(() => const UpdateOrganisationInfo());
-              }),
-          _TextButton(
-              iconData: Icons.credit_score_outlined,
-              text: 'Tax Details & Permit',
-              onPressed: () {
-                Get.to(() => const UpdateTaxDetails());
-              }),
-          _TextButton(
-              iconData: Icons.work,
-              text: 'Work/Job Execution Experience',
-              onPressed: () {
-                Get.to(() => const WorkExperience());
-              }),
-          _TextButton(
-              iconData: Icons.money,
-              text: 'Financial Data',
-              onPressed: () {
-                Get.to(() => const UpdateFinancialDetails());
-              }),
-          _TextButton(
-              iconData: Icons.upload_file,
-              text: 'Upload Documents',
-              onPressed: () {
-                Get.to(() => const UploadDocuments());
-              })
-                       ],
-                     ) :  Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                       children: [
-                        Text('Your Kyc Score : $kycPoint'),
-                      const  SizedBox(height: 15),
-                         TweenAnimationBuilder(tween:  Tween<double>(
-          begin: 0,
-          end: userDetails.profile!.kycPoint!.toDouble()
-            ), duration: const Duration(milliseconds: 1000), builder: (context,double value, _) =>
-          LinearProgressIndicator(
-            minHeight: 15,
-            color: (value / 100) < 0.5 ? Colors.red : Colors.green,
-            value: value / 100,),
-        ),
-          const  SizedBox(height: 15),
-            _TextButton(
-              iconData: Icons.info,
-              text: 'General Information',
-              onPressed: () {
-                Get.to(() => const UpdateGeneralInfo());
-              }),
-          _TextButton(
-              iconData: Icons.info_outline_sharp,
-              text: 'Organisational Info',
-              onPressed: () {
-                Get.to(() => const UpdateOrganisationInfo());
-              }),
-          _TextButton(
-              iconData: Icons.credit_score_outlined,
-              text: 'Tax Details & Permit',
-              onPressed: () {
-                Get.to(() => const UpdateTaxDetails());
-              }),
-          _TextButton(
-              iconData: Icons.work,
-              text: 'Work/Job Execution Experience',
-              onPressed: () {
-                Get.to(() => const WorkExperience());
-              }),
-          _TextButton(
-              iconData: Icons.money,
-              text: 'Financial Data',
-              onPressed: () {
-                Get.to(() => const UpdateFinancialDetails());
-              }),
-          _TextButton(
-              iconData: Icons.upload_file,
-              text: 'Upload Documents',
-              onPressed: () {
-                Get.to(() => const UploadDocuments());
-              })
-                       ],
-                     );
+                                iconData: Icons.info,
+                                text: 'General Information',
+                                onPressed: () async {
+                                  await Get.to(() => UpdateGeneralInfo(
+                                        kycScore: kycScoreMap,
+                                      ));
+                                  setState(() {});
+                                }),
+                            _TextButton(
+                                iconData: Icons.info_outline_sharp,
+                                text: 'Organisational Info',
+                                onPressed: () async {
+                                  await Get.to(
+                                      () => const UpdateOrganisationInfo());
+                                  setState(() {});
+                                }),
+                            _TextButton(
+                                iconData: Icons.credit_score_outlined,
+                                text: 'Tax Details & Permit',
+                                onPressed: () async {
+                                  await Get.to(() => const UpdateTaxDetails());
+                                  setState(() {});
+                                }),
+                            _TextButton(
+                                iconData: Icons.work,
+                                text: 'Work/Job Execution Experience',
+                                onPressed: () async {
+                                  await Get.to(() => const WorkExperience());
+                                  setState(() {});
+                                }),
+                            _TextButton(
+                                iconData: Icons.money,
+                                text: 'Financial Data',
+                                onPressed: () async {
+                                  await Get.to(
+                                      () => const UpdateFinancialDetails());
+                                  setState(() {});
+                                }),
+                            _TextButton(
+                                iconData: Icons.upload_file,
+                                text: 'Upload Documents',
+                                onPressed: () async {
+                                  await Get.to(() => const UploadDocuments());
+                                  setState(() {});
+                                })
+                          ],
+                        )
+                      : Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                                'Your Kyc Score : ${kycNewPoint.toStringAsFixed(2)}'),
+                            const SizedBox(height: 15),
+                            TweenAnimationBuilder(
+                              tween: Tween<double>(
+                                  begin: 0, end: kycNewPoint.toDouble()),
+                              duration: const Duration(milliseconds: 1000),
+                              builder: (context, double value, _) =>
+                                  LinearProgressIndicator(
+                                minHeight: 15,
+                                color: (value / 100) < 0.5
+                                    ? Colors.red
+                                    : Colors.green,
+                                value: (value / 100),
+                              ),
+                            ),
+                            const SizedBox(height: 15),
+                            _TextButton(
+                                iconData: Icons.info,
+                                text: 'General Information',
+                                onPressed: () async {
+                                  await Get.to(() => UpdateGeneralInfo(
+                                        kycScore: kycScoreMap,
+                                      ));
+                                  setState(() {});
+                                }),
+                            _TextButton(
+                                iconData: Icons.info_outline_sharp,
+                                text: 'Organisational Info',
+                                onPressed: () async {
+                                  await Get.to(
+                                      () => const UpdateOrganisationInfo());
+                                  setState(() {});
+                                }),
+                            _TextButton(
+                                iconData: Icons.credit_score_outlined,
+                                text: 'Tax Details & Permit',
+                                onPressed: () async {
+                                  await Get.to(() => const UpdateTaxDetails());
+                                  setState(() {});
+                                }),
+                            _TextButton(
+                                iconData: Icons.work,
+                                text: 'Work/Job Execution Experience',
+                                onPressed: () async {
+                                  await Get.to(() => const WorkExperience());
+                                  setState(() {});
+                                }),
+                            _TextButton(
+                                iconData: Icons.money,
+                                text: 'Financial Data',
+                                onPressed: () async {
+                                  await Get.to(
+                                      () => const UpdateFinancialDetails());
+                                  setState(() {});
+                                }),
+                            _TextButton(
+                                iconData: Icons.upload_file,
+                                text: 'Upload Documents',
+                                onPressed: () async {
+                                  await Get.to(() => const UploadDocuments());
+                                  setState(() {});
+                                })
+                          ],
+                        );
                 } else {
                   return const AppLoader();
                   // return Column(
@@ -147,7 +203,6 @@ class KYCPage extends StatelessWidget {
                   //   ],
                   // );
                 }
-               
               }),
         ),
       ),
