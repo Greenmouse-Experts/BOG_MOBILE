@@ -20,7 +20,8 @@ import '../../data/providers/my_pref.dart';
 
 class UpdateGeneralInfo extends StatefulWidget {
   final Map<String, dynamic> kycScore;
-  const UpdateGeneralInfo({super.key, required this.kycScore});
+  final Map<String, dynamic> kycTotal;
+  const UpdateGeneralInfo({super.key, required this.kycScore, required this.kycTotal});
 
   @override
   State<UpdateGeneralInfo> createState() => _UpdateGeneralInfoState();
@@ -57,10 +58,6 @@ class _UpdateGeneralInfoState extends State<UpdateGeneralInfo> {
     final options = ['Incorporation', 'Registered Business Name'];
 
     var logInDetails = LogInModel.fromJson(jsonDecode(MyPref.logInDetail.val));
-    print(widget.kycScore);
-    print('00');
-    const kycTotal =
-        "{'generalInfo':7,'orgInfo':9,'taxDetails':3,'workExperience':6,'SupplyCat':1,'financialData':6,'uploadDocument':16}";
     return AppBaseView(
         child: Scaffold(
       body: SingleChildScrollView(
@@ -178,9 +175,9 @@ class _UpdateGeneralInfoState extends State<UpdateGeneralInfo> {
                                     final updateAccount = await controller
                                         .userRepo
                                         .patchData('/user/update-account', {
-                                      "kycScore": kycScore.toString(),
-                                      "kycTotal": kycTotal
-                                    });
+                                    "kycScore": jsonEncode(kycScore),
+                                    "kycTotal": jsonEncode(widget.kycTotal)
+                                  });
                                     final res = await controller.userRepo
                                         .postData('/kyc-general-info/create',
                                             newGeneralInfo);
@@ -313,11 +310,13 @@ class _UpdateGeneralInfoState extends State<UpdateGeneralInfo> {
                                   kycScore['generalInfo'] = 7;
 
                                   final controller = Get.find<HomeController>();
+                                
+                            
                                   final updateAccount = await controller
                                       .userRepo
                                       .patchData('/user/update-account', {
-                                    "kycScore": kycScore,
-                                    "kycTotal": kycTotal
+                                    "kycScore": jsonEncode(kycScore),
+                                    "kycTotal": jsonEncode(widget.kycTotal)
                                   });
                                   final res = await controller.userRepo
                                       .postData('/kyc-general-info/create',

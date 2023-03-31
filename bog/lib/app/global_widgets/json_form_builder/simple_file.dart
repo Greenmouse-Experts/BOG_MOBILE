@@ -4,7 +4,7 @@ import 'package:bog/app/global_widgets/global_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart' ;
 
-import '../../data/providers/api.dart';
+
 
 // import 'helpers/function.dart';
 
@@ -67,8 +67,7 @@ class _SimpleFileState extends State<SimpleFile> {
       },
       onFilePicked: (file) async {
         pickedFile = file;
-        print(pickedFile!.path);
-        print('sjcoc');
+      
         var body = {
           "image": [
                                             await MultipartFile.fromFile(
@@ -77,17 +76,15 @@ class _SimpleFileState extends State<SimpleFile> {
                                           ],
         };
         final formData = FormData.fromMap(body);
-        print('letst');
+
         final response = await dio.post('https://bog.greenmouseproperties.com/upload',data: formData);
-            
-            print('no issue');
+       
         if (response.statusCode == 200) {
-          print(response.data);
+    
           widget.onChange(widget.position, response.data[0]);
-          print(response.data[0]);
+    
         } else{
-          print(response.statusCode);
-          print('ndlds');
+     
         }
         pickedFile = file;
       },

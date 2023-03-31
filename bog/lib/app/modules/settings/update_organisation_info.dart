@@ -19,7 +19,9 @@ import '../../data/providers/my_pref.dart';
 import '../../global_widgets/app_loader.dart';
 
 class UpdateOrganisationInfo extends StatefulWidget {
-  const UpdateOrganisationInfo({super.key});
+  final Map<String, dynamic> kycScore;
+  final Map<String, dynamic> kycTotal;
+  const UpdateOrganisationInfo({super.key, required this.kycScore, required this.kycTotal});
 
   @override
   State<UpdateOrganisationInfo> createState() => _UpdateOrganisationInfoState();
@@ -88,6 +90,7 @@ class _UpdateOrganisationInfoState extends State<UpdateOrganisationInfo> {
                                 },
                                 options: options,
                                 label: 'Type of organisation',
+                                
                               ),
                               const SizedBox(height: 10),
                               AppDatePicker(
@@ -95,6 +98,7 @@ class _UpdateOrganisationInfoState extends State<UpdateOrganisationInfo> {
                                 onChanged: (value) {
                                   dateOfIncorporation.text = value;
                                 },
+
                               ),
                               const SizedBox(height: 10),
                               PageInput(
@@ -179,6 +183,11 @@ class _UpdateOrganisationInfoState extends State<UpdateOrganisationInfo> {
                               AppButton(
                                 title: 'Submit',
                                 onPressed: () async {
+                                  if (orgType.isEmpty){
+                                    Get.snackbar('Error', 'Select a type of organization', backgroundColor: Colors.red);
+                                    return;
+                                  }
+                               
                                   if (_formKey.currentState!.validate()) {
                                     final newOrgInfo = {
                                       "organisation_type": orgType,
@@ -196,20 +205,28 @@ class _UpdateOrganisationInfoState extends State<UpdateOrganisationInfo> {
                                       "userType": userType,
                                       "id": logInDetails.profile!.id
                                     };
-                                    print(newOrgInfo.toString());
+                                    final kycScore = widget.kycScore;
+
+                                    kycScore['orgInfo'] = 9;
+
                                     final controller =
                                         Get.find<HomeController>();
+                                      final updateAccount = await controller
+                                        .userRepo
+                                        .patchData('/user/update-account', {
+                                    "kycScore": jsonEncode(kycScore),
+                                    "kycTotal": jsonEncode(widget.kycTotal)
+                                  });
                                     final res = await controller.userRepo
                                         .postData(
                                             '/kyc-organisation-info/create',
                                             newOrgInfo);
-                                    if (res.isSuccessful) {
-                                      Get.back();
-                                      Get.snackbar('Success',
-                                          'Organizational Info Updated Successfully',
-                                          backgroundColor: Colors.green);
+                                    if (res.isSuccessful && updateAccount.isSuccessful) {
+                                      AppOverlay.successOverlay(
+                                          message:
+                                              'Organizational Info Updated Successfully');
                                     } else {
-                                      print(res.message);
+                                 
                                       Get.showSnackbar(const GetSnackBar(
                                         message: 'Error occured',
                                         backgroundColor: Colors.red,
@@ -265,9 +282,10 @@ class _UpdateOrganisationInfoState extends State<UpdateOrganisationInfo> {
                               label: 'Others(Specify)',
                               controller: otherSpecify,
                               validator: (p0) {
-                                if (orgType == 'Others(Specify)') {
+                                if (orgType == 'Others(Specify)' && p0!.isEmpty) {
                                   return 'Please specify other';
                                 }
+
                                 return null;
                               },
                             ),
@@ -338,6 +356,11 @@ class _UpdateOrganisationInfoState extends State<UpdateOrganisationInfo> {
                             AppButton(
                               title: 'Submit',
                               onPressed: () async {
+                                  if (orgType.isEmpty){
+                                    Get.snackbar('Error', 'Select a type of organization', backgroundColor: Colors.red);
+                                    return;
+                                  }
+                              
                                 if (_formKey.currentState!.validate()) {
                                   final newOrgInfo = {
                                     "organisation_type": orgType,
@@ -355,18 +378,25 @@ class _UpdateOrganisationInfoState extends State<UpdateOrganisationInfo> {
                                     "userType": userType,
                                     "id": logInDetails.profile!.id
                                   };
-                                  print(newOrgInfo.toString());
+                                    final kycScore = widget.kycScore;
+
+                                    kycScore['orgInfo'] = 9;
                                   final controller = Get.find<HomeController>();
+                                    final updateAccount = await controller
+                                        .userRepo
+                                        .patchData('/user/update-account', {
+                                    "kycScore": jsonEncode(kycScore),
+                                    "kycTotal": jsonEncode(widget.kycTotal)
+                                  });
                                   final res = await controller.userRepo
                                       .postData('/kyc-organisation-info/create',
                                           newOrgInfo);
-                                  if (res.isSuccessful) {
-                                    Get.back();
-                                    Get.snackbar('Success',
-                                        'Organizational Info Updated Successfully',
-                                        backgroundColor: Colors.green);
+                                  if (res.isSuccessful && updateAccount.isSuccessful) {
+                                     AppOverlay.successOverlay(
+                                          message:
+                                              'Organizational Info Updated Successfully');
                                   } else {
-                                    print(res.message);
+                                  
                                     Get.showSnackbar(const GetSnackBar(
                                       message: 'Error occured',
                                       backgroundColor: Colors.red,

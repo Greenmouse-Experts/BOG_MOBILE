@@ -38,7 +38,7 @@ class _ServiceProviderSignUpState extends State<ServiceProviderSignUp> {
 
   @override
   Widget build(BuildContext context) {
-    GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+    GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
     return Scaffold(
         appBar: AppBar(
@@ -75,7 +75,7 @@ class _ServiceProviderSignUpState extends State<ServiceProviderSignUp> {
                     return Container(
                       color: AppColors.backgroundVariant1,
                       child: Form(
-                        key: _formKey,
+                        key: formKey,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -363,7 +363,7 @@ class _ServiceProviderSignUpState extends State<ServiceProviderSignUp> {
                                           onPressed: () async =>
                                               await controller
                                                   .signupServiceProvider(
-                                                      _formKey),
+                                                      formKey),
                                           borderRadius: 10,
                                           enabled: controller
                                               .isTermsAndConditionsChecked,

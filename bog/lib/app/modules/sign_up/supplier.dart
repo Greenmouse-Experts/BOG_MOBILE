@@ -21,7 +21,7 @@ class SupplierSignUp extends GetView<AuthController> {
 
   @override
   Widget build(BuildContext context) {
-    GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+    GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
     return Scaffold(
         appBar: AppBar(
@@ -46,7 +46,7 @@ class SupplierSignUp extends GetView<AuthController> {
             color: AppColors.backgroundVariant1,
             width: Get.width,
             child: Form(
-              key: _formKey,
+              key: formKey,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -248,7 +248,7 @@ class SupplierSignUp extends GetView<AuthController> {
                               AppButton(
                                 title: 'Sign Up As A Product Partner',
                                 onPressed: () async =>
-                                    await controller.signupSupplier(_formKey),
+                                    await controller.signupSupplier(formKey),
                                 borderRadius: 10,
                                 enabled: controller.isTermsAndConditionsChecked,
                               ),

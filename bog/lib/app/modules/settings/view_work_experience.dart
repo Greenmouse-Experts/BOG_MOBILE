@@ -12,7 +12,9 @@ import '../../global_widgets/app_base_view.dart';
 import '../../global_widgets/app_button.dart';
 
 class WorkExperience extends StatefulWidget {
-  const WorkExperience({super.key});
+   final Map<String, dynamic> kycScore;
+  final Map<String, dynamic> kycTotal;
+  const WorkExperience({super.key, required this.kycScore, required this.kycTotal});
 
   @override
   State<WorkExperience> createState() => _WorkExperienceState();
@@ -123,6 +125,8 @@ class _WorkExperienceState extends State<WorkExperience> {
                                   IconButton(
                                     onPressed: () {
                                       Get.to(() => UpdateWorkExperience(
+                                        kycScore: widget.kycScore,
+                                        kycTotal: widget.kycTotal,
                                             isNewWork: false,
                                             workExperience: experience[i],
                                           ));
@@ -141,8 +145,11 @@ class _WorkExperienceState extends State<WorkExperience> {
                         title: 'Add new work experience',
                         onPressed: () async {
                        
-                    final response =  await Get.to(() =>
-                              const UpdateWorkExperience(isNewWork: true));
+                 await Get.to(() =>
+                            UpdateWorkExperience(
+                              kycScore: widget.kycScore,
+                              kycTotal: widget.kycTotal,
+                              isNewWork: true));
                         
                           
                         

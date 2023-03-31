@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:bog/app/data/model/read_document_model.dart';
@@ -15,11 +16,14 @@ import 'package:flutter/material.dart';
 import '../../global_widgets/app_loader.dart';
 import 'package:dio/dio.dart' as dio;
 
+import '../../global_widgets/overlays.dart';
 import '../../global_widgets/pdf_page_viewer.dart';
 import '../../global_widgets/photo_view_page.dart';
 
 class UploadDocuments extends StatefulWidget {
-  const UploadDocuments({super.key});
+    final Map<String, dynamic> kycScore;
+  final Map<String, dynamic> kycTotal;
+  const UploadDocuments({super.key, required this.kycScore, required this.kycTotal});
 
   @override
   State<UploadDocuments> createState() => _UploadDocumentsState();
@@ -46,6 +50,9 @@ class _UploadDocumentsState extends State<UploadDocuments> {
   TextEditingController operationalController = TextEditingController();
   TextEditingController vendorsController = TextEditingController();
 
+
+
+
   TextEditingController companyProfileController1 = TextEditingController();
   TextEditingController organizationalChartController1 =
       TextEditingController();
@@ -63,6 +70,13 @@ class _UploadDocumentsState extends State<UploadDocuments> {
   TextEditingController financeAuditController1 = TextEditingController();
   TextEditingController operationalController1 = TextEditingController();
   TextEditingController vendorsController1 = TextEditingController();
+
+  int countNonEmptyControllers(List<TextEditingController> controllers) {
+
+  List<TextEditingController> nonEmptyControllers = controllers.where((controller) => controller.text.isNotEmpty).toList();
+
+  return nonEmptyControllers.length;
+}
 
   ReadDocumentModel? companyProfile1;
   ReadDocumentModel? orgChart1;
@@ -441,12 +455,6 @@ class _UploadDocumentsState extends State<UploadDocuments> {
                                       passportOfVendorsFile = file;
                                     },
                                     controller: vendorsController,
-                                    // validator: (value) {
-                                    //   if (value!.isEmpty) {
-                                    //     return "Please pick a picture to upload";
-                                    //   }
-                                    //   return null;
-                                    // },
                                     hint: '',
                                     label:
                                         "Passport of vendors and all directors",
@@ -499,20 +507,33 @@ class _UploadDocumentsState extends State<UploadDocuments> {
                                     ));
                                   }
                                 }
+                                  List<TextEditingController> countControllers = [companyProfileController,organizationalChartController,cORController,cACController,meOAController,hseController,qMPController,taxClearanceCertController ,vatRegCertController,companyStatementController ,referenceFromBankController ,nsitfController ,mdPassPortController ,financeAuditController,operationalController,vendorsController];
+                                  final kycScore = widget.kycScore;
+
+                                  final newCount = countNonEmptyControllers(countControllers);
+                             
+                           
+
+                                kycScore['uploadDocument'] = formData.fields.length + newCount - 1;
+                                 final updateAccount = await controller
+                                        .userRepo
+                                        .patchData('/user/update-account', {
+                                    "kycScore": jsonEncode(kycScore),
+                                    "kycTotal": jsonEncode(widget.kycTotal)
+                                  });
                                 var response = await Api().postData(
                                     "/kyc-documents/create",
                                     body: formData,
                                     hasHeader: true);
-                                if (response.isSuccessful) {
-                                  Get.back();
-                                  Get.snackbar('Success',
-                                      'Documents have been added successfully',
-                                      backgroundColor: Colors.green);
+                                if (response.isSuccessful && updateAccount.isSuccessful) {
+                                    AppOverlay.successOverlay(
+                                          message:
+                                              'Documents Uploaded Successfully');
                                 } else {
                                   Get.snackbar('Error', 'An error occurred',
                                       backgroundColor: Colors.red);
                                 }
-                              },
+                             },
                             )
                           ],
                         ),

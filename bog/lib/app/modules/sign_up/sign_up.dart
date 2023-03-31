@@ -23,8 +23,8 @@ class SignUp extends GetView<AuthController> {
 
   @override
   Widget build(BuildContext context) {
-    GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-    GlobalKey<FormState> _formKey1 = GlobalKey<FormState>();
+    GlobalKey<FormState> formKey = GlobalKey<FormState>();
+    GlobalKey<FormState> formKey1 = GlobalKey<FormState>();
 
     return Scaffold(
         appBar: AppBar(
@@ -127,7 +127,7 @@ class SignUp extends GetView<AuthController> {
                             physics: const NeverScrollableScrollPhysics(),
                             children: [
                               Form(
-                                key: _formKey,
+                                key: formKey,
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -300,7 +300,7 @@ class SignUp extends GetView<AuthController> {
                                     AppButton(
                                       title: 'Sign Up As A Client',
                                       onPressed: () async => await controller
-                                          .signupClient(_formKey),
+                                          .signupClient(formKey),
                                       borderRadius: 10,
                                       enabled: controller
                                           .isTermsAndConditionsChecked,
@@ -320,7 +320,7 @@ class SignUp extends GetView<AuthController> {
                                 ),
                               ),
                               Form(
-                                key: _formKey1,
+                                key: formKey1,
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -486,7 +486,7 @@ class SignUp extends GetView<AuthController> {
                                     AppButton(
                                       title: 'Sign Up',
                                       onPressed: () async => await controller
-                                          .signupCorporate(_formKey1),
+                                          .signupCorporate(formKey1),
                                       borderRadius: 10,
                                       enabled: controller
                                           .isTermsAndConditionsChecked,

@@ -158,7 +158,7 @@ class _CheckoutState extends State<Checkout> {
         },
       );
     } else {
-      print(response.message);
+     Get.snackbar('Error', 'An error occurred');
     }
   }
 

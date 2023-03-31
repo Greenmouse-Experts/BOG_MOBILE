@@ -176,7 +176,7 @@ class Api {
     var head = {
       'Authorization': MyPref.authToken.val,
     };
-    print(MyPref.authToken.val);
+   
     try {
       var request = await _client.request(
         url,
@@ -239,19 +239,17 @@ class Api {
       return ApiResponse.responseFromBody(response.body, response.statusCode);
       //return ApiResponse.response(request);
     } on DioError catch (e) {
-      print("Error 3");
-      print(e.message);
+    
       return e.toApiError(cancelToken: token);
     } on SocketException {
-      print("Error 2");
+ 
       return ApiResponse(
         data: null,
         isSuccessful: false,
         message: 'No Internet connection',
       );
     } on Exception catch (e) {
-      print("Error");
-      print(e.toString());
+   
       return ApiResponse(
         data: null,
         isSuccessful: false,

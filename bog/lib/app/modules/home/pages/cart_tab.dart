@@ -820,8 +820,12 @@ class ProductItem extends StatelessWidget {
 }
 
 class OrderRequestItem extends StatelessWidget {
+  final String orderSlug;
+  final int quantity;
+  final String price;
+  final String name;
   const OrderRequestItem({
-    Key? key,
+    Key? key, required this.orderSlug, required this.quantity, required this.price, required this.name,
   }) : super(key: key);
 
   @override
@@ -863,7 +867,7 @@ class OrderRequestItem extends StatelessWidget {
                       Padding(
                         padding: EdgeInsets.only(left: Get.width * 0.005),
                         child: Text(
-                          "Order ID :  SAN - 123- NDS ",
+                          "Order ID :  $orderSlug ",
                           style: AppTextStyle.caption.copyWith(
                             color: Colors.black,
                             fontSize: Get.width * 0.035,
@@ -875,7 +879,7 @@ class OrderRequestItem extends StatelessWidget {
                       Padding(
                         padding: EdgeInsets.only(left: Get.width * 0.005),
                         child: Text(
-                          '30 Tonnes of Sharp Sand  ',
+                          name,
                           style: AppTextStyle.caption.copyWith(
                             color: Colors.black.withOpacity(0.6),
                             fontSize: Get.width * 0.033,
@@ -894,7 +898,7 @@ class OrderRequestItem extends StatelessWidget {
                     Padding(
                       padding: EdgeInsets.only(left: Get.width * 0.015),
                       child: Text(
-                        'N 115,000',
+                        price,
                         style: AppTextStyle.caption.copyWith(
                           color: AppColors.primary,
                           fontSize: Get.width * 0.035,
@@ -906,7 +910,7 @@ class OrderRequestItem extends StatelessWidget {
                     Padding(
                       padding: EdgeInsets.only(left: Get.width * 0.015),
                       child: Text(
-                        'x2',
+                        '$quantity',
                         style: AppTextStyle.caption.copyWith(
                           color: Colors.black.withOpacity(0.6),
                           fontSize: Get.width * 0.033,

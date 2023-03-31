@@ -164,7 +164,7 @@ class _MyOrderScreenState extends State<MyOrderScreen>
                               if (snapshot.hasData) {
                                 final res =
                                     snapshot.data!.data as List<dynamic>;
-                                print(res);
+                              
                                 final myOrdersData = <MyOrdersModel>[];
                                 for (var element in res) {
                                   myOrdersData
@@ -368,98 +368,98 @@ class _MyOrderScreenState extends State<MyOrderScreen>
   }
 }
 
-class _TextButton extends StatelessWidget {
-  final String imageAsset;
-  final String text;
-  final String? subtitle;
-  final bool showArrow;
-  final Function() onPressed;
-  const _TextButton(
-      {required this.imageAsset,
-      required this.text,
-      required this.onPressed,
-      this.subtitle,
-      this.showArrow = true});
+// class _TextButton extends StatelessWidget {
+//   final String imageAsset;
+//   final String text;
+//   final String? subtitle;
+//   final bool showArrow;
+//   final Function() onPressed;
+//   const _TextButton(
+//       {required this.imageAsset,
+//       required this.text,
+//       required this.onPressed,
+//       this.subtitle,
+//       this.showArrow = true});
 
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onPressed,
-      child: Padding(
-        padding:
-            EdgeInsets.only(left: Get.width * 0.03, right: Get.width * 0.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
-              width: Get.width * 0.1,
-              height: Get.width * 0.1,
-              decoration: BoxDecoration(
-                color: const Color(0xffE8F4FE),
-                borderRadius: BorderRadius.circular(100),
-              ),
-              child: Center(
-                child: Image.asset(
-                  imageAsset,
-                  width: Get.width * 0.05,
-                  height: Get.width * 0.05,
-                ),
-              ),
-            ),
-            SizedBox(
-              width: Get.width * 0.7,
-              child: Padding(
-                padding: EdgeInsets.only(left: Get.width * 0.01),
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      SizedBox(
-                        height: Get.height * 0.01,
-                      ),
-                      Text(
-                        text,
-                        maxLines: 1,
-                        overflow: TextOverflow.clip,
-                        style: AppTextStyle.subtitle1.copyWith(
-                            color: text == "Log Out"
-                                ? AppColors.bostonUniRed
-                                : Colors.black,
-                            fontSize: Get.width * 0.04,
-                            fontWeight: FontWeight.w500),
-                      ),
-                      SizedBox(
-                        height: Get.height * 0.01,
-                      ),
-                      if (subtitle != null)
-                        Text(
-                          subtitle!,
-                          maxLines: 1,
-                          overflow: TextOverflow.clip,
-                          style: AppTextStyle.subtitle1
-                              .copyWith(color: Colors.black),
-                        ),
-                      if (subtitle != null)
-                        SizedBox(
-                          height: Get.height * 0.01,
-                        ),
-                    ]),
-              ),
-            ),
-            IconButton(
-              onPressed: onPressed,
-              padding: EdgeInsets.zero,
-              icon: showArrow
-                  ? Icon(
-                      Icons.arrow_forward_ios_rounded,
-                      color: Colors.black,
-                      size: Get.width * 0.04,
-                    )
-                  : Container(),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return GestureDetector(
+//       onTap: onPressed,
+//       child: Padding(
+//         padding:
+//             EdgeInsets.only(left: Get.width * 0.03, right: Get.width * 0.0),
+//         child: Row(
+//           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//           crossAxisAlignment: CrossAxisAlignment.center,
+//           children: [
+//             Container(
+//               width: Get.width * 0.1,
+//               height: Get.width * 0.1,
+//               decoration: BoxDecoration(
+//                 color: const Color(0xffE8F4FE),
+//                 borderRadius: BorderRadius.circular(100),
+//               ),
+//               child: Center(
+//                 child: Image.asset(
+//                   imageAsset,
+//                   width: Get.width * 0.05,
+//                   height: Get.width * 0.05,
+//                 ),
+//               ),
+//             ),
+//             SizedBox(
+//               width: Get.width * 0.7,
+//               child: Padding(
+//                 padding: EdgeInsets.only(left: Get.width * 0.01),
+//                 child: Column(
+//                     crossAxisAlignment: CrossAxisAlignment.stretch,
+//                     children: [
+//                       SizedBox(
+//                         height: Get.height * 0.01,
+//                       ),
+//                       Text(
+//                         text,
+//                         maxLines: 1,
+//                         overflow: TextOverflow.clip,
+//                         style: AppTextStyle.subtitle1.copyWith(
+//                             color: text == "Log Out"
+//                                 ? AppColors.bostonUniRed
+//                                 : Colors.black,
+//                             fontSize: Get.width * 0.04,
+//                             fontWeight: FontWeight.w500),
+//                       ),
+//                       SizedBox(
+//                         height: Get.height * 0.01,
+//                       ),
+//                       if (subtitle != null)
+//                         Text(
+//                           subtitle!,
+//                           maxLines: 1,
+//                           overflow: TextOverflow.clip,
+//                           style: AppTextStyle.subtitle1
+//                               .copyWith(color: Colors.black),
+//                         ),
+//                       if (subtitle != null)
+//                         SizedBox(
+//                           height: Get.height * 0.01,
+//                         ),
+//                     ]),
+//               ),
+//             ),
+//             IconButton(
+//               onPressed: onPressed,
+//               padding: EdgeInsets.zero,
+//               icon: showArrow
+//                   ? Icon(
+//                       Icons.arrow_forward_ios_rounded,
+//                       color: Colors.black,
+//                       size: Get.width * 0.04,
+//                     )
+//                   : Container(),
+//             )
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }

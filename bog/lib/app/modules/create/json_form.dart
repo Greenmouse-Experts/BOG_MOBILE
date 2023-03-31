@@ -95,7 +95,7 @@ class _JsonFormState extends State<JsonForm> {
                                   response1 = response;
                                 },
                                 actionSave: (data) {
-                                  print(data);
+                                
                                 },
                                 buttonSave: Container(
                                   width: Get.width,

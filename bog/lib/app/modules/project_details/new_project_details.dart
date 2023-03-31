@@ -146,7 +146,7 @@ class _NewProjectDetailPageState extends State<NewProjectDetailPage> {
                                       'Payment Ref: ',
                                       maxLines: 2,
                                     )),
-                                Text('data'),
+                               const Text('data'),
                                 // Text(
                                 //    DateFormat.yMd()
                                 //     .format(orderDetail.createdAt!)),
@@ -216,7 +216,7 @@ class RowTitle extends StatelessWidget {
         ),
         Text(
           detail,
-          style: TextStyle(
+          style: const TextStyle(
               color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),
         )
       ],

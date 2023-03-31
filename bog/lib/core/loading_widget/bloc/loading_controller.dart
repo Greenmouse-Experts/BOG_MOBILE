@@ -2,7 +2,9 @@ import 'dart:async';
 import 'package:get/get.dart';
 import '../loading_widget.dart';
 
-//TODO: Please make sure you add this to your get_it instance
+
+// ignore: todo
+// TODO: Please make sure you add this to your get_it instance
 
 class AppLoadingController extends GetxController {
   static AppLoadingController get instance => Get.find();

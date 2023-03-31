@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:bog/app/global_widgets/app_button.dart';
-import 'package:bog/app/global_widgets/bank_name.dart';
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:get/get.dart';
@@ -53,7 +52,7 @@ class _UpdateFinancialDetailsState extends State<UpdateFinancialDetails> {
   void _verifyAccount() async {
     final accountNumber = accountController.text;
     final bank = bankCode.text;
-    print(bank + accountNumber);
+  
     if (accountNumber.length == 10) {
       final controller = Get.find<HomeController>();
       final response =
@@ -82,7 +81,7 @@ class _UpdateFinancialDetailsState extends State<UpdateFinancialDetails> {
   var previousBank;
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<HomeController>();
+    
     return AppBaseView(
         child: Scaffold(
       body: SingleChildScrollView(

@@ -24,7 +24,7 @@ class AddressPicker extends StatefulWidget {
 }
 
 class _AddressPickerState extends State<AddressPicker> {
-  var _selectedOption;
+ dynamic _selectedOption;
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<ApiResponse>(

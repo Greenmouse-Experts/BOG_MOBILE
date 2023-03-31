@@ -51,7 +51,7 @@ class _MyProjectWidgetState extends State<MyProjectWidget> {
   }
 
   void checkOut(String id) async {
-    print(id);
+   
     var logInDetails = LogInModel.fromJson(jsonDecode(MyPref.logInDetail.val));
     const price = 20000 * 100;
     final email = logInDetails.email;

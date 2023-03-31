@@ -624,7 +624,7 @@ class _GeotechnicalInvestigationState extends State<GeotechnicalInvestigation> {
                                                                     300),
                                                         curve: Curves.easeIn);
                                                   } else {
-                                                    print(response.code);
+                                               
                                                     Get.snackbar(
                                                         "Error",
                                                         response.data

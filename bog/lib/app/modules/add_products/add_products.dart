@@ -61,7 +61,7 @@ class _AddProjectState extends State<AddProject> {
 
   @override
   Widget build(BuildContext context) {
-    var title = Get.arguments as String?;
+
     var width = Get.width;
     final Size size = MediaQuery.of(context).size;
     double multiplier = 25 * size.height * 0.01;
@@ -289,7 +289,7 @@ class _AddProjectState extends State<AddProject> {
                                               "/products",
                                               body: formData,
                                               hasHeader: true);
-                                          print(response.message);
+                                       
                                           if (response.isSuccessful) {
                                             Get.to(() =>
                                                 const AddProductSuccess());
@@ -487,7 +487,7 @@ class _AddProjectState extends State<AddProject> {
                                             "/products",
                                             body: formData,
                                             hasHeader: true);
-                                        print(response.message);
+                                      
                                         if (response.isSuccessful) {
                                           Get.to(
                                               () => const AddProductSuccess());

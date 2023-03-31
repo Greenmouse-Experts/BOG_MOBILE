@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:bog/app/global_widgets/app_base_view.dart';
 import 'package:bog/app/global_widgets/custom_app_bar.dart';
 import 'package:bog/app/global_widgets/global_widgets.dart';
@@ -12,7 +14,9 @@ import '../../data/providers/api_response.dart';
 import '../../global_widgets/app_loader.dart';
 
 class UpdateTaxDetails extends StatefulWidget {
-  const UpdateTaxDetails({super.key});
+  final Map<String, dynamic> kycScore;
+  final Map<String, dynamic> kycTotal;
+  const UpdateTaxDetails({super.key, required this.kycScore, required this.kycTotal});
 
   @override
   State<UpdateTaxDetails> createState() => _UpdateTaxDetailsState();
@@ -100,14 +104,23 @@ class _UpdateTaxDetailsState extends State<UpdateTaxDetails> {
                                   "relevant_statutory" : professionalBodies.text,
                                   "userType": userType
                                 };
-                                print(newTaxDetails.toString());
+                                final kycScore = widget.kycScore;
+
+                                kycScore['taxDetails'] = 3;
                                  final controller = Get.find<HomeController>();
+                                 final updateAccount = await controller
+                                        .userRepo
+                                        .patchData('/user/update-account', {
+                                    "kycScore": jsonEncode(kycScore),
+                                    "kycTotal": jsonEncode(widget.kycTotal)
+                                  });
                                 final res = await controller.userRepo
                                       .postData('/kyc-tax-permits/create',
                                           newTaxDetails);
-                                  if (res.isSuccessful) {
-                                    Get.back();
-                                    Get.snackbar('Success', 'Tax Details Updated Successfully', backgroundColor: Colors.green);
+                                  if (res.isSuccessful && updateAccount.isSuccessful) {
+                                   AppOverlay.successOverlay(
+                                          message:
+                                              'Tax Details Updated Successfully');
                                   } else {
                                     Get.showSnackbar(const GetSnackBar(
                                       message: 'Error occured',

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:bog/app/data/model/available_projects_model.dart';
+import 'package:bog/app/data/model/order_request_model.dart';
 import 'package:bog/app/data/model/projetcs_model.dart';
 import 'package:bog/app/data/model/service_projects_model.dart';
 import 'package:bog/app/global_widgets/app_loader.dart';
@@ -37,7 +38,7 @@ class ProjectTab extends StatefulWidget {
 
 class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
   String search = "";
-  String currentOrder = "New Order Requests";
+  var currentOrder = "New Order Requests".obs;
   List<MyProjects> savedPosts = [];
 
   late TabController tabController;
@@ -45,6 +46,7 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
   late Future<ApiResponse> getMyProjects;
   late Future<ApiResponse> getAvailableProjects;
   late Future<ApiResponse> getServiceProjects;
+  late Future<ApiResponse> getOrderRequests;
 
   TextEditingController projectUpdateController = TextEditingController();
 
@@ -66,6 +68,7 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
         .getData("/projects/service-request?userType=professional");
     getAvailableProjects = controller.userRepo
         .getData("/projects/dispatched-projects/${logInDetails.profile!.id}");
+    getOrderRequests = controller.userRepo.getData('/orders/order-request');
     tabController = TabController(length: 2, vsync: this);
   }
 
@@ -100,35 +103,84 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
                 children: [
                
                   if (controller.currentType == "Product Partner")
-                    Padding(
-                      padding: EdgeInsets.only(
-                          left: Get.width * 0.03, right: Get.width * 0.03),
-                      child: PageDropButtonWithoutBackground(
-                        label: "",
-                        hint: '',
-                        padding: const EdgeInsets.fromLTRB(10, 0, 5, 0),
-                        onChanged: (val) {
-                          currentOrder = val;
-                          controller.update();
-                        },
-                        value: "New Order Requests",
-                        items: ["New Order Requests", "Ongoing Orders"]
-                            .map<DropdownMenuItem<String>>((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(
-                              value,
-                              style: AppTextStyle.subtitle1.copyWith(
-                                color: AppColors.primary,
-                                fontSize: Get.width * 0.035,
-                                fontWeight: FontWeight.w500,
-                              ),
-                              textAlign: TextAlign.start,
-                            ),
-                          );
-                        }).toList(),
-                      ),
+                  FutureBuilder<ApiResponse>(
+                    future: getOrderRequests,
+                    builder: (context, snapshot){
+                    if (snapshot.connectionState == ConnectionState.waiting){
+                      return const AppLoader();
+                    } else {
+                      if (snapshot.data!.isSuccessful){
+                        final response = snapshot.data!.data as List<dynamic>;
+                        final orderRequests = <OrderRequestsModel>[];
+
+                        for (var element in response){
+                          orderRequests.add(OrderRequestsModel.fromJson(element));
+                        }
+
+                        return Column(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: Get.width * 0.03),
+                          child: PageDropButtonWithoutBackground(
+                            label: "",
+                            hint: '',
+                            padding: const EdgeInsets.fromLTRB(10, 0, 5, 0),
+                            onChanged: (val) {
+                              currentOrder.value = val;
+                              controller.update();
+                            },
+                            value: "New Order Requests",
+                            items: ["New Order Requests", "Ongoing Orders"]
+                                .map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(
+                                  value,
+                                  style: AppTextStyle.subtitle1.copyWith(
+                                    color: AppColors.primary,
+                                    fontSize: Get.width * 0.035,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                  textAlign: TextAlign.start,
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                        ),
+                    SizedBox(
+                    height: Get.height * 0.8,
+                    child: orderRequests.isEmpty ? const Center(child: Text('You have no requests available'),) : ListView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: orderRequests.length,
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      padding: const EdgeInsets.all(0),
+                      itemBuilder: (BuildContext context, int index) {
+                        final order = orderRequests[index];
+                        return currentOrder.value == "Ongoing Orders"
+                            ? OrderItem(
+                                price: '203000',
+                                date: DateTime.now(),
+                                status: 'Pending',
+                                orderItemName: '10 tons of coconut',
+                              )
+                            :  OrderRequestItem(
+                              name: order.product!.name ?? '',
+                              orderSlug: order.order!.orderSlug ?? '',
+                              price: order.paymentInfo!.amount.toString() ,
+                              quantity: order.quantity ?? 0,
+                            );
+                      },
                     ),
+                    ),
+                      ],
+                    );
+                      } else {
+                        return const Center(child: Text('An error occurred'),);
+                      }
+                    }
+                  }),
+                    
                   if (controller.currentType == 'Product')
                     Padding(
                       padding: EdgeInsets.only(
@@ -509,27 +561,8 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
                             return const AppLoader();
                           }
                         }),
-                  if (controller.currentType == "Product Partner")
-                    SizedBox(
-                      height: Get.height * 0.8,
-                      child: ListView.builder(
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: 5,
-                        scrollDirection: Axis.vertical,
-                        shrinkWrap: true,
-                        padding: const EdgeInsets.all(0),
-                        itemBuilder: (BuildContext context, int index) {
-                          return currentOrder == "Ongoing Orders"
-                              ? OrderItem(
-                                  price: '203000',
-                                  date: DateTime.now(),
-                                  status: 'Pending',
-                                  orderItemName: '10 tons of coconut',
-                                )
-                              : const OrderRequestItem();
-                        },
-                      ),
-                    ),
+                
+                 
                   if (controller.currentType == "Service Partner")
                     Column(
                       children: [
@@ -589,14 +622,14 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
                                   for (var element in response1) {
                                     serviceProjects.add(
                                         ServiceProjectsModel.fromJson(element));
-                                    print(element);
+                                 
                                   }
                                   for (var element in response2) {
                                     availableProjects.add(
                                         AvailableProjectsModel.fromJson(
                                             element));
                                   }
-                                  print(serviceProjects);
+                           
                                   return SizedBox(
                                     height: Get.height * 0.735,
                                     child: TabBarView(
