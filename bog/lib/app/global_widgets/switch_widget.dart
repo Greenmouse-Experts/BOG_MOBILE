@@ -85,14 +85,13 @@ class _PrimarySwitchWidgetState extends State<PrimarySwitchWidget> {
   bool state = false;
   @override
   Widget build(BuildContext context) {
-
-    void updateuser(String type) async{
-        final controller = Get.find<HomeController>();
-        final newRes = await controller.userRepo.getData('/user/me?userType=$type');
-       final userDetails = UserDetailsModel.fromJson(newRes.user);
-       MyPref.userDetails.val = jsonEncode(userDetails);
+    void updateuser(String type) async {
+      final controller = Get.find<HomeController>();
+      final newRes =
+          await controller.userRepo.getData('/user/me?userType=$type');
+      final userDetails = UserDetailsModel.fromJson(newRes.user);
+      MyPref.userDetails.val = jsonEncode(userDetails);
     }
-
 
     void verifyKycComplete(String type, VoidCallback onPressed) async {
       final controller = Get.find<HomeController>();
@@ -180,7 +179,9 @@ class _PrimarySwitchWidgetState extends State<PrimarySwitchWidget> {
                           var logInInfo = LogInModel.fromJson(response.user);
 
                           MyPref.logInDetail.val = jsonEncode(logInInfo);
-
+                          controller.currentBottomNavPage.value = 0;
+                          controller.updateNewUser(controller.currentType);
+                          controller.update(['home']);
                           Get.back();
                         }
                       });
@@ -210,6 +211,10 @@ class _PrimarySwitchWidgetState extends State<PrimarySwitchWidget> {
                                   MyPref.setSubscribeOverlay.val == true)) {
                             Get.back();
                           }
+                          // Get.back();
+                          controller.currentBottomNavPage.value = 0;
+                          controller.updateNewUser(controller.currentType);
+                          controller.update(['home']);
                           Get.back();
                         }
                       });

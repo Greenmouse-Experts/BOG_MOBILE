@@ -22,10 +22,9 @@ class AppOverlay {
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                  color: const Color.fromARGB(255, 26, 26, 25),
-                  borderRadius: BorderRadius.circular(10)),
-              child: LoadingAnimationWidget.staggeredDotsWave(
-                color: AppColors.bostonUniRed,
+                  color: Colors.white, borderRadius: BorderRadius.circular(10)),
+              child: LoadingAnimationWidget.inkDrop(
+                color: AppColors.primary,
                 size: 35,
               ),
             ),
