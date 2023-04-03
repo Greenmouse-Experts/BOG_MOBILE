@@ -707,13 +707,13 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
                                                                           .projectTypes
                                                                           ?.capitalizeFirst ??
                                                                       '',
-                                                                  style: AppTextStyle
-                                                                      .bodyText2
-                                                                      .copyWith(
-                                                                          fontWeight: FontWeight
-                                                                              .w600,
-                                                                          color:
-                                                                              Colors.black),
+                                                                  style: AppTextStyle.caption.copyWith(
+                              color: Colors.black,
+                              fontSize: Get.width * 0.035,
+                              fontWeight: FontWeight.w600,
+                            ),
+                                                                  
+                                                              
                                                                 ),
                                                                 SizedBox(
                                                                     width: Get
@@ -721,13 +721,17 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
                                                                         0.03),
                                                                 Text(
                                                                   '${serviceProjects[i].progress!} %',
-                                                                  style: AppTextStyle.bodyText2.copyWith(
-                                                                      fontWeight: FontWeight.w600,
-                                                                      color: serviceProjects[i].progress! < 50
+                                                                  style: AppTextStyle.caption.copyWith(
+                              color: serviceProjects[i].progress! < 50
                                                                           ? Colors.red
                                                                           : serviceProjects[i].progress! < 70
                                                                               ? AppColors.serviceYellow
-                                                                              : Colors.green),
+                                                                              : Colors.green,
+                              fontSize: Get.width * 0.035,
+                              fontWeight: FontWeight.w600,
+                            ),
+                                                                  
+                                                               
                                                                 )
                                                               ],
                                                             ),
@@ -737,14 +741,13 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
                                                                       .projectSlug
                                                                       ?.capitalizeFirst ??
                                                                   ''),
-                                                              style: AppTextStyle
-                                                                  .caption
-                                                                  .copyWith(
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w400,
-                                                                      color: Colors
-                                                                          .black),
+                                                              style:  AppTextStyle.caption.copyWith(
+                          color: Colors.black.withOpacity(0.6),
+                          fontSize: Get.width * 0.033,
+                          fontWeight: FontWeight.w500,
+                        ),
+                                                              
+                                                              
                                                             ),
                                                             trailing:
                                                                 PopupMenuButton(

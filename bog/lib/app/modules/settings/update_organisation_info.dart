@@ -222,6 +222,7 @@ class _UpdateOrganisationInfoState extends State<UpdateOrganisationInfo> {
                                             '/kyc-organisation-info/create',
                                             newOrgInfo);
                                     if (res.isSuccessful && updateAccount.isSuccessful) {
+                                      MyPref.setOverlay.val = false;
                                       AppOverlay.successOverlay(
                                           message:
                                               'Organizational Info Updated Successfully');
@@ -392,6 +393,7 @@ class _UpdateOrganisationInfoState extends State<UpdateOrganisationInfo> {
                                       .postData('/kyc-organisation-info/create',
                                           newOrgInfo);
                                   if (res.isSuccessful && updateAccount.isSuccessful) {
+                                      MyPref.setOverlay.val = false;
                                      AppOverlay.successOverlay(
                                           message:
                                               'Organizational Info Updated Successfully');

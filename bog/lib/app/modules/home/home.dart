@@ -86,7 +86,7 @@ class _HomeState extends State<Home> {
           onPressed: onPressed);
     } else if (userDetails.profile!.hasActiveSubscription != true) {
       MyPref.setSubscribeOverlay.val = true;
-      AppOverlay.showKycDialog(
+      AppOverlay.showSubscribeDialog(
           title: 'No Active Subscriptions',
           buttonText: 'Subscribe',
           content:

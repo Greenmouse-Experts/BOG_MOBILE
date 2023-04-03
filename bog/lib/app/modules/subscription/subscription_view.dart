@@ -62,9 +62,13 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
           "userType": userType
         });
         if (res.isSuccessful) {
+         final userDetails = UserDetailsModel.fromJson(jsonDecode(MyPref.userDetails.val));
+         userDetails.profile!.hasActiveSubscription = true;
+          MyPref.userDetails.val = jsonEncode(userDetails);
           Get.back();
           Get.snackbar('Success', 'Subscription made successfully',
               backgroundColor: AppColors.successGreen);
+              MyPref.setSubscribeOverlay.val = false;
         } else {
           Get.snackbar('Error',
               res.message ?? 'An error occurred, please try again later',

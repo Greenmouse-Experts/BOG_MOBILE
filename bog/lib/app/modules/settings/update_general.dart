@@ -97,7 +97,9 @@ class _UpdateGeneralInfoState extends State<UpdateGeneralInfo> {
                               const SizedBox(height: 10),
                               AppRadioButton(
                                 onchanged: (value) {
+
                                   newRegType = value;
+                                 
                                 },
                                 option1: 'Incorporation',
                                 options: options,
@@ -155,7 +157,7 @@ class _UpdateGeneralInfoState extends State<UpdateGeneralInfo> {
                                       "email_address": emailController.text,
                                       "contact_number":
                                           int.parse(officeTelController.text),
-                                      "reg_type": '',
+                                      "reg_type": newRegType,
                                       "registration_number":
                                           int.parse(regNumController.text),
                                       "business_address":
@@ -183,6 +185,7 @@ class _UpdateGeneralInfoState extends State<UpdateGeneralInfo> {
                                             newGeneralInfo);
                                     if (res.isSuccessful &&
                                         updateAccount.isSuccessful) {
+                                          MyPref.setOverlay.val = false;
                                       AppOverlay.successOverlay(
                                           message:
                                               'General Info Updated Successfully');
@@ -240,7 +243,7 @@ class _UpdateGeneralInfoState extends State<UpdateGeneralInfo> {
                               onchanged: (value) {
                                 orgData.regType = value;
                               },
-                              option1: orgData.regType,
+                              option1: orgData.regType ?? '',
                               options: options,
                               label: 'Type of Registration',
                             ),
@@ -323,6 +326,7 @@ class _UpdateGeneralInfoState extends State<UpdateGeneralInfo> {
                                           newGeneralInfo);
                                   if (res.isSuccessful &&
                                       updateAccount.isSuccessful) {
+                                    MyPref.setOverlay.val = false;
                                     AppOverlay.successOverlay(
                                         message:
                                             'General Info Updated Successfully');

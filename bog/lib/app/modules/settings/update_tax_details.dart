@@ -11,6 +11,7 @@ import 'package:get/get.dart';
 import '../../controllers/home_controller.dart';
 import '../../data/model/tax_data_model.dart';
 import '../../data/providers/api_response.dart';
+import '../../data/providers/my_pref.dart';
 import '../../global_widgets/app_loader.dart';
 
 class UpdateTaxDetails extends StatefulWidget {
@@ -118,6 +119,7 @@ class _UpdateTaxDetailsState extends State<UpdateTaxDetails> {
                                       .postData('/kyc-tax-permits/create',
                                           newTaxDetails);
                                   if (res.isSuccessful && updateAccount.isSuccessful) {
+                                      MyPref.setOverlay.val = false;
                                    AppOverlay.successOverlay(
                                           message:
                                               'Tax Details Updated Successfully');

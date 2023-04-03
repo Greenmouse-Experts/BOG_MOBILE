@@ -30,6 +30,7 @@ class PageInput extends StatefulWidget {
       this.onDropdownChanged,
       this.isReferral = false,
       this.showInfo = true,
+      this.textWidth = 0.8,
       this.isFilePicker = false,
       this.borderSide = const BorderSide(
         width: 1,
@@ -42,6 +43,7 @@ class PageInput extends StatefulWidget {
   final String label;
   final AutovalidateMode? autovalidateMode;
   final Widget? prefix;
+  final double textWidth;
   final TextInputType keyboardType;
   final Widget? suffix;
   final TextEditingController? controller;
@@ -99,7 +101,7 @@ class _PageInputState extends State<PageInput> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(
-                //width: Get.width * 0.8,
+                width: Get.width * widget.textWidth,
                 child: Text(
                   widget.label,
                   style: AppTextStyle.bodyText2.copyWith(

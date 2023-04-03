@@ -225,6 +225,7 @@ class AuthController extends GetxController {
   }
 
   Future<void> verifyOTPForSignUp() async {
+   print(email.text);
     ApiResponse response =
         await userRepo.verifyOTPForSignUp(email.text, otp.text);
     if (response.isSuccessful) {
@@ -239,7 +240,7 @@ class AuthController extends GetxController {
     } else {
       AppOverlay.showInfoDialog(
         title: 'Failure',
-        content: "OTP Verification Failed. Please try again",
+        content:  response.message ?? "OTP Verification Failed. Please try again",
         buttonText: "Okay",
         onPressed: () {
           Get.back();

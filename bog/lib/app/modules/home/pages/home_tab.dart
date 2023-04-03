@@ -46,9 +46,6 @@ class _HomeTabState extends State<HomeTab> {
 
   late Future<ApiResponse> getNotifications;
 
-  // late Future<ApiResponse> getAssignedSPProjects;
-  // late Future<ApiResponse> getAvailableSPProjects;
-
   @override
   void initState() {
     final controller = Get.find<HomeController>();
@@ -60,6 +57,8 @@ class _HomeTabState extends State<HomeTab> {
 
     super.initState();
   }
+
+
 
   @override
   Widget build(BuildContext context) {

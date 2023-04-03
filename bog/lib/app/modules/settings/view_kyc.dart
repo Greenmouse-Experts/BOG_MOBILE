@@ -48,28 +48,50 @@ class _KYCPageState extends State<KYCPage> {
                     snapshot.data!.isSuccessful) {
                   final userDetails =
                       UserDetailsModel.fromJson(snapshot.data!.user);
-                  final kycPoint = userDetails.profile!.kycPoint;
+        
                   final kycScore = userDetails.kycScore ?? '';
                   final kycTotal = userDetails.kycTotal ?? '';
-               
-                  Map<String, dynamic> kycScoreMap = jsonDecode(kycScore);
+
+
+                  
                   dynamic totalScore = 0;
+                  Map<String, dynamic> kycScoreMap = {};
+                  if (kycScore != '0'){
+                  kycScoreMap = jsonDecode(kycScore);
+                
                   kycScoreMap.forEach((key, value) {
                     totalScore += value;
                   });
-                  //    print('Total KYC Score: $totalScore');
-
-                  Map<String, dynamic> kycTotalMap = jsonDecode(kycTotal);
+                  } 
+                
+                  Map<String, dynamic> kycTotalMap = {
+                    "generalInfo" : 7,
+                    "orgInfo" : 9,
+                    "taxDetails": 3,
+                    "workExperience": 0,
+                    "SupplyCat": 1,
+                    "financialData" : 6,
+                    "uploadDocument": 16,
+                  };
                   dynamic totalTotal = 0;
+                  if (kycTotal != '0' ){
+                  kycTotalMap = jsonDecode(kycTotal);
                   kycTotalMap.forEach((key, value) {
                     totalTotal += value;
                   });
-                 
-                  final kycNewPoint = (totalScore / totalTotal) * 100;
+                  }
+                   
 
-                  //   print();
+                var newPoint = (totalScore / totalTotal) * 100;
+                  if (totalTotal == 0 && totalScore == 0){
+                   newPoint = 0;
+                  }
+        
+                  
+                  final kycNewPoint = newPoint == double.nan.isNaN ? 0.0 : newPoint;
 
-                  return kycPoint == null
+
+                  return kycScore == '0' 
                       ? Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -148,7 +170,7 @@ class _KYCPageState extends State<KYCPage> {
                             const SizedBox(height: 15),
                             TweenAnimationBuilder(
                               tween: Tween<double>(
-                                  begin: 0, end: kycNewPoint.toDouble()),
+                                  begin: 0, end: kycNewPoint),
                               duration: const Duration(milliseconds: 1000),
                               builder: (context, double value, _) =>
                                   LinearProgressIndicator(

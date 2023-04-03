@@ -13,6 +13,7 @@ import '../../data/providers/api.dart';
 import '../../data/providers/api_response.dart';
 import 'package:flutter/material.dart';
 
+import '../../data/providers/my_pref.dart';
 import '../../global_widgets/app_loader.dart';
 import 'package:dio/dio.dart' as dio;
 
@@ -526,6 +527,7 @@ class _UploadDocumentsState extends State<UploadDocuments> {
                                     body: formData,
                                     hasHeader: true);
                                 if (response.isSuccessful && updateAccount.isSuccessful) {
+                                  MyPref.setOverlay.val = false;
                                     AppOverlay.successOverlay(
                                           message:
                                               'Documents Uploaded Successfully');

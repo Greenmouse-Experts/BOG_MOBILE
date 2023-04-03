@@ -1047,6 +1047,9 @@ class ServiceRequestItem extends StatelessWidget {
                 width: Get.width * 0.4,
                 child: AppButton(
                   title: "Decline",
+                  onPressed: (){
+                    AppOverlay.showInfoDialog(title: 'Confirm', content: 'Are you sure you want to decline this project', doubleFunction: true, buttonText: 'Continue');
+                  },
                   padding: const EdgeInsets.symmetric(vertical: 10),
                   border: Border.all(color: const Color(0xFFDC1515)),
                   bckgrndColor: Colors.white,
@@ -1057,6 +1060,9 @@ class ServiceRequestItem extends StatelessWidget {
                 width: Get.width * 0.4,
                 child: AppButton(
                   title: "Accept",
+                  onPressed: (){
+                     AppOverlay.showAcceptFormDialog(title: 'Confirm', doubleFunction: true, buttonText: 'Continue');
+                  },
                   padding: const EdgeInsets.symmetric(vertical: 10),
                   border: Border.all(color: const Color(0xFF24B53D)),
                   bckgrndColor: Colors.white,

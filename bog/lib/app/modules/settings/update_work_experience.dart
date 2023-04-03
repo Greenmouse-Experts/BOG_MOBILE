@@ -11,6 +11,7 @@ import 'package:get/get.dart';
 import '../../controllers/home_controller.dart';
 import '../../data/model/work_experience_model.dart';
 import '../../data/providers/api.dart';
+import '../../data/providers/my_pref.dart';
 import '../../global_widgets/app_base_view.dart';
 import '../../global_widgets/app_date_picker.dart';
 import '../../global_widgets/custom_app_bar.dart';
@@ -210,6 +211,7 @@ class _UpdateWorkExperienceState extends State<UpdateWorkExperience> {
                                   body: formData,
                                   hasHeader: true);
                               if (response.isSuccessful && updateAccount.isSuccessful) {
+                                    MyPref.setOverlay.val = false;
                                     AppOverlay.successOverlay(
                                           message:
                                               'Work Experience Updated Successfully');
@@ -239,7 +241,6 @@ class _UpdateWorkExperienceState extends State<UpdateWorkExperience> {
                                   hasHeader: true);
                               if (response.isSuccessful) {
                                 Get.back(result: response.isSuccessful);
-  
                                 Get.snackbar('Success',
                                     'Work Experience Updated Successfully',
                                     backgroundColor: Colors.green);

@@ -156,7 +156,7 @@ class _MyProjectWidgetState extends State<MyProjectWidget> {
                           style: TextStyle(color: Colors.grey, fontSize: 12),
                         )),
                   ),
-                  if (!widget.isOngoing && !widget.isCancelled)
+                  if (!widget.isOngoing && !widget.isCancelled &&!widget.inReview)
                     PopupMenuItem<int>(
                       value: 3,
                       child: TextButton(
