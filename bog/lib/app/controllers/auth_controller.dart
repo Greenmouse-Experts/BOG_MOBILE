@@ -123,7 +123,8 @@ class AuthController extends GetxController {
               "Account created successfully, Check your email for otp verification";
           buttonMessage = "Continue";
         } else {
-          message = "An error occurred, Please try again";
+          //    message = "An error occurred, Please try again";
+          message = response.message ?? '';
           buttonMessage = "Ok";
         }
       }
@@ -333,18 +334,16 @@ class AuthController extends GetxController {
         MyPref.logInDetail.val = jsonEncode(response.user);
         MyPref.authToken.val = token.toString();
         ApiResponse bankListResponse = await userRepo.getBanks();
-       
 
- 
-       final newRes = await userRepo.getData('/user/me?userType=${logInInfo.profile!.userType}');
-       final userDetails = UserDetailsModel.fromJson(newRes.user);
-       MyPref.userDetails.val = jsonEncode(userDetails);
-  
+        final newRes = await userRepo
+            .getData('/user/me?userType=${logInInfo.profile!.userType}');
+        final userDetails = UserDetailsModel.fromJson(newRes.user);
+        MyPref.userDetails.val = jsonEncode(userDetails);
 
         // Loader.hideLoading();
         if (bankListResponse.isSuccessful && newRes.isSuccessful) {
           MyPref.bankListDetail.val = jsonEncode(bankListResponse.data);
-           
+
           Get.offAndToNamed(Home.route);
         } else {
           AppOverlay.showInfoDialog(

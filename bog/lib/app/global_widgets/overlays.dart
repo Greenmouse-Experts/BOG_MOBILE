@@ -1,10 +1,10 @@
 import 'package:bog/app/global_widgets/app_input.dart';
+import 'package:bog/app/global_widgets/update_slider.dart';
 import 'package:bog/app/modules/switch/switch.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-
 
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_styles.dart';
@@ -214,6 +214,7 @@ class AppOverlay {
   static void showPercentageDialog(
       {required String title,
       required TextEditingController controller,
+      required double value,
       String? content,
       Widget? contentReplacement,
       bool? doubleFunction,
@@ -230,7 +231,7 @@ class AppOverlay {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                width: Get.width * 0.8,
+                width: Get.width * 0.9,
                 padding: const EdgeInsets.symmetric(
                   vertical: 15,
                   horizontal: 20,
@@ -245,10 +246,8 @@ class AppOverlay {
                     Text(
                       title,
                       textAlign: TextAlign.center,
-                      style: Get.textTheme.bodyLarge!.copyWith(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 17 * Get.textScaleFactor * 0.90,
-                          color: Colors.black),
+                      style: AppTextStyle.bodyText2.copyWith(
+                          fontWeight: FontWeight.w600, color: Colors.black),
                     ),
                     const SizedBox(height: 11),
                     Center(
@@ -264,16 +263,18 @@ class AppOverlay {
                     ),
                     const SizedBox(height: 11),
                     Row(
-                      mainAxisSize: MainAxisSize.min,
                       children: [
                         SizedBox(
-                          width: Get.width * 0.5,
-                          child: AppInput(
-                            borderRadius: 50,
-                            hintText: '',
-                            controller: controller,
-                          ),
-                        ),
+                            width: Get.width * 0.75,
+                            child: UpdateSlider(
+                              val: value,
+                            )
+                            // AppInput(
+                            //   borderRadius: 50,
+                            //   hintText: '',
+                            //   controller: controller,
+                            // ),
+                            ),
                         SizedBox(width: Get.width * 0.01),
                         const Text(
                           '%',
@@ -290,6 +291,7 @@ class AppOverlay {
                                 Expanded(
                                   child: AppButton(
                                     title: 'No',
+                                    bckgrndColor: Colors.red,
                                     onPressed: () {
                                       Get.back();
                                     },
@@ -298,8 +300,8 @@ class AppOverlay {
                                 const SizedBox(width: 5),
                                 Expanded(
                                   child: AppButton(
-                                    bckgrndColor: Colors.red,
-                                    title: buttonText ?? 'Yes',
+                                    bckgrndColor: Colors.green,
+                                    title: buttonText ?? 'Update',
                                     onPressed: onPressed ?? Get.back,
                                   ),
                                 )
@@ -434,7 +436,7 @@ class AppOverlay {
                         child: AppButton(
                             title: 'Or Switch Account',
                             borderRadius: 100,
-                            bckgrndColor: Color.fromRGBO(244, 67, 54, 1),
+                            bckgrndColor: const Color.fromRGBO(244, 67, 54, 1),
                             onPressed: () {
                               // Get.back();
                               Get.to(() => const SwitchUser());
