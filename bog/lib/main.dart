@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     //FlutterNativeSplash.remove();
     return GetMaterialApp(
-      theme: AppThemes.lightTheme,
+      // theme: AppThemes.lightTheme,
       debugShowCheckedModeBanner: false,
       initialRoute: AppPages.initial,
       getPages: AppPages.routes,

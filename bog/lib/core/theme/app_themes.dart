@@ -32,7 +32,8 @@ class AppThemes {
         fontWeight: FontWeight.w600,
       ),
       labelColor: AppColors.primary,
-      labelPadding: const EdgeInsets.symmetric(horizontal: AppThemes.appPaddingVal),
+      labelPadding:
+          const EdgeInsets.symmetric(horizontal: AppThemes.appPaddingVal),
       unselectedLabelColor: AppColors.onyx,
       unselectedLabelStyle: AppTextStyle.subtitle1.copyWith(
         fontWeight: FontWeight.w500,
@@ -48,6 +49,9 @@ class AppThemes {
       headline6: AppTextStyle.headline6,
       button: AppTextStyle.button,
       headline4: AppTextStyle.headline4,
+    ),
+    timePickerTheme: TimePickerThemeData(
+      backgroundColor: Colors.white,
     ),
     colorScheme: const ColorScheme(
       primary: AppColors.primary,

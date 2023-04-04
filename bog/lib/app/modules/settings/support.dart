@@ -37,15 +37,14 @@ class Support extends GetView<HomeController> {
       required Uri url,
     }) async {
       try {
-        bool launched = await launchUrl(url,
-            mode:
-                LaunchMode.externalApplication); // Launch the app if installed!
+        bool launched =
+            await launchUrl(url, mode: LaunchMode.externalApplication);
 
         if (!launched) {
-          launchUrl(url); // Launch web view if app is not installed!
+          launchUrl(url);
         }
       } catch (e) {
-        launchUrl(url); // Launch web view if app is not installed!
+        launchUrl(url);
       }
     }
 

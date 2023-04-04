@@ -4,11 +4,12 @@ import 'package:get/get.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_styles.dart';
 
-PreferredSizeWidget newAppBarBack(
-    BuildContext context, String title) {
+PreferredSizeWidget newAppBarBack(BuildContext context, String title) {
   final Size size = MediaQuery.of(context).size;
   double multiplier = 25 * size.height * 0.01;
   return AppBar(
+      backgroundColor: AppColors.background,
+      elevation: 0,
       bottom: PreferredSize(
         preferredSize: const Size.fromHeight(1),
         child: Divider(
@@ -24,25 +25,22 @@ PreferredSizeWidget newAppBarBack(
             fontWeight: FontWeight.w600),
         textAlign: TextAlign.center,
       ),
-      leading: 
-
-     IconButton(
-              onPressed: () {
-                Get.back();
-              },
-              icon:
-                   const Icon(Icons.arrow_back_ios_new_outlined))
-             
-     
-      );
+      leading: IconButton(
+          onPressed: () {
+            Get.back();
+          },
+          icon: const Icon(
+            Icons.arrow_back_ios_new_outlined,
+            color: Colors.black,
+          )));
 }
 
-
-PreferredSizeWidget newAppBar(
-    BuildContext context, String title) {
+PreferredSizeWidget newAppBar(BuildContext context, String title) {
   final Size size = MediaQuery.of(context).size;
   double multiplier = 25 * size.height * 0.01;
   return AppBar(
+      backgroundColor: AppColors.background,
+      elevation: 0,
       bottom: PreferredSize(
         preferredSize: const Size.fromHeight(1),
         child: Divider(
@@ -58,10 +56,5 @@ PreferredSizeWidget newAppBar(
             fontWeight: FontWeight.w600),
         textAlign: TextAlign.center,
       ),
-      leading: const SizedBox()
-
-   
-             
-     
-      );
+      leading: const SizedBox());
 }

@@ -164,7 +164,7 @@ class _MyOrderScreenState extends State<MyOrderScreen>
                               if (snapshot.hasData) {
                                 final res =
                                     snapshot.data!.data as List<dynamic>;
-                              
+
                                 final myOrdersData = <MyOrdersModel>[];
                                 for (var element in res) {
                                   myOrdersData
@@ -270,8 +270,6 @@ class _MyOrderScreenState extends State<MyOrderScreen>
                                     ],
                                   ),
                                 );
-
-                                //Text('Result: ${orderItems[1].amount}');
                               } else if (snapshot.hasError) {
                                 return TabBarView(
                                     controller: tabController,
