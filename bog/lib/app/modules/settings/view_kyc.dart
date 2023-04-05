@@ -147,7 +147,10 @@ class _KYCPageState extends State<KYCPage> {
                                 text: 'Financial Data',
                                 onPressed: () async {
                                   await Get.to(
-                                      () => const UpdateFinancialDetails());
+                                      () =>  UpdateFinancialDetails(
+                                            kycScore: kycScoreMap,
+                                     kycTotal: kycTotalMap,
+                                      ));
                                   setState(() {});
                                 }),
                             _TextButton(
@@ -239,7 +242,10 @@ class _KYCPageState extends State<KYCPage> {
                                 text: 'Financial Data',
                                 onPressed: () async {
                                   await Get.to(
-                                      () => const UpdateFinancialDetails());
+                                      () =>  UpdateFinancialDetails(
+                                            kycScore: kycScoreMap,
+                                     kycTotal: kycTotalMap,
+                                      ));
                                   setState(() {});
                                 }),
                             _TextButton(

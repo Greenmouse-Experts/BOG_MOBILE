@@ -14,6 +14,7 @@ class ApiResponse {
   dynamic order;
   dynamic accounts;
   dynamic user;
+  dynamic status;
   final bool isSuccessful;
   String? message;
   String? token;
@@ -25,20 +26,25 @@ class ApiResponse {
       this.order,
       this.accounts,
       this.projects,
+      this.status,
       required this.isSuccessful,
       this.token,
       this.user});
+
+
+
 
   static ApiResponse response(Response response) {
     var json = response.data;
 
     return ApiResponse(
         message: json['message'],
-        isSuccessful: json['success'],
+        isSuccessful: json['success'] ?? false,
         data: json['data'],
         projects: json['projects'],
         user: json['user'],
         token: json['token'],
+        status:  json['status'],
         accounts: json['accounts'],
         order: json['order']);
   }
@@ -48,10 +54,11 @@ class ApiResponse {
     //print(jsonD['status']);
     return ApiResponse(
         message: jsonD['message'],
-        isSuccessful: jsonD['success'],
+        isSuccessful: jsonD['success'] ?? false,
         data: jsonD['data'],
         projects: jsonD['projects'],
         user: jsonD['user'],
+        status: jsonD['status'],
         token: jsonD['token'],
         accounts: jsonD['accounts'],
         order: jsonD['order']);

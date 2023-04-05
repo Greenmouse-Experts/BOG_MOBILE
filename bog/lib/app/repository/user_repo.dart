@@ -23,7 +23,10 @@ class UserRepository {
 
   Future<ApiResponse> verifyOTPForSignUp(String email, String token) async {
     final response =
-        await api.getData('/user/verify?email=$email&token=$token');
+        await api.postData('/user/verify', hasHeader: true, body: {
+          'email': email,
+          'token': token
+        });
     return response;
   }
 

@@ -11,21 +11,17 @@ import 'package:bog/app/global_widgets/new_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:get/get.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
+
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_styles.dart';
 import '../../../../core/utils/formatter.dart';
 import '../../../controllers/home_controller.dart';
-
 import '../../../data/model/log_in_model.dart';
 import '../../../data/providers/api_response.dart';
-
 import '../../../data/providers/my_pref.dart';
-
 import '../../../global_widgets/my_project_widget.dart';
 import '../../../global_widgets/page_dropdown.dart';
-import '../../../global_widgets/tabs.dart';
 import '../../create/create.dart';
 import '../../project_details/project_details.dart';
 import 'cart_tab.dart';

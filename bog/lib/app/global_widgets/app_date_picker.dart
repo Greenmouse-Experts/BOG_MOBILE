@@ -169,7 +169,7 @@ class _AppTimePickerState extends State<AppTimePicker> {
 
             if (pickedDate != null) {
               final localizations = MaterialLocalizations.of(context);
-              final formattedTime = localizations.formatTimeOfDay(pickedDate);
+              final formattedTime = localizations.formatTimeOfDay(pickedDate, alwaysUse24HourFormat: true);
               widget.onChanged(formattedTime);
 
               setState(() {

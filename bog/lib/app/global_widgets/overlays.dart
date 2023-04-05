@@ -5,6 +5,7 @@ import 'package:bog/app/global_widgets/app_radio_button.dart';
 import 'package:bog/app/global_widgets/global_widgets.dart';
 import 'package:bog/app/global_widgets/page_dropdown.dart';
 import 'package:bog/app/global_widgets/update_slider.dart';
+import 'package:bog/app/modules/meetings/meeting.dart';
 import 'package:bog/app/modules/switch/switch.dart';
 
 import 'package:flutter/material.dart';
@@ -30,6 +31,11 @@ final interestOptions = [
 ];
 String chosenInterest = '';
 String reasonOfInterest = '';
+
+String selectedMeeting = '';
+String selectedDate = '';
+String selectedTime = '';
+TextEditingController description = TextEditingController();
 
 final _interestKey = GlobalKey<FormState>();
 
@@ -59,7 +65,7 @@ class AppOverlay {
         ),
       );
 
-  static void successOverlay({required String message}) {
+  static void successOverlay({required String message, Function()? onPressed}) {
     showDialog(
         context: Get.context!,
         builder: (context) => WillPopScope(
@@ -108,8 +114,13 @@ class AppOverlay {
                               AppButton(
                                 title: 'Okay',
                                 onPressed: () {
+                                  if (onPressed == null){
                                   Get.back();
                                   Get.back();
+                                  } else {
+                                    onPressed();
+                                  }
+                              
                                 },
                               )
                             ],
@@ -496,86 +507,145 @@ class AppOverlay {
   }
 
   static void showRequestMeetingDialog(
-      {bool? doubleFunction, Function()? onPressed, String? buttonText}) {
+      {bool? doubleFunction,required List<String> projectSlugs,required String email, required String  userType, required String userId ,Function()? onPressed, String? buttonText}) {
     showDialog(
       context: Get.context!,
-      builder: (context) => Material(
-        elevation: 10,
-        color: Colors.black.withOpacity(0.2),
-        child: IntrinsicHeight(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                width: Get.width * 0.9,
-                padding: const EdgeInsets.symmetric(
-                  vertical: 15,
-                  horizontal: 20,
-                ),
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(6),
-                  color: Colors.white,
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    SizedBox(
-                      //height: Get.height * 0.6,
-                      child: Scrollbar(
-                        controller: scrollController,
-                        trackVisibility: true,
-                        thumbVisibility: true,
-                        child: Padding(
-                          padding: const EdgeInsets.only(right: 8.0),
-                          child: ListView(
-                            controller: scrollController,
-                            children: [
-                              Text(
-                                'Request Meeting',
-                                textAlign: TextAlign.center,
-                                style: Get.textTheme.bodyText1!.copyWith(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 17 * Get.textScaleFactor * 0.90,
-                                    color: Colors.black),
-                              ),
-                              const SizedBox(height: 11),
-                              PageDropButton(label: '', hint: 'Project Id'),
-                              SizedBox(height: Get.height * 0.01),
-                              AppDatePicker(
-                                  label: 'Select Date',
-                                  onChanged: (onChanged) {}),
-                              SizedBox(height: Get.height * 0.01),
-                              AppTimePicker(
-                                  label: 'Select Time',
-                                  onChanged: (onChanged) {}),
-                              PageInput(
-                                hint: '',
-                                label: 'Description',
-                                keyboardType: TextInputType.number,
-                                textWidth: 0.6,
-                                controller: TextEditingController(),
-                                isTextArea: true,
-                              ),
-                              const SizedBox(height: 22),
-                              SizedBox(
-                                width: double.infinity,
-                                child: AppButton(
-                                    title: buttonText ?? "Okay",
-                                    borderRadius: 12,
-                                    onPressed: onPressed ?? Get.back),
-                              ),
-                              const SizedBox(height: 10),
-                            ],
-                          ),
+      builder: (context) => WillPopScope(
+        onWillPop: ()async {
+          selectedDate = '';
+          selectedMeeting = '';
+          selectedTime = '';
+          description.clear();
+          return true;
+        },
+        child: Material(
+          elevation: 10,
+          color: Colors.black.withOpacity(0.2),
+          child: IntrinsicHeight(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  width: Get.width * 0.9,
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 15,
+                    horizontal: 20,
+                  ),
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(6),
+                    color: Colors.white,
+                  ),
+                  child: SizedBox(
+                    height: Get.height * 0.575,
+                    child: Scrollbar(
+                      controller: scrollController,
+                      trackVisibility: true,
+                      thumbVisibility: true,
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: ListView(
+                          controller: scrollController,
+                          children: [
+                            Text(
+                              'Request Meeting',
+                              textAlign: TextAlign.center,
+                              style: Get.textTheme.bodyText1!.copyWith(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 17 * Get.textScaleFactor * 0.90,
+                                  color: Colors.black),
+                            ),
+                            const SizedBox(height: 11),
+                            PageDropButton(label: '', hint: 'Project Id', value: projectSlugs.first,
+                             padding: const EdgeInsets.symmetric(
+                                            horizontal: 10),
+                            onChanged: (val){
+                                selectedMeeting = val;
+                            },
+                            items:  projectSlugs.map((value) {
+                                          return DropdownMenuItem<String>(
+                                            value: value,
+                                            child: Text(value.toString()),
+                                          );
+                                        }).toList(), ),
+                            SizedBox(height: Get.height * 0.01),
+                            AppDatePicker(
+                                label: 'Select Date',
+                                onChanged: (onChanged) {
+                                  selectedDate = onChanged;
+                                  print(selectedDate);
+                                }),
+                            SizedBox(height: Get.height * 0.01),
+                            AppTimePicker(
+                                label: 'Select Time',
+                                onChanged: (onChanged) {
+                                  selectedTime = onChanged;
+                                  print(selectedTime);
+                                }),
+                            SizedBox(height: Get.height * 0.01),
+                            PageInput(
+                              hint: '',
+                              label: 'Description',
+                              textWidth: 0.6,
+                              controller: description,
+                              isTextArea: true,
+                            ),
+                            const SizedBox(height: 22),
+                            SizedBox(
+                              width: double.infinity,
+                              child: AppButton(
+                                  title: buttonText ?? "Okay",
+                                  borderRadius: 12,
+                                  onPressed: () async {
+                                    if (selectedDate == '' || selectedMeeting == '' || selectedTime == '' || description.text.isEmpty){
+                                      Get.snackbar('Fill all fields', 'All fields are required to submit this form', colorText: AppColors.background, backgroundColor: Colors.red);
+                                    return;
+                                    }
+                                    final meetingRequest = {
+                                      'date': selectedDate,
+                                      'description': description.text,
+                                      'projectSlug': selectedMeeting,
+                                      'requestEmail' : email,
+                                      'requestId': userId,
+                                      'time': selectedTime,
+                                      'userType': userType
+                                    };
+                                    print(meetingRequest);
+                                    final controller = Get.find<HomeController>();
+                                    final response = await controller.userRepo.postData('/meeting/create', meetingRequest);
+                                     if (response.isSuccessful){
+                                         selectedDate = '';
+          selectedMeeting = '';
+          selectedTime = '';
+          description.clear();
+                                      Get.back();
+                                      AppOverlay.successOverlay(message: 'Project Requested Successfully', onPressed: (){
+                                        Get.back();
+                                        Get.back();
+                                        Get.to(()=> const NewMeetings());
+                                      });
+                                     } else{
+                                         selectedDate = '';
+          selectedMeeting = '';
+          selectedTime = '';
+          description.clear();
+                                      Get.back();
+                                      Get.snackbar('Error', response.message ?? 'An error occurred', backgroundColor: Colors.red,
+                                      colorText: AppColors.background);
+                                     }
+                                    
+                                  }),
+                            ),
+                            const SizedBox(height: 10),
+                          ],
                         ),
                       ),
                     ),
-                  ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

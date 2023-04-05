@@ -36,6 +36,7 @@ class PageInput extends StatefulWidget {
         width: 1,
         color: Color(0xFF828282),
       ),
+      this.onchanged,
       this.onFilePicked,  })
       : super(key: key);
 
@@ -60,6 +61,7 @@ class PageInput extends StatefulWidget {
   final List<DropdownMenuItem<dynamic>>? dropDownItems;
   final Function(dynamic)? onDropdownChanged;
   final Function(File)? onFilePicked;
+  final Function? onchanged;
   final String? initialValue;
 
   @override
@@ -198,7 +200,13 @@ class _PageInputState extends State<PageInput> {
         if ((!widget.isPhoneNumber && !showText) || widget.obscureText)
           AppInput(
             initalValue: widget.initialValue,
+              onChanged: (p0) {
+               if (widget.onchanged != null) {
+                          widget.onchanged!(p0);
+                        }
+            },
             hintText: !widget.isFilePicker
+
                 ? widget.hint
                 : 'Click to open file picker',
             maxLines: widget.isTextArea ? 5 : 1,
@@ -220,6 +228,7 @@ class _PageInputState extends State<PageInput> {
                         if (widget.controller != null) {
                           widget.controller!.text = file.path.split('/').last;
                         }
+                       
                         if (widget.onFilePicked != null) {
                           widget.onFilePicked!(file);
                         }

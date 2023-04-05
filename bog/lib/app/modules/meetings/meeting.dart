@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:bog/app/data/model/meeting_model.dart';
+import 'package:bog/app/data/model/projetcs_model.dart';
 import 'package:bog/app/data/providers/api_response.dart';
 import 'package:bog/app/global_widgets/app_base_view.dart';
 import 'package:bog/app/global_widgets/bottom_widget.dart';
@@ -15,6 +18,8 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_styles.dart';
 import '../../controllers/home_controller.dart';
 
+import '../../data/model/log_in_model.dart';
+import '../../data/providers/my_pref.dart';
 import '../../global_widgets/app_loader.dart';
 import '../chat/chat.dart';
 
@@ -151,6 +156,10 @@ class _NewMeetingsState extends State<NewMeetings>
     with TickerProviderStateMixin {
   late TabController tabController;
   late Future<ApiResponse> getMeetings;
+  late Future<ApiResponse> getMyRequests;
+  late String userId;
+  late String userTypeUsed;
+  late String userEmail;
 
   Future<void> launchSocialMediaAppIfInstalled({
     required Uri url,
@@ -185,8 +194,13 @@ class _NewMeetingsState extends State<NewMeetings>
             : controller.currentType == 'Product Partner'
                 ? 'vendor'
                 : 'professional';
+   userTypeUsed = userType;
     getMeetings =
         controller.userRepo.getData('/meeting/my-meeting?userType=$userType');
+    getMyRequests = controller.userRepo.getData('/projects/my-request?userType=$userType');
+     var logInDetails = LogInModel.fromJson(jsonDecode(MyPref.logInDetail.val));
+    userId = logInDetails.id ?? '';
+    userEmail = logInDetails.email ?? '';
     super.initState();
   }
 
@@ -234,19 +248,31 @@ class _NewMeetingsState extends State<NewMeetings>
                     ],
                     onTap: (index) {},
                   ),
-                  FutureBuilder<ApiResponse>(
-                      future: getMeetings,
+                  FutureBuilder<List<ApiResponse>>(
+                      future: Future.wait([getMeetings, getMyRequests]),
                       builder: (context, snapshot) {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
                           return const AppLoader();
-                        } else if (snapshot.data!.isSuccessful &&
+                        } else if (snapshot.data![0].isSuccessful && snapshot.data![1].isSuccessful &&
                             snapshot.connectionState == ConnectionState.done) {
-                          final response = snapshot.data!.data as List<dynamic>;
+                          final response1 = snapshot.data![0].data as List<dynamic>;
                           final meetings = <MeetingModel>[];
+                          final response2 = snapshot.data![1].data as List<dynamic>;
+                          final myRequests = <MyProjects>[];
 
-                          for (var element in response) {
+                          final List<String> projectSlugs = [];
+
+                          for (var element in response1) {
                             meetings.add(MeetingModel.fromJson(element));
+                          }
+
+                           for (var element in response2) {
+                            myRequests.add(MyProjects.fromJson(element));
+                          }
+
+                          for (var element in myRequests){
+                            projectSlugs.add(element.projectSlug ?? '');
                           }
 
                           final completedMeetings =
@@ -298,8 +324,12 @@ class _NewMeetingsState extends State<NewMeetings>
                                           padding: const EdgeInsets.all(10.0),
                                           child: FloatingActionButton(
                                             onPressed: () {
+                                              print(userId);
+                                              print(userEmail);
                                               AppOverlay
-                                                  .showRequestMeetingDialog();
+                                                  .showRequestMeetingDialog(projectSlugs: projectSlugs,email: userEmail,
+                                                  userId: userId,
+                                                  userType: userTypeUsed);
                                             },
                                             backgroundColor: AppColors.primary,
                                             child: Stack(
