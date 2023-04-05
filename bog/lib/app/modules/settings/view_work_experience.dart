@@ -12,16 +12,17 @@ import '../../global_widgets/app_base_view.dart';
 import '../../global_widgets/app_button.dart';
 
 class WorkExperience extends StatefulWidget {
-   final Map<String, dynamic> kycScore;
+  final Map<String, dynamic> kycScore;
   final Map<String, dynamic> kycTotal;
-  const WorkExperience({super.key, required this.kycScore, required this.kycTotal});
+  const WorkExperience(
+      {super.key, required this.kycScore, required this.kycTotal});
 
   @override
   State<WorkExperience> createState() => _WorkExperienceState();
 }
 
 class _WorkExperienceState extends State<WorkExperience> {
- // late Future<ApiResponse> getWorkExperiences;
+  // late Future<ApiResponse> getWorkExperiences;
 
   @override
   void initState() {
@@ -43,7 +44,7 @@ class _WorkExperienceState extends State<WorkExperience> {
     final userType =
         controller.currentType == 'Product Partner' ? 'vendor' : 'professional';
     //print(userType);
-   final getWorkExperiences = controller.userRepo
+    final getWorkExperiences = controller.userRepo
         .getData('/kyc-work-experience/fetch?userType=$userType');
     return AppBaseView(
       child: Scaffold(
@@ -97,25 +98,36 @@ class _WorkExperienceState extends State<WorkExperience> {
                                 children: [
                                   IconButton(
                                     onPressed: () {
-                                      AppOverlay.showInfoDialog(title: 'Delete Experience', 
-                                      content: 'Are you sure you want to delete this work experience?',
-                                      doubleFunction: true,
-                                      onPressed: () async{
-                                        final controller = Get.find<HomeController>();
-                                        final response = await controller.userRepo.deleteData('/kyc-work-experience/delete/${experience[i].id}');
-                                        if (response.isSuccessful){
-                                          Get.back();
-                                          Get.back();
-                                          Get.snackbar('Success', 'Work experience deleted successfullys', backgroundColor: Colors.green);
-                                          setState(() {
-                                            
+                                      AppOverlay.showInfoDialog(
+                                          title: 'Delete Experience',
+                                          content:
+                                              'Are you sure you want to delete this work experience?',
+                                          doubleFunction: true,
+                                          onPressed: () async {
+                                            final controller =
+                                                Get.find<HomeController>();
+                                            final response = await controller
+                                                .userRepo
+                                                .deleteData(
+                                                    '/kyc-work-experience/delete/${experience[i].id}');
+                                            if (response.isSuccessful) {
+                                              Get.back();
+                                              Get.back();
+                                              Get.snackbar('Success',
+                                                  'Work experience deleted successfullys',
+                                                  backgroundColor: Colors.green,
+                                                  colorText:
+                                                      AppColors.background);
+                                              setState(() {});
+                                            } else {
+                                              Get.back();
+                                              Get.snackbar(
+                                                  'Error', 'An error occurred',
+                                                  colorText:
+                                                      AppColors.background,
+                                                  backgroundColor: Colors.red);
+                                            }
                                           });
-                                        } else{
-                                          Get.back();
-                                          Get.snackbar('Error', 'An error occurred');
-                                        }
-                                      });
-                                      
                                     },
                                     icon: const Icon(
                                       Icons.delete,
@@ -125,8 +137,8 @@ class _WorkExperienceState extends State<WorkExperience> {
                                   IconButton(
                                     onPressed: () {
                                       Get.to(() => UpdateWorkExperience(
-                                        kycScore: widget.kycScore,
-                                        kycTotal: widget.kycTotal,
+                                            kycScore: widget.kycScore,
+                                            kycTotal: widget.kycTotal,
                                             isNewWork: false,
                                             workExperience: experience[i],
                                           ));
@@ -144,15 +156,10 @@ class _WorkExperienceState extends State<WorkExperience> {
                       AppButton(
                         title: 'Add new work experience',
                         onPressed: () async {
-                       
-                 await Get.to(() =>
-                            UpdateWorkExperience(
+                          await Get.to(() => UpdateWorkExperience(
                               kycScore: widget.kycScore,
                               kycTotal: widget.kycTotal,
                               isNewWork: true));
-                        
-                          
-                        
                         },
                       )
                     ],

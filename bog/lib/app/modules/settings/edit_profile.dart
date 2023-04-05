@@ -255,14 +255,17 @@ class _EditProfileState extends State<EditProfile> {
                                       Get.snackbar('Success',
                                           'Profile Updated Successfully',
                                           backgroundColor:
-                                              AppColors.successGreen);
+                                              AppColors.successGreen,
+                                          colorText: AppColors.background);
                                     } else {
                                       Get.snackbar('Error', 'An error occurred',
-                                          backgroundColor: Colors.red);
+                                          backgroundColor: Colors.red,
+                                          colorText: AppColors.background);
                                     }
                                   } else {
                                     Get.snackbar('Error', 'An error occurred',
-                                        backgroundColor: Colors.red);
+                                        backgroundColor: Colors.red,
+                                        colorText: AppColors.background);
                                   }
                                 }
                               },

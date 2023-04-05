@@ -3,6 +3,7 @@ import 'package:bog/app/data/model/client_project_model.dart';
 import 'package:bog/app/data/providers/api_response.dart';
 import 'package:bog/app/global_widgets/app_base_view.dart';
 import 'package:bog/app/global_widgets/app_loader.dart';
+import 'package:bog/app/global_widgets/new_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -35,27 +36,29 @@ class _ViewFormPageState extends State<ViewFormPage> {
     double multiplier = 25 * size.height * 0.01;
     return AppBaseView(
         child: Scaffold(
-      appBar: AppBar(
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(1),
-          child: Divider(
-            color: AppColors.grey.withOpacity(0.3),
-          ),
-        ),
-        title: Text(
-          "Project Form",
-          style: AppTextStyle.subtitle1.copyWith(
-              fontSize: multiplier * 0.07,
-              color: Colors.black,
-              fontWeight: FontWeight.w600),
-          textAlign: TextAlign.center,
-        ),
-        leading: IconButton(
-            onPressed: () {
-              Get.back();
-            },
-            icon: const Icon(Icons.arrow_back_ios_new_outlined)),
-      ),
+      appBar: newAppBarBack(context, 'Project Form'),
+
+      //  AppBar(
+      //   bottom: PreferredSize(
+      //     preferredSize: const Size.fromHeight(1),
+      //     child: Divider(
+      //       color: AppColors.grey.withOpacity(0.3),
+      //     ),
+      //   ),
+      //   title: Text(
+      //     "Project Form",
+      //     style: AppTextStyle.subtitle1.copyWith(
+      //         fontSize: multiplier * 0.07,
+      //         color: Colors.black,
+      //         fontWeight: FontWeight.w600),
+      //     textAlign: TextAlign.center,
+      //   ),
+      //   leading: IconButton(
+      //       onPressed: () {
+      //         Get.back();
+      //       },
+      //       icon: const Icon(Icons.arrow_back_ios_new_outlined)),
+      // ),
       body: FutureBuilder<ApiResponse>(
           future: getFormDetails,
           builder: (ctx, snapshot) {
@@ -78,37 +81,40 @@ class _ViewFormPageState extends State<ViewFormPage> {
                                 child: Text(
                                   projectData[i].serviceForm!.label!,
                                   style: AppTextStyle.subtitle1.copyWith(
+                                      fontSize: multiplier * 0.06,
                                       color: Colors.black,
-                                      fontWeight: FontWeight.bold),
+                                      fontWeight: FontWeight.w600),
                                   maxLines: 2,
                                 ),
                               ),
                               const SizedBox(width: 10),
                               SizedBox(
                                 width: Get.width * 0.5,
-                                child:
-                                    projectData[i].serviceForm!.label == 'PHOTO' ||  projectData[i].serviceForm!.label == 'PASSPORT'
-                                        ? Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: SizedBox(
+                                child: projectData[i].serviceForm!.label ==
+                                            'PHOTO' ||
+                                        projectData[i].serviceForm!.label ==
+                                            'PASSPORT'
+                                    ? Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: SizedBox(
+                                          height: Get.width * 0.25,
+                                          width: Get.width * 0.25,
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(12),
+                                            child: Image.network(
+                                              projectData[i].value!,
                                               height: Get.width * 0.25,
                                               width: Get.width * 0.25,
-                                              child: ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(12),
-                                                child: Image.network(
-                                                  projectData[i].value!,
-                                                  height: Get.width * 0.25,
-                                                  width: Get.width * 0.25,
-                                                  fit: BoxFit.cover,
-                                                ),
-                                              ),
+                                              fit: BoxFit.cover,
                                             ),
-                                          )
-                                        : Text(
-                                            projectData[i].value!,
-                                            maxLines: 2,
                                           ),
+                                        ),
+                                      )
+                                    : Text(
+                                        projectData[i].value!,
+                                        maxLines: 2,
+                                      ),
                               )
                             ],
                           ),

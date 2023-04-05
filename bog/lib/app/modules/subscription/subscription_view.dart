@@ -62,21 +62,24 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
           "userType": userType
         });
         if (res.isSuccessful) {
-         final userDetails = UserDetailsModel.fromJson(jsonDecode(MyPref.userDetails.val));
-         userDetails.profile!.hasActiveSubscription = true;
+          final userDetails =
+              UserDetailsModel.fromJson(jsonDecode(MyPref.userDetails.val));
+          userDetails.profile!.hasActiveSubscription = true;
           MyPref.userDetails.val = jsonEncode(userDetails);
           Get.back();
           Get.snackbar('Success', 'Subscription made successfully',
-              backgroundColor: AppColors.successGreen);
-              MyPref.setSubscribeOverlay.val = false;
+              backgroundColor: AppColors.successGreen,
+              colorText: AppColors.background);
+          MyPref.setSubscribeOverlay.val = false;
         } else {
           Get.snackbar('Error',
               res.message ?? 'An error occurred, please try again later',
-              backgroundColor: Colors.red);
+              backgroundColor: Colors.red, colorText: AppColors.background);
         }
       });
     } else {
-      Get.snackbar('Error', response.message, backgroundColor: Colors.red);
+      Get.snackbar('Error', response.message,
+          backgroundColor: Colors.red, colorText: AppColors.background);
     }
   }
 
@@ -144,7 +147,8 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                                           true) {
                                         Get.snackbar('Error',
                                             '“Your KYC is not verified by Admin, please try Subscribing later',
-                                            backgroundColor: Colors.red);
+                                            backgroundColor: Colors.red,
+                                            colorText: AppColors.background);
                                       } else {
                                         checkout(
                                             planId: subscription.id ?? '',

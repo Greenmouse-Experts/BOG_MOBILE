@@ -22,9 +22,10 @@ import '../../global_widgets/pdf_page_viewer.dart';
 import '../../global_widgets/photo_view_page.dart';
 
 class UploadDocuments extends StatefulWidget {
-    final Map<String, dynamic> kycScore;
+  final Map<String, dynamic> kycScore;
   final Map<String, dynamic> kycTotal;
-  const UploadDocuments({super.key, required this.kycScore, required this.kycTotal});
+  const UploadDocuments(
+      {super.key, required this.kycScore, required this.kycTotal});
 
   @override
   State<UploadDocuments> createState() => _UploadDocumentsState();
@@ -51,9 +52,6 @@ class _UploadDocumentsState extends State<UploadDocuments> {
   TextEditingController operationalController = TextEditingController();
   TextEditingController vendorsController = TextEditingController();
 
-
-
-
   TextEditingController companyProfileController1 = TextEditingController();
   TextEditingController organizationalChartController1 =
       TextEditingController();
@@ -73,11 +71,11 @@ class _UploadDocumentsState extends State<UploadDocuments> {
   TextEditingController vendorsController1 = TextEditingController();
 
   int countNonEmptyControllers(List<TextEditingController> controllers) {
+    List<TextEditingController> nonEmptyControllers =
+        controllers.where((controller) => controller.text.isNotEmpty).toList();
 
-  List<TextEditingController> nonEmptyControllers = controllers.where((controller) => controller.text.isNotEmpty).toList();
-
-  return nonEmptyControllers.length;
-}
+    return nonEmptyControllers.length;
+  }
 
   ReadDocumentModel? companyProfile1;
   ReadDocumentModel? orgChart1;
@@ -508,34 +506,52 @@ class _UploadDocumentsState extends State<UploadDocuments> {
                                     ));
                                   }
                                 }
-                                  List<TextEditingController> countControllers = [companyProfileController,organizationalChartController,cORController,cACController,meOAController,hseController,qMPController,taxClearanceCertController ,vatRegCertController,companyStatementController ,referenceFromBankController ,nsitfController ,mdPassPortController ,financeAuditController,operationalController,vendorsController];
-                                  final kycScore = widget.kycScore;
+                                List<TextEditingController> countControllers = [
+                                  companyProfileController,
+                                  organizationalChartController,
+                                  cORController,
+                                  cACController,
+                                  meOAController,
+                                  hseController,
+                                  qMPController,
+                                  taxClearanceCertController,
+                                  vatRegCertController,
+                                  companyStatementController,
+                                  referenceFromBankController,
+                                  nsitfController,
+                                  mdPassPortController,
+                                  financeAuditController,
+                                  operationalController,
+                                  vendorsController
+                                ];
+                                final kycScore = widget.kycScore;
 
-                                  final newCount = countNonEmptyControllers(countControllers);
-                             
-                           
+                                final newCount =
+                                    countNonEmptyControllers(countControllers);
 
-                                kycScore['uploadDocument'] = formData.fields.length + newCount - 1;
-                                 final updateAccount = await controller
-                                        .userRepo
-                                        .patchData('/user/update-account', {
-                                    "kycScore": jsonEncode(kycScore),
-                                    "kycTotal": jsonEncode(widget.kycTotal)
-                                  });
+                                kycScore['uploadDocument'] =
+                                    formData.fields.length + newCount - 1;
+                                final updateAccount = await controller.userRepo
+                                    .patchData('/user/update-account', {
+                                  "kycScore": jsonEncode(kycScore),
+                                  "kycTotal": jsonEncode(widget.kycTotal)
+                                });
                                 var response = await Api().postData(
                                     "/kyc-documents/create",
                                     body: formData,
                                     hasHeader: true);
-                                if (response.isSuccessful && updateAccount.isSuccessful) {
+                                if (response.isSuccessful &&
+                                    updateAccount.isSuccessful) {
                                   MyPref.setOverlay.val = false;
-                                    AppOverlay.successOverlay(
-                                          message:
-                                              'Documents Uploaded Successfully');
+                                  AppOverlay.successOverlay(
+                                      message:
+                                          'Documents Uploaded Successfully');
                                 } else {
                                   Get.snackbar('Error', 'An error occurred',
-                                      backgroundColor: Colors.red);
+                                      backgroundColor: Colors.red,
+                                      colorText: AppColors.background);
                                 }
-                             },
+                              },
                             )
                           ],
                         ),
@@ -581,7 +597,8 @@ class DocButton extends StatelessWidget {
                 Get.to(() => PdfViewerPage(path: file));
               } else {
                 Get.snackbar('Error', 'File type not supported currently',
-                    backgroundColor: Colors.red);
+                    backgroundColor: Colors.red,
+                    colorText: AppColors.background);
               }
             },
             style: TextButton.styleFrom(

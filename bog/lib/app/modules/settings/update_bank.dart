@@ -235,16 +235,21 @@ class _UpdateBankState extends State<UpdateBank> {
                                       Get.back();
                                       Get.snackbar("Success",
                                           "Bank Details Added Successfully",
-                                          backgroundColor: Colors.green);
+                                          backgroundColor: Colors.green,
+                                          colorText: AppColors.background);
                                     } else {
                                       if (response.message != null) {
-                                        Get.snackbar("Error",
-                                            response.message.toString(),
-                                            backgroundColor: Colors.red);
+                                        Get.snackbar(
+                                            "Error",
+                                            response.message ??
+                                                'An error occurred',
+                                            backgroundColor: Colors.red,
+                                            colorText: AppColors.background);
                                       } else {
                                         Get.snackbar("Error",
                                             "Something went wrong, please try again",
-                                            backgroundColor: Colors.red);
+                                            backgroundColor: Colors.red,
+                                            colorText: AppColors.background);
                                       }
                                     }
                                   }

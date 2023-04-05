@@ -11,6 +11,7 @@ import 'package:bog/app/global_widgets/new_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_styles.dart';
@@ -47,6 +48,7 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
   late Future<ApiResponse> getAvailableProjects;
   late Future<ApiResponse> getServiceProjects;
   late Future<ApiResponse> getOrderRequests;
+  late String userId;
 
   TextEditingController projectUpdateController = TextEditingController();
 
@@ -59,6 +61,7 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
     super.initState();
     final controller = Get.find<HomeController>();
     var logInDetails = LogInModel.fromJson(jsonDecode(MyPref.logInDetail.val));
+    userId = logInDetails.profile!.id!;
     final userType = controller.currentType == 'Client'
         ? 'private_client'
         : 'corporate_client';
@@ -269,130 +272,104 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
                                       ],
                                     ),
                                   );
+                                } else {
+                                  final postsToUse = posts
+                                      .where((post) => post.title
+                                          .toString()
+                                          .toLowerCase()
+                                          .contains(search.toLowerCase()))
+                                      .toList();
+
+                                  List<String> dropDownItem = [
+                                    'All',
+                                    'Pending',
+                                    'Ongoing',
+                                    'Completed'
+                                  ];
+
+                                  final approvedProjects = getProjectsByStatus(
+                                      'approved', postsToUse);
+                                  final pendingProjects = getProjectsByStatus(
+                                      'pending', postsToUse);
+                                  final inReviewProjects = getProjectsByStatus(
+                                      'in_review', postsToUse);
+                                  final cancelledProjects =
+                                      getProjectsByCustomerStatus(
+                                          'completed', postsToUse);
+                                  final allPendingProjects = [
+                                    ...pendingProjects,
+                                    ...inReviewProjects,
+                                  ];
+
+                                  allPendingProjects.sort((a, b) =>
+                                      a.createdAt!.compareTo(b.createdAt!));
+                                  final newAllPendingProjects =
+                                      allPendingProjects.reversed.toList();
+
+                                  List<Widget> contents = <Widget>[
+                                    getAllProjects(
+                                      postsToUse,
+                                      controller,
+                                    ),
+                                    getAllProjects(
+                                      newAllPendingProjects,
+                                      controller,
+                                    ),
+                                    getGroupedProjects(
+                                        approvedProjects, controller,
+                                        isPending: false,
+                                        isOngoing: true,
+                                        inReview: false),
+                                    getGroupedProjects(
+                                        cancelledProjects, controller,
+                                        isPending: false,
+                                        isOngoing: true,
+                                        inReview: false)
+                                  ].obs;
+                                  prods = contents[0];
+                                  return Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Column(
+                                      children: [
+                                        PageDropButton(
+                                          onChanged: (val) {
+                                            setState(() {
+                                              final index = dropDownItem
+                                                  .indexWhere((element) =>
+                                                      element == val);
+                                              contentIndex.value = index;
+                                              prods = contents[index];
+                                            });
+                                          },
+                                          label: '',
+                                          hint: 'Status',
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 10),
+                                          value: dropDownItem.first,
+                                          items: dropDownItem.map((value) {
+                                            return DropdownMenuItem<String>(
+                                              value: value,
+                                              child: Text(value),
+                                            );
+                                          }).toList(),
+                                        ),
+                                        const SizedBox(height: 10),
+                                        SizedBox(
+                                          height: Get.height * 0.72,
+                                          child: ListView.builder(
+                                              scrollDirection: Axis.vertical,
+                                              padding: const EdgeInsets.all(0),
+                                              itemCount: contents.length,
+                                              itemBuilder: (context, i) {
+                                                return contentIndex.value == i
+                                                    ? contents[i]
+                                                    : const SizedBox.shrink();
+                                              }),
+                                        )
+                                      ],
+                                    ),
+                                  );
                                 }
-
-                                final postsToUse = posts
-                                    .where((post) => post.title
-                                        .toString()
-                                        .toLowerCase()
-                                        .contains(search.toLowerCase()))
-                                    .toList();
-
-                                List<Tab> tabs = [
-                                  const Tab(
-                                    child: Text('All'),
-                                  ),
-                                  const Tab(child: Text('Pending')),
-                                  const Tab(child: Text('Ongoing')),
-                                  const Tab(child: Text('Completed'))
-                                ];
-
-                                List<String> dropDownItem = [
-                                  'All',
-                                  'Pending',
-                                  'Ongoing',
-                                  'Completed'
-                                ];
-
-                                final approvedProjects =
-                                    getProjectsByStatus('approved', postsToUse);
-                                final pendingProjects =
-                                    getProjectsByStatus('pending', postsToUse);
-                                final inReviewProjects = getProjectsByStatus(
-                                    'in_review', postsToUse);
-                                final cancelledProjects =
-                                    getProjectsByCustomerStatus(
-                                        'completed', postsToUse);
-                                final allPendingProjects = [
-                                  ...pendingProjects,
-                                  ...inReviewProjects,
-                                ];
-
-                                allPendingProjects.sort((a, b) =>
-                                    a.createdAt!.compareTo(b.createdAt!));
-                                final newAllPendingProjects =
-                                    allPendingProjects.reversed.toList();
-
-                                List<Widget> contents = [
-                                  getAllProjects(
-                                    postsToUse,
-                                    controller,
-                                  ),
-                                  getAllProjects(
-                                    newAllPendingProjects,
-                                    controller,
-                                  ),
-                                  getGroupedProjects(
-                                      approvedProjects, controller,
-                                      isPending: false,
-                                      isOngoing: true,
-                                      inReview: false),
-                                  getGroupedProjects(
-                                      cancelledProjects, controller,
-                                      isPending: false,
-                                      isOngoing: true,
-                                      inReview: false)
-                                ].obs;
-
-                                prods = contents[0];
-                                return SizedBox(
-                                    height: Get.height * 0.8,
-                                    //     child: Padding(
-                                    //       padding: const EdgeInsets.all(8),
-                                    //       child: Column(
-                                    //         children: [
-                                    //           PageDropButton(
-                                    //             onChanged: (val) {
-                                    //               setState(() {
-                                    //                 final index = dropDownItem.indexWhere(
-                                    //                     (element) => element == val);
-                                    //                 contentIndex.value = index;
-                                    //                 prods = contents[index];
-                                    //               });
-                                    //             },
-                                    //             label: '',
-                                    //             hint: 'Status',
-                                    //             padding: const EdgeInsets.symmetric(
-                                    //                 horizontal: 10),
-                                    //             value: dropDownItem.first,
-                                    //             items: dropDownItem.map((value) {
-                                    //               return DropdownMenuItem<String>(
-                                    //                 value: value,
-                                    //                 child: Text(value.toString()),
-                                    //               );
-                                    //             }).toList(),
-                                    //           ),
-                                    //           const SizedBox(height: 10),
-                                    //           ListView.builder(
-                                    //               shrinkWrap: true,
-                                    //               physics:
-                                    //                   const NeverScrollableScrollPhysics(),
-                                    //               itemCount: contents.length,
-                                    //               itemBuilder: (context, i) {
-                                    //                 return
-                                    //                     //contentIndex.value == i
-                                    //                     //      ?
-                                    //                     contents[i];
-                                    //                 //   : const SizedBox.shrink();
-                                    //               })
-                                    //         ],
-                                    //       ),
-                                    //     )
-
-                                    child: VerticalTabs(
-                                        backgroundColor:
-                                            AppColors.backgroundVariant2,
-                                        tabBackgroundColor:
-                                            AppColors.backgroundVariant2,
-                                        indicatorColor: AppColors.primary,
-                                        tabsShadowColor:
-                                            AppColors.backgroundVariant2,
-                                        tabsWidth: Get.width * 0.25,
-                                        initialIndex: 0,
-                                        tabs: tabs,
-                                        contents: contents));
-
-                                //getGroupedProjects(postsToUse);
                               } else if (savedPosts.isNotEmpty) {
                                 final posts = savedPosts;
                                 if (posts.isEmpty) {
@@ -707,31 +684,43 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
                                                                           .projectTypes
                                                                           ?.capitalizeFirst ??
                                                                       '',
-                                                                  style: AppTextStyle.caption.copyWith(
-                              color: Colors.black,
-                              fontSize: Get.width * 0.035,
-                              fontWeight: FontWeight.w600,
-                            ),
-                                                                  
-                                                              
+                                                                  style: AppTextStyle
+                                                                      .caption
+                                                                      .copyWith(
+                                                                    color: Colors
+                                                                        .black,
+                                                                    fontSize:
+                                                                        Get.width *
+                                                                            0.035,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600,
+                                                                  ),
                                                                 ),
                                                                 SizedBox(
                                                                     width: Get
                                                                             .width *
                                                                         0.03),
                                                                 Text(
-                                                                  '${serviceProjects[i].progress!} %',
-                                                                  style: AppTextStyle.caption.copyWith(
-                              color: serviceProjects[i].progress! < 50
-                                                                          ? Colors.red
-                                                                          : serviceProjects[i].progress! < 70
-                                                                              ? AppColors.serviceYellow
-                                                                              : Colors.green,
-                              fontSize: Get.width * 0.035,
-                              fontWeight: FontWeight.w600,
-                            ),
-                                                                  
-                                                               
+                                                                  '${serviceProjects[i].servicePartnerProgress!} %',
+                                                                  style: AppTextStyle
+                                                                      .caption
+                                                                      .copyWith(
+                                                                    color: serviceProjects[i].servicePartnerProgress! <
+                                                                            50
+                                                                        ? Colors
+                                                                            .red
+                                                                        : serviceProjects[i].servicePartnerProgress! <
+                                                                                70
+                                                                            ? AppColors.serviceYellow
+                                                                            : Colors.green,
+                                                                    fontSize:
+                                                                        Get.width *
+                                                                            0.035,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600,
+                                                                  ),
                                                                 )
                                                               ],
                                                             ),
@@ -741,13 +730,21 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
                                                                       .projectSlug
                                                                       ?.capitalizeFirst ??
                                                                   ''),
-                                                              style:  AppTextStyle.caption.copyWith(
-                          color: Colors.black.withOpacity(0.6),
-                          fontSize: Get.width * 0.033,
-                          fontWeight: FontWeight.w500,
-                        ),
-                                                              
-                                                              
+                                                              style:
+                                                                  AppTextStyle
+                                                                      .caption
+                                                                      .copyWith(
+                                                                color: Colors
+                                                                    .black
+                                                                    .withOpacity(
+                                                                        0.6),
+                                                                fontSize:
+                                                                    Get.width *
+                                                                        0.033,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500,
+                                                              ),
                                                             ),
                                                             trailing:
                                                                 PopupMenuButton(
@@ -789,7 +786,7 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
                                                                                   content: 'Drag the progress bar to match your project progress',
                                                                                   onPressed: () async {
                                                                                     if (projectUpdateController.text.isEmpty) {
-                                                                                      Get.snackbar('Error', 'Put a valid value', backgroundColor: Colors.red);
+                                                                                      Get.snackbar('Error', 'Put a valid value', backgroundColor: Colors.red, colorText: AppColors.background);
                                                                                     }
                                                                                     final response = await controller.userRepo.putData('/projects/progress/${serviceProjects[i].serviceProviderId}/${serviceProjects[i].id}', {
                                                                                       "percent": projectUpdateController.text,
@@ -804,11 +801,7 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
                                                                                       );
                                                                                       projectUpdateController.text = '';
                                                                                     } else {
-                                                                                      Get.snackbar(
-                                                                                        'Error',
-                                                                                        response.message ?? 'An error occurred',
-                                                                                        backgroundColor: Colors.red,
-                                                                                      );
+                                                                                      Get.snackbar('Error', response.message ?? 'An error occurred', backgroundColor: Colors.red, colorText: AppColors.background);
                                                                                       projectUpdateController.text = '';
                                                                                     }
                                                                                   });
@@ -841,6 +834,7 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
                                                           (BuildContext context,
                                                               int index) {
                                                         return ServiceRequestItem(
+                                                          userId: userId,
                                                           id: availableProjects[
                                                                       index]
                                                                   .projectId ??
@@ -902,25 +896,7 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
               floatingActionButton:
                   controller.currentType == "Product Partner" ||
                           controller.currentType == "Service Partner"
-                      ? FloatingActionButton(
-                          onPressed: () {
-                            //Get.toNamed(Create.route);
-                          },
-                          backgroundColor: AppColors.primary,
-                          child: Stack(
-                            children: [
-                              SizedBox(
-                                width: Get.width * 0.05,
-                                height: Get.width * 0.05,
-                                child: Image.asset(
-                                  "assets/images/Group 46942.png",
-                                  fit: BoxFit.contain,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ],
-                          ),
-                        )
+                      ? null
                       : FloatingActionButton(
                           onPressed: () {
                             Get.toNamed(Create.route);
@@ -946,58 +922,83 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
   }
 
   Widget getGroupedProjects(
-      List<MyProjects> postsToUse, HomeController controller,
+      List<MyProjects> postsToUseHere, HomeController controller,
       {required bool isPending,
       required bool isOngoing,
       required bool inReview}) {
-    return postsToUse.isEmpty
-        ? const Center(
-            child: Text('No Projects Available'),
-          )
-        : Padding(
-            padding: const EdgeInsets.only(left: 8, right: 8),
-            child: ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: postsToUse.length,
-                itemBuilder: (ctx, i) {
-                  return MyProjectWidget(
-                    inReview: inReview,
-                    isCancelled: false,
-                    isOngoing: isOngoing,
-                    isPending: isPending,
-                    id: postsToUse[i].id ?? '',
-                    controller: controller,
-                    projectType: postsToUse[i].projectTypes ?? '',
-                    orderSlug: postsToUse[i].projectSlug ?? '',
-                  );
-                }));
+    final postsToUse = postsToUseHere.obs;
+    return Obx(() {
+      return postsToUse.isEmpty
+          ? SizedBox(
+              height: Get.height * 0.7,
+              child: const Center(
+                child: Text('No Projects Available'),
+              ),
+            )
+          : Padding(
+              padding: const EdgeInsets.only(left: 8, right: 8),
+              child: ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: postsToUse.length,
+                  itemBuilder: (ctx, i) {
+                    return MyProjectWidget(
+                      index: i,
+                      delete: (index) {
+                        postsToUse.removeAt(index);
+                        controller.update();
+                      },
+                      inReview: inReview,
+                      isCancelled: false,
+                      isOngoing: isOngoing,
+                      isPending: isPending,
+                      id: postsToUse[i].id ?? '',
+                      controller: controller,
+                      projectType: postsToUse[i].projectTypes ?? '',
+                      orderSlug: postsToUse[i].projectSlug ?? '',
+                    );
+                  }));
+    });
   }
 
   Widget getAllProjects(
-    List<MyProjects> postsToUse,
+    List<MyProjects> postsToUseHere,
     HomeController controller,
   ) {
-    return postsToUse.isEmpty
-        ? const Center(
-            child: Text('No Projects Available'),
-          )
-        : Padding(
-            padding: const EdgeInsets.only(left: 8, right: 8),
-            child: ListView.builder(
-                itemCount: postsToUse.length,
-                itemBuilder: (ctx, i) {
-                  return MyProjectWidget(
-                    inReview: postsToUse[i].approvalStatus == 'in_review',
-                    isCancelled: postsToUse[i].approvalStatus == 'disapproved',
-                    isOngoing: postsToUse[i].approvalStatus == 'approved',
-                    isPending: postsToUse[i].approvalStatus == 'pending',
-                    id: postsToUse[i].id ?? '',
-                    controller: controller,
-                    projectType: postsToUse[i].projectTypes ?? '',
-                    orderSlug: postsToUse[i].projectSlug ?? '',
-                  );
-                }));
+    final postsToUse = postsToUseHere.obs;
+    return Obx(() {
+      return postsToUse.isEmpty
+          ? SizedBox(
+              height: Get.height * 0.7,
+              child: const Center(
+                child: Text('No Projects Available'),
+              ),
+            )
+          : Padding(
+              padding: const EdgeInsets.only(left: 8, right: 8),
+              child: ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: postsToUse.length,
+                  itemBuilder: (ctx, i) {
+                    return MyProjectWidget(
+                      index: i,
+                      delete: (index) {
+                        postsToUse.removeAt(index);
+                        controller.update();
+                      },
+                      inReview: postsToUse[i].approvalStatus == 'in_review',
+                      isCancelled:
+                          postsToUse[i].approvalStatus == 'disapproved',
+                      isOngoing: postsToUse[i].approvalStatus == 'approved',
+                      isPending: postsToUse[i].approvalStatus == 'pending',
+                      id: postsToUse[i].id ?? '',
+                      controller: controller,
+                      projectType: postsToUse[i].projectTypes ?? '',
+                      orderSlug: postsToUse[i].projectSlug ?? '',
+                    );
+                  }));
+    });
   }
 
   List<TextSpan> highlightOccurrences(String source, String query) {

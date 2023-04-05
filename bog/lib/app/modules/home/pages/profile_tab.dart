@@ -137,11 +137,11 @@ class ProfileTab extends StatelessWidget {
                     },
                     imageAsset: "assets/images/kyc.png",
                   ),
-                 if (controller.currentType == "Product Partner" ||
+                if (controller.currentType == "Product Partner" ||
                     controller.currentType == "Service Partner")
-                const SizedBox(
-                  height: kToolbarHeight / 3,
-                ),
+                  const SizedBox(
+                    height: kToolbarHeight / 3,
+                  ),
                 if (controller.currentType == "Product Partner" ||
                     controller.currentType == "Service Partner")
                   _TextButton(
@@ -153,7 +153,8 @@ class ProfileTab extends StatelessWidget {
                       if (userDetails.profile!.hasActiveSubscription == true) {
                         Get.snackbar(
                             'Error', 'You already have an active subscription',
-                            backgroundColor: Colors.red);
+                            backgroundColor: Colors.red,
+                            colorText: AppColors.background);
                       } else {
                         Get.to(() => const SubscriptionScreen());
                       }

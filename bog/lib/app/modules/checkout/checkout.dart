@@ -158,7 +158,8 @@ class _CheckoutState extends State<Checkout> {
         },
       );
     } else {
-     Get.snackbar('Error', 'An error occurred');
+      Get.snackbar('Error', 'An error occurred',
+          colorText: AppColors.background, backgroundColor: Colors.red);
     }
   }
 

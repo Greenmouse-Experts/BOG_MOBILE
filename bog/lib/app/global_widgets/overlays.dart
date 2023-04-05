@@ -1,23 +1,40 @@
+import 'package:bog/app/controllers/home_controller.dart';
 import 'package:bog/app/global_widgets/app_date_picker.dart';
-import 'package:bog/app/global_widgets/app_input.dart';
+
 import 'package:bog/app/global_widgets/app_radio_button.dart';
 import 'package:bog/app/global_widgets/global_widgets.dart';
+import 'package:bog/app/global_widgets/page_dropdown.dart';
 import 'package:bog/app/global_widgets/update_slider.dart';
 import 'package:bog/app/modules/switch/switch.dart';
 
 import 'package:flutter/material.dart';
+import 'package:form_field_validator/form_field_validator.dart';
 import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:scroll_indicator/scroll_indicator.dart';
 
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_styles.dart';
 import '../data/providers/my_pref.dart';
 import '../modules/subscription/subscription_view.dart';
-import 'app_button.dart';
+
 import 'confirm_logout.dart';
 
 final options = ['Yes', 'No'];
+final interestOptions = [
+  'Quantity Surveyor',
+  'Architect',
+  'Structural Engineer',
+  'Electrical Engineer',
+  'Mechanical Engineer',
+  'Contractor'
+];
+String chosenInterest = '';
+String reasonOfInterest = '';
+
+final _interestKey = GlobalKey<FormState>();
+
+TextEditingController bestPriceController = TextEditingController();
+TextEditingController timeLineController = TextEditingController();
 final ScrollController scrollController = ScrollController();
 
 class AppOverlay {
@@ -291,119 +308,187 @@ class AppOverlay {
   static void showAcceptFormDialog(
       {required String title,
       bool? doubleFunction,
+      required String userId,
       Function()? onPressed,
+      required String projectId,
       String? buttonText}) {
     showDialog(
       context: Get.context!,
-      builder: (context) => Material(
-        elevation: 10,
-        color: Colors.black.withOpacity(0.2),
-        child: IntrinsicHeight(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                width: Get.width,
-                padding: const EdgeInsets.symmetric(
-                  vertical: 15,
-                  horizontal: 20,
-                ),
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(6),
-                  color: Colors.white,
-                ),
-                child: SizedBox(
-                  height: Get.height * 0.6,
-                  child: Scrollbar(
-                    controller: scrollController,
-                    trackVisibility: true,
-                    thumbVisibility: true,
-                    child: ListView(
+      builder: (context) => WillPopScope(
+        onWillPop: () async {
+          chosenInterest = '';
+          reasonOfInterest = '';
+          bestPriceController.clear();
+          timeLineController.clear();
+          return true;
+        },
+        child: Material(
+          elevation: 10,
+          color: Colors.black.withOpacity(0.2),
+          child: IntrinsicHeight(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  width: Get.width * 0.9,
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 15,
+                    horizontal: 20,
+                  ),
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(6),
+                    color: Colors.white,
+                  ),
+                  child: SizedBox(
+                    height: Get.height * 0.75,
+                    child: Scrollbar(
                       controller: scrollController,
-                      children: [
-                        Text(
-                          'Request Meeting',
-
-                          // textAlign: TextAlign.center,
-                          style: Get.textTheme.bodyText1!.copyWith(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 17 * Get.textScaleFactor * 0.90,
-                              color: Colors.black),
-                        ),
-                        SizedBox(height: Get.height * 0.01),
-                        Text(
-                          'With the details contained in the view form, fill and submit the document below to show interest.',
-
-                          // textAlign: TextAlign.center,
-                          style: Get.textTheme.bodyText1!.copyWith(
-                              fontSize: 14 * Get.textScaleFactor,
-                              color: Colors.black),
-                        ),
-                        const SizedBox(height: 11),
-                        AppRadioButton(
-                            options: options,
-                            label: '1. Are you interested in this project',
-                            option1: 'Yes',
-                            onchanged: (value) {}),
-                        PageInput(
-                          hint: '',
-                          label:
-                              '2. What is your best price for rendering your service on this project',
-                          keyboardType: TextInputType.number,
-                          textWidth: 0.6,
-                        ),
-                        PageInput(
-                          hint: '',
-                          label:
-                              '3. How soon can you deliver this project? (Give us answer in weeks)',
-                          keyboardType: TextInputType.number,
-                          textWidth: 0.6,
-                        ),
-                        AppRadioButton(
-                            options: options,
-                            label: '4. What is your interest on this project',
-                            option1: 'Quantity Surveyor',
-                            onchanged: (value) {}),
-                        // ScrollIndicator(scrollController: scrollController, ),
-                        const SizedBox(height: 22),
-                        SizedBox(
-                          width: double.infinity,
-                          child: doubleFunction != null && doubleFunction
-                              ? Row(
-                                  children: [
-                                    Expanded(
-                                      child: AppButton(
-                                        title: 'No',
-                                        onPressed: () {
+                      trackVisibility: true,
+                      thumbVisibility: true,
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 6.0),
+                        child: Form(
+                          key: _interestKey,
+                          child: ListView(
+                            controller: scrollController,
+                            children: [
+                              SizedBox(
+                                child: Text(
+                                  'Project Interest Form',
+                                  style: Get.textTheme.bodyText1!.copyWith(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 17 * Get.textScaleFactor * 0.90,
+                                      color: Colors.black),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                              SizedBox(height: Get.height * 0.01),
+                              Text(
+                                'With the details contained in the form below, fill and submit the document to show interest.',
+                                textAlign: TextAlign.center,
+                                style: AppTextStyle.bodyText2.copyWith(
+                                    fontSize: 14 * Get.textScaleFactor,
+                                    color: Colors.black),
+                              ),
+                              const SizedBox(height: 11),
+                              NewAppRadioButton(
+                                  options: options,
+                                  label:
+                                      '1. Are you interested in this project',
+                                  option1: '',
+                                  onchanged: (value) {
+                                    chosenInterest = value;
+                                  }),
+                              SizedBox(height: Get.height * 0.01),
+                              PageInput(
+                                validator: MinLengthValidator(4,
+                                    errorText: 'Enter a valid price'),
+                                hint: '',
+                                label:
+                                    '2. What is your best price for rendering your service on this project',
+                                keyboardType: TextInputType.number,
+                                textWidth: 0.6,
+                                controller: bestPriceController,
+                              ),
+                              SizedBox(height: Get.height * 0.01),
+                              PageInput(
+                                validator: MinLengthValidator(1,
+                                    errorText: 'Enter a valid timeline'),
+                                hint: '',
+                                label:
+                                    '3. How soon can you deliver this project? (Give us answer in weeks)',
+                                keyboardType: TextInputType.number,
+                                textWidth: 0.6,
+                                controller: timeLineController,
+                              ),
+                              SizedBox(height: Get.height * 0.01),
+                              NewAppRadioButton(
+                                  options: interestOptions,
+                                  label:
+                                      '4. What is your interest on this project',
+                                  option1: '',
+                                  onchanged: (value) {
+                                    reasonOfInterest = value;
+                                  }),
+                              const SizedBox(height: 22),
+                              SizedBox(
+                                width: double.infinity,
+                                child: AppButton(
+                                    title: buttonText ?? "Okay",
+                                    borderRadius: 12,
+                                    // bckgrndColor: Colors.green,
+                                    onPressed: () async {
+                                      if (chosenInterest == '' ||
+                                          chosenInterest == 'No') {
+                                        Get.snackbar('Error',
+                                            'You must be interested in this project to request',
+                                            backgroundColor: Colors.red,
+                                            colorText: AppColors.background);
+                                        return;
+                                      }
+                                      if (reasonOfInterest == '') {
+                                        Get.snackbar('Error',
+                                            'You must select a reason of interest',
+                                            backgroundColor: Colors.red,
+                                            colorText: AppColors.background);
+                                        return;
+                                      }
+                                      if (_interestKey.currentState!
+                                          .validate()) {
+                                        final controller =
+                                            Get.find<HomeController>();
+                                        final response = await controller
+                                            .userRepo
+                                            .postData('/projects/bid-project', {
+                                          'areYouInterested': true,
+                                          'deliveryTimeLine': int.parse(
+                                              timeLineController.text),
+                                          'projectCost': int.parse(
+                                              bestPriceController.text),
+                                          'projectId': projectId,
+                                          'reasonOfInterest': reasonOfInterest,
+                                          'userId': userId
+                                        });
+                                        if (response.isSuccessful) {
+                                          chosenInterest = '';
+                                          reasonOfInterest = '';
+                                          bestPriceController.clear();
+                                          timeLineController.clear();
                                           Get.back();
-                                        },
-                                      ),
-                                    ),
-                                    const SizedBox(width: 5),
-                                    Expanded(
-                                      child: AppButton(
-                                        // bckgrndColor: Colors.red,
-                                        title: buttonText ?? 'Yes',
-                                        bckgrndColor: Colors.green,
-                                        onPressed: onPressed ?? Get.back,
-                                      ),
-                                    )
-                                  ],
-                                )
-                              : AppButton(
-                                  title: buttonText ?? "Okay",
-                                  borderRadius: 100,
-                                  bckgrndColor: Colors.green,
-                                  onPressed: onPressed ?? Get.back),
+                                          Get.snackbar(
+                                              'Success',
+                                              response.message ??
+                                                  'Project bid successful',
+                                              backgroundColor: Colors.green,
+                                              colorText: AppColors.background);
+                                        } else {
+                                          chosenInterest = '';
+                                          reasonOfInterest = '';
+                                          bestPriceController.clear();
+                                          timeLineController.clear();
+                                          Get.back();
+                                          Get.snackbar(
+                                              'Error',
+                                              response.message ??
+                                                  'An error occurred',
+                                              backgroundColor: Colors.red,
+                                              colorText: AppColors.background);
+                                        }
+                                      }
+                                    }),
+                              ),
+                              const SizedBox(height: 22),
+                            ],
+                          ),
                         ),
-                      ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -411,10 +496,7 @@ class AppOverlay {
   }
 
   static void showRequestMeetingDialog(
-      {required String title,
-      bool? doubleFunction,
-      Function()? onPressed,
-      String? buttonText}) {
+      {bool? doubleFunction, Function()? onPressed, String? buttonText}) {
     showDialog(
       context: Get.context!,
       builder: (context) => Material(
@@ -426,7 +508,7 @@ class AppOverlay {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                width: Get.width * 0.8,
+                width: Get.width * 0.9,
                 padding: const EdgeInsets.symmetric(
                   vertical: 15,
                   horizontal: 20,
@@ -436,70 +518,61 @@ class AppOverlay {
                   borderRadius: BorderRadius.circular(6),
                   color: Colors.white,
                 ),
-                child: SizedBox(
-                  height: Get.height * 0.6,
-                  child: Scrollbar(
-                    controller: scrollController,
-                    trackVisibility: true,
-                    thumbVisibility: true,
-                    child: ListView(
-                      controller: scrollController,
-                      children: [
-                        Text(
-                          'Project Interest Form',
-
-                          // textAlign: TextAlign.center,
-                          style: Get.textTheme.bodyText1!.copyWith(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 17 * Get.textScaleFactor * 0.90,
-                              color: Colors.black),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(
+                      //height: Get.height * 0.6,
+                      child: Scrollbar(
+                        controller: scrollController,
+                        trackVisibility: true,
+                        thumbVisibility: true,
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 8.0),
+                          child: ListView(
+                            controller: scrollController,
+                            children: [
+                              Text(
+                                'Request Meeting',
+                                textAlign: TextAlign.center,
+                                style: Get.textTheme.bodyText1!.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 17 * Get.textScaleFactor * 0.90,
+                                    color: Colors.black),
+                              ),
+                              const SizedBox(height: 11),
+                              PageDropButton(label: '', hint: 'Project Id'),
+                              SizedBox(height: Get.height * 0.01),
+                              AppDatePicker(
+                                  label: 'Select Date',
+                                  onChanged: (onChanged) {}),
+                              SizedBox(height: Get.height * 0.01),
+                              AppTimePicker(
+                                  label: 'Select Time',
+                                  onChanged: (onChanged) {}),
+                              PageInput(
+                                hint: '',
+                                label: 'Description',
+                                keyboardType: TextInputType.number,
+                                textWidth: 0.6,
+                                controller: TextEditingController(),
+                                isTextArea: true,
+                              ),
+                              const SizedBox(height: 22),
+                              SizedBox(
+                                width: double.infinity,
+                                child: AppButton(
+                                    title: buttonText ?? "Okay",
+                                    borderRadius: 12,
+                                    onPressed: onPressed ?? Get.back),
+                              ),
+                              const SizedBox(height: 10),
+                            ],
+                          ),
                         ),
-                        const SizedBox(height: 11),
-                        AppDatePicker(
-                            label: 'Select Date', onChanged: (onChanged) {}),
-                        AppTimePicker(
-                            label: 'Select Date', onChanged: (onChanged) {}),
-                        PageInput(
-                          hint: '',
-                          label: 'Description',
-                          keyboardType: TextInputType.number,
-                          textWidth: 0.6,
-                          controller: TextEditingController(),
-                        ),
-                        const SizedBox(height: 22),
-                        SizedBox(
-                          width: double.infinity,
-                          child: doubleFunction != null && doubleFunction
-                              ? Row(
-                                  children: [
-                                    Expanded(
-                                      child: AppButton(
-                                        title: 'No',
-                                        onPressed: () {
-                                          Get.back();
-                                        },
-                                      ),
-                                    ),
-                                    const SizedBox(width: 5),
-                                    Expanded(
-                                      child: AppButton(
-                                        // bckgrndColor: Colors.red,
-                                        title: buttonText ?? 'Yes',
-                                        bckgrndColor: Colors.green,
-                                        onPressed: onPressed ?? Get.back,
-                                      ),
-                                    )
-                                  ],
-                                )
-                              : AppButton(
-                                  title: buttonText ?? "Okay",
-                                  borderRadius: 100,
-                                  bckgrndColor: Colors.green,
-                                  onPressed: onPressed ?? Get.back),
-                        ),
-                      ],
+                      ),
                     ),
-                  ),
+                  ],
                 ),
               ),
             ],

@@ -1,3 +1,4 @@
+import 'package:bog/core/theme/app_colors.dart';
 import 'package:bog/routes/app_pages.dart';
 import 'package:flutter/material.dart';
 
@@ -20,6 +21,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     //FlutterNativeSplash.remove();
     return GetMaterialApp(
+      theme: ThemeData(scaffoldBackgroundColor: AppColors.background),
       // theme: AppThemes.lightTheme,
       debugShowCheckedModeBanner: false,
       initialRoute: AppPages.initial,

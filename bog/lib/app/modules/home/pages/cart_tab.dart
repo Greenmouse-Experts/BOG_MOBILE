@@ -825,7 +825,11 @@ class OrderRequestItem extends StatelessWidget {
   final String price;
   final String name;
   const OrderRequestItem({
-    Key? key, required this.orderSlug, required this.quantity, required this.price, required this.name,
+    Key? key,
+    required this.orderSlug,
+    required this.quantity,
+    required this.price,
+    required this.name,
   }) : super(key: key);
 
   @override
@@ -960,11 +964,13 @@ class ServiceRequestItem extends StatelessWidget {
   final String projectId;
   final String location;
   final String id;
+  final String userId;
   const ServiceRequestItem({
     Key? key,
     required this.projectId,
     required this.location,
     required this.id,
+    required this.userId,
   }) : super(key: key);
 
   @override
@@ -1047,8 +1053,13 @@ class ServiceRequestItem extends StatelessWidget {
                 width: Get.width * 0.4,
                 child: AppButton(
                   title: "Decline",
-                  onPressed: (){
-                    AppOverlay.showInfoDialog(title: 'Confirm', content: 'Are you sure you want to decline this project', doubleFunction: true, buttonText: 'Continue');
+                  onPressed: () {
+                    AppOverlay.showInfoDialog(
+                        title: 'Confirm',
+                        content:
+                            'Are you sure you want to decline this project',
+                        doubleFunction: true,
+                        buttonText: 'Continue');
                   },
                   padding: const EdgeInsets.symmetric(vertical: 10),
                   border: Border.all(color: const Color(0xFFDC1515)),
@@ -1060,8 +1071,13 @@ class ServiceRequestItem extends StatelessWidget {
                 width: Get.width * 0.4,
                 child: AppButton(
                   title: "Accept",
-                  onPressed: (){
-                     AppOverlay.showAcceptFormDialog(title: 'Confirm', doubleFunction: true, buttonText: 'Continue');
+                  onPressed: () {
+                    AppOverlay.showAcceptFormDialog(
+                        userId: userId,
+                        projectId: id,
+                        title: 'Confirm',
+                        doubleFunction: true,
+                        buttonText: 'Submit');
                   },
                   padding: const EdgeInsets.symmetric(vertical: 10),
                   border: Border.all(color: const Color(0xFF24B53D)),

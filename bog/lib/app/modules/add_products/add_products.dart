@@ -61,7 +61,6 @@ class _AddProjectState extends State<AddProject> {
 
   @override
   Widget build(BuildContext context) {
-
     var width = Get.width;
     final Size size = MediaQuery.of(context).size;
     double multiplier = 25 * size.height * 0.01;
@@ -289,13 +288,17 @@ class _AddProjectState extends State<AddProject> {
                                               "/products",
                                               body: formData,
                                               hasHeader: true);
-                                       
+
                                           if (response.isSuccessful) {
                                             Get.to(() =>
                                                 const AddProductSuccess());
                                           } else {
-                                            Get.snackbar("Error",
-                                                response.data.toString());
+                                            Get.snackbar(
+                                                "Error",
+                                                response.message ??
+                                                    'An error occurred',
+                                                colorText: AppColors.background,
+                                                backgroundColor: Colors.red);
                                           }
                                         }
                                       },
@@ -487,13 +490,15 @@ class _AddProjectState extends State<AddProject> {
                                             "/products",
                                             body: formData,
                                             hasHeader: true);
-                                      
+
                                         if (response.isSuccessful) {
                                           Get.to(
                                               () => const AddProductSuccess());
                                         } else {
-                                          Get.snackbar("Error",
-                                              response.data.toString());
+                                          Get.snackbar(
+                                              "Error", response.message ?? '',
+                                              colorText: AppColors.background,
+                                              backgroundColor: Colors.red);
                                         }
                                       }
                                     },

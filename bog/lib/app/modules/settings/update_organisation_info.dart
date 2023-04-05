@@ -11,6 +11,7 @@ import 'package:form_field_validator/form_field_validator.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
+import '../../../core/theme/app_colors.dart';
 import '../../controllers/home_controller.dart';
 import '../../data/model/log_in_model.dart';
 import '../../data/model/org_info_model.dart';
@@ -21,7 +22,8 @@ import '../../global_widgets/app_loader.dart';
 class UpdateOrganisationInfo extends StatefulWidget {
   final Map<String, dynamic> kycScore;
   final Map<String, dynamic> kycTotal;
-  const UpdateOrganisationInfo({super.key, required this.kycScore, required this.kycTotal});
+  const UpdateOrganisationInfo(
+      {super.key, required this.kycScore, required this.kycTotal});
 
   @override
   State<UpdateOrganisationInfo> createState() => _UpdateOrganisationInfoState();
@@ -90,7 +92,6 @@ class _UpdateOrganisationInfoState extends State<UpdateOrganisationInfo> {
                                 },
                                 options: options,
                                 label: 'Type of organisation',
-                                
                               ),
                               const SizedBox(height: 10),
                               AppDatePicker(
@@ -98,7 +99,6 @@ class _UpdateOrganisationInfoState extends State<UpdateOrganisationInfo> {
                                 onChanged: (value) {
                                   dateOfIncorporation.text = value;
                                 },
-
                               ),
                               const SizedBox(height: 10),
                               PageInput(
@@ -183,11 +183,14 @@ class _UpdateOrganisationInfoState extends State<UpdateOrganisationInfo> {
                               AppButton(
                                 title: 'Submit',
                                 onPressed: () async {
-                                  if (orgType.isEmpty){
-                                    Get.snackbar('Error', 'Select a type of organization', backgroundColor: Colors.red);
+                                  if (orgType.isEmpty) {
+                                    Get.snackbar('Error',
+                                        'Select a type of organization',
+                                        backgroundColor: Colors.red,
+                                        colorText: AppColors.background);
                                     return;
                                   }
-                               
+
                                   if (_formKey.currentState!.validate()) {
                                     final newOrgInfo = {
                                       "organisation_type": orgType,
@@ -211,23 +214,23 @@ class _UpdateOrganisationInfoState extends State<UpdateOrganisationInfo> {
 
                                     final controller =
                                         Get.find<HomeController>();
-                                      final updateAccount = await controller
+                                    final updateAccount = await controller
                                         .userRepo
                                         .patchData('/user/update-account', {
-                                    "kycScore": jsonEncode(kycScore),
-                                    "kycTotal": jsonEncode(widget.kycTotal)
-                                  });
+                                      "kycScore": jsonEncode(kycScore),
+                                      "kycTotal": jsonEncode(widget.kycTotal)
+                                    });
                                     final res = await controller.userRepo
                                         .postData(
                                             '/kyc-organisation-info/create',
                                             newOrgInfo);
-                                    if (res.isSuccessful && updateAccount.isSuccessful) {
+                                    if (res.isSuccessful &&
+                                        updateAccount.isSuccessful) {
                                       MyPref.setOverlay.val = false;
                                       AppOverlay.successOverlay(
                                           message:
                                               'Organizational Info Updated Successfully');
                                     } else {
-                                 
                                       Get.showSnackbar(const GetSnackBar(
                                         message: 'Error occured',
                                         backgroundColor: Colors.red,
@@ -283,7 +286,8 @@ class _UpdateOrganisationInfoState extends State<UpdateOrganisationInfo> {
                               label: 'Others(Specify)',
                               controller: otherSpecify,
                               validator: (p0) {
-                                if (orgType == 'Others(Specify)' && p0!.isEmpty) {
+                                if (orgType == 'Others(Specify)' &&
+                                    p0!.isEmpty) {
                                   return 'Please specify other';
                                 }
 
@@ -357,11 +361,14 @@ class _UpdateOrganisationInfoState extends State<UpdateOrganisationInfo> {
                             AppButton(
                               title: 'Submit',
                               onPressed: () async {
-                                  if (orgType.isEmpty){
-                                    Get.snackbar('Error', 'Select a type of organization', backgroundColor: Colors.red);
-                                    return;
-                                  }
-                              
+                                if (orgType.isEmpty) {
+                                  Get.snackbar(
+                                      'Error', 'Select a type of organization',
+                                      backgroundColor: Colors.red,
+                                      colorText: AppColors.background);
+                                  return;
+                                }
+
                                 if (_formKey.currentState!.validate()) {
                                   final newOrgInfo = {
                                     "organisation_type": orgType,
@@ -379,26 +386,26 @@ class _UpdateOrganisationInfoState extends State<UpdateOrganisationInfo> {
                                     "userType": userType,
                                     "id": logInDetails.profile!.id
                                   };
-                                    final kycScore = widget.kycScore;
+                                  final kycScore = widget.kycScore;
 
-                                    kycScore['orgInfo'] = 9;
+                                  kycScore['orgInfo'] = 9;
                                   final controller = Get.find<HomeController>();
-                                    final updateAccount = await controller
-                                        .userRepo
-                                        .patchData('/user/update-account', {
+                                  final updateAccount = await controller
+                                      .userRepo
+                                      .patchData('/user/update-account', {
                                     "kycScore": jsonEncode(kycScore),
                                     "kycTotal": jsonEncode(widget.kycTotal)
                                   });
                                   final res = await controller.userRepo
                                       .postData('/kyc-organisation-info/create',
                                           newOrgInfo);
-                                  if (res.isSuccessful && updateAccount.isSuccessful) {
-                                      MyPref.setOverlay.val = false;
-                                     AppOverlay.successOverlay(
-                                          message:
-                                              'Organizational Info Updated Successfully');
+                                  if (res.isSuccessful &&
+                                      updateAccount.isSuccessful) {
+                                    MyPref.setOverlay.val = false;
+                                    AppOverlay.successOverlay(
+                                        message:
+                                            'Organizational Info Updated Successfully');
                                   } else {
-                                  
                                     Get.showSnackbar(const GetSnackBar(
                                       message: 'Error occured',
                                       backgroundColor: Colors.red,

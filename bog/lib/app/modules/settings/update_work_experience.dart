@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:get/get.dart';
 
+import '../../../core/theme/app_colors.dart';
 import '../../controllers/home_controller.dart';
 import '../../data/model/work_experience_model.dart';
 import '../../data/providers/api.dart';
@@ -19,13 +20,17 @@ import '../../global_widgets/custom_app_bar.dart';
 import 'package:dio/dio.dart' as dio;
 
 class UpdateWorkExperience extends StatefulWidget {
-   final Map<String, dynamic> kycScore;
+  final Map<String, dynamic> kycScore;
   final Map<String, dynamic> kycTotal;
- 
+
   final bool isNewWork;
   final WorkExperienceModel? workExperience;
   const UpdateWorkExperience(
-      {super.key, required this.isNewWork, this.workExperience, required this.kycScore, required this.kycTotal});
+      {super.key,
+      required this.isNewWork,
+      this.workExperience,
+      required this.kycScore,
+      required this.kycTotal});
 
   @override
   State<UpdateWorkExperience> createState() => _UpdateWorkExperienceState();
@@ -89,23 +94,19 @@ class _UpdateWorkExperienceState extends State<UpdateWorkExperience> {
                     ),
                     const SizedBox(height: 8),
                     AppDatePicker(
-                      
                       initialDate: dateController.text,
                       label: 'Date',
                       onChanged: (date) {
                         dateController.text = date;
                       },
                     ),
-                   
                     const SizedBox(height: 12),
                     if (widget.isNewWork)
                       PageInput(
                         hint: '',
                         label: 'Provisional Document',
                         controller: fileController,
-                        
                         validator: (value) {
-                         
                           if (value!.isEmpty) {
                             return "Please pick a picture to upload";
                           }
@@ -152,7 +153,8 @@ class _UpdateWorkExperienceState extends State<UpdateWorkExperience> {
                           } else {
                             Get.snackbar(
                                 'Error', 'File type not supported currently',
-                                backgroundColor: Colors.red);
+                                backgroundColor: Colors.red,
+                                colorText: AppColors.background);
                           }
                         },
                       ),
@@ -163,11 +165,14 @@ class _UpdateWorkExperienceState extends State<UpdateWorkExperience> {
                           if (widget.isNewWork) {
                             if (pickedFile == null) {
                               Get.snackbar('No File Picked', 'Pick a File',
-                                  backgroundColor: Colors.red);
+                                  backgroundColor: Colors.red,
+                                  colorText: AppColors.background);
                               return;
                             }
-                            if (dateController.text.isEmpty){
-                              Get.snackbar('Error', 'Select a date',backgroundColor: Colors.red);
+                            if (dateController.text.isEmpty) {
+                              Get.snackbar('Error', 'Select a date',
+                                  backgroundColor: Colors.red,
+                                  colorText: AppColors.background);
                               return;
                             }
                             if (formKey.currentState!.validate()) {
@@ -186,23 +191,22 @@ class _UpdateWorkExperienceState extends State<UpdateWorkExperience> {
                                 ]
                               };
 
-                               final kycScore = widget.kycScore;
+                              final kycScore = widget.kycScore;
 
-                               if (subController.text.isEmpty){
-                                  kycScore['workExperience'] = kycScore['workExperience'] + 5;
-                               } else{
-                                  kycScore['workExperience'] =   kycScore['workExperience']  + 6;
-                               }
+                              if (subController.text.isEmpty) {
+                                kycScore['workExperience'] =
+                                    kycScore['workExperience'] + 5;
+                              } else {
+                                kycScore['workExperience'] =
+                                    kycScore['workExperience'] + 6;
+                              }
 
-                               
-                              
-                                final controller = Get.find<HomeController>();
-                                 final updateAccount = await controller
-                                        .userRepo
-                                        .patchData('/user/update-account', {
-                                    "kycScore": jsonEncode(kycScore),
-                                    "kycTotal": jsonEncode(widget.kycTotal)
-                                  });
+                              final controller = Get.find<HomeController>();
+                              final updateAccount = await controller.userRepo
+                                  .patchData('/user/update-account', {
+                                "kycScore": jsonEncode(kycScore),
+                                "kycTotal": jsonEncode(widget.kycTotal)
+                              });
 
                               var formData =
                                   dio.FormData.fromMap(newWorkExperience);
@@ -210,11 +214,12 @@ class _UpdateWorkExperienceState extends State<UpdateWorkExperience> {
                                   "/kyc-work-experience/create",
                                   body: formData,
                                   hasHeader: true);
-                              if (response.isSuccessful && updateAccount.isSuccessful) {
-                                    MyPref.setOverlay.val = false;
-                                    AppOverlay.successOverlay(
-                                          message:
-                                              'Work Experience Updated Successfully');
+                              if (response.isSuccessful &&
+                                  updateAccount.isSuccessful) {
+                                MyPref.setOverlay.val = false;
+                                AppOverlay.successOverlay(
+                                    message:
+                                        'Work Experience Updated Successfully');
                               } else {
                                 Get.showSnackbar(const GetSnackBar(
                                   message: 'Error occured',
@@ -243,10 +248,11 @@ class _UpdateWorkExperienceState extends State<UpdateWorkExperience> {
                                 Get.back(result: response.isSuccessful);
                                 Get.snackbar('Success',
                                     'Work Experience Updated Successfully',
-                                    backgroundColor: Colors.green);
+                                    backgroundColor: Colors.green,
+                                    colorText: AppColors.background);
                               } else {
-                                Get.showSnackbar(const GetSnackBar(
-                                  message: 'Error occured',
+                                Get.showSnackbar(GetSnackBar(
+                                  message: response.message ?? 'Error occured',
                                   backgroundColor: Colors.red,
                                 ));
                               }

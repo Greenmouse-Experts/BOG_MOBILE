@@ -14,26 +14,29 @@ import '../data/model/log_in_model.dart';
 import '../data/providers/api.dart';
 import '../data/providers/my_pref.dart';
 
-
 class MyProjectWidget extends StatefulWidget {
   final String projectType;
   final String orderSlug;
   final HomeController controller;
   final String id;
+  final int index;
   final bool inReview;
   final bool isPending;
   final bool isOngoing;
   final bool isCancelled;
+  final Function delete;
   const MyProjectWidget(
       {super.key,
       required this.projectType,
       required this.orderSlug,
       required this.controller,
       required this.id,
+      required this.index,
       required this.isPending,
       required this.isOngoing,
       required this.isCancelled,
-      required this.inReview});
+      required this.inReview,
+      required this.delete});
 
   @override
   State<MyProjectWidget> createState() => _MyProjectWidgetState();
@@ -51,7 +54,6 @@ class _MyProjectWidgetState extends State<MyProjectWidget> {
   }
 
   void checkOut(String id) async {
-   
     var logInDetails = LogInModel.fromJson(jsonDecode(MyPref.logInDetail.val));
     const price = 20000 * 100;
     final email = logInDetails.email;
@@ -74,16 +76,20 @@ class _MyProjectWidgetState extends State<MyProjectWidget> {
         final response = await controller.userRepo
             .patchData('/projects/request-for-approval/$id', {"amount": 20000});
         if (response.isSuccessful) {
-          Get.snackbar('Success', 'Review sent', backgroundColor: AppColors.successGreen);
-           controller.currentBottomNavPage.value = 1;
-           controller.updateNewUser(controller.currentType);
-           controller.update(['home']);
+          Get.snackbar('Success', 'Review sent',
+              backgroundColor: AppColors.successGreen,
+              colorText: AppColors.background);
+          controller.currentBottomNavPage.value = 1;
+          controller.updateNewUser(controller.currentType);
+          controller.update(['home']);
         } else {
-          Get.snackbar('Error', response.message ?? 'An error occurred');
+          Get.snackbar('Error', response.message ?? 'An error occurred',
+              colorText: AppColors.background);
         }
       });
     } else {
-      Get.snackbar('Error', 'An error occcurred', backgroundColor: Colors.red);
+      Get.snackbar('Error', 'An error occcurred',
+          backgroundColor: Colors.red, colorText: AppColors.background);
     }
   }
 
@@ -156,7 +162,9 @@ class _MyProjectWidgetState extends State<MyProjectWidget> {
                           style: TextStyle(color: Colors.grey, fontSize: 12),
                         )),
                   ),
-                  if (!widget.isOngoing && !widget.isCancelled &&!widget.inReview)
+                  if (!widget.isOngoing &&
+                      !widget.isCancelled &&
+                      !widget.inReview)
                     PopupMenuItem<int>(
                       value: 3,
                       child: TextButton(
@@ -169,8 +177,7 @@ class _MyProjectWidgetState extends State<MyProjectWidget> {
                               doubleFunction: true,
                               onPressed: () {
                                 Get.back();
-                            
-                      
+
                                 checkOut(widget.id);
                               },
                             );
@@ -181,31 +188,31 @@ class _MyProjectWidgetState extends State<MyProjectWidget> {
                           )),
                     ),
                   PopupMenuItem<int>(
-                    value: 4,
-                    child: SizedBox(
-                      height: 50,
-                      child: AppButton(
-                        title: 'Delete Project',
-                        
-                        bckgrndColor: Colors.red,
-                        
+                      value: 4,
+                      child: SizedBox(
+                        height: 50,
+                        child: AppButton(
+                          title: 'Delete Project',
+                          bckgrndColor: Colors.red,
                           onPressed: () async {
                             final response = await widget.controller.userRepo
                                 .deleteData('/projects/delete/${widget.id}');
                             if (response.isSuccessful) {
+                              widget.delete(widget.index);
                               Get.back();
                               Get.snackbar(
                                   'Sucessful', 'Project Deleted Successfully',
-                                  backgroundColor: Colors.green);
+                                  backgroundColor: Colors.green,
+                                  colorText: AppColors.background);
                             } else {
                               Get.back();
-                              Get.snackbar('Error', 'An error occurred');
+                              Get.snackbar('Error', 'An error occurred',
+                                  colorText: AppColors.background,
+                                  backgroundColor: Colors.red);
                             }
                           },
-                     
-                      ),
-                    )
-                  ),
+                        ),
+                      )),
                 ];
               },
               onSelected: (value) {},

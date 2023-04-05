@@ -299,8 +299,7 @@ class _NewMeetingsState extends State<NewMeetings>
                                           child: FloatingActionButton(
                                             onPressed: () {
                                               AppOverlay
-                                                  .showRequestMeetingDialog(
-                                                      title: 'title');
+                                                  .showRequestMeetingDialog();
                                             },
                                             backgroundColor: AppColors.primary,
                                             child: Stack(
@@ -440,7 +439,9 @@ class _NewMeetingsState extends State<NewMeetings>
                                                     Get.snackbar('Success',
                                                         'Meeting cancelled successfully',
                                                         backgroundColor:
-                                                            Colors.green);
+                                                            Colors.green,
+                                                        colorText: AppColors
+                                                            .background);
                                                   } else {
                                                     Get.back();
                                                     Get.snackbar(
@@ -448,7 +449,9 @@ class _NewMeetingsState extends State<NewMeetings>
                                                         response.message ??
                                                             'An error occurred',
                                                         backgroundColor:
-                                                            Colors.red);
+                                                            Colors.red,
+                                                        colorText: AppColors
+                                                            .background);
                                                   }
                                                 });
                                           },

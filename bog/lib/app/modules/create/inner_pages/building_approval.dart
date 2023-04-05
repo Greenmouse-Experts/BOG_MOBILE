@@ -820,8 +820,12 @@ class _BuildingApprovalState extends State<BuildingApproval> {
                                                   } else {
                                                     Get.snackbar(
                                                         "Error",
-                                                        response.data
-                                                            .toString());
+                                                        response.message ??
+                                                            'An error occurred',
+                                                        colorText: AppColors
+                                                            .background,
+                                                        backgroundColor:
+                                                            Colors.red);
                                                   }
                                                 }
                                               },

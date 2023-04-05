@@ -202,16 +202,21 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                                       Get.back();
                                       Get.snackbar("Success",
                                           "Password changed successfully",
-                                          backgroundColor: Colors.green);
+                                          backgroundColor: Colors.green,
+                                          colorText: AppColors.background);
                                     } else {
                                       if (response.message != null) {
-                                        Get.snackbar("Error",
-                                            response.message.toString(),
-                                            backgroundColor: Colors.red);
+                                        Get.snackbar(
+                                            "Error",
+                                            response.message ??
+                                                'An error occurred',
+                                            backgroundColor: Colors.red,
+                                            colorText: AppColors.background);
                                       } else {
                                         Get.snackbar("Error",
                                             "Something went wrong, please try again",
-                                            backgroundColor: Colors.red);
+                                            backgroundColor: Colors.red,
+                                            colorText: AppColors.background);
                                       }
                                     }
                                   }

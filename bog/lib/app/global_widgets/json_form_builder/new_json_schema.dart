@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-
 import 'package:bog/app/controllers/home_controller.dart';
 
 import 'package:bog/app/global_widgets/json_form_builder/simple_file.dart';
@@ -9,7 +8,7 @@ import 'package:bog/app/global_widgets/overlays.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-
+import '../../../core/theme/app_colors.dart';
 import './simple_forms/simple_text.dart';
 // import './simple_forms/simple_checkbox.dart';
 import './simple_forms/simple_radios.dart';
@@ -17,7 +16,6 @@ import './simple_forms/simple_radios.dart';
 import './simple_forms/simple_date.dart';
 import 'simple_forms/simple_checkbox.dart';
 import 'simple_forms/simple_select.dart';
-
 
 class NewJsonSchema extends StatefulWidget {
   const NewJsonSchema({
@@ -61,7 +59,6 @@ class _CoreFormState extends State<NewJsonSchema> {
 
   List<int> headerInts = [];
 
-
   _CoreFormState(this.formGeneral);
   final _formKey = GlobalKey<FormState>();
 
@@ -91,8 +88,6 @@ class _CoreFormState extends State<NewJsonSchema> {
       // if (formAnswer['form'][count]['_id'] == 0){
       //   formAnswer['form'].remove([count]);
       // }
-
-
 
       if (item['inputType'] == "header") {
         //formAnswer['form'].remove([count]);
@@ -124,7 +119,7 @@ class _CoreFormState extends State<NewJsonSchema> {
       }
 
       if (item['inputType'] == "radio-group") {
-   ;
+        ;
         listWidget.add(Padding(
           padding: const EdgeInsets.all(4),
           child: SimpleRadio(
@@ -209,35 +204,38 @@ class _CoreFormState extends State<NewJsonSchema> {
         children: [
           InkWell(
             onTap: () async {
-        
               if (_formKey.currentState!.validate()) {
-              
                 final controller = Get.find<HomeController>();
-     
-                widget.actionSave(formAnswer);
-            
 
-             final jsonString = jsonEncode(formAnswer);
-             final jsonMap = jsonDecode(jsonString);
-  List<dynamic> filteredForm = jsonMap["form"].where((formValue) {
-    return formValue["_id"] != 0 && formValue["value"] != "val";
-  }).toList();
-  Map<String, dynamic> newJsonMap = {"form": filteredForm};
- 
-  AppOverlay.loadingOverlay(asyncFunction: ()async{
-           final response  = await controller.userRepo.postData('/projects/request', newJsonMap);
-     
-                if (response.isSuccessful){
-                  Get.back();
-                  Get.snackbar('Form Posted Successfully', '', backgroundColor: Colors.green);
-                } else {
-          
-                  Get.snackbar('Error occured', 'An error occurred', backgroundColor: Colors.red);
-                }
-  });
-               
+                widget.actionSave(formAnswer);
+
+                final jsonString = jsonEncode(formAnswer);
+                final jsonMap = jsonDecode(jsonString);
+                List<dynamic> filteredForm = jsonMap["form"].where((formValue) {
+                  return formValue["_id"] != 0 && formValue["value"] != "val";
+                }).toList();
+                Map<String, dynamic> newJsonMap = {"form": filteredForm};
+
+                AppOverlay.loadingOverlay(asyncFunction: () async {
+                  final response = await controller.userRepo
+                      .postData('/projects/request', newJsonMap);
+
+                  if (response.isSuccessful) {
+                    Get.back();
+                    Get.snackbar('Form Posted Successfully', '',
+                        backgroundColor: Colors.green,
+                        colorText: AppColors.background);
+                  } else {
+                    Get.snackbar('Error occured', 'An error occurred',
+                        backgroundColor: Colors.red,
+                        colorText: AppColors.background);
+                  }
+                });
               } else {
-                Get.snackbar('Incomplete Form', 'Complete form before submitiing');
+                Get.snackbar(
+                    'Incomplete Form', 'Complete form before submitiing',
+                    backgroundColor: Colors.red,
+                    colorText: AppColors.background);
               }
             },
             child: widget.buttonSave,
@@ -260,8 +258,6 @@ class _CoreFormState extends State<NewJsonSchema> {
       _handleChanged();
     });
   }
-
- 
 
   void onChangeOthers(int position, dynamic value, dynamic id) {
     setState(() {

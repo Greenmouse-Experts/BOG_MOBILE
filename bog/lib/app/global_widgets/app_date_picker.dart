@@ -143,7 +143,7 @@ class _AppTimePickerState extends State<AppTimePicker> {
           style: const TextStyle(color: Colors.black),
           decoration: InputDecoration(
             icon: const Icon(
-              Icons.calendar_today,
+              Icons.av_timer_outlined,
               color: AppColors.primary,
             ),
             border: outlineInputBorder,

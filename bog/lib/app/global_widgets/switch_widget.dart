@@ -52,7 +52,8 @@ class MainSwitchWidget extends StatelessWidget {
                 onChanged: (val) {
                   Get.snackbar(
                       'Error', "You're already logged in as $accountType",
-                      backgroundColor: Colors.red);
+                      backgroundColor: Colors.red,
+                      colorText: AppColors.background);
                 },
               ),
             ),

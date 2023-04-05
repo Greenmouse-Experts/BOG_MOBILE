@@ -1,12 +1,17 @@
+import 'dart:convert';
+
 import 'package:bog/app/global_widgets/app_base_view.dart';
 import 'package:bog/app/global_widgets/app_loader.dart';
+import 'package:bog/app/global_widgets/new_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../core/theme/theme.dart';
 import '../../controllers/home_controller.dart';
 import '../../data/model/client_project_model.dart';
+import '../../data/model/log_in_model.dart';
 import '../../data/providers/api_response.dart';
+import '../../data/providers/my_pref.dart';
 import '../../global_widgets/page_input.dart';
 
 class NewProjectDetailPage extends StatefulWidget {
@@ -19,10 +24,12 @@ class NewProjectDetailPage extends StatefulWidget {
 
 class _NewProjectDetailPageState extends State<NewProjectDetailPage> {
   late Future<ApiResponse> getProjectDetails;
+  // late String
 
   @override
   void initState() {
     final controller = Get.find<HomeController>();
+
     getProjectDetails =
         controller.userRepo.getData('/projects/v2/view-project/${widget.id}');
     super.initState();
@@ -34,27 +41,7 @@ class _NewProjectDetailPageState extends State<NewProjectDetailPage> {
     double multiplier = 25 * size.height * 0.01;
     return AppBaseView(
         child: Scaffold(
-            appBar: AppBar(
-              bottom: PreferredSize(
-                preferredSize: const Size.fromHeight(1),
-                child: Divider(
-                  color: AppColors.grey.withOpacity(0.3),
-                ),
-              ),
-              title: Text(
-                "Product Details",
-                style: AppTextStyle.subtitle1.copyWith(
-                    fontSize: multiplier * 0.07,
-                    color: Colors.black,
-                    fontWeight: FontWeight.w600),
-                textAlign: TextAlign.center,
-              ),
-              leading: IconButton(
-                  onPressed: () {
-                    Get.back();
-                  },
-                  icon: const Icon(Icons.arrow_back_ios_new_outlined)),
-            ),
+            appBar: newAppBarBack(context, 'Project Details'),
             backgroundColor: AppColors.backgroundVariant2,
             body: FutureBuilder<ApiResponse>(
                 future: getProjectDetails,
@@ -146,7 +133,7 @@ class _NewProjectDetailPageState extends State<NewProjectDetailPage> {
                                       'Payment Ref: ',
                                       maxLines: 2,
                                     )),
-                               const Text('data'),
+                                const Text('data'),
                                 // Text(
                                 //    DateFormat.yMd()
                                 //     .format(orderDetail.createdAt!)),
