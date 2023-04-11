@@ -587,29 +587,57 @@ class DocButton extends StatelessWidget {
           title,
           style: const TextStyle(color: Colors.black),
         ),
-        subtitle: TextButton(
-            onPressed: () {
-              if (file.endsWith('.jpg') ||
-                  file.endsWith('.png') ||
-                  file.endsWith('.jpeg')) {
-                Get.to(() => PhotoViewPage(url: file));
-              } else if (file.endsWith('.pdf')) {
-                Get.to(() => PdfViewerPage(path: file));
-              } else {
-                Get.snackbar('Error', 'File type not supported currently',
-                    backgroundColor: Colors.red,
-                    colorText: AppColors.background);
-              }
-            },
-            style: TextButton.styleFrom(
-              padding: EdgeInsets.zero,
-              alignment: Alignment.centerLeft,
-            ),
-            child: const Text('View Document')),
-        trailing: ElevatedButton(
-            onPressed: () {},
-            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-            child: const Text('Delete')),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            IconButton(
+                onPressed: () {
+                  if (file.endsWith('.jpg') ||
+                      file.endsWith('.png') ||
+                      file.endsWith('.jpeg')) {
+                    Get.to(() => PhotoViewPage(url: file));
+                  } else if (file.endsWith('.pdf')) {
+                    Get.to(() => PdfViewerPage(path: file));
+                  } else {
+                    Get.snackbar('Error', 'File type not supported currently',
+                        backgroundColor: Colors.red,
+                        colorText: AppColors.background);
+                  }
+                },
+                icon: const Icon(
+                  Icons.visibility,
+                  color: AppColors.primary,
+                )),
+            IconButton(
+                onPressed: () {
+                  AppOverlay.showInfoDialog(
+                    title: 'Delete Document',
+                    doubleFunction: true,
+                    content: 'Are you sure you want to delete this document',
+                    onPressed: () async {
+                      final controller = Get.find<HomeController>();
+                      final response = await controller.userRepo
+                          .deleteData('/kyc-documents/delete/$id');
+                      if (response.isSuccessful) {
+                        Get.back();
+                        AppOverlay.successOverlay(
+                            message: 'Document deleted successfully');
+                      } else {
+                        Get.back();
+                        Get.snackbar(
+                            'Error', response.message ?? 'An error occurred',
+                            colorText: AppColors.background,
+                            backgroundColor: Colors.red);
+                      }
+                    },
+                  );
+                },
+                icon: const Icon(
+                  Icons.delete,
+                  color: Colors.red,
+                )),
+          ],
+        ),
       ),
     );
   }

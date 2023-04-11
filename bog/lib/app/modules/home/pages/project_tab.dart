@@ -7,11 +7,12 @@ import 'package:bog/app/data/model/service_projects_model.dart';
 import 'package:bog/app/global_widgets/app_loader.dart';
 import 'package:bog/app/global_widgets/global_widgets.dart';
 import 'package:bog/app/global_widgets/new_app_bar.dart';
+import 'package:bog/app/modules/project_details/new_project_details.dart';
+import 'package:bog/app/modules/project_details/service_partner_project_details.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:get/get.dart';
-
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_styles.dart';
@@ -760,7 +761,9 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
                                                                           child:
                                                                               TextButton(
                                                                             onPressed:
-                                                                                () {},
+                                                                                () {
+                                                                              Get.to(() => ServicePartnerProjectDetails(serviceProject: serviceProjects[i]));
+                                                                            },
                                                                             child:
                                                                                 const Text(
                                                                               'View Details',

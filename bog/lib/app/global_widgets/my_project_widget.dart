@@ -143,6 +143,7 @@ class _MyProjectWidgetState extends State<MyProjectWidget> {
                           onPressed: () {
                             Get.to(() => NewProjectDetailPage(
                                   id: widget.id,
+                                  isClient: true,
                                 ));
                           },
                           child: const Text(

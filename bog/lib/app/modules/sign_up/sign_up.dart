@@ -4,6 +4,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../../core/theme/app_colors.dart';
 
@@ -25,6 +26,10 @@ class SignUp extends GetView<AuthController> {
   Widget build(BuildContext context) {
     GlobalKey<FormState> formKey = GlobalKey<FormState>();
     GlobalKey<FormState> formKey1 = GlobalKey<FormState>();
+
+    GoogleSignInAccount? _currentUser;
+
+    final GoogleSignInAccount? user = _currentUser;
 
     return Scaffold(
         appBar: AppBar(
@@ -304,6 +309,24 @@ class SignUp extends GetView<AuthController> {
                                       borderRadius: 10,
                                       enabled: controller
                                           .isTermsAndConditionsChecked,
+                                    ),
+                                    // GoogleUserCircleAvatar(identity: user),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 8.0),
+                                      child: AppButton(
+                                        title: 'Sign Up using google',
+                                        trailingColor: Colors.pink,
+                                        borderRadius: 10,
+                                        bckgrndColor:
+                                            AppColors.backgroundVariant2,
+                                        bold: false,
+                                        hasIcon: true,
+                                        fontColor: Colors.black,
+                                        onPressed: () {
+                                          controller.handleSignUpGoogle();
+                                        },
+                                      ),
                                     ),
                                     AppButton(
                                       title: 'Already have an account ? ',

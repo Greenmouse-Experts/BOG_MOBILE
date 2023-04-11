@@ -5,6 +5,7 @@ import 'package:bog/app/global_widgets/app_radio_button.dart';
 import 'package:bog/app/global_widgets/global_widgets.dart';
 import 'package:bog/app/global_widgets/page_dropdown.dart';
 import 'package:bog/app/global_widgets/update_slider.dart';
+import 'package:bog/app/modules/home/home.dart';
 import 'package:bog/app/modules/meetings/meeting.dart';
 import 'package:bog/app/modules/switch/switch.dart';
 
@@ -114,13 +115,12 @@ class AppOverlay {
                               AppButton(
                                 title: 'Okay',
                                 onPressed: () {
-                                  if (onPressed == null){
-                                  Get.back();
-                                  Get.back();
+                                  if (onPressed == null) {
+                                    Get.back();
+                                    Get.back();
                                   } else {
                                     onPressed();
                                   }
-                              
                                 },
                               )
                             ],
@@ -507,11 +507,18 @@ class AppOverlay {
   }
 
   static void showRequestMeetingDialog(
-      {bool? doubleFunction,required List<String> projectSlugs,required String email, required String  userType, required String userId ,Function()? onPressed, String? buttonText}) {
+      {bool? doubleFunction,
+      required List<String> projectSlugs,
+      required String email,
+      required String userType,
+      required String userId,
+      Function()? onPressed,
+      required bool isSP,
+      String? buttonText}) {
     showDialog(
       context: Get.context!,
       builder: (context) => WillPopScope(
-        onWillPop: ()async {
+        onWillPop: () async {
           selectedDate = '';
           selectedMeeting = '';
           selectedTime = '';
@@ -557,31 +564,33 @@ class AppOverlay {
                                   color: Colors.black),
                             ),
                             const SizedBox(height: 11),
-                            PageDropButton(label: '', hint: 'Project Id', value: projectSlugs.first,
-                             padding: const EdgeInsets.symmetric(
-                                            horizontal: 10),
-                            onChanged: (val){
+                            PageDropButton(
+                              label: '',
+                              hint: 'Project Id',
+                              value: projectSlugs.first,
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
+                              onChanged: (val) {
                                 selectedMeeting = val;
-                            },
-                            items:  projectSlugs.map((value) {
-                                          return DropdownMenuItem<String>(
-                                            value: value,
-                                            child: Text(value.toString()),
-                                          );
-                                        }).toList(), ),
+                              },
+                              items: projectSlugs.map((value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(value.toString()),
+                                );
+                              }).toList(),
+                            ),
                             SizedBox(height: Get.height * 0.01),
                             AppDatePicker(
                                 label: 'Select Date',
                                 onChanged: (onChanged) {
                                   selectedDate = onChanged;
-                                  print(selectedDate);
                                 }),
                             SizedBox(height: Get.height * 0.01),
                             AppTimePicker(
                                 label: 'Select Time',
                                 onChanged: (onChanged) {
                                   selectedTime = onChanged;
-                                  print(selectedTime);
                                 }),
                             SizedBox(height: Get.height * 0.01),
                             PageInput(
@@ -598,43 +607,67 @@ class AppOverlay {
                                   title: buttonText ?? "Okay",
                                   borderRadius: 12,
                                   onPressed: () async {
-                                    if (selectedDate == '' || selectedMeeting == '' || selectedTime == '' || description.text.isEmpty){
-                                      Get.snackbar('Fill all fields', 'All fields are required to submit this form', colorText: AppColors.background, backgroundColor: Colors.red);
-                                    return;
+                                    if (selectedDate == '' ||
+                                        selectedMeeting == '' ||
+                                        selectedTime == '' ||
+                                        description.text.isEmpty) {
+                                      Get.snackbar('Fill all fields',
+                                          'All fields are required to submit this form',
+                                          colorText: AppColors.background,
+                                          backgroundColor: Colors.red);
+                                      return;
                                     }
                                     final meetingRequest = {
                                       'date': selectedDate,
                                       'description': description.text,
                                       'projectSlug': selectedMeeting,
-                                      'requestEmail' : email,
+                                      'requestEmail': email,
                                       'requestId': userId,
                                       'time': selectedTime,
                                       'userType': userType
                                     };
-                                    print(meetingRequest);
-                                    final controller = Get.find<HomeController>();
-                                    final response = await controller.userRepo.postData('/meeting/create', meetingRequest);
-                                     if (response.isSuccessful){
-                                         selectedDate = '';
-          selectedMeeting = '';
-          selectedTime = '';
-          description.clear();
+
+                                    final controller =
+                                        Get.find<HomeController>();
+                                    final response = await controller.userRepo
+                                        .postData(
+                                            '/meeting/create', meetingRequest);
+                                    if (response.isSuccessful) {
+                                      selectedDate = '';
+                                      selectedMeeting = '';
+                                      selectedTime = '';
+                                      description.clear();
                                       Get.back();
-                                      AppOverlay.successOverlay(message: 'Project Requested Successfully', onPressed: (){
-                                        Get.back();
-                                        Get.back();
-                                        Get.to(()=> const NewMeetings());
-                                      });
-                                     } else{
-                                         selectedDate = '';
-          selectedMeeting = '';
-          selectedTime = '';
-          description.clear();
+                                      AppOverlay.successOverlay(
+                                          message:
+                                              'Project Requested Successfully',
+                                          onPressed: () {
+                                            if (isSP) {
+                                              Get.back();
+                                              controller.currentBottomNavPage
+                                                  .value = 0;
+                                              controller.updateNewUser(
+                                                  controller.currentType);
+                                              controller.update(['home']);
+                                            } else {
+                                              Get.back();
+                                              Get.back();
+                                              Get.to(() => const NewMeetings());
+                                            }
+                                          });
+                                    } else {
+                                      selectedDate = '';
+                                      selectedMeeting = '';
+                                      selectedTime = '';
+                                      description.clear();
                                       Get.back();
-                                      Get.snackbar('Error', response.message ?? 'An error occurred', backgroundColor: Colors.red,
-                                      colorText: AppColors.background);
-                                     }
-                                    
+                                      Get.snackbar(
+                                          'Error',
+                                          response.message ??
+                                              'An error occurred',
+                                          backgroundColor: Colors.red,
+                                          colorText: AppColors.background);
+                                    }
                                   }),
                             ),
                             const SizedBox(height: 10),

@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:otp_text_field/otp_field.dart';
 
 import '../data/model/log_in_model.dart';
@@ -14,6 +15,11 @@ import '../modules/home/home.dart';
 import '../modules/sign_in/sign_in.dart';
 import '../modules/sign_up/verify_otp.dart';
 import '../repository/user_repo.dart';
+
+final signInScopes = [
+  'email',
+  'https://www.googleapis.com/auth/contacts.readonly',
+];
 
 class AuthController extends GetxController {
   // final HomeController homeController;
@@ -54,6 +60,8 @@ class AuthController extends GetxController {
   bool isTermsAndConditionsChecked = false;
 
   AuthController(this.userRepo);
+
+  final GoogleSignIn _googleSignIn = GoogleSignIn(scopes: signInScopes);
 
   toggleBusiness(int index) {
     this.index = index;
@@ -224,8 +232,32 @@ class AuthController extends GetxController {
     }
   }
 
+  Future<void> handleSignUpGoogle() async {
+    try {
+      final response = await _googleSignIn.signIn();
+      if (response != null) {
+        print('ihff');
+        print('ihfwwff');
+        print('ivehff');
+        print(response.id);
+        print('ihff');
+        print('ihfevrf');
+        print('ihavttvs rveff');
+        print('iwf4wqe42hff');
+      }
+    } catch (error) {
+      print('ihff');
+      print('ihfwwff');
+      print('ivehff');
+      print(error);
+      print('ihff');
+      print('ihfevrf');
+      print('ihavttvs rveff');
+      print('iwf4wqe42hff');
+    }
+  }
+
   Future<void> verifyOTPForSignUp() async {
-   print(email.text);
     ApiResponse response =
         await userRepo.verifyOTPForSignUp(email.text, otp.text);
     if (response.isSuccessful) {
@@ -240,7 +272,8 @@ class AuthController extends GetxController {
     } else {
       AppOverlay.showInfoDialog(
         title: 'Failure',
-        content:  response.message ?? "OTP Verification Failed. Please try again",
+        content:
+            response.message ?? "OTP Verification Failed. Please try again",
         buttonText: "Okay",
         onPressed: () {
           Get.back();

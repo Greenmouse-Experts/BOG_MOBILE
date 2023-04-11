@@ -48,50 +48,46 @@ class _KYCPageState extends State<KYCPage> {
                     snapshot.data!.isSuccessful) {
                   final userDetails =
                       UserDetailsModel.fromJson(snapshot.data!.user);
-        
+
                   final kycScore = userDetails.kycScore ?? '';
                   final kycTotal = userDetails.kycTotal ?? '';
 
-
-                  
                   dynamic totalScore = 0;
                   Map<String, dynamic> kycScoreMap = {};
-                  if (kycScore != '0'){
-                  kycScoreMap = jsonDecode(kycScore);
-                
-                  kycScoreMap.forEach((key, value) {
-                    totalScore += value;
-                  });
-                  } 
-                
+                  if (kycScore != '0') {
+                    kycScoreMap = jsonDecode(kycScore);
+
+                    kycScoreMap.forEach((key, value) {
+                      totalScore += value;
+                    });
+                  }
+
                   Map<String, dynamic> kycTotalMap = {
-                    "generalInfo" : 7,
-                    "orgInfo" : 9,
+                    "generalInfo": 7,
+                    "orgInfo": 9,
                     "taxDetails": 3,
                     "workExperience": 0,
                     "SupplyCat": 1,
-                    "financialData" : 6,
+                    "financialData": 6,
                     "uploadDocument": 16,
                   };
                   dynamic totalTotal = 0;
-                  if (kycTotal != '0' ){
-                  kycTotalMap = jsonDecode(kycTotal);
-                  kycTotalMap.forEach((key, value) {
-                    totalTotal += value;
-                  });
+                  if (kycTotal != '0') {
+                    kycTotalMap = jsonDecode(kycTotal);
+                    kycTotalMap.forEach((key, value) {
+                      totalTotal += value;
+                    });
                   }
-                   
 
-                var newPoint = (totalScore / totalTotal) * 100;
-                  if (totalTotal == 0 && totalScore == 0){
-                   newPoint = 0;
+                  var newPoint = (totalScore / totalTotal) * 100;
+                  if (totalTotal == 0 && totalScore == 0) {
+                    newPoint = 0;
                   }
-        
-                  
-                  final kycNewPoint = newPoint == double.nan.isNaN ? 0.0 : newPoint;
 
+                  final kycNewPoint =
+                      newPoint == double.nan.isNaN ? 0.0 : newPoint;
 
-                  return kycScore == '0' 
+                  return kycScore == '0'
                       ? Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -115,9 +111,8 @@ class _KYCPageState extends State<KYCPage> {
                                 iconData: Icons.info_outline_sharp,
                                 text: 'Organisational Info',
                                 onPressed: () async {
-                                  await Get.to(
-                                      () =>  UpdateOrganisationInfo(
-                                         kycScore: kycScoreMap,
+                                  await Get.to(() => UpdateOrganisationInfo(
+                                        kycScore: kycScoreMap,
                                         kycTotal: kycTotalMap,
                                       ));
                                   setState(() {});
@@ -126,10 +121,10 @@ class _KYCPageState extends State<KYCPage> {
                                 iconData: Icons.credit_score_outlined,
                                 text: 'Tax Details & Permit',
                                 onPressed: () async {
-                                  await Get.to(() =>  UpdateTaxDetails(
-                                     kycScore: kycScoreMap,
+                                  await Get.to(() => UpdateTaxDetails(
+                                        kycScore: kycScoreMap,
                                         kycTotal: kycTotalMap,
-                                  ));
+                                      ));
                                   setState(() {});
                                 }),
                             _TextButton(
@@ -137,19 +132,18 @@ class _KYCPageState extends State<KYCPage> {
                                 text: 'Work/Job Execution Experience',
                                 onPressed: () async {
                                   await Get.to(() => WorkExperience(
-                                     kycScore: kycScoreMap,
-                                     kycTotal: kycTotalMap,
-                                  ));
+                                        kycScore: kycScoreMap,
+                                        kycTotal: kycTotalMap,
+                                      ));
                                   setState(() {});
                                 }),
                             _TextButton(
                                 iconData: Icons.money,
                                 text: 'Financial Data',
                                 onPressed: () async {
-                                  await Get.to(
-                                      () =>  UpdateFinancialDetails(
-                                            kycScore: kycScoreMap,
-                                     kycTotal: kycTotalMap,
+                                  await Get.to(() => UpdateFinancialDetails(
+                                        kycScore: kycScoreMap,
+                                        kycTotal: kycTotalMap,
                                       ));
                                   setState(() {});
                                 }),
@@ -158,9 +152,9 @@ class _KYCPageState extends State<KYCPage> {
                                 text: 'Upload Documents',
                                 onPressed: () async {
                                   await Get.to(() => UploadDocuments(
-                                     kycScore: kycScoreMap,
-                                     kycTotal: kycTotalMap,
-                                  ));
+                                        kycScore: kycScoreMap,
+                                        kycTotal: kycTotalMap,
+                                      ));
                                   setState(() {});
                                 })
                           ],
@@ -172,12 +166,12 @@ class _KYCPageState extends State<KYCPage> {
                                 'Your Kyc Score : ${kycNewPoint.toStringAsFixed(2)}'),
                             const SizedBox(height: 15),
                             TweenAnimationBuilder(
-                              tween: Tween<double>(
-                                  begin: 0, end: kycNewPoint),
+                              tween: Tween<double>(begin: 0, end: kycNewPoint),
                               duration: const Duration(milliseconds: 1000),
                               builder: (context, double value, _) =>
                                   LinearProgressIndicator(
                                 minHeight: 15,
+                                backgroundColor: AppColors.newAsh,
                                 color: (value / 100) < 0.5
                                     ? Colors.red
                                     : Colors.green,
@@ -199,9 +193,8 @@ class _KYCPageState extends State<KYCPage> {
                                 iconData: Icons.info_outline_sharp,
                                 text: 'Organisational Info',
                                 onPressed: () async {
-                                  await Get.to(
-                                      () =>  UpdateOrganisationInfo(
-                                         kycScore: kycScoreMap,
+                                  await Get.to(() => UpdateOrganisationInfo(
+                                        kycScore: kycScoreMap,
                                         kycTotal: kycTotalMap,
                                       ));
                                   setState(() {});
@@ -210,10 +203,10 @@ class _KYCPageState extends State<KYCPage> {
                                 iconData: Icons.credit_score_outlined,
                                 text: 'Tax Details & Permit',
                                 onPressed: () async {
-                                  await Get.to(() =>  UpdateTaxDetails(
-                                     kycScore: kycScoreMap,
+                                  await Get.to(() => UpdateTaxDetails(
+                                        kycScore: kycScoreMap,
                                         kycTotal: kycTotalMap,
-                                  ));
+                                      ));
                                   setState(() {});
                                 }),
                             _TextButton(
@@ -221,30 +214,29 @@ class _KYCPageState extends State<KYCPage> {
                                 text: 'Work/Job Execution Experience',
                                 onPressed: () async {
                                   await Get.to(() => WorkExperience(
-                                     kycScore: kycScoreMap,
-                                     kycTotal: kycTotalMap,
-                                  ));
+                                        kycScore: kycScoreMap,
+                                        kycTotal: kycTotalMap,
+                                      ));
                                   setState(() {});
                                 }),
-                                if (userType == 'vendor')
-                                  _TextButton(
-                                iconData: Icons.category,
-                                text: 'Categories of Supply',
-                                onPressed: () async {
-                                  await Get.to(() => UpdateSupplyCategory(
-                                     kycScore: kycScoreMap,
-                                     kycTotal: kycTotalMap,
-                                  ));
-                                  setState(() {});
-                                }),
+                            if (userType == 'vendor')
+                              _TextButton(
+                                  iconData: Icons.category,
+                                  text: 'Categories of Supply',
+                                  onPressed: () async {
+                                    await Get.to(() => UpdateSupplyCategory(
+                                          kycScore: kycScoreMap,
+                                          kycTotal: kycTotalMap,
+                                        ));
+                                    setState(() {});
+                                  }),
                             _TextButton(
                                 iconData: Icons.money,
                                 text: 'Financial Data',
                                 onPressed: () async {
-                                  await Get.to(
-                                      () =>  UpdateFinancialDetails(
-                                            kycScore: kycScoreMap,
-                                     kycTotal: kycTotalMap,
+                                  await Get.to(() => UpdateFinancialDetails(
+                                        kycScore: kycScoreMap,
+                                        kycTotal: kycTotalMap,
                                       ));
                                   setState(() {});
                                 }),
@@ -252,10 +244,10 @@ class _KYCPageState extends State<KYCPage> {
                                 iconData: Icons.upload_file,
                                 text: 'Upload Documents',
                                 onPressed: () async {
-                                  await Get.to(() =>  UploadDocuments(
-                                     kycScore: kycScoreMap,
-                                     kycTotal: kycTotalMap,
-                                  ));
+                                  await Get.to(() => UploadDocuments(
+                                        kycScore: kycScoreMap,
+                                        kycTotal: kycTotalMap,
+                                      ));
                                   setState(() {});
                                 })
                           ],
@@ -333,8 +325,8 @@ class _TextButton extends StatelessWidget {
     return GestureDetector(
       onTap: onPressed,
       child: Padding(
-        padding:
-            EdgeInsets.only(left: Get.width * 0.03, right: Get.width * 0.0, top: 10),
+        padding: EdgeInsets.only(
+            left: Get.width * 0.03, right: Get.width * 0.0, top: 10),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 import '../../core/theme/app_colors.dart';
@@ -19,6 +20,7 @@ class AppButton extends StatefulWidget {
     this.trailingColor = AppColors.orange,
     this.bold = true,
     this.enabled = true,
+    this.hasIcon = false,
   }) : super(key: key);
   final String title;
   final String trailingTitle;
@@ -33,6 +35,7 @@ class AppButton extends StatefulWidget {
   final bool bold;
   final bool enabled;
   final Border? border;
+  final bool? hasIcon;
 
   @override
   State<AppButton> createState() => _AppButtonState();
@@ -71,6 +74,14 @@ class _AppButtonState extends State<AppButton> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
+                        widget.hasIcon!
+                            ? SizedBox(
+                                width: 36,
+                                height: 36,
+                                child:
+                                    Image.asset('assets/icons/googleIcon.webp'))
+                            : const SizedBox.shrink(),
+                        const SizedBox(width: 5),
                         Text(
                           widget.title,
                           textAlign: TextAlign.center,

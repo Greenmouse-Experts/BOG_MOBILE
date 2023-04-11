@@ -64,9 +64,10 @@ class _CartTabState extends State<CartTab> {
                     ],
                   ),
                 ),
-                SizedBox(
-                  height: Get.height * 0.03,
-                ),
+                if (controller.currentType != 'Service Partner')
+                  SizedBox(
+                    height: Get.height * 0.03,
+                  ),
                 if (controller.currentType == "Client" ||
                     controller.currentType == "Corporate Client")
                   Expanded(
