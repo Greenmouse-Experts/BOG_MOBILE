@@ -1,20 +1,19 @@
-import 'package:bog/app/data/model/transactions_model.dart';
-import 'package:bog/app/data/providers/api_response.dart';
-import 'package:bog/app/global_widgets/app_loader.dart';
-import 'package:bog/app/global_widgets/bottom_widget.dart';
-import 'package:bog/app/global_widgets/global_widgets.dart';
-import 'package:bog/app/global_widgets/new_app_bar.dart';
-
-import 'package:feather_icons/feather_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:feather_icons/feather_icons.dart';
 
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_styles.dart';
 import '../../controllers/home_controller.dart';
 
+import '../../data/model/transactions_model.dart';
+import '../../data/providers/api_response.dart';
 import '../../global_widgets/app_input.dart';
+import '../../global_widgets/app_loader.dart';
+import '../../global_widgets/bottom_widget.dart';
+import '../../global_widgets/new_app_bar.dart';
 
 class TransactionPage extends StatefulWidget {
   const TransactionPage({Key? key}) : super(key: key);
@@ -28,16 +27,11 @@ class TransactionPage extends StatefulWidget {
 class _TransactionPageState extends State<TransactionPage> {
   late Future<ApiResponse> getTransactions;
 
+  var search = '';
+
   @override
   void initState() {
     final controller = Get.find<HomeController>();
-    // final userType = controller.currentType == 'Client'
-    //     ? 'private_client'
-    //     : controller.currentType == 'Corporate Client'
-    //         ? 'corporate_client'
-    //         : controller.currentType == 'Product Partner'
-    //             ? 'vendor'
-    //             : 'professional';
     getTransactions = controller.userRepo.getData('/transactions/user');
     super.initState();
   }
@@ -63,10 +57,27 @@ class _TransactionPageState extends State<TransactionPage> {
                             ConnectionState.done &&
                         snapshot.data!.isSuccessful) {
                       final response = snapshot.data!.data as List<dynamic>;
-                      final transactions = <TransactionsModel>[];
+                      List<TransactionsModel> transactions =
+                          <TransactionsModel>[];
 
                       for (var element in response) {
                         transactions.add(TransactionsModel.fromJson(element));
+                      }
+
+                      if (search.isNotEmpty) {
+                        transactions = {
+                          ...transactions.where((element) => element.type!
+                              .toLowerCase()
+                              .contains(search.toLowerCase())),
+                          ...transactions.where((element) => element
+                              .transactionId!
+                              .toLowerCase()
+                              .contains(search.toLowerCase())),
+                          ...transactions.where((element) => element.amount
+                              .toString()
+                              .toLowerCase()
+                              .contains(search.toLowerCase()))
+                        }.toList();
                       }
 
                       return SizedBox(
@@ -84,10 +95,10 @@ class _TransactionPageState extends State<TransactionPage> {
                               children: [
                                 Padding(
                                   padding: EdgeInsets.only(
-                                      left: width * 0.02, right: width * 0.0),
+                                      left: width * 0.02, right: width * 0.02),
                                   child: SizedBox(
-                                      height: Get.height * 0.055,
-                                      width: Get.width * 0.78,
+                                      height: Get.height * 0.06,
+                                      width: Get.width  * 0.96,
                                       child: AppInput(
                                         hintText: "Search",
                                         prefexIcon: Icon(
@@ -95,27 +106,24 @@ class _TransactionPageState extends State<TransactionPage> {
                                           color:
                                               AppColors.grey.withOpacity(0.5),
                                         ),
+                                        onChanged: (val) {
+                                          if (search != val) {
+                                            setState(() {
+                                              search = val;
+                                            });
+                                          }
+                                        },
                                       )),
                                 ),
-                                Padding(
-                                  padding: EdgeInsets.only(right: width * 0.02),
-                                  child: SizedBox(
-                                    height: Get.height * 0.054,
-                                    width: Get.height * 0.054,
-                                    child: Image.asset(
-                                      "assets/images/Group 47358.png",
-                                      height: width * 0.08,
-                                      width: width * 0.08,
-                                    ),
-                                  ),
-                                ),
+                             
                               ],
                             ),
+                            
                             SizedBox(
                               height: width * 0.02,
                             ),
                             SizedBox(
-                              height: Get.height * 0.75,
+                              height: Get.height * 0.74,
                               child: transactions.isEmpty
                                   ? const Center(
                                       child:
@@ -159,56 +167,90 @@ class _TransactionPageState extends State<TransactionPage> {
                                               SizedBox(
                                                 width: Get.width * 0.02,
                                               ),
-                                              RichText(
-                                                text: TextSpan(
-                                                  text: transaction
-                                                          .transactionId ??
-                                                      '',
-                                                  style: AppTextStyle.subtitle1
-                                                      .copyWith(
-                                                          fontSize:
-                                                              multiplier * 0.07,
-                                                          color: Colors.black,
-                                                          fontWeight:
-                                                              FontWeight.w500),
-                                                  children: <TextSpan>[
-                                                    TextSpan(
-                                                      text:
-                                                          transaction.status ??
-                                                              '',
+                                              Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  RichText(
+                                                    text: TextSpan(
+                                                      text: transaction
+                                                              .transactionId ??
+                                                          '',
                                                       style: AppTextStyle
                                                           .subtitle1
                                                           .copyWith(
                                                               fontSize:
                                                                   multiplier *
-                                                                      0.05,
-                                                              color: AppColors
-                                                                  .grey,
+                                                                      0.07,
+                                                              color:
+                                                                  Colors.black,
                                                               fontWeight:
                                                                   FontWeight
-                                                                      .w400),
+                                                                      .w500),
                                                     ),
-                                                  ],
-                                                ),
-                                              ),
-                                              Expanded(
-                                                  child: Wrap(
-                                                alignment: WrapAlignment.end,
-                                                children: [
+                                                  ),
+                                                  const SizedBox(height: 4),
                                                   Text(
-                                                    transaction.amount
-                                                        .toString(),
+                                                    (transaction.status ?? '')
+                                                        .toUpperCase(),
                                                     style: AppTextStyle
                                                         .subtitle1
                                                         .copyWith(
                                                             fontSize:
                                                                 multiplier *
-                                                                    0.065,
-                                                            color: Colors.black,
+                                                                    0.05,
+                                                            color:
+                                                                AppColors.grey,
                                                             fontWeight:
                                                                 FontWeight
-                                                                    .w500),
-                                                    textAlign: TextAlign.center,
+                                                                    .w400),
+                                                  ),
+                                                ],
+                                              ),
+                                              Expanded(
+                                                  child: Wrap(
+                                                alignment: WrapAlignment.end,
+                                                children: [
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment.end,
+                                                    children: [
+                                                      Text(
+                                                        'NGN ${transaction.amount ?? 0}',
+                                                        style: AppTextStyle
+                                                            .subtitle1
+                                                            .copyWith(
+                                                                fontSize:
+                                                                    multiplier *
+                                                                        0.065,
+                                                                color: Colors
+                                                                    .black,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500),
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                      ),
+                                                      const SizedBox(height: 4),
+                                                      transaction.createdAt ==
+                                                              null
+                                                          ? const SizedBox
+                                                              .shrink()
+                                                          : Text(
+                                                              DateFormat(
+                                                                      'dd MMM yyyy')
+                                                                  .format(transaction
+                                                                      .createdAt!),
+                                                              style:
+                                                                  AppTextStyle
+                                                                      .caption2
+                                                                      .copyWith(
+                                                                color: AppColors
+                                                                    .grey,
+                                                              ),
+                                                            )
+                                                    ],
                                                   ),
                                                 ],
                                               ))

@@ -1,3 +1,4 @@
+import 'package:feather_icons/feather_icons.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_svg/svg.dart';
@@ -9,6 +10,7 @@ import '../../controllers/home_controller.dart';
 import '../../data/model/my_order_model.dart';
 import '../../data/providers/api_response.dart';
 import '../../global_widgets/app_base_view.dart';
+import '../../global_widgets/app_input.dart';
 import '../../global_widgets/app_loader.dart';
 import '../../global_widgets/bottom_widget.dart';
 import '../../global_widgets/my_orders_widget.dart';
@@ -34,9 +36,17 @@ class _MyOrderScreenState extends State<MyOrderScreen>
   var typeController = TextEditingController(text: 'Residential');
   var surveyController = TextEditingController(text: 'Perimeter Survey');
 
+  late Future<ApiResponse> getOrders;
+
+  var searchPending = '';
+  var searchCompleted = '';
+  var searchCancelled = '';
+
   @override
   void initState() {
     super.initState();
+    final controller = Get.find<HomeController>();
+    getOrders = controller.userRepo.getData("/orders/my-orders");
     tabController = TabController(length: 3, vsync: this);
   }
 
@@ -153,8 +163,7 @@ class _MyOrderScreenState extends State<MyOrderScreen>
                         color: AppColors.grey.withOpacity(0.1),
                       ),
                       FutureBuilder<ApiResponse>(
-                          future:
-                              controller.userRepo.getData("/orders/my-orders"),
+                          future: getOrders,
                           builder: (context, snapshot) {
                             if (snapshot.connectionState ==
                                 ConnectionState.waiting) {
@@ -184,12 +193,49 @@ class _MyOrderScreenState extends State<MyOrderScreen>
                                     .where((element) =>
                                         element.status == 'cancelled')
                                     .toList();
-                                final pendingItems =
+                                List<MyOrderItem> pendingItems =
                                     getAllOrderItems(pendingOrders);
-                                final completedItems =
+
+                                if (searchPending.isNotEmpty) {
+                                  pendingItems = {
+                                    ...pendingItems.where((element) => element
+                                        .product!.name
+                                        .toLowerCase()
+                                        .contains(searchPending.toLowerCase())),
+                                    ...pendingItems.where((element) => element
+                                        .orderId!
+                                        .toLowerCase()
+                                        .contains(searchPending.toLowerCase()))
+                                  }.toList();
+                                }
+                                List<MyOrderItem> completedItems =
                                     getAllOrderItems(completedOrders);
-                                final cancelledItems =
+                                if (searchCompleted.isNotEmpty) {
+                                  completedItems = {
+                                    ...completedItems.where((element) => element
+                                        .product!.name
+                                        .toLowerCase()
+                                        .contains(
+                                            searchCompleted.toLowerCase())),
+                                    ...completedItems.where((element) =>
+                                        element.orderId!.toLowerCase().contains(
+                                            searchCompleted.toLowerCase()))
+                                  }.toList();
+                                }
+                                List<MyOrderItem> cancelledItems =
                                     getAllOrderItems(cancelledOrders);
+                                if (searchCancelled.isNotEmpty) {
+                                  cancelledItems = {
+                                    ...cancelledItems.where((element) => element
+                                        .product!.name
+                                        .toLowerCase()
+                                        .contains(
+                                            searchCancelled.toLowerCase())),
+                                    ...cancelledItems.where((element) =>
+                                        element.orderId!.toLowerCase().contains(
+                                            searchCancelled.toLowerCase()))
+                                  }.toList();
+                                }
 
                                 return SizedBox(
                                   height: Get.height * 0.78,
@@ -203,8 +249,32 @@ class _MyOrderScreenState extends State<MyOrderScreen>
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
+                                            Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                  vertical: 8.0,
+                                                  horizontal: Get.width * 0.04),
+                                              child: AppInput(
+                                                hintText:
+                                                    'Search with name or keyword ...',
+                                                filledColor:
+                                                    Colors.grey.withOpacity(.1),
+                                                prefexIcon: Icon(
+                                                  FeatherIcons.search,
+                                                  color: Colors.black
+                                                      .withOpacity(.5),
+                                                  size: Get.width * 0.05,
+                                                ),
+                                                onChanged: (val) {
+                                                  if (searchPending != val) {
+                                                    setState(() {
+                                                      searchPending = val;
+                                                    });
+                                                  }
+                                                },
+                                              ),
+                                            ),
                                             SizedBox(
-                                                height: Get.height * 0.75,
+                                                height: Get.height * 0.7,
                                                 child: pendingItems.isEmpty
                                                     ? const Center(
                                                         child: Text(
@@ -228,9 +298,33 @@ class _MyOrderScreenState extends State<MyOrderScreen>
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
+                                            Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                  vertical: 8.0,
+                                                  horizontal: Get.width * 0.04),
+                                              child: AppInput(
+                                                hintText:
+                                                    'Search with name or keyword ...',
+                                                filledColor:
+                                                    Colors.grey.withOpacity(.1),
+                                                prefexIcon: Icon(
+                                                  FeatherIcons.search,
+                                                  color: Colors.black
+                                                      .withOpacity(.5),
+                                                  size: Get.width * 0.05,
+                                                ),
+                                                onChanged: (val) {
+                                                  if (searchCompleted != val) {
+                                                    setState(() {
+                                                      searchCompleted = val;
+                                                    });
+                                                  }
+                                                },
+                                              ),
+                                            ),
                                             SizedBox(
-                                                height: Get.height * 0.75,
-                                                child: completedOrders.isEmpty
+                                                height: Get.height * 0.7,
+                                                child: completedItems.isEmpty
                                                     ? const Center(
                                                         child: Text(
                                                             'No Completed Orders'),
@@ -251,9 +345,33 @@ class _MyOrderScreenState extends State<MyOrderScreen>
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
+                                            Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                  vertical: 8.0,
+                                                  horizontal: Get.width * 0.04),
+                                              child: AppInput(
+                                                hintText:
+                                                    'Search with name or keyword ...',
+                                                filledColor:
+                                                    Colors.grey.withOpacity(.1),
+                                                prefexIcon: Icon(
+                                                  FeatherIcons.search,
+                                                  color: Colors.black
+                                                      .withOpacity(.5),
+                                                  size: Get.width * 0.05,
+                                                ),
+                                                onChanged: (val) {
+                                                  if (searchCancelled != val) {
+                                                    setState(() {
+                                                      searchCancelled = val;
+                                                    });
+                                                  }
+                                                },
+                                              ),
+                                            ),
                                             SizedBox(
-                                                height: Get.height * 0.75,
-                                                child: cancelledOrders.isEmpty
+                                                height: Get.height * 0.7,
+                                                child: cancelledItems.isEmpty
                                                     ? const Center(
                                                         child: Text(
                                                             'No cancelled Orders'),
@@ -365,99 +483,3 @@ class _MyOrderScreenState extends State<MyOrderScreen>
     );
   }
 }
-
-// class _TextButton extends StatelessWidget {
-//   final String imageAsset;
-//   final String text;
-//   final String? subtitle;
-//   final bool showArrow;
-//   final Function() onPressed;
-//   const _TextButton(
-//       {required this.imageAsset,
-//       required this.text,
-//       required this.onPressed,
-//       this.subtitle,
-//       this.showArrow = true});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return GestureDetector(
-//       onTap: onPressed,
-//       child: Padding(
-//         padding:
-//             EdgeInsets.only(left: Get.width * 0.03, right: Get.width * 0.0),
-//         child: Row(
-//           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//           crossAxisAlignment: CrossAxisAlignment.center,
-//           children: [
-//             Container(
-//               width: Get.width * 0.1,
-//               height: Get.width * 0.1,
-//               decoration: BoxDecoration(
-//                 color: const Color(0xffE8F4FE),
-//                 borderRadius: BorderRadius.circular(100),
-//               ),
-//               child: Center(
-//                 child: Image.asset(
-//                   imageAsset,
-//                   width: Get.width * 0.05,
-//                   height: Get.width * 0.05,
-//                 ),
-//               ),
-//             ),
-//             SizedBox(
-//               width: Get.width * 0.7,
-//               child: Padding(
-//                 padding: EdgeInsets.only(left: Get.width * 0.01),
-//                 child: Column(
-//                     crossAxisAlignment: CrossAxisAlignment.stretch,
-//                     children: [
-//                       SizedBox(
-//                         height: Get.height * 0.01,
-//                       ),
-//                       Text(
-//                         text,
-//                         maxLines: 1,
-//                         overflow: TextOverflow.clip,
-//                         style: AppTextStyle.subtitle1.copyWith(
-//                             color: text == "Log Out"
-//                                 ? AppColors.bostonUniRed
-//                                 : Colors.black,
-//                             fontSize: Get.width * 0.04,
-//                             fontWeight: FontWeight.w500),
-//                       ),
-//                       SizedBox(
-//                         height: Get.height * 0.01,
-//                       ),
-//                       if (subtitle != null)
-//                         Text(
-//                           subtitle!,
-//                           maxLines: 1,
-//                           overflow: TextOverflow.clip,
-//                           style: AppTextStyle.subtitle1
-//                               .copyWith(color: Colors.black),
-//                         ),
-//                       if (subtitle != null)
-//                         SizedBox(
-//                           height: Get.height * 0.01,
-//                         ),
-//                     ]),
-//               ),
-//             ),
-//             IconButton(
-//               onPressed: onPressed,
-//               padding: EdgeInsets.zero,
-//               icon: showArrow
-//                   ? Icon(
-//                       Icons.arrow_forward_ios_rounded,
-//                       color: Colors.black,
-//                       size: Get.width * 0.04,
-//                     )
-//                   : Container(),
-//             )
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }

@@ -1,13 +1,8 @@
 import 'dart:convert';
 
-import 'package:bog/app/data/model/notifications_model.dart';
-import 'package:bog/app/global_widgets/app_loader.dart';
-import 'package:bog/app/modules/settings/faq.dart';
-
 import 'package:flutter/material.dart';
 import 'package:pie_chart/pie_chart.dart' as pie_chart;
 import 'package:badges/badges.dart' as badges;
-
 import 'package:get/get.dart';
 
 import '../../../../core/theme/app_colors.dart';
@@ -15,15 +10,21 @@ import '../../../../core/theme/app_styles.dart';
 import '../../../controllers/home_controller.dart';
 import '../../../data/model/log_in_model.dart';
 
+import '../../../data/model/my_products.dart';
+import '../../../data/model/notifications_model.dart';
+import '../../../data/model/order_request_model.dart';
+import '../../../data/model/project_analysis_model.dart';
 import '../../../data/model/user_details_model.dart';
 import '../../../data/providers/api_response.dart';
 import '../../../data/providers/my_pref.dart';
 import '../../../global_widgets/activity_widget.dart';
 import '../../../global_widgets/app_avatar.dart';
 
+import '../../../global_widgets/app_loader.dart';
 import '../../../global_widgets/sp_project_preview.dart';
 import '../../create/create.dart';
 import '../../notifications/notification.dart';
+import '../../settings/faq.dart';
 import '../../settings/support.dart';
 import '../../shop/shop.dart';
 
@@ -38,12 +39,6 @@ class _HomeTabState extends State<HomeTab> {
   final HomeController controller = Get.find<HomeController>();
   var logInDetails = LogInModel.fromJson(jsonDecode(MyPref.logInDetail.val));
 
-  final labelMap = <String, String>{
-    "Approved Projects": '52',
-    "Projects in review": '38',
-    "Disapproved Projects": '18',
-  };
-
   late Future<ApiResponse> getNotifications;
 
   @override
@@ -57,8 +52,6 @@ class _HomeTabState extends State<HomeTab> {
 
     super.initState();
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -90,6 +83,10 @@ class _HomeTabState extends State<HomeTab> {
                     for (var element in response) {
                       notifications.add(NotificationsModel.fromJson(element));
                     }
+                    final int unreadNotifications = notifications
+                        .where((element) => element.isRead == false)
+                        .toList()
+                        .length;
                     return Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -152,12 +149,10 @@ class _HomeTabState extends State<HomeTab> {
                                         ),
                                       ],
                                     ),
-                                    //Alarm Icon
                                     IconButton(
                                       icon: badges.Badge(
-                                        //    position: badges.BadgePosition(),
                                         badgeContent: Text(
-                                          notifications.length.toString(),
+                                          unreadNotifications.toString(),
                                           style: const TextStyle(
                                               color: Colors.white),
                                         ),
@@ -277,7 +272,9 @@ class _HomeTabState extends State<HomeTab> {
                                           } else {
                                             var response1 = [];
                                             var response2 = [];
-
+                                            final myProducts = <MyProducts>[];
+                                            final myOrderRequests =
+                                                <OrderRequestsModel>[];
                                             final dataMap = <String, double>{
                                               "Approved Orders": 52,
                                               "Orders in review": 38,
@@ -289,15 +286,47 @@ class _HomeTabState extends State<HomeTab> {
                                                     .data![1].isSuccessful) {
                                               response1 = snapshot.data![0].data
                                                   as List<dynamic>;
+                                              for (var element in response1) {
+                                                myProducts.add(
+                                                    MyProducts.fromJson(
+                                                        element));
+                                              }
                                               response2 = snapshot.data![1].data
                                                   as List<dynamic>;
+                                              for (var element in response2) {
+                                                myOrderRequests.add(
+                                                    OrderRequestsModel.fromJson(
+                                                        element));
+                                              }
                                             }
+
+                                            final productsInStore = myProducts
+                                                .where(
+                                                  (element) =>
+                                                      element.status ==
+                                                      'approved',
+                                                )
+                                                .toList()
+                                                .length;
+
+                                            final deliveries = myOrderRequests
+                                                .where((element) =>
+                                                    element.order!.status ==
+                                                    'completed')
+                                                .toList()
+                                                .length;
                                             return ProductPartnerHomeWidget(
-                                                orderRequest: response2.length,
-                                                total: response1.length,
-                                                kycScore: kycScore,
-                                                dataMap: dataMap,
-                                                labelMap: labelMap);
+                                              remainingDate: logInDetails.profile!.expiredAt,
+                                              orderRequest: response2.length,
+                                              productsInStore: productsInStore,
+                                              total: response1.length,
+                                              kycScore: kycScore,
+                                              dataMap: dataMap,
+                                              deliveries: deliveries,
+                                              isVerified: logInDetails
+                                                      .profile!.isVerified ??
+                                                  false,
+                                            );
                                           }
                                         }
                                       }),
@@ -503,17 +532,38 @@ class _HomeTabState extends State<HomeTab> {
                                           } else {
                                             var response1 = [];
                                             var response2 = [];
+                                            final projectAnalysis =
+                                                <ProjectAnalysisModel>[];
                                             if (snapshot
                                                     .data![0].isSuccessful &&
                                                 snapshot
                                                     .data![1].isSuccessful) {
                                               response1 = snapshot.data![0]
                                                   .projects as List<dynamic>;
+                                              for (var element in response1) {
+                                                projectAnalysis.add(
+                                                    ProjectAnalysisModel
+                                                        .fromJson(element));
+                                              }
                                               response2 = snapshot.data![1].data
                                                   as List<dynamic>;
                                             }
                                             final assignedProjects =
                                                 response1.length;
+                                            final ongoingProjects =
+                                                projectAnalysis
+                                                    .where((element) =>
+                                                        element.status ==
+                                                        'ongoing')
+                                                    .toList()
+                                                    .length;
+                                            final completedProjects =
+                                                projectAnalysis
+                                                    .where((element) =>
+                                                        element.status ==
+                                                        'completed')
+                                                    .toList()
+                                                    .length;
                                             final availableProjects =
                                                 response2.length;
 
@@ -527,11 +577,17 @@ class _HomeTabState extends State<HomeTab> {
                                             };
 
                                             return SPHomeWidget(
+                                              remainingDate: logInDetails
+                                                  .profile!.expiredAt,
+                                              completedProjects:
+                                                  completedProjects,
+                                              ongoingProjects: ongoingProjects,
                                               total: response1.length,
-                                              isVerified: isVerified,
+                                              isVerified: logInDetails
+                                                      .profile!.isVerified ??
+                                                  false,
                                               kycScore: kycScore,
                                               dataMap: newdataMap,
-                                              labelMap: labelMap,
                                               assignedProjects:
                                                   assignedProjects,
                                               availableProjects:
@@ -707,20 +763,39 @@ class ProductPartnerHomeWidget extends StatelessWidget {
     super.key,
     required this.kycScore,
     required this.dataMap,
-    required this.labelMap,
     required this.total,
     required this.orderRequest,
+    required this.productsInStore,
+    required this.deliveries,
+    required this.isVerified, required this.remainingDate,
   });
 
   final double kycScore;
   final int total;
   final int orderRequest;
+  final int productsInStore;
+  final bool isVerified;
+  final int deliveries;
   final Map<String, double> dataMap;
-  final Map<String, String> labelMap;
+  final dynamic remainingDate;
 
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<HomeController>();
+      Duration duration = const Duration(days: 0);
+    if (remainingDate != null) {
+      duration = DateTime.parse(remainingDate).difference(DateTime.now());
+    }
+
+    String durationToWeeks(Duration duration) {
+      final weeks = duration.inDays ~/ 7;
+      final days = duration.inDays % 7;
+      final weeksString = weeks > 0 ? '$weeks weeks' : '';
+      final daysString = days > 0 ? '$days days' : '';
+      final separator =
+          weeksString.isNotEmpty && daysString.isNotEmpty ? ' ' : '';
+      return '$weeksString$separator$daysString';
+    }
     return Padding(
         padding: EdgeInsets.only(
           left: Get.width * 0.05,
@@ -740,27 +815,7 @@ class ProductPartnerHomeWidget extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      children: [
-                        Text('NGN 3,180,000',
-                            style: AppTextStyle.mid1
-                                .copyWith(color: AppColors.white)),
-                        IconButton(
-                            onPressed: () {},
-                            icon: Icon(
-                              Icons.visibility,
-                              size: 15 * Get.textScaleFactor,
-                            )),
-                        const Spacer(),
-                        Image.asset('assets/icons/verified.png'),
-                        const SizedBox(width: 5),
-                        Text(
-                          'Verified',
-                          style: AppTextStyle.caption
-                              .copyWith(color: AppColors.white),
-                        ),
-                      ],
-                    ),
+                    PriceSwitcher(isVerified: isVerified),
                     Text(
                       'Total Earnings',
                       style: AppTextStyle.caption2
@@ -790,7 +845,7 @@ class ProductPartnerHomeWidget extends StatelessWidget {
                                   .copyWith(color: AppColors.white),
                             ),
                             Text(
-                              '11 months, 3 days',
+                              durationToWeeks(duration),
                               style: AppTextStyle.caption
                                   .copyWith(color: AppColors.white),
                             )
@@ -901,7 +956,7 @@ class ProductPartnerHomeWidget extends StatelessWidget {
                 ),
                 ActivityWidget(
                   onTap: () {},
-                  total: 100,
+                  total: productsInStore,
                   isProduct: false,
                   title: 'Products in Store',
                   subTitle: 'Total Sales made.',
@@ -929,7 +984,7 @@ class ProductPartnerHomeWidget extends StatelessWidget {
                 ),
                 ActivityWidget(
                   onTap: () {},
-                  total: 0,
+                  total: deliveries,
                   isProduct: false,
                   title: 'Deliveries',
                   subTitle: 'Successful deliveries made',
@@ -948,8 +1003,7 @@ class ProductPartnerHomeWidget extends StatelessWidget {
                 AppColors.successGreen,
                 AppColors.serviceYellow
               ],
-              legendOptions: pie_chart.LegendOptions(
-                  legendLabels: labelMap, showLegends: true),
+              legendOptions: const pie_chart.LegendOptions(showLegends: true),
               chartValuesOptions:
                   const pie_chart.ChartValuesOptions(showChartValues: false),
               emptyColor: AppColors.primary,
@@ -965,16 +1019,62 @@ class ProductPartnerHomeWidget extends StatelessWidget {
   }
 }
 
+class PriceSwitcher extends StatefulWidget {
+  final bool isVerified;
+  const PriceSwitcher({
+    super.key,
+    required this.isVerified,
+  });
+
+  @override
+  State<PriceSwitcher> createState() => _PriceSwitcherState();
+}
+
+class _PriceSwitcherState extends State<PriceSwitcher> {
+  bool showPrice = false;
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Text(showPrice ? 'NGN 3,180,000' : '******',
+            style: AppTextStyle.mid1.copyWith(color: AppColors.white)),
+        IconButton(
+            onPressed: () {
+              setState(() {
+                showPrice = !showPrice;
+              });
+            },
+            icon: Icon(
+              Icons.visibility,
+              size: 15 * Get.textScaleFactor,
+              color: AppColors.white,
+            )),
+        const Spacer(),
+        widget.isVerified
+            ? Image.asset('assets/icons/verified.png')
+            : const SizedBox.shrink(),
+        const SizedBox(width: 5),
+        Text(
+          'Verified',
+          style: AppTextStyle.caption.copyWith(color: AppColors.white),
+        ),
+      ],
+    );
+  }
+}
+
 class SPHomeWidget extends StatelessWidget {
   const SPHomeWidget({
     super.key,
     required this.kycScore,
     required this.dataMap,
-    required this.labelMap,
     required this.availableProjects,
     required this.assignedProjects,
     required this.isVerified,
     required this.total,
+    required this.completedProjects,
+    required this.ongoingProjects,
+    required this.remainingDate,
   });
 
   final int availableProjects;
@@ -982,11 +1082,29 @@ class SPHomeWidget extends StatelessWidget {
   final double kycScore;
   final bool isVerified;
   final int total;
+  final int completedProjects;
+  final int ongoingProjects;
+  final dynamic remainingDate;
+
   final Map<String, double> dataMap;
-  final Map<String, String> labelMap;
 
   @override
   Widget build(BuildContext context) {
+    Duration duration = const Duration(days: 0);
+    if (remainingDate != null) {
+      duration = DateTime.parse(remainingDate).difference(DateTime.now());
+    }
+
+    String durationToWeeks(Duration duration) {
+      final weeks = duration.inDays ~/ 7;
+      final days = duration.inDays % 7;
+      final weeksString = weeks > 0 ? '$weeks weeks' : '';
+      final daysString = days > 0 ? '$days days' : '';
+      final separator =
+          weeksString.isNotEmpty && daysString.isNotEmpty ? ' ' : '';
+      return '$weeksString$separator$daysString';
+    }
+
     return Padding(
         padding: EdgeInsets.only(
           left: Get.width * 0.05,
@@ -1005,29 +1123,7 @@ class SPHomeWidget extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      children: [
-                        Text('NGN 3,180,000',
-                            style: AppTextStyle.mid1
-                                .copyWith(color: AppColors.white)),
-                        IconButton(
-                            onPressed: () {},
-                            icon: Icon(
-                              Icons.visibility,
-                              size: 15 * Get.textScaleFactor,
-                            )),
-                        const Spacer(),
-                        isVerified
-                            ? Image.asset('assets/icons/verified.png')
-                            : const SizedBox.shrink(),
-                        const SizedBox(width: 5),
-                        Text(
-                          isVerified ? 'Verified' : 'Not Verified',
-                          style: AppTextStyle.caption
-                              .copyWith(color: AppColors.white),
-                        ),
-                      ],
-                    ),
+                    PriceSwitcher(isVerified: isVerified),
                     Text(
                       'Total Earnings',
                       style: AppTextStyle.caption2
@@ -1057,7 +1153,7 @@ class SPHomeWidget extends StatelessWidget {
                                   .copyWith(color: AppColors.white),
                             ),
                             Text(
-                              '11 months, 3 days',
+                              durationToWeeks(duration),
                               style: AppTextStyle.caption
                                   .copyWith(color: AppColors.white),
                             )
@@ -1164,15 +1260,15 @@ class SPHomeWidget extends StatelessWidget {
                 SizedBox(height: Get.width * 0.06),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
+                  children: [
                     SPProjectPreview(
-                      amount: 12,
+                      amount: completedProjects,
                       title: 'Completed Projects',
                       image: 'assets/icons/complete_projects.png',
                       color: AppColors.serviceBlue,
                     ),
                     SPProjectPreview(
-                      amount: 12,
+                      amount: ongoingProjects,
                       title: 'Ongoing Projects',
                       image: 'assets/icons/ongoing_projects.png',
                       color: AppColors.serviceRed,
@@ -1194,8 +1290,8 @@ class SPHomeWidget extends StatelessWidget {
                     animationDuration: const Duration(seconds: 2),
                     centerText: total.toString(),
                     ringStrokeWidth: 12,
-                    legendOptions: pie_chart.LegendOptions(
-                        legendLabels: labelMap, showLegends: true),
+                    legendOptions:
+                        const pie_chart.LegendOptions(showLegends: true),
                     chartValuesOptions: const pie_chart.ChartValuesOptions(
                         showChartValues: false),
                     baseChartColor: AppColors.background,

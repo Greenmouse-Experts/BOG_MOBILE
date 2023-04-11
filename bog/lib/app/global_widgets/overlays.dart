@@ -5,7 +5,6 @@ import 'package:bog/app/global_widgets/app_radio_button.dart';
 import 'package:bog/app/global_widgets/global_widgets.dart';
 import 'package:bog/app/global_widgets/page_dropdown.dart';
 import 'package:bog/app/global_widgets/update_slider.dart';
-import 'package:bog/app/modules/home/home.dart';
 import 'package:bog/app/modules/meetings/meeting.dart';
 import 'package:bog/app/modules/switch/switch.dart';
 
@@ -513,8 +512,8 @@ class AppOverlay {
       required String userType,
       required String userId,
       Function()? onPressed,
-      required bool isSP,
-      String? buttonText}) {
+      String? buttonText,
+      required bool isSP}) {
     showDialog(
       context: Get.context!,
       builder: (context) => WillPopScope(
@@ -585,12 +584,14 @@ class AppOverlay {
                                 label: 'Select Date',
                                 onChanged: (onChanged) {
                                   selectedDate = onChanged;
+                                  print(selectedDate);
                                 }),
                             SizedBox(height: Get.height * 0.01),
                             AppTimePicker(
                                 label: 'Select Time',
                                 onChanged: (onChanged) {
                                   selectedTime = onChanged;
+                                  print(selectedTime);
                                 }),
                             SizedBox(height: Get.height * 0.01),
                             PageInput(
@@ -626,7 +627,7 @@ class AppOverlay {
                                       'time': selectedTime,
                                       'userType': userType
                                     };
-
+                                    print(meetingRequest);
                                     final controller =
                                         Get.find<HomeController>();
                                     final response = await controller.userRepo
@@ -642,7 +643,7 @@ class AppOverlay {
                                           message:
                                               'Project Requested Successfully',
                                           onPressed: () {
-                                            if (isSP) {
+                                           if (isSP) {
                                               Get.back();
                                               controller.currentBottomNavPage
                                                   .value = 0;

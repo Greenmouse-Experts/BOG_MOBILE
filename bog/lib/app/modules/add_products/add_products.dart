@@ -1,11 +1,6 @@
 import 'dart:io';
 
-import 'package:bog/app/global_widgets/bottom_widget.dart';
-import 'package:bog/app/global_widgets/global_widgets.dart';
-import 'package:bog/app/modules/add_products/add_product_success.dart';
-
 import 'package:flutter/material.dart';
-
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:get/get.dart';
 
@@ -18,9 +13,14 @@ import '../../data/providers/api.dart';
 import '../../data/providers/api_response.dart';
 
 import '../../global_widgets/app_base_view.dart';
+import '../../global_widgets/bottom_widget.dart';
+import '../../global_widgets/global_widgets.dart';
+import '../../global_widgets/new_app_bar.dart';
 import '../../global_widgets/page_dropdown.dart';
 
 import 'package:dio/dio.dart' as dio;
+
+import 'add_product_success.dart';
 
 class AddProject extends StatefulWidget {
   const AddProject({Key? key}) : super(key: key);
@@ -70,27 +70,7 @@ class _AddProjectState extends State<AddProject> {
           id: 'AddProject',
           builder: (controller) {
             return Scaffold(
-              appBar: AppBar(
-                bottom: PreferredSize(
-                  preferredSize: const Size.fromHeight(1),
-                  child: Divider(
-                    color: AppColors.grey.withOpacity(0.3),
-                  ),
-                ),
-                title: Text(
-                  "Add Product",
-                  style: AppTextStyle.subtitle1.copyWith(
-                      fontSize: multiplier * 0.07,
-                      color: Colors.black,
-                      fontWeight: FontWeight.w600),
-                  textAlign: TextAlign.center,
-                ),
-                leading: IconButton(
-                    onPressed: () {
-                      Get.back();
-                    },
-                    icon: const Icon(Icons.arrow_back_ios_new_outlined)),
-              ),
+              appBar: newAppBarBack(context, 'Add Product'),
               backgroundColor: AppColors.backgroundVariant2,
               body: FutureBuilder<ApiResponse>(
                   future: createProd,

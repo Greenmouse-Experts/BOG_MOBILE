@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:bog/app/modules/settings/edit_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -13,6 +12,7 @@ import '../../data/model/user_details_model.dart';
 import '../../data/providers/my_pref.dart';
 import '../../global_widgets/app_avatar.dart';
 import '../../global_widgets/page_input.dart';
+import 'edit_profile.dart';
 
 class ProfileInfo extends GetView<HomeController> {
   const ProfileInfo({Key? key}) : super(key: key);
@@ -177,6 +177,7 @@ class ProfileInfo extends GetView<HomeController> {
                                 width: width * 0.45,
                                 child: PageInput(
                                   hint: '',
+                                   textWidth: 0.3,
                                   label: 'First Name',
                                   isCompulsory: false,
                                   readOnly: true,
@@ -188,6 +189,7 @@ class ProfileInfo extends GetView<HomeController> {
                                 width: width * 0.45,
                                 child: PageInput(
                                   hint: '',
+                                  textWidth: 0.3,
                                   label: 'Last Name',
                                   isCompulsory: false,
                                   readOnly: true,
@@ -214,6 +216,7 @@ class ProfileInfo extends GetView<HomeController> {
                           PageInput(
                             hint: '',
                             label: 'Phone Number',
+                           
                             isCompulsory: false,
                             readOnly: true,
                             borderSide: BorderSide.none,
@@ -225,6 +228,7 @@ class ProfileInfo extends GetView<HomeController> {
                           PageInput(
                             hint: 'No Address Currently',
                             label: 'Address',
+                           
                             isCompulsory: false,
                             readOnly: true,
                             borderSide: BorderSide.none,
@@ -241,6 +245,7 @@ class ProfileInfo extends GetView<HomeController> {
                                 child: PageInput(
                                   hint: 'No State Currently',
                                   label: 'State',
+                                    textWidth: 0.3,
                                   isCompulsory: false,
                                   readOnly: true,
                                   borderSide: BorderSide.none,
@@ -252,6 +257,7 @@ class ProfileInfo extends GetView<HomeController> {
                                 child: PageInput(
                                   hint: 'No City Currently',
                                   label: 'City',
+                                    textWidth: 0.3,
                                   isCompulsory: false,
                                   readOnly: true,
                                   borderSide: BorderSide.none,

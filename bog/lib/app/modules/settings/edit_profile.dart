@@ -1,9 +1,5 @@
 import 'dart:convert';
 
-import 'package:bog/app/global_widgets/app_button.dart';
-import 'package:bog/app/global_widgets/bottom_widget.dart';
-import 'package:bog/app/global_widgets/new_app_bar.dart';
-
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart' as dio;
 import 'package:form_field_validator/form_field_validator.dart';
@@ -17,6 +13,9 @@ import '../../data/model/user_details_model.dart';
 import '../../data/providers/my_pref.dart';
 import '../../global_widgets/app_avatar.dart';
 
+import '../../global_widgets/app_button.dart';
+import '../../global_widgets/bottom_widget.dart';
+import '../../global_widgets/new_app_bar.dart';
 import '../../global_widgets/page_input.dart';
 
 class EditProfile extends StatefulWidget {
@@ -135,6 +134,7 @@ class _EditProfileState extends State<EditProfile> {
                                   child: PageInput(
                                     hint: '',
                                     label: 'First Name',
+                                    textWidth: 0.3,
                                     isCompulsory: true,
                                     controller: firstName,
                                     validator: MinLengthValidator(1,
@@ -146,6 +146,7 @@ class _EditProfileState extends State<EditProfile> {
                                   child: PageInput(
                                     hint: '',
                                     label: 'Last Name',
+                                    textWidth: 0.3,
                                     isCompulsory: true,
                                     controller: lastName,
                                     validator: MinLengthValidator(1,
@@ -196,6 +197,7 @@ class _EditProfileState extends State<EditProfile> {
                                   child: PageInput(
                                     hint: 'Enter State',
                                     label: 'State',
+                                    textWidth: 0.3,
                                     isCompulsory: false,
                                     controller: state,
                                   ),
@@ -205,6 +207,7 @@ class _EditProfileState extends State<EditProfile> {
                                   child: PageInput(
                                     hint: 'Enter City',
                                     label: 'City',
+                                    textWidth: 0.3,
                                     isCompulsory: false,
                                     controller: city,
                                   ),

@@ -1,5 +1,3 @@
-import 'package:bog/app/global_widgets/app_ratings.dart';
-import 'package:bog/app/global_widgets/page_dropdown.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -12,6 +10,9 @@ import '../../data/model/shop_category.dart';
 import '../../data/providers/api_response.dart';
 import '../../global_widgets/bottom_widget.dart';
 
+import '../../global_widgets/global_widgets.dart';
+import '../../global_widgets/new_app_bar.dart';
+import '../../global_widgets/page_dropdown.dart';
 import 'product_details.dart';
 
 final loadedProducts = <Widget>[];
@@ -49,27 +50,7 @@ class _ShopState extends State<Shop> {
         id: 'shop',
         builder: (controller) {
           return Scaffold(
-            appBar: AppBar(
-              bottom: PreferredSize(
-                preferredSize: const Size.fromHeight(1),
-                child: Divider(
-                  color: AppColors.grey.withOpacity(0.3),
-                ),
-              ),
-              title: Text(
-                "Shop",
-                style: AppTextStyle.subtitle1.copyWith(
-                    fontSize: multiplier * 0.07,
-                    color: Colors.black,
-                    fontWeight: FontWeight.w600),
-                textAlign: TextAlign.center,
-              ),
-              leading: IconButton(
-                  onPressed: () {
-                    Get.back();
-                  },
-                  icon: const Icon(Icons.arrow_back_ios_new_outlined)),
-            ),
+            appBar: newAppBarBack(context, 'Shop'),
             body: SizedBox(
               width: Get.width,
               child: SingleChildScrollView(
@@ -94,8 +75,7 @@ class _ShopState extends State<Shop> {
                                 multiplier, width, true, getAllProducts));
                             for (var element in posts) {
                               if (element.totalProducts != 0) {
-                                // tabs.add(
-                                //     Tab(child: Text(element.name.toString())));
+                                
                               }
 
                               if (element.totalProducts != 0) {
@@ -218,7 +198,6 @@ class _ShopState extends State<Shop> {
               width: Get.width * 0.92,
               child: GridView.builder(
                 shrinkWrap: true,
-                //  physics: const NeverScrollableScrollPhysics(),
                 itemCount: posts.length,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     childAspectRatio: 4 / 4.5,

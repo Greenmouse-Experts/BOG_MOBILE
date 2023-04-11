@@ -1,8 +1,6 @@
-import 'package:bog/app/global_widgets/global_widgets.dart';
-import 'package:bog/app/modules/meetings/meeting.dart';
-import 'package:bog/app/modules/project_details/view_form.dart';
-import 'package:date_time_format/date_time_format.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:date_time_format/date_time_format.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:get/get.dart';
 
@@ -11,12 +9,13 @@ import '../../../../core/theme/app_styles.dart';
 import '../../../controllers/home_controller.dart';
 import '../../../data/model/my_products.dart';
 import '../../../data/providers/api_response.dart';
-
 import '../../../global_widgets/app_loader.dart';
-
+import '../../../global_widgets/global_widgets.dart';
 import '../../add_products/add_products.dart';
 import '../../checkout/checkout.dart';
+import '../../meetings/meeting.dart';
 import '../../orders/order_details.dart';
+import '../../project_details/view_form.dart';
 
 class CartTab extends StatefulWidget {
   const CartTab({Key? key}) : super(key: key);
@@ -26,9 +25,9 @@ class CartTab extends StatefulWidget {
 }
 
 class _CartTabState extends State<CartTab> {
+  String search = "";
   @override
   Widget build(BuildContext context) {
-    String search = "";
     final Size size = MediaQuery.of(context).size;
     double multiplier = 25 * size.height * 0.01;
 
@@ -312,8 +311,11 @@ class _CartTabState extends State<CartTab> {
                         size: Get.width * 0.05,
                       ),
                       onChanged: (value) {
-                        search = value;
-                        controller.update();
+                        if (search != value) {
+                          setState(() {
+                            search = value;
+                          });
+                        }
                       },
                     ),
                   ),
@@ -329,9 +331,17 @@ class _CartTabState extends State<CartTab> {
                           if (snapshot.connectionState ==
                                   ConnectionState.done &&
                               snapshot.data!.isSuccessful) {
-                            final posts =
+                            RxList<MyProducts> posts =
                                 MyProducts.fromJsonList(snapshot.data!.data)
                                     .obs;
+                            if (search.isNotEmpty) {
+                              posts = posts
+                                  .where((element) => element.name!
+                                      .toLowerCase()
+                                      .contains(search.toLowerCase()))
+                                  .toList()
+                                  .obs;
+                            }
                             if (posts.isEmpty) {
                               return SizedBox(
                                 height: Get.height * 0.7,
@@ -359,6 +369,7 @@ class _CartTabState extends State<CartTab> {
                               itemBuilder: (BuildContext context, int index) {
                                 return ProductItem(
                                   title: posts[index].name,
+                                  status:  posts[index].status,
                                   deleteProd: () async {
                                     final response = await controller.userRepo
                                         .deleteData(
@@ -380,7 +391,7 @@ class _CartTabState extends State<CartTab> {
                                     }
                                   },
                                   subTitle: "N ${posts[index].price}",
-                                  date: posts[index].createdAt,
+                                  quantity: posts[index].quantity,
                                   image: posts[index].image,
                                 );
                               },
@@ -688,21 +699,20 @@ class ProductItem extends StatelessWidget {
     Key? key,
     this.title,
     this.subTitle,
-    this.date,
+    this.quantity,
     this.image,
+    this.status,
     required this.deleteProd,
   }) : super(key: key);
 
   final String? title;
   final String? subTitle;
-  final String? date;
+  final String? quantity;
   final String? image;
+  final String? status;
   final VoidCallback deleteProd;
   @override
   Widget build(BuildContext context) {
-    /*CachedNetworkImageProvider(
-      "www.com",
-    )*/
     return IntrinsicHeight(
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
@@ -713,10 +723,16 @@ class ProductItem extends StatelessWidget {
               width: 90,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10),
-                child: Image.network(
-                  image.toString(),
+                child: CachedNetworkImage(
+                  imageUrl: image.toString(),
                   fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) {
+                  placeholder: (context, url) {
+                    return const Center(
+                      child:
+                          CircularProgressIndicator(color: AppColors.primary),
+                    );
+                  },
+                  errorWidget: (context, url, error) {
                     return Container(
                       height: 90,
                       width: 90,
@@ -746,12 +762,12 @@ class ProductItem extends StatelessWidget {
                 children: [
                   Padding(
                     padding: EdgeInsets.only(left: Get.width * 0.015),
-                    child: Text(title ?? "30 Tonnes Sharp Sand"),
+                    child: Text(title ?? ""),
                   ),
                   Padding(
                     padding: EdgeInsets.only(left: Get.width * 0.015),
                     child: Text(
-                      subTitle ?? 'N 115,000',
+                      subTitle ?? '',
                       style: AppTextStyle.caption.copyWith(
                         color: Colors.black,
                         fontSize: Get.width * 0.035,
@@ -762,7 +778,7 @@ class ProductItem extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.only(left: Get.width * 0.015),
                     child: Text(
-                      date ?? 'Monday, 31 October 2022 ',
+                      'Qty: ${quantity ?? 0}',
                       style: AppTextStyle.caption.copyWith(
                         color: const Color(0xFF9A9A9A),
                         fontSize: Get.width * 0.033,
@@ -803,11 +819,16 @@ class ProductItem extends StatelessWidget {
                   child: SizedBox(
                     width: Get.width * 0.2,
                     child: AppButton(
-                      title: "Pending",
+                      title:(status == 'in_review' ? 'In Review' : status?.capitalizeFirst ?? 'Pending'),
                       padding: const EdgeInsets.symmetric(vertical: 5),
-                      border: Border.all(color: const Color(0xFFECF6FC)),
+                      border: Border.all(
+                          color: status == 'approved'
+                              ? AppColors.successGreen.withOpacity(0.1)
+                              : const Color(0xFFECF6FC)),
                       bckgrndColor: const Color(0xFFECF6FC),
-                      fontColor: AppColors.primary,
+                      fontColor: status == 'approved'
+                          ? AppColors.successGreen
+                          : AppColors.primary,
                     ),
                   ),
                 ),
@@ -825,19 +846,18 @@ class OrderRequestItem extends StatelessWidget {
   final int quantity;
   final String price;
   final String name;
+  final String status;
   const OrderRequestItem({
     Key? key,
     required this.orderSlug,
     required this.quantity,
     required this.price,
     required this.name,
+    required this.status,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    /*CachedNetworkImageProvider(
-      "www.com",
-    )*/
     return Container(
       margin: EdgeInsets.only(
           left: Get.width * 0.03, right: Get.width * 0.03, bottom: 20, top: 5),
@@ -850,7 +870,7 @@ class OrderRequestItem extends StatelessWidget {
             color: Colors.grey.withOpacity(0.2),
             spreadRadius: 1,
             blurRadius: 6,
-            offset: const Offset(0, 3), // changes position of shadow
+            offset: const Offset(0, 3),
           ),
         ],
       ),
@@ -861,6 +881,7 @@ class OrderRequestItem extends StatelessWidget {
               ));
         },
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
@@ -903,7 +924,7 @@ class OrderRequestItem extends StatelessWidget {
                     Padding(
                       padding: EdgeInsets.only(left: Get.width * 0.015),
                       child: Text(
-                        price,
+                        'NGN $price',
                         style: AppTextStyle.caption.copyWith(
                           color: AppColors.primary,
                           fontSize: Get.width * 0.035,
@@ -915,7 +936,7 @@ class OrderRequestItem extends StatelessWidget {
                     Padding(
                       padding: EdgeInsets.only(left: Get.width * 0.015),
                       child: Text(
-                        '$quantity',
+                        'Qty: $quantity',
                         style: AppTextStyle.caption.copyWith(
                           color: Colors.black.withOpacity(0.6),
                           fontSize: Get.width * 0.033,
@@ -928,31 +949,12 @@ class OrderRequestItem extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 10),
-            Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                SizedBox(
-                  width: Get.width * 0.4,
-                  child: AppButton(
-                    title: "Decline",
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    border: Border.all(color: const Color(0xFFDC1515)),
-                    bckgrndColor: Colors.white,
-                    fontColor: const Color(0xFFDC1515),
-                  ),
-                ),
-                SizedBox(
-                  width: Get.width * 0.4,
-                  child: AppButton(
-                    title: "Accept",
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    border: Border.all(color: const Color(0xFF24B53D)),
-                    bckgrndColor: Colors.white,
-                    fontColor: const Color(0xFF24B53D),
-                  ),
-                ),
-              ],
+            Text(
+              'Status:  ${status.toUpperCase()}',
+              style: AppTextStyle.caption.copyWith(
+                  fontSize: Get.width * 0.035,
+                  fontWeight: FontWeight.w400,
+                  color: Colors.black),
             )
           ],
         ),
@@ -976,9 +978,6 @@ class ServiceRequestItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    /*CachedNetworkImageProvider(
-      "www.com",
-    )*/
     return Container(
       margin: EdgeInsets.only(
           left: Get.width * 0.03, right: Get.width * 0.03, bottom: 20, top: 5),
@@ -991,7 +990,7 @@ class ServiceRequestItem extends StatelessWidget {
             color: Colors.grey.withOpacity(0.2),
             spreadRadius: 1,
             blurRadius: 6,
-            offset: const Offset(0, 3), // changes position of shadow
+            offset: const Offset(0, 3),
           ),
         ],
       ),

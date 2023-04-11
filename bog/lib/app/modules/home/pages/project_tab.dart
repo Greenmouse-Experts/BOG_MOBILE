@@ -1,15 +1,5 @@
 import 'dart:convert';
 
-import 'package:bog/app/data/model/available_projects_model.dart';
-import 'package:bog/app/data/model/order_request_model.dart';
-import 'package:bog/app/data/model/projetcs_model.dart';
-import 'package:bog/app/data/model/service_projects_model.dart';
-import 'package:bog/app/global_widgets/app_loader.dart';
-import 'package:bog/app/global_widgets/global_widgets.dart';
-import 'package:bog/app/global_widgets/new_app_bar.dart';
-import 'package:bog/app/modules/project_details/new_project_details.dart';
-import 'package:bog/app/modules/project_details/service_partner_project_details.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:get/get.dart';
@@ -18,13 +8,21 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_styles.dart';
 import '../../../../core/utils/formatter.dart';
 import '../../../controllers/home_controller.dart';
+import '../../../data/model/available_projects_model.dart';
 import '../../../data/model/log_in_model.dart';
+import '../../../data/model/order_request_model.dart';
+import '../../../data/model/projetcs_model.dart';
+import '../../../data/model/service_projects_model.dart';
 import '../../../data/providers/api_response.dart';
 import '../../../data/providers/my_pref.dart';
+import '../../../global_widgets/app_loader.dart';
+import '../../../global_widgets/global_widgets.dart';
 import '../../../global_widgets/my_project_widget.dart';
+import '../../../global_widgets/new_app_bar.dart';
 import '../../../global_widgets/page_dropdown.dart';
 import '../../create/create.dart';
 import '../../project_details/project_details.dart';
+import '../../project_details/service_partner_project_details.dart';
 import 'cart_tab.dart';
 
 class ProjectTab extends StatefulWidget {
@@ -132,6 +130,7 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
                                           onChanged: (val) {
                                             currentOrder.value = val;
                                             controller.update();
+                                            setState(() {});
                                           },
                                           value: "New Order Requests",
                                           items: [
@@ -188,6 +187,7 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
                                                           name: order.product!
                                                                   .name ??
                                                               '',
+                                                          status: order.order!.status ?? '',
                                                           orderSlug: order
                                                                   .order!
                                                                   .orderSlug ??

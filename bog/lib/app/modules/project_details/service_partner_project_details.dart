@@ -1,4 +1,3 @@
-import 'package:bog/app/data/model/service_projects_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -7,10 +6,12 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_styles.dart';
 import '../../controllers/home_controller.dart';
 
+import '../../data/model/service_projects_model.dart';
 import '../../global_widgets/app_base_view.dart';
 
 import '../../global_widgets/bottom_widget.dart';
 import '../../global_widgets/new_app_bar.dart';
+import '../../global_widgets/overlays.dart';
 import 'new_project_details.dart';
 
 class ServicePartnerProjectDetails extends StatefulWidget {
@@ -24,6 +25,7 @@ class ServicePartnerProjectDetails extends StatefulWidget {
 
 class _ServicePartnerProjectDetailsState
     extends State<ServicePartnerProjectDetails> {
+  TextEditingController projectUpdateController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return AppBaseView(
@@ -55,25 +57,28 @@ class _ServicePartnerProjectDetailsState
                                 text: TextSpan(children: [
                                   TextSpan(
                                       text: 'Project ID:  ',
-                                      style: AppTextStyle.subtitle1.copyWith(
+                                      style: AppTextStyle.subtitle2.copyWith(
                                           color: Colors.black,
                                           fontWeight: FontWeight.w600)),
                                   TextSpan(
                                       text: widget.serviceProject.projectSlug,
-                                      style: AppTextStyle.subtitle1.copyWith(
+                                      style: AppTextStyle.subtitle2.copyWith(
                                           color: AppColors.primary,
                                           fontWeight: FontWeight.w600)),
                                 ]),
                               ),
                               Text(
-                                widget.serviceProject.status ?? '',
-                                style: AppTextStyle.caption.copyWith(
+                                (widget.serviceProject.status ?? '')
+                                    .toUpperCase(),
+                                style: AppTextStyle.caption2.copyWith(
                                     color: widget.serviceProject.status ==
                                             'pending'
                                         ? AppColors.serviceYellow
                                         : widget.serviceProject.status ==
-                                                'approved'
-                                            ? AppColors.successGreen
+                                                    'approved' ||
+                                                widget.serviceProject.status ==
+                                                    'ongoing'
+                                            ? Colors.green
                                             : Colors.black),
                               ),
                             ],
@@ -84,12 +89,12 @@ class _ServicePartnerProjectDetailsState
                             children: [
                               Text(
                                 'Request Date: ${DateFormat('dd/mm/yyyy').format(widget.serviceProject.createdAt!)}',
-                                style: AppTextStyle.caption
+                                style: AppTextStyle.caption2
                                     .copyWith(color: AppColors.ashColor),
                               ),
                               Text(
-                                widget.serviceProject.endDate.toString(),
-                                style: AppTextStyle.caption
+                                'End Date: ${DateFormat('dd/MMM/yyyy').format(widget.serviceProject.endDate ?? DateTime.now())}',
+                                style: AppTextStyle.caption2
                                     .copyWith(color: AppColors.ashColor),
                               ),
                             ],
@@ -155,10 +160,68 @@ class _ServicePartnerProjectDetailsState
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            'Project Completion Rate: ${widget.serviceProject.servicePartnerProgress ?? 0}%',
-                            style: AppTextStyle.caption
-                                .copyWith(color: Colors.black),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Project Completion Rate: ${widget.serviceProject.servicePartnerProgress ?? 0}%',
+                                style: AppTextStyle.caption
+                                    .copyWith(color: Colors.black),
+                              ),
+                              IconButton(
+                                  onPressed: () {
+                                    AppOverlay.showPercentageDialog(
+                                        doubleFunction: true,
+                                        controller: projectUpdateController,
+                                        value: widget.serviceProject.progress!
+                                            .toDouble(),
+                                        title: 'Update Project Percentage',
+                                        content:
+                                            'Drag the progress bar to match your project progress',
+                                        onPressed: () async {
+                                          if (projectUpdateController
+                                              .text.isEmpty) {
+                                            Get.snackbar(
+                                                'Error', 'Put a valid value',
+                                                backgroundColor: Colors.red,
+                                                colorText:
+                                                    AppColors.background);
+                                          }
+                                          final response =
+                                              await controller.userRepo.putData(
+                                                  '/projects/progress/${widget.serviceProject.serviceProviderId}/${widget.serviceProject.id}',
+                                                  {
+                                                "percent":
+                                                    projectUpdateController
+                                                        .text,
+                                              });
+                                          if (response.isSuccessful) {
+                                            Get.back();
+                                            setState(() {});
+                                            Get.snackbar(
+                                              'Success',
+                                              'Project Status updated successfully',
+                                              backgroundColor: Colors.green,
+                                            );
+                                            projectUpdateController.text = '';
+                                          } else {
+                                            Get.snackbar(
+                                                'Error',
+                                                response.message ??
+                                                    'An error occurred',
+                                                backgroundColor: Colors.red,
+                                                colorText:
+                                                    AppColors.background);
+                                            projectUpdateController.text = '';
+                                          }
+                                        });
+                                  },
+                                  icon: Icon(
+                                    Icons.edit,
+                                    color: AppColors.primary,
+                                    size: Get.width * 0.05,
+                                  ))
+                            ],
                           ),
                           SizedBox(height: Get.height * 0.01),
                           TweenAnimationBuilder(
@@ -184,80 +247,78 @@ class _ServicePartnerProjectDetailsState
                     ),
                   ),
                   SizedBox(height: Get.height * 0.01),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Card(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5)),
-                        elevation: 2,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: IntrinsicWidth(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Transactions',
-                                  style: AppTextStyle.caption2
-                                      .copyWith(color: Colors.black),
-                                ),
-                                Divider(
-                                  thickness: 1,
-                                  color: AppColors.newAsh.withOpacity(0.3),
-                                ),
-                                SizedBox(
-                                    width: Get.width * 0.375,
-                                    height: Get.height * 0.3,
-                                    child: Center(
-                                      child: Text(
-                                        'No transactions available currently',
-                                        textAlign: TextAlign.center,
-                                        style: AppTextStyle.caption2
-                                            .copyWith(color: Colors.black),
-                                      ),
-                                    )),
-                              ],
+                  Card(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5)),
+                    elevation: 2,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: IntrinsicWidth(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Project Updates',
+                              style: AppTextStyle.subtitle2.copyWith(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold),
                             ),
-                          ),
+                            Divider(
+                              thickness: 1,
+                              color: AppColors.newAsh.withOpacity(0.3),
+                            ),
+                            SizedBox(
+                                width: Get.width * 0.92,
+                                height: Get.height * 0.3,
+                                child: Center(
+                                  child: Text(
+                                    'No updates yet',
+                                    textAlign: TextAlign.center,
+                                    style: AppTextStyle.caption2
+                                        .copyWith(color: Colors.black),
+                                  ),
+                                )),
+                          ],
                         ),
                       ),
-                      Card(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5)),
-                        elevation: 2,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: IntrinsicWidth(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Cost Summary',
-                                  style: AppTextStyle.caption2
-                                      .copyWith(color: Colors.black),
-                                ),
-                                Divider(
-                                  thickness: 1,
-                                  color: AppColors.newAsh.withOpacity(0.3),
-                                ),
-                                SizedBox(
-                                    width: Get.width * 0.375,
-                                    height: Get.height * 0.3,
-                                    child: Center(
-                                      child: Text(
-                                        'No summary available currently',
-                                        textAlign: TextAlign.center,
-                                        style: AppTextStyle.caption2
-                                            .copyWith(color: Colors.black),
-                                      ),
-                                    )),
-                              ],
+                    ),
+                  ),
+                  SizedBox(height: Get.height * 0.01),
+                  Card(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5)),
+                    elevation: 2,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: IntrinsicWidth(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Payment Status',
+                              style: AppTextStyle.subtitle2.copyWith(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold),
                             ),
-                          ),
+                            Divider(
+                              thickness: 1,
+                              color: AppColors.newAsh.withOpacity(0.3),
+                            ),
+                            SizedBox(
+                                width: Get.width * 0.92,
+                                height: Get.height * 0.1,
+                                child: Center(
+                                  child: Text(
+                                    'No payment from admin',
+                                    textAlign: TextAlign.center,
+                                    style: AppTextStyle.caption2
+                                        .copyWith(color: Colors.black),
+                                  ),
+                                )),
+                          ],
                         ),
                       ),
-                    ],
+                    ),
                   ),
                   SizedBox(height: Get.height * 0.01),
                 ],

@@ -1,14 +1,6 @@
 import 'dart:convert';
 
-import 'package:bog/app/global_widgets/app_base_view.dart';
-import 'package:bog/app/global_widgets/confirm_logout.dart';
-// import 'package:bog/app/modules/checkout/receipt.dart';
-
-import 'package:bog/app/modules/meetings/meeting.dart';
-
-import 'package:bog/app/modules/settings/support.dart';
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
 
 import '../../core/theme/app_colors.dart';
@@ -18,11 +10,15 @@ import '../controllers/home_controller.dart';
 import '../data/model/log_in_model.dart';
 import '../data/providers/my_pref.dart';
 
+import '../modules/meetings/meeting.dart';
 import '../modules/orders/my_orders.dart';
 import '../modules/reviews/reviews.dart';
+import '../modules/settings/support.dart';
 import '../modules/switch/switch.dart';
 import '../modules/transactions/transaction.dart';
 import 'app_avatar.dart';
+import 'app_base_view.dart';
+import 'confirm_logout.dart';
 
 class AppDrawer extends StatefulWidget {
   const AppDrawer({Key? key}) : super(key: key);
@@ -53,7 +49,6 @@ class _AppDrawerState extends State<AppDrawer> {
                     width: Get.width * 0.7,
                     height: Get.height * 0.95,
                     decoration: const BoxDecoration(
-                      //color: AppColors.background,
                       image: DecorationImage(
                         image: AssetImage("assets/images/Frame 466391.png"),
                         fit: BoxFit.fitHeight,
@@ -142,7 +137,6 @@ class _AppDrawerState extends State<AppDrawer> {
                               controller.currentBottomNavPage.value = 4;
                               controller.updateNewUser(controller.currentType);
                               controller.update(['home']);
-                              // Get.to(() => const ProfileTab(isPage: true));
                             },
                             imageAsset: "assets/images/one1.png",
                             showArrow: true),
@@ -161,7 +155,12 @@ class _AppDrawerState extends State<AppDrawer> {
                           _TextButton(
                               imageAsset: 'assets/images/project_icon.png',
                               text: 'Projects',
-                              onPressed: () {}),
+                              onPressed: () {
+                                  Get.back();
+                              controller.currentBottomNavPage.value = 2;
+                              controller.updateNewUser(controller.currentType);
+                              controller.update(['home']);
+                              }),
                         _TextButton(
                             text: "Transactions",
                             onPressed: () {
@@ -204,7 +203,6 @@ class _AppDrawerState extends State<AppDrawer> {
                                 onPressed: () {
                                   Get.back();
                                   Get.to(() => const SwitchUser());
-                                  //Get.toNamed(OnboardingPage.route);
                                 },
                                 imageAsset: "assets/images/six1.png",
                                 showArrow: true),
@@ -213,7 +211,6 @@ class _AppDrawerState extends State<AppDrawer> {
                                 onPressed: () {
                                   Get.back();
                                   Get.to(() => const Support());
-                                  //Get.toNamed(OnboardingPage.route);
                                 },
                                 imageAsset: "assets/images/seven1.png",
                                 showArrow: true),
@@ -225,8 +222,6 @@ class _AppDrawerState extends State<AppDrawer> {
                                       barrierDismissible: false,
                                       builder: (BuildContext context) =>
                                           const ConfirmLogout());
-                                  // Get.back();
-                                  //   Get.toNamed(OnboardingPage.route);
                                 },
                                 imageAsset: "assets/images/log_out.png",
                                 showArrow: false),

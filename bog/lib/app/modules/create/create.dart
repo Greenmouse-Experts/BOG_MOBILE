@@ -5,7 +5,6 @@ import 'package:bog/app/global_widgets/bottom_widget.dart';
 import 'package:bog/app/global_widgets/global_widgets.dart';
 import 'package:bog/app/modules/create/json_form.dart';
 
-
 import 'package:flutter/material.dart';
 
 import 'package:flutter_svg/svg.dart';
@@ -28,10 +27,10 @@ class Create extends StatefulWidget {
 }
 
 class _CreateState extends State<Create> {
-  // var chosen = -1;
-
   late Future<ApiResponse> allServices;
   late Future<ApiResponse> typeOfService;
+
+  var search = '';
 
   @override
   void initState() {
@@ -43,24 +42,6 @@ class _CreateState extends State<Create> {
 
   var titleController = TextEditingController();
   var searchController = TextEditingController();
-
-  List<String> titles = [
-    "Land Surveyor",
-    "Construction Drawing",
-    "Geotechnical \nInvestigation",
-    //"Smart Calculator",
-    "Building Approval",
-    "Contractor"
-  ];
-
-  List<String> titlesToUse = [
-    "Land Surveyor",
-    "Construction Drawing",
-    "Geotechnical \nInvestigation",
-    // "Smart Calculator",
-    "Building Approval",
-    "Contractor"
-  ];
 
   GetServices? searchService(List<GetServices> getServices, String id) {
     try {
@@ -177,25 +158,12 @@ class _CreateState extends State<Create> {
                             left: width * 0.05, right: width * 0.05),
                         child: AppInput(
                           hintText: "Search for your desired service",
-                          controller: searchController,
                           onChanged: (val) {
-                            if (val.isNotEmpty) {
-                              titlesToUse.clear();
-                              for (var element in titles) {
-                                if (element
-                                        .toLowerCase()
-                                        .contains(val.toLowerCase().trim()) ||
-                                    element.toLowerCase() ==
-                                        val.toLowerCase().trim()) {
-                                  titlesToUse.add(element);
-                                }
-                              }
-                            } else {
-                              titlesToUse.clear();
-                              titlesToUse.addAll(titles);
+                            if (search != val) {
+                              setState(() {
+                                search = val;
+                              });
                             }
-                            //chosen = -1;
-                            controller.update(['Create']);
                           },
                         ),
                       ),
@@ -227,15 +195,23 @@ class _CreateState extends State<Create> {
                                   child: Text('An error occured'),
                                 );
                               } else if (snapshot.hasData) {
-                                // final allService = snapshot.data![0].data;
                                 final serviceType = snapshot.data![0].data;
 
                                 final newRes = serviceType as List<dynamic>;
 
-                                final serviceTypeData = <AllService>[];
+                                List<AllService> serviceTypeData =
+                                    <AllService>[];
                                 for (var element in newRes) {
                                   serviceTypeData
                                       .add(AllService.fromJson(element));
+                                }
+
+                                if (search.isNotEmpty) {
+                                  serviceTypeData = serviceTypeData
+                                      .where((element) => element.name!
+                                          .toLowerCase()
+                                          .contains(search.toLowerCase()))
+                                      .toList();
                                 }
 
                                 final serviceType2 = snapshot.data![1].data;
@@ -286,7 +262,6 @@ class _CreateState extends State<Create> {
                                                   service:
                                                       gottenService.title ?? '',
                                                   onTap: () {
-                                                    // Get.to(() => AllFields());
                                                     Get.off(JsonForm(
                                                         id: gottenService.id ??
                                                             ''));

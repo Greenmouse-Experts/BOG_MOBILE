@@ -1,8 +1,3 @@
-import 'package:bog/app/global_widgets/app_base_view.dart';
-import 'package:bog/app/global_widgets/app_button.dart';
-import 'package:bog/app/global_widgets/app_loader.dart';
-import 'package:bog/app/global_widgets/bottom_widget.dart';
-import 'package:bog/app/global_widgets/new_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -13,6 +8,11 @@ import '../../data/model/client_project_model.dart';
 
 import '../../data/providers/api_response.dart';
 
+import '../../global_widgets/app_base_view.dart';
+import '../../global_widgets/app_button.dart';
+import '../../global_widgets/app_loader.dart';
+import '../../global_widgets/bottom_widget.dart';
+import '../../global_widgets/new_app_bar.dart';
 import '../../global_widgets/page_input.dart';
 
 class NewProjectDetailPage extends StatefulWidget {
@@ -391,7 +391,7 @@ class ColoredRow extends StatelessWidget {
             TextSpan(
                 text: content,
                 style: AppTextStyle.subtitle1.copyWith(
-                    color: Colors.black, fontWeight: FontWeight.w600)),
+                    color: Colors.black, fontWeight: FontWeight.w500)),
           ]))
         ],
       ),

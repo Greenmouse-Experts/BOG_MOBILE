@@ -1,7 +1,8 @@
-import 'package:bog/core/theme/app_colors.dart';
-import 'package:bog/core/theme/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../../core/theme/theme.dart';
+import '../modules/add_products/add_products.dart';
 
 class ActivityWidget extends StatelessWidget {
   final String title;
@@ -77,7 +78,9 @@ class ActivityWidget extends StatelessWidget {
                                 style: IconButton.styleFrom(
                                   padding: EdgeInsets.zero,
                                 ),
-                                onPressed: () {},
+                                onPressed: () {
+                                  Get.to(() => const AddProject());
+                                },
                                 icon: Icon(
                                   Icons.add_circle_outline_rounded,
                                   color: AppColors.servicePurple,

@@ -1,12 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:bog/app/global_widgets/global_widgets.dart';
-import 'package:bog/app/global_widgets/pdf_page_viewer.dart';
-import 'package:bog/app/global_widgets/photo_view_page.dart';
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../controllers/home_controller.dart';
@@ -16,8 +14,10 @@ import '../../data/providers/my_pref.dart';
 import '../../global_widgets/app_base_view.dart';
 import '../../global_widgets/app_date_picker.dart';
 import '../../global_widgets/custom_app_bar.dart';
-// import '../../global_widgets/page_input.dart';
 import 'package:dio/dio.dart' as dio;
+import '../../global_widgets/global_widgets.dart';
+import '../../global_widgets/pdf_page_viewer.dart';
+import '../../global_widgets/photo_view_page.dart';
 
 class UpdateWorkExperience extends StatefulWidget {
   final Map<String, dynamic> kycScore;
@@ -52,7 +52,7 @@ class _UpdateWorkExperienceState extends State<UpdateWorkExperience> {
     if (!widget.isNewWork) {
       nameController.text = widget.workExperience!.name ?? '';
       valueController.text = widget.workExperience!.value ?? '';
-      dateController.text = widget.workExperience!.date.toString();
+      dateController.text = widget.workExperience!.date!.toIso8601String();
       expYearController.text = widget.workExperience!.yearsOfExperience ?? '';
       subController.text = widget.workExperience!.companyInvolvement ?? '';
     }
@@ -94,7 +94,10 @@ class _UpdateWorkExperienceState extends State<UpdateWorkExperience> {
                     ),
                     const SizedBox(height: 8),
                     AppDatePicker(
-                      initialDate: dateController.text,
+                      initialDate: dateController.text.isEmpty
+                          ? dateController.text
+                          : DateFormat('yyyy-MM-dd')
+                              .format(DateTime.parse(dateController.text)),
                       label: 'Date',
                       onChanged: (date) {
                         dateController.text = date;

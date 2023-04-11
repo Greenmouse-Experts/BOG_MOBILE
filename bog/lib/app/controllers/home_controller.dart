@@ -17,6 +17,8 @@ class HomeController extends GetxController {
 
   RxInt currentBottomNavPage = 0.obs;
   String currentType = "Client";
+  bool showProductPartnerEarnings = false;
+  bool showServicePartnerEarnings = false;
 
   TextEditingController orderReview = TextEditingController();
 
@@ -29,6 +31,16 @@ class HomeController extends GetxController {
   String homeTitle = 'Home';
   String cartTitle = 'Cart';
   String projectTitle = 'Project';
+
+  void switchProdPartnerEarnings() {
+    showProductPartnerEarnings = !showProductPartnerEarnings;
+    update();
+  }
+
+  void switchServicePartnerEarnings() {
+    showServicePartnerEarnings = !showServicePartnerEarnings;
+    update();
+  }
 
   updateNewUser(String userType, {bool updatePages = true}) {
     if (userType == "Client" || userType == "Corporate Client") {

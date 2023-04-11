@@ -247,7 +247,7 @@ class PaymentInfo {
     });
 
     String? reference;
-    int? amount;
+    dynamic amount;
 
     factory PaymentInfo.fromRawJson(String str) => PaymentInfo.fromJson(json.decode(str));
 

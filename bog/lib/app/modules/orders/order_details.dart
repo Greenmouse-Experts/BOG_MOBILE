@@ -1,8 +1,4 @@
-import 'package:bog/app/data/model/order_details.dart';
-import 'package:bog/app/data/providers/api_response.dart';
-import 'package:bog/app/global_widgets/app_loader.dart';
-import 'package:bog/app/global_widgets/custom_app_bar.dart';
-import 'package:bog/app/global_widgets/global_widgets.dart';
+
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -11,8 +7,13 @@ import 'package:intl/intl.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_styles.dart';
 import '../../controllers/home_controller.dart';
+import '../../data/model/order_details.dart';
+import '../../data/providers/api_response.dart';
 import '../../global_widgets/app_base_view.dart';
+import '../../global_widgets/app_loader.dart';
 import '../../global_widgets/bottom_widget.dart';
+import '../../global_widgets/custom_app_bar.dart';
+import '../../global_widgets/global_widgets.dart';
 import '../../global_widgets/order_details_builder.dart';
 
 class OrderDetails extends StatefulWidget {
@@ -24,7 +25,6 @@ class OrderDetails extends StatefulWidget {
 }
 
 class _OrderDetailsState extends State<OrderDetails> {
-  // var pageController = PageController();
   late Future<ApiResponse> orderFuture;
   @override
   void initState() {
@@ -36,7 +36,6 @@ class _OrderDetailsState extends State<OrderDetails> {
 
   @override
   Widget build(BuildContext context) {
-    //  var title = Get.arguments as String?;
     var width = Get.width;
     final Size size = MediaQuery.of(context).size;
     double multiplier = 25 * size.height * 0.01;
@@ -181,7 +180,10 @@ class _OrderDetailsState extends State<OrderDetails> {
                             } else {
                               if (snapshot.connectionState ==
                                   ConnectionState.done) {
-                                return const Text('No order detail');
+                                return SizedBox(
+                                    height: Get.height * 0.72,
+                                    child: const Center(
+                                        child: Text('No order detail')));
                               }
                               return const AppLoader();
                             }

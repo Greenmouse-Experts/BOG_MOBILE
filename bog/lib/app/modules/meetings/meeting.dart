@@ -1,16 +1,7 @@
 import 'dart:convert';
 
-import 'package:bog/app/data/model/meeting_model.dart';
-import 'package:bog/app/data/model/projetcs_model.dart';
-import 'package:bog/app/data/providers/api_response.dart';
-import 'package:bog/app/global_widgets/app_base_view.dart';
-import 'package:bog/app/global_widgets/bottom_widget.dart';
-import 'package:bog/app/global_widgets/global_widgets.dart';
-import 'package:bog/app/global_widgets/new_app_bar.dart';
-
-import 'package:feather_icons/feather_icons.dart';
 import 'package:flutter/material.dart';
-
+import 'package:feather_icons/feather_icons.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -19,8 +10,18 @@ import '../../../core/theme/app_styles.dart';
 import '../../controllers/home_controller.dart';
 
 import '../../data/model/log_in_model.dart';
+import '../../data/model/meeting_model.dart';
+import '../../data/model/projetcs_model.dart';
+import '../../data/providers/api_response.dart';
 import '../../data/providers/my_pref.dart';
+import '../../global_widgets/app_avatar.dart';
+import '../../global_widgets/app_base_view.dart';
+import '../../global_widgets/app_button.dart';
+import '../../global_widgets/app_input.dart';
 import '../../global_widgets/app_loader.dart';
+import '../../global_widgets/bottom_widget.dart';
+import '../../global_widgets/new_app_bar.dart';
+import '../../global_widgets/overlays.dart';
 
 class Meetings extends StatefulWidget {
   const Meetings({Key? key}) : super(key: key);
@@ -38,6 +39,7 @@ class _MeetingsState extends State<Meetings> with TickerProviderStateMixin {
   late String userId;
   late String userTypeUsed;
   late String userEmail;
+  var search = '';
 
   @override
   void initState() {
@@ -144,8 +146,23 @@ class _MeetingsState extends State<Meetings> with TickerProviderStateMixin {
                         projectSlugs.add(element.projectSlug ?? '');
                       }
 
-                      final completedMeetings =
+                      List<MeetingModel> completedMeetings =
                           getMeetingByStatus(meetings, 'completed');
+
+                      if (search.isNotEmpty) {
+                        completedMeetings = {
+                          ...completedMeetings
+                              .where((element) => element.meetingSlug!
+                                  .toLowerCase()
+                                  .contains(search.toLowerCase()))
+                              .toList(),
+                          ...completedMeetings
+                              .where((element) => element.projectSlug!
+                                  .toLowerCase()
+                                  .contains(search.toLowerCase()))
+                              .toList()
+                        }.toList();
+                      }
                       final upcomingMeetings =
                           getMeetingByStatus(meetings, 'placed');
                       final pendingMeetings =
@@ -176,6 +193,13 @@ class _MeetingsState extends State<Meetings> with TickerProviderStateMixin {
                                         color: Colors.black.withOpacity(.5),
                                         size: Get.width * 0.05,
                                       ),
+                                      onChanged: (val) {
+                                        if (search != val) {
+                                          setState(() {
+                                            search = val;
+                                          });
+                                        }
+                                      },
                                     ),
                                     SizedBox(
                                       height: Get.height * 0.03,
