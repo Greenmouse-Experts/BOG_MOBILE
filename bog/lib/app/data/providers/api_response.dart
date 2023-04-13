@@ -31,9 +31,6 @@ class ApiResponse {
       this.token,
       this.user});
 
-
-
-
   static ApiResponse response(Response response) {
     var json = response.data;
 
@@ -44,7 +41,7 @@ class ApiResponse {
         projects: json['projects'],
         user: json['user'],
         token: json['token'],
-        status:  json['status'],
+        status: json['status'],
         accounts: json['accounts'],
         order: json['order']);
   }
@@ -77,7 +74,7 @@ extension ApiError on DioError {
   ApiResponse toApiError({CancelToken? cancelToken}) {
     ApiResponse apiResponse = ApiResponse(isSuccessful: false);
     switch (type) {
-      case DioErrorType.connectTimeout:
+      case DioErrorType.connectionTimeout:
         if (cancelToken != null) {
           cancelToken.cancel();
         }
@@ -107,14 +104,14 @@ extension ApiError on DioError {
           message: "Please check your internet connection or try again later",
         );
 
-      case DioErrorType.other:
+      case DioErrorType.unknown:
         return ApiResponse(
           isSuccessful: false,
           data: null,
           message: "Please help report this error to BOG support",
         );
 
-      case DioErrorType.response:
+      case DioErrorType.badResponse:
         if (response!.data is Map<String, dynamic>) {
           var val = response!.data;
           return ApiResponse(

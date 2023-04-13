@@ -19,7 +19,7 @@ class Api {
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
     },
-    receiveTimeout: 10000,
+    receiveTimeout: const Duration(seconds: 30),
   ));
 
   final Dio _uploadClient = Dio(BaseOptions(
@@ -27,7 +27,7 @@ class Api {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
-    receiveTimeout: 10000,
+    receiveTimeout: const Duration(seconds: 30),
   ));
 
   Future<ApiResponse> postData(
@@ -67,7 +67,6 @@ class Api {
 
   Future<ApiResponse> uploadData(
     String url, {
-   
     body,
   }) async {
     token = CancelToken();
@@ -79,7 +78,7 @@ class Api {
         url,
         data: body,
         cancelToken: token,
-        options: Options(method: 'POST', headers:  null),
+        options: Options(method: 'POST', headers: null),
       );
 
       return ApiResponse.response(request);
@@ -176,7 +175,7 @@ class Api {
     var head = {
       'Authorization': MyPref.authToken.val,
     };
-   
+
     try {
       var request = await _client.request(
         url,
@@ -239,17 +238,14 @@ class Api {
       return ApiResponse.responseFromBody(response.body, response.statusCode);
       //return ApiResponse.response(request);
     } on DioError catch (e) {
-    
       return e.toApiError(cancelToken: token);
     } on SocketException {
- 
       return ApiResponse(
         data: null,
         isSuccessful: false,
         message: 'No Internet connection',
       );
     } on Exception catch (e) {
-   
       return ApiResponse(
         data: null,
         isSuccessful: false,
