@@ -198,10 +198,14 @@ class _UpdateWorkExperienceState extends State<UpdateWorkExperience> {
 
                               if (subController.text.isEmpty) {
                                 kycScore['workExperience'] =
-                                    kycScore['workExperience'] + 5;
+                                    kycScore['workExperience'] == null
+                                        ? 5
+                                        : kycScore['workExperience'] + 5;
                               } else {
                                 kycScore['workExperience'] =
-                                    kycScore['workExperience'] + 6;
+                                    kycScore['workExperience'] == null
+                                        ? 6
+                                        : kycScore['workExperience'] + 6;
                               }
 
                               final controller = Get.find<HomeController>();

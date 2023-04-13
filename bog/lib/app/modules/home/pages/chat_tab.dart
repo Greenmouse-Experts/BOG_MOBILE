@@ -113,15 +113,27 @@ class _ChatTabState extends State<ChatTab> {
                                 if (snapshot.data!.isSuccessful) {
                                   final response =
                                       snapshot.data!.data as List<dynamic>;
-                                  List<AnnouncementModel>  announcements = <AnnouncementModel>[];
+                                  List<AnnouncementModel> announcements =
+                                      <AnnouncementModel>[];
 
                                   for (var element in response) {
                                     announcements.add(
                                         AnnouncementModel.fromJson(element));
                                   }
-                                  
-                                  if (search.isNotEmpty){
-                                    announcements = {...announcements.where((element) => element.title!.toLowerCase().contains(search.toLowerCase())).toList(),...announcements.where((element) => element.content!.toLowerCase().contains(search.toLowerCase())).toList()}.toList();
+
+                                  if (search.isNotEmpty) {
+                                    announcements = {
+                                      ...announcements
+                                          .where((element) => element.title!
+                                              .toLowerCase()
+                                              .contains(search.toLowerCase()))
+                                          .toList(),
+                                      ...announcements
+                                          .where((element) => element.content!
+                                              .toLowerCase()
+                                              .contains(search.toLowerCase()))
+                                          .toList()
+                                    }.toList();
                                   }
 
                                   return ListView.builder(
@@ -302,21 +314,6 @@ class _ChatTabState extends State<ChatTab> {
                   ],
                 ),
               ),
-              //floating action button
-              FloatingActionButton(
-                onPressed: () {
-                  Get.toNamed(Chat.route);
-                },
-                backgroundColor: AppColors.primary,
-                child: Stack(
-                  children: [
-                    SizedBox(
-                        width: Get.width * 0.05,
-                        height: Get.width * 0.05,
-                        child: Image.asset("assets/images/chat_new.png")),
-                  ],
-                ),
-              )
             ],
           ),
         ),

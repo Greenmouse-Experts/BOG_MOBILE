@@ -187,7 +187,9 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
                                                           name: order.product!
                                                                   .name ??
                                                               '',
-                                                          status: order.order!.status ?? '',
+                                                          status: order.order!
+                                                                  .status ??
+                                                              '',
                                                           orderSlug: order
                                                                   .order!
                                                                   .orderSlug ??
@@ -644,7 +646,7 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
                                           as List<dynamic>;
                                       final serviceProjects =
                                           <ServiceProjectsModel>[];
-                                      final availableProjects =
+                                      var availableProjects =
                                           <AvailableProjectsModel>[];
                                       for (var element in response1) {
                                         serviceProjects.add(
@@ -656,6 +658,11 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
                                             AvailableProjectsModel.fromJson(
                                                 element));
                                       }
+
+                                      availableProjects.removeWhere((element) =>
+                                          serviceProjects.any((myProject) =>
+                                              element.project!.projectSlug ==
+                                              myProject.projectSlug));
 
                                       return SizedBox(
                                         height: Get.height * 0.735,
@@ -699,12 +706,14 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
                                                                             .width *
                                                                         0.03),
                                                                 Text(
-                                                                  '${serviceProjects[i].servicePartnerProgress!} %',
+                                                                  '${serviceProjects[i].servicePartnerProgress ?? 0} %',
                                                                   style: AppTextStyle
                                                                       .caption
                                                                       .copyWith(
-                                                                    color: serviceProjects[i].servicePartnerProgress! <
-                                                                            50
+                                                                    color: serviceProjects[i].servicePartnerProgress ==
+                                                                                null ||
+                                                                            serviceProjects[i].servicePartnerProgress! <
+                                                                                50
                                                                         ? Colors
                                                                             .red
                                                                         : serviceProjects[i].servicePartnerProgress! <

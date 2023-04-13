@@ -23,12 +23,11 @@ class NotificationPage extends GetView<HomeController> {
     final Size size = MediaQuery.of(context).size;
     double multiplier = 25 * size.height * 0.01;
 
-    return  AppBaseView
-    (
+    return AppBaseView(
       child: GetBuilder<HomeController>(
-            id: 'Notification',
-            builder: (controller) {
-              return Scaffold(
+          id: 'Notification',
+          builder: (controller) {
+            return Scaffold(
                 backgroundColor: AppColors.backgroundVariant2,
                 body: SizedBox(
                   width: Get.width,
@@ -122,67 +121,87 @@ class NotificationPage extends GetView<HomeController> {
                       ),
                       SizedBox(
                         height: Get.height * 0.77,
-                        child: notifications.isEmpty ? const Center(child: Text('You have no notifications'),) : ListView.builder(
-                          itemCount: notifications.length,
-                          shrinkWrap: true,
-                          padding: EdgeInsets.only(
-                              left: width * 0.02, right: width * 0.02),
-                          physics: const BouncingScrollPhysics(),
-                          itemBuilder: (context, index) {
-                            final notification = notifications[index];
-                            return Padding(
-                              padding: EdgeInsets.symmetric(vertical: Get.height * 0.015),
-                             // height: Get.height * 0.08,
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  SizedBox(
-                                    width: Get.width * 0.13,
-                                    height: Get.width * 0.13,
-                                    child: IconButton(
-                                      icon: Image.asset(
-                                        "assets/images/Ellipse 956.png",
-                                        fit: BoxFit.cover,
-                                      ),
-                                      onPressed: () {},
-                                    ),
-                                  ),
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      SizedBox(
-                                        width: Get.width * 0.8,
-                                        child: Text(notification.message ?? '',
-                                        style: AppTextStyle.subtitle1.copyWith(
-                                          fontSize: multiplier * 0.07,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w500),)),
-                                          SizedBox(height: Get.height * 0.01),
-                                             Text(
-                                         timeago.format(notification.createdAt ?? DateTime.now()).capitalizeFirst ?? '',
-                                          style: AppTextStyle.subtitle1.copyWith(
-                                              fontSize: multiplier * 0.05,
-                                              color: AppColors.grey,
-                                              fontWeight: FontWeight.w400),
+                        child: notifications.isEmpty
+                            ? const Center(
+                                child: Text('You have no notifications'),
+                              )
+                            : ListView.builder(
+                                itemCount: notifications.length,
+                                shrinkWrap: true,
+                                padding: EdgeInsets.only(
+                                    left: width * 0.02, right: width * 0.02),
+                                physics: const BouncingScrollPhysics(),
+                                itemBuilder: (context, index) {
+                                  final notification = notifications[index];
+                                  return Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: Get.height * 0.015),
+                                    // height: Get.height * 0.08,
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        SizedBox(
+                                          width: Get.width * 0.13,
+                                          height: Get.width * 0.13,
+                                          child: IconButton(
+                                            icon: Image.asset(
+                                              "assets/images/Ellipse 956.png",
+                                              fit: BoxFit.cover,
+                                            ),
+                                            onPressed: () {},
+                                          ),
                                         ),
-                                    ],
-                                  ),
-                               
-                                ],
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            SizedBox(
+                                                width: Get.width * 0.8,
+                                                child: Text(
+                                                  notification.message ?? '',
+                                                  style: AppTextStyle.subtitle1
+                                                      .copyWith(
+                                                          fontSize:
+                                                              multiplier * 0.07,
+                                                          color: Colors.black,
+                                                          fontWeight:
+                                                              FontWeight.w500),
+                                                )),
+                                            SizedBox(height: Get.height * 0.01),
+                                            Text(
+                                              timeago
+                                                      .format(notification
+                                                              .createdAt ??
+                                                          DateTime.now())
+                                                      .capitalizeFirst ??
+                                                  '',
+                                              style: AppTextStyle.subtitle1
+                                                  .copyWith(
+                                                      fontSize:
+                                                          multiplier * 0.05,
+                                                      color: AppColors.grey,
+                                                      fontWeight:
+                                                          FontWeight.w400),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
                               ),
-                            );
-                          },
-                        ),
                       )
                     ],
                   ),
                 ),
-                bottomNavigationBar: 
-                
-               HomeBottomWidget(isHome: false, controller: controller, doubleNavigate: false)
-              );
-            }),
+                bottomNavigationBar: HomeBottomWidget(
+                    isHome: false,
+                    controller: controller,
+                    doubleNavigate: false));
+          }),
     );
   }
 }
