@@ -1,12 +1,4 @@
-import 'package:bog/app/controllers/home_controller.dart';
-import 'package:bog/app/global_widgets/app_date_picker.dart';
-
-import 'package:bog/app/global_widgets/app_radio_button.dart';
-import 'package:bog/app/global_widgets/global_widgets.dart';
-import 'package:bog/app/global_widgets/page_dropdown.dart';
-import 'package:bog/app/global_widgets/update_slider.dart';
-import 'package:bog/app/modules/meetings/meeting.dart';
-import 'package:bog/app/modules/switch/switch.dart';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
@@ -15,10 +7,18 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_styles.dart';
+import '../controllers/home_controller.dart';
 import '../data/providers/my_pref.dart';
+import '../modules/meetings/meeting.dart';
 import '../modules/subscription/subscription_view.dart';
 
+import '../modules/switch/switch.dart';
+import 'app_date_picker.dart';
+import 'app_radio_button.dart';
 import 'confirm_logout.dart';
+import 'global_widgets.dart';
+import 'page_dropdown.dart';
+import 'update_slider.dart';
 
 final options = ['Yes', 'No'];
 final interestOptions = [
@@ -42,6 +42,10 @@ final _interestKey = GlobalKey<FormState>();
 TextEditingController bestPriceController = TextEditingController();
 TextEditingController timeLineController = TextEditingController();
 final ScrollController scrollController = ScrollController();
+
+TextEditingController updateMessageController = TextEditingController();
+TextEditingController fileController = TextEditingController();
+File? pickedFile;
 
 class AppOverlay {
   static Future<void> loadingOverlay({
@@ -584,14 +588,12 @@ class AppOverlay {
                                 label: 'Select Date',
                                 onChanged: (onChanged) {
                                   selectedDate = onChanged;
-                                  print(selectedDate);
                                 }),
                             SizedBox(height: Get.height * 0.01),
                             AppTimePicker(
                                 label: 'Select Time',
                                 onChanged: (onChanged) {
                                   selectedTime = onChanged;
-                                  print(selectedTime);
                                 }),
                             SizedBox(height: Get.height * 0.01),
                             PageInput(
@@ -627,7 +629,7 @@ class AppOverlay {
                                       'time': selectedTime,
                                       'userType': userType
                                     };
-                                    print(meetingRequest);
+
                                     final controller =
                                         Get.find<HomeController>();
                                     final response = await controller.userRepo
@@ -641,9 +643,9 @@ class AppOverlay {
                                       Get.back();
                                       AppOverlay.successOverlay(
                                           message:
-                                              'Project Requested Successfully',
+                                              'Meeting Requested Successfully',
                                           onPressed: () {
-                                           if (isSP) {
+                                            if (isSP) {
                                               Get.back();
                                               controller.currentBottomNavPage
                                                   .value = 0;
@@ -676,6 +678,111 @@ class AppOverlay {
                         ),
                       ),
                     ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  static void showUpdateProjectProgressDialod({
+    bool? doubleFunction,
+    String? buttonText,
+  }) {
+    showDialog(
+      context: Get.context!,
+      builder: (context) => WillPopScope(
+        onWillPop: () async {
+          updateMessageController.clear();
+          fileController.clear();
+          pickedFile = null;
+          return true;
+        },
+        child: Material(
+          elevation: 10,
+          color: Colors.black.withOpacity(0.2),
+          child: IntrinsicHeight(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  width: Get.width * 0.9,
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 15,
+                    horizontal: 20,
+                  ),
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(6),
+                    color: Colors.white,
+                  ),
+                  child: Column(
+                    children: [
+                      Text(
+                        'Project Progress Update',
+                        textAlign: TextAlign.center,
+                        style: Get.textTheme.bodyText1!.copyWith(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 17 * Get.textScaleFactor * 0.90,
+                            color: Colors.black),
+                      ),
+                      const SizedBox(height: 11),
+                      SizedBox(
+                        height: Get.height * 0.4,
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 8.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              PageInput(
+                                hint: '',
+                                label: 'Update Message',
+                                textWidth: 0.6,
+                                controller: updateMessageController,
+                                isTextArea: true,
+                              ),
+                              PageInput(
+                                hint: '',
+                                label: 'Add Image',
+                                textWidth: 0.6,
+                                controller: fileController,
+                                isFilePicker: true,
+                                onFilePicked: (file) {
+                                  pickedFile = file;
+                                },
+                              ),
+                              const SizedBox(height: 22),
+                              SizedBox(
+                                width: double.infinity,
+                                child: AppButton(
+                                    title: buttonText ?? "Okay",
+                                    borderRadius: 12,
+                                    onPressed: () async {
+                                      if (pickedFile == null ||
+                                          updateMessageController
+                                              .text.isEmpty) {
+                                        Get.snackbar('Required',
+                                            'All fields are required',
+                                            backgroundColor: Colors.red,
+                                            colorText:
+                                                AppColors.backgroundVariant2);
+                                        return;
+                                      }
+                                      return;
+                                     // final controller = Get.find<HomeController>();
+                                      // final response = await controller.userRepo.
+                                    }),
+                              ),
+                              const SizedBox(height: 10),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],

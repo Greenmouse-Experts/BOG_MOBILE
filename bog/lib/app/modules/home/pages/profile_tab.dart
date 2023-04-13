@@ -29,7 +29,7 @@ class ProfileTab extends StatelessWidget {
   static const route = '/profileTab';
   @override
   Widget build(BuildContext context) {
-    var logInDetails = LogInModel.fromJson(jsonDecode(MyPref.logInDetail.val));
+    var logInDetails = UserDetailsModel.fromJson(jsonDecode(MyPref.userDetails.val));
 
     final Uri about = Uri.parse('https://bog-project-new.netlify.app/about');
     final Uri terms = Uri.parse('https://bog-project-new.netlify.app/terms');

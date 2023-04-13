@@ -8,7 +8,6 @@ import 'package:get/get.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_styles.dart';
 import '../../../controllers/home_controller.dart';
-import '../../../data/model/log_in_model.dart';
 
 import '../../../data/model/my_products.dart';
 import '../../../data/model/notifications_model.dart';
@@ -18,8 +17,6 @@ import '../../../data/model/user_details_model.dart';
 import '../../../data/providers/api_response.dart';
 import '../../../data/providers/my_pref.dart';
 import '../../../global_widgets/activity_widget.dart';
-import '../../../global_widgets/app_avatar.dart';
-
 import '../../../global_widgets/app_loader.dart';
 import '../../../global_widgets/sp_project_preview.dart';
 import '../../create/create.dart';
@@ -37,7 +34,8 @@ class HomeTab extends StatefulWidget {
 
 class _HomeTabState extends State<HomeTab> {
   final HomeController controller = Get.find<HomeController>();
-  var logInDetails = LogInModel.fromJson(jsonDecode(MyPref.logInDetail.val));
+  var logInDetails =
+      UserDetailsModel.fromJson(jsonDecode(MyPref.userDetails.val));
 
   late Future<ApiResponse> getNotifications;
 
@@ -99,23 +97,14 @@ class _HomeTabState extends State<HomeTab> {
                               left: 10.0, right: 10.0, top: 10.0),
                           child: Row(
                             children: [
-                              Builder(builder: (context1) {
-                                return SizedBox(
-                                  width: Get.width * 0.16,
-                                  height: Get.width * 0.16,
-                                  child: IconButton(
-                                    icon: AppAvatar(
-                                      imgUrl: (logInDetails.photo).toString(),
-                                      radius: Get.width * 0.16,
-                                      name:
-                                          "${logInDetails.fname} ${logInDetails.lname}",
-                                    ),
-                                    onPressed: () {
-                                      Scaffold.of(context).openDrawer();
-                                    },
-                                  ),
-                                );
-                              }),
+                              IconButton(
+                                  onPressed: () {
+                                    Scaffold.of(context).openDrawer();
+                                  },
+                                  icon: Icon(
+                                    Icons.menu,
+                                    size: Get.width * 0.075,
+                                  )),
                               const SizedBox(
                                 width: 10.0,
                               ),
@@ -316,7 +305,8 @@ class _HomeTabState extends State<HomeTab> {
                                                 .toList()
                                                 .length;
                                             return ProductPartnerHomeWidget(
-                                              remainingDate: logInDetails.profile!.expiredAt,
+                                              remainingDate: logInDetails
+                                                  .profile!.expiredAt,
                                               orderRequest: response2.length,
                                               productsInStore: productsInStore,
                                               total: response1.length,
@@ -330,9 +320,7 @@ class _HomeTabState extends State<HomeTab> {
                                           }
                                         }
                                       }),
-                                SizedBox(
-                                  height: Get.height * 0.015,
-                                ),
+                              
                                 if (controller.currentType == "Client" ||
                                     controller.currentType ==
                                         "Corporate Client")
@@ -596,10 +584,6 @@ class _HomeTabState extends State<HomeTab> {
                                           }
                                         }
                                       }),
-                                if (controller.currentType == "Service Partner")
-                                  SizedBox(
-                                    height: Get.height * 0.01,
-                                  ),
                                 SizedBox(
                                   height: Get.height * 0.01,
                                 ),
@@ -767,7 +751,8 @@ class ProductPartnerHomeWidget extends StatelessWidget {
     required this.orderRequest,
     required this.productsInStore,
     required this.deliveries,
-    required this.isVerified, required this.remainingDate,
+    required this.isVerified,
+    required this.remainingDate,
   });
 
   final double kycScore;
@@ -782,9 +767,13 @@ class ProductPartnerHomeWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<HomeController>();
-      Duration duration = const Duration(days: 0);
+    Duration duration = const Duration(days: 0);
     if (remainingDate != null) {
-      duration = DateTime.parse(remainingDate).difference(DateTime.now());
+      if (remainingDate.runtimeType == DateTime) {
+        duration = remainingDate.difference(DateTime.now());
+      } else {
+        duration = DateTime.parse(remainingDate).difference(DateTime.now());
+      }
     }
 
     String durationToWeeks(Duration duration) {
@@ -796,6 +785,7 @@ class ProductPartnerHomeWidget extends StatelessWidget {
           weeksString.isNotEmpty && daysString.isNotEmpty ? ' ' : '';
       return '$weeksString$separator$daysString';
     }
+
     return Padding(
         padding: EdgeInsets.only(
           left: Get.width * 0.05,
@@ -1092,7 +1082,11 @@ class SPHomeWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     Duration duration = const Duration(days: 0);
     if (remainingDate != null) {
-      duration = DateTime.parse(remainingDate).difference(DateTime.now());
+      if (remainingDate.runtimeType == DateTime) {
+        duration = remainingDate.difference(DateTime.now());
+      } else {
+        duration = DateTime.parse(remainingDate).difference(DateTime.now());
+      }
     }
 
     String durationToWeeks(Duration duration) {

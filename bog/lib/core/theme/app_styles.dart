@@ -37,6 +37,13 @@ class AppTextStyle {
     color: AppColors.platinum,
     fontSize: 12 * Get.textScaleFactor * 0.90,
   );
+
+   static TextStyle tinyBold = TextStyle(
+    fontFamily: _font,
+    fontWeight: FontWeight.w600,
+    color: AppColors.platinum,
+    fontSize: 8 * Get.textScaleFactor * 0.90,
+  );
   static TextStyle caption2 = TextStyle(
     fontFamily: _font,
     fontWeight: FontWeight.w500,

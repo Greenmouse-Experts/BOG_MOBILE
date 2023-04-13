@@ -236,24 +236,12 @@ class AuthController extends GetxController {
     try {
       final response = await _googleSignIn.signIn();
       if (response != null) {
-        print('ihff');
-        print('ihfwwff');
-        print('ivehff');
+      
         print(response.id);
-        print('ihff');
-        print('ihfevrf');
-        print('ihavttvs rveff');
-        print('iwf4wqe42hff');
+      
       }
     } catch (error) {
-      print('ihff');
-      print('ihfwwff');
-      print('ivehff');
-      print(error);
-      print('ihff');
-      print('ihfevrf');
-      print('ihavttvs rveff');
-      print('iwf4wqe42hff');
+     
     }
   }
 

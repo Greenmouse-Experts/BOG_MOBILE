@@ -1,5 +1,4 @@
-import 'package:bog/app/data/model/admin_progress_model.dart';
-import 'package:bog/app/global_widgets/app_avatar.dart';
+import 'package:bog/app/data/model/cost_summary_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -8,16 +7,17 @@ import 'package:intl/intl.dart';
 
 import '../../../core/theme/theme.dart';
 import '../../controllers/home_controller.dart';
+import '../../data/model/admin_progress_model.dart';
 import '../../data/model/client_project_model.dart';
 
+import '../../data/model/project_transactions_update.dart';
 import '../../data/providers/api_response.dart';
 
 import '../../global_widgets/app_base_view.dart';
-import '../../global_widgets/app_button.dart';
 import '../../global_widgets/app_loader.dart';
 import '../../global_widgets/bottom_widget.dart';
+import '../../global_widgets/global_widgets.dart';
 import '../../global_widgets/new_app_bar.dart';
-import '../../global_widgets/page_input.dart';
 
 class NewProjectDetailPage extends StatefulWidget {
   final String id;
@@ -32,6 +32,8 @@ class NewProjectDetailPage extends StatefulWidget {
 class _NewProjectDetailPageState extends State<NewProjectDetailPage> {
   late Future<ApiResponse> getProjectDetails;
   late Future<ApiResponse> getAdminUpdate;
+  late Future<ApiResponse> getTransactions;
+  late Future<ApiResponse> getCostSummary;
 
   @override
   void initState() {
@@ -40,7 +42,11 @@ class _NewProjectDetailPageState extends State<NewProjectDetailPage> {
     getProjectDetails =
         controller.userRepo.getData('/projects/v2/view-project/${widget.id}');
     getAdminUpdate = controller.userRepo
-        .getData('/projects/notification/${widget.id}/view?type=cost');
+        .getData('/projects/notification/${widget.id}/view');
+    getTransactions = controller.userRepo
+        .getData('/projects/installments/${widget.id}/view?type=installment');
+    getCostSummary = controller.userRepo
+        .getData('/projects/installments/${widget.id}/view?type=cost');
     super.initState();
   }
 
@@ -53,7 +59,12 @@ class _NewProjectDetailPageState extends State<NewProjectDetailPage> {
           backgroundColor: AppColors.backgroundVariant2,
           body: SingleChildScrollView(
             child: FutureBuilder<List<ApiResponse>>(
-              future: Future.wait([getProjectDetails, getAdminUpdate]),
+              future: Future.wait([
+                getProjectDetails,
+                getAdminUpdate,
+                getTransactions,
+                getCostSummary
+              ]),
               builder: (ctx, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const AppLoader();
@@ -64,8 +75,19 @@ class _NewProjectDetailPageState extends State<NewProjectDetailPage> {
                         ClientProjectModel.fromJson(response1);
                     final response2 = snapshot.data![1].data as List<dynamic>;
                     final adminUpdates = <AdminProgressModel>[];
+                    final response3 = snapshot.data![2].data as List<dynamic>;
+                    final transactionUpdates = <ProjectTransactionsUpdate>[];
+                    final response4 = snapshot.data![3].data as List<dynamic>;
+                    final costSummary = <CostSummaryModel>[];
                     for (var element in response2) {
                       adminUpdates.add(AdminProgressModel.fromJson(element));
+                    }
+                    for (var element in response3) {
+                      transactionUpdates
+                          .add(ProjectTransactionsUpdate.fromJson(element));
+                    }
+                    for (var element in response4) {
+                      costSummary.add(CostSummaryModel.fromJson(element));
                     }
                     return Padding(
                       padding: EdgeInsets.only(
@@ -251,7 +273,7 @@ class _NewProjectDetailPageState extends State<NewProjectDetailPage> {
                                     ),
                                     SizedBox(
                                         width: Get.width,
-                                        height: Get.height * 0.3,
+                                        height: Get.height * 0.25,
                                         child: Center(
                                           child: adminUpdates.isEmpty
                                               ? Text(
@@ -370,87 +392,176 @@ class _NewProjectDetailPageState extends State<NewProjectDetailPage> {
                             ),
                           ),
                           SizedBox(height: Get.height * 0.01),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Card(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5)),
-                                elevation: 2,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: IntrinsicWidth(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'Transactions',
-                                          style: AppTextStyle.caption2
-                                              .copyWith(color: Colors.black),
-                                        ),
-                                        Divider(
-                                          thickness: 1,
-                                          color:
-                                              AppColors.newAsh.withOpacity(0.3),
-                                        ),
-                                        SizedBox(
-                                            width: Get.width * 0.375,
-                                            height: Get.height * 0.3,
-                                            child: Center(
-                                              child: Text(
-                                                'No transactions available currently',
-                                                textAlign: TextAlign.center,
-                                                style: AppTextStyle.caption2
-                                                    .copyWith(
-                                                        color: Colors.black),
-                                              ),
-                                            )),
-                                      ],
+                          Card(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5)),
+                            elevation: 2,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: IntrinsicWidth(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Transactions',
+                                      style: AppTextStyle.caption2
+                                          .copyWith(color: Colors.black),
                                     ),
-                                  ),
+                                    Divider(
+                                      thickness: 1,
+                                      color: AppColors.newAsh.withOpacity(0.3),
+                                    ),
+                                    SizedBox(
+                                        width: Get.width,
+                                        height: Get.height * 0.25,
+                                        child: transactionUpdates.isEmpty
+                                            ? Center(
+                                                child: Text(
+                                                  'No transactions available currently',
+                                                  textAlign: TextAlign.center,
+                                                  style: AppTextStyle.caption2
+                                                      .copyWith(
+                                                          color: Colors.black),
+                                                ),
+                                              )
+                                            : ListView.builder(
+                                                itemCount:
+                                                    transactionUpdates.length,
+                                                itemBuilder: (context, i) {
+                                                  final update =
+                                                      transactionUpdates[i];
+                                                  return ListTile(
+                                                    contentPadding:
+                                                        EdgeInsets.zero,
+                                                    title: Text(
+                                                      update.title ?? '',
+                                                      style: AppTextStyle
+                                                          .bodyText2
+                                                          .copyWith(
+                                                              color:
+                                                                  Colors.black),
+                                                    ),
+                                                    subtitle: Text(
+                                                      'NGN ${update.amount ?? 0}',
+                                                      style: AppTextStyle
+                                                          .bodyText2
+                                                          .copyWith(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400,
+                                                              color: AppColors
+                                                                  .ashColor),
+                                                    ),
+                                                    trailing: update.paid ==
+                                                                null ||
+                                                            update.paid == false
+                                                        ? SizedBox(
+                                                            width:
+                                                                Get.width * 0.2,
+                                                            height: Get.height *
+                                                                0.065,
+                                                            child: AppButton(
+                                                              title: 'Pay Now',
+                                                              onPressed: () {},
+                                                            ),
+                                                          )
+                                                        : Padding(
+                                                          padding: EdgeInsets.symmetric(horizontal: Get.width * 0.065),
+                                                          child: Text(
+                                                              'Paid',
+                                                              textAlign: TextAlign
+                                                                  .center,
+                                                              style: AppTextStyle
+                                                                  .bodyText2
+                                                                  .copyWith(
+                                                                color: AppColors
+                                                                    .successGreen,
+                                                              ),
+                                                            ),
+                                                        ),
+                                                  );
+                                                })),
+                                  ],
                                 ),
                               ),
-                              Card(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5)),
-                                elevation: 2,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: IntrinsicWidth(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'Cost Summary',
-                                          style: AppTextStyle.caption2
-                                              .copyWith(color: Colors.black),
-                                        ),
-                                        Divider(
-                                          thickness: 1,
-                                          color:
-                                              AppColors.newAsh.withOpacity(0.3),
-                                        ),
-                                        SizedBox(
-                                            width: Get.width * 0.375,
-                                            height: Get.height * 0.3,
-                                            child: Center(
-                                              child: Text(
-                                                'No summary available currently',
-                                                textAlign: TextAlign.center,
-                                                style: AppTextStyle.caption2
-                                                    .copyWith(
-                                                        color: Colors.black),
-                                              ),
-                                            )),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
+                            ),
                           ),
+                          Card(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5)),
+                            elevation: 2,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: IntrinsicWidth(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Cost Summary',
+                                      style: AppTextStyle.caption2
+                                          .copyWith(color: Colors.black),
+                                    ),
+                                    Divider(
+                                      thickness: 1,
+                                      color: AppColors.newAsh.withOpacity(0.3),
+                                    ),
+                                    SizedBox(
+                                        width: Get.width,
+                                        height: Get.height * 0.25,
+                                        child: Center(
+                                          child: costSummary.isEmpty
+                                              ? Text(
+                                                  'No summary available currently',
+                                                  textAlign: TextAlign.center,
+                                                  style: AppTextStyle.caption2
+                                                      .copyWith(
+                                                          color: Colors.black),
+                                                )
+                                              : ListView.builder(
+                                                  itemCount: costSummary.length,
+                                                  itemBuilder: (context, i) {
+                                                    final cost = costSummary[i];
+                                                    return Column(
+                                                      children: [
+                                                        ListTile(
+                                                          contentPadding:
+                                                              EdgeInsets.zero,
+                                                          minVerticalPadding: 0,
+
+                                                          title: Text(
+                                                            cost.title ?? '',
+                                                            style: AppTextStyle
+                                                                .bodyText2
+                                                                .copyWith(
+                                                                    color: Colors
+                                                                        .black),
+                                                          ),
+                                                          trailing: Text(
+                                                            'NGN ${cost.amount ?? 0}',
+                                                            style: AppTextStyle
+                                                                .bodyText2
+                                                                .copyWith(
+                                                                    color: AppColors
+                                                                        .productPurple),
+                                                          ),
+                                                        ),
+                                                        Divider(
+                                                          thickness: 1,
+                                                          color: AppColors
+                                                              .newAsh
+                                                              .withOpacity(0.3),
+                                                        ),
+                                                      ],
+                                                    );
+                                                  }),
+                                        )),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          //   ],
+                          // ),
                           SizedBox(height: Get.height * 0.01),
                           const PageInput(
                             hint: 'Leave review',

@@ -11,6 +11,7 @@ import '../../controllers/home_controller.dart';
 import '../../data/model/user_details_model.dart';
 import '../../data/providers/my_pref.dart';
 import '../../global_widgets/app_avatar.dart';
+import '../../global_widgets/bottom_widget.dart';
 import '../../global_widgets/page_input.dart';
 import 'edit_profile.dart';
 
@@ -45,308 +46,236 @@ class ProfileInfo extends GetView<HomeController> {
         id: 'ProfileInfo',
         builder: (controller) {
           return Scaffold(
-            backgroundColor: AppColors.backgroundVariant2,
-            body: SizedBox(
-              width: Get.width,
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(
-                          right: width * 0.05,
-                          left: width * 0.045,
-                          top: kToolbarHeight),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          InkWell(
-                            onTap: () {
-                              Navigator.pop(context);
-                            },
-                            child: SvgPicture.asset(
-                              "assets/images/back.svg",
-                              height: width * 0.045,
-                              width: width * 0.045,
-                              color: Colors.black,
-                            ),
-                          ),
-                          SizedBox(
-                            width: width * 0.04,
-                          ),
-                          Expanded(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "Profile Info",
-                                  style: AppTextStyle.subtitle1.copyWith(
-                                      fontSize: multiplier * 0.07,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w500),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            width: width * 0.04,
-                          ),
-                          InkWell(
-                            onTap: () {
-                              Get.to(() => const EditProfile());
-                            },
-                            child: SvgPicture.asset(
-                              "assets/images/write.svg",
-                              height: width * 0.045,
-                              width: width * 0.045,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: width * 0.04,
-                    ),
-                    Container(
-                      height: 1,
-                      width: width,
-                      color: AppColors.grey.withOpacity(0.1),
-                    ),
-                    SizedBox(
-                      height: width * 0.04,
-                    ),
-                    Row(
-                      children: [
-                        SizedBox(
-                          width: width * 0.03,
-                        ),
-                        SizedBox(
-                          width: Get.width * 0.22,
-                          height: Get.width * 0.22,
-                          child: IconButton(
-                            icon: AppAvatar(
-                                imgUrl: (logInDetails.photo).toString(),
-                                radius: Get.width * 0.16,
-                                name:
-                                    "${logInDetails.fname} ${logInDetails.lname}"),
-                            onPressed: () {},
-                          ),
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
+              backgroundColor: AppColors.backgroundVariant2,
+              body: SizedBox(
+                width: Get.width,
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(
+                            right: width * 0.05,
+                            left: width * 0.045,
+                            top: kToolbarHeight),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Text(
-                              "${logInDetails.fname} ${logInDetails.lname}",
-                              style: AppTextStyle.subtitle1.copyWith(
+                            InkWell(
+                              onTap: () {
+                                Navigator.pop(context);
+                              },
+                              child: SvgPicture.asset(
+                                "assets/images/back.svg",
+                                height: width * 0.045,
+                                width: width * 0.045,
                                 color: Colors.black,
-                                fontSize: Get.width * 0.045,
                               ),
                             ),
-                            Text(
-                              logInDetails.userType
-                                  .toString()
-                                  .replaceAll("_", " ")
-                                  .capitalizeFirst
-                                  .toString(),
-                              style: AppTextStyle.subtitle1.copyWith(
-                                color: Colors.black.withOpacity(0.5),
-                                fontSize: Get.width * 0.035,
+                            SizedBox(
+                              width: width * 0.04,
+                            ),
+                            Expanded(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "Profile Info",
+                                    style: AppTextStyle.subtitle1.copyWith(
+                                        fontSize: multiplier * 0.07,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w500),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              width: width * 0.04,
+                            ),
+                            InkWell(
+                              onTap: () {
+                                Get.to(() => const EditProfile());
+                              },
+                              child: SvgPicture.asset(
+                                "assets/images/write.svg",
+                                height: width * 0.045,
+                                width: width * 0.045,
+                                color: Colors.black,
                               ),
                             ),
                           ],
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      height: width * 0.04,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                          left: width * 0.025, right: width * 0.025),
-                      child: Column(
+                        ),
+                      ),
+                      SizedBox(
+                        height: width * 0.04,
+                      ),
+                      Container(
+                        height: 1,
+                        width: width,
+                        color: AppColors.grey.withOpacity(0.1),
+                      ),
+                      SizedBox(
+                        height: width * 0.04,
+                      ),
+                      Row(
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          SizedBox(
+                            width: width * 0.03,
+                          ),
+                          SizedBox(
+                            width: Get.width * 0.22,
+                            height: Get.width * 0.22,
+                            child: IconButton(
+                              icon: AppAvatar(
+                                  imgUrl: (logInDetails.photo).toString(),
+                                  radius: Get.width * 0.16,
+                                  name:
+                                      "${logInDetails.fname} ${logInDetails.lname}"),
+                              onPressed: () {},
+                            ),
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              SizedBox(
-                                width: width * 0.45,
-                                child: PageInput(
-                                  hint: '',
-                                   textWidth: 0.3,
-                                  label: 'First Name',
-                                  isCompulsory: false,
-                                  readOnly: true,
-                                  borderSide: BorderSide.none,
-                                  controller: firstName,
+                              Text(
+                                "${logInDetails.fname} ${logInDetails.lname}",
+                                style: AppTextStyle.subtitle1.copyWith(
+                                  color: Colors.black,
+                                  fontSize: Get.width * 0.045,
                                 ),
                               ),
-                              SizedBox(
-                                width: width * 0.45,
-                                child: PageInput(
-                                  hint: '',
-                                  textWidth: 0.3,
-                                  label: 'Last Name',
-                                  isCompulsory: false,
-                                  readOnly: true,
-                                  borderSide: BorderSide.none,
-                                  controller: lastName,
+                              Text(
+                                logInDetails.userType
+                                    .toString()
+                                    .replaceAll("_", " ")
+                                    .capitalizeFirst
+                                    .toString(),
+                                style: AppTextStyle.subtitle1.copyWith(
+                                  color: Colors.black.withOpacity(0.5),
+                                  fontSize: Get.width * 0.035,
                                 ),
                               ),
                             ],
-                          ),
-                          SizedBox(
-                            height: width * 0.04,
-                          ),
-                          PageInput(
-                            hint: '',
-                            label: 'Email',
-                            isCompulsory: false,
-                            readOnly: true,
-                            borderSide: BorderSide.none,
-                            controller: email,
-                          ),
-                          SizedBox(
-                            height: width * 0.04,
-                          ),
-                          PageInput(
-                            hint: '',
-                            label: 'Phone Number',
-                           
-                            isCompulsory: false,
-                            readOnly: true,
-                            borderSide: BorderSide.none,
-                            controller: phoneNumber,
-                          ),
-                          SizedBox(
-                            height: width * 0.04,
-                          ),
-                          PageInput(
-                            hint: 'No Address Currently',
-                            label: 'Address',
-                           
-                            isCompulsory: false,
-                            readOnly: true,
-                            borderSide: BorderSide.none,
-                            controller: address,
-                          ),
-                          SizedBox(
-                            height: width * 0.04,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              SizedBox(
-                                width: width * 0.45,
-                                child: PageInput(
-                                  hint: 'No State Currently',
-                                  label: 'State',
-                                    textWidth: 0.3,
-                                  isCompulsory: false,
-                                  readOnly: true,
-                                  borderSide: BorderSide.none,
-                                  controller: state,
-                                ),
-                              ),
-                              SizedBox(
-                                width: width * 0.45,
-                                child: PageInput(
-                                  hint: 'No City Currently',
-                                  label: 'City',
-                                    textWidth: 0.3,
-                                  isCompulsory: false,
-                                  readOnly: true,
-                                  borderSide: BorderSide.none,
-                                  controller: city,
-                                ),
-                              ),
-                            ],
-                          ),
+                          )
                         ],
                       ),
-                    ),
-                  ],
+                      SizedBox(
+                        height: width * 0.04,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(
+                            left: width * 0.025, right: width * 0.025),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                SizedBox(
+                                  width: width * 0.45,
+                                  child: PageInput(
+                                    hint: '',
+                                    textWidth: 0.3,
+                                    label: 'First Name',
+                                    isCompulsory: false,
+                                    readOnly: true,
+                                    borderSide: BorderSide.none,
+                                    controller: firstName,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: width * 0.45,
+                                  child: PageInput(
+                                    hint: '',
+                                    textWidth: 0.3,
+                                    label: 'Last Name',
+                                    isCompulsory: false,
+                                    readOnly: true,
+                                    borderSide: BorderSide.none,
+                                    controller: lastName,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: width * 0.04,
+                            ),
+                            PageInput(
+                              hint: '',
+                              label: 'Email',
+                              isCompulsory: false,
+                              readOnly: true,
+                              borderSide: BorderSide.none,
+                              controller: email,
+                            ),
+                            SizedBox(
+                              height: width * 0.04,
+                            ),
+                            PageInput(
+                              hint: '',
+                              label: 'Phone Number',
+                              isCompulsory: false,
+                              readOnly: true,
+                              borderSide: BorderSide.none,
+                              controller: phoneNumber,
+                            ),
+                            SizedBox(
+                              height: width * 0.04,
+                            ),
+                            PageInput(
+                              hint: 'No Address Currently',
+                              label: 'Address',
+                              isCompulsory: false,
+                              readOnly: true,
+                              borderSide: BorderSide.none,
+                              controller: address,
+                            ),
+                            SizedBox(
+                              height: width * 0.04,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                SizedBox(
+                                  width: width * 0.45,
+                                  child: PageInput(
+                                    hint: 'No State Currently',
+                                    label: 'State',
+                                    textWidth: 0.3,
+                                    isCompulsory: false,
+                                    readOnly: true,
+                                    borderSide: BorderSide.none,
+                                    controller: state,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: width * 0.45,
+                                  child: PageInput(
+                                    hint: 'No City Currently',
+                                    label: 'City',
+                                    textWidth: 0.3,
+                                    isCompulsory: false,
+                                    readOnly: true,
+                                    borderSide: BorderSide.none,
+                                    controller: city,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            bottomNavigationBar: BottomNavigationBar(
-                backgroundColor: AppColors.backgroundVariant2,
-                showSelectedLabels: true,
-                showUnselectedLabels: true,
-                type: BottomNavigationBarType.fixed,
-                items: <BottomNavigationBarItem>[
-                  BottomNavigationBarItem(
-                    icon: Padding(
-                      padding: const EdgeInsets.only(bottom: 5),
-                      child: Image.asset(
-                        controller.homeIcon,
-                        width: 20,
-                        //color: controller.currentBottomNavPage.value == 0 ? AppColors.primary : AppColors.grey,
-                      ),
-                    ),
-                    label: controller.homeTitle,
-                    backgroundColor: AppColors.background,
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Padding(
-                      padding: const EdgeInsets.only(bottom: 5),
-                      child: Image.asset(
-                        controller.currentBottomNavPage.value == 1
-                            ? 'assets/images/chat_filled.png'
-                            : 'assets/images/chatIcon.png',
-                        width: 22,
-                        //color: controller.currentBottomNavPage.value == 1 ? AppColors.primary : AppColors.grey,
-                      ),
-                    ),
-                    label: 'Chat',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Padding(
-                      padding: const EdgeInsets.only(bottom: 5),
-                      child: Image.asset(
-                        controller.projectIcon,
-                        width: 20,
-                        //color: controller.currentBottomNavPage.value == 2 ? AppColors.primary : AppColors.grey,
-                      ),
-                    ),
-                    label: controller.projectTitle,
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Padding(
-                      padding: const EdgeInsets.only(bottom: 5),
-                      child: Image.asset(
-                        controller.cartIcon,
-                        width: 25,
-                        //color: controller.currentBottomNavPage.value == 3 ? AppColors.primary : AppColors.grey,
-                      ),
-                    ),
-                    label: controller.cartTitle,
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Padding(
-                      padding: const EdgeInsets.only(bottom: 5),
-                      child: Image.asset(
-                        controller.profileIcon,
-                        width: 25,
-                        //color: controller.currentBottomNavPage.value == 4 ? AppColors.primary : AppColors.grey,
-                      ),
-                    ),
-                    label: 'Profile',
-                  ),
-                ],
-                currentIndex: controller.currentBottomNavPage.value,
-                selectedItemColor: AppColors.primary,
-                unselectedItemColor: Colors.grey,
-                onTap: (index) {
-                  controller.currentBottomNavPage.value = index;
-                  controller.updateNewUser(controller.currentType);
-                  Get.back();
-                }),
-          );
+              bottomNavigationBar: HomeBottomWidget(
+                  isHome: false,
+                  controller: controller,
+                  doubleNavigate: false));
         });
   }
 }

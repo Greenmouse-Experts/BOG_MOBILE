@@ -1,6 +1,7 @@
 
 
 
+import 'package:bog/app/global_widgets/new_app_bar.dart';
 import 'package:bog/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
@@ -51,12 +52,7 @@ class _PdfViewerPageState extends State<PdfViewerPage> {
 @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          "Flutter PDF Viewer",
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-      ),
+      appBar: newAppBarBack(context, 'View Document'),
        body: isLoading
           ? const Center(child: CircularProgressIndicator(color: AppColors.primary,))
           : SizedBox(

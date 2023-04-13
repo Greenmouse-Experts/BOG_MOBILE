@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart' as dio;
 import 'package:form_field_validator/form_field_validator.dart';
@@ -29,6 +31,8 @@ class EditProfile extends StatefulWidget {
 
 class _EditProfileState extends State<EditProfile> {
   final _formKey = GlobalKey<FormState>();
+  String? selectedImg;
+  File? pickedImage;
 
   var logInDetails =
       UserDetailsModel.fromJson(jsonDecode(MyPref.userDetails.val));
@@ -84,10 +88,23 @@ class _EditProfileState extends State<EditProfile> {
                             icon: AppAvatar(
                               imgUrl: (logInDetails.photo).toString(),
                               radius: Get.width * 0.16,
+                              selectedImg: selectedImg,
                               name:
                                   "${logInDetails.fname} ${logInDetails.lname}",
                             ),
-                            onPressed: () {},
+                            onPressed: () async {
+                              FilePickerResult? result =
+                                  await FilePicker.platform.pickFiles();
+                              if (result != null) {
+                                File file =
+                                    File(result.files.single.path.toString());
+                                pickedImage = file;
+                                setState(() {
+                                  selectedImg = file.path;
+                                  
+                                });
+                              }
+                            },
                           ),
                         ),
                         Column(
@@ -221,14 +238,30 @@ class _EditProfileState extends State<EditProfile> {
                               title: "Save Changes",
                               onPressed: () async {
                                 if (_formKey.currentState!.validate()) {
-                                  var body = {
-                                    'fname': firstName.text,
-                                    "lname": lastName.text,
-                                    "phone": phoneNumber.text,
-                                    "address": address.text,
-                                    "state": state.text,
-                                    "city": city.text,
-                                  };
+                                  var body = pickedImage == null
+                                      ? {
+                                          'fname': firstName.text,
+                                          "lname": lastName.text,
+                                          "phone": phoneNumber.text,
+                                          "address": address.text,
+                                          "state": state.text,
+                                          "city": city.text,
+                                        }
+                                      : {
+                                          'fname': firstName.text,
+                                          "lname": lastName.text,
+                                          "phone": phoneNumber.text,
+                                          "address": address.text,
+                                          "state": state.text,
+                                          "city": city.text,
+                                          "photo": [
+                                            await dio.MultipartFile.fromFile(
+                                                pickedImage!.path,
+                                                filename: pickedImage!.path
+                                                    .split('/')
+                                                    .last),
+                                          ],
+                                        };
                                   var formData = dio.FormData.fromMap(body);
 
                                   final response = await controller.userRepo
@@ -247,6 +280,7 @@ class _EditProfileState extends State<EditProfile> {
                                                     : 'professional';
                                     final newRes = await controller.userRepo
                                         .getData('/user/me?userType=$type');
+                                   
                                     if (newRes.isSuccessful) {
                                       final userDetails =
                                           UserDetailsModel.fromJson(
