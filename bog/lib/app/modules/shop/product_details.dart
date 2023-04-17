@@ -311,55 +311,34 @@ class ProductDetails extends GetView<HomeController> {
                       SizedBox(
                         height: Get.height * 0.03,
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          SizedBox(
-                            width: Get.width * 0.45,
-                            child: Padding(
-                              padding: EdgeInsets.only(
-                                  left: Get.width * 0.03,
-                                  right: Get.width * 0.03),
-                              child: AppButton(
-                                title: 'Add To Cart',
-                                onPressed: () {
-                                  controller.addItem(product);
-
-                                  // controller.productsMap.putIfAbsent(
-                                  //     product.id.toString(),
-                                  //            () => currentQuantity);
-                                  // for (var element in controller.productsList) {
-                                  //   controller.totalPrice +=
-                                  //       int.parse(element.price.toString());
-                                  // }
-                                  //   Get.back();
-                                },
-                                borderRadius: 10,
-                                padding: EdgeInsets.symmetric(
-                                    vertical: Get.height * 0.02),
-                              ),
-                            ),
+                      GetBuilder<HomeController>(builder: (controller) {
+                        return Padding(
+                          padding: EdgeInsets.only(
+                              left: Get.width * 0.03, right: Get.width * 0.03),
+                          child: AppButton(
+                            title:
+                                controller.cartItems.keys.contains(product.id)
+                                    ? 'Proceed to Checkout'
+                                    : 'Add To Cart',
+                            onPressed: () {
+                              if (controller.cartItems.keys
+                                  .contains(product.id)) {
+                                Get.back();
+                                Get.back();
+                                controller.currentBottomNavPage.value = 3;
+                                controller
+                                    .updateNewUser(controller.currentType);
+                                controller.update(['home']);
+                              } else {
+                                controller.addItem(product);
+                              }
+                            },
+                            borderRadius: 10,
+                            padding: EdgeInsets.symmetric(
+                                vertical: Get.height * 0.02),
                           ),
-                          SizedBox(
-                            width: Get.width * 0.45,
-                            child: Padding(
-                              padding: EdgeInsets.only(
-                                  left: Get.width * 0.03,
-                                  right: Get.width * 0.03),
-                              child: AppButton(
-                                title: 'Buy Now',
-                                onPressed: () {},
-                                borderRadius: 10,
-                                padding: EdgeInsets.symmetric(
-                                    vertical: Get.height * 0.02),
-                                border: Border.all(color: AppColors.primary),
-                                bckgrndColor: Colors.white,
-                                fontColor: AppColors.primary,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                        );
+                      }),
                     ],
                   ),
                 ),

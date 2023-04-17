@@ -14,8 +14,8 @@ import '../../../global_widgets/global_widgets.dart';
 import '../../add_products/add_products.dart';
 import '../../checkout/checkout.dart';
 import '../../meetings/meeting.dart';
-import '../../orders/order_details.dart';
 import '../../project_details/view_form.dart';
+import '../../shop/shop.dart';
 
 class CartTab extends StatefulWidget {
   const CartTab({Key? key}) : super(key: key);
@@ -26,6 +26,30 @@ class CartTab extends StatefulWidget {
 
 class _CartTabState extends State<CartTab> {
   String search = "";
+  bool isDraft = false;
+  bool isReview = false;
+  bool isInStore = false;
+  bool isAll = true;
+
+  late Future<ApiResponse> getProducts;
+
+  @override
+  void initState() {
+    super.initState();
+    initializeData();
+  }
+
+  void initializeData() {
+    final controller = Get.find<HomeController>();
+    getProducts = controller.userRepo.getData("/products");
+  }
+
+  void onApiChange() {
+    setState(() {
+      initializeData();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
@@ -79,7 +103,9 @@ class _CartTabState extends State<CartTab> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           SizedBox(
-                            height: Get.height * 0.3,
+                            height: controller.productsList.isEmpty
+                                ? Get.height * 0.7
+                                : Get.height * 0.3,
                             child: controller.productsList.isEmpty
                                 ? Center(
                                     child: Column(
@@ -109,6 +135,13 @@ class _CartTabState extends State<CartTab> {
                                             fontWeight: FontWeight.w500,
                                           ),
                                         ),
+                                        const SizedBox(height: 20),
+                                        AppButton(
+                                          title: 'Shop Now',
+                                          onPressed: () {
+                                            Get.to(() => const Shop());
+                                          },
+                                        )
                                       ],
                                     ),
                                   )
@@ -138,13 +171,7 @@ class _CartTabState extends State<CartTab> {
                                         quantity: controller.productsMap[
                                                 product.id.toString()] ??
                                             1,
-                                        quantityChanged: (value) {
-                                          //    controller.cartItemIncrement(product.id!);
-                                          // controller.addProductToCart(product);
-                                          // controller.productsMap[
-                                          //     product.id.toString()] = value;
-                                          // controller.update();
-                                        },
+                                        quantityChanged: (value) {},
                                       );
                                     }),
                           ),
@@ -161,139 +188,141 @@ class _CartTabState extends State<CartTab> {
                           SizedBox(
                             height: Get.height * 0.02,
                           ),
-                          SizedBox(
-                            height: Get.height * 0.4,
-                            child: SingleChildScrollView(
-                              child: Column(
-                                children: [
-                                  // const PageInput(
-                                  //   hint: 'Enter your coupon code',
-                                  //   label:
-                                  //       'Do you have a coupon ? Enter it here',
-                                  //   validator: null,
-                                  //   isCompulsory: true,
-                                  //   obscureText: false,
-                                  // ),
-                                  SizedBox(
-                                    height: Get.height * 0.05,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        "Sub Total:",
-                                        style: AppTextStyle.subtitle1.copyWith(
-                                          color: Colors.black,
-                                          fontSize: Get.width * 0.035,
-                                          fontWeight: FontWeight.w400,
+                          if (controller.productsList.isNotEmpty)
+                            SizedBox(
+                              height: Get.height * 0.4,
+                              child: SingleChildScrollView(
+                                child: Column(
+                                  children: [
+                                    SizedBox(
+                                      height: Get.height * 0.05,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          "Sub Total:",
+                                          style:
+                                              AppTextStyle.subtitle1.copyWith(
+                                            color: Colors.black,
+                                            fontSize: Get.width * 0.035,
+                                            fontWeight: FontWeight.w400,
+                                          ),
                                         ),
-                                      ),
-                                      Text(
-                                        "N ${controller.subTotalPrice}",
-                                        style: AppTextStyle.subtitle1.copyWith(
-                                          color: Colors.black,
-                                          fontSize: Get.width * 0.035,
-                                          fontWeight: FontWeight.w400,
+                                        Text(
+                                          "N ${controller.subTotalPrice}",
+                                          style:
+                                              AppTextStyle.subtitle1.copyWith(
+                                            color: Colors.black,
+                                            fontSize: Get.width * 0.035,
+                                            fontWeight: FontWeight.w400,
+                                          ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: Get.height * 0.025,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        "Estimated Delivery Fee :",
-                                        style: AppTextStyle.subtitle1.copyWith(
-                                          color: Colors.black,
-                                          fontSize: Get.width * 0.035,
-                                          fontWeight: FontWeight.w400,
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: Get.height * 0.025,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          "Estimated Delivery Fee :",
+                                          style:
+                                              AppTextStyle.subtitle1.copyWith(
+                                            color: Colors.black,
+                                            fontSize: Get.width * 0.035,
+                                            fontWeight: FontWeight.w400,
+                                          ),
                                         ),
-                                      ),
-                                      Text(
-                                        "TBD",
-                                        style: AppTextStyle.subtitle1.copyWith(
-                                          color: Colors.black,
-                                          fontSize: Get.width * 0.035,
-                                          fontWeight: FontWeight.w400,
+                                        Text(
+                                          "TBD",
+                                          style:
+                                              AppTextStyle.subtitle1.copyWith(
+                                            color: Colors.black,
+                                            fontSize: Get.width * 0.035,
+                                            fontWeight: FontWeight.w400,
+                                          ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: Get.height * 0.025,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        "Estimated Sales Tax :",
-                                        style: AppTextStyle.subtitle1.copyWith(
-                                          color: Colors.black,
-                                          fontSize: Get.width * 0.035,
-                                          fontWeight: FontWeight.w400,
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: Get.height * 0.025,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          "Estimated Sales Tax :",
+                                          style:
+                                              AppTextStyle.subtitle1.copyWith(
+                                            color: Colors.black,
+                                            fontSize: Get.width * 0.035,
+                                            fontWeight: FontWeight.w400,
+                                          ),
                                         ),
-                                      ),
-                                      Text(
-                                        "TBD",
-                                        style: AppTextStyle.subtitle1.copyWith(
-                                          color: Colors.black,
-                                          fontSize: Get.width * 0.035,
-                                          fontWeight: FontWeight.w400,
+                                        Text(
+                                          "TBD",
+                                          style:
+                                              AppTextStyle.subtitle1.copyWith(
+                                            color: Colors.black,
+                                            fontSize: Get.width * 0.035,
+                                            fontWeight: FontWeight.w400,
+                                          ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: Get.height * 0.025,
-                                  ),
-                                  //Dotted Line
-                                  CustomPaint(painter: DashedLinePainter()),
-                                  SizedBox(
-                                    height: Get.height * 0.025,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        "Total :",
-                                        style: AppTextStyle.subtitle1.copyWith(
-                                          color: Colors.black,
-                                          fontSize: Get.width * 0.035,
-                                          fontWeight: FontWeight.w400,
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: Get.height * 0.025,
+                                    ),
+                                    //Dotted Line
+                                    CustomPaint(painter: DashedLinePainter()),
+                                    SizedBox(
+                                      height: Get.height * 0.025,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          "Total :",
+                                          style:
+                                              AppTextStyle.subtitle1.copyWith(
+                                            color: Colors.black,
+                                            fontSize: Get.width * 0.035,
+                                            fontWeight: FontWeight.w400,
+                                          ),
                                         ),
-                                      ),
-                                      Text(
-                                        "NGN ${controller.subTotalPrice}",
-                                        style: AppTextStyle.subtitle1.copyWith(
-                                          color: AppColors.primary,
-                                          fontSize: Get.width * 0.04,
-                                          fontWeight: FontWeight.w400,
+                                        Text(
+                                          "NGN ${controller.subTotalPrice}",
+                                          style:
+                                              AppTextStyle.subtitle1.copyWith(
+                                            color: AppColors.primary,
+                                            fontSize: Get.width * 0.04,
+                                            fontWeight: FontWeight.w400,
+                                          ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: Get.height * 0.035,
-                                  ),
-                                  AppButton(
-                                    title: 'Proceed To Checkout',
-                                    onPressed: () {
-                                      Get.to(() => const Checkout());
-                                    },
-                                    borderRadius: 10,
-                                    enabled: controller.productsList.isNotEmpty,
-                                  ),
-                                ],
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: Get.height * 0.035,
+                                    ),
+                                    AppButton(
+                                      title: 'Proceed To Checkout',
+                                      onPressed: () {
+                                        Get.to(() => const Checkout());
+                                      },
+                                      borderRadius: 10,
+                                      enabled:
+                                          controller.productsList.isNotEmpty,
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
                         ],
                       ),
                     ),
@@ -326,7 +355,7 @@ class _CartTabState extends State<CartTab> {
                 if (controller.currentType == "Product Partner")
                   Expanded(
                     child: FutureBuilder<ApiResponse>(
-                        future: controller.userRepo.getData("/products"),
+                        future: getProducts,
                         builder: (context, snapshot) {
                           if (snapshot.connectionState ==
                                   ConnectionState.done &&
@@ -334,8 +363,39 @@ class _CartTabState extends State<CartTab> {
                             RxList<MyProducts> posts =
                                 MyProducts.fromJsonList(snapshot.data!.data)
                                     .obs;
+                            final initialProducts = posts;
+                            var drafts = posts
+                                .where((p0) => p0.status == 'draft')
+                                .toList()
+                                .obs;
+                            var review = posts
+                                .where((p0) => p0.status == 'in_review')
+                                .toList()
+                                .obs;
+                            var instore = posts
+                                .where((p0) => p0.status == 'approved')
+                                .toList()
+                                .obs;
                             if (search.isNotEmpty) {
                               posts = posts
+                                  .where((element) => element.name!
+                                      .toLowerCase()
+                                      .contains(search.toLowerCase()))
+                                  .toList()
+                                  .obs;
+                              drafts = drafts
+                                  .where((element) => element.name!
+                                      .toLowerCase()
+                                      .contains(search.toLowerCase()))
+                                  .toList()
+                                  .obs;
+                              instore = instore
+                                  .where((element) => element.name!
+                                      .toLowerCase()
+                                      .contains(search.toLowerCase()))
+                                  .toList()
+                                  .obs;
+                              review = review
                                   .where((element) => element.name!
                                       .toLowerCase()
                                       .contains(search.toLowerCase()))
@@ -361,40 +421,152 @@ class _CartTabState extends State<CartTab> {
                                 ),
                               );
                             }
-                            return ListView.builder(
-                              itemCount: posts.length,
-                              scrollDirection: Axis.vertical,
-                              shrinkWrap: true,
-                              padding: const EdgeInsets.all(0),
-                              itemBuilder: (BuildContext context, int index) {
-                                return ProductItem(
-                                  title: posts[index].name,
-                                  status:  posts[index].status,
-                                  deleteProd: () async {
-                                    final response = await controller.userRepo
-                                        .deleteData(
-                                            '/product/${posts[index].id}');
+                            return Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0),
+                                  child: Row(
+                                    children: [
+                                      NumberButton(
+                                        isActive: isAll,
+                                        onPressed: () {
+                                          setState(() {
+                                            isAll = true;
+                                            isReview = false;
+                                            isDraft = false;
+                                            isInStore = false;
+                                          });
+                                        },
+                                        text: 'All',
+                                        num: posts.length,
+                                      ),
+                                      NumberButton(
+                                        isActive: isInStore,
+                                        onPressed: () {
+                                          setState(() {
+                                            isAll = false;
+                                            isInStore = true;
+                                            isReview = false;
+                                            isDraft = false;
+                                          });
+                                        },
+                                        text: 'In Store',
+                                        num: instore.length,
+                                      ),
+                                      NumberButton(
+                                        isActive: isReview,
+                                        onPressed: () {
+                                          setState(() {
+                                            isAll = false;
+                                            isInStore = false;
+                                            isReview = true;
+                                            isDraft = false;
+                                          });
+                                        },
+                                        text: 'Review',
+                                        num: review.length,
+                                      ),
+                                      NumberButton(
+                                        isActive: isDraft,
+                                        onPressed: () {
+                                          setState(() {
+                                            isAll = false;
+                                            isReview = false;
+                                            isInStore = false;
+                                            isDraft = true;
+                                          });
+                                        },
+                                        text: 'Draft',
+                                        num: drafts.length,
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: Get.height * 0.64,
+                                  child: ListView.builder(
+                                    itemCount: isAll
+                                        ? posts.length
+                                        : isInStore
+                                            ? instore.length
+                                            : isReview
+                                                ? review.length
+                                                : drafts.length,
+                                    scrollDirection: Axis.vertical,
+                                    shrinkWrap: true,
+                                    padding: const EdgeInsets.all(0),
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      final prod = isAll
+                                          ? posts[index]
+                                          : isInStore
+                                              ? instore[index]
+                                              : isReview
+                                                  ? review[index]
+                                                  : drafts[index];
+                                      return ProductItem(
+                                        title: prod.name,
+                                        status: prod.status,
+                                        myProduct: prod,
+                                        editProduct: () async {
+                                          await Get.to(() =>
+                                              AddProject(myProduct: prod));
+                                          onApiChange();
+                                        },
+                                        addProduct: () async {
+                                          final response = await controller
+                                              .userRepo
+                                              .patchData(
+                                                  '/product/add-to-shop/${prod.id}',
+                                                  '');
+                                          if (response.isSuccessful) {
+                                            onApiChange();
+                                            Get.back();
+                                            Get.showSnackbar(const GetSnackBar(
+                                              message:
+                                                  'Product Added Successfully',
+                                              backgroundColor: Colors.green,
+                                            ));
+                                          } else {
+                                            Get.back();
+                                            Get.showSnackbar(GetSnackBar(
+                                              message: response.message ??
+                                                  "Product wasn't added",
+                                              backgroundColor: Colors.red,
+                                            ));
+                                          }
+                                        },
+                                        deleteProd: () async {
+                                          final response = await controller
+                                              .userRepo
+                                              .deleteData(
+                                                  '/product/${prod.id}');
 
-                                    if (response.isSuccessful) {
-                                      setState(() {});
-                                      Get.back();
-                                      Get.showSnackbar(const GetSnackBar(
-                                        message: 'Product Deleted Successfully',
-                                        backgroundColor: Colors.green,
-                                      ));
-                                    } else {
-                                      Get.back();
-                                      Get.showSnackbar(const GetSnackBar(
-                                        message: "Product wasn't deleted",
-                                        backgroundColor: Colors.red,
-                                      ));
-                                    }
-                                  },
-                                  subTitle: "N ${posts[index].price}",
-                                  quantity: posts[index].quantity,
-                                  image: posts[index].image,
-                                );
-                              },
+                                          if (response.isSuccessful) {
+                                            onApiChange();
+                                            Get.back();
+                                            Get.showSnackbar(const GetSnackBar(
+                                              message:
+                                                  'Product Deleted Successfully',
+                                              backgroundColor: Colors.green,
+                                            ));
+                                          } else {
+                                            Get.back();
+                                            Get.showSnackbar(const GetSnackBar(
+                                              message: "Product wasn't deleted",
+                                              backgroundColor: Colors.red,
+                                            ));
+                                          }
+                                        },
+                                        subTitle: "N ${prod.price}",
+                                        quantity: prod.quantity,
+                                        image: prod.image,
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ],
                             );
                           } else {
                             if (snapshot.connectionState ==
@@ -433,8 +605,9 @@ class _CartTabState extends State<CartTab> {
                   controller.currentType == "Service Partner"
               ? null
               : FloatingActionButton(
-                  onPressed: () {
-                    Get.to(() => const AddProject());
+                  onPressed: () async {
+                    await Get.to(() => const AddProject());
+                    onApiChange();
                   },
                   backgroundColor: AppColors.primary,
                   child: Stack(
@@ -483,9 +656,6 @@ class CartItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    /*CachedNetworkImageProvider(
-      "www.com",
-    )*/
     return IntrinsicHeight(
       child: Container(
         margin: const EdgeInsets.only(bottom: 25),
@@ -566,6 +736,7 @@ class CartItem extends StatelessWidget {
                           content: 'Are you sure you want to delete this item?',
                           doubleFunction: true,
                           onPressed: () {
+                            Get.back();
                             deleteItem();
                           });
                     },
@@ -694,6 +865,57 @@ class OrderItem extends StatelessWidget {
   }
 }
 
+class NumberButton extends StatelessWidget {
+  final bool isActive;
+  final VoidCallback onPressed;
+  final String text;
+  final int num;
+  const NumberButton(
+      {super.key,
+      required this.isActive,
+      required this.onPressed,
+      required this.text,
+      required this.num});
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+        onPressed: onPressed,
+        style: ElevatedButton.styleFrom(
+            elevation: 0,
+            backgroundColor:
+                isActive ? AppColors.primary : AppColors.background,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            fixedSize: Size(Get.width * 0.235, Get.height * 0.05)),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              text,
+              style: AppTextStyle.caption.copyWith(
+                  color:
+                      isActive ? AppColors.backgroundVariant1 : Colors.black),
+            ),
+            SizedBox(width: Get.width * 0.005),
+            Container(
+              width: Get.width * 0.035,
+              height: Get.height * 0.02,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                  color: AppColors.backgroundVariant1,
+                  borderRadius: BorderRadius.circular(12)),
+              child: Text(
+                '$num',
+                style: AppTextStyle.caption.copyWith(color: AppColors.primary),
+              ),
+            )
+          ],
+        ));
+  }
+}
+
 class ProductItem extends StatelessWidget {
   const ProductItem({
     Key? key,
@@ -703,6 +925,9 @@ class ProductItem extends StatelessWidget {
     this.image,
     this.status,
     required this.deleteProd,
+    required this.addProduct,
+    required this.myProduct,
+    required this.editProduct,
   }) : super(key: key);
 
   final String? title;
@@ -710,7 +935,10 @@ class ProductItem extends StatelessWidget {
   final String? quantity;
   final String? image;
   final String? status;
+  final VoidCallback editProduct;
   final VoidCallback deleteProd;
+  final VoidCallback addProduct;
+  final MyProducts myProduct;
   @override
   Widget build(BuildContext context) {
     return IntrinsicHeight(
@@ -794,41 +1022,89 @@ class ProductItem extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                InkWell(
-                  onTap: () {
-                    AppOverlay.showInfoDialog(
-                        title: 'Delete This Product',
-                        buttonText: 'Delete Product',
-                        content: 'Are you sure you want to delete this PRODUCT',
-                        doubleFunction: true,
-                        onPressed: () async {
-                          deleteProd();
-                        });
-                  },
-                  child: Padding(
-                    padding: EdgeInsets.only(left: Get.width * 0.015, top: 5),
-                    child: Image.asset(
-                      'assets/images/Group 47403.png',
-                      height: Get.width * 0.07,
-                      width: Get.width * 0.07,
+                PopupMenuButton(
+                    color: Colors.white,
+                    child: const Icon(
+                      Icons.more_vert_outlined,
+                      color: AppColors.ashColor,
                     ),
-                  ),
-                ),
+                    itemBuilder: (context) {
+                      return [
+                        if (status == 'draft')
+                          PopupMenuItem(
+                              child: TextButton(
+                                  onPressed: () {
+                                    Get.back();
+                                    AppOverlay.showInfoDialog(
+                                        title: 'Add product to shop',
+                                        buttonText: 'Add',
+                                        content:
+                                            'Are you sure you want to add this product to shop',
+                                        doubleFunction: true,
+                                        onPressed: () async => addProduct());
+                                  },
+                                  child: Text(
+                                    'Add to Shop',
+                                    style: TextStyle(
+                                        fontSize: 12 * Get.textScaleFactor,
+                                        color: Colors.black),
+                                  ))),
+                        PopupMenuItem(
+                            child: TextButton(
+                                onPressed: () {
+                                  Get.back();
+
+                                  editProduct();
+                                },
+                                child: Text(
+                                  'Edit Product',
+                                  style: TextStyle(
+                                      fontSize: 12 * Get.textScaleFactor,
+                                      color: Colors.black),
+                                ))),
+                        PopupMenuItem(
+                            child: TextButton(
+                                onPressed: () {
+                                  Get.back();
+                                  AppOverlay.showInfoDialog(
+                                      title: 'Delete This Product',
+                                      buttonText: 'Delete Product',
+                                      content:
+                                          'Are you sure you want to delete this Product',
+                                      doubleFunction: true,
+                                      onPressed: () async => deleteProd());
+                                },
+                                child: Text(
+                                  'Delete',
+                                  style: TextStyle(
+                                      fontSize: 12 * Get.textScaleFactor,
+                                      color: Colors.red),
+                                )))
+                      ];
+                    }),
                 Padding(
                   padding: EdgeInsets.only(left: Get.width * 0.015, bottom: 5),
                   child: SizedBox(
                     width: Get.width * 0.2,
                     child: AppButton(
-                      title:(status == 'in_review' ? 'In Review' : status?.capitalizeFirst ?? 'Pending'),
+                      title: (status == 'in_review'
+                          ? 'In Review'
+                          : status?.capitalizeFirst ?? 'Pending'),
                       padding: const EdgeInsets.symmetric(vertical: 5),
+                      fontSize: 12 * Get.textScaleFactor,
+                      onPressed: () {},
                       border: Border.all(
                           color: status == 'approved'
                               ? AppColors.successGreen.withOpacity(0.1)
-                              : const Color(0xFFECF6FC)),
+                              : status == 'disapproved'
+                                  ? Colors.red.withOpacity(0.1)
+                                  : const Color(0xFFECF6FC)),
                       bckgrndColor: const Color(0xFFECF6FC),
                       fontColor: status == 'approved'
                           ? AppColors.successGreen
-                          : AppColors.primary,
+                          : status == 'disapproved'
+                              ? Colors.red
+                              : AppColors.primary,
                     ),
                   ),
                 ),
@@ -874,69 +1150,32 @@ class OrderRequestItem extends StatelessWidget {
           ),
         ],
       ),
-      child: InkWell(
-        onTap: () {
-          Get.to(() => const OrderDetails(
-                id: '',
-              ));
-        },
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(left: Get.width * 0.005),
-                        child: Text(
-                          "Order ID :  $orderSlug ",
-                          style: AppTextStyle.caption.copyWith(
-                            color: Colors.black,
-                            fontSize: Get.width * 0.035,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      Padding(
-                        padding: EdgeInsets.only(left: Get.width * 0.005),
-                        child: Text(
-                          name,
-                          style: AppTextStyle.caption.copyWith(
-                            color: Colors.black.withOpacity(0.6),
-                            fontSize: Get.width * 0.033,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.end,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: EdgeInsets.only(left: Get.width * 0.015),
+                      padding: EdgeInsets.only(left: Get.width * 0.005),
                       child: Text(
-                        'NGN $price',
+                        "Order ID :  $orderSlug ",
                         style: AppTextStyle.caption.copyWith(
-                          color: AppColors.primary,
+                          color: Colors.black,
                           fontSize: Get.width * 0.035,
-                          fontWeight: FontWeight.w400,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     ),
                     const SizedBox(height: 10),
                     Padding(
-                      padding: EdgeInsets.only(left: Get.width * 0.015),
+                      padding: EdgeInsets.only(left: Get.width * 0.005),
                       child: Text(
-                        'Qty: $quantity',
+                        name,
                         style: AppTextStyle.caption.copyWith(
                           color: Colors.black.withOpacity(0.6),
                           fontSize: Get.width * 0.033,
@@ -946,18 +1185,52 @@ class OrderRequestItem extends StatelessWidget {
                     ),
                   ],
                 ),
-              ],
-            ),
-            const SizedBox(height: 10),
-            Text(
-              'Status:  ${status.toUpperCase()}',
-              style: AppTextStyle.caption.copyWith(
-                  fontSize: Get.width * 0.035,
-                  fontWeight: FontWeight.w400,
-                  color: Colors.black),
-            )
-          ],
-        ),
+              ),
+              const SizedBox(width: 8),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(left: Get.width * 0.015),
+                    child: Text(
+                      'NGN $price',
+                      style: AppTextStyle.caption.copyWith(
+                        color: AppColors.primary,
+                        fontSize: Get.width * 0.035,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Padding(
+                    padding: EdgeInsets.only(left: Get.width * 0.015),
+                    child: Text(
+                      'Qty: $quantity',
+                      style: AppTextStyle.caption.copyWith(
+                        color: Colors.black.withOpacity(0.6),
+                        fontSize: Get.width * 0.033,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          Text(
+            'Status:  ${status.toUpperCase()}',
+            style: AppTextStyle.caption.copyWith(
+                fontSize: Get.width * 0.035,
+                fontWeight: FontWeight.w400,
+                color: status == 'cancelled'
+                    ? Colors.red
+                    : status == 'completed'
+                        ? AppColors.successGreen
+                        : Colors.black),
+          )
+        ],
       ),
     );
   }

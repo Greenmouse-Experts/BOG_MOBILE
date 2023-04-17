@@ -320,7 +320,6 @@ class _HomeTabState extends State<HomeTab> {
                                           }
                                         }
                                       }),
-                              
                                 if (controller.currentType == "Client" ||
                                     controller.currentType ==
                                         "Corporate Client")
@@ -945,13 +944,17 @@ class ProductPartnerHomeWidget extends StatelessWidget {
                   isProduct: true,
                 ),
                 ActivityWidget(
-                  onTap: () {},
+                  onTap: () {
+                    controller.currentBottomNavPage.value = 3;
+                    controller.updateNewUser(controller.currentType);
+                    controller.update(['home']);
+                  },
                   total: productsInStore,
                   isProduct: false,
                   title: 'Products in Store',
                   subTitle: 'Total Sales made.',
                   image: 'assets/activity/sales.png',
-                  color: AppColors.productGreen.withOpacity(0.7),
+                  color: AppColors.successGreen,
                 ),
               ],
             ),
@@ -970,10 +973,14 @@ class ProductPartnerHomeWidget extends StatelessWidget {
                   title: 'Order Requests',
                   subTitle: 'Total Order requests',
                   image: 'assets/activity/requests.png',
-                  color: AppColors.productYellow.withOpacity(0.7),
+                  color: AppColors.productYellow,
                 ),
                 ActivityWidget(
-                  onTap: () {},
+                  onTap: () {
+                    controller.currentBottomNavPage.value = 2;
+                    controller.updateNewUser(controller.currentType);
+                    controller.update(['home']);
+                  },
                   total: deliveries,
                   isProduct: false,
                   title: 'Deliveries',

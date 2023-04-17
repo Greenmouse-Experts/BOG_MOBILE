@@ -136,174 +136,204 @@ class _ChatTabState extends State<ChatTab> {
                                     }.toList();
                                   }
 
-                                  return ListView.builder(
-                                    itemCount: announcements.length,
-                                    shrinkWrap: true,
-                                    padding: EdgeInsets.zero,
-                                    physics: const BouncingScrollPhysics(),
-                                    itemBuilder: (context, index) {
-                                      final announcement = announcements[index];
-                                      return SizedBox(
-                                        height: Get.height * 0.08,
-                                        child: InkWell(
-                                          onTap: () {
-                                            AppOverlay.showInfoDialog(
-                                              title: announcement.title ?? '',
-                                              contentReplacement: Column(
-                                                children: [
-                                                  Text(
-                                                    announcement.content ?? '',
-                                                    textAlign: TextAlign.center,
-                                                    style: AppTextStyle
-                                                        .bodyText2
-                                                        .copyWith(
-                                                      fontWeight:
-                                                          FontWeight.w500,
-                                                      color: Colors.black,
+                                  return announcements.isEmpty
+                                      ? Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: const [
+                                            Text(
+                                                'You have no messages currently')
+                                          ],
+                                        )
+                                      : ListView.builder(
+                                          itemCount: announcements.length,
+                                          shrinkWrap: true,
+                                          padding: EdgeInsets.zero,
+                                          physics:
+                                              const BouncingScrollPhysics(),
+                                          itemBuilder: (context, index) {
+                                            final announcement =
+                                                announcements[index];
+                                            return SizedBox(
+                                              height: Get.height * 0.08,
+                                              child: InkWell(
+                                                onTap: () {
+                                                  AppOverlay.showInfoDialog(
+                                                    title: announcement.title ??
+                                                        '',
+                                                    contentReplacement: Column(
+                                                      children: [
+                                                        Text(
+                                                          announcement
+                                                                  .content ??
+                                                              '',
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style: AppTextStyle
+                                                              .bodyText2
+                                                              .copyWith(
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            color: Colors.black,
+                                                          ),
+                                                        ),
+                                                        const SizedBox(
+                                                            height: 5),
+                                                        announcement.supportingDocument ==
+                                                                null
+                                                            ? const SizedBox
+                                                                .shrink()
+                                                            : AppButton(
+                                                                title:
+                                                                    'View Supporting Document',
+                                                                onPressed: () {
+                                                                  Get.back();
+                                                                  if (announcement.supportingDocument!.endsWith('.jpg') ||
+                                                                      announcement
+                                                                          .supportingDocument!
+                                                                          .endsWith(
+                                                                              '.png') ||
+                                                                      announcement
+                                                                          .supportingDocument!
+                                                                          .endsWith(
+                                                                              '.jpeg')) {
+                                                                    Get.to(() =>
+                                                                        PhotoViewPage(
+                                                                            url:
+                                                                                announcement.supportingDocument!));
+                                                                  } else if (announcement
+                                                                      .supportingDocument!
+                                                                      .endsWith(
+                                                                          '.pdf')) {
+                                                                    Get.to(() =>
+                                                                        PdfViewerPage(
+                                                                            path:
+                                                                                announcement.supportingDocument!));
+                                                                  } else {
+                                                                    Get.snackbar(
+                                                                        'Error',
+                                                                        'File type not supported currently',
+                                                                        backgroundColor:
+                                                                            Colors
+                                                                                .red,
+                                                                        colorText:
+                                                                            AppColors.background);
+                                                                  }
+                                                                },
+                                                                borderRadius:
+                                                                    10,
+                                                                bckgrndColor:
+                                                                    Colors
+                                                                        .white,
+                                                                fontColor:
+                                                                    AppColors
+                                                                        .primary,
+                                                                bold: false,
+                                                              )
+                                                      ],
                                                     ),
-                                                  ),
-                                                  const SizedBox(height: 5),
-                                                  announcement.supportingDocument ==
-                                                          null
-                                                      ? const SizedBox.shrink()
-                                                      : AppButton(
-                                                          title:
-                                                              'View Supporting Document',
-                                                          onPressed: () {
-                                                            Get.back();
-                                                            if (announcement.supportingDocument!.endsWith('.jpg') ||
-                                                                announcement
-                                                                    .supportingDocument!
-                                                                    .endsWith(
-                                                                        '.png') ||
-                                                                announcement
-                                                                    .supportingDocument!
-                                                                    .endsWith(
-                                                                        '.jpeg')) {
-                                                              Get.to(() =>
-                                                                  PhotoViewPage(
-                                                                      url: announcement
-                                                                          .supportingDocument!));
-                                                            } else if (announcement
-                                                                .supportingDocument!
-                                                                .endsWith(
-                                                                    '.pdf')) {
-                                                              Get.to(() =>
-                                                                  PdfViewerPage(
-                                                                      path: announcement
-                                                                          .supportingDocument!));
-                                                            } else {
-                                                              Get.snackbar(
-                                                                  'Error',
-                                                                  'File type not supported currently',
-                                                                  backgroundColor:
-                                                                      Colors
-                                                                          .red,
-                                                                  colorText:
-                                                                      AppColors
-                                                                          .background);
-                                                            }
-                                                          },
-                                                          borderRadius: 10,
-                                                          bckgrndColor:
-                                                              Colors.white,
-                                                          fontColor:
-                                                              AppColors.primary,
-                                                          bold: false,
-                                                        )
-                                                ],
-                                              ),
-                                              buttonText: 'Back',
-                                            );
-                                          },
-                                          child: Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            children: [
-                                              SizedBox(
-                                                width: Get.width * 0.16,
-                                                height: Get.width * 0.16,
-                                                child: IconButton(
-                                                  icon: AppAvatar(
-                                                      imgUrl: "",
-                                                      radius: Get.width * 0.16,
-                                                      name: "Admin"),
-                                                  onPressed: () {},
+                                                    buttonText: 'Back',
+                                                  );
+                                                },
+                                                child: Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  children: [
+                                                    SizedBox(
+                                                      width: Get.width * 0.16,
+                                                      height: Get.width * 0.16,
+                                                      child: IconButton(
+                                                        icon: AppAvatar(
+                                                            imgUrl: "",
+                                                            radius: Get.width *
+                                                                0.16,
+                                                            name: "Admin"),
+                                                        onPressed: () {},
+                                                      ),
+                                                    ),
+                                                    Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
+                                                          children: [
+                                                            Text(
+                                                              announcement
+                                                                      .title ??
+                                                                  '',
+                                                              style: AppTextStyle
+                                                                  .subtitle1
+                                                                  .copyWith(
+                                                                      color: Colors
+                                                                          .black,
+                                                                      fontSize:
+                                                                          Get.width *
+                                                                              0.04),
+                                                            ),
+                                                            SizedBox(
+                                                                width:
+                                                                    Get.width *
+                                                                        0.2),
+                                                            Text(
+                                                              DateFormat(
+                                                                      'yyyy-MM-dd')
+                                                                  .format(announcement
+                                                                      .createdAt!),
+                                                              style: AppTextStyle
+                                                                  .subtitle1
+                                                                  .copyWith(
+                                                                      color: Colors
+                                                                          .grey,
+                                                                      fontSize:
+                                                                          Get.width *
+                                                                              0.035),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        SizedBox(
+                                                            height: Get.height *
+                                                                0.01),
+                                                        Text(
+                                                          announcement
+                                                                  .content ??
+                                                              '',
+                                                          style: AppTextStyle
+                                                              .subtitle1
+                                                              .copyWith(
+                                                                  color: Colors
+                                                                      .grey,
+                                                                  fontSize:
+                                                                      Get.width *
+                                                                          0.035),
+                                                        ),
+                                                        SizedBox(
+                                                          height:
+                                                              Get.height * 0.01,
+                                                        ),
+                                                        Container(
+                                                          height: 1,
+                                                          width:
+                                                              Get.width * 0.7,
+                                                          color: Colors.grey
+                                                              .withOpacity(.2),
+                                                        ),
+                                                      ],
+                                                    )
+                                                  ],
                                                 ),
                                               ),
-                                              Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      Text(
-                                                        announcement.title ??
-                                                            '',
-                                                        style: AppTextStyle
-                                                            .subtitle1
-                                                            .copyWith(
-                                                                color: Colors
-                                                                    .black,
-                                                                fontSize:
-                                                                    Get.width *
-                                                                        0.04),
-                                                      ),
-                                                      SizedBox(
-                                                          width:
-                                                              Get.width * 0.2),
-                                                      Text(
-                                                        DateFormat('yyyy-MM-dd')
-                                                            .format(announcement
-                                                                .createdAt!),
-                                                        style: AppTextStyle
-                                                            .subtitle1
-                                                            .copyWith(
-                                                                color:
-                                                                    Colors.grey,
-                                                                fontSize:
-                                                                    Get.width *
-                                                                        0.035),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  SizedBox(
-                                                      height:
-                                                          Get.height * 0.01),
-                                                  Text(
-                                                    announcement.content ?? '',
-                                                    style: AppTextStyle
-                                                        .subtitle1
-                                                        .copyWith(
-                                                            color: Colors.grey,
-                                                            fontSize:
-                                                                Get.width *
-                                                                    0.035),
-                                                  ),
-                                                  SizedBox(
-                                                    height: Get.height * 0.01,
-                                                  ),
-                                                  Container(
-                                                    height: 1,
-                                                    width: Get.width * 0.7,
-                                                    color: Colors.grey
-                                                        .withOpacity(.2),
-                                                  ),
-                                                ],
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  );
+                                            );
+                                          },
+                                        );
                                 } else {
                                   return const Center(
                                     child: Text('An error occurred'),

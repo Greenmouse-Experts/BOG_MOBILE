@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:otp_text_field/otp_field.dart';
@@ -16,10 +17,10 @@ import '../modules/sign_in/sign_in.dart';
 import '../modules/sign_up/verify_otp.dart';
 import '../repository/user_repo.dart';
 
-final signInScopes = [
-  'email',
-  'https://www.googleapis.com/auth/contacts.readonly',
-];
+// final signInScopes = [
+//   'email',
+//   'https://www.googleapis.com/auth/contacts.readonly',
+// ];
 
 class AuthController extends GetxController {
   // final HomeController homeController;
@@ -61,7 +62,11 @@ class AuthController extends GetxController {
 
   AuthController(this.userRepo);
 
-  final GoogleSignIn _googleSignIn = GoogleSignIn(scopes: signInScopes);
+  final GoogleSignIn _googleSignIn = GoogleSignIn(
+      //clientId: "721325752461-q1276n5vq7bij0dlqetb2nrtp2nt1ce3.apps.googleusercontent.com",
+      // scopes: signInScopes,
+
+      );
 
   toggleBusiness(int index) {
     this.index = index;
@@ -233,16 +238,72 @@ class AuthController extends GetxController {
   }
 
   Future<void> handleSignUpGoogle() async {
+    var title = "";
+    var message = "";
+    var buttonMessage = "";
     try {
+      await _googleSignIn.signOut();
       final response = await _googleSignIn.signIn();
+
       if (response != null) {
-      
-        print(response.id);
-      
+        final newRes = await response.authentication;
+        AppOverlay.loadingOverlay(asyncFunction: () async {
+          ApiResponse response = await userRepo.googleSignUp({
+            "access_token": newRes.accessToken,
+            "user_type": "private_client"
+          });
+
+          if (response.isSuccessful) {
+            var logInInfo = LogInModel.fromJson(response.user);
+            response.user = logInInfo;
+
+            var token = response.token;
+            MyPref.logInDetail.val = jsonEncode(response.user);
+            MyPref.authToken.val = token.toString();
+            ApiResponse bankListResponse = await userRepo.getBanks();
+
+            final newRes = await userRepo
+                .getData('/user/me?userType=${logInInfo.profile!.userType}');
+            final userDetails = UserDetailsModel.fromJson(newRes.user);
+            MyPref.userDetails.val = jsonEncode(userDetails);
+
+            if (bankListResponse.isSuccessful && newRes.isSuccessful) {
+              MyPref.bankListDetail.val = jsonEncode(bankListResponse.data);
+
+              Get.offAndToNamed(Home.route);
+            } else {
+              AppOverlay.showInfoDialog(
+                title: "Error",
+                content: "An error occurred, Please try again",
+                buttonText: "Okay",
+                onPressed: () {
+                  Get.back();
+                },
+              );
+            }
+          } else {
+            title = 'Failure';
+            message = response.message ?? 'Account creation failed';
+            buttonMessage = 'Continue';
+            AppOverlay.showInfoDialog(
+              title: 'Failure',
+              content: response.message ?? 'Account creation failed',
+              buttonText: "Continue",
+              onPressed: () {
+                if (response.isSuccessful) {
+                } else {
+                  Get.back();
+                }
+              },
+            );
+          }
+        });
       }
-    } catch (error) {
-     
-    }
+    } catch (error) {}
+  }
+
+  Future<void> logOutGoogle() async {
+    await _googleSignIn.signOut();
   }
 
   Future<void> verifyOTPForSignUp() async {

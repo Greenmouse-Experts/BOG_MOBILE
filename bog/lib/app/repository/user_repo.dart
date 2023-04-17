@@ -11,6 +11,11 @@ class UserRepository {
     return response;
   }
 
+   Future<ApiResponse> googleSignUp(dynamic body) async {
+    final response = await api.postData('/users/auth/google', body: body);
+    return response;
+  }
+
   Future<ApiResponse> signIn(dynamic body) async {
     final response = await api.postData('/user/login', body: body);
     return response;

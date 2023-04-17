@@ -74,9 +74,7 @@ class _ShopState extends State<Shop> {
                             contents.add(getProducts(controller, posts[0],
                                 multiplier, width, true, getAllProducts));
                             for (var element in posts) {
-                              if (element.totalProducts != 0) {
-                                
-                              }
+                              if (element.totalProducts != 0) {}
 
                               if (element.totalProducts != 0) {
                                 dropDownItem.add(element.name!);
@@ -196,136 +194,148 @@ class _ShopState extends State<Shop> {
             final newProduct = SizedBox(
               height: Get.height * 0.7,
               width: Get.width * 0.92,
-              child: GridView.builder(
-                shrinkWrap: true,
-                itemCount: posts.length,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    childAspectRatio: 4 / 4.5,
-                    crossAxisCount: 2,
-                    mainAxisSpacing: 15),
-                scrollDirection: Axis.vertical,
-                padding: const EdgeInsets.all(0),
-                itemBuilder: (BuildContext context, int index) {
-                  return Padding(
-                    padding: EdgeInsets.only(
-                        left: width * 0.02, right: width * 0.02),
-                    child: InkWell(
-                      onTap: () {
-                        Get.to(const ProductDetails(key: Key('ProductDetails')),
-                            arguments: posts[index]);
-                      },
-                      child: Container(
-                        width: width * 0.45,
-                        height: Get.height * 0.45,
-                        decoration: BoxDecoration(
-                          color: AppColors.backgroundVariant2,
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(
-                              color: AppColors.grey.withOpacity(0.1), width: 1),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            SizedBox(
-                              height: Get.height * 0.1,
-                              child: Padding(
-                                padding: EdgeInsets.only(
-                                    top: width * 0.03,
-                                    left: width * 0.03,
-                                    right: width * 0.03),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: Image.network(
-                                    posts[index].productImage!.isEmpty
-                                        ? "https://www.woolha.com/media/2020/03/eevee.png"
-                                        : posts[index]
-                                            .productImage![0]
-                                            .url
-                                            .toString(),
-                                    fit: BoxFit.cover,
-                                    alignment: Alignment.center,
-                                    errorBuilder: (context, error, stackTrace) {
-                                      return Container(
-                                        width: width * 0.45,
-                                        height: Get.height * 0.1,
-                                        decoration: BoxDecoration(
-                                          color: AppColors.primary,
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          border: Border.all(
-                                              color: AppColors.grey
-                                                  .withOpacity(0.1),
-                                              width: 1),
+              child: posts.isEmpty
+                  ? const Center(
+                      child: Text('No Products available'),
+                    )
+                  : GridView.builder(
+                      shrinkWrap: true,
+                      itemCount: posts.length,
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                              childAspectRatio: 4 / 4.5,
+                              crossAxisCount: 2,
+                              mainAxisSpacing: 15),
+                      scrollDirection: Axis.vertical,
+                      padding: const EdgeInsets.all(0),
+                      itemBuilder: (BuildContext context, int index) {
+                        return Padding(
+                          padding: EdgeInsets.only(
+                              left: width * 0.02, right: width * 0.02),
+                          child: InkWell(
+                            onTap: () {
+                              Get.to(
+                                  const ProductDetails(
+                                      key: Key('ProductDetails')),
+                                  arguments: posts[index]);
+                            },
+                            child: Container(
+                              width: width * 0.45,
+                              height: Get.height * 0.45,
+                              decoration: BoxDecoration(
+                                color: AppColors.backgroundVariant2,
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(
+                                    color: AppColors.grey.withOpacity(0.1),
+                                    width: 1),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  SizedBox(
+                                    height: Get.height * 0.1,
+                                    child: Padding(
+                                      padding: EdgeInsets.only(
+                                          top: width * 0.03,
+                                          left: width * 0.03,
+                                          right: width * 0.03),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(10),
+                                        child: Image.network(
+                                          posts[index].productImage!.isEmpty
+                                              ? "https://www.woolha.com/media/2020/03/eevee.png"
+                                              : posts[index]
+                                                  .productImage![0]
+                                                  .url
+                                                  .toString(),
+                                          fit: BoxFit.cover,
+                                          alignment: Alignment.center,
+                                          errorBuilder:
+                                              (context, error, stackTrace) {
+                                            return Container(
+                                              width: width * 0.45,
+                                              height: Get.height * 0.1,
+                                              decoration: BoxDecoration(
+                                                color: AppColors.primary,
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                border: Border.all(
+                                                    color: AppColors.grey
+                                                        .withOpacity(0.1),
+                                                    width: 1),
+                                              ),
+                                              child: Center(
+                                                child: Icon(
+                                                  Icons.image_not_supported,
+                                                  color: AppColors.background,
+                                                  size: width * 0.1,
+                                                ),
+                                              ),
+                                            );
+                                          },
                                         ),
-                                        child: Center(
-                                          child: Icon(
-                                            Icons.image_not_supported,
-                                            color: AppColors.background,
-                                            size: width * 0.1,
-                                          ),
-                                        ),
-                                      );
-                                    },
+                                      ),
+                                    ),
                                   ),
-                                ),
+                                  SizedBox(
+                                    height: width * 0.02,
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                        left: width * 0.03,
+                                        right: width * 0.03),
+                                    child: Text(
+                                      posts[index].name.toString(),
+                                      style: AppTextStyle.subtitle1.copyWith(
+                                          fontSize: multiplier * 0.055,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w600),
+                                      textAlign: TextAlign.start,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: width * 0.02,
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                        left: width * 0.03,
+                                        right: width * 0.03),
+                                    child: Text(
+                                      "NGN ${posts[index].price} ",
+                                      // /${posts[index].unit
+                                      style: AppTextStyle.subtitle1.copyWith(
+                                          fontSize: multiplier * 0.055,
+                                          color: AppColors.primary,
+                                          fontWeight: FontWeight.bold),
+                                      textAlign: TextAlign.start,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: width * 0.02,
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.all(width * 0.03),
+                                    child: FittedBox(
+                                      child: AppRating(
+                                        onRatingUpdate: (val) {},
+                                        rating: 5,
+                                      ),
+                                    ),
+                                  )
+                                ],
                               ),
                             ),
-                            SizedBox(
-                              height: width * 0.02,
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(
-                                  left: width * 0.03, right: width * 0.03),
-                              child: Text(
-                                posts[index].name.toString(),
-                                style: AppTextStyle.subtitle1.copyWith(
-                                    fontSize: multiplier * 0.055,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w600),
-                                textAlign: TextAlign.start,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                            SizedBox(
-                              height: width * 0.02,
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(
-                                  left: width * 0.03, right: width * 0.03),
-                              child: Text(
-                                "NGN ${posts[index].price} ",
-                                // /${posts[index].unit
-                                style: AppTextStyle.subtitle1.copyWith(
-                                    fontSize: multiplier * 0.055,
-                                    color: AppColors.primary,
-                                    fontWeight: FontWeight.bold),
-                                textAlign: TextAlign.start,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                            SizedBox(
-                              height: width * 0.02,
-                            ),
-                            Padding(
-                              padding: EdgeInsets.all(width * 0.03),
-                              child: FittedBox(
-                                child: AppRating(
-                                  onRatingUpdate: (val) {},
-                                  rating: 5,
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
+                          ),
+                        );
+                      },
                     ),
-                  );
-                },
-              ),
             );
             //oducts.add(newProduct);
             return newProduct;

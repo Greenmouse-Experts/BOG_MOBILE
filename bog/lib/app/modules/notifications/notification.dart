@@ -1,4 +1,5 @@
 import 'package:bog/app/global_widgets/bottom_widget.dart';
+import 'package:bog/app/global_widgets/new_app_bar.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_svg/svg.dart';
@@ -29,68 +30,13 @@ class NotificationPage extends GetView<HomeController> {
           builder: (controller) {
             return Scaffold(
                 backgroundColor: AppColors.backgroundVariant2,
+                appBar: newAppBarBack(context, 'Notifications'),
                 body: SizedBox(
                   width: Get.width,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      Padding(
-                        padding: EdgeInsets.only(
-                            right: width * 0.05,
-                            left: width * 0.045,
-                            top: kToolbarHeight),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                Navigator.pop(context);
-                              },
-                              child: SvgPicture.asset(
-                                "assets/images/back.svg",
-                                height: width * 0.045,
-                                width: width * 0.045,
-                                color: Colors.black,
-                              ),
-                            ),
-                            SizedBox(
-                              width: width * 0.04,
-                            ),
-                            Expanded(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    "Notification",
-                                    style: AppTextStyle.subtitle1.copyWith(
-                                        fontSize: multiplier * 0.07,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w500),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(
-                              width: width * 0.04,
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: width * 0.04,
-                      ),
-                      Container(
-                        height: 1,
-                        width: width,
-                        color: AppColors.grey.withOpacity(0.1),
-                      ),
-                      SizedBox(
-                        height: width * 0.04,
-                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -136,7 +82,6 @@ class NotificationPage extends GetView<HomeController> {
                                   return Padding(
                                     padding: EdgeInsets.symmetric(
                                         vertical: Get.height * 0.015),
-                                    // height: Get.height * 0.08,
                                     child: Row(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.center,

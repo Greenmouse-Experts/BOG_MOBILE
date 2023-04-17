@@ -117,6 +117,19 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
                                         OrderRequestsModel.fromJson(element));
                                   }
 
+                                  final cancelledOrders = orderRequests
+                                      .where((element) =>
+                                          element.order!.status == 'cancelled')
+                                      .toList();
+                                  final deliveredOrders = orderRequests
+                                      .where((element) =>
+                                          element.order!.status == 'completed')
+                                      .toList();
+                                  final inProgressOrders = orderRequests
+                                      .where((element) =>
+                                          element.order!.status == 'pending')
+                                      .toList();
+
                                   return Column(
                                     children: [
                                       Padding(
@@ -132,10 +145,12 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
                                             controller.update();
                                             setState(() {});
                                           },
-                                          value: "New Order Requests",
+                                          value: "All Order Requests",
                                           items: [
-                                            "New Order Requests",
-                                            "Ongoing Orders"
+                                            "All Order Requests",
+                                            "Delivered",
+                                            "Cancelled",
+                                            "In progress"
                                           ].map<DropdownMenuItem<String>>(
                                               (String value) {
                                             return DropdownMenuItem<String>(
@@ -164,7 +179,19 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
                                             : ListView.builder(
                                                 physics:
                                                     const NeverScrollableScrollPhysics(),
-                                                itemCount: orderRequests.length,
+                                                itemCount: currentOrder.value ==
+                                                        'All Order Requests'
+                                                    ? orderRequests.length
+                                                    : currentOrder.value ==
+                                                            'In progress'
+                                                        ? inProgressOrders
+                                                            .length
+                                                        : currentOrder.value ==
+                                                                'Delivered'
+                                                            ? deliveredOrders
+                                                                .length
+                                                            : cancelledOrders
+                                                                .length,
                                                 scrollDirection: Axis.vertical,
                                                 shrinkWrap: true,
                                                 padding:
@@ -172,18 +199,22 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
                                                 itemBuilder:
                                                     (BuildContext context,
                                                         int index) {
-                                                  final order =
-                                                      orderRequests[index];
-                                                  return currentOrder.value ==
-                                                          "Ongoing Orders"
-                                                      ? OrderItem(
-                                                          price: '203000',
-                                                          date: DateTime.now(),
-                                                          status: 'Pending',
-                                                          orderItemName:
-                                                              '10 tons of coconut',
-                                                        )
-                                                      : OrderRequestItem(
+                                                  final order = currentOrder
+                                                              .value ==
+                                                          'All Order Requests'
+                                                      ? orderRequests[index]
+                                                      : currentOrder.value ==
+                                                              'In progress'
+                                                          ? inProgressOrders[
+                                                              index]
+                                                          : currentOrder
+                                                                      .value ==
+                                                                  'Delivered'
+                                                              ? deliveredOrders[
+                                                                  index]
+                                                              : cancelledOrders[
+                                                                  index];
+                                                  return OrderRequestItem(
                                                           name: order.product!
                                                                   .name ??
                                                               '',
@@ -260,7 +291,7 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
                                           MainAxisAlignment.center,
                                       children: [
                                         Text(
-                                          "No Projects Available",
+                                          "You have no available projects",
                                           style: AppTextStyle.subtitle1
                                               .copyWith(
                                                   fontSize: multiplier * 0.07,
@@ -381,7 +412,7 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
                                           MainAxisAlignment.center,
                                       children: [
                                         Text(
-                                          "No Projects Available",
+                                          "You have no available projects",
                                           style: AppTextStyle.subtitle1
                                               .copyWith(
                                                   fontSize: multiplier * 0.07,
@@ -577,7 +608,7 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
                                           MainAxisAlignment.center,
                                       children: [
                                         Text(
-                                          "No Projects Available",
+                                          "You have no available projects",
                                           style: AppTextStyle.subtitle1
                                               .copyWith(
                                                   fontSize: multiplier * 0.07,
@@ -672,7 +703,7 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
                                               serviceProjects.isEmpty
                                                   ? const Center(
                                                       child: Text(
-                                                          'No projects available'),
+                                                          'You have no available projects'),
                                                     )
                                                   : ListView.builder(
                                                       shrinkWrap: true,
@@ -866,7 +897,8 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
                                       );
                                     } else {
                                       return const Center(
-                                        child: Text('No Projects Available'),
+                                        child: Text(
+                                            'You have no available projects'),
                                       );
                                     }
                                   } else if (snapshot.hasError) {
@@ -940,7 +972,7 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
           ? SizedBox(
               height: Get.height * 0.7,
               child: const Center(
-                child: Text('No Projects Available'),
+                child: Text('You have no available projects'),
               ),
             )
           : Padding(
@@ -979,7 +1011,7 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
           ? SizedBox(
               height: Get.height * 0.7,
               child: const Center(
-                child: Text('No Projects Available'),
+                child: Text('You have no available projects'),
               ),
             )
           : Padding(

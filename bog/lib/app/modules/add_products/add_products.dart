@@ -8,6 +8,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_styles.dart';
 import '../../controllers/home_controller.dart';
 
+import '../../data/model/my_products.dart';
 import '../../data/model/shop_category.dart';
 import '../../data/providers/api.dart';
 import '../../data/providers/api_response.dart';
@@ -23,7 +24,8 @@ import 'package:dio/dio.dart' as dio;
 import 'add_product_success.dart';
 
 class AddProject extends StatefulWidget {
-  const AddProject({Key? key}) : super(key: key);
+  final MyProducts? myProduct;
+  const AddProject({Key? key, this.myProduct}) : super(key: key);
 
   @override
   State<AddProject> createState() => _AddProjectState();
@@ -56,7 +58,20 @@ class _AddProjectState extends State<AddProject> {
   void initState() {
     final controller = Get.find<HomeController>();
     createProd = controller.userRepo.getData("/product/category");
+    initEdit();
     super.initState();
+  }
+
+  void initEdit() {
+    if (widget.myProduct != null) {
+      final myProduct = widget.myProduct!;
+      nameController.text = myProduct.name ?? '';
+      productController.text = myProduct.description ?? '';
+      priceController.text = myProduct.price ?? '';
+      unitController.text = myProduct.unit ?? '';
+      quantityController.text = myProduct.quantity ?? '';
+      fileController.text = myProduct.image ?? '';
+    }
   }
 
   @override
@@ -79,8 +94,11 @@ class _AddProjectState extends State<AddProject> {
                         snapshot.data!.isSuccessful) {
                       final posts =
                           ShopCategory.fromJsonList(snapshot.data!.data);
+
                       savedPosts = posts;
                       selectedCategory = savedPosts[0];
+
+                      if (widget.myProduct != null) {}
                       return Form(
                         key: formKey,
                         child: SingleChildScrollView(
@@ -243,35 +261,130 @@ class _AddProjectState extends State<AddProject> {
                                       title: "Submit Product",
                                       onPressed: () async {
                                         if (formKey.currentState!.validate()) {
-                                          var body = {
-                                            "categoryId":
-                                                selectedCategory.id.toString(),
-                                            "name": nameController.text,
-                                            "price": priceController.text,
-                                            "photos": [
-                                              await dio.MultipartFile.fromFile(
-                                                  pickedFile!.path,
-                                                  filename: pickedFile!.path
-                                                      .split('/')
-                                                      .last),
-                                            ],
-                                            "quantity": quantityController.text,
-                                            "unit": unitController.text,
-                                            "status": "draft",
-                                            "description":
-                                                productController.text,
-                                          };
+                                          Map<String, dynamic> bodyForEdit = {};
+                                          print('sj');
+                                          print(bodyForEdit);
+                                          print(widget.myProduct);
+                                          if (widget.myProduct != null) {
+                                            print('sgg');
+                                            bodyForEdit = pickedFile == null
+                                                ? {
+                                                    "categoryId": widget
+                                                            .myProduct!
+                                                            .categoryId ??
+                                                        '',
+                                                    "name": nameController.text,
+                                                    "price":
+                                                        priceController.text,
+                                                    "quantity":
+                                                        quantityController.text,
+                                                    "unit": unitController.text,
+                                                    "status": widget.myProduct!
+                                                            .status ??
+                                                        "draft",
+                                                    "description":
+                                                        productController.text,
+                                                    "productId":
+                                                        widget.myProduct!.id
+                                                  }
+                                                : {
+                                                    "categoryId": widget
+                                                            .myProduct!
+                                                            .categoryId ??
+                                                        '',
+                                                    "name": nameController.text,
+                                                    "price":
+                                                        priceController.text,
+                                                    "photos": [
+                                                      await dio.MultipartFile
+                                                          .fromFile(
+                                                              pickedFile!.path,
+                                                              filename:
+                                                                  pickedFile!
+                                                                      .path
+                                                                      .split(
+                                                                          '/')
+                                                                      .last),
+                                                    ],
+                                                    "quantity":
+                                                        quantityController.text,
+                                                    "unit": unitController.text,
+                                                    "status": widget.myProduct!
+                                                            .status ??
+                                                        'draft',
+                                                    "description":
+                                                        productController.text,
+                                                    "productId":
+                                                        widget.myProduct!.id
+                                                  };
+                                          }
+
+                                          var body = pickedFile == null
+                                              ? {
+                                                  "categoryId": selectedCategory
+                                                      .id
+                                                      .toString(),
+                                                  "name": nameController.text,
+                                                  "price": priceController.text,
+                                                  "quantity":
+                                                      quantityController.text,
+                                                  "unit": unitController.text,
+                                                  "status": "draft",
+                                                  "description":
+                                                      productController.text,
+                                                }
+                                              : {
+                                                  "categoryId": selectedCategory
+                                                      .id
+                                                      .toString(),
+                                                  "name": nameController.text,
+                                                  "price": priceController.text,
+                                                  "photos": [
+                                                    await dio.MultipartFile
+                                                        .fromFile(
+                                                            pickedFile!.path,
+                                                            filename:
+                                                                pickedFile!.path
+                                                                    .split('/')
+                                                                    .last),
+                                                  ],
+                                                  "quantity":
+                                                      quantityController.text,
+                                                  "unit": unitController.text,
+                                                  "status": "draft",
+                                                  "description":
+                                                      productController.text,
+                                                };
+
+                                          print(bodyForEdit);
+                                          print('zdz');
 
                                           var formData =
                                               dio.FormData.fromMap(body);
-                                          var response = await Api().postData(
-                                              "/products",
-                                              body: formData,
-                                              hasHeader: true);
+                                          var editFormData =
+                                              dio.FormData.fromMap(bodyForEdit);
+                                          var response = (widget.myProduct !=
+                                                  null)
+                                              ? await controller.userRepo.patchData(
+                                                  '/product/${widget.myProduct!.id}',
+                                                  editFormData)
+                                              : await Api().postData(
+                                                  "/products",
+                                                  body: formData,
+                                                  hasHeader: true);
 
                                           if (response.isSuccessful) {
-                                            Get.to(() =>
-                                                const AddProductSuccess());
+                                            if (widget.myProduct == null) {
+                                              Get.to(() =>
+                                                  const AddProductSuccess());
+                                            } else {
+                                              AppOverlay.successOverlay(
+                                                  message:
+                                                      'Product Updated Successfully',
+                                                  onPressed: () {
+                                                    Get.back();
+                                                  });
+                                            }
                                           } else {
                                             Get.snackbar(
                                                 "Error",
@@ -443,37 +556,120 @@ class _AddProjectState extends State<AddProject> {
                                     title: "Submit Product",
                                     onPressed: () async {
                                       if (formKey.currentState!.validate()) {
-                                        var body = {
-                                          "categoryId":
-                                              selectedCategory.id.toString(),
-                                          "name": nameController.text,
-                                          "price": priceController.text,
-                                          "photos": [
-                                            await dio.MultipartFile.fromFile(
-                                                pickedFile!.path,
-                                                filename: pickedFile!.path
-                                                    .split('/')
-                                                    .last),
-                                          ],
-                                          "quantity": quantityController.text,
-                                          "unit": unitController.text,
-                                          "status": "draft",
-                                          "description": productController.text,
-                                        };
-                                        /*body['photos'] = await dio.MultipartFile.fromFile(
-                                            pickedFile!.path,
-                                            filename: pickedFile!.path.split('/').last,
-                                          );*/
+                                        Map<String, dynamic> bodyForEdit = {};
+
+                                        print(bodyForEdit);
+                                        print('zdsaz');
+                                        if (widget.myProduct != null) {
+                                          bodyForEdit = pickedFile == null
+                                              ? {
+                                                  "categoryId": widget
+                                                      .myProduct!.categoryId,
+                                                  "name": nameController.text,
+                                                  "price": priceController.text,
+                                                  "quantity":
+                                                      quantityController.text,
+                                                  "unit": unitController.text,
+                                                  "status": "draft",
+                                                  "description":
+                                                      productController.text,
+                                                  "productId":
+                                                      widget.myProduct!.id
+                                                }
+                                              : {
+                                                  "categoryId": widget
+                                                          .myProduct!
+                                                          .category!
+                                                          .id ??
+                                                      '',
+                                                  "name": nameController.text,
+                                                  "price": priceController.text,
+                                                  "photos": [
+                                                    await dio.MultipartFile
+                                                        .fromFile(
+                                                            pickedFile!.path,
+                                                            filename:
+                                                                pickedFile!.path
+                                                                    .split('/')
+                                                                    .last),
+                                                  ],
+                                                  "quantity":
+                                                      quantityController.text,
+                                                  "unit": unitController.text,
+                                                  "status": "draft",
+                                                  "description":
+                                                      productController.text,
+                                                  "productId":
+                                                      widget.myProduct!.id
+                                                };
+                                        }
+
+                                        print(bodyForEdit);
+                                        print('zdz');
+
+                                        var body = pickedFile == null
+                                            ? {
+                                                "categoryId": selectedCategory
+                                                    .id
+                                                    .toString(),
+                                                "name": nameController.text,
+                                                "price": priceController.text,
+                                                "quantity":
+                                                    quantityController.text,
+                                                "unit": unitController.text,
+                                                "status": "draft",
+                                                "description":
+                                                    productController.text,
+                                              }
+                                            : {
+                                                "categoryId": selectedCategory
+                                                    .id
+                                                    .toString(),
+                                                "name": nameController.text,
+                                                "price": priceController.text,
+                                                "photos": [
+                                                  await dio.MultipartFile
+                                                      .fromFile(
+                                                          pickedFile!.path,
+                                                          filename: pickedFile!
+                                                              .path
+                                                              .split('/')
+                                                              .last),
+                                                ],
+                                                "quantity":
+                                                    quantityController.text,
+                                                "unit": unitController.text,
+                                                "status": "draft",
+                                                "description":
+                                                    productController.text,
+                                              };
+
                                         var formData =
                                             dio.FormData.fromMap(body);
-                                        var response = await Api().postData(
-                                            "/products",
-                                            body: formData,
-                                            hasHeader: true);
+                                        var editFormData =
+                                            dio.FormData.fromMap(bodyForEdit);
+
+                                        var response = (widget.myProduct !=
+                                                null)
+                                            ? await controller.userRepo.patchData(
+                                                '/product/${widget.myProduct!.id}',
+                                                editFormData)
+                                            : await Api().postData("/products",
+                                                body: formData,
+                                                hasHeader: true);
 
                                         if (response.isSuccessful) {
-                                          Get.to(
-                                              () => const AddProductSuccess());
+                                          if (widget.myProduct == null) {
+                                            Get.to(() =>
+                                                const AddProductSuccess());
+                                          } else {
+                                            AppOverlay.successOverlay(
+                                                message:
+                                                    'Product Updated Successfully',
+                                                onPressed: () {
+                                                  Get.back();
+                                                });
+                                          }
                                         } else {
                                           Get.snackbar(
                                               "Error", response.message ?? '',

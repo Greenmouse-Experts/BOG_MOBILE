@@ -27,9 +27,9 @@ class SignUp extends GetView<AuthController> {
     GlobalKey<FormState> formKey = GlobalKey<FormState>();
     GlobalKey<FormState> formKey1 = GlobalKey<FormState>();
 
-    GoogleSignInAccount? _currentUser;
+  
 
-    final GoogleSignInAccount? user = _currentUser;
+    // final GoogleSignInAccount? user = _currentUser;
 
     return Scaffold(
         appBar: AppBar(

@@ -1,3 +1,4 @@
+import 'package:bog/app/controllers/auth_controller.dart';
 import 'package:bog/app/modules/onboarding/onboarding.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -30,8 +31,10 @@ class ConfirmLogout extends StatelessWidget {
               style: AppTextStyle.headline4.copyWith(color: Colors.red),
             )),
         TextButton(
-            onPressed: () {
+            onPressed: () async {
+         
               Get.offAll(() => const OnboardingPage());
+              
             },
             child: Text(
               'Yes',

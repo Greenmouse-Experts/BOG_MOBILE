@@ -127,7 +127,7 @@ class HomeController extends GetxController {
   Map<String, int> productsMap = {};
 
   final Map<String, CartModel> _cartItems = {};
-  Map<String, CartModel> get cartItems => _cartItems.obs;
+  RxMap<String, CartModel> get cartItems => _cartItems.obs;
 
   void addItem(
     MyProducts product,
