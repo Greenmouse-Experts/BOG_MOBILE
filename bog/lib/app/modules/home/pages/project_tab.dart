@@ -170,15 +170,15 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
                                         ),
                                       ),
                                       SizedBox(
-                                        height: Get.height * 0.8,
+                                        height: Get.height * 0.77,
                                         child: orderRequests.isEmpty
                                             ? const Center(
                                                 child: Text(
                                                     'You have no requests available'),
                                               )
                                             : ListView.builder(
-                                                physics:
-                                                    const NeverScrollableScrollPhysics(),
+                                                // physics:
+                                                //     const NeverScrollableScrollPhysics(),
                                                 itemCount: currentOrder.value ==
                                                         'All Order Requests'
                                                     ? orderRequests.length

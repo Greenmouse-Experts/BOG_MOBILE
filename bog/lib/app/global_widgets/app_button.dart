@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 import 'package:get/get.dart';
 
 import '../../core/theme/app_colors.dart';
@@ -21,6 +21,7 @@ class AppButton extends StatefulWidget {
     this.bold = true,
     this.enabled = true,
     this.hasIcon = false,
+    this.isGoogle = true,
   }) : super(key: key);
   final String title;
   final String trailingTitle;
@@ -36,6 +37,7 @@ class AppButton extends StatefulWidget {
   final bool enabled;
   final Border? border;
   final bool? hasIcon;
+  final bool? isGoogle;
 
   @override
   State<AppButton> createState() => _AppButtonState();
@@ -76,10 +78,11 @@ class _AppButtonState extends State<AppButton> {
                       children: [
                         widget.hasIcon!
                             ? SizedBox(
-                                width: 36,
-                                height: 36,
-                                child:
-                                    Image.asset('assets/icons/googleIcon.webp'))
+                                width: 25,
+                                height: 25,
+                                child: Image.asset(widget.isGoogle!
+                                    ? 'assets/icons/googleIcon.webp'
+                                    : 'assets/icons/apple-emblem.jpeg'))
                             : const SizedBox.shrink(),
                         const SizedBox(width: 5),
                         Text(

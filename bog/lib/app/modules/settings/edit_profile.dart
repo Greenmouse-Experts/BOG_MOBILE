@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_styles.dart';
+import '../../../core/utils/validator.dart';
 import '../../controllers/home_controller.dart';
 
 import '../../data/model/user_details_model.dart';
@@ -101,7 +102,6 @@ class _EditProfileState extends State<EditProfile> {
                                 pickedImage = file;
                                 setState(() {
                                   selectedImg = file.path;
-                                  
                                 });
                               }
                             },
@@ -186,14 +186,13 @@ class _EditProfileState extends State<EditProfile> {
                               height: width * 0.04,
                             ),
                             PageInput(
-                                hint: '',
-                                label: 'Phone Number',
-                                isCompulsory: true,
-                                controller: phoneNumber,
-                                validator: LengthRangeValidator(
-                                    min: 11,
-                                    max: 11,
-                                    errorText: 'Enter a valid phone number')),
+                              hint: '',
+                              label: 'Phone Number',
+                              validator: Validator.phoneNumValidation,
+                              isCompulsory: true,
+                              isPhoneNumber: true,
+                              controller: phoneNumber,
+                            ),
                             SizedBox(
                               height: width * 0.04,
                             ),
@@ -280,7 +279,7 @@ class _EditProfileState extends State<EditProfile> {
                                                     : 'professional';
                                     final newRes = await controller.userRepo
                                         .getData('/user/me?userType=$type');
-                                   
+
                                     if (newRes.isSuccessful) {
                                       final userDetails =
                                           UserDetailsModel.fromJson(

@@ -7,7 +7,9 @@ import 'package:bog/app/data/providers/api_response.dart';
 import 'package:bog/app/global_widgets/app_base_view.dart';
 import 'package:bog/app/global_widgets/app_loader.dart';
 import 'package:bog/app/global_widgets/custom_app_bar.dart';
+
 import 'package:bog/core/theme/app_colors.dart';
+import 'package:bog/core/theme/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -94,18 +96,23 @@ class _JsonFormState extends State<JsonForm> {
                                 onChanged: (dynamic response) {
                                   response1 = response;
                                 },
-                                actionSave: (data) {
-                                
-                                },
-                                buttonSave: Container(
+                                actionSave: (data) {},
+                                buttonSave:
+                                    // const AppButton(title: 'Submit')
+
+                                    Container(
                                   width: Get.width,
-                                  height: 35,
+                                  height: 50,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(12),
                                     color: AppColors.primary,
                                   ),
-                                  child: const Center(
-                                    child: Text('Submit'),
+                                  child: Center(
+                                    child: Text(
+                                      'Submit',
+                                      style: AppTextStyle.bodyText2.copyWith(
+                                          color: AppColors.background),
+                                    ),
                                   ),
                                 ),
                               ),

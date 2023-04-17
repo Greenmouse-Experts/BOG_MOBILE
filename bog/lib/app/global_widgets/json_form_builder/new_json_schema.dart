@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_styles.dart';
 import './simple_forms/simple_text.dart';
 // import './simple_forms/simple_checkbox.dart';
 import './simple_forms/simple_radios.dart';
@@ -73,7 +74,10 @@ class _CoreFormState extends State<NewJsonSchema> {
     if (formGeneral['formTitle'] != null) {
       listWidget.add(Text(
         formGeneral['formTitle'],
-        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+         style: AppTextStyle.bodyText2.copyWith(
+          fontWeight: FontWeight.w700,
+          color: Colors.black,
+        ),
       ));
     }
 

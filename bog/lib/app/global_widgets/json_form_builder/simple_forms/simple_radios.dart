@@ -55,8 +55,13 @@ class _SimpleRadioState extends State<SimpleRadio> {
     List<Widget> radios = [];
 
     if (Fun.labelHidden(item)) {
-      radios.add(Text(item['label'],
-          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)));
+      radios.add(Text(
+        item['label'],
+        style: AppTextStyle.bodyText2.copyWith(
+          fontWeight: FontWeight.w600,
+          color: Colors.black,
+        ),
+      ));
     }
     //  radioValue = item['_values'][0]['value'];
 
@@ -79,8 +84,9 @@ class _SimpleRadioState extends State<SimpleRadio> {
                     radioValue = value;
                     item['value'] = value;
                     answer['value'] = value;
-                     final resolver = widget.item['_values'] as List<dynamic>;
-                    id = resolver.firstWhere((element) => element['value'] == value);
+                    final resolver = widget.item['_values'] as List<dynamic>;
+                    id = resolver
+                        .firstWhere((element) => element['value'] == value);
                     widget.onChange(widget.position, value, id['id']);
                   });
                 })
@@ -155,9 +161,12 @@ class _AppRadioButtonFormState extends State<AppRadioButtonForm> {
                 groupValue: option,
                 onChanged: (value) {
                   setState(() {
-                    widget.onChange(widget.position, value.toString(), );
+                    widget.onChange(
+                      widget.position,
+                      value.toString(),
+                    );
                     answer['value'] = value.toString();
-                   
+
                     option = value.toString();
                   });
                 },

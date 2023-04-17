@@ -102,6 +102,8 @@ class ShippingAddress {
         required this.contactName,
         required this.contactPhone,
         required this.contactEmail,
+        this.deliveryTime,
+        this.homeAddress,
     });
 
     String city;
@@ -112,6 +114,8 @@ class ShippingAddress {
     String contactName;
     String contactPhone;
     String contactEmail;
+    String? deliveryTime;
+    String? homeAddress;
 
     factory ShippingAddress.fromRawJson(String str) => ShippingAddress.fromJson(json.decode(str));
 
@@ -126,6 +130,8 @@ class ShippingAddress {
         contactName: json["contact_name"],
         contactPhone: json["contact_phone"],
         contactEmail: json["contact_email"],
+        deliveryTime: json["delivery_time"],
+        homeAddress: json["home_address"]
     );
 
     Map<String, dynamic> toJson() => {
@@ -137,5 +143,7 @@ class ShippingAddress {
         "contact_name": contactName,
         "contact_phone": contactPhone,
         "contact_email": contactEmail,
+        "delivery_time": deliveryTime,
+        "home_address" : homeAddress
     };
 }

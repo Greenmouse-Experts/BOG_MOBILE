@@ -50,7 +50,8 @@ class _CheckoutState extends State<Checkout> {
 
   var logInDetails = LogInModel.fromJson(jsonDecode(MyPref.logInDetail.val));
 
-  NearestAddress? deliveryFee;
+  NearestAddress? deliveryNearestAddress;
+
   TextEditingController address = TextEditingController();
   TextEditingController city = TextEditingController();
   TextEditingController state = TextEditingController();
@@ -92,7 +93,7 @@ class _CheckoutState extends State<Checkout> {
 
   void updateDeliveryFee(String newDeliveryFee) {
     final answer = NearestAddress.fromJson(jsonDecode(newDeliveryFee));
-    deliveryFee = answer;
+    deliveryNearestAddress = answer;
   }
 
   checkout(
@@ -107,19 +108,29 @@ class _CheckoutState extends State<Checkout> {
       orderProducts.add(
           OrderProduct(productId: item.product.id!, quantity: item.quantity));
     }
+    List<dynamic> jsonProducts = [];
+    for (var element in orderProducts) {
+      jsonProducts.add(element.toJson());
+    }
     final shippingAddress = ShippingAddress(
         city: city.text,
         state: state.text,
         country: country.text,
         postalCode: zip.text,
-        address: address.text,
+        homeAddress: address.text,
+        deliveryTime: deliveryNearestAddress == null
+            ? ''
+            : deliveryNearestAddress!.deliveryTime ?? '',
+        address: deliveryNearestAddress == null
+            ? ''
+            : deliveryNearestAddress!.address ?? '',
         contactName: '${logInDetails.fname} ${logInDetails.lname}',
         contactPhone: logInDetails.phone!,
         contactEmail: logInDetails.email!);
 
     Charge charge = Charge()
       ..amount = price
-      ..reference = 'ref_${DateTime.now().millisecondsSinceEpoch}'
+      ..reference = 'TR-${DateTime.now().millisecondsSinceEpoch}'
       ..email = email
       ..currency = "NGN";
 
@@ -135,16 +146,39 @@ class _CheckoutState extends State<Checkout> {
         asyncFunction: () async {
           successMessage = 'Payment was successful. Ref: ${response.reference}';
           final total = cost + deliveryFee;
-          final postOrder = PostOrder(
-                  products: orderProducts,
-                  shippingAddress: shippingAddress,
-                  paymentInfo:
-                      PaymentInfo(reference: response.reference!, amount: cost),
-                  discount: 0,
-                  deliveryFee: deliveryFee,
-                  totalAmount: total)
-              .toJson();
+          final postOrder = {
+            "products": [...jsonProducts],
+            "shippingAddress": {
+              "address": deliveryNearestAddress == null
+                  ? ''
+                  : deliveryNearestAddress!.address ?? '',
+              "contact_email": logInDetails.email!,
+              "contact_name": '${logInDetails.fname} ${logInDetails.lname}',
+              "contact_phone": logInDetails.phone!,
+              "country": country.text,
+              "delivery_time": deliveryNearestAddress == null
+                  ? ''
+                  : deliveryNearestAddress!.deliveryTime ?? '',
+              "home_address": address.text,
+              "postal_code": zip.text,
+              "state": state.text,
+            },
+            "totalAmount": total,
+            "deliveryFee": deliveryFee,
+            "discount": 0,
+            "paymentInfo": {"reference": response.reference!, "amount": total}
+          };
 
+          // PostOrder(
+          //         products: orderProducts,
+          //         shippingAddress: shippingAddress,
+          //         paymentInfo: PaymentInfo(
+          //             reference: response.reference!, amount: total),
+          //         discount: 0,
+          //         deliveryFee: deliveryFee,
+          //         totalAmount: total)
+          //     .toJson();
+          // print(postOrder);
           final respose = await controller.userRepo
               .postData('/orders/submit-order', postOrder);
 
@@ -153,7 +187,7 @@ class _CheckoutState extends State<Checkout> {
             final order = order_response.OrderResponse.fromJson(respose.order);
             Get.back();
 
-            Get.to(AppReceipt(id: order.id!));
+            Get.to(() => AppReceipt(id: order.id!));
           }
         },
       );
@@ -286,9 +320,6 @@ class _CheckoutState extends State<Checkout> {
                                     SizedBox(
                                       height: width * 0.015,
                                     ),
-                                    // SizedBox(
-                                    //   height: width * 0.08,
-                                    // ),
                                     Expanded(
                                       child: SingleChildScrollView(
                                         child: Column(
@@ -332,6 +363,7 @@ class _CheckoutState extends State<Checkout> {
                                                   child: SizedBox(
                                                     width: width * 0.4,
                                                     child: PageInput(
+                                                      textWidth: 0.35,
                                                       hint: "Enter City",
                                                       label: "City",
                                                       controller: city,
@@ -351,6 +383,7 @@ class _CheckoutState extends State<Checkout> {
                                                   child: SizedBox(
                                                     width: width * 0.4,
                                                     child: PageInput(
+                                                      textWidth: 0.35,
                                                       hint:
                                                           "Enter State/Province",
                                                       label: "State/Province",
@@ -381,6 +414,7 @@ class _CheckoutState extends State<Checkout> {
                                                   child: SizedBox(
                                                     width: width * 0.4,
                                                     child: PageInput(
+                                                      textWidth: 0.35,
                                                       hint: "Enter Postal Code",
                                                       label: "Postal Code",
                                                       controller: zip,
@@ -402,6 +436,7 @@ class _CheckoutState extends State<Checkout> {
                                                     child: PageInput(
                                                       hint: "Enter Country",
                                                       label: "Country",
+                                                      textWidth: 0.35,
                                                       controller: country,
                                                       validator: (value) {
                                                         if (value!.isEmpty) {
@@ -565,6 +600,51 @@ class _CheckoutState extends State<Checkout> {
                                                         height:
                                                             Get.height * 0.05,
                                                       ),
+                                                      if (deliveryNearestAddress !=
+                                                          null)
+                                                        Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
+                                                          children: [
+                                                            Text(
+                                                              "Delivery Time:",
+                                                              style:
+                                                                  AppTextStyle
+                                                                      .subtitle1
+                                                                      .copyWith(
+                                                                color: Colors
+                                                                    .black,
+                                                                fontSize:
+                                                                    Get.width *
+                                                                        0.035,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w400,
+                                                              ),
+                                                            ),
+                                                            Text(
+                                                              "${deliveryNearestAddress!.deliveryTime ?? 0}",
+                                                              style:
+                                                                  AppTextStyle
+                                                                      .subtitle1
+                                                                      .copyWith(
+                                                                color: Colors
+                                                                    .black,
+                                                                fontSize:
+                                                                    Get.width *
+                                                                        0.035,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w400,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      SizedBox(
+                                                        height:
+                                                            Get.height * 0.025,
+                                                      ),
                                                       Row(
                                                         mainAxisAlignment:
                                                             MainAxisAlignment
@@ -627,9 +707,10 @@ class _CheckoutState extends State<Checkout> {
                                                             ),
                                                           ),
                                                           Text(
-                                                            deliveryFee == null
+                                                            deliveryNearestAddress ==
+                                                                    null
                                                                 ? '0'
-                                                                : deliveryFee!
+                                                                : deliveryNearestAddress!
                                                                     .charge
                                                                     .toString(),
                                                             style: AppTextStyle
@@ -721,9 +802,10 @@ class _CheckoutState extends State<Checkout> {
                                                             ),
                                                           ),
                                                           Text(
-                                                            deliveryFee == null
+                                                            deliveryNearestAddress ==
+                                                                    null
                                                                 ? "N ${controller.subTotalPrice}"
-                                                                : (deliveryFee!
+                                                                : (deliveryNearestAddress!
                                                                             .charge! +
                                                                         controller
                                                                             .subTotalPrice)
@@ -754,7 +836,7 @@ class _CheckoutState extends State<Checkout> {
                                                             cost: controller
                                                                 .subTotalPrice,
                                                             deliveryFee:
-                                                                deliveryFee!
+                                                                deliveryNearestAddress!
                                                                         .charge ??
                                                                     5000,
                                                             email: logInDetails

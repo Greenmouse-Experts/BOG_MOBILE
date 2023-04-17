@@ -262,11 +262,9 @@ class _AddProjectState extends State<AddProject> {
                                       onPressed: () async {
                                         if (formKey.currentState!.validate()) {
                                           Map<String, dynamic> bodyForEdit = {};
-                                          print('sj');
-                                          print(bodyForEdit);
-                                          print(widget.myProduct);
+                                        
                                           if (widget.myProduct != null) {
-                                            print('sgg');
+                                           
                                             bodyForEdit = pickedFile == null
                                                 ? {
                                                     "categoryId": widget
@@ -356,8 +354,7 @@ class _AddProjectState extends State<AddProject> {
                                                       productController.text,
                                                 };
 
-                                          print(bodyForEdit);
-                                          print('zdz');
+                                   
 
                                           var formData =
                                               dio.FormData.fromMap(body);
@@ -382,6 +379,7 @@ class _AddProjectState extends State<AddProject> {
                                                   message:
                                                       'Product Updated Successfully',
                                                   onPressed: () {
+                                                    Get.back();
                                                     Get.back();
                                                   });
                                             }
@@ -579,8 +577,7 @@ class _AddProjectState extends State<AddProject> {
                                               : {
                                                   "categoryId": widget
                                                           .myProduct!
-                                                          .category!
-                                                          .id ??
+                                                          .myProductCategoryId ??
                                                       '',
                                                   "name": nameController.text,
                                                   "price": priceController.text,
@@ -667,6 +664,7 @@ class _AddProjectState extends State<AddProject> {
                                                 message:
                                                     'Product Updated Successfully',
                                                 onPressed: () {
+                                                  Get.back();
                                                   Get.back();
                                                 });
                                           }

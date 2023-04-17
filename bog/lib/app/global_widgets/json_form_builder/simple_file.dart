@@ -2,9 +2,7 @@ import 'dart:io';
 
 import 'package:bog/app/global_widgets/global_widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:dio/dio.dart' ;
-
-
+import 'package:dio/dio.dart';
 
 // import 'helpers/function.dart';
 
@@ -57,6 +55,7 @@ class _SimpleFileState extends State<SimpleFile> {
     return PageInput(
       hint: 'Pick a text',
       label: item['label'],
+      boldLabel: true,
       isFilePicker: true,
       controller: fileController,
       validator: (value) {
@@ -67,25 +66,24 @@ class _SimpleFileState extends State<SimpleFile> {
       },
       onFilePicked: (file) async {
         pickedFile = file;
-      
+
         var body = {
           "image": [
-                                            await MultipartFile.fromFile(
-                                                pickedFile!.path,
-                                                filename: pickedFile!.path.split('/').last,)
-                                          ],
+            await MultipartFile.fromFile(
+              pickedFile!.path,
+              filename: pickedFile!.path.split('/').last,
+            )
+          ],
         };
         final formData = FormData.fromMap(body);
 
-        final response = await dio.post('https://bog.greenmouseproperties.com/upload',data: formData);
-       
+        final response = await dio.post(
+            'https://bog.greenmouseproperties.com/upload',
+            data: formData);
+
         if (response.statusCode == 200) {
-    
           widget.onChange(widget.position, response.data[0]);
-    
-        } else{
-     
-        }
+        } else {}
         pickedFile = file;
       },
     );

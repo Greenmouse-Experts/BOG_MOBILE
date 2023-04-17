@@ -27,8 +27,6 @@ class SignUp extends GetView<AuthController> {
     GlobalKey<FormState> formKey = GlobalKey<FormState>();
     GlobalKey<FormState> formKey1 = GlobalKey<FormState>();
 
-  
-
     // final GoogleSignInAccount? user = _currentUser;
 
     return Scaffold(
@@ -126,7 +124,7 @@ class SignUp extends GetView<AuthController> {
                       child: Padding(
                         padding: const EdgeInsets.all(AppThemes.appPaddingVal),
                         child: SizedBox(
-                          height: Get.height + (Get.height * 0.25),
+                          height: Get.height + (Get.height * 0.4),
                           child: PageView(
                             controller: controller.pageController,
                             physics: const NeverScrollableScrollPhysics(),
@@ -311,22 +309,28 @@ class SignUp extends GetView<AuthController> {
                                           .isTermsAndConditionsChecked,
                                     ),
                                     // GoogleUserCircleAvatar(identity: user),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 8.0),
-                                      child: AppButton(
-                                        title: 'Sign Up using google',
-                                        trailingColor: Colors.pink,
-                                        borderRadius: 10,
-                                        bckgrndColor:
-                                            AppColors.backgroundVariant2,
-                                        bold: false,
-                                        hasIcon: true,
-                                        fontColor: Colors.black,
-                                        onPressed: () {
-                                          controller.handleSignUpGoogle();
-                                        },
-                                      ),
+                                    AppButton(
+                                      title: 'Sign up with Google',
+                                      trailingColor: Colors.pink,
+                                      borderRadius: 10,
+                                      bckgrndColor:
+                                          AppColors.backgroundVariant2,
+                                      bold: false,
+                                      hasIcon: true,
+                                      fontColor: Colors.black,
+                                      onPressed: () {
+                                        controller.handleSignUpGoogle();
+                                      },
+                                    ),
+                                    AppButton(
+                                      title: 'Sign up with Apple',
+                                      isGoogle: false,
+                                      trailingColor: Colors.pink,
+                                      borderRadius: 10,
+                                      bckgrndColor: Colors.black,
+                                      hasIcon: true,
+                                      fontColor: AppColors.background,
+                                      onPressed: () {},
                                     ),
                                     AppButton(
                                       title: 'Already have an account ? ',

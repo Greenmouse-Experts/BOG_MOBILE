@@ -9,13 +9,15 @@ import '../../core/theme/app_styles.dart';
 
 class AppDatePicker extends StatefulWidget {
   final String label;
+  final bool? boldLabel;
   final Function onChanged;
   final String? initialDate;
   const AppDatePicker(
       {super.key,
       required this.label,
       required this.onChanged,
-      this.initialDate = ''});
+      this.initialDate = '',
+      this.boldLabel = false});
 
   @override
   State<AppDatePicker> createState() => _AppDatePickerState();
@@ -45,7 +47,7 @@ class _AppDatePickerState extends State<AppDatePicker> {
         Text(
           widget.label,
           style: AppTextStyle.bodyText2.copyWith(
-            fontWeight: FontWeight.w500,
+            fontWeight: widget.boldLabel! ? FontWeight.w600 : FontWeight.w500,
             color: Colors.black,
           ),
         ),

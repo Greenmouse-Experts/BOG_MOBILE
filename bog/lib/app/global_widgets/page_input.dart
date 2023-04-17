@@ -10,35 +10,36 @@ import '../../core/theme/theme.dart';
 import 'app_input.dart';
 
 class PageInput extends StatefulWidget {
-  const PageInput(
-      {Key? key,
-      required this.hint,
-      required this.label,
-      this.prefix,
-      this.initialValue,
-      this.suffix,
-      this.controller,
-      this.keyboardType = TextInputType.text,
-      this.obscureText = false,
-      this.isTextArea = false,
-      this.validator,
-      this.autovalidateMode,
-      this.readOnly = false,
-      this.isCompulsory = false,
-      this.isPhoneNumber = false,
-      this.dropDownItems,
-      this.onDropdownChanged,
-      this.isReferral = false,
-      this.showInfo = true,
-      this.textWidth = 0.8,
-      this.isFilePicker = false,
-      this.borderSide = const BorderSide(
-        width: 1,
-        color: Color(0xFF828282),
-      ),
-      this.onchanged,
-      this.onFilePicked,  })
-      : super(key: key);
+  const PageInput({
+    Key? key,
+    required this.hint,
+    required this.label,
+    this.prefix,
+    this.initialValue,
+    this.suffix,
+    this.controller,
+    this.keyboardType = TextInputType.text,
+    this.obscureText = false,
+    this.isTextArea = false,
+    this.validator,
+    this.autovalidateMode,
+    this.readOnly = false,
+    this.isCompulsory = false,
+    this.isPhoneNumber = false,
+    this.dropDownItems,
+    this.onDropdownChanged,
+    this.isReferral = false,
+    this.showInfo = true,
+    this.textWidth = 0.8,
+    this.isFilePicker = false,
+    this.borderSide = const BorderSide(
+      width: 1,
+      color: Color(0xFF828282),
+    ),
+    this.onchanged,
+    this.onFilePicked,
+    this.boldLabel = false,
+  }) : super(key: key);
 
   final String hint;
   final String label;
@@ -63,6 +64,7 @@ class PageInput extends StatefulWidget {
   final Function(File)? onFilePicked;
   final Function? onchanged;
   final String? initialValue;
+  final bool? boldLabel;
 
   @override
   State<PageInput> createState() => _PageInputState();
@@ -107,7 +109,8 @@ class _PageInputState extends State<PageInput> {
                 child: Text(
                   widget.label,
                   style: AppTextStyle.bodyText2.copyWith(
-                    fontWeight: FontWeight.w500,
+                    fontWeight:
+                        widget.boldLabel! ? FontWeight.w600 : FontWeight.w500,
                     color: Colors.black,
                   ),
                 ),
@@ -200,13 +203,12 @@ class _PageInputState extends State<PageInput> {
         if ((!widget.isPhoneNumber && !showText) || widget.obscureText)
           AppInput(
             initalValue: widget.initialValue,
-              onChanged: (p0) {
-               if (widget.onchanged != null) {
-                          widget.onchanged!(p0);
-                        }
+            onChanged: (p0) {
+              if (widget.onchanged != null) {
+                widget.onchanged!(p0);
+              }
             },
             hintText: !widget.isFilePicker
-
                 ? widget.hint
                 : 'Click to open file picker',
             maxLines: widget.isTextArea ? 5 : 1,
@@ -228,7 +230,7 @@ class _PageInputState extends State<PageInput> {
                         if (widget.controller != null) {
                           widget.controller!.text = file.path.split('/').last;
                         }
-                       
+
                         if (widget.onFilePicked != null) {
                           widget.onFilePicked!(file);
                         }
@@ -305,35 +307,34 @@ class _PageInputState extends State<PageInput> {
   }
 }
 
-
 class DisabledPageInput extends StatefulWidget {
-  const DisabledPageInput(
-      {Key? key,
-      required this.hint,
-      required this.label,
-      this.prefix,
-      this.initialValue,
-      this.suffix,
-      this.controller,
-      this.keyboardType = TextInputType.text,
-      this.obscureText = false,
-      this.isTextArea = false,
-      this.validator,
-      this.autovalidateMode,
-      this.readOnly = false,
-      this.isCompulsory = false,
-      this.isPhoneNumber = false,
-      this.dropDownItems,
-      this.onDropdownChanged,
-      this.isReferral = false,
-      this.showInfo = true,
-      this.isFilePicker = false,
-      this.borderSide = const BorderSide(
-        width: 1,
-        color: Color(0xFF828282),
-      ),
-      this.onFilePicked,  })
-      : super(key: key);
+  const DisabledPageInput({
+    Key? key,
+    required this.hint,
+    required this.label,
+    this.prefix,
+    this.initialValue,
+    this.suffix,
+    this.controller,
+    this.keyboardType = TextInputType.text,
+    this.obscureText = false,
+    this.isTextArea = false,
+    this.validator,
+    this.autovalidateMode,
+    this.readOnly = false,
+    this.isCompulsory = false,
+    this.isPhoneNumber = false,
+    this.dropDownItems,
+    this.onDropdownChanged,
+    this.isReferral = false,
+    this.showInfo = true,
+    this.isFilePicker = false,
+    this.borderSide = const BorderSide(
+      width: 1,
+      color: Color(0xFF828282),
+    ),
+    this.onFilePicked,
+  }) : super(key: key);
 
   final String hint;
   final String label;
@@ -590,4 +591,3 @@ class _DisabledPageInputState extends State<DisabledPageInput> {
     );
   }
 }
-

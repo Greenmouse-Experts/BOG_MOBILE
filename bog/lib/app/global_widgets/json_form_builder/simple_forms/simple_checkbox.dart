@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/theme/app_styles.dart';
 import '../helpers/function.dart';
 
 class SimpleListCheckbox extends StatefulWidget {
@@ -56,8 +57,13 @@ class _SimpleListCheckbox extends State<SimpleListCheckbox> {
   Widget build(BuildContext context) {
     List<Widget> checkboxes = [];
     if (Fun.labelHidden(item)) {
-      checkboxes.add(Text(item['label'],
-          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)));
+      checkboxes.add(Text(
+        item['label'],
+        style: AppTextStyle.bodyText2.copyWith(
+          fontWeight: FontWeight.w600,
+          color: Colors.black,
+        ),
+      ));
     }
     for (var i = 0; i < item['_values'].length; i++) {
       checkboxes.add(

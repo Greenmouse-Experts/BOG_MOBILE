@@ -104,7 +104,7 @@ class _PageInputState extends State<SimplePageInput> {
                 //width: Get.width * 0.8,
                 child: Text(
                   widget.label,
-                  style: AppTextStyle.bodyText2.copyWith(
+                   style: AppTextStyle.bodyText2.copyWith(
                     fontWeight: FontWeight.w500,
                     color: Colors.black,
                   ),

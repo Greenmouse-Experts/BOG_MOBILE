@@ -59,7 +59,10 @@ class _SimpleTextsState extends State<SimpleTexts> {
       label = SizedBox(
         child: Text(
           item['label'],
-          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
+          style: AppTextStyle.bodyText2.copyWith(
+            fontWeight: FontWeight.w600,
+            color: Colors.black,
+          ),
         ),
       );
     }

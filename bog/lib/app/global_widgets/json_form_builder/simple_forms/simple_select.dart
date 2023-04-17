@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_styles.dart';
@@ -33,10 +32,8 @@ class SimpleSelects extends StatefulWidget {
 class _SimpleSelectsState extends State<SimpleSelects> {
   dynamic item;
   dynamic answer;
-   dynamic id;
+  dynamic id;
   dynamic initial;
-
-  
 
   @override
   void initState() {
@@ -59,7 +56,10 @@ class _SimpleSelectsState extends State<SimpleSelects> {
     if (Fun.labelHidden(item)) {
       label = Text(
         item['label'],
-        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
+        style: AppTextStyle.bodyText2.copyWith(
+          fontWeight: FontWeight.w600,
+          color: Colors.black,
+        ),
       );
     }
     return Column(

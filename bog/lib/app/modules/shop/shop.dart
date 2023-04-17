@@ -74,7 +74,7 @@ class _ShopState extends State<Shop> {
                             contents.add(getProducts(controller, posts[0],
                                 multiplier, width, true, getAllProducts));
                             for (var element in posts) {
-                              if (element.totalProducts != 0) {}
+                              // if (element.totalProducts != 0) {}
 
                               if (element.totalProducts != 0) {
                                 dropDownItem.add(element.name!);
@@ -245,11 +245,11 @@ class _ShopState extends State<Shop> {
                                       child: ClipRRect(
                                         borderRadius: BorderRadius.circular(10),
                                         child: Image.network(
-                                          posts[index].productImage!.isEmpty
+                                          posts[index].productImageUrl!.isEmpty
                                               ? "https://www.woolha.com/media/2020/03/eevee.png"
                                               : posts[index]
-                                                  .productImage![0]
-                                                  .url
+                                                  .productImageUrl![0]
+                                                
                                                   .toString(),
                                           fit: BoxFit.cover,
                                           alignment: Alignment.center,

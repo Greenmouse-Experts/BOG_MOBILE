@@ -1,3 +1,5 @@
+import 'package:bog/app/controllers/home_controller.dart';
+import 'package:bog/app/global_widgets/global_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -17,6 +19,8 @@ class MyOrdersWidget extends StatelessWidget {
   final Color statusColor;
   final String orderItemName;
   final String id;
+  final Function cancelOrder;
+  final String? refundStatus;
   const MyOrdersWidget(
       {super.key,
       required this.price,
@@ -25,7 +29,9 @@ class MyOrdersWidget extends StatelessWidget {
       required this.statusColor,
       required this.orderItemName,
       required this.image,
-      required this.id});
+      required this.id,
+      required this.cancelOrder,
+      this.refundStatus});
 
   @override
   Widget build(BuildContext context) {
@@ -67,17 +73,6 @@ class MyOrdersWidget extends StatelessWidget {
                       padding: EdgeInsets.only(left: Get.width * 0.015),
                       child: Text(orderItemName),
                     ),
-                    // Padding(
-                    //   padding: EdgeInsets.only(left: Get.width * 0.015),
-                    //   child: Text(
-                    //     date.format(AmericanDateFormats.abbrShort),
-                    //     style: AppTextStyle.caption.copyWith(
-                    //       color: const Color(0xFF9A9A9A),
-                    //       fontSize: Get.width * 0.033,
-                    //       fontWeight: FontWeight.w400,
-                    //     ),
-                    //   ),
-                    // ),
                     Padding(
                       padding: EdgeInsets.only(left: Get.width * 0.015),
                       child: Text(
@@ -105,12 +100,11 @@ class MyOrdersWidget extends StatelessWidget {
               ),
               const SizedBox(width: 8),
               Column(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  const SizedBox(height: 5),
                   Padding(
-                    padding: EdgeInsets.only(left: Get.width * 0.015),
+                    padding: EdgeInsets.only(left: Get.width * 0.015, top: 5),
                     child: Text(
                       price,
                       style: AppTextStyle.caption.copyWith(
@@ -120,6 +114,104 @@ class MyOrdersWidget extends StatelessWidget {
                       ),
                     ),
                   ),
+                  status == 'Pending'
+                      ? SizedBox(
+                          width: Get.width * 0.2,
+                          child: AppButton(
+                            bckgrndColor: Colors.red,
+                            title: 'Cancel',
+                            onPressed: () {
+                              AppOverlay.showInfoDialog(
+                                  title: 'Cancel Order',
+                                  content:
+                                      'Are you sure you want to cancel this order',
+                                  onPressed: () async {
+                                    final controller =
+                                        Get.find<HomeController>();
+                                    final response = await controller.userRepo
+                                        .getData('/orders/cancel-order/$id');
+                                    if (response.isSuccessful) {
+                                      Get.back();
+                                      AppOverlay.successOverlay(
+                                          message:
+                                              'Order cancelled successfully',
+                                          onPressed: () {
+                                            Get.back();
+                                            cancelOrder();
+                                          });
+                                    } else {
+                                      Get.snackbar(
+                                          'Error',
+                                          response.message ??
+                                              'An error occurred',
+                                          backgroundColor: Colors.red,
+                                          colorText:
+                                              AppColors.backgroundVariant1);
+                                    }
+                                  },
+                                  doubleFunction: true,
+                                  buttonText: 'Cancel');
+                            },
+                          ),
+                        )
+                      : const SizedBox.shrink(),
+                  status == 'Cancelled'
+                      ? Text(
+                          'Status: ${refundStatus == 'request refund' ? 'Pending' : 'Not Refunded'}',
+                          style: AppTextStyle.caption
+                              .copyWith(color: Colors.black),
+                        )
+                      : const SizedBox.shrink(),
+                  status == "Cancelled"
+                      ? PopupMenuButton(
+                          child: const Icon(Icons.more_vert_outlined),
+                          itemBuilder: (context) {
+                            return [
+                              PopupMenuItem(
+                                  child: TextButton(
+                                      onPressed: () async {
+                                        Get.back();
+                                        AppOverlay.showInfoDialog(
+                                            title: 'Request Refund',
+                                            content:
+                                                'Are you sure you want to request refund on this order',
+                                            onPressed: () async {
+                                              final controller =
+                                                  Get.find<HomeController>();
+                                              final response = await controller
+                                                  .userRepo
+                                                  .getData(
+                                                      '/orders/request-refund/$id');
+                                              if (response.isSuccessful) {
+                                                Get.back();
+                                                AppOverlay.successOverlay(
+                                                    message:
+                                                        'Refund requested successfully',
+                                                    onPressed: () {
+                                                      Get.back();
+                                                      cancelOrder();
+                                                    });
+                                              } else {
+                                                Get.snackbar(
+                                                    'Error',
+                                                    response.message ??
+                                                        'An error occurred',
+                                                    backgroundColor: Colors.red,
+                                                    colorText: AppColors
+                                                        .backgroundVariant1);
+                                              }
+                                            },
+                                            doubleFunction: true,
+                                            buttonText: 'Request');
+                                      },
+                                      child: Text(
+                                        'Request Refund',
+                                        style: AppTextStyle.caption2
+                                            .copyWith(color: Colors.red),
+                                      )))
+                            ];
+                          })
+                      : const SizedBox.shrink(),
                 ],
               ),
             ],
@@ -132,23 +224,34 @@ class MyOrdersWidget extends StatelessWidget {
 
 class MyOrderWidgetList extends StatelessWidget {
   final List<MyOrderItem> orderItemsList;
-  final String status;
+
   final Color statusColor;
+  final String status;
+  final Function cancelOrder;
+  final List<MyOrdersModel>? orders;
   const MyOrderWidgetList(
       {super.key,
       required this.orderItemsList,
+      required this.statusColor,
+      required this.cancelOrder,
       required this.status,
-      required this.statusColor});
+      this.orders});
 
   @override
   Widget build(BuildContext context) {
+    String? refundStatus;
+
     return ListView.builder(
       itemCount: orderItemsList.length,
       scrollDirection: Axis.vertical,
       shrinkWrap: false,
-      padding:
-          EdgeInsets.only(left: Get.width * 0.02, right: Get.width * 0.02),
+      padding: EdgeInsets.only(left: Get.width * 0.02, right: Get.width * 0.02),
       itemBuilder: (BuildContext context, int i) {
+        if (orders != null) {
+          final orderNew = orders!.firstWhere(
+              (element) => element.orderItems.contains(orderItemsList[i]));
+          refundStatus = orderNew.refundStatus;
+        }
         return MyOrdersWidget(
           status: status,
           statusColor: statusColor,
@@ -157,6 +260,46 @@ class MyOrderWidgetList extends StatelessWidget {
           date: orderItemsList[i].createdAt ?? DateTime.now(),
           orderItemName: orderItemsList[i].product!.name,
           price: orderItemsList[i].amount.toString(),
+          cancelOrder: cancelOrder,
+          refundStatus: refundStatus,
+        );
+      },
+    );
+  }
+}
+
+class MyDoubleOrderWidgetList extends StatelessWidget {
+  final List<MyOrderItem> orderItemsList;
+  final List<MyOrderItem> orderItemsList2;
+
+  final Function cancelOrder;
+  const MyDoubleOrderWidgetList({
+    super.key,
+    required this.orderItemsList,
+    required this.cancelOrder,
+    required this.orderItemsList2,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final orders = [...orderItemsList, ...orderItemsList2];
+    return ListView.builder(
+      itemCount: orders.length,
+      scrollDirection: Axis.vertical,
+      shrinkWrap: false,
+      padding: EdgeInsets.only(left: Get.width * 0.02, right: Get.width * 0.02),
+      itemBuilder: (BuildContext context, int i) {
+        return MyOrdersWidget(
+          status: orderItemsList.contains(orders[i]) ? 'Pending' : 'Approved',
+          statusColor: orderItemsList.contains(orders[i])
+              ? const Color(0xFFEC8B20)
+              : Colors.green,
+          id: orders[i].orderId!,
+          image: orders[i].product!.image,
+          date: orders[i].createdAt ?? DateTime.now(),
+          orderItemName: orders[i].product!.name,
+          price: orders[i].amount.toString(),
+          cancelOrder: cancelOrder,
         );
       },
     );
