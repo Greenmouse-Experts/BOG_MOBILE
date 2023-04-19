@@ -56,8 +56,6 @@ class MyOrdersWidget extends StatelessWidget {
                     borderRadius: BorderRadius.circular(8),
                     child: CachedNetworkImage(
                         imageUrl: image,
-                        // 'https://media.premiumtimesng.com/wp-content/files/2021/07/1625980458926blob.png',
-
                         fit: BoxFit.cover,
                         placeholder: (context, url) => const AppLoader(),
                         errorWidget: (context, url, error) =>
@@ -117,9 +115,9 @@ class MyOrdersWidget extends StatelessWidget {
                   status == 'Pending'
                       ? SizedBox(
                           width: Get.width * 0.2,
-                          child: AppButton(
-                            bckgrndColor: Colors.red,
-                            title: 'Cancel',
+                          child: IconButton(
+                            alignment: Alignment.centerRight,
+                            icon: const Icon(Icons.delete, color: Colors.red),
                             onPressed: () {
                               AppOverlay.showInfoDialog(
                                   title: 'Cancel Order',

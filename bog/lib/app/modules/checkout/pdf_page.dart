@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:bog/app/global_widgets/new_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
-import 'package:get/get.dart';
 
 class PDFScreen extends StatefulWidget {
   final String? path;

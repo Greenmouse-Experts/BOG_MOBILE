@@ -18,7 +18,7 @@ class ForgotPassword extends GetView<AuthController> {
 
   @override
   Widget build(BuildContext context) {
-    GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+    GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
     return Scaffold(
       appBar: AppBar(
@@ -39,7 +39,7 @@ class ForgotPassword extends GetView<AuthController> {
         width: Get.width,
         child: SingleChildScrollView(
           child: Form(
-            key: _formKey,
+            key: formKey,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -88,7 +88,7 @@ class ForgotPassword extends GetView<AuthController> {
                         AppButton(
                           title: 'Send Reset Link',
                           onPressed: () async =>
-                              await controller.forgotPassword(_formKey),
+                              await controller.forgotPassword(formKey),
                           borderRadius: 10,
                         ),
                         AppButton(

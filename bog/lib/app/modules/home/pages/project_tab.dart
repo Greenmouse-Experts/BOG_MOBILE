@@ -34,7 +34,7 @@ class ProjectTab extends StatefulWidget {
 
 class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
   String search = "";
-  var currentOrder = "New Order Requests".obs;
+  var currentOrder = "All Order Requests".obs;
   List<MyProjects> savedPosts = [];
 
   late TabController tabController;

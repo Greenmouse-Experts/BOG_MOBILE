@@ -1,4 +1,3 @@
-import 'package:bog/app/controllers/auth_controller.dart';
 import 'package:bog/app/modules/onboarding/onboarding.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

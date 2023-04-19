@@ -10,7 +10,6 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_styles.dart';
 import '../../../controllers/home_controller.dart';
-import '../../../data/model/log_in_model.dart';
 
 import '../../../data/model/user_details_model.dart';
 import '../../../data/providers/my_pref.dart';

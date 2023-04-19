@@ -14,7 +14,6 @@ import '../../../global_widgets/app_loader.dart';
 import '../../../global_widgets/global_widgets.dart';
 import '../../../global_widgets/pdf_page_viewer.dart';
 import '../../../global_widgets/photo_view_page.dart';
-import '../../chat/chat.dart';
 
 class ChatTab extends StatefulWidget {
   const ChatTab({Key? key}) : super(key: key);
@@ -265,29 +264,32 @@ class _ChatTabState extends State<ChatTab> {
                                                           mainAxisAlignment:
                                                               MainAxisAlignment
                                                                   .spaceBetween,
+                                                          //  crossAxisAlignment: CrossAxisAlignment.end,
                                                           children: [
-                                                            Text(
-                                                              announcement
-                                                                      .title ??
-                                                                  '',
-                                                              style: AppTextStyle
-                                                                  .subtitle1
-                                                                  .copyWith(
-                                                                      color: Colors
-                                                                          .black,
-                                                                      fontSize:
-                                                                          Get.width *
-                                                                              0.04),
-                                                            ),
                                                             SizedBox(
-                                                                width:
-                                                                    Get.width *
-                                                                        0.2),
+                                                              width: Get.width *
+                                                                  0.5,
+                                                              child: Text(
+                                                                announcement
+                                                                        .title ??
+                                                                    '',
+                                                                style: AppTextStyle
+                                                                    .subtitle1
+                                                                    .copyWith(
+                                                                        color: Colors
+                                                                            .black,
+                                                                        fontSize:
+                                                                            Get.width *
+                                                                                0.04),
+                                                              ),
+                                                            ),
                                                             Text(
                                                               DateFormat(
                                                                       'yyyy-MM-dd')
                                                                   .format(announcement
                                                                       .createdAt!),
+                                                              textAlign:
+                                                                  TextAlign.end,
                                                               style: AppTextStyle
                                                                   .subtitle1
                                                                   .copyWith(
@@ -302,18 +304,26 @@ class _ChatTabState extends State<ChatTab> {
                                                         SizedBox(
                                                             height: Get.height *
                                                                 0.01),
-                                                        Text(
-                                                          announcement
-                                                                  .content ??
-                                                              '',
-                                                          style: AppTextStyle
-                                                              .subtitle1
-                                                              .copyWith(
-                                                                  color: Colors
-                                                                      .grey,
-                                                                  fontSize:
-                                                                      Get.width *
-                                                                          0.035),
+                                                        SizedBox(
+                                                          width:
+                                                              Get.width * 0.7,
+                                                          child: Text(
+                                                            announcement
+                                                                    .content ??
+                                                                '',
+                                                            maxLines: 2,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                            style: AppTextStyle
+                                                                .subtitle1
+                                                                .copyWith(
+                                                                    color: Colors
+                                                                        .grey,
+                                                                    fontSize: Get
+                                                                            .width *
+                                                                        0.035),
+                                                          ),
                                                         ),
                                                         SizedBox(
                                                           height:

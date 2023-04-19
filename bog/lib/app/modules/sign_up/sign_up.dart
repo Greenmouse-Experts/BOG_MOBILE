@@ -4,7 +4,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../../core/theme/app_colors.dart';
 
@@ -319,6 +318,7 @@ class SignUp extends GetView<AuthController> {
                                       hasIcon: true,
                                       fontColor: Colors.black,
                                       onPressed: () {
+                                        print('tapped');
                                         controller.handleSignUpGoogle();
                                       },
                                     ),

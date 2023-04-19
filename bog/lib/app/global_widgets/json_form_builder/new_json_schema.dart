@@ -123,7 +123,6 @@ class _CoreFormState extends State<NewJsonSchema> {
       }
 
       if (item['inputType'] == "radio-group") {
-        ;
         listWidget.add(Padding(
           padding: const EdgeInsets.all(4),
           child: SimpleRadio(

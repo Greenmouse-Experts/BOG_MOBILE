@@ -15,6 +15,9 @@ import 'dart:convert';
 /// deletedAt : null
 /// category : {"id":"84c25973-1770-4136-ab01-9084e9fddf92","name":"Tiles","description":"Consequat mollit commodo laboris amet est occaecat velit velit proident enim"}
 /// product_image : [{"id":"270b58e2-372b-44f2-b0f7-a0b754df91f7","name":"Screenshot 2022-10-13 at 23.17.38.png","image":"uploads/6EdrE3jScreenshot 2022-10-13 at 23.17.38.png","url":"https://res.cloudinary.com/yhomi1996/image/upload/v1669963606/y7hkjgmxd0zib9cm7bub.png"}]
+/// 
+
+
 
 MyProducts myProductsFromJson(String str) => MyProducts.fromJson(json.decode(str));
 String myProductsToJson(MyProducts data) => json.encode(data.toJson());
@@ -24,14 +27,18 @@ String myProductsToJson(MyProducts data) => json.encode(data.toJson());
 //     final myProducts = myProductsFromJson(jsonString);
 
 
+// To parse this JSON data, do
+//
+//     final myProducts = myProductsFromJson(jsonString);
+
 
 class MyProducts {
     MyProducts({
         this.id,
         this.name,
         this.description,
-        this.myProductCategoryId,
-        this.myProductCreatorId,
+        this.categoryId,
+        this.creatorId,
         this.price,
         this.quantity,
         this.weight,
@@ -42,26 +49,10 @@ class MyProducts {
         this.createdAt,
         this.updatedAt,
         this.deletedAt,
-        this.creatorId,
-        this.creatorName,
-        this.creatorEmail,
-        this.creatorPhone,
-        this.creatorPhoto,
-        this.reviewId,
-        this.reviewUserId,
-        this.reviewProductId,
-        this.reviewStar,
-        this.reviewReview,
-        this.reviewCreatedAt,
-        this.reviewUpdatedAt,
-        this.reviewDeletedAt,
-        this.categoryId,
-        this.categoryName,
-        this.categoryDescription,
-        this.productImageId,
-        this.productImageName,
-        this.productImageImage,
-        this.productImageUrl,
+        this.creator,
+        this.review,
+        this.category,
+        this.productImage,
         this.orderTotal,
         this.inStock,
         this.remaining,
@@ -70,38 +61,22 @@ class MyProducts {
     String? id;
     String? name;
     String? description;
-    String? myProductCategoryId;
-    String? myProductCreatorId;
+    String? categoryId;
+    String? creatorId;
     String? price;
     String? quantity;
     dynamic weight;
     String? unit;
     String? image;
-    int? showInShop;
+    bool? showInShop;
     String? status;
     DateTime? createdAt;
     DateTime? updatedAt;
     dynamic deletedAt;
-    String? creatorId;
-    String? creatorName;
-    String? creatorEmail;
-    String? creatorPhone;
-    String? creatorPhoto;
-    dynamic reviewId;
-    dynamic reviewUserId;
-    dynamic reviewProductId;
-    dynamic reviewStar;
-    dynamic reviewReview;
-    dynamic reviewCreatedAt;
-    dynamic reviewUpdatedAt;
-    dynamic reviewDeletedAt;
-    String? categoryId;
-    String? categoryName;
-    String? categoryDescription;
-    String? productImageId;
-    String? productImageName;
-    String? productImageImage;
-    String? productImageUrl;
+    Creator? creator;
+    List<dynamic>? review;
+    Category? category;
+    List<ProductImage>? productImage;
     int? orderTotal;
     bool? inStock;
     int? remaining;
@@ -110,18 +85,12 @@ class MyProducts {
 
     String toRawJson() => json.encode(toJson());
 
-
-  static List<MyProducts> fromJsonList(List list) {
-    if (list.isEmpty) return [];
-    return list.map((item) => MyProducts.fromJson(item)).toList();
-  }
-
     factory MyProducts.fromJson(Map<String, dynamic> json) => MyProducts(
         id: json["id"],
         name: json["name"],
         description: json["description"],
-        myProductCategoryId: json["categoryId"],
-        myProductCreatorId: json["creatorId"],
+        categoryId: json["categoryId"],
+        creatorId: json["creatorId"],
         price: json["price"],
         quantity: json["quantity"],
         weight: json["weight"],
@@ -132,37 +101,26 @@ class MyProducts {
         createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
         updatedAt: json["updatedAt"] == null ? null : DateTime.parse(json["updatedAt"]),
         deletedAt: json["deletedAt"],
-        creatorId: json["creator.id"],
-        creatorName: json["creator.name"],
-        creatorEmail: json["creator.email"],
-        creatorPhone: json["creator.phone"],
-        creatorPhoto: json["creator.photo"],
-        reviewId: json["review.id"],
-        reviewUserId: json["review.userId"],
-        reviewProductId: json["review.productId"],
-        reviewStar: json["review.star"],
-        reviewReview: json["review.review"],
-        reviewCreatedAt: json["review.createdAt"],
-        reviewUpdatedAt: json["review.updatedAt"],
-        reviewDeletedAt: json["review.deletedAt"],
-        categoryId: json["category.id"],
-        categoryName: json["category.name"],
-        categoryDescription: json["category.description"],
-        productImageId: json["product_image.id"],
-        productImageName: json["product_image.name"],
-        productImageImage: json["product_image.image"],
-        productImageUrl: json["product_image.url"],
+        creator: json["creator"] == null ? null : Creator.fromJson(json["creator"]),
+        review: json["review"] == null ? [] : List<dynamic>.from(json["review"]!.map((x) => x)),
+        category: json["category"] == null ? null : Category.fromJson(json["category"]),
+        productImage: json["product_image"] == null ? [] : List<ProductImage>.from(json["product_image"]!.map((x) => ProductImage.fromJson(x))),
         orderTotal: json["orderTotal"],
         inStock: json["in_stock"],
         remaining: json["remaining"],
     );
 
+    static List<MyProducts> fromJsonList(List list) {
+    if (list.isEmpty) return [];
+    return list.map((item) => MyProducts.fromJson(item)).toList();
+  }
+
     Map<String, dynamic> toJson() => {
         "id": id,
         "name": name,
         "description": description,
-        "categoryId": myProductCategoryId,
-        "creatorId": myProductCreatorId,
+        "categoryId": categoryId,
+        "creatorId": creatorId,
         "price": price,
         "quantity": quantity,
         "weight": weight,
@@ -173,31 +131,112 @@ class MyProducts {
         "createdAt": createdAt?.toIso8601String(),
         "updatedAt": updatedAt?.toIso8601String(),
         "deletedAt": deletedAt,
-        "creator.id": creatorId,
-        "creator.name": creatorName,
-        "creator.email": creatorEmail,
-        "creator.phone": creatorPhone,
-        "creator.photo": creatorPhoto,
-        "review.id": reviewId,
-        "review.userId": reviewUserId,
-        "review.productId": reviewProductId,
-        "review.star": reviewStar,
-        "review.review": reviewReview,
-        "review.createdAt": reviewCreatedAt,
-        "review.updatedAt": reviewUpdatedAt,
-        "review.deletedAt": reviewDeletedAt,
-        "category.id": categoryId,
-        "category.name": categoryName,
-        "category.description": categoryDescription,
-        "product_image.id": productImageId,
-        "product_image.name": productImageName,
-        "product_image.image": productImageImage,
-        "product_image.url": productImageUrl,
+        "creator": creator?.toJson(),
+        "review": review == null ? [] : List<dynamic>.from(review!.map((x) => x)),
+        "category": category?.toJson(),
+        "product_image": productImage == null ? [] : List<dynamic>.from(productImage!.map((x) => x.toJson())),
         "orderTotal": orderTotal,
         "in_stock": inStock,
         "remaining": remaining,
     };
 }
+
+class Category {
+    Category({
+        this.id,
+        this.name,
+        this.description,
+    });
+
+    String? id;
+    String? name;
+    String? description;
+
+    factory Category.fromRawJson(String str) => Category.fromJson(json.decode(str));
+
+    String toRawJson() => json.encode(toJson());
+
+    factory Category.fromJson(Map<String, dynamic> json) => Category(
+        id: json["id"],
+        name: json["name"],
+        description: json["description"],
+    );
+
+    Map<String, dynamic> toJson() => {
+        "id": id,
+        "name": name,
+        "description": description,
+    };
+}
+
+class Creator {
+    Creator({
+        this.id,
+        this.name,
+        this.email,
+        this.phone,
+        this.photo,
+    });
+
+    String? id;
+    String? name;
+    String? email;
+    String? phone;
+    String? photo;
+
+    factory Creator.fromRawJson(String str) => Creator.fromJson(json.decode(str));
+
+    String toRawJson() => json.encode(toJson());
+
+    factory Creator.fromJson(Map<String, dynamic> json) => Creator(
+        id: json["id"],
+        name: json["name"],
+        email: json["email"],
+        phone: json["phone"],
+        photo: json["photo"],
+    );
+
+    Map<String, dynamic> toJson() => {
+        "id": id,
+        "name": name,
+        "email": email,
+        "phone": phone,
+        "photo": photo,
+    };
+}
+
+class ProductImage {
+    ProductImage({
+        this.id,
+        this.name,
+        this.image,
+        this.url,
+    });
+
+    String? id;
+    String? name;
+    String? image;
+    String? url;
+
+    factory ProductImage.fromRawJson(String str) => ProductImage.fromJson(json.decode(str));
+
+    String toRawJson() => json.encode(toJson());
+
+    factory ProductImage.fromJson(Map<String, dynamic> json) => ProductImage(
+        id: json["id"],
+        name: json["name"],
+        image: json["image"],
+        url: json["url"],
+    );
+
+    Map<String, dynamic> toJson() => {
+        "id": id,
+        "name": name,
+        "image": image,
+        "url": url,
+    };
+}
+
 
 // class MyProducts {
 //   MyProducts({

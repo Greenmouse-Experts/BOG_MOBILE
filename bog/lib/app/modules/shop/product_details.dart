@@ -112,9 +112,9 @@ class ProductDetails extends GetView<HomeController> {
                           child: ClipRRect(
                               borderRadius: BorderRadius.circular(10),
                               child: Image.network(
-                                  product.productImageUrl!.isEmpty
+                                  product.productImage!.isEmpty
                                       ? "https://www.woolha.com/media/2020/03/eevee.png"
-                                      : product.productImageUrl!.toString(),
+                                      : product.productImage![0].url ?? "https://www.woolha.com/media/2020/03/eevee.png",
                                   fit: BoxFit.cover,
                                   errorBuilder: (context, error, stackTrace) {
                                 return Container(

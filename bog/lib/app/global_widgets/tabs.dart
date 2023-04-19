@@ -87,8 +87,9 @@ class _VerticalTabsState extends State<VerticalTabs>
     }
     _selectTab(widget.initialIndex);
 
-    if (widget.disabledChangePageFromContentView == true)
+    if (widget.disabledChangePageFromContentView == true) {
       pageScrollPhysics = const NeverScrollableScrollPhysics();
+    }
 
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -173,8 +174,9 @@ class _VerticalTabsState extends State<VerticalTabs>
                               }
 
                               Color itemBGColor = widget.tabBackgroundColor;
-                              if (_selectedIndex == index)
+                              if (_selectedIndex == index) {
                                 itemBGColor = widget.selectedTabBackgroundColor;
+                              }
 
                               double? left, right;
                               if (widget.direction == TextDirection.rtl) {

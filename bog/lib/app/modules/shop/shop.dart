@@ -245,12 +245,12 @@ class _ShopState extends State<Shop> {
                                       child: ClipRRect(
                                         borderRadius: BorderRadius.circular(10),
                                         child: Image.network(
-                                          posts[index].productImageUrl!.isEmpty
+                                          posts[index].productImage!.isEmpty
                                               ? "https://www.woolha.com/media/2020/03/eevee.png"
                                               : posts[index]
-                                                  .productImageUrl![0]
-                                                
-                                                  .toString(),
+                                                      .productImage![0]
+                                                      .url ??
+                                                  "https://www.woolha.com/media/2020/03/eevee.png",
                                           fit: BoxFit.cover,
                                           alignment: Alignment.center,
                                           errorBuilder:

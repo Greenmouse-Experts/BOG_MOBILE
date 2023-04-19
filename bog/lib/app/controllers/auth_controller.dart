@@ -238,11 +238,9 @@ class AuthController extends GetxController {
   }
 
   Future<void> handleSignUpGoogle() async {
-    var title = "";
-    var message = "";
-    var buttonMessage = "";
     try {
       await _googleSignIn.signOut();
+
       final response = await _googleSignIn.signIn();
 
       if (response != null) {
@@ -282,9 +280,6 @@ class AuthController extends GetxController {
               );
             }
           } else {
-            title = 'Failure';
-            message = response.message ?? 'Account creation failed';
-            buttonMessage = 'Continue';
             AppOverlay.showInfoDialog(
               title: 'Failure',
               content: response.message ?? 'Account creation failed',

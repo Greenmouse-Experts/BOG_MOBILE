@@ -1,3 +1,4 @@
+import 'package:bog/app/global_widgets/new_app_bar.dart';
 import 'package:feather_icons/feather_icons.dart';
 import 'package:flutter/material.dart';
 
@@ -75,65 +76,13 @@ class _MyOrderScreenState extends State<MyOrderScreen>
           id: 'MyOrderScreen',
           builder: (controller) {
             return Scaffold(
+              appBar: newAppBarBack(context, 'My Orders'),
                 backgroundColor: AppColors.backgroundVariant2,
                 body: SizedBox(
                   width: Get.width,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Padding(
-                        padding: EdgeInsets.only(
-                            right: width * 0.05,
-                            left: width * 0.045,
-                            top: kToolbarHeight),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                Navigator.pop(context);
-                              },
-                              child: SvgPicture.asset(
-                                "assets/images/back.svg",
-                                height: width * 0.045,
-                                width: width * 0.045,
-                                color: Colors.black,
-                              ),
-                            ),
-                            SizedBox(
-                              width: width * 0.04,
-                            ),
-                            Expanded(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    "My Orders",
-                                    style: AppTextStyle.subtitle1.copyWith(
-                                        fontSize: multiplier * 0.07,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w600),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(
-                              width: width * 0.04,
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: width * 0.04,
-                      ),
-                      Container(
-                        height: 1,
-                        width: width,
-                        color: AppColors.grey.withOpacity(0.1),
-                      ),
                       TabBar(
                         controller: tabController,
                         padding: EdgeInsets.zero,
@@ -261,7 +210,7 @@ class _MyOrderScreenState extends State<MyOrderScreen>
                                   }
 
                                   return SizedBox(
-                                    height: Get.height * 0.78,
+                                    height: Get.height * 0.755,
                                     child: TabBarView(
                                       controller: tabController,
                                       children: [
@@ -298,7 +247,7 @@ class _MyOrderScreenState extends State<MyOrderScreen>
                                                 ),
                                               ),
                                               SizedBox(
-                                                  height: Get.height * 0.7,
+                                                  height: Get.height * 0.68,
                                                   child: [
                                                     ...pendingItems,
                                                     ...approvedItems
@@ -353,7 +302,7 @@ class _MyOrderScreenState extends State<MyOrderScreen>
                                                 ),
                                               ),
                                               SizedBox(
-                                                  height: Get.height * 0.7,
+                                                  height: Get.height * 0.68,
                                                   child: completedItems.isEmpty
                                                       ? const Center(
                                                           child: Text(
@@ -405,7 +354,7 @@ class _MyOrderScreenState extends State<MyOrderScreen>
                                                 ),
                                               ),
                                               SizedBox(
-                                                  height: Get.height * 0.7,
+                                                  height: Get.height * 0.68,
                                                   child: cancelledItems.isEmpty
                                                       ? const Center(
                                                           child: Text(

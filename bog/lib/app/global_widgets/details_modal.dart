@@ -33,13 +33,13 @@ class DetailsMedia extends StatelessWidget {
             ),
           ),
           Positioned(
+            top: 0,
+            right: 0,
+            left: 0,
             child: AppBar(
               backgroundColor: Colors.transparent,
               elevation: 0,
             ),
-            top: 0,
-            right: 0,
-            left: 0,
           ),
         ],
       ),

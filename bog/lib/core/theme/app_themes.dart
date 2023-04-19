@@ -50,7 +50,7 @@ class AppThemes {
       button: AppTextStyle.button,
       headline4: AppTextStyle.headline4,
     ),
-    timePickerTheme: TimePickerThemeData(
+    timePickerTheme: const TimePickerThemeData(
       backgroundColor: Colors.white,
     ),
     colorScheme: const ColorScheme(

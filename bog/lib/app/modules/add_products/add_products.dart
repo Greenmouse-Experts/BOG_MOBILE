@@ -262,9 +262,8 @@ class _AddProjectState extends State<AddProject> {
                                       onPressed: () async {
                                         if (formKey.currentState!.validate()) {
                                           Map<String, dynamic> bodyForEdit = {};
-                                        
+
                                           if (widget.myProduct != null) {
-                                           
                                             bodyForEdit = pickedFile == null
                                                 ? {
                                                     "categoryId": widget
@@ -353,8 +352,6 @@ class _AddProjectState extends State<AddProject> {
                                                   "description":
                                                       productController.text,
                                                 };
-
-                                   
 
                                           var formData =
                                               dio.FormData.fromMap(body);
@@ -577,7 +574,7 @@ class _AddProjectState extends State<AddProject> {
                                               : {
                                                   "categoryId": widget
                                                           .myProduct!
-                                                          .myProductCategoryId ??
+                                                          .categoryId ??
                                                       '',
                                                   "name": nameController.text,
                                                   "price": priceController.text,
