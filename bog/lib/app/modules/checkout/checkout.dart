@@ -112,21 +112,7 @@ class _CheckoutState extends State<Checkout> {
     for (var element in orderProducts) {
       jsonProducts.add(element.toJson());
     }
-    final shippingAddress = ShippingAddress(
-        city: city.text,
-        state: state.text,
-        country: country.text,
-        postalCode: zip.text,
-        homeAddress: address.text,
-        deliveryTime: deliveryNearestAddress == null
-            ? ''
-            : deliveryNearestAddress!.deliveryTime ?? '',
-        address: deliveryNearestAddress == null
-            ? ''
-            : deliveryNearestAddress!.address ?? '',
-        contactName: '${logInDetails.fname} ${logInDetails.lname}',
-        contactPhone: logInDetails.phone!,
-        contactEmail: logInDetails.email!);
+   
 
     Charge charge = Charge()
       ..amount = price
@@ -166,19 +152,8 @@ class _CheckoutState extends State<Checkout> {
             "totalAmount": total,
             "deliveryFee": deliveryFee,
             "discount": 0,
-            "paymentInfo": {"reference": response.reference!, "amount": total}
+            "paymentInfo": {"reference": response.reference, "amount": total}
           };
-
-          // PostOrder(
-          //         products: orderProducts,
-          //         shippingAddress: shippingAddress,
-          //         paymentInfo: PaymentInfo(
-          //             reference: response.reference!, amount: total),
-          //         discount: 0,
-          //         deliveryFee: deliveryFee,
-          //         totalAmount: total)
-          //     .toJson();
-          // print(postOrder);
           final respose = await controller.userRepo
               .postData('/orders/submit-order', postOrder);
 

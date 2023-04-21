@@ -28,7 +28,7 @@ class DateItemButton extends StatelessWidget {
       ),
       child: Text(
         title,
-        style: theme.textTheme.caption!.copyWith(color: textColor),
+        style: theme.textTheme.bodySmall!.copyWith(color: textColor),
       ),
     );
   }

@@ -168,9 +168,9 @@ class _CartTabState extends State<CartTab> {
                                         title: product.name.toString(),
                                         image: product.image.toString(),
                                         price: "N ${product.price}",
-                                        quantity: controller.productsMap[
-                                                product.id.toString()] ??
-                                            1,
+                                        quantity: controller
+                                            .cartItems[product.id.toString()]!
+                                            .quantity,
                                         quantityChanged: (value) {},
                                       );
                                     }),
@@ -363,7 +363,6 @@ class _CartTabState extends State<CartTab> {
                             RxList<MyProducts> posts =
                                 MyProducts.fromJsonList(snapshot.data!.data)
                                     .obs;
-                            final initialProducts = posts;
                             var drafts = posts
                                 .where((p0) => p0.status == 'draft')
                                 .toList()
@@ -410,7 +409,7 @@ class _CartTabState extends State<CartTab> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      "No Products Available",
+                                      "You have no products yet",
                                       style: AppTextStyle.subtitle1.copyWith(
                                           fontSize: multiplier * 0.07,
                                           color: Colors.black,

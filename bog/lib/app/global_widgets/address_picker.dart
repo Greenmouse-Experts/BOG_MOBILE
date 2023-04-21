@@ -32,7 +32,7 @@ class _AddressPickerState extends State<AddressPicker> {
           .getData('/address/view/all?q=${widget.textController.text}'),
       builder: (BuildContext context, AsyncSnapshot<ApiResponse> snapshot) {
         if (snapshot.hasData) {
-          print(snapshot.data!.data);
+         
           final nearestAddresses = <NearestAddress>[];
           for (var element in snapshot.data!.data as List<dynamic>) {
             nearestAddresses.add(NearestAddress.fromJson(element));
@@ -48,7 +48,7 @@ class _AddressPickerState extends State<AddressPicker> {
               value: _selectedOption,
               onChanged: (newValue) {
                 setState(() {
-                   print(snapshot.data!.data);
+                
                   _selectedOption = newValue!;
                   widget.updateDeliveryFee(newValue!);
                 });

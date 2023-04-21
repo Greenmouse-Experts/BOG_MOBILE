@@ -192,7 +192,7 @@ class _ShopState extends State<Shop> {
                 : posts.removeWhere((e) => e.categoryId != element.id);
 
             final newProduct = SizedBox(
-              height: Get.height * 0.7,
+              height: Get.height * 0.73,
               width: Get.width * 0.92,
               child: posts.isEmpty
                   ? const Center(
@@ -236,7 +236,8 @@ class _ShopState extends State<Shop> {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   SizedBox(
-                                    height: Get.height * 0.1,
+                                    height: Get.height * 0.12,
+                                   width: Get.width,
                                     child: Padding(
                                       padding: EdgeInsets.only(
                                           top: width * 0.03,

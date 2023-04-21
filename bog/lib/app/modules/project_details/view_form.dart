@@ -58,84 +58,97 @@ class _ViewFormPageState extends State<ViewFormPage> {
       //       },
       //       icon: const Icon(Icons.arrow_back_ios_new_outlined)),
       // ),
-      body: FutureBuilder<ApiResponse>(
-          future: getFormDetails,
-          builder: (ctx, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done &&
-                snapshot.data!.isSuccessful) {
-              final response = snapshot.data!.data;
-              final clientProject = ClientProjectModel.fromJson(response);
-              final projectData = clientProject.projectData!;
-              return Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: ListView.builder(
-                    itemCount: projectData.length,
-                    itemBuilder: (ctx, i) {
-                      return Column(
-                        children: [
-                          Row(
-                            children: [
-                              SizedBox(
-                                width: Get.width * 0.3,
-                                child: Text(
-                                  projectData[i].serviceForm!.label!,
-                                  style: AppTextStyle.subtitle1.copyWith(
-                                      fontSize: multiplier * 0.06,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w600),
-                                  maxLines: 2,
+      body: SingleChildScrollView(
+        child: FutureBuilder<ApiResponse>(
+            future: getFormDetails,
+            builder: (ctx, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done &&
+                  snapshot.data!.isSuccessful) {
+                final response = snapshot.data!.data;
+                final clientProject = ClientProjectModel.fromJson(response);
+                final projectData = clientProject.projectData!;
+                return Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: projectData.length,
+                      itemBuilder: (ctx, i) {
+                        return Column(
+                          children: [
+                            Row(
+                              children: [
+                                SizedBox(
+                                  width: Get.width * 0.3,
+                                  child: Text(
+                                    projectData[i].serviceForm!.label!,
+                                    style: AppTextStyle.subtitle1.copyWith(
+                                        fontSize: multiplier * 0.06,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w600),
+                                    maxLines: 2,
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(width: 10),
-                              SizedBox(
-                                width: Get.width * 0.5,
-                                child: projectData[i].serviceForm!.label ==
-                                            'PHOTO' ||
-                                        projectData[i].serviceForm!.label ==
-                                            'PASSPORT'
-                                    ? Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: SizedBox(
-                                          height: Get.width * 0.25,
-                                          width: Get.width * 0.25,
-                                          child: ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
-                                            child: Image.network(
-                                              projectData[i].value!,
-                                              height: Get.width * 0.25,
-                                              width: Get.width * 0.25,
-                                              fit: BoxFit.cover,
+                                const SizedBox(width: 10),
+                                SizedBox(
+                                  width: Get.width * 0.5,
+                                  child: projectData[i].serviceForm!.label ==
+                                              'PHOTO' ||
+                                          projectData[i].serviceForm!.label ==
+                                              'PASSPORT' ||
+                                          projectData[i]
+                                              .value!
+                                              .endsWith('.jpg') ||
+                                          projectData[i]
+                                              .value!
+                                              .endsWith('.png') ||
+                                          projectData[i]
+                                              .value!
+                                              .endsWith('.jpeg')
+                                      ? Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: SizedBox(
+                                            height: Get.width * 0.25,
+                                            width: Get.width * 0.25,
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                              child: Image.network(
+                                                projectData[i].value!,
+                                                height: Get.width * 0.25,
+                                                width: Get.width * 0.25,
+                                                fit: BoxFit.cover,
+                                              ),
                                             ),
                                           ),
+                                        )
+                                      : Text(
+                                          projectData[i].value!,
+                                          maxLines: 2,
                                         ),
-                                      )
-                                    : Text(
-                                        projectData[i].value!,
-                                        maxLines: 2,
-                                      ),
-                              )
-                            ],
-                          ),
-                          const SizedBox(height: 5),
-                          Divider(
-                            color: Colors.grey.withOpacity(0.3),
-                          )
-                        ],
-                      );
-                    }),
-              );
-            } else if (snapshot.hasError) {
-              return const Center(
-                child: Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Text('An error occurred, Please Try again'),
-                ),
-              );
-            } else {
-              return const AppLoader();
-            }
-          }),
+                                )
+                              ],
+                            ),
+                            const SizedBox(height: 5),
+                            Divider(
+                              color: Colors.grey.withOpacity(0.3),
+                            )
+                          ],
+                        );
+                      }),
+                );
+              } else if (snapshot.hasError) {
+                return const Center(
+                  child: Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text('An error occurred, Please Try again'),
+                  ),
+                );
+              } else {
+                return const AppLoader();
+              }
+            }),
+      ),
     ));
   }
 }

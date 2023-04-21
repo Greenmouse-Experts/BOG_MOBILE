@@ -38,7 +38,6 @@ class NotificationPage extends GetView<HomeController> {
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Padding(
                             padding: EdgeInsets.only(left: width * 0.06),

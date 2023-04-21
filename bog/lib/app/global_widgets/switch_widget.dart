@@ -1,18 +1,18 @@
 import 'dart:convert';
 
-import 'package:bog/app/controllers/home_controller.dart';
-import 'package:bog/app/data/model/user_details_model.dart';
-import 'package:bog/app/modules/subscription/subscription_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_styles.dart';
+import '../controllers/home_controller.dart';
 import '../data/model/gen_kyc.dart';
 import '../data/model/log_in_model.dart';
+import '../data/model/user_details_model.dart';
 import '../data/providers/my_pref.dart';
 import '../modules/settings/view_kyc.dart';
+import '../modules/subscription/subscription_view.dart';
 import 'overlays.dart';
 
 class MainSwitchWidget extends StatelessWidget {
@@ -212,7 +212,6 @@ class _PrimarySwitchWidgetState extends State<PrimarySwitchWidget> {
                                   MyPref.setSubscribeOverlay.val == true)) {
                             Get.back();
                           }
-                          // Get.back();
                           controller.currentBottomNavPage.value = 0;
                           controller.updateNewUser(controller.currentType);
                           controller.update(['home']);

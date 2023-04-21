@@ -532,6 +532,7 @@ class _NewMeetingsState extends State<NewMeetings>
                   meetingsWidget(getMeetings, getMyRequests),
                 ],
               ),
+            
               bottomNavigationBar: HomeBottomWidget(
                   isHome: false, controller: controller, doubleNavigate: false),
             );
@@ -573,7 +574,7 @@ class _NewMeetingsState extends State<NewMeetings>
             final pendingMeetings = getMeetingByStatus(meetings, 'pending');
             return Container(
               width: Get.width,
-              height: Get.height * 0.77,
+              height: Get.height * 0.73,
               padding: const EdgeInsets.all(8),
               child: TabBarView(controller: tabController, children: [
                 Padding(

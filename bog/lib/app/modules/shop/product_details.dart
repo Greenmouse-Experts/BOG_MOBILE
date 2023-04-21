@@ -27,7 +27,12 @@ class ProductDetails extends GetView<HomeController> {
     final Size size = MediaQuery.of(context).size;
     double multiplier = 25 * size.height * 0.01;
     var product = Get.arguments as MyProducts;
-    int currentQuantity = 1;
+    final controller = Get.find<HomeController>();
+    int currentQuantity = controller.cartItems.containsKey(product.id)
+        ? controller.cartItems.values
+            .firstWhere((element) => element.product.id == product.id)
+            .quantity
+        : 1;
 
     return AppBaseView(
       child: GetBuilder<HomeController>(
@@ -114,7 +119,8 @@ class ProductDetails extends GetView<HomeController> {
                               child: Image.network(
                                   product.productImage!.isEmpty
                                       ? "https://www.woolha.com/media/2020/03/eevee.png"
-                                      : product.productImage![0].url ?? "https://www.woolha.com/media/2020/03/eevee.png",
+                                      : product.productImage![0].url ??
+                                          "https://www.woolha.com/media/2020/03/eevee.png",
                                   fit: BoxFit.cover,
                                   errorBuilder: (context, error, stackTrace) {
                                 return Container(
@@ -236,7 +242,14 @@ class ProductDetails extends GetView<HomeController> {
                                     itemDecrement: () {
                                       controller.cartItemDecrement(product.id!);
                                     },
-                                    initialCount: 1,
+                                    initialCount: controller.cartItems
+                                            .containsKey(product.id)
+                                        ? controller.cartItems.values
+                                            .firstWhere((element) =>
+                                                element.product.id ==
+                                                product.id)
+                                            .quantity
+                                        : 1,
                                     onCountChanged: (count) {
                                       if (count == 0) {
                                         currentQuantity = 1;
@@ -330,7 +343,7 @@ class ProductDetails extends GetView<HomeController> {
                                     .updateNewUser(controller.currentType);
                                 controller.update(['home']);
                               } else {
-                                controller.addItem(product);
+                                controller.addItem(product, currentQuantity);
                               }
                             },
                             borderRadius: 10,

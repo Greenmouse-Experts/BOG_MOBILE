@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:get/get.dart';
+import 'package:dio/dio.dart' as dio;
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import '../../core/theme/app_colors.dart';
@@ -46,6 +47,8 @@ final ScrollController scrollController = ScrollController();
 TextEditingController updateMessageController = TextEditingController();
 TextEditingController fileController = TextEditingController();
 File? pickedFile;
+
+var dioSend = dio.Dio();
 
 class AppOverlay {
   static Future<void> loadingOverlay({
@@ -98,7 +101,7 @@ class AppOverlay {
                               Text(
                                 'Success',
                                 textAlign: TextAlign.center,
-                                style: Get.textTheme.bodyText1!.copyWith(
+                                style: Get.textTheme.bodyLarge!.copyWith(
                                     fontWeight: FontWeight.w600,
                                     fontSize: 17 * Get.textScaleFactor * 0.90,
                                     color: Colors.black),
@@ -193,7 +196,7 @@ class AppOverlay {
                     Text(
                       title,
                       textAlign: TextAlign.center,
-                      style: Get.textTheme.bodyText1!.copyWith(
+                      style: Get.textTheme.bodyLarge!.copyWith(
                           fontWeight: FontWeight.w600,
                           fontSize: 17 * Get.textScaleFactor * 0.90,
                           color: Colors.black),
@@ -280,7 +283,7 @@ class AppOverlay {
                     Text(
                       'Meeting Details',
                       textAlign: TextAlign.center,
-                      style: Get.textTheme.bodyText1!.copyWith(
+                      style: Get.textTheme.bodyLarge!.copyWith(
                           fontWeight: FontWeight.w600,
                           fontSize: 17 * Get.textScaleFactor * 0.90,
                           color: Colors.black),
@@ -371,7 +374,7 @@ class AppOverlay {
                               SizedBox(
                                 child: Text(
                                   'Project Interest Form',
-                                  style: Get.textTheme.bodyText1!.copyWith(
+                                  style: Get.textTheme.bodyLarge!.copyWith(
                                       fontWeight: FontWeight.w600,
                                       fontSize: 17 * Get.textScaleFactor * 0.90,
                                       color: Colors.black),
@@ -561,7 +564,7 @@ class AppOverlay {
                             Text(
                               'Request Meeting',
                               textAlign: TextAlign.center,
-                              style: Get.textTheme.bodyText1!.copyWith(
+                              style: Get.textTheme.bodyLarge!.copyWith(
                                   fontWeight: FontWeight.w600,
                                   fontSize: 17 * Get.textScaleFactor * 0.90,
                                   color: Colors.black),
@@ -689,6 +692,7 @@ class AppOverlay {
   }
 
   static void showUpdateProjectProgressDialod({
+    required String projectSlug,
     bool? doubleFunction,
     String? buttonText,
   }) {
@@ -725,7 +729,7 @@ class AppOverlay {
                       Text(
                         'Project Progress Update',
                         textAlign: TextAlign.center,
-                        style: Get.textTheme.bodyText1!.copyWith(
+                        style: Get.textTheme.bodyLarge!.copyWith(
                             fontWeight: FontWeight.w600,
                             fontSize: 17 * Get.textScaleFactor * 0.90,
                             color: Colors.black),
@@ -772,9 +776,58 @@ class AppOverlay {
                                                 AppColors.backgroundVariant2);
                                         return;
                                       }
-                                      return;
-                                     // final controller = Get.find<HomeController>();
-                                      // final response = await controller.userRepo.
+                                      var body = {
+                                        "image": [
+                                          await dio.MultipartFile.fromFile(
+                                            pickedFile!.path,
+                                            filename: pickedFile!.path
+                                                .split('/')
+                                                .last,
+                                          )
+                                        ],
+                                      };
+
+                                      final formData =
+                                          dio.FormData.fromMap(body);
+                                      final imageRes = await dioSend.post(
+                                          'https://bog.greenmouseproperties.com/upload',
+                                          data: formData);
+                                      if (imageRes.statusCode == 200) {
+                                        final controller =
+                                            Get.find<HomeController>();
+                                        final response =
+                                            await controller.userRepo.postData(
+                                                '/projects/notification/create',
+                                                {
+                                              "body":
+                                                  updateMessageController.text,
+                                              "image": imageRes.data[0],
+                                              "project_slug": projectSlug
+                                            });
+                                        if (response.isSuccessful) {
+                                          Get.back();
+                                          AppOverlay.successOverlay(
+                                              message:
+                                                  'Project Updated successfully',
+                                              onPressed: () {
+                                                Get.back();
+                                              });
+                                        } else {
+                                          Get.snackbar(
+                                              'Error',
+                                              response.message ??
+                                                  'An error occurred, please try again later',
+                                              backgroundColor: Colors.red,
+                                              colorText:
+                                                  AppColors.backgroundVariant1);
+                                        }
+                                      } else {
+                                        Get.snackbar('Error',
+                                            'An error occurred, please try again later',
+                                            backgroundColor: Colors.red,
+                                            colorText:
+                                                AppColors.backgroundVariant1);
+                                      }
                                     }),
                               ),
                               const SizedBox(height: 10),
@@ -826,7 +879,7 @@ class AppOverlay {
                     Text(
                       title,
                       textAlign: TextAlign.center,
-                      style: Get.textTheme.bodyText1!.copyWith(
+                      style: Get.textTheme.bodyLarge!.copyWith(
                           fontWeight: FontWeight.w600,
                           fontSize: 17 * Get.textScaleFactor * 0.90,
                           color: Colors.black),
@@ -1031,7 +1084,7 @@ class AppOverlay {
                               child: Text(
                                 title,
                                 textAlign: TextAlign.center,
-                                style: Get.textTheme.bodyText1!.copyWith(
+                                style: Get.textTheme.bodyLarge!.copyWith(
                                     fontWeight: FontWeight.w600,
                                     fontSize: 17 * Get.textScaleFactor * 0.90,
                                     color: Colors.black),
@@ -1163,7 +1216,7 @@ class AppOverlay {
                               child: Text(
                                 title,
                                 textAlign: TextAlign.center,
-                                style: Get.textTheme.bodyText1!.copyWith(
+                                style: Get.textTheme.bodyLarge!.copyWith(
                                     fontWeight: FontWeight.w600,
                                     fontSize: 17 * Get.textScaleFactor * 0.90,
                                     color: Colors.black),

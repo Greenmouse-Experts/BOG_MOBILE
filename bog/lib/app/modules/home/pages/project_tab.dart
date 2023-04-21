@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:bog/app/data/model/commencement_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:get/get.dart';
@@ -43,6 +44,7 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
   late Future<ApiResponse> getAvailableProjects;
   late Future<ApiResponse> getServiceProjects;
   late Future<ApiResponse> getOrderRequests;
+  late Future<ApiResponse> getCommitmentFee;
   late String userId;
 
   TextEditingController projectUpdateController = TextEditingController();
@@ -67,6 +69,7 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
     getAvailableProjects = controller.userRepo
         .getData("/projects/dispatched-projects/${logInDetails.profile!.id}");
     getOrderRequests = controller.userRepo.getData('/orders/order-request');
+    getCommitmentFee = controller.userRepo.getData('/fees/commitment');
     tabController = TabController(length: 2, vsync: this);
   }
 
@@ -215,24 +218,20 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
                                                               : cancelledOrders[
                                                                   index];
                                                   return OrderRequestItem(
-                                                          name: order.product!
-                                                                  .name ??
-                                                              '',
-                                                          status: order.order!
-                                                                  .status ??
-                                                              '',
-                                                          orderSlug: order
-                                                                  .order!
-                                                                  .orderSlug ??
-                                                              '',
-                                                          price: order
-                                                              .paymentInfo!
-                                                              .amount
-                                                              .toString(),
-                                                          quantity:
-                                                              order.quantity ??
-                                                                  0,
-                                                        );
+                                                    name: order.product!.name ??
+                                                        '',
+                                                    status:
+                                                        order.order!.status ??
+                                                            '',
+                                                    orderSlug: order
+                                                            .order!.orderSlug ??
+                                                        '',
+                                                    price: order
+                                                        .paymentInfo!.amount
+                                                        .toString(),
+                                                    quantity:
+                                                        order.quantity ?? 0,
+                                                  );
                                                 },
                                               ),
                                       ),
@@ -269,17 +268,23 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
                         ),
                       if (controller.currentType == "Client" ||
                           controller.currentType == "Corporate Client")
-                        FutureBuilder<ApiResponse>(
-                            future: getMyProjects,
+                        FutureBuilder<List<ApiResponse>>(
+                            future:
+                                Future.wait([getMyProjects, getCommitmentFee]),
                             builder: (context, snapshot) {
                               if (snapshot.connectionState ==
                                       ConnectionState.done &&
-                                  snapshot.data!.isSuccessful) {
+                                  snapshot.data![0].isSuccessful &&
+                                  snapshot.data![1].isSuccessful) {
                                 final List<MyProjects> posts =
                                     MyProjects.fromJsonList(
-                                        snapshot.data!.data);
+                                        snapshot.data![0].data);
                                 savedPosts.clear();
                                 savedPosts.addAll(posts);
+
+                                final commitmentFee =
+                                    CommencementFeeModel.fromJson(
+                                        snapshot.data![1].data);
 
                                 if (posts.isEmpty) {
                                   return SizedBox(
@@ -337,24 +342,26 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
                                       allPendingProjects.reversed.toList();
 
                                   List<Widget> contents = <Widget>[
+                                    getAllProjects(postsToUse, controller,
+                                        commitmentFee.amount ?? 25000),
                                     getAllProjects(
-                                      postsToUse,
-                                      controller,
-                                    ),
-                                    getAllProjects(
-                                      newAllPendingProjects,
-                                      controller,
-                                    ),
+                                        newAllPendingProjects,
+                                        controller,
+                                        commitmentFee.amount ?? 25000),
                                     getGroupedProjects(
                                         approvedProjects, controller,
                                         isPending: false,
                                         isOngoing: true,
-                                        inReview: false),
+                                        inReview: false,
+                                        commitmentFee:
+                                            commitmentFee.amount ?? 25000),
                                     getGroupedProjects(
                                         cancelledProjects, controller,
                                         isPending: false,
                                         isOngoing: true,
-                                        inReview: false)
+                                        inReview: false,
+                                        commitmentFee:
+                                            commitmentFee.amount ?? 25000)
                                   ].obs;
                                   prods = contents[0];
                                   return Padding(
@@ -802,6 +809,7 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
                                                                               TextButton(
                                                                             onPressed:
                                                                                 () {
+                                                                              Get.back();
                                                                               Get.to(() => ServicePartnerProjectDetails(serviceProject: serviceProjects[i]));
                                                                             },
                                                                             child:
@@ -965,7 +973,8 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
       List<MyProjects> postsToUseHere, HomeController controller,
       {required bool isPending,
       required bool isOngoing,
-      required bool inReview}) {
+      required bool inReview,
+      required int commitmentFee}) {
     final postsToUse = postsToUseHere.obs;
     return Obx(() {
       return postsToUse.isEmpty
@@ -983,6 +992,7 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
                   itemCount: postsToUse.length,
                   itemBuilder: (ctx, i) {
                     return MyProjectWidget(
+                      commitmentFee: commitmentFee,
                       index: i,
                       delete: (index) {
                         postsToUse.removeAt(index);
@@ -1001,10 +1011,8 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
     });
   }
 
-  Widget getAllProjects(
-    List<MyProjects> postsToUseHere,
-    HomeController controller,
-  ) {
+  Widget getAllProjects(List<MyProjects> postsToUseHere,
+      HomeController controller, int commitment) {
     final postsToUse = postsToUseHere.obs;
     return Obx(() {
       return postsToUse.isEmpty
@@ -1022,6 +1030,7 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
                   itemCount: postsToUse.length,
                   itemBuilder: (ctx, i) {
                     return MyProjectWidget(
+                      commitmentFee: commitment,
                       index: i,
                       delete: (index) {
                         postsToUse.removeAt(index);

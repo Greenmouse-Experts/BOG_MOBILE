@@ -18,6 +18,7 @@ class MyProjectWidget extends StatefulWidget {
   final String projectType;
   final String orderSlug;
   final HomeController controller;
+  final int commitmentFee;
   final String id;
   final int index;
   final bool inReview;
@@ -36,7 +37,8 @@ class MyProjectWidget extends StatefulWidget {
       required this.isOngoing,
       required this.isCancelled,
       required this.inReview,
-      required this.delete});
+      required this.delete,
+      required this.commitmentFee});
 
   @override
   State<MyProjectWidget> createState() => _MyProjectWidgetState();
@@ -53,13 +55,13 @@ class _MyProjectWidgetState extends State<MyProjectWidget> {
     super.initState();
   }
 
-  void checkOut(String id) async {
+  void checkOut(String id, int priceChosen) async {
     var logInDetails = LogInModel.fromJson(jsonDecode(MyPref.logInDetail.val));
-    const price = 20000 * 100;
+    final price = priceChosen * 100;
     final email = logInDetails.email;
     Charge charge = Charge()
       ..amount = price
-      ..reference = 'ref_${DateTime.now().millisecondsSinceEpoch}'
+       ..reference = 'TR-${DateTime.now().millisecondsSinceEpoch}'
       ..email = email
       ..currency = "NGN";
 
@@ -74,7 +76,7 @@ class _MyProjectWidgetState extends State<MyProjectWidget> {
       AppOverlay.loadingOverlay(asyncFunction: () async {
         final controller = Get.find<HomeController>();
         final response = await controller.userRepo
-            .patchData('/projects/request-for-approval/$id', {"amount": 20000});
+            .patchData('/projects/request-for-approval/$id', {"amount": priceChosen});
         if (response.isSuccessful) {
           Get.snackbar('Success', 'Review sent',
               backgroundColor: AppColors.successGreen,
@@ -141,6 +143,7 @@ class _MyProjectWidgetState extends State<MyProjectWidget> {
                       value: 1,
                       child: TextButton(
                           onPressed: () {
+                            Get.back();
                             Get.to(() => NewProjectDetailPage(
                                   id: widget.id,
                                   isClient: true,
@@ -174,12 +177,12 @@ class _MyProjectWidgetState extends State<MyProjectWidget> {
                             AppOverlay.showInfoDialog(
                               title: 'Commence Project',
                               content:
-                                  'To proceed, a commitment fee of NGN 20,000 must be paid. This will be deducted from total cost of this project if approved.You will be refunded if this project is declined by the service partner',
+                                  'To proceed, a commitment fee of NGN ${widget.commitmentFee} must be paid. This will be deducted from total cost of this project if approved.You will be refunded if this project is declined by the service partner',
                               doubleFunction: true,
                               onPressed: () {
                                 Get.back();
 
-                                checkOut(widget.id);
+                                checkOut(widget.id, widget.commitmentFee);
                               },
                             );
                           },

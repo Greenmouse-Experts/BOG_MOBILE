@@ -115,7 +115,7 @@ class _UpdateFinancialDetailsState extends State<UpdateFinancialDetails> {
                               onChanged: (val) {
                                 bankCode.text =
                                     (val! as BankListModel).code.toString();
-                                print(bankCode.text);
+                           
                                 chosenBankName.text =
                                     (val as BankListModel).name.toString();
                               },
@@ -209,7 +209,7 @@ class _UpdateFinancialDetailsState extends State<UpdateFinancialDetails> {
                                     'banker_address':
                                         referenceNameController.text
                                   };
-                                  print(financialData);
+                                
                                   final kycScore = widget.kycScore;
                                   kycScore['financialData'] = 6;
 

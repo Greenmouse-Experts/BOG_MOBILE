@@ -397,14 +397,14 @@ class _TextButton extends StatelessWidget {
   final String imageAsset;
   final String text;
   final String? subtitle;
-  final bool showArrow;
+  // final bool showArrow;
   final Function() onPressed;
   const _TextButton(
       {required this.imageAsset,
       required this.text,
       required this.onPressed,
       this.subtitle,
-      this.showArrow = true});
+      });
 
   @override
   Widget build(BuildContext context) {
@@ -474,13 +474,12 @@ class _TextButton extends StatelessWidget {
             IconButton(
               onPressed: onPressed,
               padding: EdgeInsets.zero,
-              icon: showArrow
-                  ? Icon(
+              icon: Icon(
                       Icons.arrow_forward_ios_rounded,
                       color: Colors.black,
                       size: Get.width * 0.04,
                     )
-                  : Container(),
+           
             )
           ],
         ),

@@ -553,8 +553,6 @@ class _AddProjectState extends State<AddProject> {
                                       if (formKey.currentState!.validate()) {
                                         Map<String, dynamic> bodyForEdit = {};
 
-                                        print(bodyForEdit);
-                                        print('zdsaz');
                                         if (widget.myProduct != null) {
                                           bodyForEdit = pickedFile == null
                                               ? {
@@ -597,9 +595,6 @@ class _AddProjectState extends State<AddProject> {
                                                       widget.myProduct!.id
                                                 };
                                         }
-
-                                        print(bodyForEdit);
-                                        print('zdz');
 
                                         var body = pickedFile == null
                                             ? {

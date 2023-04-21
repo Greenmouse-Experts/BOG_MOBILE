@@ -58,7 +58,7 @@ class VerticalTabs extends StatefulWidget {
         super(key: key);
 
   @override
-  _VerticalTabsState createState() => _VerticalTabsState();
+  State<VerticalTabs> createState() => _VerticalTabsState();
 }
 
 class _VerticalTabsState extends State<VerticalTabs>
@@ -173,10 +173,10 @@ class _VerticalTabsState extends State<VerticalTabs>
                                     ));
                               }
 
-                              Color itemBGColor = widget.tabBackgroundColor;
-                              if (_selectedIndex == index) {
-                                itemBGColor = widget.selectedTabBackgroundColor;
-                              }
+                              // Color itemBGColor = widget.tabBackgroundColor;
+                              // if (_selectedIndex == index) {
+                              //   itemBGColor = widget.selectedTabBackgroundColor;
+                              // }
 
                               double? left, right;
                               if (widget.direction == TextDirection.rtl) {

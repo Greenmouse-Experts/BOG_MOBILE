@@ -123,7 +123,7 @@ class _TransactionPageState extends State<TransactionPage> {
                               height: width * 0.02,
                             ),
                             SizedBox(
-                              height: Get.height * 0.74,
+                              height: Get.height * 0.7,
                               child: transactions.isEmpty
                                   ? const Center(
                                       child:

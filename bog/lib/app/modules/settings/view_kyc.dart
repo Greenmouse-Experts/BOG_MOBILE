@@ -32,6 +32,7 @@ class _KYCPageState extends State<KYCPage> {
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<HomeController>();
+   
     final userType =
         controller.currentType == 'Product Partner' ? 'vendor' : 'professional';
     return AppBaseView(

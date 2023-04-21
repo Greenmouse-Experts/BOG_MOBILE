@@ -174,7 +174,7 @@ class AppOutlineButton extends StatelessWidget {
       child: Text(
         title,
         textAlign: TextAlign.center,
-        style: Get.theme.textTheme.bodyText1!.copyWith(
+        style: Get.theme.textTheme.bodyLarge!.copyWith(
           color: fontColor,
           fontSize: fontSize,
         ),

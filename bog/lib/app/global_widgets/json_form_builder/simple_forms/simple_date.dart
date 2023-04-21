@@ -1,9 +1,8 @@
-// import 'package:bog/app/global_widgets/page_input.dart';
+
 import 'package:flutter/material.dart';
 
-import '../../../../core/theme/app_styles.dart';
 import '../../app_date_picker.dart';
-import '../helpers/function.dart';
+
 
 class SimpleDate extends StatefulWidget {
   const SimpleDate({
@@ -37,28 +36,8 @@ class _SimpleDateState extends State<SimpleDate> {
     item = widget.item;
   }
 
-  // String val = '';
-  // final myController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
-    OutlineInputBorder outlineInputBorder = OutlineInputBorder(
-      borderRadius: BorderRadius.circular(12),
-      borderSide: const BorderSide()
-          .copyWith(color: const Color(0xFF828282).withOpacity(.3)),
-    );
-    Widget label = const SizedBox.shrink();
-    if (Fun.labelHidden(item)) {
-      label = SizedBox(
-        child: Text(
-          item['label'],
-          style: AppTextStyle.bodyText2.copyWith(
-            fontWeight: FontWeight.w600,
-            color: Colors.black,
-          ),
-        ),
-      );
-    }
     return AppDatePicker(
       onChanged: (value) {
         widget.onChange(widget.position, value);

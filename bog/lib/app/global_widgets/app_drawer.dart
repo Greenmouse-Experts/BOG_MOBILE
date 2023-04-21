@@ -155,6 +155,7 @@ class _AppDrawerState extends State<AppDrawer> {
                           _TextButton(
                               imageAsset: 'assets/images/project_icon.png',
                               text: 'Projects',
+                              showArrow: true,
                               onPressed: () {
                                   Get.back();
                               controller.currentBottomNavPage.value = 2;
@@ -251,8 +252,9 @@ class _TextButton extends StatelessWidget {
       {required this.imageAsset,
       required this.text,
       required this.onPressed,
-      this.subtitle,
-      this.showArrow = true});
+     
+      this.subtitle ,
+    required  this.showArrow });
 
   @override
   Widget build(BuildContext context) {

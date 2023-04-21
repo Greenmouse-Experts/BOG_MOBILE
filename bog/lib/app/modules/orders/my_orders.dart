@@ -2,11 +2,11 @@ import 'package:bog/app/global_widgets/new_app_bar.dart';
 import 'package:feather_icons/feather_icons.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flutter_svg/svg.dart';
+
 import 'package:get/get.dart';
 
 import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_styles.dart';
+
 import '../../controllers/home_controller.dart';
 import '../../data/model/my_order_model.dart' as order;
 import '../../data/providers/api_response.dart';
@@ -64,8 +64,8 @@ class _MyOrderScreenState extends State<MyOrderScreen>
   @override
   Widget build(BuildContext context) {
     var width = Get.width;
-    final Size size = MediaQuery.of(context).size;
-    double multiplier = 25 * size.height * 0.01;
+  
+   
 
     List<order.MyOrderItem> getAllOrderItems(List<order.MyOrdersModel> orders) {
       return orders.expand((order) => order.orderItems).toList();
@@ -78,394 +78,372 @@ class _MyOrderScreenState extends State<MyOrderScreen>
             return Scaffold(
               appBar: newAppBarBack(context, 'My Orders'),
                 backgroundColor: AppColors.backgroundVariant2,
-                body: SizedBox(
-                  width: Get.width,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      TabBar(
-                        controller: tabController,
-                        padding: EdgeInsets.zero,
-                        labelColor: Colors.black,
-                        unselectedLabelColor: const Color(0xff9A9A9A),
-                        indicatorColor: AppColors.primary,
-                        indicatorSize: TabBarIndicatorSize.tab,
-                        indicatorPadding: EdgeInsets.only(
-                            left: width * 0.045, right: width * 0.045),
-                        labelStyle: TextStyle(
-                          fontSize: Get.width * 0.035,
-                          fontWeight: FontWeight.w500,
+                body: SafeArea(
+                  child: SizedBox(
+                    width: Get.width,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TabBar(
+                          controller: tabController,
+                          padding: EdgeInsets.zero,
+                          labelColor: Colors.black,
+                          unselectedLabelColor: const Color(0xff9A9A9A),
+                          indicatorColor: AppColors.primary,
+                          indicatorSize: TabBarIndicatorSize.tab,
+                          indicatorPadding: EdgeInsets.only(
+                              left: width * 0.045, right: width * 0.045),
+                          labelStyle: TextStyle(
+                            fontSize: Get.width * 0.035,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          unselectedLabelStyle: TextStyle(
+                            fontSize: Get.width * 0.035,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          tabs: const [
+                            Tab(
+                              text: 'Pending',
+                              iconMargin: EdgeInsets.zero,
+                            ),
+                            Tab(
+                              text: 'Completed',
+                              iconMargin: EdgeInsets.zero,
+                            ),
+                            Tab(
+                              text: 'Cancelled',
+                              iconMargin: EdgeInsets.zero,
+                            ),
+                          ],
+                          onTap: (index) {},
                         ),
-                        unselectedLabelStyle: TextStyle(
-                          fontSize: Get.width * 0.035,
-                          fontWeight: FontWeight.w500,
+                        Container(
+                          height: 1,
+                          width: width,
+                          color: AppColors.grey.withOpacity(0.1),
                         ),
-                        tabs: const [
-                          Tab(
-                            text: 'Pending',
-                            iconMargin: EdgeInsets.zero,
-                          ),
-                          Tab(
-                            text: 'Completed',
-                            iconMargin: EdgeInsets.zero,
-                          ),
-                          Tab(
-                            text: 'Cancelled',
-                            iconMargin: EdgeInsets.zero,
-                          ),
-                        ],
-                        onTap: (index) {},
-                      ),
-                      Container(
-                        height: 1,
-                        width: width,
-                        color: AppColors.grey.withOpacity(0.1),
-                      ),
-                      FutureBuilder<ApiResponse>(
-                          future: getOrders,
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return const AppLoader();
-                            } else if (snapshot.connectionState ==
-                                ConnectionState.done) {
-                              if (snapshot.data!.isSuccessful) {
-                                if (snapshot.hasData) {
-                                  final res =
-                                      snapshot.data!.data as List<dynamic>;
-
-                                  final myOrdersData = <order.MyOrdersModel>[];
-                                  for (var element in res) {
-                                    myOrdersData.add(
-                                        order.MyOrdersModel.fromJson(element));
+                        FutureBuilder<ApiResponse>(
+                            future: getOrders,
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const AppLoader();
+                              } else if (snapshot.connectionState ==
+                                  ConnectionState.done) {
+                                if (snapshot.data!.isSuccessful) {
+                                  if (snapshot.hasData) {
+                                    final res =
+                                        snapshot.data!.data as List<dynamic>;
+                
+                                    final myOrdersData = <order.MyOrdersModel>[];
+                                    for (var element in res) {
+                                      myOrdersData.add(
+                                          order.MyOrdersModel.fromJson(element));
+                                    }
+                
+                                    final pendingOrders = myOrdersData
+                                        .where((element) =>
+                                            element.status == 'pending')
+                                        .toList();
+                                    final approvedOrders = myOrdersData
+                                        .where((element) =>
+                                            element.status == 'approved')
+                                        .toList();
+                                    final completedOrders = myOrdersData
+                                        .where((element) =>
+                                            element.status == 'completed')
+                                        .toList();
+                                    final cancelledOrders = myOrdersData
+                                        .where((element) =>
+                                            element.status == 'cancelled')
+                                        .toList();
+                                    List<order.MyOrderItem> pendingItems =
+                                        getAllOrderItems(pendingOrders);
+                
+                                    List<order.MyOrderItem> approvedItems =
+                                        getAllOrderItems(approvedOrders);
+                
+                                    if (searchPending.isNotEmpty) {
+                                      pendingItems = {
+                                        ...pendingItems.where((element) => element
+                                            .product!.name
+                                            .toLowerCase()
+                                            .contains(
+                                                searchPending.toLowerCase())),
+                                        ...pendingItems.where((element) => element
+                                            .orderId!
+                                            .toLowerCase()
+                                            .contains(
+                                                searchPending.toLowerCase()))
+                                      }.toList();
+                                    }
+                                    List<order.MyOrderItem> completedItems =
+                                        getAllOrderItems(completedOrders);
+                                    if (searchCompleted.isNotEmpty) {
+                                      completedItems = {
+                                        ...completedItems.where((element) =>
+                                            element.product!.name
+                                                .toLowerCase()
+                                                .contains(searchCompleted
+                                                    .toLowerCase())),
+                                        ...completedItems.where((element) =>
+                                            element.orderId!
+                                                .toLowerCase()
+                                                .contains(searchCompleted
+                                                    .toLowerCase()))
+                                      }.toList();
+                                    }
+                                    List<order.MyOrderItem> cancelledItems =
+                                        getAllOrderItems(cancelledOrders);
+                                    if (searchCancelled.isNotEmpty) {
+                                      cancelledItems = {
+                                        ...cancelledItems.where((element) =>
+                                            element.product!.name
+                                                .toLowerCase()
+                                                .contains(searchCancelled
+                                                    .toLowerCase())),
+                                        ...cancelledItems.where((element) =>
+                                            element.orderId!
+                                                .toLowerCase()
+                                                .contains(searchCancelled
+                                                    .toLowerCase()))
+                                      }.toList();
+                                    }
+                
+                                    return SizedBox(
+                                      height: Get.height * 0.72,
+                                      child: TabBarView(
+                                        controller: tabController,
+                                        children: [
+                                          SingleChildScrollView(
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Padding(
+                                                  padding: EdgeInsets.symmetric(
+                                                      vertical: 8.0,
+                                                      horizontal:
+                                                          Get.width * 0.04),
+                                                  child: AppInput(
+                                                    hintText:
+                                                        'Search with name or keyword ...',
+                                                    filledColor: Colors.grey
+                                                        .withOpacity(.1),
+                                                    prefexIcon: Icon(
+                                                      FeatherIcons.search,
+                                                      color: Colors.black
+                                                          .withOpacity(.5),
+                                                      size: Get.width * 0.05,
+                                                    ),
+                                                    onChanged: (val) {
+                                                      if (searchPending != val) {
+                                                        setState(() {
+                                                          searchPending = val;
+                                                        });
+                                                      }
+                                                    },
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                    height: Get.height * 0.66,
+                                                    child: [
+                                                      ...pendingItems,
+                                                      ...approvedItems
+                                                    ].isEmpty
+                                                        ? const Center(
+                                                            child: Text(
+                                                                'No pending Orders'),
+                                                          )
+                                                        : MyDoubleOrderWidgetList(
+                                                            cancelOrder: () {
+                                                              onApiChange();
+                                                            },
+                                                            orderItemsList:
+                                                                pendingItems,
+                                                            orderItemsList2:
+                                                                approvedItems,
+                                                          ))
+                                              ],
+                                            ),
+                                          ),
+                                          SingleChildScrollView(
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Padding(
+                                                  padding: EdgeInsets.symmetric(
+                                                      vertical: 8.0,
+                                                      horizontal:
+                                                          Get.width * 0.04),
+                                                  child: AppInput(
+                                                    hintText:
+                                                        'Search with name or keyword ...',
+                                                    filledColor: Colors.grey
+                                                        .withOpacity(.1),
+                                                    prefexIcon: Icon(
+                                                      FeatherIcons.search,
+                                                      color: Colors.black
+                                                          .withOpacity(.5),
+                                                      size: Get.width * 0.05,
+                                                    ),
+                                                    onChanged: (val) {
+                                                      if (searchCompleted !=
+                                                          val) {
+                                                        setState(() {
+                                                          searchCompleted = val;
+                                                        });
+                                                      }
+                                                    },
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                    height: Get.height * 0.66,
+                                                    child: completedItems.isEmpty
+                                                        ? const Center(
+                                                            child: Text(
+                                                                'No Completed Orders'),
+                                                          )
+                                                        : MyOrderWidgetList(
+                                                            cancelOrder: () {
+                                                              onApiChange();
+                                                            },
+                                                            orderItemsList:
+                                                                completedItems,
+                                                            status: 'Completed',
+                                                            statusColor:
+                                                                Colors.green))
+                                              ],
+                                            ),
+                                          ),
+                                          SingleChildScrollView(
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Padding(
+                                                  padding: EdgeInsets.symmetric(
+                                                      vertical: 8.0,
+                                                      horizontal:
+                                                          Get.width * 0.04),
+                                                  child: AppInput(
+                                                    hintText:
+                                                        'Search with name or keyword ...',
+                                                    filledColor: Colors.grey
+                                                        .withOpacity(.1),
+                                                    prefexIcon: Icon(
+                                                      FeatherIcons.search,
+                                                      color: Colors.black
+                                                          .withOpacity(.5),
+                                                      size: Get.width * 0.05,
+                                                    ),
+                                                    onChanged: (val) {
+                                                      if (searchCancelled !=
+                                                          val) {
+                                                        setState(() {
+                                                          searchCancelled = val;
+                                                        });
+                                                      }
+                                                    },
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                    height: Get.height * 0.66,
+                                                    child: cancelledItems.isEmpty
+                                                        ? const Center(
+                                                            child: Text(
+                                                                'No cancelled Orders'),
+                                                          )
+                                                        : MyOrderWidgetList(
+                                                          orders :cancelledOrders,
+                                                            cancelOrder: () {
+                                                              onApiChange();
+                                                            },
+                                                            status: 'Cancelled',
+                                                            orderItemsList:
+                                                                cancelledItems,
+                                                            statusColor:
+                                                                Colors.red))
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  } else {
+                                    return Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: const [
+                                        Center(
+                                          child: Text('An error occurred'),
+                                        ),
+                                      ],
+                                    );
                                   }
-
-                                  final pendingOrders = myOrdersData
-                                      .where((element) =>
-                                          element.status == 'pending')
-                                      .toList();
-                                  final approvedOrders = myOrdersData
-                                      .where((element) =>
-                                          element.status == 'approved')
-                                      .toList();
-                                  final completedOrders = myOrdersData
-                                      .where((element) =>
-                                          element.status == 'completed')
-                                      .toList();
-                                  final cancelledOrders = myOrdersData
-                                      .where((element) =>
-                                          element.status == 'cancelled')
-                                      .toList();
-                                  List<order.MyOrderItem> pendingItems =
-                                      getAllOrderItems(pendingOrders);
-
-                                  List<order.MyOrderItem> approvedItems =
-                                      getAllOrderItems(approvedOrders);
-
-                                  if (searchPending.isNotEmpty) {
-                                    pendingItems = {
-                                      ...pendingItems.where((element) => element
-                                          .product!.name
-                                          .toLowerCase()
-                                          .contains(
-                                              searchPending.toLowerCase())),
-                                      ...pendingItems.where((element) => element
-                                          .orderId!
-                                          .toLowerCase()
-                                          .contains(
-                                              searchPending.toLowerCase()))
-                                    }.toList();
-                                  }
-                                  List<order.MyOrderItem> completedItems =
-                                      getAllOrderItems(completedOrders);
-                                  if (searchCompleted.isNotEmpty) {
-                                    completedItems = {
-                                      ...completedItems.where((element) =>
-                                          element.product!.name
-                                              .toLowerCase()
-                                              .contains(searchCompleted
-                                                  .toLowerCase())),
-                                      ...completedItems.where((element) =>
-                                          element.orderId!
-                                              .toLowerCase()
-                                              .contains(searchCompleted
-                                                  .toLowerCase()))
-                                    }.toList();
-                                  }
-                                  List<order.MyOrderItem> cancelledItems =
-                                      getAllOrderItems(cancelledOrders);
-                                  if (searchCancelled.isNotEmpty) {
-                                    cancelledItems = {
-                                      ...cancelledItems.where((element) =>
-                                          element.product!.name
-                                              .toLowerCase()
-                                              .contains(searchCancelled
-                                                  .toLowerCase())),
-                                      ...cancelledItems.where((element) =>
-                                          element.orderId!
-                                              .toLowerCase()
-                                              .contains(searchCancelled
-                                                  .toLowerCase()))
-                                    }.toList();
-                                  }
-
+                                } else if (snapshot.hasError) {
+                                  return TabBarView(
+                                      controller: tabController,
+                                      children: [
+                                        Center(
+                                          child: Text(
+                                              'Error: ${snapshot.error.toString()}'),
+                                        ),
+                                        Center(
+                                          child: Text(
+                                              'Error: ${snapshot.error.toString()}'),
+                                        ),
+                                        Center(
+                                          child: Text(
+                                              'Error: ${snapshot.error.toString()}'),
+                                        ),
+                                      ]);
+                                } else {
                                   return SizedBox(
-                                    height: Get.height * 0.755,
+                                    height: Get.height * 0.72,
                                     child: TabBarView(
                                       controller: tabController,
                                       children: [
                                         SingleChildScrollView(
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Padding(
-                                                padding: EdgeInsets.symmetric(
-                                                    vertical: 8.0,
-                                                    horizontal:
-                                                        Get.width * 0.04),
-                                                child: AppInput(
-                                                  hintText:
-                                                      'Search with name or keyword ...',
-                                                  filledColor: Colors.grey
-                                                      .withOpacity(.1),
-                                                  prefexIcon: Icon(
-                                                    FeatherIcons.search,
-                                                    color: Colors.black
-                                                        .withOpacity(.5),
-                                                    size: Get.width * 0.05,
-                                                  ),
-                                                  onChanged: (val) {
-                                                    if (searchPending != val) {
-                                                      setState(() {
-                                                        searchPending = val;
-                                                      });
-                                                    }
-                                                  },
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                  height: Get.height * 0.68,
-                                                  child: [
-                                                    ...pendingItems,
-                                                    ...approvedItems
-                                                  ].isEmpty
-                                                      ? const Center(
-                                                          child: Text(
-                                                              'No pending Orders'),
-                                                        )
-                                                      : MyDoubleOrderWidgetList(
-                                                          cancelOrder: () {
-                                                            onApiChange();
-                                                          },
-                                                          orderItemsList:
-                                                              pendingItems,
-                                                          orderItemsList2:
-                                                              approvedItems,
-                                                        ))
-                                            ],
-                                          ),
+                                          child: SizedBox(
+                                              height: Get.height * 0.68,
+                                              child: const Center(
+                                                child:
+                                                    Text('No pending Orders'),
+                                              )),
                                         ),
                                         SingleChildScrollView(
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Padding(
-                                                padding: EdgeInsets.symmetric(
-                                                    vertical: 8.0,
-                                                    horizontal:
-                                                        Get.width * 0.04),
-                                                child: AppInput(
-                                                  hintText:
-                                                      'Search with name or keyword ...',
-                                                  filledColor: Colors.grey
-                                                      .withOpacity(.1),
-                                                  prefexIcon: Icon(
-                                                    FeatherIcons.search,
-                                                    color: Colors.black
-                                                        .withOpacity(.5),
-                                                    size: Get.width * 0.05,
-                                                  ),
-                                                  onChanged: (val) {
-                                                    if (searchCompleted !=
-                                                        val) {
-                                                      setState(() {
-                                                        searchCompleted = val;
-                                                      });
-                                                    }
-                                                  },
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                  height: Get.height * 0.68,
-                                                  child: completedItems.isEmpty
-                                                      ? const Center(
-                                                          child: Text(
-                                                              'No Completed Orders'),
-                                                        )
-                                                      : MyOrderWidgetList(
-                                                          cancelOrder: () {
-                                                            onApiChange();
-                                                          },
-                                                          orderItemsList:
-                                                              completedItems,
-                                                          status: 'Completed',
-                                                          statusColor:
-                                                              Colors.green))
-                                            ],
-                                          ),
+                                          child: SizedBox(
+                                              height: Get.height * 0.68,
+                                              child: const Center(
+                                                child: Text(
+                                                    'No Completed Orders'),
+                                              )),
                                         ),
                                         SingleChildScrollView(
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Padding(
-                                                padding: EdgeInsets.symmetric(
-                                                    vertical: 8.0,
-                                                    horizontal:
-                                                        Get.width * 0.04),
-                                                child: AppInput(
-                                                  hintText:
-                                                      'Search with name or keyword ...',
-                                                  filledColor: Colors.grey
-                                                      .withOpacity(.1),
-                                                  prefexIcon: Icon(
-                                                    FeatherIcons.search,
-                                                    color: Colors.black
-                                                        .withOpacity(.5),
-                                                    size: Get.width * 0.05,
-                                                  ),
-                                                  onChanged: (val) {
-                                                    if (searchCancelled !=
-                                                        val) {
-                                                      setState(() {
-                                                        searchCancelled = val;
-                                                      });
-                                                    }
-                                                  },
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                  height: Get.height * 0.68,
-                                                  child: cancelledItems.isEmpty
-                                                      ? const Center(
-                                                          child: Text(
-                                                              'No cancelled Orders'),
-                                                        )
-                                                      : MyOrderWidgetList(
-                                                        orders :cancelledOrders,
-                                                          cancelOrder: () {
-                                                            onApiChange();
-                                                          },
-                                                          status: 'Cancelled',
-                                                          orderItemsList:
-                                                              cancelledItems,
-                                                          statusColor:
-                                                              Colors.red))
-                                            ],
-                                          ),
+                                          child: SizedBox(
+                                              height: Get.height * 0.68,
+                                              child: const Center(
+                                                child: Text(
+                                                    'No cancelled Orders'),
+                                              )),
                                         ),
                                       ],
                                     ),
                                   );
-                                } else {
-                                  return Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: const [
-                                      Center(
-                                        child: Text('An error occurred'),
-                                      ),
-                                    ],
-                                  );
                                 }
-                              } else if (snapshot.hasError) {
-                                return TabBarView(
-                                    controller: tabController,
-                                    children: [
-                                      Center(
-                                        child: Text(
-                                            'Error: ${snapshot.error.toString()}'),
-                                      ),
-                                      Center(
-                                        child: Text(
-                                            'Error: ${snapshot.error.toString()}'),
-                                      ),
-                                      Center(
-                                        child: Text(
-                                            'Error: ${snapshot.error.toString()}'),
-                                      ),
-                                    ]);
                               } else {
-                                return SizedBox(
-                                  height: Get.height * 0.78,
-                                  child: TabBarView(
-                                    controller: tabController,
-                                    children: [
-                                      SingleChildScrollView(
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            SizedBox(
-                                                height: Get.height * 0.75,
-                                                child: const Center(
-                                                  child:
-                                                      Text('No pending Orders'),
-                                                ))
-                                          ],
-                                        ),
-                                      ),
-                                      SingleChildScrollView(
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            SizedBox(
-                                                height: Get.height * 0.75,
-                                                child: const Center(
-                                                  child: Text(
-                                                      'No Completed Orders'),
-                                                ))
-                                          ],
-                                        ),
-                                      ),
-                                      SingleChildScrollView(
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            SizedBox(
-                                                height: Get.height * 0.75,
-                                                child: const Center(
-                                                  child: Text(
-                                                      'No cancelled Orders'),
-                                                ))
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                );
+                                return const Text('Active');
                               }
-                            } else {
-                              return const Text('Active');
-                            }
-                          })
-                    ],
+                            })
+                      ],
+                    ),
                   ),
                 ),
                 bottomNavigationBar: HomeBottomWidget(

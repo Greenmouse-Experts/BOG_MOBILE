@@ -62,11 +62,7 @@ class AuthController extends GetxController {
 
   AuthController(this.userRepo);
 
-  final GoogleSignIn _googleSignIn = GoogleSignIn(
-      //clientId: "721325752461-q1276n5vq7bij0dlqetb2nrtp2nt1ce3.apps.googleusercontent.com",
-      // scopes: signInScopes,
-
-      );
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   toggleBusiness(int index) {
     this.index = index;
@@ -239,7 +235,7 @@ class AuthController extends GetxController {
 
   Future<void> handleSignUpGoogle() async {
     try {
-      await _googleSignIn.signOut();
+       await _googleSignIn.signOut();
 
       final response = await _googleSignIn.signIn();
 
@@ -294,7 +290,11 @@ class AuthController extends GetxController {
           }
         });
       }
-    } catch (error) {}
+    } catch (error) {
+      print(error);
+      print(error.toString());
+      AppOverlay.showInfoDialog(title: 'Error', content: error.toString());
+    }
   }
 
   Future<void> logOutGoogle() async {
@@ -333,7 +333,7 @@ class AuthController extends GetxController {
     Timer.periodic(
       oneSec,
       (Timer timer) {
-        var duration = Duration(seconds: _start);
+       // var duration = Duration(seconds: _start);
         if (_start < 1) {
           time = "0:00";
           timer.cancel();
@@ -398,16 +398,10 @@ class AuthController extends GetxController {
   //Sign In
   Future<void> signIn(GlobalKey<FormState> formKey) async {
     if (formKey.currentState!.validate()) {
-      var message = "";
-      var buttonMessage = "";
-      // print('shown');
-      // Loader.showLoading();
-      // print('afetr jkdp');
       ApiResponse response = await userRepo.signIn(_signInPayload);
       if (response.isSuccessful) {
         var logInInfo = LogInModel.fromJson(response.user);
         response.user = logInInfo;
-
         var token = response.token;
         MyPref.logInDetail.val = jsonEncode(response.user);
         MyPref.authToken.val = token.toString();
@@ -418,7 +412,6 @@ class AuthController extends GetxController {
         final userDetails = UserDetailsModel.fromJson(newRes.user);
         MyPref.userDetails.val = jsonEncode(userDetails);
 
-        // Loader.hideLoading();
         if (bankListResponse.isSuccessful && newRes.isSuccessful) {
           MyPref.bankListDetail.val = jsonEncode(bankListResponse.data);
 
@@ -434,14 +427,6 @@ class AuthController extends GetxController {
           );
         }
       } else {
-        if (response.message == "This Email is already in Use") {
-          message = "This Email is already in Use, Please Login";
-          buttonMessage = "Login";
-        } else {
-          message =
-              "Account created successfully, Check your email for verification";
-          buttonMessage = "Login";
-        }
         AppOverlay.showInfoDialog(
           title: response.isSuccessful ? 'Success' : 'Failure',
           content: response.message,

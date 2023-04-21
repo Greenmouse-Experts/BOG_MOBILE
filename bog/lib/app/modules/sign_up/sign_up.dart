@@ -318,7 +318,7 @@ class SignUp extends GetView<AuthController> {
                                       hasIcon: true,
                                       fontColor: Colors.black,
                                       onPressed: () {
-                                        print('tapped');
+                                  
                                         controller.handleSignUpGoogle();
                                       },
                                     ),

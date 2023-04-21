@@ -43,8 +43,15 @@ class OrderDetailsBuilder extends StatelessWidget {
                     Text('QTY: ${orderItems[i].quantity.toString()}')
                   ],
                 ),
-                const Spacer(),
-                Text('Price: ${orderItems[i].amount.toString()}')
+                 const Spacer(),
+                SizedBox(
+                  width: Get.width * 0.15,
+                  child: Text(
+                    'Price: ${orderItems[i].amount.toString()}',
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                )
               ],
             ),
           );

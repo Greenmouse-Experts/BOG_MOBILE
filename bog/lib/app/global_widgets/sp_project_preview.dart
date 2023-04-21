@@ -27,8 +27,8 @@ class SPProjectPreview extends StatelessWidget {
         controller.update(['home']);
       },
       child: Container(
-        width: Get.width * 0.42,
-        height: Get.width * 0.36,
+        width: Get.width * 0.43,
+        height: Get.width * 0.345,
         decoration: BoxDecoration(
             color: color.withOpacity(0.05),
             borderRadius: BorderRadius.circular(18),

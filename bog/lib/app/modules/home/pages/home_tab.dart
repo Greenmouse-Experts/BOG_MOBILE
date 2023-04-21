@@ -53,20 +53,6 @@ class _HomeTabState extends State<HomeTab> {
 
   @override
   Widget build(BuildContext context) {
-    var userDetails =
-        UserDetailsModel.fromJson(jsonDecode(MyPref.userDetails.val));
-
-    var isVerified = false;
-
-    if (userDetails.profile!.isVerified != null) {
-      isVerified = userDetails.profile!.isVerified!;
-    }
-
-    var kycScore = 0.0;
-    if (userDetails.profile!.kycPoint != null) {
-      kycScore = userDetails.profile!.kycPoint!.toDouble();
-    }
-
     return GetBuilder<HomeController>(builder: (controller) {
       return SizedBox(
           height: Get.height * 0.93,
@@ -246,7 +232,9 @@ class _HomeTabState extends State<HomeTab> {
                                         controller.userRepo
                                             .getData("/products"),
                                         controller.userRepo
-                                            .getData('/orders/order-request')
+                                            .getData('/orders/order-request'),
+                                        controller.userRepo.getData(
+                                            '/user/me?userType=vendor')
                                       ]),
                                       builder: (context, snapshot) {
                                         if (snapshot.connectionState ==
@@ -261,6 +249,8 @@ class _HomeTabState extends State<HomeTab> {
                                           } else {
                                             var response1 = [];
                                             var response2 = [];
+                                            UserDetailsModel response3 =
+                                                UserDetailsModel();
                                             final myProducts = <MyProducts>[];
                                             final myOrderRequests =
                                                 <OrderRequestsModel>[];
@@ -288,6 +278,12 @@ class _HomeTabState extends State<HomeTab> {
                                                         element));
                                               }
                                             }
+                                            if (snapshot
+                                                .data![2].isSuccessful) {
+                                              response3 =
+                                                  UserDetailsModel.fromJson(
+                                                      snapshot.data![2].user);
+                                            }
 
                                             final productsInStore = myProducts
                                                 .where(
@@ -310,7 +306,12 @@ class _HomeTabState extends State<HomeTab> {
                                               orderRequest: response2.length,
                                               productsInStore: productsInStore,
                                               total: response1.length,
-                                              kycScore: kycScore,
+                                              kycScore: response3
+                                                          .profile!.kycPoint ==
+                                                      null
+                                                  ? null
+                                                  : response3.profile!.kycPoint!
+                                                      .toDouble(),
                                               dataMap: dataMap,
                                               deliveries: deliveries,
                                               isVerified: logInDetails
@@ -505,6 +506,8 @@ class _HomeTabState extends State<HomeTab> {
                                             '/projects/service-partner-analyze?y=2023'),
                                         controller.userRepo.getData(
                                             "/projects/dispatched-projects/${logInDetails.profile!.id}"),
+                                        controller.userRepo.getData(
+                                            '/user/me?userType=professional')
                                       ]),
                                       builder: (context, snapshot) {
                                         if (snapshot.connectionState ==
@@ -519,6 +522,9 @@ class _HomeTabState extends State<HomeTab> {
                                           } else {
                                             var response1 = [];
                                             var response2 = [];
+                                            UserDetailsModel response3 =
+                                                UserDetailsModel();
+
                                             final projectAnalysis =
                                                 <ProjectAnalysisModel>[];
                                             if (snapshot
@@ -534,6 +540,12 @@ class _HomeTabState extends State<HomeTab> {
                                               }
                                               response2 = snapshot.data![1].data
                                                   as List<dynamic>;
+                                            }
+                                            if (snapshot
+                                                .data![2].isSuccessful) {
+                                              response3 =
+                                                  UserDetailsModel.fromJson(
+                                                      snapshot.data![2].user);
                                             }
                                             final assignedProjects =
                                                 response1.length;
@@ -573,7 +585,12 @@ class _HomeTabState extends State<HomeTab> {
                                               isVerified: logInDetails
                                                       .profile!.isVerified ??
                                                   false,
-                                              kycScore: kycScore,
+                                              kycScore: response3
+                                                          .profile!.kycPoint ==
+                                                      null
+                                                  ? null
+                                                  : response3.profile!.kycPoint!
+                                                      .toDouble(),
                                               dataMap: newdataMap,
                                               assignedProjects:
                                                   assignedProjects,
@@ -754,7 +771,7 @@ class ProductPartnerHomeWidget extends StatelessWidget {
     required this.remainingDate,
   });
 
-  final double kycScore;
+  final double? kycScore;
   final int total;
   final int orderRequest;
   final int productsInStore;
@@ -846,79 +863,82 @@ class ProductPartnerHomeWidget extends StatelessWidget {
                 ),
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'KYC Score',
-                  style: AppTextStyle.caption2
-                      .copyWith(color: AppColors.blackShade.withOpacity(0.8)),
-                ),
-                SizedBox(width: Get.width * 0.01),
-                TweenAnimationBuilder(
-                  tween: Tween<double>(
-                    begin: 0,
-                    end: kycScore / 100,
-                  ),
-                  duration: const Duration(milliseconds: 1000),
-                  builder: (context, double val, _) {
-                    return SizedBox(
-                      width: Get.width * 0.55,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(18),
-                        child: LinearProgressIndicator(
-                          color: kycScore < 50
-                              ? Colors.red
-                              : AppColors.successGreen,
-                          value: val,
-                          minHeight: 12,
-                          backgroundColor: AppColors.backgroundGrey,
+            kycScore == null
+                ? const SizedBox.shrink()
+                : Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'KYC Score',
+                        style: AppTextStyle.caption2.copyWith(
+                            color: AppColors.blackShade.withOpacity(0.8)),
+                      ),
+                      SizedBox(width: Get.width * 0.01),
+                      TweenAnimationBuilder(
+                        tween: Tween<double>(
+                          begin: 0,
+                          end: kycScore! / 100,
+                        ),
+                        duration: const Duration(milliseconds: 1000),
+                        builder: (context, double val, _) {
+                          return SizedBox(
+                            width: Get.width * 0.55,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(18),
+                              child: LinearProgressIndicator(
+                                color: kycScore! < 50
+                                    ? Colors.red
+                                    : AppColors.successGreen,
+                                value: val,
+                                minHeight: 12,
+                                backgroundColor: AppColors.backgroundGrey,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                      Container(
+                        width: Get.width * 0.15,
+                        height: Get.width * 0.15,
+                        padding: EdgeInsets.all(Get.width * 0.015),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(100),
+                          color: kycScore! < 50
+                              ? Colors.red.withOpacity(0.1)
+                              : AppColors.successGreen.withOpacity(0.1),
+                        ),
+                        child: Container(
+                          width: Get.width * 0.1,
+                          height: Get.width * 0.1,
+                          padding: EdgeInsets.all(Get.width * 0.015),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(100),
+                            color: kycScore! < 50
+                                ? Colors.red.withOpacity(0.3)
+                                : AppColors.successGreen.withOpacity(0.3),
+                          ),
+                          child: Container(
+                            alignment: Alignment.center,
+                            width: Get.width * 0.05,
+                            height: Get.width * 0.05,
+                            padding: EdgeInsets.all(Get.width * 0.01),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(100),
+                              color: kycScore! < 50
+                                  ? Colors.red
+                                  : AppColors.successGreen,
+                            ),
+                            child: Text(
+                              '${kycScore!.toInt()}%',
+                              style: AppTextStyle.caption.copyWith(
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColors.white),
+                            ),
+                          ),
                         ),
                       ),
-                    );
-                  },
-                ),
-                Container(
-                  width: Get.width * 0.15,
-                  height: Get.width * 0.15,
-                  padding: EdgeInsets.all(Get.width * 0.015),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(100),
-                    color: kycScore < 50
-                        ? Colors.red.withOpacity(0.1)
-                        : AppColors.successGreen.withOpacity(0.1),
+                    ],
                   ),
-                  child: Container(
-                    width: Get.width * 0.1,
-                    height: Get.width * 0.1,
-                    padding: EdgeInsets.all(Get.width * 0.015),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(100),
-                      color: kycScore < 50
-                          ? Colors.red.withOpacity(0.3)
-                          : AppColors.successGreen.withOpacity(0.3),
-                    ),
-                    child: Container(
-                      alignment: Alignment.center,
-                      width: Get.width * 0.05,
-                      height: Get.width * 0.05,
-                      padding: EdgeInsets.all(Get.width * 0.01),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(100),
-                        color:
-                            kycScore < 50 ? Colors.red : AppColors.successGreen,
-                      ),
-                      child: Text(
-                        '${kycScore.toInt()}%',
-                        style: AppTextStyle.caption.copyWith(
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.white),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
@@ -1076,7 +1096,7 @@ class SPHomeWidget extends StatelessWidget {
 
   final int availableProjects;
   final int assignedProjects;
-  final double kycScore;
+  final double? kycScore;
   final bool isVerified;
   final int total;
   final int completedProjects;
@@ -1108,8 +1128,8 @@ class SPHomeWidget extends StatelessWidget {
 
     return Padding(
         padding: EdgeInsets.only(
-          left: Get.width * 0.05,
-          right: Get.width * 0.05,
+          left: Get.width * 0.04,
+          right: Get.width * 0.04,
         ),
         child: Column(
           children: [
@@ -1117,10 +1137,10 @@ class SPHomeWidget extends StatelessWidget {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15)),
               color: AppColors.primary,
-              margin: const EdgeInsets.all(8),
+              // margin: const EdgeInsets.all(8),
               child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 20.0, horizontal: 15),
+                padding: EdgeInsets.symmetric(
+                    vertical: Get.height * 0.015, horizontal: Get.width * 0.04),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -1166,79 +1186,82 @@ class SPHomeWidget extends StatelessWidget {
                 ),
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'KYC Score',
-                  style: AppTextStyle.caption2
-                      .copyWith(color: AppColors.blackShade.withOpacity(0.8)),
-                ),
-                SizedBox(width: Get.width * 0.01),
-                TweenAnimationBuilder(
-                  tween: Tween<double>(
-                    begin: 0,
-                    end: kycScore / 100,
-                  ),
-                  duration: const Duration(milliseconds: 1000),
-                  builder: (context, double val, _) {
-                    return SizedBox(
-                      width: Get.width * 0.55,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(18),
-                        child: LinearProgressIndicator(
-                          color: kycScore < 50
-                              ? Colors.red
-                              : AppColors.successGreen,
-                          value: val,
-                          minHeight: 12,
-                          backgroundColor: AppColors.backgroundGrey,
+            kycScore == null
+                ? const SizedBox.shrink()
+                : Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'KYC Score',
+                        style: AppTextStyle.caption2.copyWith(
+                            color: AppColors.blackShade.withOpacity(0.8)),
+                      ),
+                      SizedBox(width: Get.width * 0.01),
+                      TweenAnimationBuilder(
+                        tween: Tween<double>(
+                          begin: 0,
+                          end: kycScore! / 100,
+                        ),
+                        duration: const Duration(milliseconds: 1000),
+                        builder: (context, double val, _) {
+                          return SizedBox(
+                            width: Get.width * 0.53,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(18),
+                              child: LinearProgressIndicator(
+                                color: kycScore! < 50
+                                    ? Colors.red
+                                    : AppColors.successGreen,
+                                value: val,
+                                minHeight: 12,
+                                backgroundColor: AppColors.backgroundGrey,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                      Container(
+                        width: Get.width * 0.17,
+                        height: Get.width * 0.17,
+                        padding: EdgeInsets.all(Get.width * 0.015),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(100),
+                          color: kycScore! < 50
+                              ? Colors.red.withOpacity(0.1)
+                              : AppColors.successGreen.withOpacity(0.1),
+                        ),
+                        child: Container(
+                          width: Get.width * 0.1,
+                          height: Get.width * 0.1,
+                          padding: EdgeInsets.all(Get.width * 0.015),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(100),
+                            color: kycScore! < 50
+                                ? Colors.red.withOpacity(0.3)
+                                : AppColors.successGreen.withOpacity(0.3),
+                          ),
+                          child: Container(
+                            alignment: Alignment.center,
+                            width: Get.width * 0.06,
+                            height: Get.width * 0.06,
+                            padding: EdgeInsets.all(Get.width * 0.01),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(100),
+                              color: kycScore! < 50
+                                  ? Colors.red
+                                  : AppColors.successGreen,
+                            ),
+                            child: Text(
+                              '${kycScore!.toInt()}%',
+                              style: AppTextStyle.caption.copyWith(
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColors.white),
+                            ),
+                          ),
                         ),
                       ),
-                    );
-                  },
-                ),
-                Container(
-                  width: Get.width * 0.15,
-                  height: Get.width * 0.15,
-                  padding: EdgeInsets.all(Get.width * 0.015),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(100),
-                    color: kycScore < 50
-                        ? Colors.red.withOpacity(0.1)
-                        : AppColors.successGreen.withOpacity(0.1),
+                    ],
                   ),
-                  child: Container(
-                    width: Get.width * 0.1,
-                    height: Get.width * 0.1,
-                    padding: EdgeInsets.all(Get.width * 0.015),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(100),
-                      color: kycScore < 50
-                          ? Colors.red.withOpacity(0.3)
-                          : AppColors.successGreen.withOpacity(0.3),
-                    ),
-                    child: Container(
-                      alignment: Alignment.center,
-                      width: Get.width * 0.05,
-                      height: Get.width * 0.05,
-                      padding: EdgeInsets.all(Get.width * 0.01),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(100),
-                        color:
-                            kycScore < 50 ? Colors.red : AppColors.successGreen,
-                      ),
-                      child: Text(
-                        '${kycScore.toInt()}%',
-                        style: AppTextStyle.caption.copyWith(
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.white),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
             Column(
               children: [
                 Row(
@@ -1258,7 +1281,7 @@ class SPHomeWidget extends StatelessWidget {
                     ),
                   ],
                 ),
-                SizedBox(height: Get.width * 0.06),
+                SizedBox(height: Get.height * 0.02),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -1276,7 +1299,7 @@ class SPHomeWidget extends StatelessWidget {
                     ),
                   ],
                 ),
-                SizedBox(height: Get.height * 0.02),
+                SizedBox(height: Get.height * 0.01),
                 SizedBox(
                   child: pie_chart.PieChart(
                     dataMap: dataMap,

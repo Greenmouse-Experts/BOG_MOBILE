@@ -1,4 +1,3 @@
-import 'package:bog/app/global_widgets/bottom_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -6,8 +5,10 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_styles.dart';
 import '../../controllers/home_controller.dart';
 import '../../global_widgets/app_base_view.dart';
-import '../../global_widgets/custom_app_bar.dart';
+
+import '../../global_widgets/bottom_widget.dart';
 import '../../global_widgets/expandable_faq.dart';
+import '../../global_widgets/new_app_bar.dart';
 
 class FAQ extends StatelessWidget {
   const FAQ({super.key});
@@ -25,11 +26,11 @@ class FAQ extends StatelessWidget {
             doubleNavigate: false,
           ),
           backgroundColor: AppColors.backgroundVariant2,
+          appBar: newAppBarBack(context, 'FAQs'),
           body: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const CustomAppBar(title: 'FAQs'),
                 Padding(
                   padding: EdgeInsets.symmetric(
                       vertical: 8.0, horizontal: Get.width * 0.05),

@@ -37,9 +37,9 @@ class MyOrdersWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Get.to(OrderDetails(
-          id: id,
-        ));
+        Get.to(() => OrderDetails(
+              id: id,
+            ));
       },
       child: IntrinsicHeight(
         child: Container(

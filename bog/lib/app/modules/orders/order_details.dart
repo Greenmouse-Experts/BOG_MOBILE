@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -110,7 +109,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                                     FeeSection(
                                         leading: 'Sub Total',
                                         content:
-                                            'NGN ${orderDetail.totalAmount}'),
+                                            'NGN ${(orderDetail.totalAmount ?? 0) - (orderDetail.deliveryFee ?? 0)}'),
                                     FeeSection(
                                         leading: 'Delivery Fee',
                                         content:

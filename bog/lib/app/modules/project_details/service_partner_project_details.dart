@@ -327,7 +327,11 @@ class _ServicePartnerProjectDetailsState
                                         ),
                                         IconButton(
                                             onPressed: () {
-                                              AppOverlay.showUpdateProjectProgressDialod();
+                                              AppOverlay
+                                                  .showUpdateProjectProgressDialod(
+                                                      projectSlug: projectData
+                                                              .projectSlug ??
+                                                          '');
                                             },
                                             icon: Icon(
                                               Icons.edit,

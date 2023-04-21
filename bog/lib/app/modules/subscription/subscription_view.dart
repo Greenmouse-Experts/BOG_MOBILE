@@ -41,7 +41,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
 
     Charge charge = Charge()
       ..amount = newPrice
-      ..reference = 'ref_${DateTime.now().millisecondsSinceEpoch}'
+      ..reference = 'TR-${DateTime.now().millisecondsSinceEpoch}'
       ..email = logInDetails.email ?? ''
       ..currency = "NGN";
 

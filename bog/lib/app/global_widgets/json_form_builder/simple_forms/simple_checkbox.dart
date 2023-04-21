@@ -25,7 +25,7 @@ class SimpleListCheckbox extends StatefulWidget {
   final Map keyboardTypes;
 
   @override
-  _SimpleListCheckbox createState() => _SimpleListCheckbox();
+  State<SimpleListCheckbox> createState() => _SimpleListCheckbox();
 }
 
 class _SimpleListCheckbox extends State<SimpleListCheckbox> {

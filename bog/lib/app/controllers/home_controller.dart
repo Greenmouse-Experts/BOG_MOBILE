@@ -130,7 +130,7 @@ class HomeController extends GetxController {
   RxMap<String, CartModel> get cartItems => _cartItems.obs;
 
   void addItem(
-    MyProducts product,
+    MyProducts product, int quantity
   ) {
     if (_cartItems.containsKey(product.id!)) {
       Get.snackbar(
@@ -150,7 +150,7 @@ class HomeController extends GetxController {
     } else {
       productsList.add(product);
       _cartItems.putIfAbsent(
-          product.id!, () => CartModel(product: product, quantity: 1));
+          product.id!, () => CartModel(product: product, quantity: quantity));
 
       Get.snackbar(
         'Added to Cart',
@@ -214,5 +214,6 @@ class HomeController extends GetxController {
     productsList.clear();
     productsMap.clear();
     _cartItems.clear();
+    update();
   }
 }
