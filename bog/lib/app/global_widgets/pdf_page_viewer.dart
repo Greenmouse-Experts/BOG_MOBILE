@@ -4,9 +4,11 @@
 import 'package:bog/app/global_widgets/new_app_bar.dart';
 import 'package:bog/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_pdfview/flutter_pdfview.dart';
+// import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'dart:io';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:open_filex/open_filex.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -35,10 +37,11 @@ class _PdfViewerPageState extends State<PdfViewerPage> {
       pFile = file;
     });
 
- 
+   await OpenFilex.open(file.path);
     setState(() {
       isLoading = false;
     });
+    Get.back();
   }
 
   @override
@@ -55,11 +58,8 @@ class _PdfViewerPageState extends State<PdfViewerPage> {
       appBar: newAppBarBack(context, 'View Document'),
        body: isLoading
           ? const Center(child: CircularProgressIndicator(color: AppColors.primary,))
-          : SizedBox(
+          : const SizedBox(
               child: Center(
-                child: PDFView(
-                  filePath: pFile!.path,
-                ),
               ),
             ),
     );

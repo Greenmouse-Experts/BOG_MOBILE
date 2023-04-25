@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_styles.dart';
@@ -25,6 +26,9 @@ class OrderDetails extends StatefulWidget {
 
 class _OrderDetailsState extends State<OrderDetails> {
   late Future<ApiResponse> orderFuture;
+
+  int orderRating = 0;
+  TextEditingController reviewController = TextEditingController();
   @override
   void initState() {
     final controller = Get.find<HomeController>();
@@ -160,19 +164,83 @@ class _OrderDetailsState extends State<OrderDetails> {
                                       ),
                                     ),
                                     const SizedBox(height: 5),
-                                    Text(
-                                      'Review Order',
-                                      style: AppTextStyle.subtitle1.copyWith(
-                                          fontSize: multiplier * 0.07,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w600),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                    PageInput(
-                                        hint: 'Leave review',
-                                        label: '',
-                                        isTextArea: true,
-                                        controller: controller.orderReview)
+                                    orderDetail.orderReview!.isNotEmpty
+                                        ? const Center()
+                                        : Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              PageInput(
+                                                  hint: 'Leave review',
+                                                  label: 'Review Order',
+                                                  isTextArea: true,
+                                                  controller: reviewController),
+                                              Text(
+                                                'Leave a rating',
+                                                style: AppTextStyle.bodyText2
+                                                    .copyWith(
+                                                        color: Colors.black),
+                                              ),
+                                              RatingBar.builder(
+                                                itemBuilder: (context, _) =>
+                                                    const Icon(
+                                                  Icons.star,
+                                                  color: Colors.amber,
+                                                ),
+                                                onRatingUpdate: (rating) {
+                                                  orderRating = rating.toInt();
+                                                },
+                                              ),
+                                              SizedBox(
+                                                  height: Get.height * 0.02),
+                                              AppButton(
+                                                title: 'Submit Review',
+                                                onPressed: () async {
+                                                  if (reviewController
+                                                          .text.isEmpty ||
+                                                      orderRating == 0) {
+                                                    Get.snackbar(
+                                                        'Complete Fields',
+                                                        'You need to fill all fields before giving a review',
+                                                        colorText: AppColors
+                                                            .backgroundVariant1,
+                                                        backgroundColor:
+                                                            Colors.red);
+                                                    return;
+                                                  }
+                                                  final response = await controller
+                                                      .userRepo
+                                                      .postData(
+                                                          '/review/product/create-review',
+                                                          {
+                                                        "star": orderRating,
+                                                        "review":
+                                                            reviewController
+                                                                .text,
+                                                        "orderId": widget.id
+                                                      });
+                                                  if (response.isSuccessful) {
+                                                    AppOverlay.successOverlay(
+                                                      message:
+                                                          'Order Reviewed Successfully',
+                                                      onPressed: () {
+                                                        Get.back();
+                                                      },
+                                                    );
+                                                  } else {
+                                                    Get.snackbar(
+                                                        'Error',
+                                                        response.message ??
+                                                            'An error occurred',
+                                                        colorText: AppColors
+                                                            .backgroundVariant1,
+                                                        backgroundColor:
+                                                            Colors.red);
+                                                  }
+                                                },
+                                              )
+                                            ],
+                                          ),
                                   ],
                                 ),
                               );
@@ -216,5 +284,14 @@ class _OrderReviewState extends State<OrderReview> {
       isTextArea: true,
       controller: reviewController,
     );
+  }
+}
+
+class MyReview extends StatelessWidget {
+  const MyReview({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column();
   }
 }

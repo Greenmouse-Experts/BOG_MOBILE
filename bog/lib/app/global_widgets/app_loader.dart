@@ -11,8 +11,9 @@ class AppLoader extends StatelessWidget {
     return SizedBox(
       height: Get.height * 0.65,
       child: const Center(
-        child: CircularProgressIndicator(
-          color: AppColors.primary,
+        child: CircularProgressIndicator.adaptive(
+          backgroundColor: AppColors.primary,
+          // color: AppColors.primary,
         ),
       ),
     );

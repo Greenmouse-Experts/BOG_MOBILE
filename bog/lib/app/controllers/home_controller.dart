@@ -20,7 +20,6 @@ class HomeController extends GetxController {
   bool showProductPartnerEarnings = false;
   bool showServicePartnerEarnings = false;
 
-  TextEditingController orderReview = TextEditingController();
 
   String homeIcon = 'assets/images/homeIcon.png';
   String chatIcon = 'assets/images/homeIcon.png';
