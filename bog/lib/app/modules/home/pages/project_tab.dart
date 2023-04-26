@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:bog/app/data/model/commencement_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:get/get.dart';
@@ -10,6 +9,7 @@ import '../../../../core/theme/app_styles.dart';
 import '../../../../core/utils/formatter.dart';
 import '../../../controllers/home_controller.dart';
 import '../../../data/model/available_projects_model.dart';
+import '../../../data/model/commencement_model.dart';
 import '../../../data/model/log_in_model.dart';
 import '../../../data/model/order_request_model.dart';
 import '../../../data/model/projetcs_model.dart';
@@ -56,6 +56,11 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    initializeData();
+    tabController = TabController(length: 2, vsync: this);
+  }
+
+  void initializeData() {
     final controller = Get.find<HomeController>();
     var logInDetails = LogInModel.fromJson(jsonDecode(MyPref.logInDetail.val));
     userId = logInDetails.profile!.id!;
@@ -70,7 +75,12 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
         .getData("/projects/dispatched-projects/${logInDetails.profile!.id}");
     getOrderRequests = controller.userRepo.getData('/orders/order-request');
     getCommitmentFee = controller.userRepo.getData('/fees/commitment');
-    tabController = TabController(length: 2, vsync: this);
+  }
+
+  void onApiChange() {
+    setState(() {
+      initializeData();
+    });
   }
 
   List<MyProjects> getProjectsByStatus(
@@ -808,9 +818,10 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
                                                                           child:
                                                                               TextButton(
                                                                             onPressed:
-                                                                                () {
+                                                                                () async {
                                                                               Get.back();
-                                                                              Get.to(() => ServicePartnerProjectDetails(serviceProject: serviceProjects[i]));
+                                                                              await Get.to(() => ServicePartnerProjectDetails(serviceProject: serviceProjects[i]));
+                                                                              onApiChange();
                                                                             },
                                                                             child:
                                                                                 const Text(
@@ -825,6 +836,7 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
                                                                             onPressed:
                                                                                 () {
                                                                               Get.back();
+                                                                              projectUpdateController.text = (serviceProjects[i].servicePartnerProgress ?? 0).toString();
                                                                               AppOverlay.showPercentageDialog(
                                                                                   doubleFunction: true,
                                                                                   controller: projectUpdateController,
@@ -840,12 +852,8 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
                                                                                     });
                                                                                     if (response.isSuccessful) {
                                                                                       Get.back();
-                                                                                      setState(() {});
-                                                                                      Get.snackbar(
-                                                                                        'Success',
-                                                                                        'Project Status updated successfully',
-                                                                                        backgroundColor: Colors.green,
-                                                                                      );
+                                                                                      onApiChange();
+                                                                                      Get.snackbar('Success', 'Project Status updated successfully', backgroundColor: Colors.green, colorText: AppColors.background);
                                                                                       projectUpdateController.text = '';
                                                                                     } else {
                                                                                       Get.snackbar('Error', response.message ?? 'An error occurred', backgroundColor: Colors.red, colorText: AppColors.background);

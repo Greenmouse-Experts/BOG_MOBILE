@@ -1,5 +1,3 @@
-import 'package:bog/app/global_widgets/bottom_widget.dart';
-import 'package:bog/app/global_widgets/new_app_bar.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -10,6 +8,8 @@ import '../../../core/theme/app_styles.dart';
 import '../../controllers/home_controller.dart';
 import '../../data/model/notifications_model.dart';
 import '../../global_widgets/app_base_view.dart';
+import '../../global_widgets/bottom_widget.dart';
+import '../../global_widgets/new_app_bar.dart';
 
 class NotificationPage extends GetView<HomeController> {
   final List<NotificationsModel> notifications;
@@ -22,7 +22,8 @@ class NotificationPage extends GetView<HomeController> {
     var width = Get.width;
     final Size size = MediaQuery.of(context).size;
     double multiplier = 25 * size.height * 0.01;
-
+    
+    
     return AppBaseView(
       child: GetBuilder<HomeController>(
           id: 'Notification',

@@ -39,13 +39,22 @@ class _ServicePartnerProjectDetailsState
 
   @override
   void initState() {
-    final controller = Get.find<HomeController>();
+    super.initState();
+    initializeData();
+  }
 
+  void initializeData() {
+    final controller = Get.find<HomeController>();
     getServiceProjectDetails = controller.userRepo
         .getData('/projects/v2/view-project/${widget.serviceProject.id}');
     getNotifications = controller.userRepo
         .getData('/projects/notification/${widget.serviceProject.id}/view');
-    super.initState();
+  }
+
+  void onApiChange() {
+    setState(() {
+      initializeData();
+    });
   }
 
   @override
@@ -249,13 +258,13 @@ class _ServicePartnerProjectDetailsState
                                                       });
                                                   if (response.isSuccessful) {
                                                     Get.back();
-                                                    setState(() {});
-                                                    Get.snackbar(
-                                                      'Success',
-                                                      'Project Status updated successfully',
-                                                      backgroundColor:
-                                                          Colors.green,
-                                                    );
+                                                    onApiChange();
+                                                    Get.snackbar('Success',
+                                                        'Project Status updated successfully',
+                                                        backgroundColor:
+                                                            Colors.green,
+                                                        colorText: AppColors
+                                                            .background);
                                                     projectUpdateController
                                                         .text = '';
                                                   } else {

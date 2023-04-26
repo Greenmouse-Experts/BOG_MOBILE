@@ -16,7 +16,6 @@ import '../../data/providers/api_response.dart';
 import '../../data/providers/my_pref.dart';
 import '../../global_widgets/app_avatar.dart';
 import '../../global_widgets/app_base_view.dart';
-import '../../global_widgets/app_button.dart';
 import '../../global_widgets/app_input.dart';
 import '../../global_widgets/app_loader.dart';
 import '../../global_widgets/bottom_widget.dart';
@@ -331,9 +330,12 @@ class _MeetingsState extends State<Meetings> with TickerProviderStateMixin {
                                       value: 1,
                                       child: SizedBox(
                                         height: 50,
-                                        child: AppButton(
-                                          title: 'Cancel Meeting',
-                                          bckgrndColor: Colors.red,
+                                        child: TextButton(
+                                          child: Text(
+                                            'Cancel Meeting',
+                                            style: AppTextStyle.bodyText2
+                                                .copyWith(color: Colors.red),
+                                          ),
                                           onPressed: () {
                                             Get.back();
                                             AppOverlay.showInfoDialog(
@@ -532,7 +534,6 @@ class _NewMeetingsState extends State<NewMeetings>
                   meetingsWidget(getMeetings, getMyRequests),
                 ],
               ),
-            
               bottomNavigationBar: HomeBottomWidget(
                   isHome: false, controller: controller, doubleNavigate: false),
             );
@@ -721,9 +722,12 @@ class _NewMeetingsState extends State<NewMeetings>
                                       value: 1,
                                       child: SizedBox(
                                         height: 50,
-                                        child: AppButton(
-                                          title: 'Cancel Meeting',
-                                          bckgrndColor: Colors.red,
+                                        child: TextButton(
+                                        child: Text(
+                                            'Cancel Meeting',
+                                            style: AppTextStyle.bodyText2
+                                                .copyWith(color: Colors.red),
+                                          ),
                                           onPressed: () {
                                             Get.back();
                                             AppOverlay.showInfoDialog(

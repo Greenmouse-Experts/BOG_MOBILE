@@ -1,8 +1,6 @@
-import 'package:bog/app/global_widgets/bottom_widget.dart';
 import 'package:feather_icons/feather_icons.dart';
 import 'package:flutter/material.dart';
-
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 
 import '../../../core/theme/app_colors.dart';
@@ -13,13 +11,28 @@ import '../../data/model/my_products.dart';
 import '../../global_widgets/app_base_view.dart';
 import '../../global_widgets/app_button.dart';
 
-import '../../global_widgets/app_ratings.dart';
+import '../../global_widgets/bottom_widget.dart';
 import '../../global_widgets/item_counter.dart';
+import '../../global_widgets/new_app_bar.dart';
 
-class ProductDetails extends GetView<HomeController> {
+class ProductDetails extends StatefulWidget {
   const ProductDetails({Key? key}) : super(key: key);
 
   static const route = '/productDetails';
+
+  @override
+  State<ProductDetails> createState() => _ProductDetailsState();
+}
+
+class _ProductDetailsState extends State<ProductDetails>
+    with TickerProviderStateMixin {
+  late TabController tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    tabController = TabController(length: 2, vsync: this);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,76 +47,27 @@ class ProductDetails extends GetView<HomeController> {
             .quantity
         : 1;
 
+    final productReviews = product.review;
+
+    double sum = 0;
+    var reviewAverage = 5.0;
+    for (var item in productReviews!) {
+      sum += item.star ?? 0;
+    }
+    reviewAverage = productReviews.isEmpty ? 5.0 : sum / productReviews.length;
+
     return AppBaseView(
       child: GetBuilder<HomeController>(
           id: 'productDetails',
           builder: (controller) {
             return Scaffold(
-              body: SizedBox(
-                width: Get.width,
-                child: SingleChildScrollView(
+              appBar: newAppBarBack(context, 'Product Details'),
+              body: SingleChildScrollView(
+                child: SizedBox(
+                  width: Get.width,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      Padding(
-                        padding: EdgeInsets.only(
-                            right: width * 0.05,
-                            left: width * 0.03,
-                            top: kToolbarHeight),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                Get.back();
-                              },
-                              child: SvgPicture.asset(
-                                "assets/images/back.svg",
-                                height: width * 0.045,
-                                width: width * 0.045,
-                                color: Colors.black,
-                              ),
-                            ),
-                            SizedBox(
-                              width: width * 0.04,
-                            ),
-                            Expanded(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    "Product Details",
-                                    style: AppTextStyle.subtitle1.copyWith(
-                                        fontSize: multiplier * 0.07,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w500),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(
-                              width: width * 0.04,
-                            ),
-                            InkWell(
-                              onTap: () {
-                                Navigator.pop(context);
-                              },
-                              child: SvgPicture.asset(
-                                "assets/images/upload_up.svg",
-                                height: width * 0.045,
-                                width: width * 0.045,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: width * 0.08,
-                      ),
                       Padding(
                         padding: EdgeInsets.only(
                             left: Get.width * 0.03, right: Get.width * 0.03),
@@ -184,10 +148,14 @@ class ProductDetails extends GetView<HomeController> {
                                             color: Colors.black,
                                             fontWeight: FontWeight.w500)),
                                   ),
-                                  AppRating(
-                                      onRatingUpdate: (value) {},
-                                      rating: 4,
-                                      size: 25),
+                                  RatingBarIndicator(
+                                      rating: reviewAverage,
+                                      itemBuilder: (context, _) {
+                                        return const Icon(
+                                          Icons.star,
+                                          color: Colors.amber,
+                                        );
+                                      }),
                                   Padding(
                                     padding: EdgeInsets.only(
                                         left: Get.width * 0.015,
@@ -209,7 +177,6 @@ class ProductDetails extends GetView<HomeController> {
                               mainAxisAlignment: MainAxisAlignment.end,
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
-                                //Love Button
                                 Container(
                                   height: Get.width * 0.07,
                                   width: Get.width * 0.07,
@@ -270,31 +237,25 @@ class ProductDetails extends GetView<HomeController> {
                       Padding(
                         padding: EdgeInsets.only(
                             left: Get.width * 0.0, right: Get.width * 0.03),
-                        child: const DefaultTabController(
-                          length: 3,
-                          child: TabBar(
-                            padding: EdgeInsets.zero,
-                            labelColor: Colors.black,
-                            unselectedLabelColor: Color(0xff9A9A9A),
-                            indicatorColor: AppColors.primary,
-                            indicatorSize: TabBarIndicatorSize.label,
-                            labelPadding: EdgeInsets.zero,
-                            indicatorPadding: EdgeInsets.zero,
-                            tabs: [
-                              Tab(
-                                text: 'Description',
-                                iconMargin: EdgeInsets.zero,
-                              ),
-                              Tab(
-                                text: 'Specification',
-                                iconMargin: EdgeInsets.zero,
-                              ),
-                              Tab(
-                                text: 'Reviews',
-                                iconMargin: EdgeInsets.zero,
-                              ),
-                            ],
-                          ),
+                        child: TabBar(
+                          controller: tabController,
+                          padding: EdgeInsets.zero,
+                          labelColor: Colors.black,
+                          unselectedLabelColor: const Color(0xff9A9A9A),
+                          indicatorColor: AppColors.primary,
+                          indicatorSize: TabBarIndicatorSize.label,
+                          labelPadding: EdgeInsets.zero,
+                          indicatorPadding: EdgeInsets.zero,
+                          tabs: const [
+                            Tab(
+                              text: 'Description',
+                              iconMargin: EdgeInsets.zero,
+                            ),
+                            Tab(
+                              text: 'Reviews',
+                              iconMargin: EdgeInsets.zero,
+                            ),
+                          ],
                         ),
                       ),
                       Padding(
@@ -307,22 +268,111 @@ class ProductDetails extends GetView<HomeController> {
                         ),
                       ),
                       SizedBox(
-                        height: Get.height * 0.03,
+                        height: Get.height * 0.01,
                       ),
                       Padding(
                         padding: EdgeInsets.only(
                             left: Get.width * 0.03, right: Get.width * 0.03),
-                        child: Text(
-                          product.description.toString(),
-                          style: AppTextStyle.subtitle1.copyWith(
-                            fontSize: multiplier * 0.075,
-                            color: Colors.black.withOpacity(0.5),
-                            fontWeight: FontWeight.w300,
+                        child: SizedBox(
+                          height: Get.height * 0.21,
+                          width: Get.width,
+                          child: TabBarView(
+                            controller: tabController,
+                            children: [
+                              SingleChildScrollView(
+                                physics: const BouncingScrollPhysics(),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      product.description.toString(),
+                                      style: AppTextStyle.subtitle1.copyWith(
+                                        fontSize: multiplier * 0.075,
+                                        color: Colors.black.withOpacity(0.5),
+                                        fontWeight: FontWeight.w300,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              productReviews.isEmpty
+                                  ? const Center(
+                                      child: Text(
+                                          'No Reviews Yet, Buy this Product to make a review'))
+                                  : Column(
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Text(
+                                                'Reviews (${productReviews.length})'),
+                                            const Spacer(),
+                                            const Icon(Icons.star,
+                                                color: Colors.amber),
+                                            Text(reviewAverage.toString())
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: Get.height * 0.18,
+                                          child: ListView.builder(
+                                              physics:
+                                                  const BouncingScrollPhysics(),
+                                              itemCount: productReviews.length,
+                                              itemBuilder: (ctx, i) {
+                                                final review =
+                                                    productReviews[i];
+                                                return ListTile(
+                                                  contentPadding:
+                                                      EdgeInsets.zero,
+                                                  title: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Text(
+                                                        'User: Anonymous',
+                                                        style: AppTextStyle
+                                                            .bodyText2
+                                                            .copyWith(
+                                                                color: Colors
+                                                                    .black),
+                                                      ),
+                                                      RatingBarIndicator(
+                                                          itemSize:
+                                                              Get.width * 0.05,
+                                                          rating:
+                                                              (review.star ?? 0)
+                                                                  .toDouble(),
+                                                          itemBuilder:
+                                                              (context, _) {
+                                                            return Icon(
+                                                              Icons.star,
+                                                              size: Get.width *
+                                                                  0.02,
+                                                              color:
+                                                                  Colors.amber,
+                                                            );
+                                                          })
+                                                    ],
+                                                  ),
+                                                  subtitle: Text(
+                                                    review.review ?? '',
+                                                    style: AppTextStyle
+                                                        .bodyText2
+                                                        .copyWith(
+                                                            color:
+                                                                Colors.black),
+                                                  ),
+                                                );
+                                              }),
+                                        ),
+                                      ],
+                                    )
+                            ],
                           ),
                         ),
                       ),
                       SizedBox(
-                        height: Get.height * 0.03,
+                        height: Get.height * 0.01,
                       ),
                       GetBuilder<HomeController>(builder: (controller) {
                         return Padding(
@@ -366,3 +416,47 @@ class ProductDetails extends GetView<HomeController> {
     );
   }
 }
+
+
+//  FutureBuilder<ApiResponse>(
+//                   future: controller.userRepo.getData(
+//                       '/review/product/get-review?productId=${product.id}'),
+//                   builder: (context, snapshot) {
+//                     if (snapshot.connectionState == ConnectionState.waiting) {
+//                       return const AppLoader();
+//                     } else {
+//                       if (snapshot.hasError) {
+//                         return Column(
+//                           mainAxisAlignment: MainAxisAlignment.center,
+//                           children: [
+//                             Center(
+//                               child: Text(snapshot.error.toString()),
+//                             ),
+//                           ],
+//                         );
+//                       } else {
+//                         final response = snapshot.data!.data as List<dynamic>;
+
+//                         final productReviews = <ProductReviewModel>[];
+
+//                         for (var element in response) {
+//                           productReviews
+//                               .add(ProductReviewModel.fromJson(element));
+//                         }
+
+//                         double sum = 0;
+//                         var reviewAverage = 0.0;
+//                         for (var item in productReviews) {
+//                           sum += item.star ?? 0;
+//                         }
+//                         reviewAverage = productReviews.isEmpty
+//                             ? 0
+//                             : sum / productReviews.length;
+
+                     
+//                       }
+//                     }
+//                   }),
+
+
+   

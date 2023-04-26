@@ -8,6 +8,7 @@ import 'package:bog/app/global_widgets/app_loader.dart';
 import 'package:bog/app/global_widgets/custom_app_bar.dart';
 import 'package:bog/app/global_widgets/app_radio_button.dart';
 import 'package:bog/app/global_widgets/global_widgets.dart';
+import 'package:bog/core/theme/app_colors.dart';
 
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +22,8 @@ import '../../data/providers/my_pref.dart';
 class UpdateGeneralInfo extends StatefulWidget {
   final Map<String, dynamic> kycScore;
   final Map<String, dynamic> kycTotal;
-  const UpdateGeneralInfo({super.key, required this.kycScore, required this.kycTotal});
+  const UpdateGeneralInfo(
+      {super.key, required this.kycScore, required this.kycTotal});
 
   @override
   State<UpdateGeneralInfo> createState() => _UpdateGeneralInfoState();
@@ -97,9 +99,7 @@ class _UpdateGeneralInfoState extends State<UpdateGeneralInfo> {
                               const SizedBox(height: 10),
                               AppRadioButton(
                                 onchanged: (value) {
-
                                   newRegType = value;
-                                 
                                 },
                                 option1: 'Incorporation',
                                 options: options,
@@ -177,23 +177,24 @@ class _UpdateGeneralInfoState extends State<UpdateGeneralInfo> {
                                     final updateAccount = await controller
                                         .userRepo
                                         .patchData('/user/update-account', {
-                                    "kycScore": jsonEncode(kycScore),
-                                    "kycTotal": jsonEncode(widget.kycTotal)
-                                  });
+                                      "kycScore": jsonEncode(kycScore),
+                                      "kycTotal": jsonEncode(widget.kycTotal)
+                                    });
                                     final res = await controller.userRepo
                                         .postData('/kyc-general-info/create',
                                             newGeneralInfo);
                                     if (res.isSuccessful &&
                                         updateAccount.isSuccessful) {
-                                          MyPref.setOverlay.val = false;
+                                      MyPref.setOverlay.val = false;
                                       AppOverlay.successOverlay(
                                           message:
                                               'General Info Updated Successfully');
                                     } else {
-                                      Get.showSnackbar(const GetSnackBar(
-                                        message: 'Error occured',
-                                        backgroundColor: Colors.red,
-                                      ));
+                                      Get.snackbar('Error',
+                                          res.message ?? 'Error Occured',
+                                          colorText:
+                                              AppColors.backgroundVariant1,
+                                          backgroundColor: Colors.red);
                                     }
                                   }
                                 },
@@ -313,8 +314,7 @@ class _UpdateGeneralInfoState extends State<UpdateGeneralInfo> {
                                   kycScore['generalInfo'] = 7;
 
                                   final controller = Get.find<HomeController>();
-                                
-                            
+
                                   final updateAccount = await controller
                                       .userRepo
                                       .patchData('/user/update-account', {
@@ -331,10 +331,10 @@ class _UpdateGeneralInfoState extends State<UpdateGeneralInfo> {
                                         message:
                                             'General Info Updated Successfully');
                                   } else {
-                                    Get.showSnackbar(const GetSnackBar(
-                                      message: 'Error occured',
-                                      backgroundColor: Colors.red,
-                                    ));
+                                    Get.snackbar(
+                                        'Error', res.message ?? 'Error Occured',
+                                        colorText: AppColors.backgroundVariant1,
+                                        backgroundColor: Colors.red);
                                   }
                                 }
                               },

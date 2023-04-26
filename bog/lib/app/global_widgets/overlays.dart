@@ -50,6 +50,18 @@ File? pickedFile;
 
 var dioSend = dio.Dio();
 
+getCloseButton({VoidCallback? onpressed}) {
+  return Container(
+    alignment: Alignment.topRight,
+    child: GestureDetector(
+        onTap: onpressed ?? Get.back,
+        child: const Icon(
+          Icons.clear,
+          color: Colors.red,
+        )),
+  );
+}
+
 class AppOverlay {
   static Future<void> loadingOverlay({
     required Future<dynamic> Function() asyncFunction,
@@ -193,6 +205,7 @@ class AppOverlay {
                 ),
                 child: Column(
                   children: [
+                    getCloseButton(),
                     Text(
                       title,
                       textAlign: TextAlign.center,
@@ -280,6 +293,7 @@ class AppOverlay {
                 ),
                 child: Column(
                   children: [
+                    getCloseButton(),
                     Text(
                       'Meeting Details',
                       textAlign: TextAlign.center,
@@ -371,6 +385,13 @@ class AppOverlay {
                           child: ListView(
                             controller: scrollController,
                             children: [
+                              getCloseButton(onpressed: () {
+                                chosenInterest = '';
+                                reasonOfInterest = '';
+                                bestPriceController.clear();
+                                timeLineController.clear();
+                                Get.back();
+                              }),
                               SizedBox(
                                 child: Text(
                                   'Project Interest Form',
@@ -561,6 +582,13 @@ class AppOverlay {
                         child: ListView(
                           controller: scrollController,
                           children: [
+                            getCloseButton(onpressed: () {
+                              selectedDate = '';
+                              selectedMeeting = '';
+                              selectedTime = '';
+                              description.clear();
+                              Get.back();
+                            }),
                             Text(
                               'Request Meeting',
                               textAlign: TextAlign.center,
@@ -726,6 +754,12 @@ class AppOverlay {
                   ),
                   child: Column(
                     children: [
+                      getCloseButton(onpressed: () {
+                        updateMessageController.clear();
+                        fileController.clear();
+                        pickedFile = null;
+                        Get.back();
+                      }),
                       Text(
                         'Project Progress Update',
                         textAlign: TextAlign.center,
@@ -876,6 +910,7 @@ class AppOverlay {
                 ),
                 child: Column(
                   children: [
+                    getCloseButton(),
                     Text(
                       title,
                       textAlign: TextAlign.center,
@@ -969,6 +1004,7 @@ class AppOverlay {
                 ),
                 child: Column(
                   children: [
+                    getCloseButton(),
                     Text(
                       title,
                       textAlign: TextAlign.center,

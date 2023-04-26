@@ -2,7 +2,6 @@ import 'package:bog/app/global_widgets/new_app_bar.dart';
 import 'package:feather_icons/feather_icons.dart';
 import 'package:flutter/material.dart';
 
-
 import 'package:get/get.dart';
 
 import '../../../../core/theme/app_colors.dart';
@@ -52,7 +51,12 @@ class _MyOrderScreenState extends State<MyOrderScreen>
 
   void initializeData() {
     final controller = Get.find<HomeController>();
-    getOrders = controller.userRepo.getData("/orders/my-orders");
+    // final userType = controller.currentType == 'Client'
+    //     ? 'private_client'
+    //     : 'corporate_client';
+        //?userType=$userType
+    getOrders =
+        controller.userRepo.getData("/orders/my-orders");
   }
 
   void onApiChange() {
@@ -64,8 +68,6 @@ class _MyOrderScreenState extends State<MyOrderScreen>
   @override
   Widget build(BuildContext context) {
     var width = Get.width;
-  
-   
 
     List<order.MyOrderItem> getAllOrderItems(List<order.MyOrdersModel> orders) {
       return orders.expand((order) => order.orderItems).toList();
@@ -76,7 +78,7 @@ class _MyOrderScreenState extends State<MyOrderScreen>
           id: 'MyOrderScreen',
           builder: (controller) {
             return Scaffold(
-              appBar: newAppBarBack(context, 'My Orders'),
+                appBar: newAppBarBack(context, 'My Orders'),
                 backgroundColor: AppColors.backgroundVariant2,
                 body: SafeArea(
                   child: SizedBox(
@@ -134,13 +136,15 @@ class _MyOrderScreenState extends State<MyOrderScreen>
                                   if (snapshot.hasData) {
                                     final res =
                                         snapshot.data!.data as List<dynamic>;
-                
-                                    final myOrdersData = <order.MyOrdersModel>[];
+
+                                    final myOrdersData =
+                                        <order.MyOrdersModel>[];
                                     for (var element in res) {
                                       myOrdersData.add(
-                                          order.MyOrdersModel.fromJson(element));
+                                          order.MyOrdersModel.fromJson(
+                                              element));
                                     }
-                
+
                                     final pendingOrders = myOrdersData
                                         .where((element) =>
                                             element.status == 'pending')
@@ -159,22 +163,22 @@ class _MyOrderScreenState extends State<MyOrderScreen>
                                         .toList();
                                     List<order.MyOrderItem> pendingItems =
                                         getAllOrderItems(pendingOrders);
-                
+
                                     List<order.MyOrderItem> approvedItems =
                                         getAllOrderItems(approvedOrders);
-                
+
                                     if (searchPending.isNotEmpty) {
                                       pendingItems = {
-                                        ...pendingItems.where((element) => element
-                                            .product!.name
-                                            .toLowerCase()
-                                            .contains(
-                                                searchPending.toLowerCase())),
-                                        ...pendingItems.where((element) => element
-                                            .orderId!
-                                            .toLowerCase()
-                                            .contains(
-                                                searchPending.toLowerCase()))
+                                        ...pendingItems.where((element) =>
+                                            element.product!.name
+                                                .toLowerCase()
+                                                .contains(searchPending
+                                                    .toLowerCase())),
+                                        ...pendingItems.where((element) =>
+                                            element.orderId!
+                                                .toLowerCase()
+                                                .contains(searchPending
+                                                    .toLowerCase()))
                                       }.toList();
                                     }
                                     List<order.MyOrderItem> completedItems =
@@ -182,12 +186,14 @@ class _MyOrderScreenState extends State<MyOrderScreen>
                                     if (searchCompleted.isNotEmpty) {
                                       completedItems = {
                                         ...completedItems.where((element) =>
-                                            element.product!.name
+                                            element
+                                                .product!.name
                                                 .toLowerCase()
                                                 .contains(searchCompleted
                                                     .toLowerCase())),
                                         ...completedItems.where((element) =>
-                                            element.orderId!
+                                            element
+                                                .orderId!
                                                 .toLowerCase()
                                                 .contains(searchCompleted
                                                     .toLowerCase()))
@@ -198,18 +204,20 @@ class _MyOrderScreenState extends State<MyOrderScreen>
                                     if (searchCancelled.isNotEmpty) {
                                       cancelledItems = {
                                         ...cancelledItems.where((element) =>
-                                            element.product!.name
+                                            element
+                                                .product!.name
                                                 .toLowerCase()
                                                 .contains(searchCancelled
                                                     .toLowerCase())),
                                         ...cancelledItems.where((element) =>
-                                            element.orderId!
+                                            element
+                                                .orderId!
                                                 .toLowerCase()
                                                 .contains(searchCancelled
                                                     .toLowerCase()))
                                       }.toList();
                                     }
-                
+
                                     return SizedBox(
                                       height: Get.height * 0.72,
                                       child: TabBarView(
@@ -239,7 +247,8 @@ class _MyOrderScreenState extends State<MyOrderScreen>
                                                       size: Get.width * 0.05,
                                                     ),
                                                     onChanged: (val) {
-                                                      if (searchPending != val) {
+                                                      if (searchPending !=
+                                                          val) {
                                                         setState(() {
                                                           searchPending = val;
                                                         });
@@ -304,7 +313,8 @@ class _MyOrderScreenState extends State<MyOrderScreen>
                                                 ),
                                                 SizedBox(
                                                     height: Get.height * 0.66,
-                                                    child: completedItems.isEmpty
+                                                    child: completedItems
+                                                            .isEmpty
                                                         ? const Center(
                                                             child: Text(
                                                                 'No Completed Orders'),
@@ -356,13 +366,15 @@ class _MyOrderScreenState extends State<MyOrderScreen>
                                                 ),
                                                 SizedBox(
                                                     height: Get.height * 0.66,
-                                                    child: cancelledItems.isEmpty
+                                                    child: cancelledItems
+                                                            .isEmpty
                                                         ? const Center(
                                                             child: Text(
                                                                 'No cancelled Orders'),
                                                           )
                                                         : MyOrderWidgetList(
-                                                          orders :cancelledOrders,
+                                                            orders:
+                                                                cancelledOrders,
                                                             cancelOrder: () {
                                                               onApiChange();
                                                             },
@@ -379,7 +391,8 @@ class _MyOrderScreenState extends State<MyOrderScreen>
                                     );
                                   } else {
                                     return Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: const [
                                         Center(
                                           child: Text('An error occurred'),
@@ -422,16 +435,16 @@ class _MyOrderScreenState extends State<MyOrderScreen>
                                           child: SizedBox(
                                               height: Get.height * 0.68,
                                               child: const Center(
-                                                child: Text(
-                                                    'No Completed Orders'),
+                                                child:
+                                                    Text('No Completed Orders'),
                                               )),
                                         ),
                                         SingleChildScrollView(
                                           child: SizedBox(
                                               height: Get.height * 0.68,
                                               child: const Center(
-                                                child: Text(
-                                                    'No cancelled Orders'),
+                                                child:
+                                                    Text('No cancelled Orders'),
                                               )),
                                         ),
                                       ],

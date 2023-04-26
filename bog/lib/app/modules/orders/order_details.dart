@@ -31,10 +31,20 @@ class _OrderDetailsState extends State<OrderDetails> {
   TextEditingController reviewController = TextEditingController();
   @override
   void initState() {
+    super.initState();
+    initializeData();
+  }
+
+  void initializeData() {
     final controller = Get.find<HomeController>();
     orderFuture =
         controller.userRepo.getData('/orders/order-detail/${widget.id}');
-    super.initState();
+  }
+
+  void onApiChange() {
+    setState(() {
+      initializeData();
+    });
   }
 
   @override
@@ -163,84 +173,104 @@ class _OrderDetailsState extends State<OrderDetails> {
                                         ],
                                       ),
                                     ),
-                                    const SizedBox(height: 5),
-                                    orderDetail.orderReview!.isNotEmpty
-                                        ? const Center()
-                                        : Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              PageInput(
-                                                  hint: 'Leave review',
-                                                  label: 'Review Order',
-                                                  isTextArea: true,
-                                                  controller: reviewController),
-                                              Text(
-                                                'Leave a rating',
-                                                style: AppTextStyle.bodyText2
-                                                    .copyWith(
-                                                        color: Colors.black),
+                                    orderDetail.status != 'completed'
+                                        ? const SizedBox.shrink()
+                                        : orderDetail.orderReview!.isNotEmpty
+                                            ? MyReview(
+                                                orderRating: (orderDetail
+                                                            .orderReview![0]
+                                                            .star ??
+                                                        0)
+                                                    .toDouble(),
+                                                myReview: orderDetail
+                                                        .orderReview![0]
+                                                        .review ??
+                                                    '')
+                                            : Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  const SizedBox(height: 5),
+                                                  PageInput(
+                                                      hint: 'Leave review',
+                                                      label: 'Review Order',
+                                                      isTextArea: true,
+                                                      controller:
+                                                          reviewController),
+                                                  Text(
+                                                    'Leave a rating',
+                                                    style: AppTextStyle
+                                                        .bodyText2
+                                                        .copyWith(
+                                                            color:
+                                                                Colors.black),
+                                                  ),
+                                                  RatingBar.builder(
+                                                    itemBuilder: (context, _) =>
+                                                        const Icon(
+                                                      Icons.star,
+                                                      color: Colors.amber,
+                                                    ),
+                                                    onRatingUpdate: (rating) {
+                                                      orderRating =
+                                                          rating.toInt();
+                                                    },
+                                                  ),
+                                                  SizedBox(
+                                                      height:
+                                                          Get.height * 0.02),
+                                                  AppButton(
+                                                    title: 'Submit Review',
+                                                    onPressed: () async {
+                                                      if (reviewController
+                                                              .text.isEmpty ||
+                                                          orderRating == 0) {
+                                                        Get.snackbar(
+                                                            'Complete Fields',
+                                                            'You need to fill all fields before giving a review',
+                                                            colorText: AppColors
+                                                                .backgroundVariant1,
+                                                            backgroundColor:
+                                                                Colors.red);
+                                                        return;
+                                                      }
+                                                      final response =
+                                                          await controller
+                                                              .userRepo
+                                                              .postData(
+                                                                  '/review/product/create-review',
+                                                                  {
+                                                            "star": orderRating,
+                                                            "review":
+                                                                reviewController
+                                                                    .text,
+                                                            "orderId": widget.id
+                                                          });
+                                                      if (response
+                                                          .isSuccessful) {
+                                                        AppOverlay
+                                                            .successOverlay(
+                                                          message:
+                                                              'Order Reviewed Successfully',
+                                                          onPressed: () {
+                                                            Get.back();
+                                                            onApiChange();
+                                                          },
+                                                        );
+                                                      } else {
+                                                        Get.snackbar(
+                                                            'Error',
+                                                            response.message ??
+                                                                'An error occurred',
+                                                            colorText: AppColors
+                                                                .backgroundVariant1,
+                                                            backgroundColor:
+                                                                Colors.red);
+                                                      }
+                                                    },
+                                                  )
+                                                ],
                                               ),
-                                              RatingBar.builder(
-                                                itemBuilder: (context, _) =>
-                                                    const Icon(
-                                                  Icons.star,
-                                                  color: Colors.amber,
-                                                ),
-                                                onRatingUpdate: (rating) {
-                                                  orderRating = rating.toInt();
-                                                },
-                                              ),
-                                              SizedBox(
-                                                  height: Get.height * 0.02),
-                                              AppButton(
-                                                title: 'Submit Review',
-                                                onPressed: () async {
-                                                  if (reviewController
-                                                          .text.isEmpty ||
-                                                      orderRating == 0) {
-                                                    Get.snackbar(
-                                                        'Complete Fields',
-                                                        'You need to fill all fields before giving a review',
-                                                        colorText: AppColors
-                                                            .backgroundVariant1,
-                                                        backgroundColor:
-                                                            Colors.red);
-                                                    return;
-                                                  }
-                                                  final response = await controller
-                                                      .userRepo
-                                                      .postData(
-                                                          '/review/product/create-review',
-                                                          {
-                                                        "star": orderRating,
-                                                        "review":
-                                                            reviewController
-                                                                .text,
-                                                        "orderId": widget.id
-                                                      });
-                                                  if (response.isSuccessful) {
-                                                    AppOverlay.successOverlay(
-                                                      message:
-                                                          'Order Reviewed Successfully',
-                                                      onPressed: () {
-                                                        Get.back();
-                                                      },
-                                                    );
-                                                  } else {
-                                                    Get.snackbar(
-                                                        'Error',
-                                                        response.message ??
-                                                            'An error occurred',
-                                                        colorText: AppColors
-                                                            .backgroundVariant1,
-                                                        backgroundColor:
-                                                            Colors.red);
-                                                  }
-                                                },
-                                              )
-                                            ],
-                                          ),
                                   ],
                                 ),
                               );
@@ -288,10 +318,41 @@ class _OrderReviewState extends State<OrderReview> {
 }
 
 class MyReview extends StatelessWidget {
-  const MyReview({super.key});
+  final double orderRating;
+  final String myReview;
+  const MyReview(
+      {super.key, required this.orderRating, required this.myReview});
 
   @override
   Widget build(BuildContext context) {
-    return Column();
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(height: 5),
+        Text(
+          'My Review',
+          style: AppTextStyle.bodyText2.copyWith(
+            fontWeight: FontWeight.w700,
+            color: Colors.black,
+          ),
+        ),
+        SizedBox(height: Get.height * 0.01),
+        Text(
+          myReview,
+          style: AppTextStyle.bodyText2.copyWith(
+            fontWeight: FontWeight.w500,
+            color: Colors.black,
+          ),
+        ),
+        SizedBox(height: Get.height * 0.01),
+        RatingBarIndicator(
+          itemBuilder: (context, _) => const Icon(
+            Icons.star,
+            color: Colors.amber,
+          ),
+          rating: orderRating,
+        ),
+      ],
+    );
   }
 }

@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:get/get.dart';
 
+import '../../../core/theme/theme.dart';
 import '../../controllers/home_controller.dart';
 import '../../data/model/tax_data_model.dart';
 import '../../data/providers/api_response.dart';
@@ -17,7 +18,8 @@ import '../../global_widgets/app_loader.dart';
 class UpdateTaxDetails extends StatefulWidget {
   final Map<String, dynamic> kycScore;
   final Map<String, dynamic> kycTotal;
-  const UpdateTaxDetails({super.key, required this.kycScore, required this.kycTotal});
+  const UpdateTaxDetails(
+      {super.key, required this.kycScore, required this.kycTotal});
 
   @override
   State<UpdateTaxDetails> createState() => _UpdateTaxDetailsState();
@@ -55,16 +57,14 @@ class _UpdateTaxDetailsState extends State<UpdateTaxDetails> {
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.done &&
                     snapshot.data!.isSuccessful) {
-                      if (snapshot.data!.data != null){
+                  if (snapshot.data!.data != null) {
+                    final response = snapshot.data!.data;
+                    final taxData = TaxDataModel.fromJson(response);
 
-                      
-                  final response = snapshot.data!.data;
-                  final taxData = TaxDataModel.fromJson(response);
-
-                  vatRegNum.text = taxData.vat ?? '';
-                  taxIdNum.text = taxData.tin ?? '';
-                  professionalBodies.text = taxData.relevantStatutory ?? '';
-                      }
+                    vatRegNum.text = taxData.vat ?? '';
+                    taxIdNum.text = taxData.tin ?? '';
+                    professionalBodies.text = taxData.relevantStatutory ?? '';
+                  }
                   return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: Form(
@@ -76,7 +76,9 @@ class _UpdateTaxDetailsState extends State<UpdateTaxDetails> {
                             label: 'VAT Registration Number',
                             keyboardType: TextInputType.number,
                             controller: vatRegNum,
-                            validator: MinLengthValidator(1, errorText: 'Enter a valid registration numbers'),
+                            validator: MinLengthValidator(1,
+                                errorText:
+                                    'Enter a valid registration numbers'),
                           ),
                           const SizedBox(height: 8),
                           PageInput(
@@ -84,7 +86,8 @@ class _UpdateTaxDetailsState extends State<UpdateTaxDetails> {
                             label: 'TAX Identification Number',
                             keyboardType: TextInputType.number,
                             controller: taxIdNum,
-                            validator: MinLengthValidator(1, errorText: 'Enter a valid TIN Number'),
+                            validator: MinLengthValidator(1,
+                                errorText: 'Enter a valid TIN Number'),
                           ),
                           const SizedBox(height: 8),
                           PageInput(
@@ -97,39 +100,38 @@ class _UpdateTaxDetailsState extends State<UpdateTaxDetails> {
                           const SizedBox(height: 15),
                           AppButton(
                             title: 'Submit',
-                            onPressed: ()async {
-                               if (_formKey.currentState!.validate()) {
+                            onPressed: () async {
+                              if (_formKey.currentState!.validate()) {
                                 final newTaxDetails = {
                                   "VAT": vatRegNum.text,
-                                  "TIN" : taxIdNum.text,
-                                  "relevant_statutory" : professionalBodies.text,
+                                  "TIN": taxIdNum.text,
+                                  "relevant_statutory": professionalBodies.text,
                                   "userType": userType
                                 };
                                 final kycScore = widget.kycScore;
 
                                 kycScore['taxDetails'] = 3;
-                                 final controller = Get.find<HomeController>();
-                                 final updateAccount = await controller
-                                        .userRepo
-                                        .patchData('/user/update-account', {
-                                    "kycScore": jsonEncode(kycScore),
-                                    "kycTotal": jsonEncode(widget.kycTotal)
-                                  });
-                                final res = await controller.userRepo
-                                      .postData('/kyc-tax-permits/create',
-                                          newTaxDetails);
-                                  if (res.isSuccessful && updateAccount.isSuccessful) {
-                                      MyPref.setOverlay.val = false;
-                                   AppOverlay.successOverlay(
-                                          message:
-                                              'Tax Details Updated Successfully');
-                                  } else {
-                                    Get.showSnackbar(const GetSnackBar(
-                                      message: 'Error occured',
-                                      backgroundColor: Colors.red,
-                                    ));
-                                  }
-                               }
+                                final controller = Get.find<HomeController>();
+                                final updateAccount = await controller.userRepo
+                                    .patchData('/user/update-account', {
+                                  "kycScore": jsonEncode(kycScore),
+                                  "kycTotal": jsonEncode(widget.kycTotal)
+                                });
+                                final res = await controller.userRepo.postData(
+                                    '/kyc-tax-permits/create', newTaxDetails);
+                                if (res.isSuccessful &&
+                                    updateAccount.isSuccessful) {
+                                  MyPref.setOverlay.val = false;
+                                  AppOverlay.successOverlay(
+                                      message:
+                                          'Tax Details Updated Successfully');
+                                } else {
+                                  Get.snackbar(
+                                      'Error', res.message ?? 'Error Occured',
+                                      colorText: AppColors.backgroundVariant1,
+                                      backgroundColor: Colors.red);
+                                }
+                              }
                             },
                           )
                         ],

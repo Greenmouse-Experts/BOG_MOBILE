@@ -62,15 +62,14 @@ class _HomeTabState extends State<HomeTab> {
                 if (snapshot.connectionState == ConnectionState.done) {
                   if (snapshot.data!.isSuccessful) {
                     final response = snapshot.data!.data as List<dynamic>;
-                    final notifications = <NotificationsModel>[];
+                    final notifications = <NotificationsModel>[].obs;
 
                     for (var element in response) {
                       notifications.add(NotificationsModel.fromJson(element));
                     }
-                    final int unreadNotifications = notifications
+                    final unreadNotifications = notifications
                         .where((element) => element.isRead == false)
-                        .toList()
-                        .length;
+                        .toList();
                     return Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -124,26 +123,11 @@ class _HomeTabState extends State<HomeTab> {
                                         ),
                                       ],
                                     ),
-                                    IconButton(
-                                      icon: badges.Badge(
-                                        badgeContent: Text(
-                                          unreadNotifications.toString(),
-                                          style: const TextStyle(
-                                              color: Colors.white),
-                                        ),
-                                        badgeStyle: const badges.BadgeStyle(
-                                            badgeColor: AppColors.primary,
-                                            padding: EdgeInsets.all(5)),
-                                        child: const Icon(
-                                          Icons.notifications,
-                                          color: Colors.grey,
-                                        ),
-                                      ),
-                                      onPressed: () {
-                                        Get.to(() =>
-                                            NotificationPage(notifications));
-                                      },
-                                    )
+                                    NootificationWidget(
+                                        controller: controller,
+                                        unreadNotifications:
+                                            unreadNotifications,
+                                        notifications: notifications)
                                   ],
                                 ),
                               ),
@@ -233,8 +217,8 @@ class _HomeTabState extends State<HomeTab> {
                                             .getData("/products"),
                                         controller.userRepo
                                             .getData('/orders/order-request'),
-                                        controller.userRepo.getData(
-                                            '/user/me?userType=vendor')
+                                        controller.userRepo
+                                            .getData('/user/me?userType=vendor')
                                       ]),
                                       builder: (context, snapshot) {
                                         if (snapshot.connectionState ==
@@ -754,6 +738,52 @@ class _HomeTabState extends State<HomeTab> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class NootificationWidget extends StatefulWidget {
+  final HomeController controller;
+  const NootificationWidget({
+    super.key,
+    required this.unreadNotifications,
+    required this.notifications,
+    required this.controller,
+  });
+
+  final List<NotificationsModel> unreadNotifications;
+  final RxList<NotificationsModel> notifications;
+
+  @override
+  State<NootificationWidget> createState() => _NootificationWidgetState();
+}
+
+class _NootificationWidgetState extends State<NootificationWidget> {
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      icon: badges.Badge(
+        badgeContent: Text(
+          widget.unreadNotifications.length.toString(),
+          style: const TextStyle(color: Colors.white),
+        ),
+        badgeStyle: const badges.BadgeStyle(
+            badgeColor: AppColors.primary, padding: EdgeInsets.all(5)),
+        child: const Icon(
+          Icons.notifications,
+          color: Colors.grey,
+        ),
+      ),
+      onPressed: () async {
+        for (var i in widget.unreadNotifications) {
+          widget.controller.userRepo
+              .patchData('/notifications/mark-read/${i.id}', '');
+        }
+        await Get.to(() => NotificationPage(widget.notifications));
+        setState(() {
+          widget.unreadNotifications.clear();
+        });
+      },
     );
   }
 }

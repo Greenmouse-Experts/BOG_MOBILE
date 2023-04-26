@@ -1,7 +1,3 @@
-// To parse this JSON data, do
-//
-//     final clientProjectModel = clientProjectModelFromJson(jsonString);
-
 import 'dart:convert';
 
 class ClientProjectModel {
@@ -45,7 +41,7 @@ class ClientProjectModel {
   int? estimatedCost;
   int? duration;
   int? progress;
-  dynamic servicePartnerProgress;
+  int? servicePartnerProgress;
   DateTime? endDate;
   DateTime? totalEndDate;
   DateTime? createdAt;
@@ -53,7 +49,7 @@ class ClientProjectModel {
   dynamic deletedAt;
   ServiceProvider? serviceProvider;
   List<ProjectDatum>? projectData;
-  List<dynamic>? reviews;
+  List<Review>? reviews;
   Client? client;
   Transactions? transactions;
 
@@ -99,7 +95,8 @@ class ClientProjectModel {
                 json["projectData"]!.map((x) => ProjectDatum.fromJson(x))),
         reviews: json["reviews"] == null
             ? []
-            : List<dynamic>.from(json["reviews"]!.map((x) => x)),
+            : List<Review>.from(
+                json["reviews"]!.map((x) => Review.fromJson(x))),
         client: json["client"] == null ? null : Client.fromJson(json["client"]),
         transactions: json["transactions"] == null
             ? null
@@ -131,8 +128,9 @@ class ClientProjectModel {
         "projectData": projectData == null
             ? []
             : List<dynamic>.from(projectData!.map((x) => x.toJson())),
-        "reviews":
-            reviews == null ? [] : List<dynamic>.from(reviews!.map((x) => x)),
+        "reviews": reviews == null
+            ? []
+            : List<dynamic>.from(reviews!.map((x) => x.toJson())),
         "client": client?.toJson(),
         "transactions": transactions?.toJson(),
       };
@@ -168,6 +166,7 @@ class Client {
     this.createdAt,
     this.updatedAt,
     this.deletedAt,
+    this.password,
   });
 
   String? id;
@@ -182,7 +181,7 @@ class Client {
   String? city;
   dynamic street;
   int? level;
-  dynamic photo;
+  String? photo;
   String? fname;
   String? lname;
   String? referralId;
@@ -198,6 +197,7 @@ class Client {
   DateTime? createdAt;
   DateTime? updatedAt;
   dynamic deletedAt;
+  String? password;
 
   factory Client.fromRawJson(String str) => Client.fromJson(json.decode(str));
 
@@ -236,6 +236,7 @@ class Client {
             ? null
             : DateTime.parse(json["updatedAt"]),
         deletedAt: json["deletedAt"],
+        password: json["password"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -267,6 +268,7 @@ class Client {
         "createdAt": createdAt?.toIso8601String(),
         "updatedAt": updatedAt?.toIso8601String(),
         "deletedAt": deletedAt,
+        "password": password,
       };
 }
 
@@ -438,6 +440,58 @@ class ServiceForm {
       };
 }
 
+class Review {
+  Review({
+    this.id,
+    this.star,
+    this.review,
+    this.userId,
+    this.projectId,
+    this.createdAt,
+    this.updatedAt,
+    this.client,
+  });
+
+  String? id;
+  int? star;
+  String? review;
+  String? userId;
+  String? projectId;
+  DateTime? createdAt;
+  DateTime? updatedAt;
+  Client? client;
+
+  factory Review.fromRawJson(String str) => Review.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
+  factory Review.fromJson(Map<String, dynamic> json) => Review(
+        id: json["id"],
+        star: json["star"],
+        review: json["review"],
+        userId: json["userId"],
+        projectId: json["projectId"],
+        createdAt: json["createdAt"] == null
+            ? null
+            : DateTime.parse(json["createdAt"]),
+        updatedAt: json["updatedAt"] == null
+            ? null
+            : DateTime.parse(json["updatedAt"]),
+        client: json["client"] == null ? null : Client.fromJson(json["client"]),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "star": star,
+        "review": review,
+        "userId": userId,
+        "projectId": projectId,
+        "createdAt": createdAt?.toIso8601String(),
+        "updatedAt": updatedAt?.toIso8601String(),
+        "client": client?.toJson(),
+      };
+}
+
 class ServiceProvider {
   ServiceProvider({
     this.id,
@@ -583,9 +637,9 @@ class Details {
   String? userType;
   DateTime? createdAt;
   bool? isActive;
-  String? address;
-  String? state;
-  String? city;
+  dynamic address;
+  dynamic state;
+  dynamic city;
   dynamic street;
 
   factory Details.fromRawJson(String str) => Details.fromJson(json.decode(str));

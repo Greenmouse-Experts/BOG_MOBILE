@@ -209,13 +209,25 @@ class _ShopState extends State<Shop> {
                       scrollDirection: Axis.vertical,
                       padding: const EdgeInsets.all(0),
                       itemBuilder: (BuildContext context, int index) {
+                        final prod = posts[index];
+
+                        final productReviews = prod.review;
+
+                        double sum = 0;
+                        var reviewAverage = 5.0;
+                        for (var item in productReviews!) {
+                          sum += item.star ?? 0;
+                        }
+                        reviewAverage = productReviews.isEmpty
+                            ? 5.0
+                            : sum / productReviews.length;
                         return Padding(
                           padding: EdgeInsets.only(
                               left: width * 0.02, right: width * 0.02),
                           child: InkWell(
                             onTap: () {
                               Get.to(
-                                  const ProductDetails(
+                                  () => const ProductDetails(
                                       key: Key('ProductDetails')),
                                   arguments: posts[index]);
                             },
@@ -237,7 +249,7 @@ class _ShopState extends State<Shop> {
                                 children: [
                                   SizedBox(
                                     height: Get.height * 0.12,
-                                   width: Get.width,
+                                    width: Get.width,
                                     child: Padding(
                                       padding: EdgeInsets.only(
                                           top: width * 0.03,
@@ -308,7 +320,6 @@ class _ShopState extends State<Shop> {
                                         right: width * 0.03),
                                     child: Text(
                                       "NGN ${posts[index].price} ",
-                                      // /${posts[index].unit
                                       style: AppTextStyle.subtitle1.copyWith(
                                           fontSize: multiplier * 0.055,
                                           color: AppColors.primary,
@@ -326,7 +337,7 @@ class _ShopState extends State<Shop> {
                                     child: FittedBox(
                                       child: AppRating(
                                         onRatingUpdate: (val) {},
-                                        rating: 5,
+                                        rating: reviewAverage,
                                       ),
                                     ),
                                   )
@@ -338,7 +349,6 @@ class _ShopState extends State<Shop> {
                       },
                     ),
             );
-            //oducts.add(newProduct);
             return newProduct;
           } else {
             if (snapshot.connectionState == ConnectionState.done) {

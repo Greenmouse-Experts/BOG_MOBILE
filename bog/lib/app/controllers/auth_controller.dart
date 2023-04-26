@@ -291,8 +291,7 @@ class AuthController extends GetxController {
         });
       }
     } catch (error) {
-      print(error);
-      print(error.toString());
+    
       AppOverlay.showInfoDialog(title: 'Error', content: error.toString());
     }
   }

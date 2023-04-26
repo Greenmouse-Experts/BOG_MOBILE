@@ -228,10 +228,10 @@ class _UpdateWorkExperienceState extends State<UpdateWorkExperience> {
                                     message:
                                         'Work Experience Updated Successfully');
                               } else {
-                                Get.showSnackbar(const GetSnackBar(
-                                  message: 'Error occured',
-                                  backgroundColor: Colors.red,
-                                ));
+                                Get.snackbar('Error',
+                                    response.message ?? 'Error Occured',
+                                    colorText: AppColors.backgroundVariant1,
+                                    backgroundColor: Colors.red);
                               }
                             }
                           } else {
@@ -258,10 +258,10 @@ class _UpdateWorkExperienceState extends State<UpdateWorkExperience> {
                                     backgroundColor: Colors.green,
                                     colorText: AppColors.background);
                               } else {
-                                Get.showSnackbar(GetSnackBar(
-                                  message: response.message ?? 'Error occured',
-                                  backgroundColor: Colors.red,
-                                ));
+                                Get.snackbar('Error',
+                                    response.message ?? 'Error Occured',
+                                    colorText: AppColors.backgroundVariant1,
+                                    backgroundColor: Colors.red);
                               }
                             }
                           }

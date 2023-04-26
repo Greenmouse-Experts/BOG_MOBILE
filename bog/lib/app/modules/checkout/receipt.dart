@@ -3,9 +3,9 @@ import 'package:bog/app/data/providers/api_response.dart';
 import 'package:bog/app/global_widgets/app_loader.dart';
 import 'package:bog/app/global_widgets/custom_app_bar.dart';
 import 'package:bog/app/global_widgets/global_widgets.dart';
-import 'package:bog/app/modules/checkout/pdf_page.dart';
+
 import 'package:dio/dio.dart';
-//  import 'package:flutter_pdfview/flutter_pdfview.dart';
+
 import 'package:flutter/material.dart';
 
 import 'package:open_filex/open_filex.dart';

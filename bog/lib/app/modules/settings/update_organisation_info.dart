@@ -5,6 +5,7 @@ import 'package:bog/app/global_widgets/app_date_picker.dart';
 import 'package:bog/app/global_widgets/app_drop_down_button.dart';
 import 'package:bog/app/global_widgets/custom_app_bar.dart';
 import 'package:bog/app/global_widgets/global_widgets.dart';
+import 'package:bog/core/utils/validator.dart';
 
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
@@ -130,17 +131,14 @@ class _UpdateOrganisationInfoState extends State<UpdateOrganisationInfo> {
                               ),
                               const SizedBox(height: 10),
                               PageInput(
-                                hint: '',
-                                label: 'Directors Phone Number',
-                                keyboardType: TextInputType.phone,
-                                controller: directorPhone,
-                                autovalidateMode:
-                                    AutovalidateMode.onUserInteraction,
-                                validator: LengthRangeValidator(
-                                    min: 10,
-                                    max: 10,
-                                    errorText: 'Enter a valid phone number'),
-                              ),
+                                  hint: '',
+                                  label: 'Directors Phone Number',
+                                  keyboardType: TextInputType.phone,
+                                  controller: directorPhone,
+                                  isPhoneNumber: true,
+                                  autovalidateMode:
+                                      AutovalidateMode.onUserInteraction,
+                                  validator: Validator.phoneNumValidation),
                               const SizedBox(height: 10),
                               PageInput(
                                 hint: '',
@@ -231,10 +229,11 @@ class _UpdateOrganisationInfoState extends State<UpdateOrganisationInfo> {
                                           message:
                                               'Organizational Info Updated Successfully');
                                     } else {
-                                      Get.showSnackbar(const GetSnackBar(
-                                        message: 'Error occured',
-                                        backgroundColor: Colors.red,
-                                      ));
+                                      Get.snackbar('Error',
+                                          res.message ?? 'Error Occured',
+                                          colorText:
+                                              AppColors.backgroundVariant1,
+                                          backgroundColor: Colors.red);
                                     }
                                   }
                                 },
@@ -312,15 +311,11 @@ class _UpdateOrganisationInfoState extends State<UpdateOrganisationInfo> {
                             ),
                             const SizedBox(height: 10),
                             PageInput(
-                              hint: '',
-                              label: 'Directors Phone Number',
-                              keyboardType: TextInputType.phone,
-                              controller: directorPhone,
-                              validator: LengthRangeValidator(
-                                  min: 11,
-                                  max: 11,
-                                  errorText: 'Enter a valid phone number'),
-                            ),
+                                hint: '',
+                                label: 'Directors Phone Number',
+                                keyboardType: TextInputType.phone,
+                                controller: directorPhone,
+                                validator: Validator.phoneNumValidation),
                             const SizedBox(height: 10),
                             PageInput(
                               hint: '',
@@ -406,10 +401,10 @@ class _UpdateOrganisationInfoState extends State<UpdateOrganisationInfo> {
                                         message:
                                             'Organizational Info Updated Successfully');
                                   } else {
-                                    Get.showSnackbar(const GetSnackBar(
-                                      message: 'Error occured',
-                                      backgroundColor: Colors.red,
-                                    ));
+                                    Get.snackbar(
+                                        'Error', res.message ?? 'Error Occured',
+                                        colorText: AppColors.backgroundVariant1,
+                                        backgroundColor: Colors.red);
                                   }
                                 }
                               },
