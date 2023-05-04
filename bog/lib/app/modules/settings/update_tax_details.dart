@@ -1,9 +1,5 @@
 import 'dart:convert';
 
-import 'package:bog/app/global_widgets/app_base_view.dart';
-import 'package:bog/app/global_widgets/custom_app_bar.dart';
-import 'package:bog/app/global_widgets/global_widgets.dart';
-
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:get/get.dart';
@@ -13,7 +9,10 @@ import '../../controllers/home_controller.dart';
 import '../../data/model/tax_data_model.dart';
 import '../../data/providers/api_response.dart';
 import '../../data/providers/my_pref.dart';
+import '../../global_widgets/app_base_view.dart';
 import '../../global_widgets/app_loader.dart';
+import '../../global_widgets/custom_app_bar.dart';
+import '../../global_widgets/global_widgets.dart';
 
 class UpdateTaxDetails extends StatefulWidget {
   final Map<String, dynamic> kycScore;

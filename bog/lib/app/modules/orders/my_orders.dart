@@ -1,11 +1,9 @@
-import 'package:bog/app/global_widgets/new_app_bar.dart';
-import 'package:feather_icons/feather_icons.dart';
-import 'package:flutter/material.dart';
 
+import 'package:flutter/material.dart';
+import 'package:feather_icons/feather_icons.dart';
 import 'package:get/get.dart';
 
 import '../../../../core/theme/app_colors.dart';
-
 import '../../controllers/home_controller.dart';
 import '../../data/model/my_order_model.dart' as order;
 import '../../data/providers/api_response.dart';
@@ -14,6 +12,7 @@ import '../../global_widgets/app_input.dart';
 import '../../global_widgets/app_loader.dart';
 import '../../global_widgets/bottom_widget.dart';
 import '../../global_widgets/my_orders_widget.dart';
+import '../../global_widgets/new_app_bar.dart';
 
 class MyOrderScreen extends StatefulWidget {
   const MyOrderScreen({Key? key}) : super(key: key);
@@ -51,12 +50,12 @@ class _MyOrderScreenState extends State<MyOrderScreen>
 
   void initializeData() {
     final controller = Get.find<HomeController>();
-    // final userType = controller.currentType == 'Client'
-    //     ? 'private_client'
-    //     : 'corporate_client';
-        //?userType=$userType
+    final userType = controller.currentType == 'Client'
+        ? 'private_client'
+        : 'corporate_client';
+      
     getOrders =
-        controller.userRepo.getData("/orders/my-orders");
+        controller.userRepo.getData("/orders/my-orders?userType=$userType");
   }
 
   void onApiChange() {

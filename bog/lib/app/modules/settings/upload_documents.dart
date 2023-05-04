@@ -1,23 +1,20 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:bog/app/data/model/read_document_model.dart';
-import 'package:bog/app/global_widgets/app_base_view.dart';
-import 'package:bog/app/global_widgets/app_button.dart';
-import 'package:bog/app/global_widgets/custom_app_bar.dart';
-import 'package:bog/app/global_widgets/page_input.dart';
 import 'package:get/get.dart';
-import '../../../core/theme/app_colors.dart';
-import '../../controllers/home_controller.dart';
-import '../../data/providers/api.dart';
-import '../../data/providers/api_response.dart';
 import 'package:flutter/material.dart';
-
-import '../../data/providers/my_pref.dart';
-import '../../global_widgets/app_loader.dart';
 import 'package:dio/dio.dart' as dio;
 
-import '../../global_widgets/overlays.dart';
+import '../../../core/theme/app_colors.dart';
+import '../../controllers/home_controller.dart';
+import '../../data/model/read_document_model.dart';
+import '../../data/providers/api.dart';
+import '../../data/providers/api_response.dart';
+import '../../data/providers/my_pref.dart';
+import '../../global_widgets/app_base_view.dart';
+import '../../global_widgets/app_loader.dart';
+import '../../global_widgets/custom_app_bar.dart';
+import '../../global_widgets/global_widgets.dart';
 import '../../global_widgets/pdf_page_viewer.dart';
 import '../../global_widgets/photo_view_page.dart';
 

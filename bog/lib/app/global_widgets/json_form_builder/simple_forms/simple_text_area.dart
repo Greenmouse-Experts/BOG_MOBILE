@@ -1,5 +1,6 @@
-import 'package:bog/app/global_widgets/page_input.dart';
 import 'package:flutter/material.dart';
+
+import '../../page_input.dart';
 
 class SimpleTextArea extends StatefulWidget {
   const SimpleTextArea({

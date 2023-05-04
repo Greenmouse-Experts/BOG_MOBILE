@@ -1,24 +1,23 @@
 import 'dart:convert';
 
-import 'package:bog/app/global_widgets/app_base_view.dart';
-import 'package:bog/app/global_widgets/app_date_picker.dart';
-import 'package:bog/app/global_widgets/app_drop_down_button.dart';
-import 'package:bog/app/global_widgets/custom_app_bar.dart';
-import 'package:bog/app/global_widgets/global_widgets.dart';
-import 'package:bog/core/utils/validator.dart';
-
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import '../../../core/theme/app_colors.dart';
+import '../../../core/utils/validator.dart';
 import '../../controllers/home_controller.dart';
 import '../../data/model/log_in_model.dart';
 import '../../data/model/org_info_model.dart';
 import '../../data/providers/api_response.dart';
 import '../../data/providers/my_pref.dart';
+import '../../global_widgets/app_base_view.dart';
+import '../../global_widgets/app_date_picker.dart';
+import '../../global_widgets/app_drop_down_button.dart';
 import '../../global_widgets/app_loader.dart';
+import '../../global_widgets/custom_app_bar.dart';
+import '../../global_widgets/global_widgets.dart';
 
 class UpdateOrganisationInfo extends StatefulWidget {
   final Map<String, dynamic> kycScore;
@@ -150,17 +149,14 @@ class _UpdateOrganisationInfoState extends State<UpdateOrganisationInfo> {
                               ),
                               const SizedBox(height: 10),
                               PageInput(
-                                hint: '',
-                                label: 'Contact Person Phone Number',
-                                keyboardType: TextInputType.phone,
-                                autovalidateMode:
-                                    AutovalidateMode.onUserInteraction,
-                                controller: contactPhone,
-                                validator: LengthRangeValidator(
-                                    min: 10,
-                                    max: 10,
-                                    errorText: 'Enter a valid phone number'),
-                              ),
+                                  hint: '',
+                                  label: 'Contact Person Phone Number',
+                                  keyboardType: TextInputType.phone,
+                                  autovalidateMode:
+                                      AutovalidateMode.onUserInteraction,
+                                  controller: contactPhone,
+                                  isPhoneNumber: true,
+                                  validator: Validator.phoneNumValidation),
                               const SizedBox(height: 10),
                               PageInput(
                                 hint: '',
@@ -315,6 +311,7 @@ class _UpdateOrganisationInfoState extends State<UpdateOrganisationInfo> {
                                 label: 'Directors Phone Number',
                                 keyboardType: TextInputType.phone,
                                 controller: directorPhone,
+                                isPhoneNumber: true,
                                 validator: Validator.phoneNumValidation),
                             const SizedBox(height: 10),
                             PageInput(
@@ -327,15 +324,12 @@ class _UpdateOrganisationInfoState extends State<UpdateOrganisationInfo> {
                             ),
                             const SizedBox(height: 10),
                             PageInput(
-                              hint: '',
-                              label: 'Contact Person Phone Number',
-                              keyboardType: TextInputType.phone,
-                              controller: contactPhone,
-                              validator: LengthRangeValidator(
-                                  min: 11,
-                                  max: 11,
-                                  errorText: 'Enter a valid phone number'),
-                            ),
+                                hint: '',
+                                label: 'Contact Person Phone Number',
+                                keyboardType: TextInputType.phone,
+                                controller: contactPhone,
+                                isPhoneNumber: true,
+                                validator: Validator.phoneNumValidation),
                             const SizedBox(height: 10),
                             PageInput(
                               hint: '',

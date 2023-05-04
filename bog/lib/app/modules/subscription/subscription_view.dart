@@ -1,21 +1,21 @@
 import 'dart:convert';
 
-import 'package:bog/app/controllers/home_controller.dart';
-import 'package:bog/app/data/model/get_subscription_model.dart';
-import 'package:bog/app/global_widgets/app_base_view.dart';
-import 'package:bog/app/global_widgets/app_loader.dart';
-import 'package:bog/app/global_widgets/new_app_bar.dart';
-import 'package:bog/app/global_widgets/overlays.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_paystack/flutter_paystack.dart';
 import 'package:get/get.dart';
 
 import '../../../core/theme/app_colors.dart';
+import '../../controllers/home_controller.dart';
+import '../../data/model/get_subscription_model.dart';
 import '../../data/model/log_in_model.dart';
 import '../../data/model/user_details_model.dart';
 import '../../data/providers/api.dart';
 import '../../data/providers/api_response.dart';
 import '../../data/providers/my_pref.dart';
+import '../../global_widgets/app_base_view.dart';
+import '../../global_widgets/app_loader.dart';
+import '../../global_widgets/global_widgets.dart';
+import '../../global_widgets/new_app_bar.dart';
 import '../../global_widgets/subscription_widget.dart';
 
 class SubscriptionScreen extends StatefulWidget {
@@ -171,14 +171,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                             child: Text('An error occurred'),
                           );
                         }
-                      })
-
-                  // Column(
-                  //   children: [
-                  //     SubscriptionWidget()
-                  //   ],
-                  // ),
-                  ),
+                      })),
             ),
           );
         },

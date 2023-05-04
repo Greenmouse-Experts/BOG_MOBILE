@@ -1,14 +1,14 @@
-import 'package:bog/app/modules/home/pages/cart_tab.dart';
-import 'package:bog/app/modules/home/pages/chat_tab.dart';
-import 'package:bog/app/modules/home/pages/profile_tab.dart';
-import 'package:bog/app/modules/home/pages/project_tab.dart';
-import 'package:feather_icons/feather_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:feather_icons/feather_icons.dart';
 import 'package:get/get.dart';
 
 import '../data/model/cart_model.dart';
 import '../data/model/my_products.dart';
+import '../modules/home/pages/cart_tab.dart';
+import '../modules/home/pages/chat_tab.dart';
 import '../modules/home/pages/home_tab.dart';
+import '../modules/home/pages/profile_tab.dart';
+import '../modules/home/pages/project_tab.dart';
 import '../repository/user_repo.dart';
 
 class HomeController extends GetxController {
@@ -19,7 +19,6 @@ class HomeController extends GetxController {
   String currentType = "Client";
   bool showProductPartnerEarnings = false;
   bool showServicePartnerEarnings = false;
-
 
   String homeIcon = 'assets/images/homeIcon.png';
   String chatIcon = 'assets/images/homeIcon.png';
@@ -128,9 +127,7 @@ class HomeController extends GetxController {
   final Map<String, CartModel> _cartItems = {};
   RxMap<String, CartModel> get cartItems => _cartItems.obs;
 
-  void addItem(
-    MyProducts product, int quantity
-  ) {
+  void addItem(MyProducts product, int quantity) {
     if (_cartItems.containsKey(product.id!)) {
       Get.snackbar(
         'Already in Cart',

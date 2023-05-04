@@ -1,16 +1,16 @@
 import 'dart:convert';
 
-import 'package:bog/app/data/model/supply_category_model.dart';
-import 'package:bog/app/global_widgets/app_base_view.dart';
-import 'package:bog/app/global_widgets/app_loader.dart';
-import 'package:bog/app/global_widgets/global_widgets.dart';
-import 'package:bog/app/global_widgets/new_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../controllers/home_controller.dart';
+import '../../data/model/supply_category_model.dart';
 import '../../data/providers/api_response.dart';
+import '../../global_widgets/app_base_view.dart';
+import '../../global_widgets/app_loader.dart';
+import '../../global_widgets/global_widgets.dart';
+import '../../global_widgets/new_app_bar.dart';
 
 class UpdateSupplyCategory extends StatefulWidget {
   final Map<String, dynamic> kycScore;

@@ -1,6 +1,3 @@
-import 'package:bog/app/data/model/projetcs_model.dart';
-import 'package:bog/app/modules/project_details/project_info.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
@@ -9,8 +6,9 @@ import 'package:get/get.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_styles.dart';
 import '../../controllers/home_controller.dart';
-
+import '../../data/model/projetcs_model.dart';
 import 'add_activity.dart';
+import 'project_info.dart';
 
 class ProjectDetails extends StatefulWidget {
   const ProjectDetails({Key? key}) : super(key: key);
@@ -399,12 +397,12 @@ class _TextButton extends StatelessWidget {
   final String? subtitle;
   // final bool showArrow;
   final Function() onPressed;
-  const _TextButton(
-      {required this.imageAsset,
-      required this.text,
-      required this.onPressed,
-      this.subtitle,
-      });
+  const _TextButton({
+    required this.imageAsset,
+    required this.text,
+    required this.onPressed,
+    this.subtitle,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -472,15 +470,13 @@ class _TextButton extends StatelessWidget {
               ),
             ),
             IconButton(
-              onPressed: onPressed,
-              padding: EdgeInsets.zero,
-              icon: Icon(
-                      Icons.arrow_forward_ios_rounded,
-                      color: Colors.black,
-                      size: Get.width * 0.04,
-                    )
-           
-            )
+                onPressed: onPressed,
+                padding: EdgeInsets.zero,
+                icon: Icon(
+                  Icons.arrow_forward_ios_rounded,
+                  color: Colors.black,
+                  size: Get.width * 0.04,
+                ))
           ],
         ),
       ),

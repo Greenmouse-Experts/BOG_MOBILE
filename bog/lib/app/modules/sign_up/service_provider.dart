@@ -1,17 +1,15 @@
-import 'package:bog/app/controllers/home_controller.dart';
-import 'package:bog/app/data/model/service_type_model.dart';
-import 'package:bog/app/data/providers/api_response.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter/gestures.dart';
 import 'package:get/get.dart';
 
 import '../../../core/theme/app_colors.dart';
-
 import '../../../core/theme/app_styles.dart';
 import '../../../core/theme/app_themes.dart';
 import '../../../core/utils/validator.dart';
 import '../../controllers/auth_controller.dart';
+import '../../controllers/home_controller.dart';
+import '../../data/model/service_type_model.dart';
+import '../../data/providers/api_response.dart';
 import '../../global_widgets/app_button.dart';
 import '../../global_widgets/page_dropdown.dart';
 import '../../global_widgets/page_input.dart';

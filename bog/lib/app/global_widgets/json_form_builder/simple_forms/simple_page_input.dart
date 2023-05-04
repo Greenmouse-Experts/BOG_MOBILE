@@ -1,13 +1,13 @@
 import 'dart:io';
 
-import 'package:bog/app/global_widgets/page_dropdown.dart';
+import 'package:flutter/material.dart';
 import 'package:dart_countries/dart_countries.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../../core/theme/app_styles.dart';
 import '../../app_input.dart';
+import '../../page_dropdown.dart';
 
 class SimplePageInput extends StatefulWidget {
   const SimplePageInput(
@@ -104,7 +104,7 @@ class _PageInputState extends State<SimplePageInput> {
                 //width: Get.width * 0.8,
                 child: Text(
                   widget.label,
-                   style: AppTextStyle.bodyText2.copyWith(
+                  style: AppTextStyle.bodyText2.copyWith(
                     fontWeight: FontWeight.w500,
                     color: Colors.black,
                   ),

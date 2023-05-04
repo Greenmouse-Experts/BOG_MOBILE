@@ -1,7 +1,5 @@
-import 'package:bog/app/global_widgets/global_widgets.dart';
-
-import 'package:feather_icons/feather_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:feather_icons/feather_icons.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -9,6 +7,7 @@ import 'package:get/get.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_styles.dart';
 import '../../controllers/home_controller.dart';
+import '../../global_widgets/global_widgets.dart';
 
 class Reviews extends GetView<HomeController> {
   const Reviews({Key? key}) : super(key: key);

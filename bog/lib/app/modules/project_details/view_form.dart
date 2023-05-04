@@ -1,13 +1,13 @@
-import 'package:bog/app/controllers/home_controller.dart';
-import 'package:bog/app/data/model/client_project_model.dart';
-import 'package:bog/app/data/providers/api_response.dart';
-import 'package:bog/app/global_widgets/app_base_view.dart';
-import 'package:bog/app/global_widgets/app_loader.dart';
-import 'package:bog/app/global_widgets/new_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../core/theme/app_styles.dart';
+import '../../controllers/home_controller.dart';
+import '../../data/model/client_project_model.dart';
+import '../../data/providers/api_response.dart';
+import '../../global_widgets/app_base_view.dart';
+import '../../global_widgets/app_loader.dart';
+import '../../global_widgets/new_app_bar.dart';
 
 class ViewFormPage extends StatefulWidget {
   final String id;
@@ -36,28 +36,6 @@ class _ViewFormPageState extends State<ViewFormPage> {
     return AppBaseView(
         child: Scaffold(
       appBar: newAppBarBack(context, 'Project Form'),
-
-      //  AppBar(
-      //   bottom: PreferredSize(
-      //     preferredSize: const Size.fromHeight(1),
-      //     child: Divider(
-      //       color: AppColors.grey.withOpacity(0.3),
-      //     ),
-      //   ),
-      //   title: Text(
-      //     "Project Form",
-      //     style: AppTextStyle.subtitle1.copyWith(
-      //         fontSize: multiplier * 0.07,
-      //         color: Colors.black,
-      //         fontWeight: FontWeight.w600),
-      //     textAlign: TextAlign.center,
-      //   ),
-      //   leading: IconButton(
-      //       onPressed: () {
-      //         Get.back();
-      //       },
-      //       icon: const Icon(Icons.arrow_back_ios_new_outlined)),
-      // ),
       body: SingleChildScrollView(
         child: FutureBuilder<ApiResponse>(
             future: getFormDetails,

@@ -1,5 +1,3 @@
-import 'package:bog/app/controllers/home_controller.dart';
-import 'package:bog/app/global_widgets/global_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -7,9 +5,11 @@ import 'package:date_time_format/date_time_format.dart';
 
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_styles.dart';
+import '../controllers/home_controller.dart';
 import '../data/model/my_order_model.dart';
 import '../modules/orders/order_details.dart';
 import 'app_loader.dart';
+import 'overlays.dart';
 
 class MyOrdersWidget extends StatelessWidget {
   final String image;

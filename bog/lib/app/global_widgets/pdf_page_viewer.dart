@@ -1,24 +1,23 @@
-
-
-
-import 'package:bog/app/global_widgets/new_app_bar.dart';
-import 'package:bog/core/theme/app_colors.dart';
-import 'package:flutter/material.dart';
-// import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'dart:io';
+
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:open_filex/open_filex.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 
+import '../../core/theme/theme.dart';
+import 'new_app_bar.dart';
+
 class PdfViewerPage extends StatefulWidget {
   final String path;
-  const PdfViewerPage({Key? key,required this.path}) : super(key: key);
+  const PdfViewerPage({Key? key, required this.path}) : super(key: key);
 
   @override
   State<PdfViewerPage> createState() => _PdfViewerPageState();
 }
+
 class _PdfViewerPageState extends State<PdfViewerPage> {
   File? pFile;
   bool isLoading = false;
@@ -37,7 +36,7 @@ class _PdfViewerPageState extends State<PdfViewerPage> {
       pFile = file;
     });
 
-   await OpenFilex.open(file.path);
+    await OpenFilex.open(file.path);
     setState(() {
       isLoading = false;
     });
@@ -51,16 +50,17 @@ class _PdfViewerPageState extends State<PdfViewerPage> {
     super.initState();
   }
 
-
-@override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: newAppBarBack(context, 'View Document'),
-       body: isLoading
-          ? const Center(child: CircularProgressIndicator(color: AppColors.primary,))
+      body: isLoading
+          ? const Center(
+              child: CircularProgressIndicator(
+              color: AppColors.primary,
+            ))
           : const SizedBox(
-              child: Center(
-              ),
+              child: Center(),
             ),
     );
   }

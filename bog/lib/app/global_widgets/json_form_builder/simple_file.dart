@@ -1,10 +1,9 @@
 import 'dart:io';
 
-import 'package:bog/app/global_widgets/global_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 
-// import 'helpers/function.dart';
+import '../global_widgets.dart';
 
 class SimpleFile extends StatefulWidget {
   final dynamic item;
@@ -43,15 +42,6 @@ class _SimpleFileState extends State<SimpleFile> {
 
   @override
   Widget build(BuildContext context) {
-    // Widget label = const SizedBox.shrink();
-    // if (Fun.labelHidden(item)) {
-    //   label = SizedBox(
-    //     child: Text(
-    //       item['label'],
-    //       style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
-    //     ),
-    //   );
-    // }
     return PageInput(
       hint: 'Pick a text',
       label: item['label'],

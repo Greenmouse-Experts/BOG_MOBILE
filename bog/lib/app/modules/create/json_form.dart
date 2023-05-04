@@ -1,18 +1,16 @@
 import 'dart:convert';
 
-import 'package:bog/app/controllers/home_controller.dart';
-import 'package:bog/app/data/model/form_builder_model.dart';
-import 'package:bog/app/data/model/form_response.dart';
-import 'package:bog/app/data/providers/api_response.dart';
-import 'package:bog/app/global_widgets/app_base_view.dart';
-import 'package:bog/app/global_widgets/app_loader.dart';
-import 'package:bog/app/global_widgets/custom_app_bar.dart';
-
-import 'package:bog/core/theme/app_colors.dart';
-import 'package:bog/core/theme/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../core/theme/theme.dart';
+import '../../controllers/home_controller.dart';
+import '../../data/model/form_builder_model.dart';
+import '../../data/model/form_response.dart';
+import '../../data/providers/api_response.dart';
+import '../../global_widgets/app_base_view.dart';
+import '../../global_widgets/app_loader.dart';
+import '../../global_widgets/custom_app_bar.dart';
 import '../../global_widgets/json_form_builder/new_json_schema.dart';
 
 class JsonForm extends StatefulWidget {

@@ -1,22 +1,20 @@
 import 'dart:convert';
 
-import 'package:bog/app/controllers/home_controller.dart';
-import 'package:bog/app/data/model/user_details_model.dart';
-import 'package:bog/app/data/providers/api_response.dart';
-import 'package:bog/app/global_widgets/app_loader.dart';
-import 'package:bog/app/global_widgets/new_app_bar.dart';
-import 'package:bog/app/modules/settings/update_supply_category.dart';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_styles.dart';
+import '../../controllers/home_controller.dart';
+import '../../data/model/user_details_model.dart';
+import '../../data/providers/api_response.dart';
 import '../../global_widgets/app_base_view.dart';
-
+import '../../global_widgets/app_loader.dart';
+import '../../global_widgets/new_app_bar.dart';
 import 'update_financial_data.dart';
 import 'update_general.dart';
 import 'update_organisation_info.dart';
+import 'update_supply_category.dart';
 import 'update_tax_details.dart';
 import 'upload_documents.dart';
 import 'view_work_experience.dart';
@@ -32,7 +30,7 @@ class _KYCPageState extends State<KYCPage> {
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<HomeController>();
-   
+
     final userType =
         controller.currentType == 'Product Partner' ? 'vendor' : 'professional';
     return AppBaseView(

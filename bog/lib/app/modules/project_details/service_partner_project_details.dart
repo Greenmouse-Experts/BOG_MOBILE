@@ -1,7 +1,5 @@
-import 'package:bog/app/data/model/service_projects_details_model.dart';
-import 'package:bog/app/global_widgets/app_loader.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -11,11 +9,13 @@ import '../../../core/theme/app_styles.dart';
 import '../../controllers/home_controller.dart';
 
 import '../../data/model/admin_progress_model.dart';
+import '../../data/model/service_projects_details_model.dart';
 import '../../data/model/service_projects_model.dart';
 import '../../data/providers/api_response.dart';
 import '../../global_widgets/app_avatar.dart';
 import '../../global_widgets/app_base_view.dart';
 
+import '../../global_widgets/app_loader.dart';
 import '../../global_widgets/bottom_widget.dart';
 import '../../global_widgets/new_app_bar.dart';
 import '../../global_widgets/overlays.dart';

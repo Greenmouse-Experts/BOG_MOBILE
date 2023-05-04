@@ -1,21 +1,18 @@
 import 'dart:io';
 
-import 'package:bog/app/global_widgets/app_button.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:dio/dio.dart' as dio;
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_styles.dart';
 import '../../../controllers/home_controller.dart';
 import '../../../data/providers/api.dart';
-
+import '../../../global_widgets/app_button.dart';
 import '../../../global_widgets/page_dropdown.dart';
 import '../../../global_widgets/page_input.dart';
-
-import 'package:dio/dio.dart' as dio;
 
 class GeotechnicalInvestigation extends StatefulWidget {
   const GeotechnicalInvestigation({Key? key}) : super(key: key);
@@ -624,7 +621,6 @@ class _GeotechnicalInvestigationState extends State<GeotechnicalInvestigation> {
                                                                     300),
                                                         curve: Curves.easeIn);
                                                   } else {
-                                               
                                                     Get.snackbar(
                                                         "Error",
                                                         response.data

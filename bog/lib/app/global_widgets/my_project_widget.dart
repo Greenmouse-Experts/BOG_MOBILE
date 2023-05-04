@@ -1,18 +1,17 @@
 import 'dart:convert';
 
-import 'package:bog/app/global_widgets/global_widgets.dart';
-import 'package:bog/app/modules/project_details/new_project_details.dart';
-import 'package:bog/app/modules/project_details/view_form.dart';
-import 'package:bog/core/theme/app_colors.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_paystack/flutter_paystack.dart';
 import 'package:get/get.dart';
 
+import '../../core/theme/theme.dart';
 import '../controllers/home_controller.dart';
 import '../data/model/log_in_model.dart';
 import '../data/providers/api.dart';
 import '../data/providers/my_pref.dart';
+import '../modules/project_details/new_project_details.dart';
+import '../modules/project_details/view_form.dart';
+import 'global_widgets.dart';
 
 class MyProjectWidget extends StatefulWidget {
   final String projectType;
@@ -61,7 +60,7 @@ class _MyProjectWidgetState extends State<MyProjectWidget> {
     final email = logInDetails.email;
     Charge charge = Charge()
       ..amount = price
-       ..reference = 'TR-${DateTime.now().millisecondsSinceEpoch}'
+      ..reference = 'TR-${DateTime.now().millisecondsSinceEpoch}'
       ..email = email
       ..currency = "NGN";
 
@@ -75,8 +74,8 @@ class _MyProjectWidgetState extends State<MyProjectWidget> {
     if (response.status == true) {
       AppOverlay.loadingOverlay(asyncFunction: () async {
         final controller = Get.find<HomeController>();
-        final response = await controller.userRepo
-            .patchData('/projects/request-for-approval/$id', {"amount": priceChosen});
+        final response = await controller.userRepo.patchData(
+            '/projects/request-for-approval/$id', {"amount": priceChosen});
         if (response.isSuccessful) {
           Get.snackbar('Success', 'Review sent',
               backgroundColor: AppColors.successGreen,

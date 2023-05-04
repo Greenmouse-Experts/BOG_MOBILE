@@ -1,12 +1,12 @@
 import 'dart:convert';
 
-import 'package:bog/app/data/providers/api_response.dart';
-import 'package:bog/app/global_widgets/page_dropdown.dart';
 import 'package:flutter/material.dart';
 
 import '../../core/theme/app_colors.dart';
 import '../controllers/home_controller.dart';
 import '../data/model/nearest_address.dart';
+import '../data/providers/api_response.dart';
+import 'page_dropdown.dart';
 
 class AddressPicker extends StatefulWidget {
   final TextEditingController textController;
@@ -24,7 +24,7 @@ class AddressPicker extends StatefulWidget {
 }
 
 class _AddressPickerState extends State<AddressPicker> {
- dynamic _selectedOption;
+  dynamic _selectedOption;
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<ApiResponse>(
@@ -32,7 +32,6 @@ class _AddressPickerState extends State<AddressPicker> {
           .getData('/address/view/all?q=${widget.textController.text}'),
       builder: (BuildContext context, AsyncSnapshot<ApiResponse> snapshot) {
         if (snapshot.hasData) {
-         
           final nearestAddresses = <NearestAddress>[];
           for (var element in snapshot.data!.data as List<dynamic>) {
             nearestAddresses.add(NearestAddress.fromJson(element));
@@ -48,7 +47,6 @@ class _AddressPickerState extends State<AddressPicker> {
               value: _selectedOption,
               onChanged: (newValue) {
                 setState(() {
-                
                   _selectedOption = newValue!;
                   widget.updateDeliveryFee(newValue!);
                 });

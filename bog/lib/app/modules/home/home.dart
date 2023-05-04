@@ -1,19 +1,18 @@
 import 'dart:convert';
 
-import 'package:bog/app/data/model/gen_kyc.dart';
-import 'package:bog/app/global_widgets/global_widgets.dart';
-import 'package:bog/app/modules/settings/view_kyc.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../controllers/home_controller.dart';
+import '../../data/model/gen_kyc.dart';
 import '../../data/model/log_in_model.dart';
 import '../../data/model/user_details_model.dart';
 import '../../data/providers/my_pref.dart';
-
 import '../../global_widgets/app_base_view.dart';
 import '../../global_widgets/app_drawer.dart';
 import '../../global_widgets/bottom_widget.dart';
+import '../../global_widgets/global_widgets.dart';
+import '../settings/view_kyc.dart';
 import '../subscription/subscription_view.dart';
 
 class Home extends StatefulWidget {
@@ -60,8 +59,6 @@ class _HomeState extends State<Home> {
 
     homeController.update();
   }
-
-
 
   void verifyKycComplete(String type, VoidCallback onPressed) async {
     final controller = Get.find<HomeController>();

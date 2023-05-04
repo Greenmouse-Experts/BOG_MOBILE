@@ -1,21 +1,20 @@
 import 'dart:convert';
 
-import 'package:bog/app/controllers/home_controller.dart';
-
-import 'package:bog/app/global_widgets/json_form_builder/simple_file.dart';
-import 'package:bog/app/global_widgets/json_form_builder/simple_forms/simple_header.dart';
-import 'package:bog/app/global_widgets/overlays.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_styles.dart';
+import '../../controllers/home_controller.dart';
+import '../overlays.dart';
 import './simple_forms/simple_text.dart';
-// import './simple_forms/simple_checkbox.dart';
+
 import './simple_forms/simple_radios.dart';
-// import './simple_forms/simple_select.dart';
+
 import './simple_forms/simple_date.dart';
+import 'simple_file.dart';
 import 'simple_forms/simple_checkbox.dart';
+import 'simple_forms/simple_header.dart';
 import 'simple_forms/simple_select.dart';
 
 class NewJsonSchema extends StatefulWidget {
@@ -74,7 +73,7 @@ class _CoreFormState extends State<NewJsonSchema> {
     if (formGeneral['formTitle'] != null) {
       listWidget.add(Text(
         formGeneral['formTitle'],
-         style: AppTextStyle.bodyText2.copyWith(
+        style: AppTextStyle.bodyText2.copyWith(
           fontWeight: FontWeight.w700,
           color: Colors.black,
         ),
@@ -207,6 +206,10 @@ class _CoreFormState extends State<NewJsonSchema> {
         children: [
           InkWell(
             onTap: () async {
+              final controller = Get.find<HomeController>();
+              final userType = controller.currentType == 'Client'
+                  ? 'private_client'
+                  : 'corporate_client';
               if (_formKey.currentState!.validate()) {
                 final controller = Get.find<HomeController>();
 
@@ -217,7 +220,10 @@ class _CoreFormState extends State<NewJsonSchema> {
                 List<dynamic> filteredForm = jsonMap["form"].where((formValue) {
                   return formValue["_id"] != 0 && formValue["value"] != "val";
                 }).toList();
-                Map<String, dynamic> newJsonMap = {"form": filteredForm};
+                Map<String, dynamic> newJsonMap = {
+                  "form": filteredForm,
+                  "userType": userType
+                };
 
                 AppOverlay.loadingOverlay(asyncFunction: () async {
                   final response = await controller.userRepo

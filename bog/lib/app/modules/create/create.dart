@@ -1,10 +1,3 @@
-import 'package:bog/app/data/providers/api_response.dart';
-import 'package:bog/app/global_widgets/app_base_view.dart';
-import 'package:bog/app/global_widgets/app_loader.dart';
-import 'package:bog/app/global_widgets/bottom_widget.dart';
-import 'package:bog/app/global_widgets/global_widgets.dart';
-import 'package:bog/app/modules/create/json_form.dart';
-
 import 'package:flutter/material.dart';
 
 import 'package:flutter_svg/svg.dart';
@@ -16,6 +9,12 @@ import '../../controllers/home_controller.dart';
 
 import '../../data/model/all_service_model.dart';
 import '../../data/model/get_services_model.dart';
+import '../../data/providers/api_response.dart';
+import '../../global_widgets/app_base_view.dart';
+import '../../global_widgets/app_loader.dart';
+import '../../global_widgets/bottom_widget.dart';
+import '../../global_widgets/global_widgets.dart';
+import 'json_form.dart';
 
 class Create extends StatefulWidget {
   const Create({Key? key}) : super(key: key);

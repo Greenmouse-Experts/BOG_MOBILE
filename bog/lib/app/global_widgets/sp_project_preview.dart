@@ -1,8 +1,8 @@
-import 'package:bog/app/controllers/home_controller.dart';
-import 'package:bog/core/theme/app_colors.dart';
-import 'package:bog/core/theme/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../../core/theme/theme.dart';
+import '../controllers/home_controller.dart';
 
 class SPProjectPreview extends StatelessWidget {
   final String title;

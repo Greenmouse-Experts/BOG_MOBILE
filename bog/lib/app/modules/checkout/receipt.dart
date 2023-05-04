@@ -1,26 +1,25 @@
-import 'package:bog/app/data/model/order_details.dart';
-import 'package:bog/app/data/providers/api_response.dart';
-import 'package:bog/app/global_widgets/app_loader.dart';
-import 'package:bog/app/global_widgets/custom_app_bar.dart';
-import 'package:bog/app/global_widgets/global_widgets.dart';
-
-import 'package:dio/dio.dart';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
-
+import 'package:dio/dio.dart';
+import 'package:flutter_file_downloader/flutter_file_downloader.dart';
 import 'package:open_filex/open_filex.dart';
-
 import 'package:get/get.dart';
-import 'dart:io';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_styles.dart';
 import '../../controllers/home_controller.dart';
+import '../../data/model/order_details.dart';
+import '../../data/providers/api_response.dart';
 import '../../global_widgets/app_base_view.dart';
+import '../../global_widgets/app_loader.dart';
 import '../../global_widgets/bottom_widget.dart';
+import '../../global_widgets/custom_app_bar.dart';
+import '../../global_widgets/global_widgets.dart';
 import '../../global_widgets/order_details_builder.dart';
+import 'pdf_page.dart';
 
 class AppReceipt extends StatefulWidget {
   final String id;
@@ -215,58 +214,57 @@ class _AppReceiptState extends State<AppReceipt> {
                                                         RegExp(r'[^\d]+'), '');
                                                 final finalLink =
                                                     'https://bog.greenmouseproperties.com/uploads/$strippedLink.pdf';
-                                                // Platform.isIOS
-                                                //     ?
-                                                await downloadFile(
-                                                    finalLink, strippedLink);
-                                                // : FileDownloader
-                                                //     .downloadFile(
-                                                //     url: finalLink,
-                                                //     onProgress: (fileName,
-                                                //         progress) {
-                                                //       setState(() {
-                                                //         _progress =
-                                                //             progress;
-                                                //       });
-                                                //     },
-                                                //     onDownloadCompleted:
-                                                //         (path) {
-                                                //       AppOverlay
-                                                //           .showInfoDialog(
-                                                //         title:
-                                                //             'Download Complete',
-                                                //         content:
-                                                //             'Your receipt has downloaded successfully',
-                                                //         onPressed: () {
-                                                //           Get.to(() =>
-                                                //               PDFScreen(
-                                                //                 path: path,
-                                                //               ));
-                                                //           // PDFView(
-                                                //           //   filePath: path,
-                                                //           //   enableSwipe: true,
-                                                //           //   swipeHorizontal: true,
-                                                //           //   autoSpacing: false,
-                                                //           //   pageFling: false,
-                                                //           // );
-                                                //         },
-                                                //       );
-                                                //       setState(() {
-                                                //         _progress = null;
-                                                //       });
-                                                //     },
-                                                //     onDownloadError:
-                                                //         (errorMessage) {
-                                                //       AppOverlay.showInfoDialog(
-                                                //           title:
-                                                //               errorMessage,
-                                                //           content:
-                                                //               'Please try again later!');
-                                                //       setState(() {
-                                                //         _progress = null;
-                                                //       });
-                                                //     },
-                                                //   );
+                                                Platform.isIOS
+                                                    ? await downloadFile(
+                                                        finalLink, strippedLink)
+                                                    : FileDownloader
+                                                        .downloadFile(
+                                                        url: finalLink,
+                                                        onProgress: (fileName,
+                                                            progress) {
+                                                          setState(() {
+                                                            _progress =
+                                                                progress;
+                                                          });
+                                                        },
+                                                        onDownloadCompleted:
+                                                            (path) {
+                                                          AppOverlay
+                                                              .showInfoDialog(
+                                                            title:
+                                                                'Download Complete',
+                                                            content:
+                                                                'Your receipt has downloaded successfully',
+                                                            onPressed: () {
+                                                              Get.to(() =>
+                                                                  PDFScreen(
+                                                                    path: path,
+                                                                  ));
+                                                              // PDFView(
+                                                              //   filePath: path,
+                                                              //   enableSwipe: true,
+                                                              //   swipeHorizontal: true,
+                                                              //   autoSpacing: false,
+                                                              //   pageFling: false,
+                                                              // );
+                                                            },
+                                                          );
+                                                          setState(() {
+                                                            _progress = null;
+                                                          });
+                                                        },
+                                                        onDownloadError:
+                                                            (errorMessage) {
+                                                          AppOverlay.showInfoDialog(
+                                                              title:
+                                                                  errorMessage,
+                                                              content:
+                                                                  'Please try again later!');
+                                                          setState(() {
+                                                            _progress = null;
+                                                          });
+                                                        },
+                                                      );
                                               },
                                             ),
                                     )

@@ -1,5 +1,3 @@
-import 'package:bog/app/global_widgets/app_button.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
@@ -9,7 +7,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_styles.dart';
 import '../../../controllers/home_controller.dart';
 import '../../../data/providers/api.dart';
-import '../../../global_widgets/app_input.dart';
+import '../../../global_widgets/global_widgets.dart';
 import '../../../global_widgets/page_dropdown.dart';
 
 class LandSurvey extends StatefulWidget {

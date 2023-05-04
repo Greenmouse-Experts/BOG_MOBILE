@@ -1,9 +1,9 @@
-import 'package:bog/app/modules/onboarding/onboarding.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_styles.dart';
+import '../modules/onboarding/onboarding.dart';
 
 class ConfirmLogout extends StatelessWidget {
   const ConfirmLogout({super.key});
@@ -31,9 +31,7 @@ class ConfirmLogout extends StatelessWidget {
             )),
         TextButton(
             onPressed: () async {
-         
               Get.offAll(() => const OnboardingPage());
-              
             },
             child: Text(
               'Yes',

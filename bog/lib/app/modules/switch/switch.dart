@@ -1,22 +1,17 @@
-// import 'dart:convert';
-
-// import 'package:bog/app/modules/home/home.dart';
-import 'package:bog/app/data/model/get_account_model.dart';
-import 'package:bog/app/data/providers/api_response.dart';
-import 'package:bog/app/global_widgets/app_loader.dart';
-import 'package:bog/app/global_widgets/bottom_widget.dart';
-import 'package:bog/app/global_widgets/new_app_bar.dart';
-import 'package:bog/app/global_widgets/switch_widget.dart';
-
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_styles.dart';
 import '../../controllers/home_controller.dart';
 
+import '../../data/model/get_account_model.dart';
+import '../../data/providers/api_response.dart';
 import '../../global_widgets/app_base_view.dart';
+import '../../global_widgets/app_loader.dart';
+import '../../global_widgets/bottom_widget.dart';
+import '../../global_widgets/new_app_bar.dart';
+import '../../global_widgets/switch_widget.dart';
 
 class SwitchUser extends StatefulWidget {
   const SwitchUser({Key? key}) : super(key: key);

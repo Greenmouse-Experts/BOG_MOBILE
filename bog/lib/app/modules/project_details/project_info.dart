@@ -1,5 +1,3 @@
-import 'package:bog/app/data/model/projetcs_model.dart';
-import 'package:bog/app/global_widgets/bottom_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -7,8 +5,9 @@ import 'package:get/get.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_styles.dart';
 import '../../controllers/home_controller.dart';
-
+import '../../data/model/projetcs_model.dart';
 import '../../global_widgets/app_base_view.dart';
+import '../../global_widgets/bottom_widget.dart';
 
 class ProjectInfo extends StatefulWidget {
   const ProjectInfo({Key? key}) : super(key: key);

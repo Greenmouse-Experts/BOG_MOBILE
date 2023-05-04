@@ -1,10 +1,10 @@
-import 'package:bog/app/modules/home/pages/profile_tab.dart';
 import 'package:get/get.dart';
 
 import '../app/bindings/auth_binding.dart';
 import '../app/modules/chat/chat.dart';
 import '../app/modules/create/create.dart';
 import '../app/modules/home/home.dart';
+import '../app/modules/home/pages/profile_tab.dart';
 import '../app/modules/multiplexor/multiplexor.dart';
 import '../app/modules/onboarding/onboarding.dart';
 import '../app/modules/profile/confirm_pin.dart';

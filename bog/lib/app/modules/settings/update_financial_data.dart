@@ -1,11 +1,10 @@
 import 'dart:convert';
 
-import 'package:bog/app/global_widgets/app_radio_button.dart';
-import 'package:bog/core/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:get/get.dart';
 
+import '../../../core/theme/theme.dart';
 import '../../controllers/home_controller.dart';
 import '../../data/model/bank_details_model.dart';
 import '../../data/model/bank_list_model.dart';
@@ -13,12 +12,11 @@ import '../../data/model/fin_data_model.dart';
 import '../../data/providers/api_response.dart';
 import '../../data/providers/my_pref.dart';
 import '../../global_widgets/app_base_view.dart';
-
 import '../../global_widgets/app_loader.dart';
+import '../../global_widgets/app_radio_button.dart';
 import '../../global_widgets/custom_app_bar.dart';
 import '../../global_widgets/global_widgets.dart';
 import '../../global_widgets/page_dropdown.dart';
-
 
 class UpdateFinancialDetails extends StatefulWidget {
   final Map<String, dynamic> kycScore;
@@ -115,7 +113,7 @@ class _UpdateFinancialDetailsState extends State<UpdateFinancialDetails> {
                               onChanged: (val) {
                                 bankCode.text =
                                     (val! as BankListModel).code.toString();
-                           
+
                                 chosenBankName.text =
                                     (val as BankListModel).name.toString();
                               },
@@ -209,7 +207,7 @@ class _UpdateFinancialDetailsState extends State<UpdateFinancialDetails> {
                                     'banker_address':
                                         referenceNameController.text
                                   };
-                                
+
                                   final kycScore = widget.kycScore;
                                   kycScore['financialData'] = 6;
 

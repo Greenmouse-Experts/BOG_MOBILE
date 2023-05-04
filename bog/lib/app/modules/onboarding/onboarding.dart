@@ -1,14 +1,14 @@
-import 'package:bog/app/modules/sign_in/sign_in.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:get/get.dart';
 import 'package:flutter/services.dart';
+
 import '../multiplexor/multiplexor.dart';
 import '../../../app/global_widgets/app_button.dart';
-
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_styles.dart';
 import '../../../core/theme/app_themes.dart';
+import '../sign_in/sign_in.dart';
 import 'onboarding_item.dart';
 
 CarouselController buttonCarouselController = CarouselController();

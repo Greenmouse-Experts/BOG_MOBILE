@@ -1,23 +1,22 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:bog/app/data/model/general_info_model.dart';
-import 'package:bog/app/global_widgets/app_base_view.dart';
-
-import 'package:bog/app/global_widgets/app_loader.dart';
-import 'package:bog/app/global_widgets/custom_app_bar.dart';
-import 'package:bog/app/global_widgets/app_radio_button.dart';
-import 'package:bog/app/global_widgets/global_widgets.dart';
-import 'package:bog/core/theme/app_colors.dart';
-
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../core/theme/theme.dart';
+import '../../../core/utils/validator.dart';
 import '../../controllers/home_controller.dart';
+import '../../data/model/general_info_model.dart';
 import '../../data/model/log_in_model.dart';
 import '../../data/providers/api_response.dart';
 import '../../data/providers/my_pref.dart';
+import '../../global_widgets/app_base_view.dart';
+import '../../global_widgets/app_loader.dart';
+import '../../global_widgets/app_radio_button.dart';
+import '../../global_widgets/custom_app_bar.dart';
+import '../../global_widgets/global_widgets.dart';
 
 class UpdateGeneralInfo extends StatefulWidget {
   final Map<String, dynamic> kycScore;
@@ -111,11 +110,8 @@ class _UpdateGeneralInfoState extends State<UpdateGeneralInfo> {
                                 label: 'Office Telephone',
                                 controller: officeTelController,
                                 keyboardType: TextInputType.phone,
-                                //   initialValue: orgData.contactNumber.toString(),
-                                validator: LengthRangeValidator(
-                                    max: 11,
-                                    min: 11,
-                                    errorText: 'Enter a valid phone number'),
+                                isPhoneNumber: true,
+                                validator: Validator.phoneNumValidation,
                               ),
                               const SizedBox(height: 10),
                               PageInput(
@@ -250,16 +246,12 @@ class _UpdateGeneralInfoState extends State<UpdateGeneralInfo> {
                             ),
                             const SizedBox(height: 10),
                             PageInput(
-                              hint: '',
-                              label: 'Office Telephone',
-                              controller: officeTelController,
-                              keyboardType: TextInputType.phone,
-                              //   initialValue: orgData.contactNumber.toString(),
-                              validator: LengthRangeValidator(
-                                  max: 11,
-                                  min: 11,
-                                  errorText: 'Enter a valid phone number'),
-                            ),
+                                hint: '',
+                                label: 'Office Telephone',
+                                controller: officeTelController,
+                                keyboardType: TextInputType.phone,
+                                isPhoneNumber: true,
+                                validator: Validator.phoneNumValidation),
                             const SizedBox(height: 10),
                             PageInput(
                               hint: '',

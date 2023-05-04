@@ -1,7 +1,4 @@
-// import 'package:bog/app/data/model/bank_details_model.dart';
-// import 'package:bog/app/data/providers/api_response.dart';
-// import 'package:bog/app/global_widgets/global_widgets.dart';
-// import 'package:bog/core/theme/app_colors.dart';
+
 // import 'package:flutter/material.dart';
 
 // import '../controllers/home_controller.dart';

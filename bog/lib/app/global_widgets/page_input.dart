@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:bog/app/global_widgets/page_dropdown.dart';
 import 'package:dart_countries/dart_countries.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +7,7 @@ import 'package:get/get.dart';
 
 import '../../core/theme/theme.dart';
 import 'app_input.dart';
+import 'page_dropdown.dart';
 
 class PageInput extends StatefulWidget {
   const PageInput({

@@ -1,17 +1,17 @@
 import 'dart:convert';
 
-import 'package:bog/app/data/model/nearest_address.dart';
-import 'package:bog/app/data/model/order_response.dart' as order_response;
-import 'package:bog/app/data/model/post_order.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:flutter_paystack/flutter_paystack.dart';
 import 'package:get/get.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_styles.dart';
 import '../../controllers/home_controller.dart';
 import '../../data/model/log_in_model.dart';
+import '../../data/model/nearest_address.dart';
+import '../../data/model/post_order.dart';
+import '../../data/model/order_response.dart' as order_response;
 import '../../data/providers/api.dart';
 import '../../data/providers/my_pref.dart';
 import '../../global_widgets/address_picker.dart';
@@ -21,7 +21,6 @@ import '../../global_widgets/bottom_widget.dart';
 import '../../global_widgets/overlays.dart';
 import '../../global_widgets/page_input.dart';
 import '../home/pages/cart_tab.dart';
-import 'package:flutter_paystack/flutter_paystack.dart';
 
 import 'receipt.dart';
 
@@ -101,6 +100,14 @@ class _CheckoutState extends State<Checkout> {
       required String email,
       required HomeController controller,
       required int deliveryFee}) async {
+    final controller = Get.find<HomeController>();
+    final userType = controller.currentType == 'Client'
+        ? 'private_client'
+        : controller.currentType == 'Corporate Client'
+            ? 'corporate_client'
+            : controller.currentType == 'Product Partner'
+                ? 'vendor'
+                : 'professional';
     var logInDetails = LogInModel.fromJson(jsonDecode(MyPref.logInDetail.val));
     int price = (cost + deliveryFee) * 100;
     final List<OrderProduct> orderProducts = [];
@@ -112,7 +119,6 @@ class _CheckoutState extends State<Checkout> {
     for (var element in orderProducts) {
       jsonProducts.add(element.toJson());
     }
-   
 
     Charge charge = Charge()
       ..amount = price
@@ -152,7 +158,8 @@ class _CheckoutState extends State<Checkout> {
             "totalAmount": total,
             "deliveryFee": deliveryFee,
             "discount": 0,
-            "paymentInfo": {"reference": response.reference, "amount": total}
+            "paymentInfo": {"reference": response.reference, "amount": total},
+            "userType": userType
           };
           final respose = await controller.userRepo
               .postData('/orders/submit-order', postOrder);

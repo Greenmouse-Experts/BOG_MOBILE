@@ -1,24 +1,20 @@
 import 'dart:convert';
 
-import 'package:bog/app/modules/settings/view_kyc.dart';
-import 'package:bog/app/modules/subscription/subscription_view.dart';
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_styles.dart';
 import '../../../controllers/home_controller.dart';
-
 import '../../../data/model/user_details_model.dart';
 import '../../../data/providers/my_pref.dart';
 import '../../../global_widgets/app_avatar.dart';
-
 import '../../../global_widgets/confirm_logout.dart';
 import '../../settings/profile_info.dart';
-
 import '../../settings/update_password.dart';
+import '../../settings/view_kyc.dart';
+import '../../subscription/subscription_view.dart';
 
 class ProfileTab extends StatelessWidget {
   const ProfileTab({
@@ -28,7 +24,8 @@ class ProfileTab extends StatelessWidget {
   static const route = '/profileTab';
   @override
   Widget build(BuildContext context) {
-    var logInDetails = UserDetailsModel.fromJson(jsonDecode(MyPref.userDetails.val));
+    var logInDetails =
+        UserDetailsModel.fromJson(jsonDecode(MyPref.userDetails.val));
 
     final Uri about = Uri.parse('https://bog-project-new.netlify.app/about');
     final Uri terms = Uri.parse('https://bog-project-new.netlify.app/terms');

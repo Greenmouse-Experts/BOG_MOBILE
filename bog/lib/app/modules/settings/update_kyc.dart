@@ -1,7 +1,5 @@
 import 'dart:convert';
 
-import 'package:bog/app/global_widgets/app_button.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
@@ -9,13 +7,12 @@ import 'package:get/get.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_styles.dart';
-
 import '../../controllers/home_controller.dart';
 import '../../data/model/bank_list_model.dart';
 import '../../data/model/log_in_model.dart';
 import '../../data/providers/my_pref.dart';
+import '../../global_widgets/global_widgets.dart';
 import '../../global_widgets/page_dropdown.dart';
-import '../../global_widgets/page_input.dart';
 
 class UpdateKyc extends StatefulWidget {
   const UpdateKyc({Key? key}) : super(key: key);
