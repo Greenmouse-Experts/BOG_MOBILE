@@ -337,7 +337,9 @@ class _CartTabState extends State<CartTab> {
                       prefexIcon: Icon(
                         FeatherIcons.search,
                         color: Colors.black.withOpacity(.5),
-                        size: Get.width * 0.05,
+                        size: Get.width > 600
+                            ? Get.width * 0.03
+                            : Get.width * 0.05,
                       ),
                       onChanged: (value) {
                         if (search != value) {
@@ -946,8 +948,8 @@ class ProductItem extends StatelessWidget {
         child: Row(
           children: [
             SizedBox(
-              height: 90,
-              width: 90,
+              height: Get.width * 0.2,
+              width: Get.width * 0.2,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10),
                 child: CachedNetworkImage(
@@ -961,8 +963,8 @@ class ProductItem extends StatelessWidget {
                   },
                   errorWidget: (context, url, error) {
                     return Container(
-                      height: 90,
-                      width: 90,
+                      height: Get.width * 0.2,
+                      width: Get.width * 0.2,
                       decoration: BoxDecoration(
                         color: AppColors.primary,
                         borderRadius: BorderRadius.circular(10),
@@ -989,7 +991,11 @@ class ProductItem extends StatelessWidget {
                 children: [
                   Padding(
                     padding: EdgeInsets.only(left: Get.width * 0.015),
-                    child: Text(title ?? ""),
+                    child: Text(title ?? "",
+                        style: AppTextStyle.headline4.copyWith(
+                            fontSize: Get.width * 0.035,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w400)),
                   ),
                   Padding(
                     padding: EdgeInsets.only(left: Get.width * 0.015),
@@ -1023,10 +1029,9 @@ class ProductItem extends StatelessWidget {
               children: [
                 PopupMenuButton(
                     color: Colors.white,
-                    child: const Icon(
-                      Icons.more_vert_outlined,
-                      color: AppColors.ashColor,
-                    ),
+                    child: Icon(Icons.more_vert_outlined,
+                        color: AppColors.ashColor,
+                        size: Get.textScaleFactor * 30),
                     itemBuilder: (context) {
                       return [
                         if (status == 'draft')
@@ -1165,19 +1170,23 @@ class OrderRequestItem extends StatelessWidget {
                         "Order ID :  $orderSlug ",
                         style: AppTextStyle.caption.copyWith(
                           color: Colors.black,
-                          fontSize: Get.width * 0.035,
+                          fontSize: Get.width > 600
+                              ? Get.width * 0.025
+                              : Get.width * 0.035,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
                     ),
-                    const SizedBox(height: 10),
+                    SizedBox(height: Get.height * 0.01),
                     Padding(
                       padding: EdgeInsets.only(left: Get.width * 0.005),
                       child: Text(
                         name,
                         style: AppTextStyle.caption.copyWith(
                           color: Colors.black.withOpacity(0.6),
-                          fontSize: Get.width * 0.033,
+                          fontSize: Get.width > 600
+                              ? Get.width * 0.023
+                              : Get.width * 0.033,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -1185,7 +1194,7 @@ class OrderRequestItem extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(width: 8),
+              SizedBox(width: Get.height * 0.01),
               Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -1196,19 +1205,23 @@ class OrderRequestItem extends StatelessWidget {
                       'NGN $price',
                       style: AppTextStyle.caption.copyWith(
                         color: AppColors.primary,
-                        fontSize: Get.width * 0.035,
+                        fontSize: Get.width > 600
+                            ? Get.width * 0.025
+                            : Get.width * 0.035,
                         fontWeight: FontWeight.w400,
                       ),
                     ),
                   ),
-                  const SizedBox(height: 10),
+                  SizedBox(height: Get.height * 0.01),
                   Padding(
                     padding: EdgeInsets.only(left: Get.width * 0.015),
                     child: Text(
                       'Qty: $quantity',
                       style: AppTextStyle.caption.copyWith(
                         color: Colors.black.withOpacity(0.6),
-                        fontSize: Get.width * 0.033,
+                        fontSize: Get.width > 600
+                            ? Get.width * 0.023
+                            : Get.width * 0.033,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -1217,7 +1230,7 @@ class OrderRequestItem extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: Get.height * 0.01),
           Text(
             'Status:  ${status.toUpperCase()}',
             style: AppTextStyle.caption.copyWith(

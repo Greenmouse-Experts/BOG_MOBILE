@@ -44,6 +44,10 @@
 			</dict>
 		</array>
 <!-- End of the Google Sign-in Section -->
+        <key>NSCameraUsageDescription</key>
+    	<string>BOG needs to access the camera to take pictures</string>
+		<key>NSPhotoLibraryUsageDescription</key>
+    	<string>BOG needs access to your photo library to select images</string>
 		<key>UISupportedInterfaceOrientations</key>
 		<array>
 			<string>UIInterfaceOrientationPortrait</string>

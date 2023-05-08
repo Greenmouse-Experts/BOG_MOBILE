@@ -57,6 +57,7 @@ class _ChatTabState extends State<ChatTab> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
+                    // newAppBar(context,'Messages'),
                     const SizedBox(
                       height: kToolbarHeight,
                     ),
@@ -71,7 +72,9 @@ class _ChatTabState extends State<ChatTab> {
                             "Messages",
                             style: AppTextStyle.subtitle1.copyWith(
                               color: Colors.black,
-                              fontSize: Get.width * 0.045,
+                              fontSize: Get.width > 600
+                                  ? Get.width * 0.03
+                                  : Get.width * 0.045,
                               fontWeight: FontWeight.w400,
                             ),
                           ),

@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 
 import '../app/bindings/auth_binding.dart';
+import '../app/data/providers/my_pref.dart';
 import '../app/modules/chat/chat.dart';
 import '../app/modules/create/create.dart';
 import '../app/modules/home/home.dart';
@@ -22,8 +23,9 @@ import '../app/modules/verify_otp/verify_otp.dart';
 
 class AppPages {
   AppPages._();
-  //static String initial = MyPref.authToken.val.isNotEmpty ? HomePage.route : OnbordingPage.route;
-  static String initial = OnboardingPage.route;
+
+  static String initial =
+      MyPref.firstTimeUser.val ? OnboardingPage.route : SignIn.route;
 
   static final routes = [
     GetPage(name: OnboardingPage.route, page: () => const OnboardingPage()),

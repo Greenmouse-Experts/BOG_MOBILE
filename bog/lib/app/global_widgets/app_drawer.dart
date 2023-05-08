@@ -77,8 +77,8 @@ class _AppDrawerState extends State<AppDrawer> {
                                       onPressed: () {},
                                     ),
                                   ),
-                                  const SizedBox(
-                                    width: 10.0,
+                                  SizedBox(
+                                    width:  Get.width * 0.02,
                                   ),
                                   Expanded(
                                     child: Row(

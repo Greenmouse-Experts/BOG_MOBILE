@@ -64,7 +64,7 @@ class SignIn extends GetView<AuthController> {
                             style: AppTextStyle.headline4.copyWith(
                               color: Colors.black,
                               fontWeight: FontWeight.w500,
-                              fontSize: 24,
+                              fontSize: Get.textScaleFactor * 24,
                             ),
                             textAlign: TextAlign.center,
                           ),
@@ -76,7 +76,7 @@ class SignIn extends GetView<AuthController> {
                             style: AppTextStyle.headline4.copyWith(
                                 color: Colors.black.withOpacity(.5),
                                 fontWeight: FontWeight.normal,
-                                fontSize: 16),
+                                fontSize:  Get.textScaleFactor * 16),
                           ),
                           SizedBox(height: Get.height * 0.035),
                           PageInput(

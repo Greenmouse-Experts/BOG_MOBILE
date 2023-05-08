@@ -1,5 +1,6 @@
 import 'package:bog/core/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class AppRadioButton extends StatefulWidget {
   final List<String> options;
@@ -107,7 +108,7 @@ class _NewAppRadioButtonState extends State<NewAppRadioButton> {
               contentPadding: EdgeInsets.zero,
               minVerticalPadding: 0,
               horizontalTitleGap: 0,
-              minLeadingWidth: 5,
+              minLeadingWidth: Get.width * 0.01,
               title: Text(
                 widget.options[index],
                 style: AppTextStyle.subtitle1.copyWith(color: Colors.black87),

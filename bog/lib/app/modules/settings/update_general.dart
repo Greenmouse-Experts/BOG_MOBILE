@@ -15,8 +15,8 @@ import '../../data/providers/my_pref.dart';
 import '../../global_widgets/app_base_view.dart';
 import '../../global_widgets/app_loader.dart';
 import '../../global_widgets/app_radio_button.dart';
-import '../../global_widgets/custom_app_bar.dart';
 import '../../global_widgets/global_widgets.dart';
+import '../../global_widgets/new_app_bar.dart';
 
 class UpdateGeneralInfo extends StatefulWidget {
   final Map<String, dynamic> kycScore;
@@ -61,11 +61,11 @@ class _UpdateGeneralInfoState extends State<UpdateGeneralInfo> {
     var logInDetails = LogInModel.fromJson(jsonDecode(MyPref.logInDetail.val));
     return AppBaseView(
         child: Scaffold(
+      appBar: newAppBarBack(context, 'General Info'),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const CustomAppBar(title: 'General Info'),
             FutureBuilder<ApiResponse>(
                 future: getGenrealInfo,
                 builder: (context, snapshot) {

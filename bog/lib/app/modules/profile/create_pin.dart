@@ -5,12 +5,9 @@ import 'package:otp_text_field/otp_field.dart';
 import 'package:otp_text_field/style.dart';
 
 import '../../../core/theme/app_colors.dart';
-
 import '../../../core/theme/app_styles.dart';
 import '../../../core/theme/app_themes.dart';
-
 import '../../global_widgets/app_button.dart';
-
 import 'confirm_pin.dart';
 
 class CreatePIN extends StatelessWidget {
@@ -77,7 +74,7 @@ class CreatePIN extends StatelessWidget {
                   length: 4,
                   width: MediaQuery.of(context).size.width,
                   fieldWidth: Get.width * 0.1,
-                  style: const TextStyle(fontSize: 17),
+                  style: TextStyle(fontSize: Get.textScaleFactor * 17),
                   textFieldAlignment: MainAxisAlignment.spaceAround,
                   fieldStyle: FieldStyle.box,
                   onCompleted: (pin) {},
@@ -98,7 +95,7 @@ class CreatePIN extends StatelessWidget {
                   length: 4,
                   width: MediaQuery.of(context).size.width,
                   fieldWidth: Get.width * 0.1,
-                  style: const TextStyle(fontSize: 17),
+                  style: TextStyle(fontSize: Get.textScaleFactor * 17),
                   textFieldAlignment: MainAxisAlignment.spaceAround,
                   fieldStyle: FieldStyle.box,
                   onCompleted: (pin) {},
@@ -108,8 +105,6 @@ class CreatePIN extends StatelessWidget {
                   title: 'Continue',
                   onPressed: () {
                     Get.toNamed(ConfirmPIN.route);
-                    // Get.toNamed(UpdateProfile.route);
-                    //Get.toNamed(SignUp.route);
                   },
                   borderRadius: 10,
                 ),

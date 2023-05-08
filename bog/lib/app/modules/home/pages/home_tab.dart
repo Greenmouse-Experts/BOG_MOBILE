@@ -82,23 +82,30 @@ class _HomeTabState extends State<HomeTab> {
                               left: 10.0, right: 10.0, top: 10.0),
                           child: Row(
                             children: [
-                              IconButton(
-                                  onPressed: () {
-                                    Scaffold.of(context).openDrawer();
-                                  },
-                                  icon: Icon(
-                                    Icons.menu,
-                                    size: Get.width * 0.075,
-                                  )),
-                              const SizedBox(
-                                width: 10.0,
+                              Center(
+                                child: IconButton(
+                                    onPressed: () {
+                                      Scaffold.of(context).openDrawer();
+                                    },
+                                    icon: Icon(
+                                      Icons.menu,
+                                      size: Get.width > 600
+                                          ? Get.width * 0.05
+                                          : Get.width * 0.075,
+                                    )),
+                              ),
+                              SizedBox(
+                                width: Get.width * 0.015,
                               ),
                               Expanded(
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  // mainAxisAlignment:
+                                  //     MainAxisAlignment.spaceBetween,
                                   children: [
+                                    SizedBox(
+                                      width: Get.width * 0.015,
+                                    ),
                                     Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -118,11 +125,14 @@ class _HomeTabState extends State<HomeTab> {
                                           style:
                                               AppTextStyle.subtitle1.copyWith(
                                             color: Colors.black,
-                                            fontSize: Get.width * 0.05,
+                                            fontSize: Get.width > 600
+                                                ? Get.textScaleFactor * 35
+                                                : Get.width * 0.05,
                                           ),
                                         ),
                                       ],
                                     ),
+                                    const Spacer(),
                                     NootificationWidget(
                                         controller: controller,
                                         unreadNotifications:
@@ -362,7 +372,9 @@ class _HomeTabState extends State<HomeTab> {
                                                           color: Colors.black,
                                                           fontWeight:
                                                               FontWeight.w400,
-                                                          fontSize: 19,
+                                                          fontSize:
+                                                              Get.textScaleFactor *
+                                                                  19,
                                                         ),
                                                       ),
                                                       const SizedBox(
@@ -376,7 +388,9 @@ class _HomeTabState extends State<HomeTab> {
                                                           color: Colors.black,
                                                           fontWeight:
                                                               FontWeight.normal,
-                                                          fontSize: 14,
+                                                          fontSize:
+                                                              Get.textScaleFactor *
+                                                                  14,
                                                         ),
                                                       ),
                                                     ],
@@ -443,7 +457,9 @@ class _HomeTabState extends State<HomeTab> {
                                                           color: Colors.black,
                                                           fontWeight:
                                                               FontWeight.w400,
-                                                          fontSize: 19,
+                                                          fontSize:
+                                                              Get.textScaleFactor *
+                                                                  19,
                                                         ),
                                                       ),
                                                       const SizedBox(
@@ -457,7 +473,9 @@ class _HomeTabState extends State<HomeTab> {
                                                           color: Colors.black,
                                                           fontWeight:
                                                               FontWeight.normal,
-                                                          fontSize: 14,
+                                                          fontSize:
+                                                              Get.textScaleFactor *
+                                                                  14,
                                                         ),
                                                       ),
                                                     ],
@@ -844,7 +862,7 @@ class ProductPartnerHomeWidget extends StatelessWidget {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15)),
               color: AppColors.primary,
-              margin: const EdgeInsets.all(8),
+              margin:  EdgeInsets.all(Get.width * 0.015),
               child: Padding(
                 padding:
                     const EdgeInsets.symmetric(vertical: 20.0, horizontal: 15),
@@ -1084,6 +1102,7 @@ class _PriceSwitcherState extends State<PriceSwitcher> {
     return Row(
       children: [
         Text(showPrice ? 'NGN 3,180,000' : '******',
+            textAlign: TextAlign.center,
             style: AppTextStyle.mid1.copyWith(color: AppColors.white)),
         IconButton(
             onPressed: () {
@@ -1102,7 +1121,7 @@ class _PriceSwitcherState extends State<PriceSwitcher> {
             : const SizedBox.shrink(),
         const SizedBox(width: 5),
         Text(
-          'Verified',
+          widget.isVerified ? 'Verified' : 'Unverified',
           style: AppTextStyle.caption.copyWith(color: AppColors.white),
         ),
       ],

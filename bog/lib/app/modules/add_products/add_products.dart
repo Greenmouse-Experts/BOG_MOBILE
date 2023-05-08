@@ -131,7 +131,7 @@ class _AddProjectState extends State<AddProject> {
                                     ),
                                   ),
                                   SizedBox(
-                                    height: Get.height * 0.04,
+                                    height: Get.height * 0.01,
                                   ),
                                   Padding(
                                     padding: EdgeInsets.only(
@@ -151,7 +151,7 @@ class _AddProjectState extends State<AddProject> {
                                     ),
                                   ),
                                   SizedBox(
-                                    height: Get.height * 0.04,
+                                    height: Get.height * 0.01,
                                   ),
                                   Padding(
                                     padding: EdgeInsets.only(
@@ -171,7 +171,7 @@ class _AddProjectState extends State<AddProject> {
                                     ),
                                   ),
                                   SizedBox(
-                                    height: Get.height * 0.04,
+                                    height: Get.height * 0.01,
                                   ),
                                   Padding(
                                     padding: EdgeInsets.only(
@@ -197,7 +197,7 @@ class _AddProjectState extends State<AddProject> {
                                     ),
                                   ),
                                   SizedBox(
-                                    height: Get.height * 0.04,
+                                    height: Get.height * 0.01,
                                   ),
                                   Padding(
                                     padding: EdgeInsets.only(
@@ -220,7 +220,7 @@ class _AddProjectState extends State<AddProject> {
                                     ),
                                   ),
                                   SizedBox(
-                                    height: Get.height * 0.04,
+                                    height: Get.height * 0.01,
                                   ),
                                   Padding(
                                     padding: EdgeInsets.only(
@@ -235,7 +235,7 @@ class _AddProjectState extends State<AddProject> {
                                     ),
                                   ),
                                   SizedBox(
-                                    height: Get.height * 0.04,
+                                    height: Get.height * 0.01,
                                   ),
                                   Padding(
                                     padding: EdgeInsets.only(
@@ -251,7 +251,7 @@ class _AddProjectState extends State<AddProject> {
                                     ),
                                   ),
                                   SizedBox(
-                                    height: Get.height * 0.04,
+                                    height: Get.height * 0.01,
                                   ),
                                   Padding(
                                     padding: EdgeInsets.only(
@@ -428,7 +428,7 @@ class _AddProjectState extends State<AddProject> {
                                   ),
                                 ),
                                 SizedBox(
-                                  height: Get.height * 0.04,
+                                  height: Get.height * 0.01,
                                 ),
                                 Padding(
                                   padding: EdgeInsets.only(
@@ -447,7 +447,7 @@ class _AddProjectState extends State<AddProject> {
                                   ),
                                 ),
                                 SizedBox(
-                                  height: Get.height * 0.04,
+                                  height: Get.height * 0.01,
                                 ),
                                 Padding(
                                   padding: EdgeInsets.only(
@@ -466,7 +466,7 @@ class _AddProjectState extends State<AddProject> {
                                   ),
                                 ),
                                 SizedBox(
-                                  height: Get.height * 0.04,
+                                  height: Get.height * 0.01,
                                 ),
                                 Padding(
                                   padding: EdgeInsets.only(
@@ -491,7 +491,7 @@ class _AddProjectState extends State<AddProject> {
                                   ),
                                 ),
                                 SizedBox(
-                                  height: Get.height * 0.04,
+                                  height: Get.height * 0.01,
                                 ),
                                 Padding(
                                   padding: EdgeInsets.only(
@@ -513,7 +513,7 @@ class _AddProjectState extends State<AddProject> {
                                   ),
                                 ),
                                 SizedBox(
-                                  height: Get.height * 0.04,
+                                  height: Get.height * 0.01,
                                 ),
                                 Padding(
                                   padding: EdgeInsets.only(
@@ -527,7 +527,7 @@ class _AddProjectState extends State<AddProject> {
                                   ),
                                 ),
                                 SizedBox(
-                                  height: Get.height * 0.04,
+                                  height: Get.height * 0.01,
                                 ),
                                 Padding(
                                   padding: EdgeInsets.only(
@@ -542,7 +542,7 @@ class _AddProjectState extends State<AddProject> {
                                   ),
                                 ),
                                 SizedBox(
-                                  height: Get.height * 0.04,
+                                  height: Get.height * 0.01,
                                 ),
                                 Padding(
                                   padding: EdgeInsets.only(

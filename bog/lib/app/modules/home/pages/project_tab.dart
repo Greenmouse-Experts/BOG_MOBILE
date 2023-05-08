@@ -173,7 +173,9 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
                                                 style: AppTextStyle.subtitle1
                                                     .copyWith(
                                                   color: AppColors.primary,
-                                                  fontSize: Get.width * 0.035,
+                                                  fontSize: Get.width > 600
+                                                      ? Get.width * 0.025
+                                                      : Get.width * 0.035,
                                                   fontWeight: FontWeight.w500,
                                                 ),
                                                 textAlign: TextAlign.start,
@@ -824,9 +826,9 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
                                                                               onApiChange();
                                                                             },
                                                                             child:
-                                                                                const Text(
+                                                                                Text(
                                                                               'View Details',
-                                                                              style: TextStyle(color: Colors.grey, fontSize: 12),
+                                                                              style: TextStyle(color: Colors.grey, fontSize: Get.textScaleFactor * 12),
                                                                             ),
                                                                           ),
                                                                         ),
@@ -862,9 +864,9 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
                                                                                   });
                                                                             },
                                                                             child:
-                                                                                const Text(
+                                                                                Text(
                                                                               'Update Details',
-                                                                              style: TextStyle(color: Colors.grey, fontSize: 12),
+                                                                              style: TextStyle(color: Colors.grey, fontSize: Get.textScaleFactor * 12),
                                                                             ),
                                                                           ),
                                                                         )

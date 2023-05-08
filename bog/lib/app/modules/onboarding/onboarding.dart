@@ -3,6 +3,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:get/get.dart';
 import 'package:flutter/services.dart';
 
+import '../../data/providers/my_pref.dart';
 import '../multiplexor/multiplexor.dart';
 import '../../../app/global_widgets/app_button.dart';
 import '../../../core/theme/app_colors.dart';
@@ -23,6 +24,20 @@ class OnboardingPage extends StatefulWidget {
 
 class _OnboardingPageState extends State<OnboardingPage> {
   int currentIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    verifyOnboarding();
+  }
+
+  void verifyOnboarding() {
+    final isFirstTimeUser = MyPref.firstTimeUser.val;
+    if (isFirstTimeUser) {
+      MyPref.firstTimeUser.val = false;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(

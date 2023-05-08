@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../loading_widget.dart';
 
@@ -130,8 +131,8 @@ class LoadingScreenState extends State<LoadingScreen> {
                       padding: const EdgeInsets.all(15.0),
                       child: Text(
                         message ?? "Please wait",
-                        style: const TextStyle(
-                            fontSize: 16,
+                        style: TextStyle(
+                            fontSize:  Get.textScaleFactor * 16,
                             color: Colors.white,
                             fontFamily: 'Mulish'),
                         textAlign: TextAlign.center,

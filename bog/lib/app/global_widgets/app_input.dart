@@ -33,7 +33,7 @@ class AppInput extends StatefulWidget {
       width: 1,
       color: Color(0xFF828282),
     ),
-    this.borderRadius = 10,  
+    this.borderRadius = 10,
   }) : super(key: key);
 
   final String? label;
@@ -126,7 +126,7 @@ class _AppInputState extends State<AppInput> {
             fontWeight: widget.borderSide == BorderSide.none
                 ? FontWeight.w600
                 : FontWeight.w500,
-            fontSize: Get.width * .035,
+            fontSize: Get.width > 600 ? Get.width * .025 : Get.width * .035,
           ),
           cursorColor: AppColors.primary,
           decoration: InputDecoration(
@@ -150,7 +150,7 @@ class _AppInputState extends State<AppInput> {
             focusColor: AppColors.spanishGray,
             hintStyle: AppTextStyle.bodyText2.copyWith(
               color: const Color(0xFFC4C4C4),
-              fontSize: Get.width * .035,
+              fontSize: Get.width > 600 ? Get.width * .025 : Get.width * .035,
               fontWeight: widget.borderSide == BorderSide.none
                   ? FontWeight.w600
                   : FontWeight.normal,
@@ -163,7 +163,6 @@ class _AppInputState extends State<AppInput> {
     );
   }
 }
-
 
 class DisabledAppInput extends StatefulWidget {
   const DisabledAppInput({
@@ -193,7 +192,7 @@ class DisabledAppInput extends StatefulWidget {
       width: 1,
       color: Color(0xFF828282),
     ),
-    this.borderRadius = 10,  
+    this.borderRadius = 10,
   }) : super(key: key);
 
   final String? label;
@@ -269,9 +268,9 @@ class _DisabledAppInputState extends State<DisabledAppInput> {
         ),
         Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
-         border: Border.all(color: const Color(0xFF828282).withOpacity(.3))
-          ),
+              borderRadius: BorderRadius.circular(12),
+              border:
+                  Border.all(color: const Color(0xFF828282).withOpacity(.3))),
           child: TextFormField(
             enabled: false,
             initialValue: widget.initalValue,
@@ -292,7 +291,7 @@ class _DisabledAppInputState extends State<DisabledAppInput> {
               fontWeight: widget.borderSide == BorderSide.none
                   ? FontWeight.w600
                   : FontWeight.w500,
-              fontSize: Get.width * .035,
+              fontSize: Get.width > 600 ? Get.width * .025 : Get.width * .035,
             ),
             cursorColor: AppColors.primary,
             decoration: InputDecoration(
@@ -316,7 +315,7 @@ class _DisabledAppInputState extends State<DisabledAppInput> {
               focusColor: AppColors.spanishGray,
               hintStyle: AppTextStyle.bodyText2.copyWith(
                 color: const Color(0xFFC4C4C4),
-                fontSize: Get.width * .035,
+                fontSize: Get.width > 600 ? Get.width * .025 : Get.width * .035,
                 fontWeight: widget.borderSide == BorderSide.none
                     ? FontWeight.w600
                     : FontWeight.normal,

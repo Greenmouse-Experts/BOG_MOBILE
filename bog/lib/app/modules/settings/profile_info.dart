@@ -219,6 +219,8 @@ class ProfileInfo extends GetView<HomeController> {
                               label: 'Phone Number',
                               isCompulsory: false,
                               readOnly: true,
+                              keyboardType: TextInputType.phone,
+                              isPhoneNumber: true,
                               borderSide: BorderSide.none,
                               controller: phoneNumber,
                             ),

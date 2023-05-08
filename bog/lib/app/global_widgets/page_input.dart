@@ -103,9 +103,10 @@ class _PageInputState extends State<PageInput> {
               left: widget.borderSide == BorderSide.none ? 15 : 5),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               SizedBox(
-                width: Get.width * widget.textWidth,
+                // width: Get.width * widget.textWidth,
                 child: Text(
                   widget.label,
                   style: AppTextStyle.bodyText2.copyWith(
@@ -115,13 +116,16 @@ class _PageInputState extends State<PageInput> {
                   ),
                 ),
               ),
-              if (widget.isCompulsory) const SizedBox(width: 5),
+              // if (widget.isCompulsory) const SizedBox(width: 5),
               if (widget.isCompulsory)
-                Text(
-                  "*",
-                  style: AppTextStyle.bodyText2.copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: Colors.red,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                  child: Text(
+                    "*",
+                    style: AppTextStyle.bodyText2.copyWith(
+                      fontWeight: FontWeight.w600,
+                      color: Colors.red,
+                    ),
                   ),
                 ),
               if (widget.isReferral && widget.showInfo)

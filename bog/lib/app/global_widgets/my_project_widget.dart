@@ -131,7 +131,8 @@ class _MyProjectWidgetState extends State<MyProjectWidget> {
           ),
           subtitle: Text(
             widget.orderSlug,
-            style: const TextStyle(fontSize: 10, color: Colors.grey),
+            style: TextStyle(
+                fontSize: Get.textScaleFactor * 10, color: Colors.grey),
           ),
           trailing: PopupMenuButton(
               color: Colors.white,
@@ -148,9 +149,11 @@ class _MyProjectWidgetState extends State<MyProjectWidget> {
                                   isClient: true,
                                 ));
                           },
-                          child: const Text(
+                          child: Text(
                             'View Details',
-                            style: TextStyle(color: Colors.grey, fontSize: 12),
+                            style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: Get.textScaleFactor * 12),
                           )),
                     ),
                   PopupMenuItem<int>(
@@ -160,9 +163,11 @@ class _MyProjectWidgetState extends State<MyProjectWidget> {
                           Get.back();
                           Get.to(() => ViewFormPage(id: widget.id));
                         },
-                        child: const Text(
+                        child: Text(
                           'View Form',
-                          style: TextStyle(color: Colors.grey, fontSize: 12),
+                          style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: Get.textScaleFactor * 12),
                         )),
                   ),
                   if (!widget.isOngoing &&
@@ -185,9 +190,11 @@ class _MyProjectWidgetState extends State<MyProjectWidget> {
                               },
                             );
                           },
-                          child: const Text(
+                          child: Text(
                             'Commence Project',
-                            style: TextStyle(color: Colors.grey, fontSize: 12),
+                            style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: Get.textScaleFactor * 12),
                           )),
                     ),
                   PopupMenuItem<int>(

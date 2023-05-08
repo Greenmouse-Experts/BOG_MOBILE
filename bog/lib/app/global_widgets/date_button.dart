@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_styles.dart';
@@ -10,7 +11,7 @@ class DateButton<T> extends StatefulWidget {
     this.validator,
     this.initialValue,
     required this.label,
-     this.date,
+    this.date,
     this.time,
   }) : super(key: key);
 
@@ -99,9 +100,7 @@ class _DateButtonState<T> extends State<DateButton<T>> {
                             title: time.minute.toString(),
                           ),
                           DateItemButton(
-                            title: time.period == DayPeriod.am
-                                ? 'AM'
-                                : 'PM',
+                            title: time.period == DayPeriod.am ? 'AM' : 'PM',
                           ),
                         ],
                       ),
@@ -111,7 +110,8 @@ class _DateButtonState<T> extends State<DateButton<T>> {
                   ? Text(
                       field.errorText!,
                       style: TextStyle(
-                          color: Colors.redAccent.shade700, fontSize: 12.0),
+                          color: Colors.redAccent.shade700,
+                          fontSize: Get.textScaleFactor * 12),
                     )
                   : const SizedBox.shrink(),
             ],

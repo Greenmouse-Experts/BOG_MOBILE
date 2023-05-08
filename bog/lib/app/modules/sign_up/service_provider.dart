@@ -87,7 +87,7 @@ class _ServiceProviderSignUpState extends State<ServiceProviderSignUp> {
                                 style: AppTextStyle.headline4.copyWith(
                                   color: Colors.black,
                                   fontWeight: FontWeight.w500,
-                                  fontSize: 24,
+                                  fontSize: Get.textScaleFactor * 24,
                                 ),
                                 textAlign: TextAlign.center,
                               ),
@@ -103,7 +103,7 @@ class _ServiceProviderSignUpState extends State<ServiceProviderSignUp> {
                                 style: AppTextStyle.headline4.copyWith(
                                     color: Colors.black.withOpacity(.5),
                                     fontWeight: FontWeight.normal,
-                                    fontSize: 16),
+                                    fontSize: Get.textScaleFactor * 16),
                               ),
                             ),
                             SizedBox(height: Get.height * 0.04),
@@ -155,6 +155,7 @@ class _ServiceProviderSignUpState extends State<ServiceProviderSignUp> {
                                               Validator.phoneNumValidation,
                                           isCompulsory: true,
                                           isPhoneNumber: true,
+                                          keyboardType: TextInputType.phone,
                                           controller: controller.phone,
                                         ),
                                         SizedBox(height: Get.height * 0.025),
@@ -331,7 +332,9 @@ class _ServiceProviderSignUpState extends State<ServiceProviderSignUp> {
                                                             .withOpacity(.5),
                                                         fontWeight:
                                                             FontWeight.normal,
-                                                        fontSize: 14,
+                                                        fontSize:
+                                                            Get.textScaleFactor *
+                                                                14,
                                                       ),
                                                     ),
                                                     TextSpan(
@@ -344,7 +347,9 @@ class _ServiceProviderSignUpState extends State<ServiceProviderSignUp> {
                                                               AppColors.primary,
                                                           fontWeight:
                                                               FontWeight.normal,
-                                                          fontSize: 14,
+                                                          fontSize:
+                                                              Get.textScaleFactor *
+                                                                  14,
                                                         ),
                                                         recognizer:
                                                             TapGestureRecognizer()

@@ -734,15 +734,19 @@ class RowTitle extends StatelessWidget {
       children: [
         Text(
           title,
-          style: TextStyle(color: Colors.grey.withOpacity(0.9), fontSize: 16),
+          style: TextStyle(
+              color: Colors.grey.withOpacity(0.9),
+              fontSize: Get.textScaleFactor * 16),
         ),
         const SizedBox(
           width: 10,
         ),
         Text(
           detail,
-          style: const TextStyle(
-              color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),
+          style: TextStyle(
+              color: Colors.black,
+              fontSize: Get.textScaleFactor * 16,
+              fontWeight: FontWeight.bold),
         )
       ],
     );

@@ -135,6 +135,7 @@ class _UpdateOrganisationInfoState extends State<UpdateOrganisationInfo> {
                                   keyboardType: TextInputType.phone,
                                   controller: directorPhone,
                                   isPhoneNumber: true,
+                                  
                                   autovalidateMode:
                                       AutovalidateMode.onUserInteraction,
                                   validator: Validator.phoneNumValidation),

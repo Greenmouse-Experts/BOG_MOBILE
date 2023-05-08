@@ -62,7 +62,7 @@ class SignUp extends GetView<AuthController> {
                     style: AppTextStyle.headline4.copyWith(
                       color: Colors.black,
                       fontWeight: FontWeight.w500,
-                      fontSize: 18,
+                      fontSize: Get.textScaleFactor * 18,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -77,11 +77,12 @@ class SignUp extends GetView<AuthController> {
                     style: AppTextStyle.headline4.copyWith(
                         color: Colors.black.withOpacity(.5),
                         fontWeight: FontWeight.normal,
-                        fontSize: 14),
+                        fontSize: Get.textScaleFactor * 14),
                   ),
                 ),
                 SizedBox(height: Get.height * 0.04),
-                SizedBox(
+                Container(
+                  alignment: Alignment.center,
                   height: Get.height * 0.045,
                   child: Padding(
                     padding:
@@ -100,7 +101,7 @@ class SignUp extends GetView<AuthController> {
                                   ? Colors.white
                                   : const Color(0xff2F2F2F),
                               fontWeight: FontWeight.w300,
-                              fontSize: 14,
+                              fontSize: Get.textScaleFactor * 14,
                             ),
                           ),
                         );
@@ -164,6 +165,7 @@ class SignUp extends GetView<AuthController> {
                                       validator: Validator.phoneNumValidation,
                                       isCompulsory: true,
                                       isPhoneNumber: true,
+                                      keyboardType: TextInputType.phone,
                                       controller: controller.phone,
                                     ),
                                     SizedBox(height: Get.height * 0.025),
@@ -275,7 +277,9 @@ class SignUp extends GetView<AuthController> {
                                                         .withOpacity(.5),
                                                     fontWeight:
                                                         FontWeight.normal,
-                                                    fontSize: 14,
+                                                    fontSize:
+                                                        Get.textScaleFactor *
+                                                            14,
                                                   ),
                                                 ),
                                                 TextSpan(
@@ -287,7 +291,9 @@ class SignUp extends GetView<AuthController> {
                                                       color: AppColors.primary,
                                                       fontWeight:
                                                           FontWeight.normal,
-                                                      fontSize: 14,
+                                                      fontSize:
+                                                          Get.textScaleFactor *
+                                                              14,
                                                     ),
                                                     recognizer:
                                                         TapGestureRecognizer()
@@ -307,6 +313,7 @@ class SignUp extends GetView<AuthController> {
                                       enabled: controller
                                           .isTermsAndConditionsChecked,
                                     ),
+                                    SizedBox(height: Get.height * 0.01),
                                     // GoogleUserCircleAvatar(identity: user),
                                     AppButton(
                                       title: 'Sign up with Google',
@@ -317,11 +324,13 @@ class SignUp extends GetView<AuthController> {
                                       bold: false,
                                       hasIcon: true,
                                       fontColor: Colors.black,
+                                      enabled: controller
+                                          .isTermsAndConditionsChecked,
                                       onPressed: () {
-                                  
                                         controller.handleSignUpGoogle();
                                       },
                                     ),
+                                    SizedBox(height: Get.height * 0.01),
                                     AppButton(
                                       title: 'Sign up with Apple',
                                       isGoogle: false,
@@ -330,6 +339,8 @@ class SignUp extends GetView<AuthController> {
                                       bckgrndColor: Colors.black,
                                       hasIcon: true,
                                       fontColor: AppColors.background,
+                                      enabled: controller
+                                          .isTermsAndConditionsChecked,
                                       onPressed: () {},
                                     ),
                                     AppButton(
@@ -373,6 +384,7 @@ class SignUp extends GetView<AuthController> {
                                       label: 'Phone Number',
                                       validator: Validator.phoneNumValidation,
                                       isCompulsory: true,
+                                      keyboardType: TextInputType.phone,
                                       isPhoneNumber: true,
                                       controller: controller.phone,
                                     ),
@@ -485,7 +497,9 @@ class SignUp extends GetView<AuthController> {
                                                         .withOpacity(.5),
                                                     fontWeight:
                                                         FontWeight.normal,
-                                                    fontSize: 14,
+                                                    fontSize:
+                                                        Get.textScaleFactor *
+                                                            14,
                                                   ),
                                                 ),
                                                 TextSpan(
@@ -497,7 +511,9 @@ class SignUp extends GetView<AuthController> {
                                                       color: AppColors.primary,
                                                       fontWeight:
                                                           FontWeight.normal,
-                                                      fontSize: 14,
+                                                      fontSize:
+                                                          Get.textScaleFactor *
+                                                              14,
                                                     ),
                                                     recognizer:
                                                         TapGestureRecognizer()

@@ -64,6 +64,7 @@ class _AppButtonState extends State<AppButton> {
         children: [
           Container(
             padding: widget.padding,
+            height: Get.width > 600 ? Get.height * 0.04: null,
             decoration: BoxDecoration(
                 color: widget.enabled ? widget.bckgrndColor : Colors.grey,
                 border: widget.border,
@@ -117,7 +118,8 @@ class _AppButtonState extends State<AppButton> {
                       child: Opacity(
                         opacity: !loading ? 0 : 1,
                         child: SizedBox.square(
-                          dimension: widget.fontSize,
+                          dimension:
+                              widget.fontSize * Get.textScaleFactor * 0.9,
                           child: CircularProgressIndicator(
                             color: widget.fontColor,
                             strokeWidth: 1.5,
@@ -176,7 +178,7 @@ class AppOutlineButton extends StatelessWidget {
         textAlign: TextAlign.center,
         style: Get.theme.textTheme.bodyLarge!.copyWith(
           color: fontColor,
-          fontSize: fontSize,
+          fontSize: fontSize * Get.textScaleFactor * 0.9,
         ),
       ),
     );

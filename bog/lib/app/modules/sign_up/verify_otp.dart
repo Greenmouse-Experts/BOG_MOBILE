@@ -64,7 +64,7 @@ class VerifySignUpOTP extends GetView<AuthController> {
                           style: AppTextStyle.headline4.copyWith(
                             color: Colors.black,
                             fontWeight: FontWeight.w500,
-                            fontSize: 24,
+                            fontSize:  Get.textScaleFactor * 24,
                           ),
                           textAlign: TextAlign.center,
                         ),
@@ -76,15 +76,15 @@ class VerifySignUpOTP extends GetView<AuthController> {
                           style: AppTextStyle.headline4.copyWith(
                               color: Colors.black.withOpacity(.5),
                               fontWeight: FontWeight.normal,
-                              fontSize: 16),
+                              fontSize:  Get.textScaleFactor * 16),
                         ),
                         SizedBox(height: Get.height * 0.04),
                         OTPTextField(
                           length: 6,
                           width: MediaQuery.of(context).size.width,
                           fieldWidth: Get.width * 0.1,
-                          style: const TextStyle(
-                            fontSize: 17,
+                          style: TextStyle(
+                            fontSize:  Get.textScaleFactor * 17,
                             color: Colors.black,
                           ),
                           textFieldAlignment: MainAxisAlignment.spaceBetween,

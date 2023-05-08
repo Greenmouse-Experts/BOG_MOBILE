@@ -191,6 +191,7 @@ class _EditProfileState extends State<EditProfile> {
                               validator: Validator.phoneNumValidation,
                               isCompulsory: true,
                               isPhoneNumber: true,
+                              keyboardType: TextInputType.phone,
                               controller: phoneNumber,
                             ),
                             SizedBox(
