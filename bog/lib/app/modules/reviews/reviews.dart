@@ -106,7 +106,9 @@ class Reviews extends GetView<HomeController> {
                             prefexIcon: Icon(
                               FeatherIcons.search,
                               color: Colors.black.withOpacity(.5),
-                              size: Get.width * 0.05,
+                              size: Get.width > 600
+                                  ? Get.width * 0.03
+                                  : Get.width * 0.05,
                             ),
                           ),
                         ),

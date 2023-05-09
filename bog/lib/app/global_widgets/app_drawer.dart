@@ -78,7 +78,7 @@ class _AppDrawerState extends State<AppDrawer> {
                                     ),
                                   ),
                                   SizedBox(
-                                    width:  Get.width * 0.02,
+                                    width: Get.width * 0.02,
                                   ),
                                   Expanded(
                                     child: Row(
@@ -105,7 +105,9 @@ class _AppDrawerState extends State<AppDrawer> {
                                                   .copyWith(
                                                 color: Colors.black
                                                     .withOpacity(0.5),
-                                                fontSize: Get.width * 0.035,
+                                                fontSize: Get.width > 600
+                                                    ? Get.width * 0.025
+                                                    : Get.width * 0.035,
                                               ),
                                             ),
                                           ],
@@ -157,10 +159,11 @@ class _AppDrawerState extends State<AppDrawer> {
                               text: 'Projects',
                               showArrow: true,
                               onPressed: () {
-                                  Get.back();
-                              controller.currentBottomNavPage.value = 2;
-                              controller.updateNewUser(controller.currentType);
-                              controller.update(['home']);
+                                Get.back();
+                                controller.currentBottomNavPage.value = 2;
+                                controller
+                                    .updateNewUser(controller.currentType);
+                                controller.update(['home']);
                               }),
                         _TextButton(
                             text: "Transactions",
@@ -252,9 +255,8 @@ class _TextButton extends StatelessWidget {
       {required this.imageAsset,
       required this.text,
       required this.onPressed,
-     
-      this.subtitle ,
-    required  this.showArrow });
+      this.subtitle,
+      required this.showArrow});
 
   @override
   Widget build(BuildContext context) {
@@ -279,13 +281,13 @@ class _TextButton extends StatelessWidget {
               child: Center(
                 child: Image.asset(
                   imageAsset,
-                  width: Get.width * 0.05,
-                  height: Get.width * 0.05,
+                  width: Get.width > 600 ? Get.width * 0.3 : Get.width * 0.05,
+                  height: Get.width > 600 ? Get.width * 0.3 : Get.width * 0.05,
                 ),
               ),
             ),
             SizedBox(
-              width: Get.width * 0.43,
+              width: Get.width > 600 ? Get.width * 0.4 : Get.width * 0.43,
               child: Padding(
                 padding: EdgeInsets.only(left: Get.width * 0.01),
                 child: Column(
@@ -328,7 +330,8 @@ class _TextButton extends StatelessWidget {
                   ? Icon(
                       Icons.arrow_forward_ios_rounded,
                       color: Colors.black,
-                      size: Get.width * 0.04,
+                      size:
+                          Get.width > 600 ? Get.width * 0.03 : Get.width * 0.04,
                     )
                   : Container(),
             )

@@ -43,7 +43,9 @@ class OnboardingItem extends StatelessWidget {
                   style: AppTextStyle.headline5.copyWith(
                     fontWeight: FontWeight.w600,
                     color: Colors.black,
-                    fontSize: 17 * Get.textScaleFactor * 1.3,
+                    fontSize: Get.width < 300
+                        ? 17 * Get.textScaleFactor * 1
+                        : 17 * Get.textScaleFactor * 1.3,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -55,7 +57,9 @@ class OnboardingItem extends StatelessWidget {
                   style: AppTextStyle.bodyText2.copyWith(
                       height: 1.5,
                       color: Colors.black,
-                      fontSize: 17 * Get.textScaleFactor * 0.90),
+                      fontSize: Get.width < 300
+                          ? 15 * Get.textScaleFactor * 0.90
+                          : 17 * Get.textScaleFactor * 0.90),
                   textAlign: TextAlign.center,
                 ),
               ],

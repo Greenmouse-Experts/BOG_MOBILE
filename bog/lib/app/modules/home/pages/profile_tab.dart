@@ -58,7 +58,9 @@ class ProfileTab extends StatelessWidget {
                     "Accounts",
                     style: AppTextStyle.subtitle1.copyWith(
                       color: Colors.black,
-                      fontSize: Get.width * 0.045,
+                      fontSize: Get.width > 600
+                          ? Get.width * 0.035
+                          : Get.width * 0.045,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -70,7 +72,7 @@ class ProfileTab extends StatelessWidget {
             ),
             Container(
               width: Get.width,
-              height: Get.height * 0.25,
+              height: Get.width > 500 ? Get.width * 0.33 : Get.height * 0.25,
               color: const Color(0xffFFF8F0),
               child: Center(
                 child: Column(
@@ -78,12 +80,16 @@ class ProfileTab extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     SizedBox(
-                      width: Get.width * 0.28,
-                      height: Get.width * 0.28,
+                      width:
+                          Get.width > 500 ? Get.width * 0.25 : Get.width * 0.28,
+                      height:
+                          Get.width > 500 ? Get.width * 0.25 : Get.width * 0.28,
                       child: IconButton(
                         icon: AppAvatar(
                           imgUrl: (logInDetails.photo).toString(),
-                          radius: Get.width * 0.16,
+                          radius: Get.width > 500
+                              ? Get.width * 0.1
+                              : Get.width * 0.16,
                           name: "${logInDetails.fname} ${logInDetails.lname}",
                         ),
                         onPressed: () {},
@@ -93,14 +99,18 @@ class ProfileTab extends StatelessWidget {
                       "${logInDetails.fname} ${logInDetails.lname}",
                       style: AppTextStyle.subtitle1.copyWith(
                         color: Colors.black,
-                        fontSize: Get.width * 0.045,
+                        fontSize: Get.width > 600
+                            ? Get.width * 0.035
+                            : Get.width * 0.045,
                       ),
                     ),
                     Text(
                       controller.currentType,
                       style: AppTextStyle.subtitle1.copyWith(
                         color: Colors.black.withOpacity(0.5),
-                        fontSize: Get.width * 0.035,
+                        fontSize: Get.width > 600
+                            ? Get.width * 0.025
+                            : Get.width * 0.035,
                       ),
                     ),
                   ],

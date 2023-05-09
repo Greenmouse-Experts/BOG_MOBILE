@@ -266,7 +266,9 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
                             prefexIcon: Icon(
                               FeatherIcons.search,
                               color: Colors.black.withOpacity(.5),
-                              size: Get.width * 0.05,
+                              size: Get.width > 600
+                                  ? Get.width * 0.03
+                                  : Get.width * 0.05,
                             ),
                             onChanged: (value) {
                               search = value;
@@ -656,11 +658,15 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
                                   left: Get.width * 0.045,
                                   right: Get.width * 0.045),
                               labelStyle: TextStyle(
-                                fontSize: Get.width * 0.035,
+                                fontSize: Get.width > 600
+                                    ? Get.width * 0.025
+                                    : Get.width * 0.035,
                                 fontWeight: FontWeight.w500,
                               ),
                               unselectedLabelStyle: TextStyle(
-                                fontSize: Get.width * 0.035,
+                                fontSize: Get.width > 600
+                                    ? Get.width * 0.025
+                                    : Get.width * 0.035,
                                 fontWeight: FontWeight.w500,
                               ),
                               tabs: const [

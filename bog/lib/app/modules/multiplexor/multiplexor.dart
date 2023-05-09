@@ -26,28 +26,28 @@ class Multiplexor extends StatelessWidget {
       child: Scaffold(
         body: Container(
           color: AppColors.backgroundVariant1,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                height: Get.height * 0.025,
-              ),
-              Center(
-                child: Stack(
-                  children: [
-                    Image.asset('assets/images/multiplexor_bg.png',
-                        width: Get.width * 0.4, height: Get.height * 0.2),
-                    Image.asset(
-                      'assets/images/boglogo.png',
-                      width: Get.width * 0.4,
-                      height: Get.height * 0.2,
-                    ),
-                  ],
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: Get.height * 0.025,
                 ),
-              ),
-              Expanded(
-                child: Container(
+                Center(
+                  child: Stack(
+                    children: [
+                      Image.asset('assets/images/multiplexor_bg.png',
+                          width: Get.width * 0.4, height: Get.height * 0.2),
+                      Image.asset(
+                        'assets/images/boglogo.png',
+                        width: Get.width * 0.4,
+                        height: Get.height * 0.2,
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
                   color: Colors.white,
                   child: Padding(
                     padding: const EdgeInsets.all(AppThemes.appPaddingVal),
@@ -93,12 +93,18 @@ class Multiplexor extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   SizedBox(
-                                    width: Get.width * 0.05,
+                                    width: Get.width < 300
+                                        ? Get.width * 0.03
+                                        : Get.width * 0.05,
                                   ),
                                   Image.asset(
                                     'assets/images/m2.png',
-                                    width: Get.width * 0.15,
-                                    height: Get.width * 0.15,
+                                    width: Get.width < 300
+                                        ? Get.width * 0.08
+                                        : Get.width * 0.15,
+                                    height: Get.width < 300
+                                        ? Get.width * 0.08
+                                        : Get.width * 0.15,
                                   ),
                                   SizedBox(
                                     width: Get.width * 0.02,
@@ -112,7 +118,9 @@ class Multiplexor extends StatelessWidget {
                                         style: AppTextStyle.headline4.copyWith(
                                           color: Colors.black,
                                           fontWeight: FontWeight.w500,
-                                          fontSize: Get.textScaleFactor *  20,
+                                          fontSize: Get.width < 300
+                                              ? Get.textScaleFactor * 16
+                                              : Get.textScaleFactor * 20,
                                         ),
                                       ),
                                       const SizedBox(
@@ -123,7 +131,9 @@ class Multiplexor extends StatelessWidget {
                                         style: AppTextStyle.headline4.copyWith(
                                           color: Colors.black,
                                           fontWeight: FontWeight.normal,
-                                          fontSize: Get.textScaleFactor *  14,
+                                          fontSize: Get.width < 300
+                                              ? Get.textScaleFactor * 11
+                                              : Get.textScaleFactor * 14,
                                         ),
                                       ),
                                     ],
@@ -151,12 +161,18 @@ class Multiplexor extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   SizedBox(
-                                    width: Get.width * 0.05,
+                                    width: Get.width < 300
+                                        ? Get.width * 0.03
+                                        : Get.width * 0.05,
                                   ),
                                   Image.asset(
                                     'assets/images/m1.png',
-                                    width: Get.width * 0.15,
-                                    height: Get.width * 0.15,
+                                    width: Get.width < 300
+                                        ? Get.width * 0.08
+                                        : Get.width * 0.15,
+                                    height: Get.width < 300
+                                        ? Get.width * 0.08
+                                        : Get.width * 0.15,
                                   ),
                                   SizedBox(
                                     width: Get.width * 0.02,
@@ -170,7 +186,9 @@ class Multiplexor extends StatelessWidget {
                                         style: AppTextStyle.headline4.copyWith(
                                           color: Colors.black,
                                           fontWeight: FontWeight.w500,
-                                          fontSize: Get.textScaleFactor * 20,
+                                          fontSize: Get.width < 300
+                                              ? Get.textScaleFactor * 16
+                                              : Get.textScaleFactor * 20,
                                         ),
                                       ),
                                       const SizedBox(
@@ -181,7 +199,9 @@ class Multiplexor extends StatelessWidget {
                                         style: AppTextStyle.headline4.copyWith(
                                           color: Colors.black,
                                           fontWeight: FontWeight.normal,
-                                          fontSize: Get.textScaleFactor * 14,
+                                          fontSize: Get.width < 300
+                                              ? Get.textScaleFactor * 11
+                                              : Get.textScaleFactor * 14,
                                         ),
                                       ),
                                     ],
@@ -209,12 +229,18 @@ class Multiplexor extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   SizedBox(
-                                    width: Get.width * 0.05,
+                                    width: Get.width < 300
+                                        ? Get.width * 0.03
+                                        : Get.width * 0.05,
                                   ),
                                   Image.asset(
                                     'assets/images/m3.png',
-                                    width: Get.width * 0.15,
-                                    height: Get.width * 0.15,
+                                    width: Get.width < 300
+                                        ? Get.width * 0.08
+                                        : Get.width * 0.15,
+                                    height: Get.width < 300
+                                        ? Get.width * 0.08
+                                        : Get.width * 0.15,
                                   ),
                                   SizedBox(
                                     width: Get.width * 0.02,
@@ -228,7 +254,9 @@ class Multiplexor extends StatelessWidget {
                                         style: AppTextStyle.headline4.copyWith(
                                           color: Colors.black,
                                           fontWeight: FontWeight.w500,
-                                          fontSize: Get.textScaleFactor * 20,
+                                          fontSize: Get.width < 300
+                                              ? Get.textScaleFactor * 16
+                                              : Get.textScaleFactor * 20,
                                         ),
                                       ),
                                       const SizedBox(
@@ -239,7 +267,9 @@ class Multiplexor extends StatelessWidget {
                                         style: AppTextStyle.headline4.copyWith(
                                           color: Colors.black,
                                           fontWeight: FontWeight.normal,
-                                          fontSize: Get.textScaleFactor * 14,
+                                          fontSize: Get.width < 300
+                                              ? Get.textScaleFactor * 11
+                                              : Get.textScaleFactor * 14,
                                         ),
                                       ),
                                     ],
@@ -252,9 +282,9 @@ class Multiplexor extends StatelessWidget {
                       ],
                     ),
                   ),
-                ),
-              )
-            ],
+                )
+              ],
+            ),
           ),
         ),
       ),

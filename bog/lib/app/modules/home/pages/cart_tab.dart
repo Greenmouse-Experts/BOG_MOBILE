@@ -131,7 +131,9 @@ class _CartTabState extends State<CartTab> {
                                           style:
                                               AppTextStyle.subtitle1.copyWith(
                                             color: Colors.black,
-                                            fontSize: Get.width * 0.035,
+                                            fontSize: Get.width > 600
+                                                ? Get.width * 0.025
+                                                : Get.width * 0.035,
                                             fontWeight: FontWeight.w500,
                                           ),
                                         ),
@@ -206,7 +208,9 @@ class _CartTabState extends State<CartTab> {
                                           style:
                                               AppTextStyle.subtitle1.copyWith(
                                             color: Colors.black,
-                                            fontSize: Get.width * 0.035,
+                                            fontSize: Get.width > 600
+                                                ? Get.width * 0.025
+                                                : Get.width * 0.035,
                                             fontWeight: FontWeight.w400,
                                           ),
                                         ),
@@ -215,7 +219,9 @@ class _CartTabState extends State<CartTab> {
                                           style:
                                               AppTextStyle.subtitle1.copyWith(
                                             color: Colors.black,
-                                            fontSize: Get.width * 0.035,
+                                            fontSize: Get.width > 600
+                                                ? Get.width * 0.025
+                                                : Get.width * 0.035,
                                             fontWeight: FontWeight.w400,
                                           ),
                                         ),
@@ -233,7 +239,9 @@ class _CartTabState extends State<CartTab> {
                                           style:
                                               AppTextStyle.subtitle1.copyWith(
                                             color: Colors.black,
-                                            fontSize: Get.width * 0.035,
+                                            fontSize: Get.width > 600
+                                                ? Get.width * 0.025
+                                                : Get.width * 0.035,
                                             fontWeight: FontWeight.w400,
                                           ),
                                         ),
@@ -242,7 +250,9 @@ class _CartTabState extends State<CartTab> {
                                           style:
                                               AppTextStyle.subtitle1.copyWith(
                                             color: Colors.black,
-                                            fontSize: Get.width * 0.035,
+                                            fontSize: Get.width > 600
+                                                ? Get.width * 0.025
+                                                : Get.width * 0.035,
                                             fontWeight: FontWeight.w400,
                                           ),
                                         ),
@@ -260,7 +270,9 @@ class _CartTabState extends State<CartTab> {
                                           style:
                                               AppTextStyle.subtitle1.copyWith(
                                             color: Colors.black,
-                                            fontSize: Get.width * 0.035,
+                                            fontSize: Get.width > 600
+                                                ? Get.width * 0.025
+                                                : Get.width * 0.035,
                                             fontWeight: FontWeight.w400,
                                           ),
                                         ),
@@ -269,7 +281,9 @@ class _CartTabState extends State<CartTab> {
                                           style:
                                               AppTextStyle.subtitle1.copyWith(
                                             color: Colors.black,
-                                            fontSize: Get.width * 0.035,
+                                            fontSize: Get.width > 600
+                                                ? Get.width * 0.025
+                                                : Get.width * 0.035,
                                             fontWeight: FontWeight.w400,
                                           ),
                                         ),
@@ -292,7 +306,9 @@ class _CartTabState extends State<CartTab> {
                                           style:
                                               AppTextStyle.subtitle1.copyWith(
                                             color: Colors.black,
-                                            fontSize: Get.width * 0.035,
+                                            fontSize: Get.width > 600
+                                                ? Get.width * 0.025
+                                                : Get.width * 0.035,
                                             fontWeight: FontWeight.w400,
                                           ),
                                         ),
@@ -301,7 +317,9 @@ class _CartTabState extends State<CartTab> {
                                           style:
                                               AppTextStyle.subtitle1.copyWith(
                                             color: AppColors.primary,
-                                            fontSize: Get.width * 0.04,
+                                            fontSize: Get.width > 600
+                                                ? Get.width * 0.03
+                                                : Get.width * 0.04,
                                             fontWeight: FontWeight.w400,
                                           ),
                                         ),
@@ -704,7 +722,9 @@ class CartItem extends StatelessWidget {
                       title,
                       style: AppTextStyle.caption.copyWith(
                         color: Colors.black,
-                        fontSize: Get.width * 0.035,
+                        fontSize: Get.width > 600
+                            ? Get.width * 0.025
+                            : Get.width * 0.035,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -716,7 +736,9 @@ class CartItem extends StatelessWidget {
                       price,
                       style: AppTextStyle.caption.copyWith(
                         color: Colors.black,
-                        fontSize: Get.width * 0.035,
+                        fontSize: Get.width > 600
+                            ? Get.width * 0.025
+                            : Get.width * 0.035,
                         fontWeight: FontWeight.w400,
                       ),
                     ),
@@ -852,7 +874,9 @@ class OrderItem extends StatelessWidget {
                     price,
                     style: AppTextStyle.caption.copyWith(
                       color: AppColors.primary,
-                      fontSize: Get.width * 0.035,
+                      fontSize: Get.width > 600
+                          ? Get.width * 0.025
+                          : Get.width * 0.035,
                       fontWeight: FontWeight.w400,
                     ),
                   ),
@@ -993,7 +1017,9 @@ class ProductItem extends StatelessWidget {
                     padding: EdgeInsets.only(left: Get.width * 0.015),
                     child: Text(title ?? "",
                         style: AppTextStyle.headline4.copyWith(
-                            fontSize: Get.width * 0.035,
+                            fontSize: Get.width > 600
+                                ? Get.width * 0.025
+                                : Get.width * 0.035,
                             color: Colors.black,
                             fontWeight: FontWeight.w400)),
                   ),
@@ -1003,7 +1029,9 @@ class ProductItem extends StatelessWidget {
                       subTitle ?? '',
                       style: AppTextStyle.caption.copyWith(
                         color: Colors.black,
-                        fontSize: Get.width * 0.035,
+                        fontSize: Get.width > 600
+                            ? Get.width * 0.025
+                            : Get.width * 0.035,
                         fontWeight: FontWeight.w400,
                       ),
                     ),
@@ -1234,7 +1262,8 @@ class OrderRequestItem extends StatelessWidget {
           Text(
             'Status:  ${status.toUpperCase()}',
             style: AppTextStyle.caption.copyWith(
-                fontSize: Get.width * 0.035,
+                fontSize:
+                    Get.width > 600 ? Get.width * 0.025 : Get.width * 0.035,
                 fontWeight: FontWeight.w400,
                 color: status == 'cancelled'
                     ? Colors.red
@@ -1297,7 +1326,9 @@ class ServiceRequestItem extends StatelessWidget {
                             "Project ID :  $projectId",
                             style: AppTextStyle.caption.copyWith(
                               color: Colors.black,
-                              fontSize: Get.width * 0.035,
+                              fontSize: Get.width > 600
+                                  ? Get.width * 0.025
+                                  : Get.width * 0.035,
                               fontWeight: FontWeight.w600,
                             ),
                           ),

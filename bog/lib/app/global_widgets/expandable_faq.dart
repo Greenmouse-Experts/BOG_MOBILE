@@ -1,9 +1,8 @@
-import 'package:bog/core/theme/app_colors.dart';
-import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
+import 'package:expandable/expandable.dart';
 import 'package:get/get.dart';
 
-import '../../core/theme/app_styles.dart';
+import '../../core/theme/theme.dart';
 
 class ExpandableFAQ extends StatelessWidget {
   final String question;
@@ -34,7 +33,7 @@ class ExpandableFAQ extends StatelessWidget {
               ),
               Text(
                 answer,
-                style: AppTextStyle.bodyText1
+                style: AppTextStyle.bodyText3
                     .copyWith(color: AppColors.blue.withOpacity(0.8)),
               )
             ],
@@ -71,7 +70,8 @@ class ExpandableHeader extends StatelessWidget {
               overflow: TextOverflow.clip,
               style: AppTextStyle.subtitle1.copyWith(
                   color: Colors.black,
-                  fontSize: Get.width * 0.03,
+                  fontSize:
+                      Get.width > 600 ? Get.width * 0.027 : Get.width * 0.03,
                   fontWeight: FontWeight.w600),
             ),
             SizedBox(
@@ -84,7 +84,7 @@ class ExpandableHeader extends StatelessWidget {
               ? Icons.keyboard_arrow_down_rounded
               : Icons.keyboard_arrow_up_rounded,
           color: Colors.black,
-          size: Get.width * 0.075,
+          size: Get.width > 600 ? Get.width * 0.06 : Get.width * 0.075,
         )
       ],
     );

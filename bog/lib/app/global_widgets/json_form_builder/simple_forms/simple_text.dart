@@ -1,7 +1,7 @@
-import 'package:bog/core/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 
+import '../../../../core/theme/theme.dart';
 import '../helpers/function.dart';
 
 class SimpleTexts extends StatefulWidget {

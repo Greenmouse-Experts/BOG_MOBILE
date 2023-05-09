@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:feather_icons/feather_icons.dart';
 import 'package:get/get.dart';
@@ -53,7 +52,7 @@ class _MyOrderScreenState extends State<MyOrderScreen>
     final userType = controller.currentType == 'Client'
         ? 'private_client'
         : 'corporate_client';
-      
+
     getOrders =
         controller.userRepo.getData("/orders/my-orders?userType=$userType");
   }
@@ -95,11 +94,15 @@ class _MyOrderScreenState extends State<MyOrderScreen>
                           indicatorPadding: EdgeInsets.only(
                               left: width * 0.045, right: width * 0.045),
                           labelStyle: TextStyle(
-                            fontSize: Get.width * 0.035,
+                            fontSize: Get.width > 600
+                                ? Get.width * 0.025
+                                : Get.width * 0.035,
                             fontWeight: FontWeight.w500,
                           ),
                           unselectedLabelStyle: TextStyle(
-                            fontSize: Get.width * 0.035,
+                            fontSize: Get.width > 600
+                                ? Get.width * 0.025
+                                : Get.width * 0.035,
                             fontWeight: FontWeight.w500,
                           ),
                           tabs: const [
@@ -243,7 +246,9 @@ class _MyOrderScreenState extends State<MyOrderScreen>
                                                       FeatherIcons.search,
                                                       color: Colors.black
                                                           .withOpacity(.5),
-                                                      size: Get.width * 0.05,
+                                                      size: Get.width > 600
+                                                          ? Get.width * 0.03
+                                                          : Get.width * 0.05,
                                                     ),
                                                     onChanged: (val) {
                                                       if (searchPending !=
@@ -298,7 +303,9 @@ class _MyOrderScreenState extends State<MyOrderScreen>
                                                       FeatherIcons.search,
                                                       color: Colors.black
                                                           .withOpacity(.5),
-                                                      size: Get.width * 0.05,
+                                                      size: Get.width > 600
+                                                          ? Get.width * 0.03
+                                                          : Get.width * 0.05,
                                                     ),
                                                     onChanged: (val) {
                                                       if (searchCompleted !=
@@ -351,7 +358,9 @@ class _MyOrderScreenState extends State<MyOrderScreen>
                                                       FeatherIcons.search,
                                                       color: Colors.black
                                                           .withOpacity(.5),
-                                                      size: Get.width * 0.05,
+                                                      size: Get.width > 600
+                                                          ? Get.width * 0.03
+                                                          : Get.width * 0.05,
                                                     ),
                                                     onChanged: (val) {
                                                       if (searchCancelled !=

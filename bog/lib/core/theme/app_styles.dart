@@ -14,6 +14,13 @@ class AppTextStyle {
     fontSize: 16 * Get.textScaleFactor * 0.90,
   );
 
+    static TextStyle bodyText3 = TextStyle(
+    color: AppColors.platinum,
+    fontFamily: _font,
+    fontWeight: FontWeight.w500,
+    fontSize: 17 * Get.textScaleFactor * 0.90,
+  );
+
   static TextStyle smallText = TextStyle(
     color: AppColors.platinum,
     fontFamily: _font,

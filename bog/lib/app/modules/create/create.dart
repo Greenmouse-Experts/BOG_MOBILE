@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../../../core/theme/app_colors.dart';
@@ -14,6 +12,7 @@ import '../../global_widgets/app_base_view.dart';
 import '../../global_widgets/app_loader.dart';
 import '../../global_widgets/bottom_widget.dart';
 import '../../global_widgets/global_widgets.dart';
+import '../../global_widgets/new_app_bar.dart';
 import 'json_form.dart';
 
 class Create extends StatefulWidget {
@@ -74,6 +73,7 @@ class _CreateState extends State<Create> {
           builder: (controller) {
             return Scaffold(
               backgroundColor: AppColors.backgroundVariant2,
+              appBar: newAppBarBack(context, 'Request Service Provider'),
               body: SizedBox(
                 width: Get.width,
                 child: SingleChildScrollView(
@@ -81,59 +81,59 @@ class _CreateState extends State<Create> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Padding(
-                        padding: EdgeInsets.only(
-                            right: width * 0.05,
-                            left: width * 0.045,
-                            top: kToolbarHeight),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                Get.back();
-                              },
-                              child: SvgPicture.asset(
-                                "assets/images/back.svg",
-                                height: width * 0.045,
-                                width: width * 0.045,
-                                color: Colors.black,
-                              ),
-                            ),
-                            SizedBox(
-                              width: width * 0.04,
-                            ),
-                            Expanded(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    "Request Service Provider",
-                                    style: AppTextStyle.subtitle1.copyWith(
-                                        fontSize: multiplier * 0.07,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w500),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(
-                              width: width * 0.04,
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: width * 0.04,
-                      ),
-                      Container(
-                        height: 1,
-                        width: width,
-                        color: AppColors.grey.withOpacity(0.1),
-                      ),
+                      // Padding(
+                      //   padding: EdgeInsets.only(
+                      //       right: width * 0.05,
+                      //       left: width * 0.045,
+                      //       top: kToolbarHeight),
+                      //   child: Row(
+                      //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //     crossAxisAlignment: CrossAxisAlignment.center,
+                      //     children: [
+                      //       InkWell(
+                      //         onTap: () {
+                      //           Get.back();
+                      //         },
+                      //         child: SvgPicture.asset(
+                      //           "assets/images/back.svg",
+                      //           height: width * 0.045,
+                      //           width: width * 0.045,
+                      //           color: Colors.black,
+                      //         ),
+                      //       ),
+                      //       SizedBox(
+                      //         width: width * 0.04,
+                      //       ),
+                      //       Expanded(
+                      //         child: Row(
+                      //           mainAxisAlignment: MainAxisAlignment.center,
+                      //           crossAxisAlignment: CrossAxisAlignment.center,
+                      //           children: [
+                      //             Text(
+                      //               "Request Service Provider",
+                      //               style: AppTextStyle.subtitle1.copyWith(
+                      //                   fontSize: multiplier * 0.07,
+                      //                   color: Colors.black,
+                      //                   fontWeight: FontWeight.w500),
+                      //               textAlign: TextAlign.center,
+                      //             ),
+                      //           ],
+                      //         ),
+                      //       ),
+                      //       SizedBox(
+                      //         width: width * 0.04,
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
+                      // SizedBox(
+                      //   height: width * 0.04,
+                      // ),
+                      // Container(
+                      //   height: 1,
+                      //   width: width,
+                      //   color: AppColors.grey.withOpacity(0.1),
+                      // ),
                       SizedBox(
                         height: width * 0.04,
                       ),

@@ -127,11 +127,15 @@ class _ProjectDetailsState extends State<ProjectDetails>
                       indicatorPadding: EdgeInsets.only(
                           left: width * 0.045, right: width * 0.045),
                       labelStyle: TextStyle(
-                        fontSize: Get.width * 0.035,
+                        fontSize: Get.width > 600
+                            ? Get.width * 0.025
+                            : Get.width * 0.035,
                         fontWeight: FontWeight.w500,
                       ),
                       unselectedLabelStyle: TextStyle(
-                        fontSize: Get.width * 0.035,
+                        fontSize: Get.width > 600
+                            ? Get.width * 0.025
+                            : Get.width * 0.035,
                         fontWeight: FontWeight.w500,
                       ),
                       tabs: const [

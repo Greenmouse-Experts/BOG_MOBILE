@@ -8,7 +8,7 @@ import '../../../core/theme/app_styles.dart';
 import '../../controllers/home_controller.dart';
 import '../../global_widgets/app_base_view.dart';
 import '../../global_widgets/bottom_widget.dart';
-import '../../global_widgets/custom_app_bar.dart';
+import '../../global_widgets/new_app_bar.dart';
 
 class Support extends GetView<HomeController> {
   const Support({Key? key}) : super(key: key);
@@ -54,13 +54,13 @@ class Support extends GetView<HomeController> {
           builder: (controller) {
             return Scaffold(
                 backgroundColor: AppColors.backgroundVariant2,
+                appBar: newAppBarBack(context, 'Support'),
                 body: SizedBox(
                   width: Get.width,
                   child: SingleChildScrollView(
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const CustomAppBar(title: 'Support'),
                           SizedBox(
                             height: width * 0.04,
                           ),

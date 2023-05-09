@@ -126,7 +126,9 @@ class _EditProfileState extends State<EditProfile> {
                                   .toString(),
                               style: AppTextStyle.subtitle1.copyWith(
                                 color: Colors.black.withOpacity(0.5),
-                                fontSize: Get.width * 0.035,
+                                fontSize: Get.width > 600
+                                    ? Get.width * 0.025
+                                    : Get.width * 0.035,
                               ),
                             ),
                           ],

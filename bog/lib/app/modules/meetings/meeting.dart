@@ -95,11 +95,13 @@ class _MeetingsState extends State<Meetings> with TickerProviderStateMixin {
                 indicatorPadding: EdgeInsets.only(
                     left: Get.width * 0.045, right: Get.width * 0.045),
                 labelStyle: TextStyle(
-                  fontSize: Get.width * 0.035,
+                  fontSize:
+                      Get.width > 600 ? Get.width * 0.025 : Get.width * 0.035,
                   fontWeight: FontWeight.w500,
                 ),
                 unselectedLabelStyle: TextStyle(
-                  fontSize: Get.width * 0.035,
+                  fontSize:
+                      Get.width > 600 ? Get.width * 0.025 : Get.width * 0.035,
                   fontWeight: FontWeight.w500,
                 ),
                 tabs: const [
@@ -190,7 +192,9 @@ class _MeetingsState extends State<Meetings> with TickerProviderStateMixin {
                                       prefexIcon: Icon(
                                         FeatherIcons.search,
                                         color: Colors.black.withOpacity(.5),
-                                        size: Get.width * 0.05,
+                                        size: Get.width > 600
+                                            ? Get.width * 0.03
+                                            : Get.width * 0.05,
                                       ),
                                       onChanged: (val) {
                                         if (search != val) {
@@ -393,10 +397,12 @@ class _MeetingsState extends State<Meetings> with TickerProviderStateMixin {
                                                       .meetingInfo!.password ??
                                                   '');
                                         },
-                                        child:Text(
+                                        child: Text(
                                           'Meeting Info',
                                           style: TextStyle(
-                                              color: Colors.grey, fontSize: Get.textScaleFactor * 12),
+                                              color: Colors.grey,
+                                              fontSize:
+                                                  Get.textScaleFactor * 12),
                                         )),
                                   ),
                                 if (!isPending)
@@ -409,10 +415,12 @@ class _MeetingsState extends State<Meetings> with TickerProviderStateMixin {
                                                       .meetingInfo!.joinUrl ??
                                                   ''));
                                         },
-                                        child:  Text(
+                                        child: Text(
                                           'Meeting Link',
                                           style: TextStyle(
-                                              color: Colors.grey, fontSize:Get.textScaleFactor *  12),
+                                              color: Colors.grey,
+                                              fontSize:
+                                                  Get.textScaleFactor * 12),
                                         )),
                                   ),
                               ];
@@ -508,11 +516,15 @@ class _NewMeetingsState extends State<NewMeetings>
                     indicatorPadding: EdgeInsets.only(
                         left: Get.width * 0.045, right: Get.width * 0.045),
                     labelStyle: TextStyle(
-                      fontSize: Get.width * 0.035,
+                      fontSize: Get.width > 600
+                          ? Get.width * 0.025
+                          : Get.width * 0.035,
                       fontWeight: FontWeight.w500,
                     ),
                     unselectedLabelStyle: TextStyle(
-                      fontSize: Get.width * 0.035,
+                      fontSize: Get.width > 600
+                          ? Get.width * 0.025
+                          : Get.width * 0.035,
                       fontWeight: FontWeight.w500,
                     ),
                     tabs: const [
@@ -594,7 +606,9 @@ class _NewMeetingsState extends State<NewMeetings>
                             prefexIcon: Icon(
                               FeatherIcons.search,
                               color: Colors.black.withOpacity(.5),
-                              size: Get.width * 0.05,
+                              size: Get.width > 600
+                                  ? Get.width * 0.03
+                                  : Get.width * 0.05,
                             ),
                           ),
                           SizedBox(
@@ -723,7 +737,7 @@ class _NewMeetingsState extends State<NewMeetings>
                                       child: SizedBox(
                                         height: 50,
                                         child: TextButton(
-                                        child: Text(
+                                          child: Text(
                                             'Cancel Meeting',
                                             style: AppTextStyle.bodyText2
                                                 .copyWith(color: Colors.red),
@@ -787,10 +801,12 @@ class _NewMeetingsState extends State<NewMeetings>
                                                       .meetingInfo!.password ??
                                                   '');
                                         },
-                                        child:  Text(
+                                        child: Text(
                                           'Meeting Info',
                                           style: TextStyle(
-                                              color: Colors.grey, fontSize: Get.textScaleFactor * 12),
+                                              color: Colors.grey,
+                                              fontSize:
+                                                  Get.textScaleFactor * 12),
                                         )),
                                   ),
                                 if (!isPending)
@@ -803,10 +819,12 @@ class _NewMeetingsState extends State<NewMeetings>
                                                       .meetingInfo!.joinUrl ??
                                                   ''));
                                         },
-                                        child:  Text(
+                                        child: Text(
                                           'Meeting Link',
                                           style: TextStyle(
-                                              color: Colors.grey, fontSize: Get.textScaleFactor * 12),
+                                              color: Colors.grey,
+                                              fontSize:
+                                                  Get.textScaleFactor * 12),
                                         )),
                                   ),
                               ];

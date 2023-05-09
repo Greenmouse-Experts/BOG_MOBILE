@@ -10,8 +10,8 @@ import '../../data/model/form_response.dart';
 import '../../data/providers/api_response.dart';
 import '../../global_widgets/app_base_view.dart';
 import '../../global_widgets/app_loader.dart';
-import '../../global_widgets/custom_app_bar.dart';
 import '../../global_widgets/json_form_builder/new_json_schema.dart';
+import '../../global_widgets/new_app_bar.dart';
 
 class JsonForm extends StatefulWidget {
   final String id;
@@ -46,10 +46,10 @@ class _JsonFormState extends State<JsonForm> {
     return AppBaseView(
       child: GetBuilder<HomeController>(builder: (controller) {
         return Scaffold(
+          appBar: newAppBarBack(context, 'Service Provider Form'),
           body: SingleChildScrollView(
             child: Column(
               children: [
-                const CustomAppBar(title: 'Service Provider Form'),
                 FutureBuilder<ApiResponse>(
                     future: formBuilder,
                     builder: (context, snapshot) {

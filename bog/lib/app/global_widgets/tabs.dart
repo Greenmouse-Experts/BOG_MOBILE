@@ -1,10 +1,8 @@
-import 'package:bog/core/theme/app_colors.dart';
-import 'package:feather_icons/feather_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:feather_icons/feather_icons.dart';
 import 'package:get/get.dart';
-// import 'package:get/get_core/src/get_main.dart';
 
-import '../../core/theme/app_styles.dart';
+import '../../core/theme/theme.dart';
 import 'app_input.dart';
 
 enum IndicatorSide { start, end }

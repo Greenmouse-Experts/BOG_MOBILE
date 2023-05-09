@@ -185,7 +185,9 @@ class _UpdateKycState extends State<UpdateKyc> {
                                 "Bank Details",
                                 style: AppTextStyle.subtitle1.copyWith(
                                   color: Colors.black,
-                                  fontSize: Get.width * 0.035,
+                                  fontSize: Get.width > 600
+                                      ? Get.width * 0.025
+                                      : Get.width * 0.035,
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),

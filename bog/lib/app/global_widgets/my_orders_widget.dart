@@ -107,7 +107,7 @@ class MyOrdersWidget extends StatelessWidget {
                       price,
                       style: AppTextStyle.caption.copyWith(
                         color: AppColors.primary,
-                        fontSize: Get.width * 0.035,
+                        fontSize: Get.width > 600 ? Get.width * 0.025 : Get.width * 0.035,
                         fontWeight: FontWeight.w400,
                       ),
                     ),

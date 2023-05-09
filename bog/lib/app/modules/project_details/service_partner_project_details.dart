@@ -284,7 +284,7 @@ class _ServicePartnerProjectDetailsState
                                           icon: Icon(
                                             Icons.edit,
                                             color: AppColors.primary,
-                                            size: Get.width * 0.05,
+                                            size: Get.width > 600 ? Get.width * 0.035 : Get.width * 0.05,
                                           ))
                                     ],
                                   ),
@@ -345,7 +345,7 @@ class _ServicePartnerProjectDetailsState
                                             icon: Icon(
                                               Icons.edit,
                                               color: AppColors.primary,
-                                              size: Get.width * 0.05,
+                                              size: Get.width > 600 ? Get.width * 0.035 : Get.width * 0.05,
                                             ))
                                       ],
                                     ),

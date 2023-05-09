@@ -64,7 +64,7 @@ class _AppButtonState extends State<AppButton> {
         children: [
           Container(
             padding: widget.padding,
-            height: Get.width > 600 ? Get.height * 0.04: null,
+            height: Get.width > 600 ? Get.height * 0.05 : null,
             decoration: BoxDecoration(
                 color: widget.enabled ? widget.bckgrndColor : Colors.grey,
                 border: widget.border,

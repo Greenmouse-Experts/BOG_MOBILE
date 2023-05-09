@@ -170,7 +170,7 @@ class _HomeTabState extends State<HomeTab> {
                                     image: const DecorationImage(
                                       image: AssetImage(
                                           "assets/images/Frame 466380.png"),
-                                      fit: BoxFit.fitWidth,
+                                      fit: BoxFit.cover,
                                     ),
                                   ),
                                 ),
@@ -360,6 +360,9 @@ class _HomeTabState extends State<HomeTab> {
                                                     CrossAxisAlignment.center,
                                                 children: [
                                                   Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceAround,
                                                     crossAxisAlignment:
                                                         CrossAxisAlignment
                                                             .start,
@@ -445,6 +448,9 @@ class _HomeTabState extends State<HomeTab> {
                                                     CrossAxisAlignment.center,
                                                 children: [
                                                   Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceAround,
                                                     crossAxisAlignment:
                                                         CrossAxisAlignment
                                                             .start,
@@ -648,7 +654,7 @@ class _HomeTabState extends State<HomeTab> {
                                                 "assets/images/Group 47034.png",
                                                 height: Get.height * 0.2,
                                                 width: Get.width * 0.4,
-                                                fit: BoxFit.fitWidth,
+                                                fit: BoxFit.contain,
                                               ),
                                             ),
                                             InkWell(
@@ -659,7 +665,7 @@ class _HomeTabState extends State<HomeTab> {
                                                 "assets/images/Group 47035.png",
                                                 height: Get.height * 0.2,
                                                 width: Get.width * 0.4,
-                                                fit: BoxFit.fitWidth,
+                                                fit: BoxFit.contain,
                                               ),
                                             ),
                                           ],
@@ -749,7 +755,8 @@ class _HomeTabState extends State<HomeTab> {
                 subTitle,
                 style: AppTextStyle.subtitle1.copyWith(
                   color: Colors.black,
-                  fontSize: Get.width * 0.035,
+                  fontSize:
+                      Get.width > 600 ? Get.width * 0.025 : Get.width * 0.035,
                 ),
               ),
             ),
@@ -862,7 +869,7 @@ class ProductPartnerHomeWidget extends StatelessWidget {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15)),
               color: AppColors.primary,
-              margin:  EdgeInsets.all(Get.width * 0.015),
+              margin: EdgeInsets.all(Get.width * 0.015),
               child: Padding(
                 padding:
                     const EdgeInsets.symmetric(vertical: 20.0, horizontal: 15),
@@ -1119,7 +1126,7 @@ class _PriceSwitcherState extends State<PriceSwitcher> {
         widget.isVerified
             ? Image.asset('assets/icons/verified.png')
             : const SizedBox.shrink(),
-        const SizedBox(width: 5),
+        SizedBox(width: Get.width * 0.01),
         Text(
           widget.isVerified ? 'Verified' : 'Unverified',
           style: AppTextStyle.caption.copyWith(color: AppColors.white),
@@ -1199,7 +1206,7 @@ class SPHomeWidget extends StatelessWidget {
                       style: AppTextStyle.caption2
                           .copyWith(color: AppColors.white),
                     ),
-                    const SizedBox(height: 10),
+                    SizedBox(height: Get.height * 0.01),
                     Row(
                       children: [
                         ElevatedButton(
@@ -1311,6 +1318,7 @@ class SPHomeWidget extends StatelessWidget {
                       ),
                     ],
                   ),
+            SizedBox(height: Get.height * 0.01),
             Column(
               children: [
                 Row(
