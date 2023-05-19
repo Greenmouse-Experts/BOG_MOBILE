@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:feather_icons/feather_icons.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_styles.dart';
 import '../../controllers/home_controller.dart';
 import '../../global_widgets/global_widgets.dart';
+import '../../global_widgets/new_app_bar.dart';
 
 class Reviews extends GetView<HomeController> {
   const Reviews({Key? key}) : super(key: key);
@@ -17,8 +17,7 @@ class Reviews extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     var width = Get.width;
-    final Size size = MediaQuery.of(context).size;
-    double multiplier = 25 * size.height * 0.01;
+
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
@@ -31,6 +30,7 @@ class Reviews extends GetView<HomeController> {
           id: 'Reviews',
           builder: (controller) {
             return Scaffold(
+              appBar: newAppBarBack(context, 'Reviews'),
               backgroundColor: AppColors.backgroundVariant2,
               body: SizedBox(
                 width: Get.width,
@@ -41,59 +41,59 @@ class Reviews extends GetView<HomeController> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        Padding(
-                          padding: EdgeInsets.only(
-                              left: Get.width * 0.04,
-                              right: Get.width * 0.03,
-                              top: kToolbarHeight),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              InkWell(
-                                onTap: () {
-                                  Navigator.pop(context);
-                                },
-                                child: SvgPicture.asset(
-                                  "assets/images/back.svg",
-                                  height: width * 0.045,
-                                  width: width * 0.045,
-                                  color: Colors.black,
-                                ),
-                              ),
-                              SizedBox(
-                                width: width * 0.04,
-                              ),
-                              Expanded(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "Reviews",
-                                      style: AppTextStyle.subtitle1.copyWith(
-                                          fontSize: multiplier * 0.07,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w500),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(
-                                width: width * 0.04,
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          height: width * 0.04,
-                        ),
-                        Container(
-                          height: 1,
-                          width: width,
-                          color: AppColors.background,
-                        ),
+                        // Padding(
+                        //   padding: EdgeInsets.only(
+                        //       left: Get.width * 0.04,
+                        //       right: Get.width * 0.03,
+                        //       top: kToolbarHeight),
+                        //   child: Row(
+                        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //     crossAxisAlignment: CrossAxisAlignment.center,
+                        //     children: [
+                        //       InkWell(
+                        //         onTap: () {
+                        //           Navigator.pop(context);
+                        //         },
+                        //         child: SvgPicture.asset(
+                        //           "assets/images/back.svg",
+                        //           height: width * 0.045,
+                        //           width: width * 0.045,
+                        //           color: Colors.black,
+                        //         ),
+                        //       ),
+                        //       SizedBox(
+                        //         width: width * 0.04,
+                        //       ),
+                        //       Expanded(
+                        //         child: Row(
+                        //           mainAxisAlignment: MainAxisAlignment.center,
+                        //           crossAxisAlignment: CrossAxisAlignment.center,
+                        //           children: [
+                        //             Text(
+                        //               "Reviews",
+                        //               style: AppTextStyle.subtitle1.copyWith(
+                        //                   fontSize: multiplier * 0.07,
+                        //                   color: Colors.black,
+                        //                   fontWeight: FontWeight.w500),
+                        //               textAlign: TextAlign.center,
+                        //             ),
+                        //           ],
+                        //         ),
+                        //       ),
+                        //       SizedBox(
+                        //         width: width * 0.04,
+                        //       ),
+                        //     ],
+                        //   ),
+                        // ),
+                        // SizedBox(
+                        //   height: width * 0.04,
+                        // ),
+                        // Container(
+                        //   height: 1,
+                        //   width: width,
+                        //   color: AppColors.background,
+                        // ),
                         SizedBox(
                           height: width * 0.04,
                         ),

@@ -14,8 +14,8 @@ import '../../data/providers/my_pref.dart';
 import '../../global_widgets/app_base_view.dart';
 import '../../global_widgets/app_loader.dart';
 import '../../global_widgets/app_radio_button.dart';
-import '../../global_widgets/custom_app_bar.dart';
 import '../../global_widgets/global_widgets.dart';
+import '../../global_widgets/new_app_bar.dart';
 import '../../global_widgets/page_dropdown.dart';
 
 class UpdateFinancialDetails extends StatefulWidget {
@@ -67,11 +67,12 @@ class _UpdateFinancialDetailsState extends State<UpdateFinancialDetails> {
   Widget build(BuildContext context) {
     return AppBaseView(
         child: Scaffold(
+      appBar: newAppBarBack(context, 'Financial Details'),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const CustomAppBar(title: 'Financial Details'),
+            // const CustomAppBar(title: 'Financial Details'),
             FutureBuilder<ApiResponse>(
                 future: getFinData,
                 builder: (context, snapshot) {

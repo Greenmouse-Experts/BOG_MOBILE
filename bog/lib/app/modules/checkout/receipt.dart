@@ -30,7 +30,6 @@ class AppReceipt extends StatefulWidget {
 }
 
 class _AppReceiptState extends State<AppReceipt> {
-  // var pageController = PageController();
   late Future<ApiResponse> orderFuture;
   @override
   void initState() {

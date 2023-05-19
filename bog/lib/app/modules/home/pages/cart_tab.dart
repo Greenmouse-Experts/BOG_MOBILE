@@ -10,6 +10,7 @@ import '../../../controllers/home_controller.dart';
 import '../../../data/model/my_products.dart';
 import '../../../data/providers/api_response.dart';
 import '../../../global_widgets/app_loader.dart';
+import '../../../global_widgets/app_tool_tip.dart';
 import '../../../global_widgets/global_widgets.dart';
 import '../../add_products/add_products.dart';
 import '../../checkout/checkout.dart';
@@ -84,6 +85,13 @@ class _CartTabState extends State<CartTab> {
                           fontWeight: FontWeight.w600,
                         ),
                       ),
+                      if (controller.currentType == "Product Partner")
+                        const Spacer(),
+                      if (controller.currentType == "Product Partner")
+                        const AppToolTip(
+                          message:
+                              'Click on the plus button at the bottom right corner of the page to add a new product, after adding, your product is saved in the draft tab. Add to shop button on the more icon on the draft tab moves your product to review tab and submits it to be reviewed by the admin. After admin approval, your product is added to the shop.',
+                        ),
                     ],
                   ),
                 ),
@@ -159,13 +167,15 @@ class _CartTabState extends State<CartTab> {
                                           controller.removeItem(
                                               product.id!, product);
                                         },
+                                        maxcount: product.remaining ?? 0,
                                         itemDecrement: () {
                                           controller
                                               .cartItemDecrement(product.id!);
                                         },
                                         itemIncrement: () {
-                                          controller
-                                              .cartItemIncrement(product.id!);
+                                          controller.cartItemIncrement(
+                                            product.id!,
+                                          );
                                         },
                                         title: product.name.toString(),
                                         image: product.image.toString(),
@@ -528,6 +538,7 @@ class _CartTabState extends State<CartTab> {
                                         title: prod.name,
                                         status: prod.status,
                                         myProduct: prod,
+                                        rem: (prod.remaining ?? 0).toString(),
                                         editProduct: () async {
                                           await Get.to(() =>
                                               AddProject(myProduct: prod));
@@ -660,7 +671,8 @@ class CartItem extends StatelessWidget {
       this.quantityChanged,
       required this.itemIncrement,
       required this.itemDecrement,
-      required this.deleteItem})
+      required this.deleteItem,
+      required this.maxcount})
       : super(key: key);
 
   final String image;
@@ -668,6 +680,7 @@ class CartItem extends StatelessWidget {
   final String subTitle;
   final String price;
   final int quantity;
+  final int maxcount;
   final VoidCallback itemIncrement;
   final VoidCallback itemDecrement;
   final VoidCallback deleteItem;
@@ -774,6 +787,7 @@ class CartItem extends StatelessWidget {
                   itemIncrement: () {
                     itemIncrement();
                   },
+                  maxCount: maxcount,
                   initialCount: quantity,
                   onCountChanged: (count) {
                     if (quantityChanged != null) {
@@ -948,7 +962,8 @@ class ProductItem extends StatelessWidget {
     this.subTitle,
     this.quantity,
     this.image,
-    this.status,
+    required this.status,
+    this.rem,
     required this.deleteProd,
     required this.addProduct,
     required this.myProduct,
@@ -960,6 +975,7 @@ class ProductItem extends StatelessWidget {
   final String? quantity;
   final String? image;
   final String? status;
+  final String? rem;
   final VoidCallback editProduct;
   final VoidCallback deleteProd;
   final VoidCallback addProduct;
@@ -1038,13 +1054,27 @@ class ProductItem extends StatelessWidget {
                   ),
                   Padding(
                     padding: EdgeInsets.only(left: Get.width * 0.015),
-                    child: Text(
-                      'Qty: ${quantity ?? 0}',
-                      style: AppTextStyle.caption.copyWith(
-                        color: const Color(0xFF9A9A9A),
-                        fontSize: Get.width * 0.033,
-                        fontWeight: FontWeight.w400,
-                      ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          'Qty: ${quantity ?? 0}',
+                          style: AppTextStyle.caption.copyWith(
+                            color: const Color(0xFF9A9A9A),
+                            fontSize: Get.width * 0.033,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Text(
+                          'Remaining: ${rem ?? 0}',
+                          style: AppTextStyle.caption.copyWith(
+                            color: const Color(0xFF9A9A9A),
+                            fontSize: Get.width * 0.033,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],

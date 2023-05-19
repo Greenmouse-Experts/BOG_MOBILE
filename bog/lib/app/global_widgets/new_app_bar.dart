@@ -35,7 +35,8 @@ PreferredSizeWidget newAppBarBack(BuildContext context, String title) {
           )));
 }
 
-PreferredSizeWidget newAppBar(BuildContext context, String title) {
+PreferredSizeWidget newAppBar(
+    BuildContext context, String title, List<Widget>? actionWidgets) {
   final Size size = MediaQuery.of(context).size;
   double multiplier = 25 * size.height * 0.01;
   return AppBar(
@@ -48,6 +49,7 @@ PreferredSizeWidget newAppBar(BuildContext context, String title) {
         ),
       ),
       centerTitle: true,
+      actions: actionWidgets,
       title: Text(
         title,
         style: AppTextStyle.subtitle1.copyWith(

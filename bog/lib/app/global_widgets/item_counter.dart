@@ -4,12 +4,17 @@ import 'package:flutter/material.dart';
 import '../../core/theme/app_colors.dart';
 
 class ItemCounter extends StatefulWidget {
-  const ItemCounter({
-    Key? key, this.onCountChanged, this.initialCount,this.maxCount, required this.itemIncrement,required this.itemDecrement
-  }) : super(key: key);
+  const ItemCounter(
+      {Key? key,
+      this.onCountChanged,
+      this.initialCount,
+      required this.maxCount,
+      required this.itemIncrement,
+      required this.itemDecrement})
+      : super(key: key);
 
   final int? initialCount;
-  final int? maxCount;
+  final int maxCount;
   final VoidCallback itemIncrement;
   final VoidCallback itemDecrement;
   final Function(int count)? onCountChanged;
@@ -36,19 +41,17 @@ class _ItemCounterState extends State<ItemCounter> {
           hasBorder: true,
           onPressed: () {
             setState(() {
-              if(widget.maxCount != null){
-                if (count > 1 ) {
-                  count--;
-                  widget.itemDecrement();
-                  if(widget.onCountChanged != null) {
-                    widget.onCountChanged!(count);
-                  }
+              if (count > 1) {
+                count--;
+                widget.itemDecrement();
+                if (widget.onCountChanged != null) {
+                  widget.onCountChanged!(count);
                 }
-              }else{
+              } else {
                 if (count > 1) {
                   count--;
                   widget.itemDecrement();
-                  if(widget.onCountChanged != null) {
+                  if (widget.onCountChanged != null) {
                     widget.onCountChanged!(count);
                   }
                 }
@@ -56,35 +59,31 @@ class _ItemCounterState extends State<ItemCounter> {
             });
           },
           iconColor: count == 1 ? Colors.grey.withOpacity(.5) : Colors.white,
-          containerColor: count == 1 ? Colors.grey.withOpacity(.2) : AppColors.primary,
+          containerColor:
+              count == 1 ? Colors.grey.withOpacity(.2) : AppColors.primary,
         ),
         const SizedBox(width: 7),
         Text('$count'),
         const SizedBox(width: 7),
         _PageIconButton(
-          icon: FeatherIcons.plus,
-          onPressed: () {
-            setState(() {
-              if(widget.maxCount != null){
-                if (count < widget.maxCount! ) {
+            icon: FeatherIcons.plus,
+            onPressed: () {
+              setState(() {
+                if (count < widget.maxCount) {
                   count++;
                   widget.itemIncrement();
-                  if(widget.onCountChanged != null) {
+                  if (widget.onCountChanged != null) {
                     widget.onCountChanged!(count);
                   }
                 }
-              }else{
-                count++;
-                 widget.itemIncrement();
-                if(widget.onCountChanged != null) {
-                  widget.onCountChanged!(count);
-                }
-              }
-            });
-          },
-          iconColor: widget.maxCount != null ? (count < widget.maxCount! ? Colors.white : Colors.grey.withOpacity(.5)) : Colors.white,
-          containerColor: widget.maxCount != null ? (count < widget.maxCount! ? AppColors.onyx : Colors.grey.withOpacity(.2)) : AppColors.primary,
-        ),
+              });
+            },
+            iconColor: (count < widget.maxCount
+                ? Colors.white
+                : Colors.grey.withOpacity(.5)),
+            containerColor: (count < widget.maxCount
+                ? AppColors.onyx
+                : Colors.grey.withOpacity(.2))),
       ],
     );
   }

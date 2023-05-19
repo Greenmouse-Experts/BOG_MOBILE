@@ -17,6 +17,7 @@ import '../../../data/model/service_projects_model.dart';
 import '../../../data/providers/api_response.dart';
 import '../../../data/providers/my_pref.dart';
 import '../../../global_widgets/app_loader.dart';
+import '../../../global_widgets/app_tool_tip.dart';
 import '../../../global_widgets/global_widgets.dart';
 import '../../../global_widgets/my_project_widget.dart';
 import '../../../global_widgets/new_app_bar.dart';
@@ -104,7 +105,24 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
         builder: (controller) {
           return Expanded(
             child: Scaffold(
-              appBar: newAppBar(context, "My ${controller.projectTitle}"),
+              appBar: newAppBar(
+                  context,
+                  "My ${controller.projectTitle}",
+                  controller.currentType == 'Client' ||
+                          controller.currentType == "Corporate Client"
+                      ? [
+                          const AppToolTip(
+                            message:
+                                'After application, please pay your commencement fee to enable the admin approve your project. After approval a service provider is assigned to your project, cost summary and project end date is also added to the project details.',
+                          )
+                        ]
+                      : controller.currentType == 'Service Partner'
+                          ? [
+                              const AppToolTip(
+                                  message:
+                                      'View the list of projects assigned to you and projects availbale on BOG for you to make a bid.')
+                            ]
+                          : []),
               body: SizedBox(
                 height: Get.height * 0.91,
                 child: SingleChildScrollView(

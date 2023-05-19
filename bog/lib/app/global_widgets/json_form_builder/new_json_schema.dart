@@ -84,14 +84,6 @@ class _CoreFormState extends State<NewJsonSchema> {
       Map item = formGeneral['formData'][count];
       Map answer = formAnswer['form'][count];
 
-      // print(widget.formResponse);
-      // print(formAnswer);
-      // print('akos');
-
-      // if (formAnswer['form'][count]['_id'] == 0){
-      //   formAnswer['form'].remove([count]);
-      // }
-
       if (item['inputType'] == "header") {
         //formAnswer['form'].remove([count]);
         headerInts.add(count);
@@ -210,22 +202,24 @@ class _CoreFormState extends State<NewJsonSchema> {
               final userType = controller.currentType == 'Client'
                   ? 'private_client'
                   : 'corporate_client';
+
+              widget.actionSave(formAnswer);
+
               if (_formKey.currentState!.validate()) {
-                final controller = Get.find<HomeController>();
-
-                widget.actionSave(formAnswer);
-
-                final jsonString = jsonEncode(formAnswer);
-                final jsonMap = jsonDecode(jsonString);
-                List<dynamic> filteredForm = jsonMap["form"].where((formValue) {
-                  return formValue["_id"] != 0 && formValue["value"] != "val";
-                }).toList();
-                Map<String, dynamic> newJsonMap = {
-                  "form": filteredForm,
-                  "userType": userType
-                };
-
                 AppOverlay.loadingOverlay(asyncFunction: () async {
+                  await Future.delayed(const Duration(seconds: 3));
+                  final controller = Get.find<HomeController>();
+
+                  final jsonString = jsonEncode(formAnswer);
+                  final jsonMap = jsonDecode(jsonString);
+                  List<dynamic> filteredForm =
+                      jsonMap["form"].where((formValue) {
+                    return formValue["_id"] != 0 && formValue["value"] != "val";
+                  }).toList();
+                  Map<String, dynamic> newJsonMap = {
+                    "form": filteredForm,
+                    "userType": userType
+                  };
                   final response = await controller.userRepo
                       .postData('/projects/request', newJsonMap);
 
@@ -260,7 +254,7 @@ class _CoreFormState extends State<NewJsonSchema> {
     widget.onChanged(formAnswer);
   }
 
-  void onChange(int position, dynamic value) {
+  void onChange(int position, dynamic value) async {
     setState(() {
       formAnswer['form'][position]['value'] = value;
       // print(value);

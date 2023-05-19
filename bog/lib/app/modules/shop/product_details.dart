@@ -206,6 +206,7 @@ class _ProductDetailsState extends State<ProductDetails>
                                     itemIncrement: () {
                                       controller.cartItemIncrement(product.id!);
                                     },
+                                    maxCount: product.remaining ?? 0,
                                     itemDecrement: () {
                                       controller.cartItemDecrement(product.id!);
                                     },

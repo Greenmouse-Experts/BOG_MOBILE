@@ -17,6 +17,7 @@ import '../../data/providers/my_pref.dart';
 import '../../global_widgets/address_picker.dart';
 import '../../global_widgets/app_base_view.dart';
 import '../../global_widgets/app_button.dart';
+import '../../global_widgets/app_tool_tip.dart';
 import '../../global_widgets/bottom_widget.dart';
 import '../../global_widgets/overlays.dart';
 import '../../global_widgets/page_input.dart';
@@ -46,6 +47,8 @@ class _CheckoutState extends State<Checkout> {
   var formKey1 = GlobalKey<FormState>();
   var formKey2 = GlobalKey<FormState>();
   var formKey3 = GlobalKey<FormState>();
+
+  bool addInsurance = true;
 
   var logInDetails = LogInModel.fromJson(jsonDecode(MyPref.logInDetail.val));
 
@@ -536,6 +539,9 @@ class _CheckoutState extends State<Checkout> {
                                                               product);
                                                           Get.back();
                                                         },
+                                                        maxcount:
+                                                            product.remaining ??
+                                                                0,
                                                         itemDecrement: () {
                                                           controller
                                                               .cartItemDecrement(
@@ -544,7 +550,8 @@ class _CheckoutState extends State<Checkout> {
                                                         itemIncrement: () {
                                                           controller
                                                               .cartItemIncrement(
-                                                                  product.id!);
+                                                            product.id!,
+                                                          );
                                                         },
                                                         title: product.name
                                                             .toString(),
@@ -749,6 +756,56 @@ class _CheckoutState extends State<Checkout> {
                                                                       .w400,
                                                             ),
                                                           ),
+                                                        ],
+                                                      ),
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                        children: [
+                                                          Row(
+                                                            mainAxisSize:
+                                                                MainAxisSize
+                                                                    .min,
+                                                            children: [
+                                                              const AppToolTip(
+                                                                message:
+                                                                    'This insurance provides the coverage for the orders shipped to recover any losses if the package is lost or damaged in transit. There is a fee required for this coverage.',
+                                                              ),
+                                                              Text(
+                                                                "Accept Insurance :",
+                                                                style: AppTextStyle
+                                                                    .subtitle1
+                                                                    .copyWith(
+                                                                  color: Colors
+                                                                      .black,
+                                                                  fontSize:
+                                                                      Get.width *
+                                                                          0.035,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w400,
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                          Checkbox(
+                                                              // checkColor:
+                                                              //     AppColors
+                                                              //         .primary,
+                                                              checkColor: AppColors
+                                                                  .backgroundVariant1, // color of tick Mark
+                                                              activeColor:
+                                                                  AppColors
+                                                                      .primary,
+                                                              value:
+                                                                  addInsurance,
+                                                              onChanged: (val) {
+                                                                setState(() {
+                                                                  addInsurance =
+                                                                      !addInsurance;
+                                                                });
+                                                              }),
                                                         ],
                                                       ),
                                                       SizedBox(

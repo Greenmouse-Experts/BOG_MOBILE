@@ -128,10 +128,26 @@ class HomeController extends GetxController {
   RxMap<String, CartModel> get cartItems => _cartItems.obs;
 
   void addItem(MyProducts product, int quantity) {
+    final remQuantity = product.remaining ?? 0;
     if (_cartItems.containsKey(product.id!)) {
       Get.snackbar(
         'Already in Cart',
         'Product is already in Cart',
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+        margin: EdgeInsets.only(bottom: Get.height * 0.1),
+        borderRadius: 0,
+        icon: const Icon(
+          FeatherIcons.shoppingCart,
+          color: Colors.white,
+        ),
+        duration: const Duration(seconds: 2),
+      );
+    } else if (remQuantity < 1) {
+      Get.snackbar(
+        'Error',
+        'Product Quantity required exceeds available quantity',
         snackPosition: SnackPosition.TOP,
         backgroundColor: Colors.red,
         colorText: Colors.white,
@@ -176,12 +192,15 @@ class HomeController extends GetxController {
 
   void cartItemIncrement(String productId) {
     if (_cartItems.containsKey(productId)) {
-      _cartItems.update(
-          productId,
-          (existingCartItem) => CartModel(
-                product: existingCartItem.product,
-                quantity: existingCartItem.quantity + 1,
-              ));
+      _cartItems.update(productId, (existingCartItem) {
+        final remQuantity = existingCartItem.product.remaining ?? 0;
+        return CartModel(
+          product: existingCartItem.product,
+          quantity: existingCartItem.quantity < remQuantity
+              ? existingCartItem.quantity + 1
+              : existingCartItem.quantity,
+        );
+      });
     }
     update();
   }

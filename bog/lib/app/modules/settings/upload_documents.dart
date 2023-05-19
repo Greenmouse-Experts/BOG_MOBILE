@@ -13,8 +13,8 @@ import '../../data/providers/api_response.dart';
 import '../../data/providers/my_pref.dart';
 import '../../global_widgets/app_base_view.dart';
 import '../../global_widgets/app_loader.dart';
-import '../../global_widgets/custom_app_bar.dart';
 import '../../global_widgets/global_widgets.dart';
+import '../../global_widgets/new_app_bar.dart';
 import '../../global_widgets/pdf_page_viewer.dart';
 import '../../global_widgets/photo_view_page.dart';
 
@@ -122,6 +122,7 @@ class _UploadDocumentsState extends State<UploadDocuments> {
   Widget build(BuildContext context) {
     return AppBaseView(
         child: Scaffold(
+      appBar: newAppBarBack(context, 'Upload Document'),
       body: SingleChildScrollView(
           child: FutureBuilder<ApiResponse>(
               future: getDocuments,
@@ -217,7 +218,6 @@ class _UploadDocumentsState extends State<UploadDocuments> {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const CustomAppBar(title: 'Upload Document'),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
                         child: Column(

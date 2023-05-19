@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:dio/dio.dart' as dio;
 
 import '../../../core/theme/app_colors.dart';
 import '../../controllers/home_controller.dart';
@@ -13,9 +14,8 @@ import '../../data/providers/api.dart';
 import '../../data/providers/my_pref.dart';
 import '../../global_widgets/app_base_view.dart';
 import '../../global_widgets/app_date_picker.dart';
-import '../../global_widgets/custom_app_bar.dart';
-import 'package:dio/dio.dart' as dio;
 import '../../global_widgets/global_widgets.dart';
+import '../../global_widgets/new_app_bar.dart';
 import '../../global_widgets/pdf_page_viewer.dart';
 import '../../global_widgets/photo_view_page.dart';
 
@@ -63,13 +63,18 @@ class _UpdateWorkExperienceState extends State<UpdateWorkExperience> {
 
     return AppBaseView(
         child: Scaffold(
+      appBar: newAppBarBack(
+          context,
+          widget.isNewWork
+              ? 'Add New Work Experience'
+              : 'Edit Work Experience'),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            CustomAppBar(
-                title: widget.isNewWork
-                    ? 'Add New Work Experience'
-                    : 'Edit Work Experience'),
+            // CustomAppBar(
+            //     title: widget.isNewWork
+            //         ? 'Add New Work Experience'
+            //         : 'Edit Work Experience'),
             Padding(
               padding: const EdgeInsets.all(12.0),
               child: Form(

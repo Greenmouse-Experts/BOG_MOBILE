@@ -11,8 +11,8 @@ import '../../data/providers/api_response.dart';
 import '../../data/providers/my_pref.dart';
 import '../../global_widgets/app_base_view.dart';
 import '../../global_widgets/app_loader.dart';
-import '../../global_widgets/custom_app_bar.dart';
 import '../../global_widgets/global_widgets.dart';
+import '../../global_widgets/new_app_bar.dart';
 
 class UpdateTaxDetails extends StatefulWidget {
   final Map<String, dynamic> kycScore;
@@ -47,10 +47,11 @@ class _UpdateTaxDetailsState extends State<UpdateTaxDetails> {
   Widget build(BuildContext context) {
     return AppBaseView(
         child: Scaffold(
+      appBar: newAppBarBack(context, 'Tax Details'),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const CustomAppBar(title: 'Tax Details'),
+          // const CustomAppBar(title: 'Tax Details'),
           FutureBuilder<ApiResponse>(
               future: getTaxInfo,
               builder: (context, snapshot) {

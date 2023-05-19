@@ -1,3 +1,4 @@
+import 'package:bog/app/modules/transactions/transaction_details_page.dart';
 import 'package:flutter/material.dart';
 import 'package:feather_icons/feather_icons.dart';
 
@@ -98,7 +99,7 @@ class _TransactionPageState extends State<TransactionPage> {
                                       left: width * 0.02, right: width * 0.02),
                                   child: SizedBox(
                                       height: Get.height * 0.06,
-                                      width: Get.width  * 0.96,
+                                      width: Get.width * 0.96,
                                       child: AppInput(
                                         hintText: "Search",
                                         prefexIcon: Icon(
@@ -115,10 +116,8 @@ class _TransactionPageState extends State<TransactionPage> {
                                         },
                                       )),
                                 ),
-                             
                               ],
                             ),
-                            
                             SizedBox(
                               height: width * 0.02,
                             ),
@@ -138,123 +137,133 @@ class _TransactionPageState extends State<TransactionPage> {
                                       physics: const BouncingScrollPhysics(),
                                       itemBuilder: (context, index) {
                                         final transaction = transactions[index];
-                                        return SizedBox(
-                                          height: Get.height * 0.08,
-                                          child: Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            children: [
-                                              Container(
-                                                width: Get.width * 0.1,
-                                                height: Get.width * 0.1,
-                                                decoration: BoxDecoration(
-                                                  color:
-                                                      const Color(0xffE8F4FE),
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          100),
-                                                ),
-                                                child: Center(
-                                                  child: Image.asset(
-                                                    "assets/images/briefing-7 5.png",
-                                                    width: Get.width * 0.05,
-                                                    height: Get.width * 0.05,
+                                        return InkWell(
+                                          onTap: () {
+                                            Get.to(() => TransactionDetailsPage(
+                                                  transaction: transaction,
+                                                ));
+                                          },
+                                          child: SizedBox(
+                                            height: Get.height * 0.08,
+                                            child: Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                Container(
+                                                  width: Get.width * 0.1,
+                                                  height: Get.width * 0.1,
+                                                  decoration: BoxDecoration(
+                                                    color:
+                                                        const Color(0xffE8F4FE),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            100),
                                                   ),
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                width: Get.width * 0.02,
-                                              ),
-                                              Column(
-                                                mainAxisSize: MainAxisSize.min,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  RichText(
-                                                    text: TextSpan(
-                                                      text: transaction
-                                                              .transactionId ??
-                                                          '',
-                                                      style: AppTextStyle
-                                                          .subtitle1
-                                                          .copyWith(
-                                                              fontSize:
-                                                                  multiplier *
-                                                                      0.07,
-                                                              color:
-                                                                  Colors.black,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w500),
+                                                  child: Center(
+                                                    child: Image.asset(
+                                                      "assets/images/briefing-7 5.png",
+                                                      width: Get.width * 0.05,
+                                                      height: Get.width * 0.05,
                                                     ),
                                                   ),
-                                                  const SizedBox(height: 4),
-                                                  Text(
-                                                    (transaction.status ?? '')
-                                                        .toUpperCase(),
-                                                    style: AppTextStyle
-                                                        .subtitle1
-                                                        .copyWith(
-                                                            fontSize:
-                                                                multiplier *
-                                                                    0.05,
-                                                            color:
-                                                                AppColors.grey,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w400),
-                                                  ),
-                                                ],
-                                              ),
-                                              Expanded(
-                                                  child: Wrap(
-                                                alignment: WrapAlignment.end,
-                                                children: [
-                                                  Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment.end,
-                                                    children: [
-                                                      Text(
-                                                        'NGN ${transaction.amount ?? 0}',
+                                                ),
+                                                SizedBox(
+                                                  width: Get.width * 0.02,
+                                                ),
+                                                Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    RichText(
+                                                      text: TextSpan(
+                                                        text: transaction
+                                                                .transactionId ??
+                                                            '',
                                                         style: AppTextStyle
                                                             .subtitle1
                                                             .copyWith(
                                                                 fontSize:
                                                                     multiplier *
-                                                                        0.065,
+                                                                        0.07,
                                                                 color: Colors
                                                                     .black,
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .w500),
-                                                        textAlign:
-                                                            TextAlign.center,
                                                       ),
-                                                      const SizedBox(height: 4),
-                                                      transaction.createdAt ==
-                                                              null
-                                                          ? const SizedBox
-                                                              .shrink()
-                                                          : Text(
-                                                              DateFormat(
-                                                                      'dd MMM yyyy')
-                                                                  .format(transaction
-                                                                      .createdAt!),
-                                                              style:
-                                                                  AppTextStyle
-                                                                      .caption2
-                                                                      .copyWith(
-                                                                color: AppColors
-                                                                    .grey,
-                                                              ),
-                                                            )
-                                                    ],
-                                                  ),
-                                                ],
-                                              ))
-                                            ],
+                                                    ),
+                                                    const SizedBox(height: 4),
+                                                    Text(
+                                                      (transaction.status ?? '')
+                                                          .toUpperCase(),
+                                                      style: AppTextStyle
+                                                          .subtitle1
+                                                          .copyWith(
+                                                              fontSize:
+                                                                  multiplier *
+                                                                      0.05,
+                                                              color: AppColors
+                                                                  .grey,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400),
+                                                    ),
+                                                  ],
+                                                ),
+                                                Expanded(
+                                                    child: Wrap(
+                                                  alignment: WrapAlignment.end,
+                                                  children: [
+                                                    Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .end,
+                                                      children: [
+                                                        Text(
+                                                          'NGN ${transaction.amount ?? 0}',
+                                                          style: AppTextStyle
+                                                              .subtitle1
+                                                              .copyWith(
+                                                                  fontSize:
+                                                                      multiplier *
+                                                                          0.065,
+                                                                  color: Colors
+                                                                      .black,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w500),
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                        ),
+                                                        const SizedBox(
+                                                            height: 4),
+                                                        transaction.createdAt ==
+                                                                null
+                                                            ? const SizedBox
+                                                                .shrink()
+                                                            : Text(
+                                                                DateFormat(
+                                                                        'dd MMM yyyy')
+                                                                    .format(transaction
+                                                                        .createdAt!),
+                                                                style: AppTextStyle
+                                                                    .caption2
+                                                                    .copyWith(
+                                                                  color:
+                                                                      AppColors
+                                                                          .grey,
+                                                                ),
+                                                              )
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ))
+                                              ],
+                                            ),
                                           ),
                                         );
                                       },
