@@ -74,18 +74,8 @@ class Api {
         cancelToken: token,
         options: Options(method: 'POST', headers: hasHeader ? head : null),
       );
-
-      print(request.data);
-      print(request.statusCode);
-      print(request.statusMessage);
-      print(request.extra);
-
       return ApiResponse.response(request);
     } on DioError catch (e) {
-      print(e.error);
-      print(e.message);
-      print(e.response);
-      print(e.type);
       return e.toApiError(cancelToken: token);
     } on SocketException {
       return ApiResponse(
