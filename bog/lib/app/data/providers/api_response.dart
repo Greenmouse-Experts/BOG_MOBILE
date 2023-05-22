@@ -1,10 +1,74 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:http/http.dart' as http;
 
 enum ApiStatus {
   success,
   failure,
+}
+
+class HttpApiResponse {
+  final int? code;
+  dynamic data;
+  dynamic projects;
+  dynamic order;
+  dynamic accounts;
+  dynamic user;
+  dynamic status;
+  final bool isSuccessful;
+  String? message;
+  String? token;
+
+  HttpApiResponse(
+      {this.code,
+      this.message,
+      this.data,
+      this.order,
+      this.accounts,
+      this.projects,
+      this.status,
+      required this.isSuccessful,
+      this.token,
+      this.user});
+
+  static HttpApiResponse response(http.Response response) {
+    var json = jsonDecode(response.body);
+
+    return HttpApiResponse(
+        message: json['message'],
+        isSuccessful: json['success'] ?? false,
+        data: json['data'],
+        projects: json['projects'],
+        user: json['user'],
+        token: json['token'],
+        status: json['status'],
+        accounts: json['accounts'],
+        order: json['order']);
+  }
+
+  static HttpApiResponse responseFromBody(String json, int isSuccessful) {
+    var jsonD = jsonDecode(json);
+
+    return HttpApiResponse(
+        message: jsonD['message'],
+        isSuccessful: jsonD['success'] ?? false,
+        data: jsonD['data'],
+        projects: jsonD['projects'],
+        user: jsonD['user'],
+        status: jsonD['status'],
+        token: jsonD['token'],
+        accounts: jsonD['accounts'],
+        order: jsonD['order']);
+  }
+
+  factory HttpApiResponse.timout(Response response) {
+    return HttpApiResponse(
+      data: null,
+      isSuccessful: false,
+      message: 'An Error occurred. Please try again',
+    );
+  }
 }
 
 class ApiResponse {

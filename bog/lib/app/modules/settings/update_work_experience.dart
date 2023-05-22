@@ -38,17 +38,15 @@ class UpdateWorkExperience extends StatefulWidget {
 
 class _UpdateWorkExperienceState extends State<UpdateWorkExperience> {
   File? pickedFile;
+  final _formKey = GlobalKey<FormState>();
+  TextEditingController nameController = TextEditingController();
+  TextEditingController valueController = TextEditingController();
+  TextEditingController dateController = TextEditingController();
+  TextEditingController expYearController = TextEditingController();
+  TextEditingController subController = TextEditingController();
+  TextEditingController fileController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    TextEditingController nameController = TextEditingController();
-    TextEditingController valueController = TextEditingController();
-    TextEditingController dateController = TextEditingController();
-    TextEditingController expYearController = TextEditingController();
-    TextEditingController subController = TextEditingController();
-    TextEditingController fileController = TextEditingController();
-
-    final formKey = GlobalKey<FormState>();
-
     if (!widget.isNewWork) {
       nameController.text = widget.workExperience!.name ?? '';
       valueController.text = widget.workExperience!.value ?? '';
@@ -78,7 +76,7 @@ class _UpdateWorkExperienceState extends State<UpdateWorkExperience> {
             Padding(
               padding: const EdgeInsets.all(12.0),
               child: Form(
-                key: formKey,
+                key: _formKey,
                 child: Column(
                   children: [
                     PageInput(
@@ -135,12 +133,17 @@ class _UpdateWorkExperienceState extends State<UpdateWorkExperience> {
                           errorText: 'Enter a valid number of years'),
                     ),
                     const SizedBox(height: 8),
-                    PageInput(
-                        hint: '',
-                        controller: subController,
-                        isTextArea: true,
-                        label:
-                            'If the company is a subsidiary, what involvement,\nif any, will the parent company have?'),
+                    GestureDetector(
+                      onTap: () {
+                        FocusScope.of(context).requestFocus(FocusNode());
+                      },
+                      child: PageInput(
+                          hint: '',
+                          controller: subController,
+                          isTextArea: true,
+                          label:
+                              'If the company is a subsidiary, what involvement,\nif any, will the parent company have?'),
+                    ),
                     const SizedBox(height: 15),
                     if (!widget.isNewWork)
                       AppButton(
@@ -183,7 +186,7 @@ class _UpdateWorkExperienceState extends State<UpdateWorkExperience> {
                                   colorText: AppColors.background);
                               return;
                             }
-                            if (formKey.currentState!.validate()) {
+                            if (_formKey.currentState!.validate()) {
                               final newWorkExperience = {
                                 "name": nameController.text,
                                 "value": valueController.text,
@@ -240,7 +243,7 @@ class _UpdateWorkExperienceState extends State<UpdateWorkExperience> {
                               }
                             }
                           } else {
-                            if (formKey.currentState!.validate()) {
+                            if (_formKey.currentState!.validate()) {
                               final newWorkExperience = {
                                 "name": nameController.text,
                                 "value": valueController.text,
@@ -271,7 +274,8 @@ class _UpdateWorkExperienceState extends State<UpdateWorkExperience> {
                             }
                           }
                         },
-                      )
+                      ),
+                    const SizedBox(height: 350),
                   ],
                 ),
               ),

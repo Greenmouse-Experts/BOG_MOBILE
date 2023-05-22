@@ -157,51 +157,65 @@ class _PageInputState extends State<PageInput> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              SizedBox(
-                width: Get.width * 0.2,
-                child: PageDropButton(
-                  label: "",
-                  hint: '',
-                  onChanged: (val) {
-                    if (widget.onDropdownChanged != null) {
-                      widget.onDropdownChanged!(val);
-                    }
-                  },
-                  value: countries.firstWhere(
-                      (element) => element.name.toLowerCase() == 'nigeria'),
-                  items:
-                      countries.map<DropdownMenuItem<Country>>((Country value) {
-                    return DropdownMenuItem<Country>(
-                      value: value,
-                      child: Container(
-                        color: Colors.white,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(value.flag),
-                            Text("+${value.countryCode}"),
-                          ],
-                        ),
-                      ),
-                    );
-                  }).toList(),
-                ),
-              ),
-              SizedBox(
-                width: Get.width * 0.7,
-                child: AppInput(
-                  hintText: widget.hint,
-                  keyboardType: widget.keyboardType,
-                  controller: widget.controller,
-                  validator: widget.validator,
-                  obscureText: widget.obscureText,
-                  autovalidateMode: widget.autovalidateMode,
-                  readOnly: widget.readOnly,
-                  prefexIcon: widget.prefix,
-                  suffixIcon: widget.suffix,
-                  borderSide: widget.borderSide,
-                ),
-              ),
+              Expanded(
+                  child: AppInput(
+                hintText: widget.hint,
+                isPhoneNumber: true,
+                keyboardType: widget.keyboardType,
+                controller: widget.controller,
+                validator: widget.validator,
+                obscureText: widget.obscureText,
+                autovalidateMode: widget.autovalidateMode,
+                readOnly: widget.readOnly,
+                prefexIcon: widget.prefix,
+                suffixIcon: widget.suffix,
+                borderSide: widget.borderSide,
+              ))
+              // SizedBox(
+              //   width: Get.width * 0.2,
+              //   child: PageDropButton(
+              //     label: "",
+              //     hint: '',
+              //     onChanged: (val) {
+              //       if (widget.onDropdownChanged != null) {
+              //         widget.onDropdownChanged!(val);
+              //       }
+              //     },
+              //     value: countries.firstWhere(
+              //         (element) => element.name.toLowerCase() == 'nigeria'),
+              //     items:
+              //         countries.map<DropdownMenuItem<Country>>((Country value) {
+              //       return DropdownMenuItem<Country>(
+              //         value: value,
+              //         child: Container(
+              //           color: Colors.white,
+              //           child: Row(
+              //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //             children: [
+              //               Text(value.flag),
+              //               Text("+${value.countryCode}"),
+              //             ],
+              //           ),
+              //         ),
+              //       );
+              //     }).toList(),
+              //   ),
+              // ),
+              // SizedBox(
+              //   width: Get.width * 0.7,
+              //   child: AppInput(
+              //     hintText: widget.hint,
+              //     keyboardType: widget.keyboardType,
+              //     controller: widget.controller,
+              //     validator: widget.validator,
+              //     obscureText: widget.obscureText,
+              //     autovalidateMode: widget.autovalidateMode,
+              //     readOnly: widget.readOnly,
+              //     prefexIcon: widget.prefix,
+              //     suffixIcon: widget.suffix,
+              //     borderSide: widget.borderSide,
+              //   ),
+              // ),
             ],
           ),
         if ((!widget.isPhoneNumber && !showText) || widget.obscureText)
@@ -298,7 +312,9 @@ class _PageInputState extends State<PageInput> {
                       style: AppTextStyle.bodyText2.copyWith(
                         fontWeight: FontWeight.w400,
                         color: Colors.black,
-                        fontSize:Get.width > 600 ? Get.width * 0.025 : Get.width * 0.035,
+                        fontSize: Get.width > 600
+                            ? Get.width * 0.025
+                            : Get.width * 0.035,
                       ),
                     ),
                   ),
@@ -583,7 +599,9 @@ class _DisabledPageInputState extends State<DisabledPageInput> {
                       style: AppTextStyle.bodyText2.copyWith(
                         fontWeight: FontWeight.w400,
                         color: Colors.black,
-                        fontSize: Get.width > 600 ? Get.width * 0.025 : Get.width * 0.035,
+                        fontSize: Get.width > 600
+                            ? Get.width * 0.025
+                            : Get.width * 0.035,
                       ),
                     ),
                   ),

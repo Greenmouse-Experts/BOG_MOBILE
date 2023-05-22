@@ -542,7 +542,7 @@ class _UploadDocumentsState extends State<UploadDocuments> {
                                   MyPref.setOverlay.val = false;
                                   AppOverlay.successOverlay(
                                       message:
-                                          'Documents Uploaded Successfully');
+                                          'Your KYC has been submitted and will be verfied by Admin soon, keep checking your status on settings');
                                 } else {
                                   Get.snackbar('Error', 'An error occurred',
                                       backgroundColor: Colors.red,

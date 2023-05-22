@@ -34,7 +34,7 @@ class _JsonFormState extends State<JsonForm> {
   @override
   Widget build(BuildContext context) {
     dynamic response1;
-
+    debugPrint(response1);
     Map decorations = {
       'input1': const InputDecoration(
         prefixIcon: Icon(Icons.account_box),

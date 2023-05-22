@@ -1,3 +1,5 @@
+// import 'dart:convert';
+import 'dart:convert';
 import 'dart:io';
 import 'dart:async';
 import 'package:dio/dio.dart';
@@ -5,6 +7,31 @@ import 'package:http/http.dart' as http;
 
 import 'api_response.dart';
 import 'my_pref.dart';
+
+class HttpClient {
+  static const String baseUrl =
+      'https://bog.greenmouseproperties.com/api'; // Replace with your API base URL
+
+  static Future<HttpApiResponse> post(String path, dynamic body) async {
+    final url = Uri.parse('$baseUrl$path');
+
+    final client = http.Client();
+    try {
+      final response = await client.post(
+        url,
+        body: jsonEncode(body),
+        headers: {
+          'Authorization': MyPref.authToken.val,
+          "Content-Type": "application/json",
+        },
+      );
+
+      return HttpApiResponse.response(response);
+    } catch (error) {
+      rethrow; // Throw the error again for handling in the calling code
+    }
+  }
+}
 
 class Api {
   static const publicKey = 'pk_test_0c79398dba746ce329d163885dd3fe5bc7e1f243';
@@ -36,6 +63,7 @@ class Api {
     body,
   }) async {
     token = CancelToken();
+
     try {
       var head = {
         'Authorization': MyPref.authToken.val,
@@ -47,8 +75,17 @@ class Api {
         options: Options(method: 'POST', headers: hasHeader ? head : null),
       );
 
+      print(request.data);
+      print(request.statusCode);
+      print(request.statusMessage);
+      print(request.extra);
+
       return ApiResponse.response(request);
     } on DioError catch (e) {
+      print(e.error);
+      print(e.message);
+      print(e.response);
+      print(e.type);
       return e.toApiError(cancelToken: token);
     } on SocketException {
       return ApiResponse(

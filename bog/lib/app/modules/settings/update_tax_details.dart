@@ -51,7 +51,7 @@ class _UpdateTaxDetailsState extends State<UpdateTaxDetails> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // const CustomAppBar(title: 'Tax Details'),
+         
           FutureBuilder<ApiResponse>(
               future: getTaxInfo,
               builder: (context, snapshot) {
