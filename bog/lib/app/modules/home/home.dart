@@ -41,16 +41,16 @@ class _HomeState extends State<Home> {
       homeController.currentType = "Product Partner";
       homeController.update();
       homeController.updateNewUser('Product Partner');
-      verifyKycComplete('vendor', () {
-        Get.to(() => const KYCPage());
-      });
+      verifyKycComplete(
+        'vendor',
+      );
     } else if (type == 'professional') {
       homeController.currentType = 'Service Partner';
       homeController.update();
       homeController.updateNewUser('Service Partner');
-      verifyKycComplete('professional', () {
-        Get.to(() => const KYCPage());
-      });
+      verifyKycComplete(
+        'professional',
+      );
     } else {
       homeController.currentType = "Corporate Client";
       homeController.update();
@@ -60,7 +60,9 @@ class _HomeState extends State<Home> {
     homeController.update();
   }
 
-  void verifyKycComplete(String type, VoidCallback onPressed) async {
+  void verifyKycComplete(
+    String type,
+  ) async {
     final controller = Get.find<HomeController>();
     var logInDetails = LogInModel.fromJson(jsonDecode(MyPref.logInDetail.val));
     final res = await controller.userRepo
@@ -80,7 +82,9 @@ class _HomeState extends State<Home> {
           buttonText: 'Complete KYC',
           content:
               "You haven't completed your KYC yet, Kindly Complete your KYC and subscribe to access all features",
-          onPressed: onPressed);
+          onPressed: () {
+            Get.to(() => const KYCPage());
+          });
     } else if (userDetails.profile!.hasActiveSubscription != true) {
       MyPref.setSubscribeOverlay.val = true;
       AppOverlay.showSubscribeDialog(

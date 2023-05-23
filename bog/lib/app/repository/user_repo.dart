@@ -11,7 +11,7 @@ class UserRepository {
     return response;
   }
 
-   Future<ApiResponse> googleSignUp(dynamic body) async {
+  Future<ApiResponse> googleSignUp(dynamic body) async {
     final response = await api.postData('/users/auth/google', body: body);
     return response;
   }
@@ -27,11 +27,14 @@ class UserRepository {
   }
 
   Future<ApiResponse> verifyOTPForSignUp(String email, String token) async {
-    final response =
-        await api.postData('/user/verify', hasHeader: true, body: {
-          'email': email,
-          'token': token
-        });
+    final response = await api.postData('/user/verify',
+        hasHeader: true, body: {'email': email, 'token': token});
+    return response;
+  }
+
+  Future<ApiResponse> resendOTP(String email) async {
+    final response = await api.postData('/user/resend-token',
+        body: {"email": email, "platform": "mobile"});
     return response;
   }
 

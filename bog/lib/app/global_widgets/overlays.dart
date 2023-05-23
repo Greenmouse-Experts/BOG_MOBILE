@@ -1113,6 +1113,23 @@ class AppOverlay {
                   ),
                   child: Column(
                     children: [
+                      getCloseButton(onpressed: () {
+                        if (MyPref.setOverlay.val) {
+                          Get.snackbar('Error', 'Kindly complete kyc',
+                              colorText: AppColors.backgroundVariant1,
+                              backgroundColor: Colors.red);
+                        } else {
+                          Get.back();
+                          MyPref.setSubscribeOverlay.val = true;
+                          AppOverlay.showSubscribeDialog(
+                              title: 'No Active Subscriptions',
+                              buttonText: 'Subscribe',
+                              content:
+                                  "You don't have an active subscription, select a subscription to enjoy full benefits",
+                              onPressed: () =>
+                                  Get.to(() => const SubscriptionScreen()));
+                        }
+                      }),
                       Row(
                         children: [
                           Expanded(

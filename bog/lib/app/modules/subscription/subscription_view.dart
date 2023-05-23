@@ -67,6 +67,10 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
           userDetails.profile!.hasActiveSubscription = true;
           MyPref.userDetails.val = jsonEncode(userDetails);
           Get.back();
+          if (MyPref.setSubscribeOverlay.val) {
+            Get.back();
+          }
+
           Get.snackbar('Success', 'Subscription made successfully',
               backgroundColor: AppColors.successGreen,
               colorText: AppColors.background);

@@ -9,8 +9,7 @@ import 'api_response.dart';
 import 'my_pref.dart';
 
 class HttpClient {
-  static const String baseUrl =
-      'https://bog.greenmouseproperties.com/api'; // Replace with your API base URL
+  static const String baseUrl = 'https://bog.greenmouseproperties.com/api';
 
   static Future<HttpApiResponse> post(String path, dynamic body) async {
     final url = Uri.parse('$baseUrl$path');

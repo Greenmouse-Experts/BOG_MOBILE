@@ -235,7 +235,7 @@ class AuthController extends GetxController {
 
   Future<void> handleSignUpGoogle() async {
     try {
-       await _googleSignIn.signOut();
+      await _googleSignIn.signOut();
 
       final response = await _googleSignIn.signIn();
 
@@ -291,13 +291,36 @@ class AuthController extends GetxController {
         });
       }
     } catch (error) {
-    
       AppOverlay.showInfoDialog(title: 'Error', content: error.toString());
     }
   }
 
   Future<void> logOutGoogle() async {
     await _googleSignIn.signOut();
+  }
+
+  Future<void> resendOTP() async {
+    ApiResponse response = await userRepo.resendOTP(email.text);
+    if (response.isSuccessful) {
+      AppOverlay.showInfoDialog(
+        title: 'Success',
+        content: "OTP Resent Successfully, Please Input New OTP",
+        buttonText: "Continue",
+        onPressed: () {
+          Get.back();
+        },
+      );
+    } else {
+      AppOverlay.showInfoDialog(
+        title: 'Failure',
+        content:
+            response.message ?? "OTP Verification Failed. Please try again",
+        buttonText: "Okay",
+        onPressed: () {
+          Get.back();
+        },
+      );
+    }
   }
 
   Future<void> verifyOTPForSignUp() async {
@@ -332,7 +355,7 @@ class AuthController extends GetxController {
     Timer.periodic(
       oneSec,
       (Timer timer) {
-       // var duration = Duration(seconds: _start);
+        // var duration = Duration(seconds: _start);
         if (_start < 1) {
           time = "0:00";
           timer.cancel();
