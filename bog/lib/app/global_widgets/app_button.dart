@@ -5,24 +5,25 @@ import 'package:get/get.dart';
 import '../../core/theme/app_colors.dart';
 
 class AppButton extends StatefulWidget {
-  const AppButton({
-    Key? key,
-    required this.title,
-    this.trailingTitle = '',
-    this.onPressed,
-    this.bckgrndColor = AppColors.primary,
-    this.borderRadius = 10,
-    this.border,
-    this.width = double.infinity,
-    this.padding = const EdgeInsets.symmetric(vertical: 16),
-    this.fontSize = 16,
-    this.fontColor = Colors.white,
-    this.trailingColor = AppColors.orange,
-    this.bold = true,
-    this.enabled = true,
-    this.hasIcon = false,
-    this.isGoogle = true,
-  }) : super(key: key);
+  const AppButton(
+      {Key? key,
+      required this.title,
+      this.trailingTitle = '',
+      this.onPressed,
+      this.bckgrndColor = AppColors.primary,
+      this.borderRadius = 10,
+      this.border,
+      this.width = double.infinity,
+      this.padding = const EdgeInsets.symmetric(vertical: 16),
+      this.fontSize = 16,
+      this.fontColor = Colors.white,
+      this.trailingColor = AppColors.orange,
+      this.bold = true,
+      this.enabled = true,
+      this.hasIcon = false,
+      this.isGoogle = true,
+      this.isElevated = false})
+      : super(key: key);
   final String title;
   final String trailingTitle;
   final Function()? onPressed;
@@ -38,6 +39,7 @@ class AppButton extends StatefulWidget {
   final Border? border;
   final bool? hasIcon;
   final bool? isGoogle;
+  final bool isElevated;
 
   @override
   State<AppButton> createState() => _AppButtonState();
@@ -59,80 +61,87 @@ class _AppButtonState extends State<AppButton> {
           });
         }
       },
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            padding: widget.padding,
-            height: Get.width > 600 ? Get.height * 0.05 : null,
-            decoration: BoxDecoration(
-                color: widget.enabled ? widget.bckgrndColor : Colors.grey,
-                border: widget.border,
-                borderRadius: BorderRadius.circular(widget.borderRadius)),
-            child: Center(
-              child: Stack(
-                children: [
-                  Opacity(
-                    opacity: loading ? 0 : 1,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        widget.hasIcon!
-                            ? SizedBox(
-                                width: 25,
-                                height: 25,
-                                child: Image.asset(widget.isGoogle!
-                                    ? 'assets/icons/googleIcon.webp'
-                                    : 'assets/icons/apple-emblem.jpeg'))
-                            : const SizedBox.shrink(),
-                        const SizedBox(width: 5),
-                        Text(
-                          widget.title,
-                          textAlign: TextAlign.center,
-                          style: Get.theme.textTheme.bodyLarge!.copyWith(
-                              color: widget.fontColor,
-                              fontSize:
-                                  widget.fontSize * Get.textScaleFactor * 0.90,
-                              fontWeight: widget.bold
-                                  ? FontWeight.w500
-                                  : FontWeight.w300),
-                        ),
-                        Text(
-                          widget.trailingTitle,
-                          textAlign: TextAlign.center,
-                          style: Get.theme.textTheme.bodyLarge!.copyWith(
-                              color: widget.trailingColor,
-                              fontSize:
-                                  widget.fontSize * Get.textScaleFactor * 0.90,
-                              fontWeight: widget.bold
-                                  ? FontWeight.w500
-                                  : FontWeight.w300),
-                        ),
-                      ],
+      child: Material(
+        elevation: widget.isElevated ? 4 : 0,
+        borderRadius: BorderRadius.circular(widget.borderRadius),
+
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              padding: widget.padding,
+              height: Get.width > 600 ? Get.height * 0.05 : null,
+              decoration: BoxDecoration(
+                  color: widget.enabled ? widget.bckgrndColor : Colors.grey,
+                  border: widget.border,
+                  borderRadius: BorderRadius.circular(widget.borderRadius)),
+              child: Center(
+                child: Stack(
+                  children: [
+                    Opacity(
+                      opacity: loading ? 0 : 1,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          widget.hasIcon!
+                              ? SizedBox(
+                                  width: 25,
+                                  height: 25,
+                                  child: Image.asset(widget.isGoogle!
+                                      ? 'assets/icons/googleIcon.webp'
+                                      : 'assets/icons/apple-emblem.jpeg'))
+                              : const SizedBox.shrink(),
+                          const SizedBox(width: 5),
+                          Text(
+                            widget.title,
+                            textAlign: TextAlign.center,
+                            style: Get.theme.textTheme.bodyLarge!.copyWith(
+                                color: widget.fontColor,
+                                fontSize: widget.fontSize *
+                                    Get.textScaleFactor *
+                                    0.90,
+                                fontWeight: widget.bold
+                                    ? FontWeight.w500
+                                    : FontWeight.w300),
+                          ),
+                          Text(
+                            widget.trailingTitle,
+                            textAlign: TextAlign.center,
+                            style: Get.theme.textTheme.bodyLarge!.copyWith(
+                                color: widget.trailingColor,
+                                fontSize: widget.fontSize *
+                                    Get.textScaleFactor *
+                                    0.90,
+                                fontWeight: widget.bold
+                                    ? FontWeight.w500
+                                    : FontWeight.w300),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  Positioned(
-                    left: 0,
-                    right: 0,
-                    child: Center(
-                      child: Opacity(
-                        opacity: !loading ? 0 : 1,
-                        child: SizedBox.square(
-                          dimension:
-                              widget.fontSize * Get.textScaleFactor * 0.9,
-                          child: CircularProgressIndicator(
-                            color: widget.fontColor,
-                            strokeWidth: 1.5,
+                    Positioned(
+                      left: 0,
+                      right: 0,
+                      child: Center(
+                        child: Opacity(
+                          opacity: !loading ? 0 : 1,
+                          child: SizedBox.square(
+                            dimension:
+                                widget.fontSize * Get.textScaleFactor * 0.9,
+                            child: CircularProgressIndicator(
+                              color: widget.fontColor,
+                              strokeWidth: 1.5,
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

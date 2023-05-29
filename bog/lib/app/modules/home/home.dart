@@ -7,11 +7,13 @@ import '../../controllers/home_controller.dart';
 import '../../data/model/gen_kyc.dart';
 import '../../data/model/log_in_model.dart';
 import '../../data/model/user_details_model.dart';
+import '../../data/providers/api.dart';
 import '../../data/providers/my_pref.dart';
 import '../../global_widgets/app_base_view.dart';
 import '../../global_widgets/app_drawer.dart';
 import '../../global_widgets/bottom_widget.dart';
 import '../../global_widgets/global_widgets.dart';
+import '../../repository/user_repo.dart';
 import '../settings/view_kyc.dart';
 import '../subscription/subscription_view.dart';
 
@@ -25,13 +27,13 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  var homeController = Get.find<HomeController>();
-
   @override
   void initState() {
+    Get.put(HomeController(UserRepository(Api())));
     super.initState();
-    var logInDetails = LogInModel.fromJson(jsonDecode(MyPref.logInDetail.val));
 
+    var logInDetails = LogInModel.fromJson(jsonDecode(MyPref.logInDetail.val));
+    var homeController = Get.find<HomeController>();
     var type = logInDetails.userType;
     if (type == "private_client") {
       homeController.currentType = "Client";
@@ -101,6 +103,7 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+   // Get.put(HomeController(UserRepository(Api())));
     return WillPopScope(
       onWillPop: () async => false,
       child: AppBaseView(

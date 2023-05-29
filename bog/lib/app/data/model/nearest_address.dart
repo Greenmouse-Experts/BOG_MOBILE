@@ -21,6 +21,7 @@ class NearestAddress {
     this.createdAt,
     this.updatedAt,
     this.deletedAt,
+    this.insurancecharge,
   });
 
   String? id;
@@ -38,6 +39,7 @@ class NearestAddress {
   DateTime? createdAt;
   DateTime? updatedAt;
   dynamic deletedAt;
+  dynamic insurancecharge;
 
   factory NearestAddress.fromRawJson(String str) =>
       NearestAddress.fromJson(json.decode(str));
@@ -64,6 +66,7 @@ class NearestAddress {
             ? null
             : DateTime.parse(json["updatedAt"]),
         deletedAt: json["deletedAt"],
+        insurancecharge: json["insurancecharge"]
       );
 
   Map<String, dynamic> toJson() => {
@@ -82,5 +85,6 @@ class NearestAddress {
         "createdAt": createdAt?.toIso8601String(),
         "updatedAt": updatedAt?.toIso8601String(),
         "deletedAt": deletedAt,
+        "insurancecharge" : insurancecharge
       };
 }

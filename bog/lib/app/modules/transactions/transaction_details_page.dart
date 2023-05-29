@@ -1,15 +1,14 @@
-import 'package:bog/app/controllers/home_controller.dart';
-import 'package:bog/app/data/model/transaction_info_model.dart';
-import 'package:bog/app/data/providers/api_response.dart';
-import 'package:bog/app/global_widgets/app_base_view.dart';
-import 'package:bog/app/global_widgets/app_loader.dart';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import '../../../core/theme/theme.dart';
+import '../../controllers/home_controller.dart';
+import '../../data/model/transaction_info_model.dart';
 import '../../data/model/transactions_model.dart';
+import '../../data/providers/api_response.dart';
+import '../../global_widgets/app_base_view.dart';
+import '../../global_widgets/app_loader.dart';
 import '../../global_widgets/new_app_bar.dart';
 
 class TransactionDetailsPage extends StatelessWidget {

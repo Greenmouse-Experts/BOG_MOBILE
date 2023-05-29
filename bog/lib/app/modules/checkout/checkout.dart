@@ -140,7 +140,15 @@ class _CheckoutState extends State<Checkout> {
       AppOverlay.loadingOverlay(
         asyncFunction: () async {
           successMessage = 'Payment was successful. Ref: ${response.reference}';
-          final total = cost + deliveryFee;
+          final num total = !addInsurance
+              ? cost + deliveryFee
+              : deliveryNearestAddress == null
+                  ? cost + deliveryFee
+                  : deliveryNearestAddress!.insurancecharge == null
+                      ? cost + deliveryFee
+                      : cost +
+                          deliveryFee +
+                          double.parse(deliveryNearestAddress!.insurancecharge);
           final postOrder = {
             "products": [...jsonProducts],
             "shippingAddress": {
@@ -162,7 +170,14 @@ class _CheckoutState extends State<Checkout> {
             "deliveryFee": deliveryFee,
             "discount": 0,
             "paymentInfo": {"reference": response.reference, "amount": total},
-            "userType": userType
+            "userType": userType,
+            "insurancecharge": !addInsurance
+                ? ''
+                : deliveryNearestAddress == null
+                    ? ''
+                    : deliveryNearestAddress!.insurancecharge == null
+                        ? ''
+                        : deliveryNearestAddress!.insurancecharge ?? '',
           };
           final respose = await controller.userRepo
               .postData('/orders/submit-order', postOrder);
@@ -276,6 +291,7 @@ class _CheckoutState extends State<Checkout> {
                         child: SizedBox(
                           height: Get.height,
                           child: PageView(
+                            physics: const NeverScrollableScrollPhysics(),
                             onPageChanged: (value) {
                               currentPos = value;
                               controller.update(['Checkout']);
@@ -581,7 +597,7 @@ class _CheckoutState extends State<Checkout> {
                                                   left: width * 0.04,
                                                   right: width * 0.04),
                                               child: SizedBox(
-                                                height: Get.height * 0.4,
+                                                height: Get.height * 0.5,
                                                 child: SingleChildScrollView(
                                                   child: Column(
                                                     children: [
@@ -717,6 +733,57 @@ class _CheckoutState extends State<Checkout> {
                                                           ),
                                                         ],
                                                       ),
+                                                      addInsurance
+                                                          ? Column(
+                                                              children: [
+                                                                SizedBox(
+                                                                  height:
+                                                                      Get.height *
+                                                                          0.025,
+                                                                ),
+                                                                Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .spaceBetween,
+                                                                  children: [
+                                                                    Text(
+                                                                      "Insurance Fee :",
+                                                                      style: AppTextStyle
+                                                                          .subtitle1
+                                                                          .copyWith(
+                                                                        color: Colors
+                                                                            .black,
+                                                                        fontSize:
+                                                                            Get.width *
+                                                                                0.035,
+                                                                        fontWeight:
+                                                                            FontWeight.w400,
+                                                                      ),
+                                                                    ),
+                                                                    Text(
+                                                                      deliveryNearestAddress ==
+                                                                              null
+                                                                          ? '0'
+                                                                          : deliveryNearestAddress!.insurancecharge == null
+                                                                              ? '0'
+                                                                              : deliveryNearestAddress!.insurancecharge.toString(),
+                                                                      style: AppTextStyle
+                                                                          .subtitle1
+                                                                          .copyWith(
+                                                                        color: Colors
+                                                                            .black,
+                                                                        fontSize:
+                                                                            Get.width *
+                                                                                0.035,
+                                                                        fontWeight:
+                                                                            FontWeight.w400,
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ],
+                                                            )
+                                                          : const SizedBox(),
                                                       SizedBox(
                                                         height:
                                                             Get.height * 0.025,

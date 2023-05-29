@@ -1,4 +1,4 @@
-import 'package:bog/app/global_widgets/overlays.dart';
+
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -12,7 +12,7 @@ import '../../../core/theme/app_styles.dart';
 import '../../../core/theme/app_themes.dart';
 
 import '../../controllers/auth_controller.dart';
-import '../../global_widgets/app_button.dart';
+import '../../global_widgets/global_widgets.dart';
 
 class VerifySignUpOTP extends GetView<AuthController> {
   const VerifySignUpOTP({Key? key}) : super(key: key);

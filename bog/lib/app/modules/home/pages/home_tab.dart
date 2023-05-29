@@ -42,7 +42,7 @@ class _HomeTabState extends State<HomeTab> {
   @override
   void initState() {
     final controller = Get.find<HomeController>();
-
+ //   Get.put(HomeController(UserRepository(Api())));
     var logInDetails =
         UserDetailsModel.fromJson(jsonDecode(MyPref.userDetails.val));
     getNotifications = controller.userRepo
@@ -53,6 +53,7 @@ class _HomeTabState extends State<HomeTab> {
 
   @override
   Widget build(BuildContext context) {
+   //   Get.put(HomeController(UserRepository(Api())));
     return GetBuilder<HomeController>(builder: (controller) {
       return SizedBox(
           height: Get.height * 0.93,

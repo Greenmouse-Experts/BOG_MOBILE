@@ -1,4 +1,3 @@
-import 'package:bog/app/modules/transactions/transaction_details_page.dart';
 import 'package:flutter/material.dart';
 import 'package:feather_icons/feather_icons.dart';
 
@@ -15,6 +14,7 @@ import '../../global_widgets/app_input.dart';
 import '../../global_widgets/app_loader.dart';
 import '../../global_widgets/bottom_widget.dart';
 import '../../global_widgets/new_app_bar.dart';
+import 'transaction_details_page.dart';
 
 class TransactionPage extends StatefulWidget {
   const TransactionPage({Key? key}) : super(key: key);

@@ -15,11 +15,13 @@ class ShopCategory {
     String? name,
     String? description,
     num? totalProducts,
+    String? unit,
   }) {
     _id = id;
     _name = name;
     _description = description;
     _totalProducts = totalProducts;
+    _unit = unit;
   }
 
   ShopCategory.fromJson(dynamic json) {
@@ -27,27 +29,32 @@ class ShopCategory {
     _name = json['name'];
     _description = json['description'];
     _totalProducts = json['totalProducts'];
+    _unit = json['unit'];
   }
   String? _id;
   String? _name;
   String? _description;
   num? _totalProducts;
+  String? _unit;
   ShopCategory copyWith({
     String? id,
     String? name,
     String? description,
     num? totalProducts,
+    String? unit
   }) =>
       ShopCategory(
         id: id ?? _id,
         name: name ?? _name,
         description: description ?? _description,
         totalProducts: totalProducts ?? _totalProducts,
+        unit: unit ?? _unit
       );
   String? get id => _id;
   String? get name => _name;
   String? get description => _description;
   num? get totalProducts => _totalProducts;
+  String? get unit => _unit;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -55,6 +62,7 @@ class ShopCategory {
     map['name'] = _name;
     map['description'] = _description;
     map['totalProducts'] = _totalProducts;
+    map['unit'] = _unit;
     return map;
   }
 

@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_styles.dart';
-import '../modules/onboarding/onboarding.dart';
+import '../modules/sign_in/sign_in.dart';
 
 class ConfirmLogout extends StatelessWidget {
   const ConfirmLogout({super.key});
@@ -31,7 +31,8 @@ class ConfirmLogout extends StatelessWidget {
             )),
         TextButton(
             onPressed: () async {
-              Get.offAll(() => const OnboardingPage());
+       
+              Get.offAll(() => const SignIn());
             },
             child: Text(
               'Yes',

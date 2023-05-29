@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../data/providers/api.dart';
 import '../../global_widgets/global_widgets.dart';
+import '../../repository/user_repo.dart';
 import '../multiplexor/multiplexor.dart';
 import '../sign_up/forgot_password.dart';
 import '../../../core/theme/app_colors.dart';
@@ -18,7 +20,7 @@ class SignIn extends GetView<AuthController> {
   @override
   Widget build(BuildContext context) {
     GlobalKey<FormState> formKey = GlobalKey<FormState>();
-
+    Get.put(AuthController(UserRepository(Api())));
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -76,11 +78,11 @@ class SignIn extends GetView<AuthController> {
                             style: AppTextStyle.headline4.copyWith(
                                 color: Colors.black.withOpacity(.5),
                                 fontWeight: FontWeight.normal,
-                                fontSize:  Get.textScaleFactor * 16),
+                                fontSize: Get.textScaleFactor * 16),
                           ),
                           SizedBox(height: Get.height * 0.035),
                           PageInput(
-                            hint: '',
+                            hint: 'Enter your email',
                             label: 'Email Address',
                             validator: Validator.emailValidation,
                             isCompulsory: true,
@@ -88,7 +90,7 @@ class SignIn extends GetView<AuthController> {
                           ),
                           SizedBox(height: Get.height * 0.025),
                           PageInput(
-                            hint: '',
+                            hint: '******',
                             label: 'Password',
                             validator: Validator.passwordValidation,
                             isCompulsory: true,

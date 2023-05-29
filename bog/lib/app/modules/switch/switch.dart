@@ -51,10 +51,10 @@ class _SwitchUserState extends State<SwitchUser> {
                     builder: (ctx, snapshot) {
                       if (snapshot.connectionState == ConnectionState.done) {
                         if (snapshot.hasError) {
-                          return const SingleChildScrollView(
+                          return  SingleChildScrollView(
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
+                              children:const [
                                 Center(
                                   child: Text('An error occured'),
                                 )
@@ -195,9 +195,9 @@ class _SwitchUserState extends State<SwitchUser> {
                           ConnectionState.waiting) {
                         return const AppLoader();
                       } else {
-                        return const Column(
+                        return  Column(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
+                          children: const [
                             Center(
                               child: Text('An error occured'),
                             )

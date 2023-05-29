@@ -1,3 +1,4 @@
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:date_time_format/date_time_format.dart';
@@ -15,6 +16,7 @@ import '../../../global_widgets/global_widgets.dart';
 import '../../add_products/add_products.dart';
 import '../../checkout/checkout.dart';
 import '../../meetings/meeting.dart';
+import '../../orders/order_progress.dart';
 import '../../project_details/view_form.dart';
 import '../../shop/shop.dart';
 
@@ -65,10 +67,18 @@ class _CartTabState extends State<CartTab> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const SizedBox(
-                  height: kToolbarHeight,
+                Container(
+                  color: controller.currentType == "Product Partner"
+                      ? Colors.white
+                      : null,
+                  child: const SizedBox(
+                    height: kToolbarHeight,
+                  ),
                 ),
-                Padding(
+                Container(
+                  color: controller.currentType == "Product Partner"
+                      ? Colors.white
+                      : null,
                   padding: EdgeInsets.only(
                       left: Get.width * 0.035,
                       right: Get.width * 0.03,
@@ -96,7 +106,10 @@ class _CartTabState extends State<CartTab> {
                   ),
                 ),
                 if (controller.currentType != 'Service Partner')
-                  SizedBox(
+                  Container(
+                    color: controller.currentType == "Product Partner"
+                        ? Colors.white
+                        : null,
                     height: Get.height * 0.03,
                   ),
                 if (controller.currentType == "Client" ||
@@ -356,12 +369,15 @@ class _CartTabState extends State<CartTab> {
                     ),
                   ),
                 if (controller.currentType == "Product Partner")
-                  Padding(
+                  Container(
+                    color: controller.currentType == "Product Partner"
+                        ? Colors.white
+                        : null,
                     padding: EdgeInsets.only(
                         left: Get.width * 0.03, right: Get.width * 0.03),
                     child: AppInput(
                       hintText: 'Search with name or keyword ...',
-                      filledColor: Colors.grey.withOpacity(.1),
+                      filledColor: Colors.white,
                       prefexIcon: Icon(
                         FeatherIcons.search,
                         color: Colors.black.withOpacity(.5),
@@ -379,8 +395,18 @@ class _CartTabState extends State<CartTab> {
                     ),
                   ),
                 if (controller.currentType == "Product Partner")
-                  SizedBox(
-                    height: Get.height * 0.015,
+                  Column(
+                    children: [
+                      Container(
+                        color: controller.currentType == "Product Partner"
+                            ? Colors.white
+                            : null,
+                        height: Get.height * 0.01,
+                      ),
+                      SizedBox(
+                        height: Get.height * 0.005,
+                      ),
+                    ],
                   ),
                 if (controller.currentType == "Product Partner")
                   Expanded(
@@ -456,6 +482,8 @@ class _CartTabState extends State<CartTab> {
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 8.0),
                                   child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       NumberButton(
                                         isActive: isAll,
@@ -512,8 +540,9 @@ class _CartTabState extends State<CartTab> {
                                     ],
                                   ),
                                 ),
+                                SizedBox(height: Get.height * 0.01),
                                 SizedBox(
-                                  height: Get.height * 0.64,
+                                  height: Get.height * 0.6475,
                                   child: ListView.builder(
                                     itemCount: isAll
                                         ? posts.length
@@ -918,40 +947,52 @@ class NumberButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-        onPressed: onPressed,
-        style: ElevatedButton.styleFrom(
-            elevation: 0,
-            backgroundColor:
-                isActive ? AppColors.primary : AppColors.background,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-            fixedSize: Size(Get.width * 0.235, Get.height * 0.05)),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              text,
-              style: AppTextStyle.caption.copyWith(
-                  color:
-                      isActive ? AppColors.backgroundVariant1 : Colors.black),
-            ),
-            SizedBox(width: Get.width * 0.005),
-            Container(
-              width: Get.width * 0.035,
-              height: Get.height * 0.02,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                  color: AppColors.backgroundVariant1,
-                  borderRadius: BorderRadius.circular(12)),
-              child: Text(
-                '$num',
-                style: AppTextStyle.caption.copyWith(color: AppColors.primary),
-              ),
-            )
-          ],
-        ));
+    return Padding(
+      padding: const EdgeInsets.only(right: 8.0),
+      child: InkWell(
+        onTap: onPressed,
+        child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 6),
+            decoration: BoxDecoration(
+                color: isActive ? AppColors.primary : const Color(0XFFF7F7F7),
+                borderRadius: BorderRadius.circular(12)),
+
+            // ElevatedButton.styleFrom(
+            //     elevation: 0,
+            //     backgroundColor:
+            //
+            //     shape: RoundedRectangleBorder(
+            //         borderRadius:
+            //     fixedSize: Size(Get.width * 0.1, Get.height * 0.02)),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  text,
+                  style: AppTextStyle.caption.copyWith(
+                      color: isActive
+                          ? AppColors.backgroundVariant1
+                          : Colors.black),
+                ),
+                SizedBox(width: Get.width * 0.005),
+                Container(
+                  width: Get.width * 0.06,
+                  height: Get.height * 0.02,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                      color: AppColors.backgroundVariant1,
+                      borderRadius: BorderRadius.circular(12)),
+                  child: Text(
+                    '$num',
+                    style:
+                        AppTextStyle.caption.copyWith(color: AppColors.primary),
+                  ),
+                )
+              ],
+            )),
+      ),
+    );
   }
 }
 
@@ -983,196 +1024,205 @@ class ProductItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IntrinsicHeight(
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-        child: Row(
-          children: [
-            SizedBox(
-              height: Get.width * 0.2,
-              width: Get.width * 0.2,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: CachedNetworkImage(
-                  imageUrl: image.toString(),
-                  fit: BoxFit.cover,
-                  placeholder: (context, url) {
-                    return const Center(
-                      child:
-                          CircularProgressIndicator(color: AppColors.primary),
-                    );
-                  },
-                  errorWidget: (context, url, error) {
-                    return Container(
-                      height: Get.width * 0.2,
-                      width: Get.width * 0.2,
-                      decoration: BoxDecoration(
-                        color: AppColors.primary,
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(
-                            color: AppColors.grey.withOpacity(0.1), width: 1),
-                      ),
-                      child: Center(
-                        child: Icon(
-                          Icons.image_not_supported,
-                          color: AppColors.background,
-                          size: Get.width * 0.1,
+      child: Card(
+        elevation: 0,
+        margin: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+          child: Row(
+            children: [
+              SizedBox(
+                height: Get.width * 0.2,
+                width: Get.width * 0.2,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: CachedNetworkImage(
+                    imageUrl: image.toString(),
+                    fit: BoxFit.cover,
+                    placeholder: (context, url) {
+                      return const Center(
+                        child:
+                            CircularProgressIndicator(color: AppColors.primary),
+                      );
+                    },
+                    errorWidget: (context, url, error) {
+                      return Container(
+                        height: Get.width * 0.2,
+                        width: Get.width * 0.2,
+                        decoration: BoxDecoration(
+                          color: AppColors.primary,
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(
+                              color: AppColors.grey.withOpacity(0.1), width: 1),
                         ),
-                      ),
-                    );
-                  },
+                        child: Center(
+                          child: Icon(
+                            Icons.image_not_supported,
+                            color: AppColors.background,
+                            size: Get.width * 0.1,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(left: Get.width * 0.015),
-                    child: Text(title ?? "",
-                        style: AppTextStyle.headline4.copyWith(
-                            fontSize: Get.width > 600
-                                ? Get.width * 0.025
-                                : Get.width * 0.035,
-                            color: Colors.black,
-                            fontWeight: FontWeight.w400)),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(left: Get.width * 0.015),
-                    child: Text(
-                      subTitle ?? '',
-                      style: AppTextStyle.caption.copyWith(
-                        color: Colors.black,
-                        fontSize: Get.width > 600
-                            ? Get.width * 0.025
-                            : Get.width * 0.035,
-                        fontWeight: FontWeight.w400,
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(left: Get.width * 0.015),
+                      child: Text(title ?? "",
+                          style: AppTextStyle.headline4.copyWith(
+                              fontSize: Get.width > 600
+                                  ? Get.width * 0.024
+                                  : Get.width * 0.033,
+                              color: Colors.black,
+                              fontWeight: FontWeight.w400)),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: Get.width * 0.015),
+                      child: Text(
+                        subTitle ?? '',
+                        style: AppTextStyle.caption.copyWith(
+                          color: Colors.black,
+                          fontSize: Get.width > 600
+                              ? Get.width * 0.023
+                              : Get.width * 0.032,
+                          fontWeight: FontWeight.w400,
+                        ),
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(left: Get.width * 0.015),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          'Qty: ${quantity ?? 0}',
-                          style: AppTextStyle.caption.copyWith(
-                            color: const Color(0xFF9A9A9A),
-                            fontSize: Get.width * 0.033,
-                            fontWeight: FontWeight.w400,
+                    Padding(
+                      padding: EdgeInsets.only(left: Get.width * 0.015),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            'Qty: ${quantity ?? 0}',
+                            style: AppTextStyle.caption.copyWith(
+                              color: const Color(0xFF9A9A9A),
+                              fontSize: Get.width > 600
+                                  ? Get.width * 0.023
+                                  : Get.width * 0.03,
+                              fontWeight: FontWeight.w400,
+                            ),
                           ),
-                        ),
-                        const SizedBox(width: 10),
-                        Text(
-                          'Remaining: ${rem ?? 0}',
-                          style: AppTextStyle.caption.copyWith(
-                            color: const Color(0xFF9A9A9A),
-                            fontSize: Get.width * 0.033,
-                            fontWeight: FontWeight.w400,
+                          const SizedBox(width: 10),
+                          Text(
+                            'Remaining: ${rem ?? 0}',
+                            style: AppTextStyle.caption.copyWith(
+                              color: const Color(0xFF9A9A9A),
+                              fontSize: Get.width > 600
+                                  ? Get.width * 0.023
+                                  : Get.width * 0.03,
+                              fontWeight: FontWeight.w400,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(width: 8),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                PopupMenuButton(
-                    color: Colors.white,
-                    child: Icon(Icons.more_vert_outlined,
-                        color: AppColors.ashColor,
-                        size: Get.textScaleFactor * 30),
-                    itemBuilder: (context) {
-                      return [
-                        if (status == 'draft')
+              const SizedBox(width: 8),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  PopupMenuButton(
+                      color: Colors.white,
+                      child: Icon(Icons.more_vert_outlined,
+                          color: AppColors.ashColor,
+                          size: Get.textScaleFactor * 30),
+                      itemBuilder: (context) {
+                        return [
+                          if (status == 'draft')
+                            PopupMenuItem(
+                                child: TextButton(
+                                    onPressed: () {
+                                      Get.back();
+                                      AppOverlay.showInfoDialog(
+                                          title: 'Add product to shop',
+                                          buttonText: 'Add',
+                                          content:
+                                              'Are you sure you want to add this product to shop',
+                                          doubleFunction: true,
+                                          onPressed: () async => addProduct());
+                                    },
+                                    child: Text(
+                                      'Add to Shop',
+                                      style: TextStyle(
+                                          fontSize: 12 * Get.textScaleFactor,
+                                          color: Colors.black),
+                                    ))),
+                          PopupMenuItem(
+                              child: TextButton(
+                                  onPressed: () {
+                                    Get.back();
+
+                                    editProduct();
+                                  },
+                                  child: Text(
+                                    'Edit Product',
+                                    style: TextStyle(
+                                        fontSize: 12 * Get.textScaleFactor,
+                                        color: Colors.black),
+                                  ))),
                           PopupMenuItem(
                               child: TextButton(
                                   onPressed: () {
                                     Get.back();
                                     AppOverlay.showInfoDialog(
-                                        title: 'Add product to shop',
-                                        buttonText: 'Add',
+                                        title: 'Delete This Product',
+                                        buttonText: 'Delete Product',
                                         content:
-                                            'Are you sure you want to add this product to shop',
+                                            'Are you sure you want to delete this Product',
                                         doubleFunction: true,
-                                        onPressed: () async => addProduct());
+                                        onPressed: () async => deleteProd());
                                   },
                                   child: Text(
-                                    'Add to Shop',
+                                    'Delete',
                                     style: TextStyle(
                                         fontSize: 12 * Get.textScaleFactor,
-                                        color: Colors.black),
-                                  ))),
-                        PopupMenuItem(
-                            child: TextButton(
-                                onPressed: () {
-                                  Get.back();
-
-                                  editProduct();
-                                },
-                                child: Text(
-                                  'Edit Product',
-                                  style: TextStyle(
-                                      fontSize: 12 * Get.textScaleFactor,
-                                      color: Colors.black),
-                                ))),
-                        PopupMenuItem(
-                            child: TextButton(
-                                onPressed: () {
-                                  Get.back();
-                                  AppOverlay.showInfoDialog(
-                                      title: 'Delete This Product',
-                                      buttonText: 'Delete Product',
-                                      content:
-                                          'Are you sure you want to delete this Product',
-                                      doubleFunction: true,
-                                      onPressed: () async => deleteProd());
-                                },
-                                child: Text(
-                                  'Delete',
-                                  style: TextStyle(
-                                      fontSize: 12 * Get.textScaleFactor,
-                                      color: Colors.red),
-                                )))
-                      ];
-                    }),
-                Padding(
-                  padding: EdgeInsets.only(left: Get.width * 0.015, bottom: 5),
-                  child: SizedBox(
-                    width: Get.width * 0.2,
-                    child: AppButton(
-                      title: (status == 'in_review'
-                          ? 'In Review'
-                          : status?.capitalizeFirst ?? 'Pending'),
-                      padding: const EdgeInsets.symmetric(vertical: 5),
-                      fontSize: 12 * Get.textScaleFactor,
-                      onPressed: () {},
-                      border: Border.all(
-                          color: status == 'approved'
-                              ? AppColors.successGreen.withOpacity(0.1)
-                              : status == 'disapproved'
-                                  ? Colors.red.withOpacity(0.1)
-                                  : const Color(0xFFECF6FC)),
-                      bckgrndColor: const Color(0xFFECF6FC),
-                      fontColor: status == 'approved'
-                          ? AppColors.successGreen
-                          : status == 'disapproved'
-                              ? Colors.red
-                              : AppColors.primary,
+                                        color: Colors.red),
+                                  )))
+                        ];
+                      }),
+                  Padding(
+                    padding:
+                        EdgeInsets.only(left: Get.width * 0.015, bottom: 5),
+                    child: SizedBox(
+                      width: Get.width * 0.2,
+                      child: AppButton(
+                        title: (status == 'in_review'
+                            ? 'In Review'
+                            : status?.capitalizeFirst ?? 'Pending'),
+                        padding: const EdgeInsets.symmetric(vertical: 5),
+                        fontSize: 12 * Get.textScaleFactor,
+                        onPressed: () {},
+                        border: Border.all(
+                            color: status == 'approved'
+                                ? AppColors.successGreen.withOpacity(0.1)
+                                : status == 'disapproved'
+                                    ? Colors.red.withOpacity(0.1)
+                                    : const Color(0xFFECF6FC)),
+                        bckgrndColor: const Color(0xFFECF6FC),
+                        fontColor: status == 'approved'
+                            ? AppColors.successGreen
+                            : status == 'disapproved'
+                                ? Colors.red
+                                : AppColors.primary,
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -1196,50 +1246,90 @@ class OrderRequestItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(
-          left: Get.width * 0.03, right: Get.width * 0.03, bottom: 20, top: 5),
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.2),
-            spreadRadius: 1,
-            blurRadius: 6,
-            offset: const Offset(0, 3),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+    return InkWell(
+      onTap: () => Get.to(() => const OrderProgressPage()),
+      child: Container(
+        margin: EdgeInsets.only(
+            left: Get.width * 0.03,
+            right: Get.width * 0.03,
+            bottom: 20,
+            top: 5),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.2),
+              spreadRadius: 1,
+              blurRadius: 6,
+              offset: const Offset(0, 3),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(left: Get.width * 0.005),
+                        child: Text(
+                          "Order ID :  $orderSlug ",
+                          style: AppTextStyle.caption.copyWith(
+                            color: Colors.black,
+                            fontSize: Get.width > 600
+                                ? Get.width * 0.025
+                                : Get.width * 0.035,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: Get.height * 0.01),
+                      Padding(
+                        padding: EdgeInsets.only(left: Get.width * 0.005),
+                        child: Text(
+                          name,
+                          style: AppTextStyle.caption.copyWith(
+                            color: Colors.black.withOpacity(0.6),
+                            fontSize: Get.width > 600
+                                ? Get.width * 0.023
+                                : Get.width * 0.033,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(width: Get.height * 0.01),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Padding(
-                      padding: EdgeInsets.only(left: Get.width * 0.005),
+                      padding: EdgeInsets.only(left: Get.width * 0.015),
                       child: Text(
-                        "Order ID :  $orderSlug ",
+                        'NGN $price',
                         style: AppTextStyle.caption.copyWith(
-                          color: Colors.black,
+                          color: AppColors.primary,
                           fontSize: Get.width > 600
                               ? Get.width * 0.025
                               : Get.width * 0.035,
-                          fontWeight: FontWeight.w600,
+                          fontWeight: FontWeight.w400,
                         ),
                       ),
                     ),
                     SizedBox(height: Get.height * 0.01),
                     Padding(
-                      padding: EdgeInsets.only(left: Get.width * 0.005),
+                      padding: EdgeInsets.only(left: Get.width * 0.015),
                       child: Text(
-                        name,
+                        'Qty: $quantity',
                         style: AppTextStyle.caption.copyWith(
                           color: Colors.black.withOpacity(0.6),
                           fontSize: Get.width > 600
@@ -1251,57 +1341,39 @@ class OrderRequestItem extends StatelessWidget {
                     ),
                   ],
                 ),
-              ),
-              SizedBox(width: Get.height * 0.01),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(left: Get.width * 0.015),
-                    child: Text(
-                      'NGN $price',
-                      style: AppTextStyle.caption.copyWith(
-                        color: AppColors.primary,
-                        fontSize: Get.width > 600
-                            ? Get.width * 0.025
-                            : Get.width * 0.035,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: Get.height * 0.01),
-                  Padding(
-                    padding: EdgeInsets.only(left: Get.width * 0.015),
-                    child: Text(
-                      'Qty: $quantity',
-                      style: AppTextStyle.caption.copyWith(
-                        color: Colors.black.withOpacity(0.6),
-                        fontSize: Get.width > 600
-                            ? Get.width * 0.023
-                            : Get.width * 0.033,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          SizedBox(height: Get.height * 0.01),
-          Text(
-            'Status:  ${status.toUpperCase()}',
-            style: AppTextStyle.caption.copyWith(
-                fontSize:
-                    Get.width > 600 ? Get.width * 0.025 : Get.width * 0.035,
-                fontWeight: FontWeight.w400,
-                color: status == 'cancelled'
-                    ? Colors.red
-                    : status == 'completed'
-                        ? AppColors.successGreen
-                        : Colors.black),
-          )
-        ],
+              ],
+            ),
+            SizedBox(height: Get.height * 0.01),
+            Row(
+              children: [
+                Text(
+                  'Status:  ${status.toUpperCase()}',
+                  style: AppTextStyle.caption.copyWith(
+                      fontSize: Get.width > 600
+                          ? Get.width * 0.025
+                          : Get.width * 0.035,
+                      fontWeight: FontWeight.w400,
+                      color: status == 'cancelled'
+                          ? Colors.red
+                          : status == 'completed'
+                              ? AppColors.successGreen
+                              : Colors.black),
+                ),
+                const Spacer(),
+                IconButton(
+                    onPressed: () {
+                      AppOverlay.showInfoDialog(
+                          title: 'Accept Delivery',
+                          doubleFunction: true,
+                          content:
+                              'Do you want to accept responsibility for delivering this product?',
+                          buttonText: 'Accept');
+                    },
+                    icon: const Icon(Icons.more_vert_outlined)),
+              ],
+            )
+          ],
+        ),
       ),
     );
   }

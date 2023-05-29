@@ -28,6 +28,7 @@ class _ChatTabState extends State<ChatTab> {
 
   @override
   void initState() {
+    //  Get.put(HomeController(UserRepository(Api())));
     final controller = Get.find<HomeController>();
     final userType = controller.currentType == 'Client'
         ? 'private_client'
@@ -43,6 +44,7 @@ class _ChatTabState extends State<ChatTab> {
 
   @override
   Widget build(BuildContext context) {
+   //   Get.put(HomeController(UserRepository(Api())));
     return GetBuilder<HomeController>(builder: (controller) {
       return Padding(
         padding:
@@ -139,10 +141,10 @@ class _ChatTabState extends State<ChatTab> {
                                 }
 
                                 return announcements.isEmpty
-                                    ? const Column(
+                                    ? Column(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
-                                        children: [
+                                        children: const [
                                           Text('You have no messages currently')
                                         ],
                                       )

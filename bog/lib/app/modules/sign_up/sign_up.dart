@@ -1,8 +1,6 @@
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
 
 import '../../../core/theme/app_colors.dart';
@@ -12,6 +10,7 @@ import '../../../core/theme/app_themes.dart';
 import '../../../core/utils/validator.dart';
 import '../../controllers/auth_controller.dart';
 import '../../global_widgets/app_button.dart';
+import '../../global_widgets/option_divider.dart';
 import '../../global_widgets/page_dropdown.dart';
 import '../../global_widgets/page_input.dart';
 import '../sign_in/sign_in.dart';
@@ -136,7 +135,7 @@ class SignUp extends GetView<AuthController> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     PageInput(
-                                      hint: '',
+                                      hint: 'Enter your first name',
                                       label: 'First Name',
                                       validator: Validator.fullnameValidation,
                                       isCompulsory: true,
@@ -144,7 +143,7 @@ class SignUp extends GetView<AuthController> {
                                     ),
                                     SizedBox(height: Get.height * 0.025),
                                     PageInput(
-                                      hint: '',
+                                      hint: 'Enter your last name',
                                       label: 'Last Name',
                                       validator: Validator.fullnameValidation,
                                       isCompulsory: true,
@@ -152,7 +151,7 @@ class SignUp extends GetView<AuthController> {
                                     ),
                                     SizedBox(height: Get.height * 0.025),
                                     PageInput(
-                                      hint: '',
+                                      hint: 'Enter your email address',
                                       label: 'Email Address',
                                       validator: Validator.emailValidation,
                                       isCompulsory: true,
@@ -160,7 +159,7 @@ class SignUp extends GetView<AuthController> {
                                     ),
                                     SizedBox(height: Get.height * 0.025),
                                     PageInput(
-                                      hint: '',
+                                      hint: 'Enter your phone number',
                                       label: 'Phone Number',
                                       validator: Validator.phoneNumValidation,
                                       isCompulsory: true,
@@ -170,7 +169,7 @@ class SignUp extends GetView<AuthController> {
                                     ),
                                     SizedBox(height: Get.height * 0.025),
                                     PageInput(
-                                      hint: '',
+                                      hint: 'Enter a strong password',
                                       label: 'Password',
                                       validator: Validator.passwordValidation,
                                       isCompulsory: true,
@@ -179,7 +178,7 @@ class SignUp extends GetView<AuthController> {
                                     ),
                                     SizedBox(height: Get.height * 0.025),
                                     PageInput(
-                                      hint: '',
+                                      hint: 'Confirm your password',
                                       label: 'Confirm Password',
                                       validator: (val) {
                                         if (val!.isEmpty) {
@@ -197,7 +196,7 @@ class SignUp extends GetView<AuthController> {
                                     ),
                                     SizedBox(height: Get.height * 0.025),
                                     PageInput(
-                                      hint: '',
+                                      hint: 'Enter your referrers code',
                                       label: 'Referral Code (Optional)',
                                       //obscureText: true,
                                       validator: (value) {
@@ -313,36 +312,7 @@ class SignUp extends GetView<AuthController> {
                                       enabled: controller
                                           .isTermsAndConditionsChecked,
                                     ),
-                                    SizedBox(height: Get.height * 0.01),
-                                    // GoogleUserCircleAvatar(identity: user),
-                                    AppButton(
-                                      title: 'Sign up with Google',
-                                      trailingColor: Colors.pink,
-                                      borderRadius: 10,
-                                      bckgrndColor:
-                                          AppColors.backgroundVariant2,
-                                      bold: false,
-                                      hasIcon: true,
-                                      fontColor: Colors.black,
-                                      enabled: controller
-                                          .isTermsAndConditionsChecked,
-                                      onPressed: () {
-                                        controller.handleSignUpGoogle();
-                                      },
-                                    ),
-                                    SizedBox(height: Get.height * 0.01),
-                                    AppButton(
-                                      title: 'Sign up with Apple',
-                                      isGoogle: false,
-                                      trailingColor: Colors.pink,
-                                      borderRadius: 10,
-                                      bckgrndColor: Colors.black,
-                                      hasIcon: true,
-                                      fontColor: AppColors.background,
-                                      enabled: controller
-                                          .isTermsAndConditionsChecked,
-                                      onPressed: () {},
-                                    ),
+                                    SizedBox(height: Get.height * 0.005),
                                     AppButton(
                                       title: 'Already have an account ? ',
                                       trailingTitle: "Log In",
@@ -354,6 +324,37 @@ class SignUp extends GetView<AuthController> {
                                       fontColor: Colors.black,
                                       bold: false,
                                     ),
+                                    //  GoogleUserCircleAvatar(identity: GoogleIdentity()),
+                                    const OptionDivider(),
+                                    SizedBox(height: Get.height * 0.01),
+                                    Padding(
+                                      padding: const EdgeInsets.all(1.0),
+                                      child: AppButton(
+                                        isElevated: true,
+                                        title: 'Sign up with Google',
+                                        trailingColor: Colors.pink,
+                                        borderRadius: 10,
+                                        bckgrndColor:
+                                            AppColors.backgroundVariant2,
+                                        bold: false,
+                                        hasIcon: true,
+                                        fontColor: Colors.black,
+                                        onPressed: () {
+                                          controller.handleSignUpGoogle();
+                                        },
+                                      ),
+                                    ),
+                                    SizedBox(height: Get.height * 0.02),
+                                    AppButton(
+                                      title: 'Sign up with Apple',
+                                      isGoogle: false,
+                                      trailingColor: Colors.pink,
+                                      borderRadius: 10,
+                                      bckgrndColor: Colors.black,
+                                      hasIcon: true,
+                                      fontColor: AppColors.background,
+                                      onPressed: () {},
+                                    ),
                                   ],
                                 ),
                               ),
@@ -364,7 +365,7 @@ class SignUp extends GetView<AuthController> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     PageInput(
-                                      hint: '',
+                                      hint: 'Enter your company name',
                                       label: 'Company Name',
                                       validator: Validator.fullnameValidation,
                                       isCompulsory: true,
@@ -372,7 +373,7 @@ class SignUp extends GetView<AuthController> {
                                     ),
                                     SizedBox(height: Get.height * 0.025),
                                     PageInput(
-                                      hint: '',
+                                      hint: 'Enter your email address',
                                       label: 'Email Address',
                                       validator: Validator.emailValidation,
                                       isCompulsory: true,
@@ -380,7 +381,7 @@ class SignUp extends GetView<AuthController> {
                                     ),
                                     SizedBox(height: Get.height * 0.025),
                                     PageInput(
-                                      hint: '',
+                                      hint: 'Enter your phone number',
                                       label: 'Phone Number',
                                       validator: Validator.phoneNumValidation,
                                       isCompulsory: true,
@@ -390,7 +391,7 @@ class SignUp extends GetView<AuthController> {
                                     ),
                                     SizedBox(height: Get.height * 0.025),
                                     PageInput(
-                                      hint: '',
+                                      hint: 'Enter a strong password',
                                       label: 'Create Password',
                                       validator: Validator.passwordValidation,
                                       isCompulsory: true,
@@ -399,7 +400,7 @@ class SignUp extends GetView<AuthController> {
                                     ),
                                     SizedBox(height: Get.height * 0.025),
                                     PageInput(
-                                      hint: '',
+                                      hint: 'Confirm your password',
                                       label: 'Confirm Password',
                                       validator: (val) {
                                         if (val!.isEmpty) {
@@ -417,7 +418,7 @@ class SignUp extends GetView<AuthController> {
                                     ),
                                     SizedBox(height: Get.height * 0.025),
                                     PageInput(
-                                      hint: '',
+                                      hint: 'Enter your referrers code',
                                       label: 'Referral Code (Optional)',
                                       //obscureText: true,
                                       validator: (value) {

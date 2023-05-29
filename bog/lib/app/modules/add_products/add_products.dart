@@ -184,6 +184,8 @@ class _AddProjectState extends State<AddProject> {
                                           horizontal: 10),
                                       onChanged: (val) {
                                         selectedCategory = val;
+                                        unitController.text =
+                                            selectedCategory.unit ?? '';
                                       },
                                       value: posts.first,
                                       items: posts
@@ -227,6 +229,7 @@ class _AddProjectState extends State<AddProject> {
                                         left: width * 0.05,
                                         right: width * 0.05),
                                     child: PageInput(
+                                      readOnly: true,
                                       hint: 'Input a unit type, e.g bags',
                                       label: 'Unit of Measurement',
                                       controller: unitController,
@@ -478,6 +481,8 @@ class _AddProjectState extends State<AddProject> {
                                         horizontal: 10),
                                     onChanged: (val) {
                                       selectedCategory = val;
+                                      unitController.text =
+                                          selectedCategory.unit ?? '';
                                     },
                                     value: posts.first,
                                     items: posts
@@ -698,10 +703,10 @@ class _AddProjectState extends State<AddProject> {
                       return SizedBox(
                         height: Get.height * 0.7,
                         width: Get.width,
-                        child: const Column(
+                        child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
+                          children: const [
                             CircularProgressIndicator(
                               color: AppColors.primary,
                             ),

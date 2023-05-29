@@ -92,7 +92,7 @@ class SupplierSignUp extends GetView<AuthController> {
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
                               PageInput(
-                                hint: '',
+                                hint: 'Enter your first name',
                                 label: 'First Name',
                                 validator: Validator.fullnameValidation,
                                 isCompulsory: true,
@@ -100,7 +100,7 @@ class SupplierSignUp extends GetView<AuthController> {
                               ),
                               SizedBox(height: Get.height * 0.025),
                               PageInput(
-                                hint: '',
+                                hint: 'Enter your last name',
                                 label: 'Last Name',
                                 validator: Validator.fullnameValidation,
                                 isCompulsory: true,
@@ -108,7 +108,7 @@ class SupplierSignUp extends GetView<AuthController> {
                               ),
                               SizedBox(height: Get.height * 0.025),
                               PageInput(
-                                hint: '',
+                                hint: 'Enter your email address',
                                 label: 'Email Address',
                                 validator: Validator.emailValidation,
                                 isCompulsory: true,
@@ -116,7 +116,7 @@ class SupplierSignUp extends GetView<AuthController> {
                               ),
                               SizedBox(height: Get.height * 0.025),
                               PageInput(
-                                hint: '',
+                                hint: 'Enter your phone number',
                                 label: 'Phone Number',
                                 validator: Validator.phoneNumValidation,
                                 isCompulsory: true,
@@ -126,7 +126,7 @@ class SupplierSignUp extends GetView<AuthController> {
                               ),
                               SizedBox(height: Get.height * 0.025),
                               PageInput(
-                                hint: '',
+                                hint: 'Enter a strong password',
                                 label: 'Password',
                                 validator: Validator.passwordValidation,
                                 isCompulsory: true,
@@ -135,7 +135,7 @@ class SupplierSignUp extends GetView<AuthController> {
                               ),
                               SizedBox(height: Get.height * 0.025),
                               PageInput(
-                                hint: '',
+                                hint: 'Confirm your password',
                                 label: 'Confirm Password',
                                 obscureText: true,
                                 validator: (value) {
@@ -150,7 +150,7 @@ class SupplierSignUp extends GetView<AuthController> {
                               ),
                               SizedBox(height: Get.height * 0.025),
                               PageInput(
-                                hint: '',
+                                hint: 'Enter your referrers code',
                                 label: 'Referral Code (Optional)',
                                 // obscureText: true,
                                 validator: (value) {

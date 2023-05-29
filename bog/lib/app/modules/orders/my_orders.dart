@@ -398,10 +398,10 @@ class _MyOrderScreenState extends State<MyOrderScreen>
                                       ),
                                     );
                                   } else {
-                                    return const Column(
+                                    return Column(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
-                                      children:  [
+                                      children: const  [
                                         Center(
                                           child: Text('An error occurred'),
                                         ),

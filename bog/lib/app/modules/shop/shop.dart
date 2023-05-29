@@ -149,10 +149,10 @@ class _ShopState extends State<Shop> {
                             }
                             return SizedBox(
                               height: Get.height * 0.7,
-                              child: const Column(
+                              child:  Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                children:  [
+                                children: const [
                                   CircularProgressIndicator(
                                     color: AppColors.primary,
                                   ),
@@ -372,10 +372,10 @@ class _ShopState extends State<Shop> {
             }
             return SizedBox(
               height: Get.height * 0.7,
-              child: const Column(
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
-                children:  [
+                children: const  [
                   CircularProgressIndicator(
                     color: AppColors.primary,
                   ),

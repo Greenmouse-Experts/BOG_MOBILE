@@ -121,7 +121,7 @@ class _PageInputState extends State<PageInput> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 5.0),
                   child: Text(
-                    "*",
+                    "",
                     style: AppTextStyle.bodyText2.copyWith(
                       fontWeight: FontWeight.w600,
                       color: Colors.red,

@@ -122,7 +122,7 @@ class _ServiceProviderSignUpState extends State<ServiceProviderSignUp> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         PageInput(
-                                          hint: '',
+                                          hint: 'Enter your first name',
                                           label: 'First Name',
                                           validator:
                                               Validator.fullnameValidation,
@@ -131,7 +131,7 @@ class _ServiceProviderSignUpState extends State<ServiceProviderSignUp> {
                                         ),
                                         SizedBox(height: Get.height * 0.025),
                                         PageInput(
-                                          hint: '',
+                                          hint: 'Enter your last name',
                                           label: 'Last Name',
                                           validator:
                                               Validator.fullnameValidation,
@@ -140,7 +140,7 @@ class _ServiceProviderSignUpState extends State<ServiceProviderSignUp> {
                                         ),
                                         SizedBox(height: Get.height * 0.025),
                                         PageInput(
-                                          hint: '',
+                                          hint: 'Enter your companys name',
                                           label: 'Company Name',
                                           validator:
                                               Validator.fullnameValidation,
@@ -149,7 +149,7 @@ class _ServiceProviderSignUpState extends State<ServiceProviderSignUp> {
                                         ),
                                         SizedBox(height: Get.height * 0.025),
                                         PageInput(
-                                          hint: '',
+                                          hint: 'Enter your phone number',
                                           label: 'Phone Number',
                                           validator:
                                               Validator.phoneNumValidation,
@@ -160,7 +160,7 @@ class _ServiceProviderSignUpState extends State<ServiceProviderSignUp> {
                                         ),
                                         SizedBox(height: Get.height * 0.025),
                                         PageInput(
-                                          hint: '',
+                                          hint: 'Enter your email address',
                                           label: 'Email Address',
                                           validator: Validator.emailValidation,
                                           isCompulsory: true,
@@ -204,7 +204,7 @@ class _ServiceProviderSignUpState extends State<ServiceProviderSignUp> {
                                           ),
                                         SizedBox(height: Get.height * 0.025),
                                         PageInput(
-                                          hint: '',
+                                          hint: 'Enter a strong password',
                                           label: 'Password',
                                           validator:
                                               Validator.passwordValidation,
@@ -214,7 +214,7 @@ class _ServiceProviderSignUpState extends State<ServiceProviderSignUp> {
                                         ),
                                         SizedBox(height: Get.height * 0.025),
                                         PageInput(
-                                          hint: '',
+                                          hint: 'Confirm your password',
                                           label: 'Confirm Password',
                                           isCompulsory: true,
                                           controller:
@@ -247,7 +247,7 @@ class _ServiceProviderSignUpState extends State<ServiceProviderSignUp> {
                               ),*/
                                         SizedBox(height: Get.height * 0.025),
                                         PageInput(
-                                          hint: '',
+                                          hint: 'Enter your referrers code',
                                           label: 'Referral Code (Optional)',
                                           //obscureText: true,
                                           validator: (value) {
