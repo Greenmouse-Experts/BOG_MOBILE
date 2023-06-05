@@ -149,10 +149,10 @@ class _ShopState extends State<Shop> {
                             }
                             return SizedBox(
                               height: Get.height * 0.7,
-                              child:  Column(
+                              child: const Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                children: const [
+                                children: [
                                   CircularProgressIndicator(
                                     color: AppColors.primary,
                                   ),
@@ -227,8 +227,9 @@ class _ShopState extends State<Shop> {
                           child: InkWell(
                             onTap: () {
                               Get.to(
-                                  () => const ProductDetails(
-                                      key: Key('ProductDetails')),
+                                  () => ProductDetails(
+                                      productId: posts[index].id ?? '',
+                                      key: const Key('ProductDetails')),
                                   arguments: posts[index]);
                             },
                             child: Container(
@@ -372,10 +373,10 @@ class _ShopState extends State<Shop> {
             }
             return SizedBox(
               height: Get.height * 0.7,
-              child: Column(
+              child: const Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const  [
+                children: [
                   CircularProgressIndicator(
                     color: AppColors.primary,
                   ),

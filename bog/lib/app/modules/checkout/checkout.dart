@@ -112,7 +112,12 @@ class _CheckoutState extends State<Checkout> {
                 ? 'vendor'
                 : 'professional';
     var logInDetails = LogInModel.fromJson(jsonDecode(MyPref.logInDetail.val));
-    int price = (cost + deliveryFee) * 100;
+    int price = addInsurance
+        ? (cost +
+                deliveryFee +
+                int.parse(deliveryNearestAddress!.insurancecharge ?? '0')) *
+            100
+        : (cost + deliveryFee) * 100;
     final List<OrderProduct> orderProducts = [];
     for (var item in controller.cartItems.values.toList()) {
       orderProducts.add(
@@ -171,13 +176,8 @@ class _CheckoutState extends State<Checkout> {
             "discount": 0,
             "paymentInfo": {"reference": response.reference, "amount": total},
             "userType": userType,
-            "insurancecharge": !addInsurance
-                ? ''
-                : deliveryNearestAddress == null
-                    ? ''
-                    : deliveryNearestAddress!.insurancecharge == null
-                        ? ''
-                        : deliveryNearestAddress!.insurancecharge ?? '',
+            "deliveryaddressId":
+                addInsurance ? deliveryNearestAddress?.id ?? '' : '',
           };
           final respose = await controller.userRepo
               .postData('/orders/submit-order', postOrder);
@@ -476,6 +476,16 @@ class _CheckoutState extends State<Checkout> {
                                               child: AppButton(
                                                 title: "Proceed to Payment",
                                                 onPressed: () {
+                                                  if (deliveryNearestAddress ==
+                                                      null) {
+                                                    Get.snackbar('Error',
+                                                        'You must select a delivery address before checkout',
+                                                        backgroundColor:
+                                                            Colors.red,
+                                                        colorText: AppColors
+                                                            .backgroundVariant1);
+                                                    return;
+                                                  }
                                                   if (formKey.currentState!
                                                       .validate()) {
                                                     pageController.animateToPage(
@@ -597,7 +607,7 @@ class _CheckoutState extends State<Checkout> {
                                                   left: width * 0.04,
                                                   right: width * 0.04),
                                               child: SizedBox(
-                                                height: Get.height * 0.5,
+                                                height: Get.height * 0.9,
                                                 child: SingleChildScrollView(
                                                   child: Column(
                                                     children: [
@@ -911,11 +921,16 @@ class _CheckoutState extends State<Checkout> {
                                                             deliveryNearestAddress ==
                                                                     null
                                                                 ? "N ${controller.subTotalPrice}"
-                                                                : (deliveryNearestAddress!
-                                                                            .charge! +
-                                                                        controller
-                                                                            .subTotalPrice)
-                                                                    .toString(),
+                                                                : addInsurance
+                                                                    ? (deliveryNearestAddress!.charge! +
+                                                                            int.parse(deliveryNearestAddress!.insurancecharge ??
+                                                                                '0') +
+                                                                            controller
+                                                                                .subTotalPrice)
+                                                                        .toString()
+                                                                    : (deliveryNearestAddress!.charge! +
+                                                                            controller.subTotalPrice)
+                                                                        .toString(),
                                                             style: AppTextStyle
                                                                 .subtitle1
                                                                 .copyWith(

@@ -6,17 +6,21 @@ import 'package:get/get.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_styles.dart';
 import '../../controllers/home_controller.dart';
+import '../../data/model/complete_prod_review.dart' as cs;
 import '../../data/model/my_products.dart';
 
+import '../../data/providers/api_response.dart';
 import '../../global_widgets/app_base_view.dart';
 import '../../global_widgets/app_button.dart';
 
+import '../../global_widgets/app_loader.dart';
 import '../../global_widgets/bottom_widget.dart';
 import '../../global_widgets/item_counter.dart';
 import '../../global_widgets/new_app_bar.dart';
 
 class ProductDetails extends StatefulWidget {
-  const ProductDetails({Key? key}) : super(key: key);
+  final String productId;
+  const ProductDetails({Key? key, required this.productId}) : super(key: key);
 
   static const route = '/productDetails';
 
@@ -28,10 +32,15 @@ class _ProductDetailsState extends State<ProductDetails>
     with TickerProviderStateMixin {
   late TabController tabController;
 
+  late Future<ApiResponse> getReviews;
+
   @override
   void initState() {
     super.initState();
     tabController = TabController(length: 2, vsync: this);
+    final controller = Get.find<HomeController>();
+    getReviews = controller.userRepo
+        .getData('/review/product/get-review?productId=${widget.productId}');
   }
 
   @override
@@ -65,346 +74,409 @@ class _ProductDetailsState extends State<ProductDetails>
               body: SingleChildScrollView(
                 child: SizedBox(
                   width: Get.width,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(
-                            left: Get.width * 0.03, right: Get.width * 0.03),
-                        child: Container(
-                          height: Get.height * 0.28,
-                          width: 90,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            color: AppColors.bostonUniRed,
-                          ),
-                          child: ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: Image.network(
-                                  product.productImage!.isEmpty
-                                      ? "https://www.woolha.com/media/2020/03/eevee.png"
-                                      : product.productImage![0].url ??
-                                          "https://www.woolha.com/media/2020/03/eevee.png",
-                                  fit: BoxFit.cover,
-                                  errorBuilder: (context, error, stackTrace) {
-                                return Container(
-                                  width: width * 0.35,
-                                  height: Get.height * 0.1,
+                  child: FutureBuilder<ApiResponse>(
+                      future: getReviews,
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const AppLoader();
+                        } else if (snapshot.hasError) {
+                          return Center(
+                            child: Text(snapshot.error.toString()),
+                          );
+                        } else {
+                          cs.CompProdReviewModel completeReviews;
+                          completeReviews = cs.CompProdReviewModel();
+                          List<cs.Review> reviews = [];
+                          if (snapshot.data != null) {
+                            completeReviews = cs.CompProdReviewModel.fromJson(
+                                snapshot.data!.data);
+                            reviews = completeReviews.reviews ?? [];
+                          }
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.only(
+                                    left: Get.width * 0.03,
+                                    right: Get.width * 0.03),
+                                child: Container(
+                                  height: Get.height * 0.28,
+                                  width: 90,
                                   decoration: BoxDecoration(
-                                    color: AppColors.primary,
-                                    borderRadius: BorderRadius.circular(10),
-                                    border: Border.all(
-                                        color: AppColors.grey.withOpacity(0.1),
-                                        width: 1),
+                                    borderRadius: BorderRadius.circular(8),
+                                    color: AppColors.bostonUniRed,
                                   ),
-                                  child: Center(
-                                    child: Icon(
-                                      Icons.image_not_supported,
-                                      color: AppColors.background,
-                                      size: width * 0.1,
-                                    ),
-                                  ),
-                                );
-                              })),
-                        ),
-                      ),
-                      SizedBox(
-                        height: Get.height * 0.01,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            width: Get.width * 0.018,
-                            height: Get.width * 0.018,
-                            decoration: BoxDecoration(
-                              color: AppColors.primary,
-                              borderRadius: BorderRadius.circular(100.0),
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: Get.height * 0.02,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                            left: Get.width * 0.02, right: Get.width * 0.03),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                        left: Get.width * 0.015,
-                                        bottom: Get.height * 0.01),
-                                    child: Text(product.name.toString(),
-                                        style: AppTextStyle.subtitle1.copyWith(
-                                            fontSize: multiplier * 0.08,
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.w500)),
-                                  ),
-                                  RatingBarIndicator(
-                                      rating: reviewAverage,
-                                      itemBuilder: (context, _) {
-                                        return const Icon(
-                                          Icons.star,
-                                          color: Colors.amber,
+                                  child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(10),
+                                      child: Image.network(
+                                          product.productImage!.isEmpty
+                                              ? "https://www.woolha.com/media/2020/03/eevee.png"
+                                              : product.productImage![0].url ??
+                                                  "https://www.woolha.com/media/2020/03/eevee.png",
+                                          fit: BoxFit.cover, errorBuilder:
+                                              (context, error, stackTrace) {
+                                        return Container(
+                                          width: width * 0.35,
+                                          height: Get.height * 0.1,
+                                          decoration: BoxDecoration(
+                                            color: AppColors.primary,
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            border: Border.all(
+                                                color: AppColors.grey
+                                                    .withOpacity(0.1),
+                                                width: 1),
+                                          ),
+                                          child: Center(
+                                            child: Icon(
+                                              Icons.image_not_supported,
+                                              color: AppColors.background,
+                                              size: width * 0.1,
+                                            ),
+                                          ),
                                         );
-                                      }),
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                        left: Get.width * 0.015,
-                                        top: Get.height * 0.01),
-                                    child: Text(
-                                      'N${product.price.toString()}',
-                                      style: AppTextStyle.caption.copyWith(
-                                        color: AppColors.primary,
-                                        fontSize: Get.width * 0.045,
-                                        fontWeight: FontWeight.w400,
-                                      ),
+                                      })),
+                                ),
+                              ),
+                              SizedBox(
+                                height: Get.height * 0.01,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    width: Get.width * 0.018,
+                                    height: Get.width * 0.018,
+                                    decoration: BoxDecoration(
+                                      color: AppColors.primary,
+                                      borderRadius:
+                                          BorderRadius.circular(100.0),
                                     ),
                                   ),
                                 ],
                               ),
-                            ),
-                            const SizedBox(width: 8),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                Container(
-                                  height: Get.width * 0.07,
-                                  width: Get.width * 0.07,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(100),
-                                    border: Border.all(
-                                      color: AppColors.grey.withOpacity(0.2),
-                                    ),
-                                  ),
-                                  child: IconButton(
-                                    padding: EdgeInsets.zero,
-                                    onPressed: () {},
-                                    icon: Icon(
-                                      FeatherIcons.heart,
-                                      color: AppColors.grey.withOpacity(0.2),
-                                      size: Get.width * 0.05,
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: Get.height * 0.04,
-                                ),
-                                Padding(
-                                  padding:
-                                      EdgeInsets.only(right: Get.width * 0.0),
-                                  child: ItemCounter(
-                                    itemIncrement: () {
-                                      controller.cartItemIncrement(product.id!);
-                                    },
-                                    maxCount: product.remaining ?? 0,
-                                    itemDecrement: () {
-                                      controller.cartItemDecrement(product.id!);
-                                    },
-                                    initialCount: controller.cartItems
-                                            .containsKey(product.id)
-                                        ? controller.cartItems.values
-                                            .firstWhere((element) =>
-                                                element.product.id ==
-                                                product.id)
-                                            .quantity
-                                        : 1,
-                                    onCountChanged: (count) {
-                                      if (count == 0) {
-                                        currentQuantity = 1;
-                                      } else {
-                                        currentQuantity = count;
-                                      }
-                                    },
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: Get.height * 0.03,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                            left: Get.width * 0.0, right: Get.width * 0.03),
-                        child: TabBar(
-                          controller: tabController,
-                          padding: EdgeInsets.zero,
-                          labelColor: Colors.black,
-                          unselectedLabelColor: const Color(0xff9A9A9A),
-                          indicatorColor: AppColors.primary,
-                          indicatorSize: TabBarIndicatorSize.label,
-                          labelPadding: EdgeInsets.zero,
-                          indicatorPadding: EdgeInsets.zero,
-                          tabs: const [
-                            Tab(
-                              text: 'Description',
-                              iconMargin: EdgeInsets.zero,
-                            ),
-                            Tab(
-                              text: 'Reviews',
-                              iconMargin: EdgeInsets.zero,
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                            left: Get.width * 0.03, right: Get.width * 0.03),
-                        child: Container(
-                          height: 1,
-                          width: width,
-                          color: AppColors.grey.withOpacity(0.1),
-                        ),
-                      ),
-                      SizedBox(
-                        height: Get.height * 0.01,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                            left: Get.width * 0.03, right: Get.width * 0.03),
-                        child: SizedBox(
-                          height: Get.height * 0.21,
-                          width: Get.width,
-                          child: TabBarView(
-                            controller: tabController,
-                            children: [
-                              SingleChildScrollView(
-                                physics: const BouncingScrollPhysics(),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                              SizedBox(
+                                height: Get.height * 0.02,
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(
+                                    left: Get.width * 0.02,
+                                    right: Get.width * 0.03),
+                                child: Row(
                                   children: [
-                                    Text(
-                                      product.description.toString(),
-                                      style: AppTextStyle.subtitle1.copyWith(
-                                        fontSize: multiplier * 0.075,
-                                        color: Colors.black.withOpacity(0.5),
-                                        fontWeight: FontWeight.w300,
+                                    Expanded(
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Padding(
+                                            padding: EdgeInsets.only(
+                                                left: Get.width * 0.015,
+                                                bottom: Get.height * 0.01),
+                                            child: Text(product.name.toString(),
+                                                style: AppTextStyle.subtitle1
+                                                    .copyWith(
+                                                        fontSize:
+                                                            multiplier * 0.08,
+                                                        color: Colors.black,
+                                                        fontWeight:
+                                                            FontWeight.w500)),
+                                          ),
+                                          RatingBarIndicator(
+                                              rating: reviewAverage,
+                                              itemBuilder: (context, _) {
+                                                return const Icon(
+                                                  Icons.star,
+                                                  color: Colors.amber,
+                                                );
+                                              }),
+                                          Padding(
+                                            padding: EdgeInsets.only(
+                                                left: Get.width * 0.015,
+                                                top: Get.height * 0.01),
+                                            child: Text(
+                                              'N${product.price.toString()}',
+                                              style:
+                                                  AppTextStyle.caption.copyWith(
+                                                color: AppColors.primary,
+                                                fontSize: Get.width * 0.045,
+                                                fontWeight: FontWeight.w400,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Column(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
+                                      children: [
+                                        Container(
+                                          height: Get.width * 0.07,
+                                          width: Get.width * 0.07,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(100),
+                                            border: Border.all(
+                                              color: AppColors.grey
+                                                  .withOpacity(0.2),
+                                            ),
+                                          ),
+                                          child: IconButton(
+                                            padding: EdgeInsets.zero,
+                                            onPressed: () {},
+                                            icon: Icon(
+                                              FeatherIcons.heart,
+                                              color: AppColors.grey
+                                                  .withOpacity(0.2),
+                                              size: Get.width * 0.05,
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: Get.height * 0.04,
+                                        ),
+                                        Padding(
+                                          padding: EdgeInsets.only(
+                                              right: Get.width * 0.0),
+                                          child: ItemCounter(
+                                            itemIncrement: () {
+                                              controller.cartItemIncrement(
+                                                  product.id!);
+                                            },
+                                            maxCount: product.remaining ?? 0,
+                                            itemDecrement: () {
+                                              controller.cartItemDecrement(
+                                                  product.id!);
+                                            },
+                                            initialCount: controller.cartItems
+                                                    .containsKey(product.id)
+                                                ? controller.cartItems.values
+                                                    .firstWhere((element) =>
+                                                        element.product.id ==
+                                                        product.id)
+                                                    .quantity
+                                                : 1,
+                                            onCountChanged: (count) {
+                                              if (count == 0) {
+                                                currentQuantity = 1;
+                                              } else {
+                                                currentQuantity = count;
+                                              }
+                                            },
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),
                               ),
-                              productReviews.isEmpty
-                                  ? const Center(
-                                      child: Text(
-                                          'No Reviews Yet, Buy this Product to make a review'))
-                                  : Column(
-                                      children: [
-                                        Row(
+                              SizedBox(
+                                height: Get.height * 0.03,
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(
+                                    left: Get.width * 0.0,
+                                    right: Get.width * 0.03),
+                                child: TabBar(
+                                  controller: tabController,
+                                  padding: EdgeInsets.zero,
+                                  labelColor: Colors.black,
+                                  unselectedLabelColor: const Color(0xff9A9A9A),
+                                  indicatorColor: AppColors.primary,
+                                  indicatorSize: TabBarIndicatorSize.label,
+                                  labelPadding: EdgeInsets.zero,
+                                  indicatorPadding: EdgeInsets.zero,
+                                  tabs: const [
+                                    Tab(
+                                      text: 'Description',
+                                      iconMargin: EdgeInsets.zero,
+                                    ),
+                                    Tab(
+                                      text: 'Reviews',
+                                      iconMargin: EdgeInsets.zero,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(
+                                    left: Get.width * 0.03,
+                                    right: Get.width * 0.03),
+                                child: Container(
+                                  height: 1,
+                                  width: width,
+                                  color: AppColors.grey.withOpacity(0.1),
+                                ),
+                              ),
+                              SizedBox(
+                                height: Get.height * 0.01,
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(
+                                    left: Get.width * 0.03,
+                                    right: Get.width * 0.03),
+                                child: SizedBox(
+                                  height: Get.height * 0.21,
+                                  width: Get.width,
+                                  child: TabBarView(
+                                    controller: tabController,
+                                    children: [
+                                      SingleChildScrollView(
+                                        physics: const BouncingScrollPhysics(),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                                'Reviews (${productReviews.length})'),
-                                            const Spacer(),
-                                            const Icon(Icons.star,
-                                                color: Colors.amber),
-                                            Text(reviewAverage.toString())
+                                              product.description.toString(),
+                                              style: AppTextStyle.subtitle1
+                                                  .copyWith(
+                                                fontSize: multiplier * 0.075,
+                                                color: Colors.black
+                                                    .withOpacity(0.5),
+                                                fontWeight: FontWeight.w300,
+                                              ),
+                                            ),
                                           ],
                                         ),
-                                        SizedBox(
-                                          height: Get.height * 0.18,
-                                          child: ListView.builder(
-                                              physics:
-                                                  const BouncingScrollPhysics(),
-                                              itemCount: productReviews.length,
-                                              itemBuilder: (ctx, i) {
-                                                final review =
-                                                    productReviews[i];
-                                                return ListTile(
-                                                  contentPadding:
-                                                      EdgeInsets.zero,
-                                                  title: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Text(
-                                                        'User: Anonymous',
-                                                        style: AppTextStyle
-                                                            .bodyText2
-                                                            .copyWith(
-                                                                color: Colors
-                                                                    .black),
-                                                      ),
-                                                      RatingBarIndicator(
-                                                          itemSize:
-                                                              Get.width * 0.05,
-                                                          rating:
-                                                              (review.star ?? 0)
-                                                                  .toDouble(),
-                                                          itemBuilder:
-                                                              (context, _) {
-                                                            return Icon(
-                                                              Icons.star,
-                                                              size: Get.width *
-                                                                  0.02,
-                                                              color:
-                                                                  Colors.amber,
-                                                            );
-                                                          })
-                                                    ],
-                                                  ),
-                                                  subtitle: Text(
-                                                    review.review ?? '',
-                                                    style: AppTextStyle
-                                                        .bodyText2
-                                                        .copyWith(
-                                                            color:
-                                                                Colors.black),
-                                                  ),
-                                                );
-                                              }),
-                                        ),
-                                      ],
-                                    )
+                                      ),
+                                      reviews.isEmpty
+                                          ? Column(
+                                              children: [
+                                                AppButton(
+                                                  title: 'Leave a Review',
+                                                  bckgrndColor:
+                                                      AppColors.orange,
+                                                  onPressed: () {},
+                                                ),
+                                                const SizedBox(height: 10),
+                                                const Center(
+                                                    child: Text(
+                                                        'No Reviews Yet, Buy this Product to make a review')),
+                                              ],
+                                            )
+                                          : Column(
+                                              children: [
+                                                Row(
+                                                  children: [
+                                                    Text(
+                                                        'Reviews (${reviews.length})'),
+                                                    const Spacer(),
+                                                    const Icon(Icons.star,
+                                                        color: Colors.amber),
+                                                    Text(reviewAverage
+                                                        .toString())
+                                                  ],
+                                                ),
+                                                SizedBox(
+                                                  height: Get.height * 0.18,
+                                                  child: ListView.builder(
+                                                      physics:
+                                                          const BouncingScrollPhysics(),
+                                                      itemCount: reviews.length,
+                                                      itemBuilder: (ctx, i) {
+                                                        final review =
+                                                            reviews[i];
+                                                        return ListTile(
+                                                          contentPadding:
+                                                              EdgeInsets.zero,
+                                                          title: Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Text(
+                                                                'User: ${review.client?.name ?? ''}',
+                                                                style: AppTextStyle
+                                                                    .bodyText2
+                                                                    .copyWith(
+                                                                        color: Colors
+                                                                            .black),
+                                                              ),
+                                                              RatingBarIndicator(
+                                                                  itemSize:
+                                                                      Get.width *
+                                                                          0.05,
+                                                                  rating: (review
+                                                                              .star ??
+                                                                          0)
+                                                                      .toDouble(),
+                                                                  itemBuilder:
+                                                                      (context,
+                                                                          _) {
+                                                                    return Icon(
+                                                                      Icons
+                                                                          .star,
+                                                                      size: Get
+                                                                              .width *
+                                                                          0.02,
+                                                                      color: Colors
+                                                                          .amber,
+                                                                    );
+                                                                  })
+                                                            ],
+                                                          ),
+                                                          subtitle: Text(
+                                                            review.review ?? '',
+                                                            style: AppTextStyle
+                                                                .bodyText2
+                                                                .copyWith(
+                                                                    color: Colors
+                                                                        .black),
+                                                          ),
+                                                        );
+                                                      }),
+                                                ),
+                                              ],
+                                            )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: Get.height * 0.01,
+                              ),
+                              GetBuilder<HomeController>(builder: (controller) {
+                                return Padding(
+                                  padding: EdgeInsets.only(
+                                      left: Get.width * 0.03,
+                                      right: Get.width * 0.03),
+                                  child: AppButton(
+                                    title: controller.cartItems.keys
+                                            .contains(product.id)
+                                        ? 'Proceed to Checkout'
+                                        : 'Add To Cart',
+                                    onPressed: () {
+                                      if (controller.cartItems.keys
+                                          .contains(product.id)) {
+                                        Get.back();
+                                        Get.back();
+                                        controller.currentBottomNavPage.value =
+                                            3;
+                                        controller.updateNewUser(
+                                            controller.currentType);
+                                        controller.update(['home']);
+                                      } else {
+                                        controller.addItem(
+                                            product, currentQuantity);
+                                      }
+                                    },
+                                    borderRadius: 10,
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: Get.height * 0.02),
+                                  ),
+                                );
+                              }),
                             ],
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: Get.height * 0.01,
-                      ),
-                      GetBuilder<HomeController>(builder: (controller) {
-                        return Padding(
-                          padding: EdgeInsets.only(
-                              left: Get.width * 0.03, right: Get.width * 0.03),
-                          child: AppButton(
-                            title:
-                                controller.cartItems.keys.contains(product.id)
-                                    ? 'Proceed to Checkout'
-                                    : 'Add To Cart',
-                            onPressed: () {
-                              if (controller.cartItems.keys
-                                  .contains(product.id)) {
-                                Get.back();
-                                Get.back();
-                                controller.currentBottomNavPage.value = 3;
-                                controller
-                                    .updateNewUser(controller.currentType);
-                                controller.update(['home']);
-                              } else {
-                                controller.addItem(product, currentQuantity);
-                              }
-                            },
-                            borderRadius: 10,
-                            padding: EdgeInsets.symmetric(
-                                vertical: Get.height * 0.02),
-                          ),
-                        );
+                          );
+                        }
                       }),
-                    ],
-                  ),
                 ),
               ),
               bottomNavigationBar: HomeBottomWidget(

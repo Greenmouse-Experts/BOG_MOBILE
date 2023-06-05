@@ -10,9 +10,9 @@ class OrderProgressPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: newAppBarBack(context, 'Order Progress'),
-      body: SafeArea(
+      body: const SafeArea(
         child: Column(
-          children: const [
+          children:  [
             Text('data'),
           ],
         ),

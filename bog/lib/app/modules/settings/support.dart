@@ -104,7 +104,7 @@ class Support extends GetView<HomeController> {
                             onPressed: () async {
                               launchSocialMediaAppIfInstalled(
                                   url: Uri.parse(
-                                      'https://www.instagram.com/greenmouseonline/'));
+                                      'https://www.instagram.com/build_on_the_go/'));
                             },
                             imageAsset: "assets/images/instagram.png",
                           ),

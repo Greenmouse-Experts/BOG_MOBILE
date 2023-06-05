@@ -185,7 +185,6 @@ class _MyProjectWidgetState extends State<MyProjectWidget> {
                               doubleFunction: true,
                               onPressed: () {
                                 Get.back();
-
                                 checkOut(widget.id, widget.commitmentFee);
                               },
                             );
@@ -197,32 +196,33 @@ class _MyProjectWidgetState extends State<MyProjectWidget> {
                                 fontSize: Get.textScaleFactor * 12),
                           )),
                     ),
-                  PopupMenuItem<int>(
-                      value: 4,
-                      child: SizedBox(
-                        height: 50,
-                        child: AppButton(
-                          title: 'Delete Project',
-                          bckgrndColor: Colors.red,
-                          onPressed: () async {
-                            final response = await widget.controller.userRepo
-                                .deleteData('/projects/delete/${widget.id}');
-                            if (response.isSuccessful) {
-                              widget.delete(widget.index);
-                              Get.back();
-                              Get.snackbar(
-                                  'Sucessful', 'Project Deleted Successfully',
-                                  backgroundColor: Colors.green,
-                                  colorText: AppColors.background);
-                            } else {
-                              Get.back();
-                              Get.snackbar('Error', 'An error occurred',
-                                  colorText: AppColors.background,
-                                  backgroundColor: Colors.red);
-                            }
-                          },
-                        ),
-                      )),
+                  if (!widget.isOngoing)
+                    PopupMenuItem<int>(
+                        value: 4,
+                        child: SizedBox(
+                          height: 50,
+                          child: AppButton(
+                            title: 'Delete Project',
+                            bckgrndColor: Colors.red,
+                            onPressed: () async {
+                              final response = await widget.controller.userRepo
+                                  .deleteData('/projects/delete/${widget.id}');
+                              if (response.isSuccessful) {
+                                widget.delete(widget.index);
+                                Get.back();
+                                Get.snackbar(
+                                    'Sucessful', 'Project Deleted Successfully',
+                                    backgroundColor: Colors.green,
+                                    colorText: AppColors.background);
+                              } else {
+                                Get.back();
+                                Get.snackbar('Error', 'An error occurred',
+                                    colorText: AppColors.background,
+                                    backgroundColor: Colors.red);
+                              }
+                            },
+                          ),
+                        )),
                 ];
               },
               onSelected: (value) {},

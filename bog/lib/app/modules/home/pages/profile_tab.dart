@@ -38,7 +38,7 @@ class ProfileTab extends StatelessWidget {
       }
     }
 
-   // Get.put(HomeController(UserRepository(Api())));
+    // Get.put(HomeController(UserRepository(Api())));
     return GetBuilder<HomeController>(builder: (controller) {
       return SingleChildScrollView(
         child: Column(

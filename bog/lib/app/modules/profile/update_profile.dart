@@ -26,10 +26,10 @@ class UpdateProfile extends StatelessWidget {
           width: Get.width * 0.3,
         ),
       ),
-      body:  Column(
+      body: const  Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
-        children:  const [],
+        children:  [],
       ),
     );
   }

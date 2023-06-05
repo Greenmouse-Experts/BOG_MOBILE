@@ -141,10 +141,10 @@ class _ChatTabState extends State<ChatTab> {
                                 }
 
                                 return announcements.isEmpty
-                                    ? Column(
+                                    ?const Column(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
-                                        children: const [
+                                        children:  [
                                           Text('You have no messages currently')
                                         ],
                                       )

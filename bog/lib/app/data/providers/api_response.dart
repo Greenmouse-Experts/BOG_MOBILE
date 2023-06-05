@@ -79,6 +79,7 @@ class ApiResponse {
   dynamic accounts;
   dynamic user;
   dynamic status;
+  dynamic reviews;
   final bool isSuccessful;
   String? message;
   String? token;
@@ -91,6 +92,7 @@ class ApiResponse {
       this.accounts,
       this.projects,
       this.status,
+      this.reviews,
       required this.isSuccessful,
       this.token,
       this.user});
@@ -100,6 +102,7 @@ class ApiResponse {
 
     return ApiResponse(
         message: json['message'],
+        reviews: json['reviews'],
         isSuccessful: json['success'] ?? false,
         data: json['data'],
         projects: json['projects'],
@@ -117,6 +120,7 @@ class ApiResponse {
         message: jsonD['message'],
         isSuccessful: jsonD['success'] ?? false,
         data: jsonD['data'],
+        reviews: jsonD['reviews'],
         projects: jsonD['projects'],
         user: jsonD['user'],
         status: jsonD['status'],
