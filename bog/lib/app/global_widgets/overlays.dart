@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:get/get.dart';
 import 'package:dio/dio.dart' as dio;
@@ -38,7 +39,9 @@ String selectedDate = '';
 String selectedTime = '';
 TextEditingController description = TextEditingController();
 
+final _reviewKey = GlobalKey<FormState>();
 final _interestKey = GlobalKey<FormState>();
+int orderRating = 0;
 
 TextEditingController bestPriceController = TextEditingController();
 TextEditingController timeLineController = TextEditingController();
@@ -46,6 +49,7 @@ final ScrollController scrollController = ScrollController();
 
 TextEditingController updateMessageController = TextEditingController();
 TextEditingController fileController = TextEditingController();
+TextEditingController productReviewController = TextEditingController();
 File? pickedFile;
 
 var dioSend = dio.Dio();
@@ -174,6 +178,159 @@ class AppOverlay {
           ],
         ),
       );
+
+  static void showProductReviewDialog(
+      {required String productId, required String userId, required VoidCallback reload}) {
+    showDialog(
+        context: Get.context!,
+        builder: (context) {
+          return WillPopScope(
+              child: Material(
+                elevation: 10,
+                color: Colors.black.withOpacity(0.2),
+                child: IntrinsicHeight(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        width: Get.width * 0.9,
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 15,
+                          horizontal: 20,
+                        ),
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(6),
+                          color: Colors.white,
+                        ),
+                        child: SizedBox(
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 6.0),
+                            child: Form(
+                              key: _reviewKey,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  getCloseButton(onpressed: () {
+                                    orderRating = 0;
+                                    productReviewController.clear();
+                                    Get.back();
+                                  }),
+                                  SizedBox(
+                                    width: Get.width,
+                                    child: Text(
+                                      'Your Review',
+                                      style: Get.textTheme.bodyLarge!.copyWith(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize:
+                                              17 * Get.textScaleFactor * 0.90,
+                                          color: Colors.black),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                  SizedBox(height: Get.height * 0.01),
+                                  PageInput(
+                                    validator: MinLengthValidator(1,
+                                        errorText: 'Enter a valid review'),
+                                    hint: '',
+                                    label: 'Enter Review',
+                                    keyboardType: TextInputType.multiline,
+                                    textWidth: 0.6,
+                                    controller: productReviewController,
+                                    isTextArea: true,
+                                  ),
+                                  SizedBox(height: Get.height * 0.01),
+                                  Text('Leave a rating',
+                                      style: AppTextStyle.bodyText2
+                                          .copyWith(color: Colors.black)),
+                                  RatingBar.builder(
+                                    itemBuilder: (context, _) => const Icon(
+                                      Icons.star,
+                                      color: Colors.amber,
+                                    ),
+                                    onRatingUpdate: (rating) {
+                                      orderRating = rating.toInt();
+                                    },
+                                  ),
+                                  const SizedBox(height: 22),
+                                  SizedBox(
+                                    width: double.infinity,
+                                    child: AppButton(
+                                        title: "Submit",
+                                        borderRadius: 12,
+                                        // bckgrndColor: Colors.green,
+                                        onPressed: () async {
+                                          if (orderRating == 0) {
+                                            Get.snackbar('Error',
+                                                'You must leave a rating',
+                                                backgroundColor: Colors.red,
+                                                colorText:
+                                                    AppColors.background);
+                                            return;
+                                          }
+
+                                          if (_reviewKey.currentState!
+                                              .validate()) {
+                                            final controller =
+                                                Get.find<HomeController>();
+                                            final response = await controller
+                                                .userRepo
+                                                .postData(
+                                                    '/review/product/create-product-review',
+                                                    {
+                                                  "productId": productId,
+                                                  "review":
+                                                      productReviewController
+                                                          .text,
+                                                  "star": orderRating,
+                                                  "userId": userId,
+                                                });
+                                            if (response.isSuccessful) {
+                                              orderRating = 0;
+                                              productReviewController.clear();
+                                              Get.back();
+                                              Get.snackbar(
+                                                  'Success',
+                                                  response.message ??
+                                                      'Product reviewed successfully',
+                                                  backgroundColor: Colors.green,
+                                                  colorText:
+                                                      AppColors.background);
+                                              reload();
+                                            } else {
+                                              orderRating = 0;
+                                              productReviewController.clear();
+                                              Get.back();
+                                              Get.snackbar(
+                                                  'Error',
+                                                  response.message ??
+                                                      'An error occurred',
+                                                  backgroundColor: Colors.red,
+                                                  colorText:
+                                                      AppColors.background);
+                                            }
+                                          }
+                                        }),
+                                  ),
+                                  const SizedBox(height: 22),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              onWillPop: () async {
+                orderRating = 0;
+                productReviewController.clear();
+                return true;
+              });
+        });
+  }
 
   static void showInfoDialog(
       {required String title,

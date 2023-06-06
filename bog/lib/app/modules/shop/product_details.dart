@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:bog/app/global_widgets/overlays.dart';
 import 'package:feather_icons/feather_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -7,9 +10,11 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_styles.dart';
 import '../../controllers/home_controller.dart';
 import '../../data/model/complete_prod_review.dart' as cs;
+import '../../data/model/log_in_model.dart';
 import '../../data/model/my_products.dart';
 
 import '../../data/providers/api_response.dart';
+import '../../data/providers/my_pref.dart';
 import '../../global_widgets/app_base_view.dart';
 import '../../global_widgets/app_button.dart';
 
@@ -38,6 +43,16 @@ class _ProductDetailsState extends State<ProductDetails>
   void initState() {
     super.initState();
     tabController = TabController(length: 2, vsync: this);
+    initializeData();
+  }
+
+  void onApiChange() {
+    setState(() {
+      initializeData();
+    });
+  }
+
+  void initializeData() {
     final controller = Get.find<HomeController>();
     getReviews = controller.userRepo
         .getData('/review/product/get-review?productId=${widget.productId}');
@@ -353,7 +368,22 @@ class _ProductDetailsState extends State<ProductDetails>
                                                   title: 'Leave a Review',
                                                   bckgrndColor:
                                                       AppColors.orange,
-                                                  onPressed: () {},
+                                                  onPressed: () {
+                                                    var logInDetails =
+                                                        LogInModel.fromJson(
+                                                            jsonDecode(MyPref
+                                                                .logInDetail
+                                                                .val));
+                                                    AppOverlay
+                                                        .showProductReviewDialog(
+                                                            reload: onApiChange,
+                                                            userId: logInDetails
+                                                                    .id ??
+                                                                '',
+                                                            productId:
+                                                                product.id ??
+                                                                    '');
+                                                  },
                                                 ),
                                                 const SizedBox(height: 10),
                                                 const Center(
@@ -363,6 +393,27 @@ class _ProductDetailsState extends State<ProductDetails>
                                             )
                                           : Column(
                                               children: [
+                                                AppButton(
+                                                  title: 'Leave a Review',
+                                                  bckgrndColor:
+                                                      AppColors.orange,
+                                                  onPressed: () {
+                                                    var logInDetails =
+                                                        LogInModel.fromJson(
+                                                            jsonDecode(MyPref
+                                                                .logInDetail
+                                                                .val));
+                                                    AppOverlay
+                                                        .showProductReviewDialog(
+                                                            reload: onApiChange,
+                                                            userId: logInDetails
+                                                                    .id ??
+                                                                '',
+                                                            productId:
+                                                                product.id ??
+                                                                    '');
+                                                  },
+                                                ),
                                                 Row(
                                                   children: [
                                                     Text(
@@ -375,7 +426,7 @@ class _ProductDetailsState extends State<ProductDetails>
                                                   ],
                                                 ),
                                                 SizedBox(
-                                                  height: Get.height * 0.18,
+                                                  height: Get.height * 0.1,
                                                   child: ListView.builder(
                                                       physics:
                                                           const BouncingScrollPhysics(),
