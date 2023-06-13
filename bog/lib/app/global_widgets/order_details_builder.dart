@@ -6,7 +6,8 @@ import '../data/model/order_details.dart';
 
 class OrderDetailsBuilder extends StatelessWidget {
   final List<OrderDetailItem> orderItems;
-  const OrderDetailsBuilder({super.key, required this.orderItems});
+  final ScrollPhysics? physics;
+  const OrderDetailsBuilder({super.key, required this.orderItems, this.physics});
 
   @override
   Widget build(BuildContext context) {
@@ -14,6 +15,7 @@ class OrderDetailsBuilder extends StatelessWidget {
         padding: EdgeInsets.zero,
         itemCount: orderItems.length,
         shrinkWrap: true,
+        physics: physics,
         itemBuilder: (context, i) {
           return Padding(
             padding: const EdgeInsets.symmetric(vertical: 2.0),

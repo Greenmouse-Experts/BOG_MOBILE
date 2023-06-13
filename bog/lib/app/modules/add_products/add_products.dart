@@ -703,10 +703,10 @@ class _AddProjectState extends State<AddProject> {
                       return SizedBox(
                         height: Get.height * 0.7,
                         width: Get.width,
-                        child:const Column(
+                        child: const Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children:  [
+                          children: [
                             CircularProgressIndicator(
                               color: AppColors.primary,
                             ),

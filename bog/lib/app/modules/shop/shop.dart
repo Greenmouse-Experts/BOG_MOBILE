@@ -229,8 +229,11 @@ class _ShopState extends State<Shop> {
                               Get.to(
                                   () => ProductDetails(
                                       productId: posts[index].id ?? '',
+                                      prod: posts[index],
                                       key: const Key('ProductDetails')),
-                                  arguments: posts[index]);
+                               //   arguments: posts[index]
+                                  
+                                  );
                             },
                             child: Container(
                               width: width * 0.45,

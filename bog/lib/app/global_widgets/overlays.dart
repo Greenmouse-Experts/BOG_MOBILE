@@ -10,6 +10,7 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_styles.dart';
 import '../controllers/home_controller.dart';
+import '../data/providers/api.dart';
 import '../data/providers/my_pref.dart';
 import '../modules/meetings/meeting.dart';
 import '../modules/subscription/subscription_view.dart';
@@ -45,12 +46,15 @@ int orderRating = 0;
 
 TextEditingController bestPriceController = TextEditingController();
 TextEditingController timeLineController = TextEditingController();
+TextEditingController workDescription = TextEditingController();
 final ScrollController scrollController = ScrollController();
 
 TextEditingController updateMessageController = TextEditingController();
 TextEditingController fileController = TextEditingController();
+TextEditingController supportingFileController = TextEditingController();
 TextEditingController productReviewController = TextEditingController();
 File? pickedFile;
+File? supportingFile;
 
 var dioSend = dio.Dio();
 
@@ -180,9 +184,12 @@ class AppOverlay {
       );
 
   static void showProductReviewDialog(
-      {required String productId, required String userId, required VoidCallback reload}) {
+      {required String productId,
+      required String userId,
+      required BuildContext context,
+      required VoidCallback reload}) {
     showDialog(
-        context: Get.context!,
+        context: context,
         builder: (context) {
           return WillPopScope(
               child: Material(
@@ -230,7 +237,7 @@ class AppOverlay {
                                     ),
                                   ),
                                   SizedBox(height: Get.height * 0.01),
-                                  PageInput(
+                                  PageInput1(
                                     validator: MinLengthValidator(1,
                                         errorText: 'Enter a valid review'),
                                     hint: '',
@@ -493,6 +500,84 @@ class AppOverlay {
     );
   }
 
+  static void showInterestAcceptance(
+      {required String userId, required String id}) {
+    showDialog(
+        barrierDismissible: false,
+        context: Get.context!,
+        builder: (context) {
+          return Material(
+            elevation: 10,
+            color: Colors.black.withOpacity(0.2),
+            child: IntrinsicHeight(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    width: Get.width * 0.8,
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 15,
+                      horizontal: 20,
+                    ),
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(6),
+                      color: Colors.white,
+                    ),
+                    child: Column(
+                      children: [
+                        Icon(
+                          Icons.check,
+                          size: Get.width * 0.1,
+                          color: AppColors.primary,
+                        ),
+                        SizedBox(height: Get.height * 0.01),
+                        Text('Project Interest Submitted',
+                            textAlign: TextAlign.center,
+                            style: AppTextStyle.headline6
+                                .copyWith(color: Colors.black)),
+                        SizedBox(height: Get.height * 0.01),
+                        SizedBox(
+                          width: Get.width * 0.85,
+                          child: Text(
+                              'Thank you for picking interest on this project. To complete the process, an interest form is made available where you are expected to analyze the project, prepare the valuation and timeframe required to complete this project. Please note that this form is valid for 24 hours.',
+                              textAlign: TextAlign.center,
+                              style: AppTextStyle.bodyText2),
+                        ),
+                        SizedBox(height: Get.height * 0.01),
+                        Row(
+                          children: [
+                            Expanded(
+                                child: AppButton(
+                                    title: 'Fill Now',
+                                    onPressed: () {
+                                      Get.back();
+                                      AppOverlay.showAcceptFormDialog(
+                                          userId: userId,
+                                          projectId: id,
+                                          title: 'Confirm',
+                                          buttonText: 'Submit',
+                                          doubleFunction: true);
+                                    })),
+                            const SizedBox(width: 15),
+                            Expanded(
+                                child: AppButton(
+                                    title: 'Fill Later',
+                                    onPressed: () => Get.back(),
+                                    bckgrndColor: Colors.red)),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
   static void showAcceptFormDialog(
       {required String title,
       bool? doubleFunction,
@@ -508,6 +593,9 @@ class AppOverlay {
           reasonOfInterest = '';
           bestPriceController.clear();
           timeLineController.clear();
+          workDescription.clear();
+          supportingFileController.clear();
+
           return true;
         },
         child: Material(
@@ -561,39 +649,30 @@ class AppOverlay {
                               ),
                               SizedBox(height: Get.height * 0.01),
                               Text(
-                                'With the details contained in the form below, fill and submit the document to show interest.',
+                                'With the details contained in the view form, fill and submit the document below to show interest.(Note that this project is available for 24hours)',
                                 textAlign: TextAlign.center,
                                 style: AppTextStyle.bodyText2.copyWith(
                                     fontSize: 14 * Get.textScaleFactor,
                                     color: Colors.black),
                               ),
                               const SizedBox(height: 11),
-                              NewAppRadioButton(
-                                  options: options,
-                                  label:
-                                      '1. Are you interested in this project',
-                                  option1: '',
-                                  onchanged: (value) {
-                                    chosenInterest = value;
-                                  }),
-                              SizedBox(height: Get.height * 0.01),
-                              PageInput(
+                              PageInput1(
                                 validator: MinLengthValidator(4,
                                     errorText: 'Enter a valid price'),
                                 hint: '',
                                 label:
-                                    '2. What is your best price for rendering your service on this project',
+                                    '1. What is your best price for rendering your service on this project',
                                 keyboardType: TextInputType.number,
                                 textWidth: 0.6,
                                 controller: bestPriceController,
                               ),
                               SizedBox(height: Get.height * 0.01),
-                              PageInput(
+                              PageInput1(
                                 validator: MinLengthValidator(1,
                                     errorText: 'Enter a valid timeline'),
                                 hint: '',
                                 label:
-                                    '3. How soon can you deliver this project? (Give us answer in weeks)',
+                                    '2. How soon can you deliver this project? (Give us answer in weeks)',
                                 keyboardType: TextInputType.number,
                                 textWidth: 0.6,
                                 controller: timeLineController,
@@ -602,11 +681,29 @@ class AppOverlay {
                               NewAppRadioButton(
                                   options: interestOptions,
                                   label:
-                                      '4. What is your interest on this project',
+                                      '3. What is your interest on this project',
                                   option1: '',
                                   onchanged: (value) {
                                     reasonOfInterest = value;
                                   }),
+                              SizedBox(height: Get.height * 0.01),
+                              PageInput1(
+                                hint: '',
+                                label: '4. Brief description on your work plan',
+                                textWidth: 0.6,
+                                controller: workDescription,
+                              ),
+                              SizedBox(height: Get.height * 0.01),
+                              PageInput1(
+                                hint: '',
+                                label: '5. Supporting Files',
+                                textWidth: 0.6,
+                                isFilePicker: true,
+                                onFilePicked: (file) {
+                                  supportingFile = file;
+                                },
+                                controller: supportingFileController,
+                              ),
                               const SizedBox(height: 22),
                               SizedBox(
                                 width: double.infinity,
@@ -615,14 +712,6 @@ class AppOverlay {
                                     borderRadius: 12,
                                     // bckgrndColor: Colors.green,
                                     onPressed: () async {
-                                      if (chosenInterest == '' ||
-                                          chosenInterest == 'No') {
-                                        Get.snackbar('Error',
-                                            'You must be interested in this project to request',
-                                            backgroundColor: Colors.red,
-                                            colorText: AppColors.background);
-                                        return;
-                                      }
                                       if (reasonOfInterest == '') {
                                         Get.snackbar('Error',
                                             'You must select a reason of interest',
@@ -630,31 +719,78 @@ class AppOverlay {
                                             colorText: AppColors.background);
                                         return;
                                       }
+
                                       if (_interestKey.currentState!
                                           .validate()) {
-                                        final controller =
-                                            Get.find<HomeController>();
-                                        final response = await controller
-                                            .userRepo
-                                            .postData('/projects/bid-project', {
-                                          'areYouInterested': true,
-                                          'deliveryTimeLine': int.parse(
-                                              timeLineController.text),
-                                          'projectCost': int.parse(
-                                              bestPriceController.text),
-                                          'projectId': projectId,
-                                          'reasonOfInterest': reasonOfInterest,
-                                          'userId': userId
-                                        });
-                                        if (response.isSuccessful) {
+                                        var body = supportingFile == null
+                                            ? {
+                                                "userId": userId,
+                                                "projectId": projectId,
+                                                "projectCost": int.parse(
+                                                    bestPriceController.text),
+                                                "deliveryTimeLine": int.parse(
+                                                    timeLineController.text),
+                                                "reasonOfInterest":
+                                                    reasonOfInterest,
+                                                "description":
+                                                    workDescription.text,
+                                              }
+                                            : {
+                                                "userId": userId,
+                                                "projectId": projectId,
+                                                "projectCost": int.parse(
+                                                    bestPriceController.text),
+                                                "deliveryTimeLine": int.parse(
+                                                    timeLineController.text),
+                                                "reasonOfInterest":
+                                                    reasonOfInterest,
+                                                "description":
+                                                    workDescription.text,
+                                                "image": [
+                                                  await dio.MultipartFile
+                                                      .fromFile(
+                                                          supportingFile!.path,
+                                                          filename:
+                                                              supportingFile!
+                                                                  .path
+                                                                  .split('/')
+                                                                  .last),
+                                                ],
+                                              };
+                                        // final controller =
+                                        //     Get.find<HomeController>();
+                                        var formData =
+                                            dio.FormData.fromMap(body);
+
+                                        final newResponse = await Api()
+                                            .postData("/projects/bid-project",
+                                                body: formData,
+                                                hasHeader: true);
+                                        // final response = await controller
+                                        //     .userRepo
+                                        //     .postData('/projects/bid-project', {
+                                        //   'areYouInterested': true,
+                                        //   'deliveryTimeLine': int.parse(
+                                        //       timeLineController.text),
+                                        //   'projectCost': int.parse(
+                                        //       bestPriceController.text),
+                                        //   'projectId': projectId,
+                                        //   'reasonOfInterest': reasonOfInterest,
+                                        //   'userId': userId
+                                        // });
+                                        print(newResponse.message);
+                                        print(newResponse.data);
+                                        if (newResponse.isSuccessful) {
                                           chosenInterest = '';
                                           reasonOfInterest = '';
                                           bestPriceController.clear();
                                           timeLineController.clear();
+                                          supportingFileController.clear();
+                                          workDescription.clear();
                                           Get.back();
                                           Get.snackbar(
                                               'Success',
-                                              response.message ??
+                                              newResponse.message ??
                                                   'Project bid successful',
                                               backgroundColor: Colors.green,
                                               colorText: AppColors.background);
@@ -663,10 +799,12 @@ class AppOverlay {
                                           reasonOfInterest = '';
                                           bestPriceController.clear();
                                           timeLineController.clear();
+                                          supportingFileController.clear();
+                                          workDescription.clear();
                                           Get.back();
                                           Get.snackbar(
                                               'Error',
-                                              response.message ??
+                                              newResponse.message ??
                                                   'An error occurred',
                                               backgroundColor: Colors.red,
                                               colorText: AppColors.background);

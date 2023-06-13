@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:bog/app/global_widgets/new_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_file_downloader/flutter_file_downloader.dart';
@@ -16,7 +17,6 @@ import '../../data/providers/api_response.dart';
 import '../../global_widgets/app_base_view.dart';
 import '../../global_widgets/app_loader.dart';
 import '../../global_widgets/bottom_widget.dart';
-import '../../global_widgets/custom_app_bar.dart';
 import '../../global_widgets/global_widgets.dart';
 import '../../global_widgets/order_details_builder.dart';
 import 'pdf_page.dart';
@@ -74,6 +74,7 @@ class _AppReceiptState extends State<AppReceipt> {
           id: 'OrderDetails',
           builder: (controller) {
             return Scaffold(
+              appBar: newAppBarBack(context, 'Order Details'),
               backgroundColor: AppColors.backgroundVariant2,
               body: SizedBox(
                 width: Get.width,
@@ -81,7 +82,6 @@ class _AppReceiptState extends State<AppReceipt> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const CustomAppBar(title: 'Order Details'),
                       FutureBuilder<ApiResponse>(
                           future: orderFuture,
                           builder: (context, snapshot) {
@@ -138,6 +138,8 @@ class _AppReceiptState extends State<AppReceipt> {
                                     const Text('Item(s)'),
                                     const SizedBox(height: 5),
                                     OrderDetailsBuilder(
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
                                       orderItems: orderDetail.orderItems!,
                                     ),
                                     Divider(

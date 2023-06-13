@@ -1,4 +1,3 @@
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:date_time_format/date_time_format.dart';
@@ -1490,12 +1489,14 @@ class ServiceRequestItem extends StatelessWidget {
                 child: AppButton(
                   title: "Accept",
                   onPressed: () {
-                    AppOverlay.showAcceptFormDialog(
-                        userId: userId,
-                        projectId: id,
-                        title: 'Confirm',
-                        doubleFunction: true,
-                        buttonText: 'Submit');
+                    AppOverlay.showInterestAcceptance(userId: userId, id: id);
+
+                    // AppOverlay.showAcceptFormDialog(
+                    //     userId: userId,
+                    //     projectId: id,
+                    //     title: 'Confirm',
+                    //     doubleFunction: true,
+                    //     buttonText: 'Submit');
                   },
                   padding: const EdgeInsets.symmetric(vertical: 10),
                   border: Border.all(color: const Color(0xFF24B53D)),

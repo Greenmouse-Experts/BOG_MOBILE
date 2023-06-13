@@ -25,7 +25,8 @@ import '../../global_widgets/new_app_bar.dart';
 
 class ProductDetails extends StatefulWidget {
   final String productId;
-  const ProductDetails({Key? key, required this.productId}) : super(key: key);
+  final MyProducts prod;
+  const ProductDetails({Key? key, required this.productId, required this.prod}) : super(key: key);
 
   static const route = '/productDetails';
 
@@ -63,7 +64,8 @@ class _ProductDetailsState extends State<ProductDetails>
     var width = Get.width;
     final Size size = MediaQuery.of(context).size;
     double multiplier = 25 * size.height * 0.01;
-    var product = Get.arguments as MyProducts;
+    var newProd = widget.prod;
+    final product = newProd;
     final controller = Get.find<HomeController>();
     int currentQuantity = controller.cartItems.containsKey(product.id)
         ? controller.cartItems.values
@@ -376,6 +378,7 @@ class _ProductDetailsState extends State<ProductDetails>
                                                                 .val));
                                                     AppOverlay
                                                         .showProductReviewDialog(
+                                                            context: context,
                                                             reload: onApiChange,
                                                             userId: logInDetails
                                                                     .id ??
@@ -405,6 +408,7 @@ class _ProductDetailsState extends State<ProductDetails>
                                                                 .val));
                                                     AppOverlay
                                                         .showProductReviewDialog(
+                                                            context: context,
                                                             reload: onApiChange,
                                                             userId: logInDetails
                                                                     .id ??
