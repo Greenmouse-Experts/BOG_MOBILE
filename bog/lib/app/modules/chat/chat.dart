@@ -1,17 +1,22 @@
 import 'dart:convert';
+// import 'dart:io';
 
 import 'package:bog/app/controllers/chat_controller.dart';
-import 'package:bog/app/global_widgets/app_loader.dart';
+// import 'package:bog/app/global_widgets/app_loader.dart';
 import 'package:bog/app/global_widgets/new_app_bar.dart';
+
+// import 'package:socket_io_client/socket_io_client.dart' as io;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 // import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+// import 'package:socket_io_client/socket_io_client.dart';
 
 import '../../../core/theme/app_colors.dart';
 // import '../../../core/theme/app_styles.dart';
 import '../../controllers/home_controller.dart';
 import '../../data/model/user_details_model.dart';
+// import '../../data/providers/api.dart';
 import '../../data/providers/my_pref.dart';
 // import '../../global_widgets/app_avatar.dart';
 import '../../global_widgets/app_input.dart';
@@ -36,6 +41,7 @@ class _ChatState extends State<Chat> with WidgetsBindingObserver {
     super.initState();
     socketManager = AppChat();
     socketManager.startSocket();
+   // initSocket();
   }
 
   @override
@@ -43,6 +49,25 @@ class _ChatState extends State<Chat> with WidgetsBindingObserver {
     socketManager.closeSocket();
     super.dispose();
   }
+
+  // void initSocket() {
+  //   io.Socket socket = io.io(
+  //       'http://localhost:3000',
+  //       OptionBuilder().setTransports(['websocket']) // for Flutter or Dart VM
+  //           .setExtraHeaders({'foo': 'bar'}) // optional
+  //           .build());
+  //   // io.Socket socket = io.io(Api.baseUrl, <String, dynamic>{
+  //   //   'autoConnect': false,
+  //   //   'transports': ['websocket'], // You can specify the transports to be used
+  //   // });
+
+  //   socket.connect();
+  //   socket.onConnect((data) => debugPrint('on colos on cos'));
+  //   socket.onError((data) {
+  //     print('object');
+  //     print(data.toString());
+  //   });
+  // }
 
   final TextEditingController _messageController = TextEditingController();
 
@@ -80,24 +105,25 @@ class _ChatState extends State<Chat> with WidgetsBindingObserver {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Expanded(
-                      child: StreamBuilder<String>(
-                        stream: socketManager.chatMessagesStream,
-                        builder: (BuildContext context,
-                            AsyncSnapshot<String> snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return const AppLoader();
-                          } else if (snapshot.hasData) {
-                            return Text('Chat Message: ${snapshot.data}');
-                          } else if (snapshot.hasError) {
-                            return Text('Error: ${snapshot.error}');
-                          } else {
-                            return const Text('No chat message yet');
-                          }
-                        },
-                      ),
-                    ),
+                    const Expanded(child: Column()
+
+                        // StreamBuilder<dynamic>(
+                        //   stream: socketManager.chatMessagesStream,
+                        //   builder: (BuildContext context,
+                        //       AsyncSnapshot<dynamic> snapshot) {
+                        //     if (snapshot.connectionState ==
+                        //         ConnectionState.waiting) {
+                        //       return const AppLoader();
+                        //     } else if (snapshot.hasData) {
+                        //       return Text('Chat Message: ${snapshot.data}');
+                        //     } else if (snapshot.hasError) {
+                        //       return Text('Error: ${snapshot.error}');
+                        //     } else {
+                        //       return const Text('No chat message yet');
+                        //     }
+                        //   },
+                        // ),
+                        ),
                     SizedBox(
                       height: Get.height * 0.1,
                       child: Column(
