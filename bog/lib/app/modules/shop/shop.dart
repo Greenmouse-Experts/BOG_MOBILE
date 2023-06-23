@@ -219,7 +219,7 @@ class _ShopState extends State<Shop> {
                           sum += item.star ?? 0;
                         }
                         reviewAverage = productReviews.isEmpty
-                            ? 5.0
+                            ? 0.0
                             : sum / productReviews.length;
                         return Padding(
                           padding: EdgeInsets.only(
@@ -227,13 +227,12 @@ class _ShopState extends State<Shop> {
                           child: InkWell(
                             onTap: () {
                               Get.to(
-                                  () => ProductDetails(
-                                      productId: posts[index].id ?? '',
-                                      prod: posts[index],
-                                      key: const Key('ProductDetails')),
-                               //   arguments: posts[index]
-                                  
-                                  );
+                                () => ProductDetails(
+                                    productId: posts[index].id ?? '',
+                                    prod: posts[index],
+                                    key: const Key('ProductDetails')),
+                                //   arguments: posts[index]
+                              );
                             },
                             child: Container(
                               width: width * 0.45,

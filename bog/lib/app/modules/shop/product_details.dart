@@ -26,7 +26,8 @@ import '../../global_widgets/new_app_bar.dart';
 class ProductDetails extends StatefulWidget {
   final String productId;
   final MyProducts prod;
-  const ProductDetails({Key? key, required this.productId, required this.prod}) : super(key: key);
+  const ProductDetails({Key? key, required this.productId, required this.prod})
+      : super(key: key);
 
   static const route = '/productDetails';
 
@@ -76,11 +77,11 @@ class _ProductDetailsState extends State<ProductDetails>
     final productReviews = product.review;
 
     double sum = 0;
-    var reviewAverage = 5.0;
+    var reviewAverage = 0.0;
     for (var item in productReviews!) {
       sum += item.star ?? 0;
     }
-    reviewAverage = productReviews.isEmpty ? 5.0 : sum / productReviews.length;
+    reviewAverage = productReviews.isEmpty ? 0.0 : sum / productReviews.length;
 
     return AppBaseView(
       child: GetBuilder<HomeController>(

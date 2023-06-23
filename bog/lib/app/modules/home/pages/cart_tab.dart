@@ -1446,13 +1446,37 @@ class ServiceRequestItem extends StatelessWidget {
                     ),
                     Padding(
                       padding: EdgeInsets.only(left: Get.width * 0.005),
-                      child: Text(
-                        'Project Type: $location',
-                        style: AppTextStyle.caption.copyWith(
-                          color: Colors.black.withOpacity(0.6),
-                          fontSize: Get.width * 0.033,
-                          fontWeight: FontWeight.w500,
-                        ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Project Type: $location',
+                            style: AppTextStyle.caption.copyWith(
+                              color: Colors.black.withOpacity(0.6),
+                              fontSize: Get.width * 0.033,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          PopupMenuButton(itemBuilder: (context) {
+                            return [
+                              PopupMenuItem(
+                                  child: TextButton(
+                                      onPressed: () {},
+                                      child: const Text('Accept project'))),
+                              PopupMenuItem(
+                                  child: TextButton(
+                                      onPressed: () {
+                                        AppOverlay.showAcceptFormDialog(
+                                            userId: userId,
+                                            projectId: id,
+                                            title: 'Confirm',
+                                            doubleFunction: true,
+                                            buttonText: 'Submit');
+                                      },
+                                      child: const Text('Fill Interest Form'))),
+                            ];
+                          })
+                        ],
                       ),
                     ),
                   ],
@@ -1462,50 +1486,50 @@ class ServiceRequestItem extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 10),
-          Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              SizedBox(
-                width: Get.width * 0.4,
-                child: AppButton(
-                  title: "Decline",
-                  onPressed: () {
-                    AppOverlay.showInfoDialog(
-                        title: 'Confirm',
-                        content:
-                            'Are you sure you want to decline this project',
-                        doubleFunction: true,
-                        buttonText: 'Continue');
-                  },
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  border: Border.all(color: const Color(0xFFDC1515)),
-                  bckgrndColor: Colors.white,
-                  fontColor: const Color(0xFFDC1515),
-                ),
-              ),
-              SizedBox(
-                width: Get.width * 0.4,
-                child: AppButton(
-                  title: "Accept",
-                  onPressed: () {
-                    AppOverlay.showInterestAcceptance(userId: userId, id: id);
+          // Row(
+          //   mainAxisSize: MainAxisSize.max,
+          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //   children: [
+          //     SizedBox(
+          //       width: Get.width * 0.4,
+          //       child: AppButton(
+          //         title: "Decline",
+          //         onPressed: () {
+          //           AppOverlay.showInfoDialog(
+          //               title: 'Confirm',
+          //               content:
+          //                   'Are you sure you want to decline this project',
+          //               doubleFunction: true,
+          //               buttonText: 'Continue');
+          //         },
+          //         padding: const EdgeInsets.symmetric(vertical: 10),
+          //         border: Border.all(color: const Color(0xFFDC1515)),
+          //         bckgrndColor: Colors.white,
+          //         fontColor: const Color(0xFFDC1515),
+          //       ),
+          //     ),
+          //     SizedBox(
+          //       width: Get.width * 0.4,
+          //       child: AppButton(
+          //         title: "Accept",
+          //         onPressed: () {
+          //           AppOverlay.showInterestAcceptance(userId: userId, id: id);
 
-                    // AppOverlay.showAcceptFormDialog(
-                    //     userId: userId,
-                    //     projectId: id,
-                    //     title: 'Confirm',
-                    //     doubleFunction: true,
-                    //     buttonText: 'Submit');
-                  },
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  border: Border.all(color: const Color(0xFF24B53D)),
-                  bckgrndColor: Colors.white,
-                  fontColor: const Color(0xFF24B53D),
-                ),
-              ),
-            ],
-          )
+          //           // AppOverlay.showAcceptFormDialog(
+          //           //     userId: userId,
+          //           //     projectId: id,
+          //           //     title: 'Confirm',
+          //           //     doubleFunction: true,
+          //           //     buttonText: 'Submit');
+          //         },
+          //         padding: const EdgeInsets.symmetric(vertical: 10),
+          //         border: Border.all(color: const Color(0xFF24B53D)),
+          //         bckgrndColor: Colors.white,
+          //         fontColor: const Color(0xFF24B53D),
+          //       ),
+          //     ),
+          //   ],
+          // )
         ],
       ),
     );

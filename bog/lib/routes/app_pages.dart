@@ -2,7 +2,6 @@ import 'package:get/get.dart';
 
 import '../app/bindings/auth_binding.dart';
 import '../app/data/providers/my_pref.dart';
-import '../app/modules/chat/chat.dart';
 import '../app/modules/create/create.dart';
 import '../app/modules/home/home.dart';
 import '../app/modules/home/pages/profile_tab.dart';
@@ -71,7 +70,6 @@ class AppPages {
     GetPage(name: ConfirmPIN.route, page: () => const ConfirmPIN()),
     GetPage(name: Interests.route, page: () => const Interests()),
     GetPage(name: Home.route, page: () => const Home()),
-    GetPage(name: Chat.route, page: () => const Chat()),
     GetPage(name: Shop.route, page: () => const Shop()),
     GetPage(name: Create.route, page: () => const Create()),
   ];
