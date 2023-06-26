@@ -10,16 +10,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 // import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-// import 'package:socket_io_client/socket_io_client.dart';
+import 'package:socket_io_client/socket_io_client.dart' as io;
 
 import '../../../core/theme/app_colors.dart';
 // import '../../../core/theme/app_styles.dart';
 import '../../controllers/home_controller.dart';
 import '../../data/model/user_details_model.dart';
 // import '../../data/providers/api.dart';
+import '../../data/providers/api.dart';
 import '../../data/providers/my_pref.dart';
 // import '../../global_widgets/app_avatar.dart';
 import '../../global_widgets/app_input.dart';
+import '../../global_widgets/app_loader.dart';
 
 class Chat extends StatefulWidget {
   final String name;
@@ -34,6 +36,7 @@ class Chat extends StatefulWidget {
 }
 
 class _ChatState extends State<Chat> with WidgetsBindingObserver {
+  // late io.Socket _socket;
   late AppChat socketManager;
 
   @override
@@ -41,14 +44,31 @@ class _ChatState extends State<Chat> with WidgetsBindingObserver {
     super.initState();
     socketManager = AppChat();
     socketManager.startSocket();
-   // initSocket();
+    // initSocket();
+    // _socket = io.io(
+    //     Api.chatUrl, io.OptionBuilder().setTransports(['websocket']).build());
+    // connectSocket();
   }
+
+  // void sendMessageS(String message, String senderId, String receiverId) {
+  //   _socket.emit('send_message',
+  //       {"senderId": senderId, "recieverId": receiverId, "message": message});
+  // }
 
   @override
   void dispose() {
+    // _socket.disconnect();
+    // _socket.dispose();
     socketManager.closeSocket();
     super.dispose();
   }
+
+  // void connectSocket() {
+  //   _socket.onConnect((data) => print('connection to socket establiished'));
+  //   _socket.onConnectError((data) => print('Connectiion error: $data'));
+  //   _socket.onDisconnect((data) => print('Connection has been disconnected'));
+  //   _socket.connect();
+  // }
 
   // void initSocket() {
   //   io.Socket socket = io.io(
@@ -78,9 +98,9 @@ class _ChatState extends State<Chat> with WidgetsBindingObserver {
     var logInDetails =
         UserDetailsModel.fromJson(jsonDecode(MyPref.userDetails.val));
 
-    _messageController.clear();
     socketManager.sendMessage(
         _messageController.text, logInDetails.profile!.id!, widget.receiverId);
+    _messageController.clear();
   }
 
   @override
@@ -105,25 +125,24 @@ class _ChatState extends State<Chat> with WidgetsBindingObserver {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    const Expanded(child: Column()
-
-                        // StreamBuilder<dynamic>(
-                        //   stream: socketManager.chatMessagesStream,
-                        //   builder: (BuildContext context,
-                        //       AsyncSnapshot<dynamic> snapshot) {
-                        //     if (snapshot.connectionState ==
-                        //         ConnectionState.waiting) {
-                        //       return const AppLoader();
-                        //     } else if (snapshot.hasData) {
-                        //       return Text('Chat Message: ${snapshot.data}');
-                        //     } else if (snapshot.hasError) {
-                        //       return Text('Error: ${snapshot.error}');
-                        //     } else {
-                        //       return const Text('No chat message yet');
-                        //     }
-                        //   },
-                        // ),
-                        ),
+                    Expanded(
+                      child: StreamBuilder<dynamic>(
+                        stream: socketManager.chatMessagesStream,
+                        builder: (BuildContext context,
+                            AsyncSnapshot<dynamic> snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const AppLoader();
+                          } else if (snapshot.hasData) {
+                            return Text('Chat Message: ${snapshot.data}');
+                          } else if (snapshot.hasError) {
+                            return Text('Error: ${snapshot.error}');
+                          } else {
+                            return const Text('No chat message yet');
+                          }
+                        },
+                      ),
+                    ),
                     SizedBox(
                       height: Get.height * 0.1,
                       child: Column(

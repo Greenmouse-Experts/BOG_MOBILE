@@ -35,7 +35,7 @@ class HttpClient {
 class Api {
   static const publicKey = 'pk_test_0c79398dba746ce329d163885dd3fe5bc7e1f243';
   static const String baseUrl = 'https://bog.greenmouseproperties.com/api';
-  static const String chatUrl = 'https://bog.greenmouseproperties.com';
+  static const String chatUrl = 'https://bog-test-a1d896fbc1d9.herokuapp.com/';
   static const String uploadUrl = 'https://bog.greenmouseproperties.com';
 
   static const String imgUrl = 'http://imgURl';

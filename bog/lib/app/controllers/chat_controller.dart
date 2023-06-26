@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:bog/app/data/providers/api.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
@@ -5,6 +7,20 @@ import 'package:socket_io_client/socket_io_client.dart' as io;
 
 class AppChat extends GetxController {
   io.Socket? socket;
+
+  final StreamController<dynamic> _chatMessagesStreamController =
+      StreamController<dynamic>.broadcast();
+  final StreamController<dynamic> _userNotificationsStreamController =
+      StreamController<dynamic>.broadcast();
+  final StreamController<dynamic> _notificationsStreamController =
+      StreamController<dynamic>.broadcast();
+
+  Stream<dynamic> get chatMessagesStream =>
+      _chatMessagesStreamController.stream;
+  Stream<dynamic> get userNotificationsStream =>
+      _userNotificationsStreamController.stream;
+  Stream<dynamic> get notificationsStream =>
+      _notificationsStreamController.stream;
 
   void startSocket() {
     try {
@@ -18,11 +34,18 @@ class AppChat extends GetxController {
         debugPrint('Connected to the server');
       });
 
-      socket!.on('getChatMessagesApi', (data) {});
+      socket!.on('getChatMessagesApi', (data) {
+        print(data);
+        _chatMessagesStreamController.add(data);
+      });
 
-      socket!.on('getUserNotifications', (data) {});
+      socket!.on('getUserNotifications', (data) {
+        _userNotificationsStreamController.add(data);
+      });
 
-      socket!.on('getNotifications', (data) {});
+      socket!.on('getNotifications', (data) {
+        _notificationsStreamController.add(data);
+      });
       socket!.onConnect((_) {
         debugPrint('Connection established');
       });
@@ -41,9 +64,9 @@ class AppChat extends GetxController {
       return;
     }
     socket!.disconnect();
-    // _chatMessagesStreamController.close();
-    // _userNotificationsStreamController.close();
-    // _notificationsStreamController.close();
+    _chatMessagesStreamController.close();
+    _userNotificationsStreamController.close();
+    _notificationsStreamController.close();
   }
 
   void sendMessage(String message, String senderId, String receiverId) {

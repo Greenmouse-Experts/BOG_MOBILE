@@ -29,6 +29,86 @@ class _ChatTabState extends State<ChatTab> {
   late Future<ApiResponse> getAdmins;
   var search = '';
 
+  List<AdminModel> _admins = [];
+
+  void showChatOptions(List<AdminModel> admins) {
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return DefaultTabController(
+              length: 3,
+              child: Column(
+                children: [
+                  TabBar(
+                    tabs: [
+                      Tab(
+                          icon: Text(
+                        'General Admin',
+                        style: AppTextStyle.bodyText2,
+                      )),
+                      Tab(
+                          icon: Text(
+                        'Product Admin',
+                        style: AppTextStyle.bodyText2,
+                      )),
+                      Tab(
+                          icon: Text(
+                        'Project Admin',
+                        style: AppTextStyle.bodyText2,
+                      )),
+                    ],
+                  ),
+                  SizedBox(
+                    height: Get.height * 0.5,
+                    child: TabBarView(children: [
+                      ListView.builder(
+                          itemCount: admins.length,
+                          shrinkWrap: true,
+                          padding: EdgeInsets.zero,
+                          physics: const BouncingScrollPhysics(),
+                          itemBuilder: (context, i) {
+                            final admin = admins[i];
+                            return ListTile(
+                              onTap: () => Get.to(() => Chat(
+                                    name: admin.name ?? "",
+                                    receiverId: admin.id ?? '',
+                                  )),
+                              contentPadding: const EdgeInsets.symmetric(
+                                  vertical: 5, horizontal: 5),
+                              leading: CircleAvatar(
+                                radius: Get.width * 0.06,
+                                backgroundColor:
+                                    AppColors.primary.withOpacity(0.4),
+                                child: Text(
+                                  admin.name!.substring(0, 1).toUpperCase(),
+                                  style: AppTextStyle.headline4
+                                      .copyWith(color: Colors.black),
+                                ),
+                              ),
+
+                              // AppAvatar(
+                              //   // imgUrl: (admin.).toString(),
+                              //   // radius: Get.width > 500
+                              //   //     ? Get.width * 0.1
+                              //   //     : Get.width * 0.16,
+                              //   name: admin.name ?? '',
+                              // ),
+                              title: Text(
+                                admin.name ?? '',
+                                style: AppTextStyle.headline5
+                                    .copyWith(color: Colors.black),
+                              ),
+                            );
+                          }),
+                      SizedBox(),
+                      SizedBox()
+                    ]),
+                  )
+                ],
+              ));
+        });
+  }
+
   @override
   void initState() {
     //  Get.put(HomeController(UserRepository(Api())));
@@ -128,6 +208,8 @@ class _ChatTabState extends State<ChatTab> {
                                     admins.add(AdminModel.fromJson(element));
                                   }
 
+                                  _admins = admins;
+
                                   return admins.isEmpty
                                       ? Column(
                                           mainAxisAlignment:
@@ -175,14 +257,6 @@ class _ChatTabState extends State<ChatTab> {
                                                           color: Colors.black),
                                                 ),
                                               ),
-
-                                              // AppAvatar(
-                                              //   // imgUrl: (admin.).toString(),
-                                              //   // radius: Get.width > 500
-                                              //   //     ? Get.width * 0.1
-                                              //   //     : Get.width * 0.16,
-                                              //   name: admin.name ?? '',
-                                              // ),
                                               title: Text(
                                                 admin.name ?? '',
                                                 style: AppTextStyle.headline5
@@ -448,7 +522,9 @@ class _ChatTabState extends State<ChatTab> {
             ),
           ),
           floatingActionButton: FloatingActionButton(
-            onPressed: () {},
+            onPressed: () {
+              showChatOptions(_admins);
+            },
             backgroundColor: AppColors.primary,
             child: Stack(
               children: [
@@ -469,6 +545,3 @@ class _ChatTabState extends State<ChatTab> {
     });
   }
 }
-
-
-
