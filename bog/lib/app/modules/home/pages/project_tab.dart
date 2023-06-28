@@ -58,14 +58,14 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     initializeData();
-  //  Get.put(HomeController(UserRepository(Api())));
+    //  Get.put(HomeController(UserRepository(Api())));
     tabController = TabController(length: 2, vsync: this);
   }
 
   void initializeData() {
     final controller = Get.find<HomeController>();
     var logInDetails = LogInModel.fromJson(jsonDecode(MyPref.logInDetail.val));
-    userId = logInDetails.profile!.id!;
+    userId = logInDetails.profile!.userId!;
     final userType = controller.currentType == 'Client'
         ? 'private_client'
         : 'corporate_client';

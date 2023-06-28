@@ -41,6 +41,10 @@
     </application>
     <queries>
   <!-- If your app checks for SMS support -->
+   <intent>
+    <action android:name="android.intent.action.VIEW" />
+    <data android:scheme="sms" />
+  </intent>
   <intent>
     <action android:name="android.intent.action.VIEW" />
     <data android:scheme="mailto" />
@@ -57,6 +61,10 @@
      <intent>
     <action android:name="android.intent.action.VIEW" />
     <data android:scheme="https" />
+  </intent>
+  <!-- Place inside the <queries> element. -->
+  <intent>
+     <action android:name="android.support.customtabs.action.CustomTabsService" />
   </intent>
  
 </queries>

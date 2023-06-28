@@ -1461,8 +1461,38 @@ class ServiceRequestItem extends StatelessWidget {
                             return [
                               PopupMenuItem(
                                   child: TextButton(
-                                      onPressed: () {},
-                                      child: const Text('Accept project'))),
+                                      onPressed: () async {
+                                        final controller =
+                                            Get.find<HomeController>();
+                                        Get.back();
+                                        final response =
+                                            await controller.userRepo.postData(
+                                                '/projects/apply-project', {
+                                          'areYouInterested': true,
+                                          'projectId': id,
+                                          'userId': userId
+                                        });
+
+                                        if (response.isSuccessful) {
+                                          Get.snackbar(
+                                              'Success',
+                                              response.message ??
+                                                  'Project application successful',
+                                              backgroundColor: Colors.green,
+                                              colorText: AppColors.background);
+                                        } else {
+                                          Get.snackbar(
+                                              'Error',
+                                              response.message ??
+                                                  'An error occurred',
+                                              backgroundColor: Colors.red,
+                                              colorText: AppColors.background);
+                                        }
+                                      },
+                                      child: const Text(
+                                        'Accept project',
+                                        style: TextStyle(color: Colors.black),
+                                      ))),
                               PopupMenuItem(
                                   child: TextButton(
                                       onPressed: () {
@@ -1473,7 +1503,10 @@ class ServiceRequestItem extends StatelessWidget {
                                             doubleFunction: true,
                                             buttonText: 'Submit');
                                       },
-                                      child: const Text('Fill Interest Form'))),
+                                      child: const Text(
+                                        'Fill Interest Form',
+                                        style: TextStyle(color: Colors.black),
+                                      ))),
                             ];
                           })
                         ],

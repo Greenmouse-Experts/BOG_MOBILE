@@ -25,9 +25,26 @@ class Support extends GetView<HomeController> {
       queryParameters: {'subject': 'BOG Support', 'body': 'I have a problem'},
     );
 
+    final Uri smsUri = Uri(
+      scheme: 'sms',
+      path: '+2347039773218', // Replace with the desired phone number
+      queryParameters: {
+        'body':
+            'Hello, I want to report a problem from BOG!', // Replace with your desired message
+      },
+    );
+
     void launchEmail() async {
       if (await canLaunchUrl(emailLaunchUri)) {
         await launchUrl(emailLaunchUri);
+      } else {
+        debugPrint('Could not launch email');
+      }
+    }
+
+    void launchSms() async {
+      if (await canLaunchUrl(smsUri)) {
+        await launchUrl(smsUri);
       } else {
         debugPrint('Could not launch email');
       }
@@ -67,10 +84,7 @@ class Support extends GetView<HomeController> {
                           _TextButton(
                             text: "Message",
                             onPressed: () {
-                              Get.back();
-                              controller.currentBottomNavPage.value = 1;
-                              controller.updateNewUser(controller.currentType);
-                              controller.update(['home']);
+                              launchSms();
                             },
                             imageAsset: "assets/images/grp.png",
                           ),

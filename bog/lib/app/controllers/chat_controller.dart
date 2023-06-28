@@ -34,16 +34,26 @@ class AppChat extends GetxController {
         debugPrint('Connected to the server');
       });
 
+      socket!.on('getUserChatMessages', (data) {
+        print('object');
+        print(data);
+      });
+
       socket!.on('getChatMessagesApi', (data) {
         print(data);
+        print('new message');
         _chatMessagesStreamController.add(data);
       });
 
       socket!.on('getUserNotifications', (data) {
+        print(data);
+        print('notifications');
         _userNotificationsStreamController.add(data);
       });
 
       socket!.on('getNotifications', (data) {
+        print(data);
+        print('notificationdksks');
         _notificationsStreamController.add(data);
       });
       socket!.onConnect((_) {
@@ -73,7 +83,11 @@ class AppChat extends GetxController {
     if (socket == null) {
       return;
     }
+
+    // print(message);
+    // print(senderId);
+    // print(receiverId);
     socket!.emit('send_message',
-        {"senderId": senderId, "recieverId": receiverId, "message": message});
+        {"senderId": receiverId, "recieverId": senderId, "message": message});
   }
 }

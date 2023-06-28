@@ -10,14 +10,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 // import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:socket_io_client/socket_io_client.dart' as io;
+// import 'package:socket_io_client/socket_io_client.dart' as io;
 
 import '../../../core/theme/app_colors.dart';
 // import '../../../core/theme/app_styles.dart';
 import '../../controllers/home_controller.dart';
 import '../../data/model/user_details_model.dart';
 // import '../../data/providers/api.dart';
-import '../../data/providers/api.dart';
+// import '../../data/providers/api.dart';
 import '../../data/providers/my_pref.dart';
 // import '../../global_widgets/app_avatar.dart';
 import '../../global_widgets/app_input.dart';
@@ -98,8 +98,8 @@ class _ChatState extends State<Chat> with WidgetsBindingObserver {
     var logInDetails =
         UserDetailsModel.fromJson(jsonDecode(MyPref.userDetails.val));
 
-    socketManager.sendMessage(
-        _messageController.text, logInDetails.profile!.id!, widget.receiverId);
+    socketManager.sendMessage(_messageController.text,
+        logInDetails.profile!.userId!, widget.receiverId);
     _messageController.clear();
   }
 
