@@ -22,7 +22,7 @@ class AppChat extends GetxController {
   Stream<dynamic> get notificationsStream =>
       _notificationsStreamController.stream;
 
-  void startSocket() {
+  void startSocket(String senderId, String receiverId) {
     try {
       if (socket != null) {
         return;
@@ -39,23 +39,32 @@ class AppChat extends GetxController {
         print(data);
       });
 
+      socket!.on('getUserChatMessages', (data) {
+        print('les chats');
+        print(data.toString());
+      });
+
+      socket!.on('sentMessage', (data) {
+        print('new message');
+        print(data.toString());
+      });
+
       socket!.on('getChatMessagesApi', (data) {
         print(data);
         print('new message');
+
         _chatMessagesStreamController.add(data);
       });
 
-      socket!.on('getUserNotifications', (data) {
-        print(data);
-        print('notifications');
-        _userNotificationsStreamController.add(data);
-      });
+      // socket!.on('getUserNotifications', (data) {
+      //   _userNotificationsStreamController.add(data);
+      // });
 
-      socket!.on('getNotifications', (data) {
-        print(data);
-        print('notificationdksks');
-        _notificationsStreamController.add(data);
-      });
+      // socket!.on('getNotifications', (data) {
+      //   debugPrint(data.toString());
+      //   print('notificationdksks');
+      //   _notificationsStreamController.add(data);
+      // });
       socket!.onConnect((_) {
         debugPrint('Connection established');
       });
@@ -87,7 +96,10 @@ class AppChat extends GetxController {
     // print(message);
     // print(senderId);
     // print(receiverId);
+    print(senderId);
     socket!.emit('send_message',
-        {"senderId": receiverId, "recieverId": senderId, "message": message});
+        {"senderId": senderId, "recieverId": receiverId, "message": message});
+    socket!.emit('getUserChatMessages',
+        {"senderId": senderId, "recieverId": receiverId});
   }
 }

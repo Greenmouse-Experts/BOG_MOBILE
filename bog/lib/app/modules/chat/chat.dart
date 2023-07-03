@@ -38,12 +38,14 @@ class Chat extends StatefulWidget {
 class _ChatState extends State<Chat> with WidgetsBindingObserver {
   // late io.Socket _socket;
   late AppChat socketManager;
+  var logInDetails =
+      UserDetailsModel.fromJson(jsonDecode(MyPref.userDetails.val));
 
   @override
   void initState() {
     super.initState();
     socketManager = AppChat();
-    socketManager.startSocket();
+    socketManager.startSocket(logInDetails.profile!.userId!, widget.receiverId);
     // initSocket();
     // _socket = io.io(
     //     Api.chatUrl, io.OptionBuilder().setTransports(['websocket']).build());
@@ -95,8 +97,6 @@ class _ChatState extends State<Chat> with WidgetsBindingObserver {
     if (_messageController.text.isEmpty) {
       return;
     }
-    var logInDetails =
-        UserDetailsModel.fromJson(jsonDecode(MyPref.userDetails.val));
 
     socketManager.sendMessage(_messageController.text,
         logInDetails.profile!.userId!, widget.receiverId);
