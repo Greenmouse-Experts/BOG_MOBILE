@@ -2,7 +2,11 @@ import 'dart:convert';
 // import 'dart:io';
 
 import 'package:bog/app/controllers/chat_controller.dart';
+import 'package:bog/app/global_widgets/message_bubble.dart';
 // import 'package:bog/app/global_widgets/app_loader.dart';
+
+import 'package:socket_io_client/socket_io_client.dart' as io;
+
 import 'package:bog/app/global_widgets/new_app_bar.dart';
 
 // import 'package:socket_io_client/socket_io_client.dart' as io;
@@ -13,15 +17,14 @@ import 'package:get/get.dart';
 // import 'package:socket_io_client/socket_io_client.dart' as io;
 
 import '../../../core/theme/app_colors.dart';
-// import '../../../core/theme/app_styles.dart';
-import '../../controllers/home_controller.dart';
+import '../../data/model/message_model.dart';
 import '../../data/model/user_details_model.dart';
 // import '../../data/providers/api.dart';
 // import '../../data/providers/api.dart';
+import '../../data/providers/api.dart';
 import '../../data/providers/my_pref.dart';
 // import '../../global_widgets/app_avatar.dart';
 import '../../global_widgets/app_input.dart';
-import '../../global_widgets/app_loader.dart';
 
 class Chat extends StatefulWidget {
   final String name;
@@ -37,59 +40,77 @@ class Chat extends StatefulWidget {
 
 class _ChatState extends State<Chat> with WidgetsBindingObserver {
   // late io.Socket _socket;
+  io.Socket? socket;
   late AppChat socketManager;
   var logInDetails =
       UserDetailsModel.fromJson(jsonDecode(MyPref.userDetails.val));
 
+  final List<MessageModel> _chats = [];
+
   @override
   void initState() {
     super.initState();
-    socketManager = AppChat();
-    socketManager.startSocket(logInDetails.profile!.userId!, widget.receiverId);
-    // initSocket();
+    // socketManager = AppChat();
+    // socketManager.startSocket(logInDetails.profile!.userId!, widget.receiverId);
+    initSocket();
     // _socket = io.io(
     //     Api.chatUrl, io.OptionBuilder().setTransports(['websocket']).build());
     // connectSocket();
   }
 
-  // void sendMessageS(String message, String senderId, String receiverId) {
-  //   _socket.emit('send_message',
-  //       {"senderId": senderId, "recieverId": receiverId, "message": message});
-  // }
-
   @override
   void dispose() {
-    // _socket.disconnect();
-    // _socket.dispose();
-    socketManager.closeSocket();
     super.dispose();
   }
 
-  // void connectSocket() {
-  //   _socket.onConnect((data) => print('connection to socket establiished'));
-  //   _socket.onConnectError((data) => print('Connectiion error: $data'));
-  //   _socket.onDisconnect((data) => print('Connection has been disconnected'));
-  //   _socket.connect();
-  // }
+  void initSocket() {
+    try {
+      if (socket != null) {
+        return;
+      }
+      socket = io.io(
+          Api.chatUrl, io.OptionBuilder().setTransports(['websocket']).build());
+      socket!.connect();
+      socket!.on('connect', (_) {
+        debugPrint('Connected to the server');
+      });
 
-  // void initSocket() {
-  //   io.Socket socket = io.io(
-  //       'http://localhost:3000',
-  //       OptionBuilder().setTransports(['websocket']) // for Flutter or Dart VM
-  //           .setExtraHeaders({'foo': 'bar'}) // optional
-  //           .build());
-  //   // io.Socket socket = io.io(Api.baseUrl, <String, dynamic>{
-  //   //   'autoConnect': false,
-  //   //   'transports': ['websocket'], // You can specify the transports to be used
-  //   // });
+      socket!.onConnect((_) {
+        debugPrint('Connection established');
+        socket!.on('getUserChatMessages', (data) {
+          print('object');
+          print(data);
+        });
 
-  //   socket.connect();
-  //   socket.onConnect((data) => debugPrint('on colos on cos'));
-  //   socket.onError((data) {
-  //     print('object');
-  //     print(data.toString());
-  //   });
-  // }
+        socket!.on('getUserChatMessages', (data) {
+          print('les chats');
+          print(data.toString());
+        });
+
+        socket!.on('sentMessage', (data) {
+          print('new message');
+          print(data);
+          setState(() {
+            _chats.add(MessageModel.fromJson(data));
+          });
+          print(_chats.length);
+          //  update();
+        });
+
+        socket!.on('getChatMessagesApi', (data) {
+          print(data);
+          print('new message');
+
+          // _chatMessagesStreamController.add(data);
+        });
+      });
+      socket!.onDisconnect((_) => debugPrint('Connection Disconnection'));
+      socket!.onConnectError((err) {});
+      socket!.onError((err) => debugPrint(err.toString()));
+    } catch (e) {
+      rethrow;
+    }
+  }
 
   final TextEditingController _messageController = TextEditingController();
 
@@ -97,9 +118,16 @@ class _ChatState extends State<Chat> with WidgetsBindingObserver {
     if (_messageController.text.isEmpty) {
       return;
     }
+    if (socket == null) {
+      return;
+    }
 
-    socketManager.sendMessage(_messageController.text,
-        logInDetails.profile!.userId!, widget.receiverId);
+    socket!.emit('send_message', {
+      "senderId": logInDetails.profile!.userId!,
+      "recieverId": widget.receiverId,
+      "message": _messageController.text
+    });
+
     _messageController.clear();
   }
 
@@ -115,84 +143,73 @@ class _ChatState extends State<Chat> with WidgetsBindingObserver {
           statusBarBrightness: Brightness.dark,
           systemNavigationBarColor: AppColors.backgroundVariant2,
           systemNavigationBarIconBrightness: Brightness.dark),
-      child: GetBuilder<HomeController>(
-          id: 'Chat',
-          builder: (controller) {
-            return Scaffold(
-              appBar: newAppBarBack(context, widget.name),
-              body: SizedBox(
-                width: Get.width,
+      child: Scaffold(
+        appBar: newAppBarBack(context, widget.name),
+        body: SizedBox(
+          width: Get.width,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Expanded(
+                  child: ListView.builder(
+                      itemCount: _chats.length,
+                      itemBuilder: (context, i) {
+                        final chat = _chats[i];
+                        return MessageBubble(
+                          message: chat.message ?? '',
+                          isMe: chat.senderId == logInDetails.profile!.userId!,
+                          userName: 'Me',
+                        );
+                      })),
+              SizedBox(
+                height: Get.height * 0.1,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Expanded(
-                      child: StreamBuilder<dynamic>(
-                        stream: socketManager.chatMessagesStream,
-                        builder: (BuildContext context,
-                            AsyncSnapshot<dynamic> snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return const AppLoader();
-                          } else if (snapshot.hasData) {
-                            return Text('Chat Message: ${snapshot.data}');
-                          } else if (snapshot.hasError) {
-                            return Text('Error: ${snapshot.error}');
-                          } else {
-                            return const Text('No chat message yet');
-                          }
-                        },
-                      ),
+                    const Divider(
+                      color: Colors.grey,
+                      thickness: 0.3,
                     ),
-                    SizedBox(
-                      height: Get.height * 0.1,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          const Divider(
-                            color: Colors.grey,
-                            thickness: 0.3,
+                    Row(
+                      children: [
+                        SizedBox(
+                          width: Get.width * 0.03,
+                        ),
+                        SizedBox(
+                          width: Get.width * 0.03,
+                        ),
+                        Expanded(
+                          child: AppInput(
+                            hintText: '',
+                            controller: _messageController,
                           ),
-                          Row(
-                            children: [
-                              SizedBox(
-                                width: Get.width * 0.03,
-                              ),
-                              SizedBox(
-                                width: Get.width * 0.03,
-                              ),
-                              Expanded(
-                                child: AppInput(
-                                  hintText: '',
-                                  controller: _messageController,
-                                ),
-                              ),
-                              SizedBox(
-                                width: Get.width * 0.03,
-                              ),
-                              IconButton(
-                                onPressed: () {
-                                  sendMessage();
-                                },
-                                icon: const Icon(
-                                  Icons.send,
-                                  color: AppColors.primary,
-                                  size: 30,
-                                ),
-                              ),
-                              SizedBox(
-                                width: Get.width * 0.03,
-                              ),
-                            ],
+                        ),
+                        SizedBox(
+                          width: Get.width * 0.03,
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            sendMessage();
+                          },
+                          icon: const Icon(
+                            Icons.send,
+                            color: AppColors.primary,
+                            size: 30,
                           ),
-                        ],
-                      ),
+                        ),
+                        SizedBox(
+                          width: Get.width * 0.03,
+                        ),
+                      ],
                     ),
                   ],
                 ),
               ),
-              //        bottomNavigationBar:
-            );
-          }),
+            ],
+          ),
+        ),
+        //        bottomNavigationBar:
+      ),
     );
   }
 }

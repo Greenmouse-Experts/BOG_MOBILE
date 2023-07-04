@@ -5,8 +5,14 @@ import 'package:bog/app/data/providers/api.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
 
+import '../data/model/message_model.dart';
+
 class AppChat extends GetxController {
   io.Socket? socket;
+
+  final List<MessageModel> _chats = [];
+
+  List<MessageModel> get chats => _chats;
 
   final StreamController<dynamic> _chatMessagesStreamController =
       StreamController<dynamic>.broadcast();
@@ -34,39 +40,32 @@ class AppChat extends GetxController {
         debugPrint('Connected to the server');
       });
 
-      socket!.on('getUserChatMessages', (data) {
-        print('object');
-        print(data);
-      });
-
-      socket!.on('getUserChatMessages', (data) {
-        print('les chats');
-        print(data.toString());
-      });
-
-      socket!.on('sentMessage', (data) {
-        print('new message');
-        print(data.toString());
-      });
-
-      socket!.on('getChatMessagesApi', (data) {
-        print(data);
-        print('new message');
-
-        _chatMessagesStreamController.add(data);
-      });
-
-      // socket!.on('getUserNotifications', (data) {
-      //   _userNotificationsStreamController.add(data);
-      // });
-
-      // socket!.on('getNotifications', (data) {
-      //   debugPrint(data.toString());
-      //   print('notificationdksks');
-      //   _notificationsStreamController.add(data);
-      // });
       socket!.onConnect((_) {
         debugPrint('Connection established');
+        socket!.on('getUserChatMessages', (data) {
+          print('object');
+          print(data);
+        });
+
+        socket!.on('getUserChatMessages', (data) {
+          print('les chats');
+          print(data.toString());
+        });
+
+        socket!.on('sentMessage', (data) {
+          print('new message');
+          print(data);
+          _chats.add(MessageModel.fromJson(data));
+          print(_chats.length);
+          update();
+        });
+
+        socket!.on('getChatMessagesApi', (data) {
+          print(data);
+          print('new message');
+
+          _chatMessagesStreamController.add(data);
+        });
       });
       socket!.onDisconnect((_) => debugPrint('Connection Disconnection'));
       socket!.onConnectError((err) {});

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:bog/app/data/model/admin_model.dart';
 import 'package:bog/app/modules/chat/chat.dart';
 import 'package:flutter/material.dart';
@@ -10,8 +12,10 @@ import '../../../../core/theme/app_styles.dart';
 import '../../../controllers/home_controller.dart';
 
 // import '../../../data/model/announcement_model.dart';
+import '../../../data/model/log_in_model.dart';
 import '../../../data/providers/api_response.dart';
 
+import '../../../data/providers/my_pref.dart';
 import '../../../global_widgets/app_loader.dart';
 import '../../../global_widgets/global_widgets.dart';
 // import '../../../global_widgets/pdf_page_viewer.dart';
@@ -210,6 +214,31 @@ class _ChatTabState extends State<ChatTab> {
 
                                   _admins = admins;
 
+                                  final productAdmins = _admins
+                                      .where((element) => element.level == 5)
+                                      .toList();
+
+                                  final projectAdmins = _admins
+                                      .where((element) => element.level == 4)
+                                      .toList();
+
+                                  final superAdmins = _admins
+                                      .where((element) => element.level == 1)
+                                      .toList();
+                                  var logInDetails = LogInModel.fromJson(
+                                      jsonDecode(MyPref.logInDetail.val));
+                                  var type = logInDetails.userType;
+
+                                  final List<AdminModel> typeAdmins =
+                                      type == "private_client" ||
+                                              type == 'corporate_client'
+                                          ? [
+                                              ...superAdmins,
+                                            ]
+                                          : type == 'vendors'
+                                              ? [...productAdmins]
+                                              : [...projectAdmins];
+
                                   return admins.isEmpty
                                       ? Column(
                                           mainAxisAlignment:
@@ -227,13 +256,13 @@ class _ChatTabState extends State<ChatTab> {
                                           ],
                                         )
                                       : ListView.builder(
-                                          itemCount: admins.length,
+                                          itemCount: typeAdmins.length,
                                           shrinkWrap: true,
                                           padding: EdgeInsets.zero,
                                           physics:
                                               const BouncingScrollPhysics(),
                                           itemBuilder: (context, i) {
-                                            final admin = admins[i];
+                                            final admin = typeAdmins[i];
                                             return ListTile(
                                               onTap: () => Get.to(() => Chat(
                                                     name: admin.name ?? "",
