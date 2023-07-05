@@ -547,7 +547,7 @@ class _CheckoutState extends State<Checkout> {
                                                   left: width * 0.04,
                                                   right: width * 0.04),
                                               child: SizedBox(
-                                                height: Get.height * 0.35,
+                                                height: Get.height * 0.25,
                                                 child: ListView.builder(
                                                     padding: EdgeInsets.zero,
                                                     itemCount: controller
@@ -558,12 +558,29 @@ class _CheckoutState extends State<Checkout> {
                                                         (context, index) {
                                                       var product = controller
                                                           .productsList[index];
+
+                                                      final productReviews =
+                                                          product.review;
+
+                                                      double sum = 0;
+                                                      var reviewAverage = 0.0;
+                                                      for (var item
+                                                          in productReviews!) {
+                                                        sum += item.star ?? 0;
+                                                      }
+                                                      reviewAverage =
+                                                          productReviews.isEmpty
+                                                              ? 0.0
+                                                              : sum /
+                                                                  productReviews
+                                                                      .length;
                                                       return CartItem(
+                                                        isCheckOut: true,
+                                                        rating: reviewAverage,
                                                         deleteItem: () {
                                                           controller.removeItem(
                                                               product.id!,
                                                               product);
-                                                          Get.back();
                                                         },
                                                         maxcount:
                                                             product.remaining ??
@@ -576,20 +593,26 @@ class _CheckoutState extends State<Checkout> {
                                                         itemIncrement: () {
                                                           controller
                                                               .cartItemIncrement(
-                                                            product.id!,
-                                                          );
+                                                                  product.id!);
                                                         },
                                                         title: product.name
                                                             .toString(),
-                                                        image: product.image
-                                                            .toString(),
+                                                        image: product
+                                                                .productImage!
+                                                                .isEmpty
+                                                            ? "https://www.woolha.com/media/2020/03/eevee.png"
+                                                            : product
+                                                                    .productImage![
+                                                                        0]
+                                                                    .url ??
+                                                                "https://www.woolha.com/media/2020/03/eevee.png",
                                                         price:
                                                             "N ${product.price}",
                                                         quantity: controller
-                                                                    .productsMap[
-                                                                product.id
-                                                                    .toString()] ??
-                                                            1,
+                                                            .cartItems[product
+                                                                .id
+                                                                .toString()]!
+                                                            .quantity,
                                                         quantityChanged:
                                                             (value) {
                                                           controller.productsMap[
@@ -599,6 +622,53 @@ class _CheckoutState extends State<Checkout> {
                                                           controller.update();
                                                         },
                                                       );
+                                                      // return CartItem(
+                                                      //   deleteItem: () {
+                                                      //     controller.removeItem(
+                                                      //         product.id!,
+                                                      //         product);
+                                                      //   },
+                                                      //   rating: reviewAverage,
+                                                      //   maxcount:
+                                                      //       product.remaining ??
+                                                      //           0,
+                                                      //   itemDecrement: () {
+                                                      //     controller
+                                                      //         .cartItemDecrement(
+                                                      //             product.id!);
+                                                      //   },
+                                                      //   itemIncrement: () {
+                                                      //     controller
+                                                      //         .cartItemIncrement(
+                                                      //             product.id!);
+                                                      //   },
+                                                      //   title: product.name
+                                                      //       .toString(),
+                                                      //   image: product
+                                                      //           .productImage!
+                                                      //           .isEmpty
+                                                      //       ? "https://www.woolha.com/media/2020/03/eevee.png"
+                                                      //       : product
+                                                      //               .productImage![
+                                                      //                   0]
+                                                      //               .url ??
+                                                      //           "https://www.woolha.com/media/2020/03/eevee.png",
+                                                      //   price:
+                                                      //       "N ${product.price}",
+                                                      //   quantity: controller
+                                                      //               .productsMap[
+                                                      //           product.id
+                                                      //               .toString()] ??
+                                                      //       1,
+                                                      //   quantityChanged:
+                                                      //       (value) {
+                                                      //     controller.productsMap[
+                                                      //             product.id
+                                                      //                 .toString()] =
+                                                      //         value;
+                                                      //     controller.update();
+                                                      //   },
+                                                      // );
                                                     }),
                                               ),
                                             ),
@@ -607,7 +677,7 @@ class _CheckoutState extends State<Checkout> {
                                                   left: width * 0.04,
                                                   right: width * 0.04),
                                               child: SizedBox(
-                                                height: Get.height * 0.9,
+                                                height: Get.height * 0.5,
                                                 child: SingleChildScrollView(
                                                   child: Column(
                                                     children: [

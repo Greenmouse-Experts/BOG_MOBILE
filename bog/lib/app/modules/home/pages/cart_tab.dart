@@ -174,7 +174,19 @@ class _CartTabState extends State<CartTab> {
                                     itemBuilder: (context, index) {
                                       var product =
                                           controller.productsList[index];
+                                      final productReviews = product.review;
+
+                                      double sum = 0;
+                                      var reviewAverage = 0.0;
+                                      for (var item in productReviews!) {
+                                        sum += item.star ?? 0;
+                                      }
+                                      reviewAverage = productReviews.isEmpty
+                                          ? 0.0
+                                          : sum / productReviews.length;
                                       return CartItem(
+                                        isCheckOut: false,
+                                        rating: reviewAverage,
                                         deleteItem: () {
                                           controller.removeItem(
                                               product.id!, product);
@@ -185,17 +197,23 @@ class _CartTabState extends State<CartTab> {
                                               .cartItemDecrement(product.id!);
                                         },
                                         itemIncrement: () {
-                                          controller.cartItemIncrement(
-                                            product.id!,
-                                          );
+                                          controller
+                                              .cartItemIncrement(product.id!);
                                         },
                                         title: product.name.toString(),
-                                        image: product.image.toString(),
+                                        image: product.productImage!.isEmpty
+                                            ? "https://www.woolha.com/media/2020/03/eevee.png"
+                                            : product.productImage![0].url ??
+                                                "https://www.woolha.com/media/2020/03/eevee.png",
                                         price: "N ${product.price}",
                                         quantity: controller
                                             .cartItems[product.id.toString()]!
                                             .quantity,
-                                        quantityChanged: (value) {},
+                                        quantityChanged: (value) {
+                                          controller.productsMap[
+                                              product.id.toString()] = value;
+                                          controller.update();
+                                        },
                                       );
                                     }),
                           ),
@@ -691,7 +709,7 @@ class _CartTabState extends State<CartTab> {
 class CartItem extends StatelessWidget {
   const CartItem(
       {Key? key,
-      this.image = "assets/images/dummy_image.png",
+      required this.image,
       this.title = "30 Tonnes Sharp Sand",
       this.subTitle = "",
       this.price = "N 115,000",
@@ -700,6 +718,8 @@ class CartItem extends StatelessWidget {
       required this.itemIncrement,
       required this.itemDecrement,
       required this.deleteItem,
+      required this.rating,
+      required this.isCheckOut,
       required this.maxcount})
       : super(key: key);
 
@@ -709,6 +729,8 @@ class CartItem extends StatelessWidget {
   final String price;
   final int quantity;
   final int maxcount;
+  final double rating;
+  final bool isCheckOut;
   final VoidCallback itemIncrement;
   final VoidCallback itemDecrement;
   final VoidCallback deleteItem;
@@ -726,10 +748,9 @@ class CartItem extends StatelessWidget {
               width: 90,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10),
-                child: Image.network(
-                  image,
+                child: CachedNetworkImage(
                   fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) {
+                  errorWidget: (context, url, error) {
                     return Container(
                       height: 90,
                       width: 90,
@@ -748,6 +769,7 @@ class CartItem extends StatelessWidget {
                       ),
                     );
                   },
+                  imageUrl: image,
                 ),
               ),
             ),
@@ -770,7 +792,7 @@ class CartItem extends StatelessWidget {
                       ),
                     ),
                   ),
-                  AppRating(onRatingUpdate: (value) {}, rating: 4.5),
+                  AppRating(onRatingUpdate: (value) {}, rating: rating),
                   Padding(
                     padding: EdgeInsets.only(left: Get.width * 0.015),
                     child: Text(
@@ -792,37 +814,42 @@ class CartItem extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                IconButton(
-                    onPressed: () {
-                      AppOverlay.showInfoDialog(
-                          title: 'Delete Item from Cart',
-                          buttonText: 'Delete Item',
-                          content: 'Are you sure you want to delete this item?',
-                          doubleFunction: true,
-                          onPressed: () {
-                            Get.back();
-                            deleteItem();
-                          });
-                    },
-                    icon: const Icon(
-                      Icons.delete,
-                      color: Colors.red,
-                    )),
-                ItemCounter(
-                  itemDecrement: () {
-                    itemDecrement();
-                  },
-                  itemIncrement: () {
-                    itemIncrement();
-                  },
-                  maxCount: maxcount,
-                  initialCount: quantity,
-                  onCountChanged: (count) {
-                    if (quantityChanged != null) {
-                      quantityChanged!(count);
-                    }
-                  },
-                ),
+                !isCheckOut
+                    ? IconButton(
+                        onPressed: () {
+                          AppOverlay.showInfoDialog(
+                              title: 'Delete Item from Cart',
+                              buttonText: 'Delete Item',
+                              content:
+                                  'Are you sure you want to delete this item?',
+                              doubleFunction: true,
+                              onPressed: () {
+                                Get.back();
+                                deleteItem();
+                              });
+                        },
+                        icon: const Icon(
+                          Icons.delete,
+                          color: Colors.red,
+                        ))
+                    : const SizedBox(),
+                isCheckOut
+                    ? Text('Quantity: $quantity')
+                    : ItemCounter(
+                        itemDecrement: () {
+                          itemDecrement();
+                        },
+                        itemIncrement: () {
+                          itemIncrement();
+                        },
+                        maxCount: maxcount,
+                        initialCount: quantity,
+                        onCountChanged: (count) {
+                          if (quantityChanged != null) {
+                            quantityChanged!(count);
+                          }
+                        },
+                      ),
                 const SizedBox(height: 5),
               ],
             ),
