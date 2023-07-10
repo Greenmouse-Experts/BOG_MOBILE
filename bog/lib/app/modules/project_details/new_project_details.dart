@@ -88,12 +88,14 @@ class _NewProjectDetailPageState extends State<NewProjectDetailPage> {
       ..email = email
       ..currency = "NGN";
 
-    CheckoutResponse response1 = await plugin.checkout(
-      context,
-      method: CheckoutMethod.card,
-      charge: charge,
-      fullscreen: true,
-    );
+    CheckoutResponse response1 = await plugin.checkout(context,
+        method: CheckoutMethod.card,
+        charge: charge,
+        fullscreen: true,
+        logo: SizedBox(
+            height: 40,
+            width: 40,
+            child: Image.asset('assets/images/bog_new_icon.png')));
 
     if (response1.status == true) {
       AppOverlay.loadingOverlay(asyncFunction: () async {
@@ -272,6 +274,7 @@ class _NewProjectDetailPageState extends State<NewProjectDetailPage> {
                                           SizedBox(width: Get.width * 0.02),
                                           SizedBox(
                                             height: Get.width * 0.2,
+                                            width: Get.width * 0.55,
                                             child: Column(
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
@@ -279,12 +282,14 @@ class _NewProjectDetailPageState extends State<NewProjectDetailPage> {
                                                   MainAxisAlignment
                                                       .spaceBetween,
                                               children: [
-                                                ColoredRow(
-                                                    color: AppColors.primary,
-                                                    content:
-                                                        clientProject.title ??
-                                                            '',
-                                                    title: 'Project Name'),
+                                                SizedBox(
+                                                  child: ColoredRow(
+                                                      color: AppColors.primary,
+                                                      content:
+                                                          clientProject.title ??
+                                                              '',
+                                                      title: 'Project Name'),
+                                                ),
                                                 ColoredRow(
                                                     color: AppColors
                                                         .serviceYellow
@@ -851,17 +856,22 @@ class ColoredRow extends StatelessWidget {
             color: color,
           ),
           const SizedBox(width: 4),
-          RichText(
-              text: TextSpan(children: [
-            TextSpan(
-                text: '$title:  ',
-                style: AppTextStyle.subtitle2.copyWith(
-                    color: Colors.black, fontWeight: FontWeight.normal)),
-            TextSpan(
-                text: content,
-                style: AppTextStyle.subtitle1.copyWith(
-                    color: Colors.black, fontWeight: FontWeight.w500)),
-          ]))
+          SizedBox(
+            width: Get.width * 0.5,
+            child: RichText(
+                overflow: TextOverflow.ellipsis,
+                maxLines: 2,
+                text: TextSpan(children: [
+                  TextSpan(
+                      text: '$title: ',
+                      style: AppTextStyle.subtitle2.copyWith(
+                          color: Colors.black, fontWeight: FontWeight.normal)),
+                  TextSpan(
+                      text: content.capitalizeFirst,
+                      style: AppTextStyle.subtitle1.copyWith(
+                          color: Colors.black, fontWeight: FontWeight.w500)),
+                ])),
+          )
         ],
       ),
     );

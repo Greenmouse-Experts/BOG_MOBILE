@@ -45,12 +45,14 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
       ..email = logInDetails.email ?? ''
       ..currency = "NGN";
 
-    CheckoutResponse response = await plugin.checkout(
-      context,
-      method: CheckoutMethod.card,
-      charge: charge,
-      fullscreen: true,
-    );
+    CheckoutResponse response = await plugin.checkout(context,
+        method: CheckoutMethod.card,
+        charge: charge,
+        fullscreen: true,
+        logo: SizedBox(
+            height: 40,
+            width: 40,
+            child: Image.asset('assets/images/bog_new_icon.png')));
 
     if (response.status == true) {
       AppOverlay.loadingOverlay(asyncFunction: () async {
