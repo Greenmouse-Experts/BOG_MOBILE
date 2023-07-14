@@ -132,39 +132,39 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      if (controller.currentType == "Product Partner")
-                        TabBar(
-                          controller: tabController,
-                          padding: EdgeInsets.zero,
-                          labelColor: Colors.black,
-                          unselectedLabelColor: const Color(0xff9A9A9A),
-                          indicatorColor: AppColors.primary,
-                          indicatorSize: TabBarIndicatorSize.tab,
-                          indicatorPadding: EdgeInsets.only(
-                              left: Get.width * 0.045,
-                              right: Get.width * 0.045),
-                          labelStyle: TextStyle(
-                            fontSize: Get.width > 600
-                                ? Get.width * 0.025
-                                : Get.width * 0.035,
-                            fontWeight: FontWeight.w500,
-                          ),
-                          unselectedLabelStyle: TextStyle(
-                            fontSize: Get.width > 600
-                                ? Get.width * 0.025
-                                : Get.width * 0.035,
-                            fontWeight: FontWeight.w500,
-                          ),
-                          tabs: const [
-                            Tab(
-                                text: 'All Orders',
-                                iconMargin: EdgeInsets.zero),
-                            Tab(
-                                text: 'My Deliveries',
-                                iconMargin: EdgeInsets.zero),
-                          ],
-                          onTap: (index) {},
-                        ),
+                      // if (controller.currentType == "Product Partner")
+                      //   TabBar(
+                      //     controller: tabController,
+                      //     padding: EdgeInsets.zero,
+                      //     labelColor: Colors.black,
+                      //     unselectedLabelColor: const Color(0xff9A9A9A),
+                      //     indicatorColor: AppColors.primary,
+                      //     indicatorSize: TabBarIndicatorSize.tab,
+                      //     indicatorPadding: EdgeInsets.only(
+                      //         left: Get.width * 0.045,
+                      //         right: Get.width * 0.045),
+                      //     labelStyle: TextStyle(
+                      //       fontSize: Get.width > 600
+                      //           ? Get.width * 0.025
+                      //           : Get.width * 0.035,
+                      //       fontWeight: FontWeight.w500,
+                      //     ),
+                      //     unselectedLabelStyle: TextStyle(
+                      //       fontSize: Get.width > 600
+                      //           ? Get.width * 0.025
+                      //           : Get.width * 0.035,
+                      //       fontWeight: FontWeight.w500,
+                      //     ),
+                      //     tabs: const [
+                      //       Tab(
+                      //           text: 'All Orders',
+                      //           iconMargin: EdgeInsets.zero),
+                      //       Tab(
+                      //           text: 'My Deliveries',
+                      //           iconMargin: EdgeInsets.zero),
+                      //     ],
+                      //     onTap: (index) {},
+                      //   ),
                       if (controller.currentType == "Product Partner")
                         FutureBuilder<ApiResponse>(
                             future: getOrderRequests,
@@ -195,139 +195,121 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
                                       .where((element) =>
                                           element.order!.status == 'pending')
                                       .toList();
-
-                                  return SizedBox(
-                                    height: Get.height * 0.77,
-                                    child: TabBarView(
-                                      controller: tabController,
-                                      children: [
-                                        Column(
-                                          children: [
-                                            Padding(
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: Get.width * 0.03),
-                                              child:
-                                                  PageDropButtonWithoutBackground(
-                                                label: "",
-                                                hint: '',
-                                                padding:
-                                                    const EdgeInsets.fromLTRB(
-                                                        10, 0, 5, 0),
-                                                onChanged: (val) {
-                                                  currentOrder.value = val;
-                                                  controller.update();
-                                                  setState(() {});
-                                                },
-                                                value: "All Order Requests",
-                                                items: [
-                                                  "All Order Requests",
-                                                  "Delivered",
-                                                  "Cancelled",
-                                                  "In progress"
-                                                ].map<DropdownMenuItem<String>>(
-                                                    (String value) {
-                                                  return DropdownMenuItem<
-                                                      String>(
-                                                    value: value,
-                                                    child: Text(
-                                                      value,
-                                                      style: AppTextStyle
-                                                          .subtitle1
-                                                          .copyWith(
-                                                        color:
-                                                            AppColors.primary,
-                                                        fontSize: Get.width >
-                                                                600
-                                                            ? Get.width * 0.025
-                                                            : Get.width * 0.035,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                      ),
-                                                      textAlign:
-                                                          TextAlign.start,
-                                                    ),
-                                                  );
-                                                }).toList(),
+                                  return Column(
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: Get.width * 0.03),
+                                        child: PageDropButtonWithoutBackground(
+                                          label: "",
+                                          hint: '',
+                                          padding: const EdgeInsets.fromLTRB(
+                                              10, 0, 5, 0),
+                                          onChanged: (val) {
+                                            currentOrder.value = val;
+                                            controller.update();
+                                            setState(() {});
+                                          },
+                                          value: "All Order Requests",
+                                          items: [
+                                            "All Order Requests",
+                                            "Delivered",
+                                            "Cancelled",
+                                            "In progress"
+                                          ].map<DropdownMenuItem<String>>(
+                                              (String value) {
+                                            return DropdownMenuItem<String>(
+                                              value: value,
+                                              child: Text(
+                                                value,
+                                                style: AppTextStyle.subtitle1
+                                                    .copyWith(
+                                                  color: AppColors.primary,
+                                                  fontSize: Get.width > 600
+                                                      ? Get.width * 0.025
+                                                      : Get.width * 0.035,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                                textAlign: TextAlign.start,
                                               ),
-                                            ),
-                                            SizedBox(
-                                              height: Get.height * 0.7,
-                                              child: orderRequests.isEmpty
-                                                  ? const Center(
-                                                      child: Text(
-                                                          'You have no requests available'),
-                                                    )
-                                                  : ListView.builder(
-                                                      itemCount: currentOrder
-                                                                  .value ==
-                                                              'All Order Requests'
-                                                          ? orderRequests.length
+                                            );
+                                          }).toList(),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: Get.height * 0.7,
+                                        child: orderRequests.isEmpty
+                                            ? const Center(
+                                                child: Text(
+                                                    'You have no requests available'),
+                                              )
+                                            : ListView.builder(
+                                                itemCount: currentOrder.value ==
+                                                        'All Order Requests'
+                                                    ? orderRequests.length
+                                                    : currentOrder.value ==
+                                                            'In progress'
+                                                        ? inProgressOrders
+                                                            .length
+                                                        : currentOrder.value ==
+                                                                'Delivered'
+                                                            ? deliveredOrders
+                                                                .length
+                                                            : cancelledOrders
+                                                                .length,
+                                                scrollDirection: Axis.vertical,
+                                                shrinkWrap: true,
+                                                padding:
+                                                    const EdgeInsets.all(0),
+                                                itemBuilder:
+                                                    (BuildContext context,
+                                                        int index) {
+                                                  final order = currentOrder
+                                                              .value ==
+                                                          'All Order Requests'
+                                                      ? orderRequests[index]
+                                                      : currentOrder.value ==
+                                                              'In progress'
+                                                          ? inProgressOrders[
+                                                              index]
                                                           : currentOrder
                                                                       .value ==
-                                                                  'In progress'
-                                                              ? inProgressOrders
-                                                                  .length
-                                                              : currentOrder
-                                                                          .value ==
-                                                                      'Delivered'
-                                                                  ? deliveredOrders
-                                                                      .length
-                                                                  : cancelledOrders
-                                                                      .length,
-                                                      scrollDirection:
-                                                          Axis.vertical,
-                                                      shrinkWrap: true,
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              0),
-                                                      itemBuilder:
-                                                          (BuildContext context,
-                                                              int index) {
-                                                        final order = currentOrder
-                                                                    .value ==
-                                                                'All Order Requests'
-                                                            ? orderRequests[
-                                                                index]
-                                                            : currentOrder
-                                                                        .value ==
-                                                                    'In progress'
-                                                                ? inProgressOrders[
-                                                                    index]
-                                                                : currentOrder
-                                                                            .value ==
-                                                                        'Delivered'
-                                                                    ? deliveredOrders[
-                                                                        index]
-                                                                    : cancelledOrders[
-                                                                        index];
-                                                        return OrderRequestItem(
-                                                          name: order.product!
-                                                                  .name ??
-                                                              '',
-                                                          status: order.order!
-                                                                  .status ??
-                                                              '',
-                                                          orderSlug: order
-                                                                  .order!
-                                                                  .orderSlug ??
-                                                              '',
-                                                          price: order
-                                                              .paymentInfo!
-                                                              .amount
-                                                              .toString(),
-                                                          quantity:
-                                                              order.quantity ??
-                                                                  0,
-                                                        );
-                                                      },
-                                                    ),
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox()
-                                      ],
-                                    ),
+                                                                  'Delivered'
+                                                              ? deliveredOrders[
+                                                                  index]
+                                                              : cancelledOrders[
+                                                                  index];
+                                                  return OrderRequestItem(
+                                                    name: order.product!.name ??
+                                                        '',
+                                                    status:
+                                                        order.order!.status ??
+                                                            '',
+                                                    orderSlug: order
+                                                            .order!.orderSlug ??
+                                                        '',
+                                                    price: order
+                                                        .paymentInfo!.amount
+                                                        .toString(),
+                                                    quantity:
+                                                        order.quantity ?? 0,
+                                                  );
+                                                },
+                                              ),
+                                      ),
+                                    ],
                                   );
+
+                                  // return SizedBox(
+                                  //   height: Get.height * 0.77,
+                                  //   child: TabBarView(
+                                  //     controller: tabController,
+                                  //     children: [
+
+                                  //       const SizedBox()
+                                  //     ],
+                                  //   ),
+                                  // );
                                 } else {
                                   return const Center(
                                     child: Text('An error occurred'),

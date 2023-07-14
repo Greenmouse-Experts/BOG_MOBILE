@@ -12,7 +12,7 @@ import '../data/providers/my_pref.dart';
 
 import '../modules/meetings/meeting.dart';
 import '../modules/orders/my_orders.dart';
-import '../modules/reviews/reviews.dart';
+// import '../modules/reviews/reviews.dart';
 import '../modules/settings/support.dart';
 import '../modules/switch/switch.dart';
 import '../modules/transactions/transaction.dart';
@@ -188,16 +188,16 @@ class _AppDrawerState extends State<AppDrawer> {
                             },
                             imageAsset: "assets/images/four1.png",
                             showArrow: true),
-                        if (controller.currentType != "Client" &&
-                            controller.currentType != "Corporate Client")
-                          _TextButton(
-                              text: "Reviews",
-                              onPressed: () {
-                                Get.back();
-                                Get.to(() => const Reviews());
-                              },
-                              imageAsset: "assets/images/carbon_review.png",
-                              showArrow: true),
+                        // if (controller.currentType != "Client" &&
+                        //     controller.currentType != "Corporate Client")
+                        //   _TextButton(
+                        //       text: "Reviews",
+                        //       onPressed: () {
+                        //         Get.back();
+                        //         Get.to(() => const Reviews());
+                        //       },
+                        //       imageAsset: "assets/images/carbon_review.png",
+                        //       showArrow: true),
                         Expanded(
                             child: Column(
                           mainAxisAlignment: MainAxisAlignment.end,
