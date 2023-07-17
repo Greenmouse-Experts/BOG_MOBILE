@@ -86,21 +86,22 @@ class AuthController extends GetxController {
   //Sign Up
   Future<void> signupServiceProvider(GlobalKey<FormState> formKey) async {
     if (formKey.currentState!.validate()) {
-      var message = "";
+      // var message = "";
       var buttonMessage = "";
       ApiResponse response =
           await userRepo.signup(_signupServiceProviderPayload);
       if (response.message == "This Email is already in Use") {
-        message = "This Email is already in Use, Please Login";
+        // message = "This Email is already in Use, Please Login";
         buttonMessage = "Login";
       } else {
-        message =
-            "Account created successfully, Check your email for otp verification";
+        // message =
+        //     "Account created successfully, Check your email for otp verification";
         buttonMessage = "Continue";
       }
+      print(response.isSuccessful);
       AppOverlay.showInfoDialog(
         title: response.isSuccessful ? 'Success' : 'Failure',
-        content: message,
+        content: response.message,
         buttonText: buttonMessage,
         onPressed: () {
           if (response.message == "This Email is already in Use") {

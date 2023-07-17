@@ -74,6 +74,7 @@ class Api {
         cancelToken: token,
         options: Options(method: 'POST', headers: hasHeader ? head : null),
       );
+      print(request.data);
       return ApiResponse.response(request);
     } on DioError catch (e) {
       return e.toApiError(cancelToken: token);
