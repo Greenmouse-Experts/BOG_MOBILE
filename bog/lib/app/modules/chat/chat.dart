@@ -40,10 +40,13 @@ class Chat extends StatefulWidget {
 
 class _ChatState extends State<Chat> with WidgetsBindingObserver {
   // late io.Socket _socket;
+
   io.Socket? socket;
   late AppChat socketManager;
   var logInDetails =
       UserDetailsModel.fromJson(jsonDecode(MyPref.userDetails.val));
+
+  String conversationId = '';
 
   final List<MessageModel> _chats = [];
 
@@ -71,20 +74,31 @@ class _ChatState extends State<Chat> with WidgetsBindingObserver {
       socket = io.io(
           Api.chatUrl, io.OptionBuilder().setTransports(['websocket']).build());
       socket!.connect();
-      socket!.on('connect', (_) {
-        debugPrint('Connected to the server');
-      });
 
       socket!.onConnect((_) {
         debugPrint('Connection established');
-        socket!.on('getUserChatMessages', (data) {
-          print('object');
+        socket!.emit('addNewUser', logInDetails.profile!.userId!);
+
+        socket!.on('getOnlineUsers', (data) {
+          print('onliners');
           print(data);
         });
 
-        socket!.on('getUserChatMessages', (data) {
+        socket!.emit('getUserConversations ');
+
+        // socket!.emit('getUserConversations', (data) {
+        //   print('this is the emited data');
+        //   print(data);
+        // });
+
+        socket!.on('getUserNotifications', (data) {
+          print('user notifications');
+          print(data);
+        });
+
+        socket!.on('getUserConversations', (data) {
           print('les chats');
-          print(data.toString());
+          print(data);
         });
 
         socket!.on('sentMessage', (data) {
@@ -97,9 +111,13 @@ class _ChatState extends State<Chat> with WidgetsBindingObserver {
           //  update();
         });
 
+        // // socket!.on('getUserChatMessages', (data) {
+        // //   print('dangote');
+        // // });
+
         socket!.on('getChatMessagesApi', (data) {
           print(data);
-          print('new message');
+          print('new message wanne');
 
           // _chatMessagesStreamController.add(data);
         });
@@ -121,18 +139,22 @@ class _ChatState extends State<Chat> with WidgetsBindingObserver {
     if (socket == null) {
       return;
     }
-
+    // print(logInDetails.profile!.userId!);
     socket!.emit('send_message', {
       "senderId": logInDetails.profile!.userId!,
       "recieverId": widget.receiverId,
-      "message": _messageController.text
+      "message": _messageController.text,
+      "conversationId": "73dc0f9e-7da7-42a7-b2c9-dd1ecf922c69"
     });
+
+    print('message sent successfully');
 
     _messageController.clear();
   }
 
   @override
   Widget build(BuildContext context) {
+    // print(widget.receiverId);
     // var width = Get.width;
     //final Size size = MediaQuery.of(context).size;
     // double multiplier = 25 * size.height * 0.01;

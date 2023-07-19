@@ -98,7 +98,6 @@ class AuthController extends GetxController {
         //     "Account created successfully, Check your email for otp verification";
         buttonMessage = "Continue";
       }
-      print(response.isSuccessful);
       AppOverlay.showInfoDialog(
         title: response.isSuccessful ? 'Success' : 'Failure',
         content: response.message,
