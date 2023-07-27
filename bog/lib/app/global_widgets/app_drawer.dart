@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:bog/app/modules/chat/load_chats.dart';
+// import 'package:bog/app/modules/chat/load_chats.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -189,15 +189,15 @@ class _AppDrawerState extends State<AppDrawer> {
                             },
                             imageAsset: "assets/images/four1.png",
                             showArrow: true),
-                        _TextButton(
-                            text: "Chat",
-                            onPressed: () {
-                              Get.back();
+                        // _TextButton(
+                        //     text: "Chat",
+                        //     onPressed: () {
+                        //       Get.back();
 
-                              Get.to(() => const LoadChats());
-                            },
-                            imageAsset: "assets/images/chat-sas.png",
-                            showArrow: true),
+                        //       Get.to(() => const LoadChats());
+                        //     },
+                        //     imageAsset: "assets/images/chat-sas.png",
+                        //     showArrow: true),
                         // if (controller.currentType != "Client" &&
                         //     controller.currentType != "Corporate Client")
                         //   _TextButton(

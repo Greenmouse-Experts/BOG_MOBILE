@@ -42,7 +42,7 @@ class _HomeTabState extends State<HomeTab> {
   @override
   void initState() {
     final controller = Get.find<HomeController>();
- //   Get.put(HomeController(UserRepository(Api())));
+    //   Get.put(HomeController(UserRepository(Api())));
     var logInDetails =
         UserDetailsModel.fromJson(jsonDecode(MyPref.userDetails.val));
     getNotifications = controller.userRepo
@@ -53,7 +53,7 @@ class _HomeTabState extends State<HomeTab> {
 
   @override
   Widget build(BuildContext context) {
-   //   Get.put(HomeController(UserRepository(Api())));
+    //   Get.put(HomeController(UserRepository(Api())));
     return GetBuilder<HomeController>(builder: (controller) {
       return SizedBox(
           height: Get.height * 0.93,
@@ -878,25 +878,25 @@ class ProductPartnerHomeWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     PriceSwitcher(isVerified: isVerified),
-                    Text(
-                      'Total Earnings',
-                      style: AppTextStyle.caption2
-                          .copyWith(color: AppColors.white),
-                    ),
+                    // Text(
+                    //   'Total Earnings',
+                    //   style: AppTextStyle.caption2
+                    //       .copyWith(color: AppColors.white),
+                    // ),
                     const SizedBox(height: 10),
                     Row(
                       children: [
-                        ElevatedButton(
-                          onPressed: () {},
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.white,
-                          ),
-                          child: Text(
-                            'Request Payout',
-                            style: AppTextStyle.caption.copyWith(
-                                color: AppColors.blackShade.withOpacity(0.8)),
-                          ),
-                        ),
+                        // ElevatedButton(
+                        //   onPressed: () {},
+                        //   style: ElevatedButton.styleFrom(
+                        //     backgroundColor: AppColors.white,
+                        //   ),
+                        //   child: Text(
+                        //     'Request Payout',
+                        //     style: AppTextStyle.caption.copyWith(
+                        //         color: AppColors.blackShade.withOpacity(0.8)),
+                        //   ),
+                        // ),
                         const Spacer(),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -1202,25 +1202,25 @@ class SPHomeWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     PriceSwitcher(isVerified: isVerified),
-                    Text(
-                      'Total Earnings',
-                      style: AppTextStyle.caption2
-                          .copyWith(color: AppColors.white),
-                    ),
+                    // Text(
+                    //   'Total Earnings',
+                    //   style: AppTextStyle.caption2
+                    //       .copyWith(color: AppColors.white),
+                    // ),
                     SizedBox(height: Get.height * 0.01),
                     Row(
                       children: [
-                        ElevatedButton(
-                          onPressed: () {},
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.white,
-                          ),
-                          child: Text(
-                            'Request Payout',
-                            style: AppTextStyle.caption.copyWith(
-                                color: AppColors.blackShade.withOpacity(0.8)),
-                          ),
-                        ),
+                        // ElevatedButton(
+                        //   onPressed: () {},
+                        //   style: ElevatedButton.styleFrom(
+                        //     backgroundColor: AppColors.white,
+                        //   ),
+                        //   child: Text(
+                        //     'Request Payout',
+                        //     style: AppTextStyle.caption.copyWith(
+                        //         color: AppColors.blackShade.withOpacity(0.8)),
+                        //   ),
+                        // ),
                         const Spacer(),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
