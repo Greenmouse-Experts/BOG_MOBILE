@@ -1185,19 +1185,20 @@ class ProductItem extends StatelessWidget {
                                           fontSize: 12 * Get.textScaleFactor,
                                           color: Colors.black),
                                     ))),
-                          PopupMenuItem(
-                              child: TextButton(
-                                  onPressed: () {
-                                    Get.back();
+                          if (status != 'approved')
+                            PopupMenuItem(
+                                child: TextButton(
+                                    onPressed: () {
+                                      Get.back();
 
-                                    editProduct();
-                                  },
-                                  child: Text(
-                                    'Edit Product',
-                                    style: TextStyle(
-                                        fontSize: 12 * Get.textScaleFactor,
-                                        color: Colors.black),
-                                  ))),
+                                      editProduct();
+                                    },
+                                    child: Text(
+                                      'Edit Product',
+                                      style: TextStyle(
+                                          fontSize: 12 * Get.textScaleFactor,
+                                          color: Colors.black),
+                                    ))),
                           PopupMenuItem(
                               child: TextButton(
                                   onPressed: () {

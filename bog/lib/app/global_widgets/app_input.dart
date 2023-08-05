@@ -27,6 +27,7 @@ class AppInput extends StatefulWidget {
     this.readOnly = false,
     this.maxLines = 1,
     this.validator,
+    this.autofillHints,
     this.isPhoneNumber = false,
     this.autovalidateMode,
     this.prefexIcon,
@@ -52,6 +53,7 @@ class AppInput extends StatefulWidget {
   final TextInputType keyboardType;
   final FocusNode? focusNode;
   final Function(String)? onFieldSubmitted;
+  final Iterable<String>? autofillHints;
   final Function(String)? onChanged;
   final BorderSide borderSide;
   final double borderRadius;
@@ -113,11 +115,9 @@ class _AppInputState extends State<AppInput> {
         widget.isPhoneNumber!
             ? IntlPhoneField(
                 initialCountryCode: 'NG',
-                
                 initialValue: widget.initalValue,
                 obscureText: obscureText,
                 readOnly: widget.readOnly,
-                
                 textAlign: widget.textAlign,
                 autovalidateMode: widget.autovalidateMode,
                 controller: widget.controller,
@@ -177,6 +177,7 @@ class _AppInputState extends State<AppInput> {
                 controller: widget.controller,
                 maxLength: widget.maxLength,
                 validator: widget.validator,
+                autofillHints: widget.autofillHints,
                 focusNode: widget.focusNode,
                 keyboardType: widget.keyboardType,
                 style: AppTextStyle.bodyText2.copyWith(

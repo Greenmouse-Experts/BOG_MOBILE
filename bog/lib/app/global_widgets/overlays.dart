@@ -778,8 +778,7 @@ class AppOverlay {
                                         //   'reasonOfInterest': reasonOfInterest,
                                         //   'userId': userId
                                         // });
-                                        print(newResponse.message);
-                                        print(newResponse.data);
+
                                         if (newResponse.isSuccessful) {
                                           chosenInterest = '';
                                           reasonOfInterest = '';

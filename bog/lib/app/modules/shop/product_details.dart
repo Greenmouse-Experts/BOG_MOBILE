@@ -20,6 +20,7 @@ import '../../global_widgets/app_button.dart';
 
 import '../../global_widgets/app_loader.dart';
 import '../../global_widgets/bottom_widget.dart';
+import '../../global_widgets/image_slider.dart';
 import '../../global_widgets/item_counter.dart';
 import '../../global_widgets/new_app_bar.dart';
 
@@ -62,6 +63,8 @@ class _ProductDetailsState extends State<ProductDetails>
 
   @override
   Widget build(BuildContext context) {
+    final available =
+        (widget.prod.remaining ?? 0) <= 0 ? 0 : widget.prod.remaining ?? 0;
     var width = Get.width;
     final Size size = MediaQuery.of(context).size;
     double multiplier = 25 * size.height * 0.01;
@@ -114,66 +117,71 @@ class _ProductDetailsState extends State<ProductDetails>
                           return Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    left: Get.width * 0.03,
-                                    right: Get.width * 0.03),
-                                child: Container(
-                                  height: Get.height * 0.28,
-                                  width: 90,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8),
-                                    color: AppColors.bostonUniRed,
-                                  ),
-                                  child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(10),
-                                      child: Image.network(
-                                          product.productImage!.isEmpty
-                                              ? "https://www.woolha.com/media/2020/03/eevee.png"
-                                              : product.productImage![0].url ??
-                                                  "https://www.woolha.com/media/2020/03/eevee.png",
-                                          fit: BoxFit.cover, errorBuilder:
-                                              (context, error, stackTrace) {
-                                        return Container(
-                                          width: width * 0.35,
-                                          height: Get.height * 0.1,
-                                          decoration: BoxDecoration(
-                                            color: AppColors.primary,
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            border: Border.all(
-                                                color: AppColors.grey
-                                                    .withOpacity(0.1),
-                                                width: 1),
-                                          ),
-                                          child: Center(
-                                            child: Icon(
-                                              Icons.image_not_supported,
-                                              color: AppColors.background,
-                                              size: width * 0.1,
-                                            ),
-                                          ),
-                                        );
-                                      })),
-                                ),
-                              ),
-                              SizedBox(
-                                height: Get.height * 0.01,
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Container(
-                                    width: Get.width * 0.018,
-                                    height: Get.width * 0.018,
-                                    decoration: BoxDecoration(
-                                      color: AppColors.primary,
-                                      borderRadius:
-                                          BorderRadius.circular(100.0),
-                                    ),
-                                  ),
-                                ],
-                              ),
+                              ImageSlider(images: product.productImage!),
+                              // Padding(
+                              //   padding: EdgeInsets.only(
+                              //       left: Get.width * 0.03,
+                              //       right: Get.width * 0.03),
+                              //   child: Container(
+                              //     height: Get.height * 0.28,
+                              //     width: 90,
+                              //     decoration: BoxDecoration(
+                              //       borderRadius: BorderRadius.circular(8),
+                              //       color: AppColors.bostonUniRed,
+                              //     ),
+                              //     child: ClipRRect(
+                              //         borderRadius: BorderRadius.circular(10),
+                              //         child: CachedNetworkImage(
+                              //             imageUrl:
+                              //                 // 'https://ichef.bbci.co.uk/news/976/cpsprodpb/16DEB/production/_121457639_tv071221629.jpg',
+                              //                 product.productImage!.isEmpty
+                              //                     ? ""
+                              //                     : product.productImage![0]
+                              //                             .url ??
+                              //                         "",
+                              //             fit: BoxFit.cover,
+                              //             errorWidget:
+                              //                 (context, error, stackTrace) {
+                              //               return Container(
+                              //                 width: width * 0.35,
+                              //                 height: Get.height * 0.1,
+                              //                 decoration: BoxDecoration(
+                              //                   color: AppColors.primary,
+                              //                   borderRadius:
+                              //                       BorderRadius.circular(10),
+                              //                   border: Border.all(
+                              //                       color: AppColors.grey
+                              //                           .withOpacity(0.1),
+                              //                       width: 1),
+                              //                 ),
+                              //                 child: Center(
+                              //                   child: Icon(
+                              //                     Icons.image_not_supported,
+                              //                     color: AppColors.background,
+                              //                     size: width * 0.1,
+                              //                   ),
+                              //                 ),
+                              //               );
+                              //             })),
+                              //   ),
+                              // ),
+                              // SizedBox(
+                              //   height: Get.height * 0.01,
+                              // ),
+                              // Row(
+                              //   mainAxisAlignment: MainAxisAlignment.center,
+                              //   children: [
+                              //     Container(
+                              //       width: Get.width * 0.018,
+                              //       height: Get.width * 0.018,
+                              //       decoration: BoxDecoration(
+                              //         color: AppColors.primary,
+                              //         borderRadius:
+                              //             BorderRadius.circular(100.0),
+                              //       ),
+                              //     ),
+                              //   ],
+                              // ),
                               SizedBox(
                                 height: Get.height * 0.02,
                               ),
@@ -294,9 +302,17 @@ class _ProductDetailsState extends State<ProductDetails>
                                   ],
                                 ),
                               ),
-                              SizedBox(
-                                height: Get.height * 0.03,
+                              SizedBox(height: Get.height * 0.01),
+                              Padding(
+                                padding: EdgeInsets.only(
+                                    left: Get.width * 0.03,
+                                    right: Get.width * 0.03),
+                                child: Text(
+                                  'Quantity Available : $available',
+                                  style: AppTextStyle.bodyText2,
+                                ),
                               ),
+                              SizedBox(height: Get.height * 0.01),
                               Padding(
                                 padding: EdgeInsets.only(
                                     left: Get.width * 0.0,
@@ -503,7 +519,7 @@ class _ProductDetailsState extends State<ProductDetails>
                                   padding: EdgeInsets.only(
                                       left: Get.width * 0.03,
                                       right: Get.width * 0.03),
-                                  child: AppButton(
+                                  child: AppButton2(
                                     title: controller.cartItems.keys
                                             .contains(product.id)
                                         ? 'Proceed to Checkout'

@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:feather_icons/feather_icons.dart';
 import 'package:get/get.dart';
 
 import '../data/model/cart_model.dart';
 import '../data/model/my_products.dart';
+import '../data/providers/my_pref.dart';
 import '../modules/home/pages/cart_tab.dart';
 import '../modules/home/pages/chat_tab.dart';
 import '../modules/home/pages/home_tab.dart';
@@ -124,8 +127,19 @@ class HomeController extends GetxController {
   List<MyProducts> productsList = [];
   Map<String, int> productsMap = {};
 
-  final Map<String, CartModel> _cartItems = {};
+  Map<String, CartModel> _cartItems = {};
   RxMap<String, CartModel> get cartItems => _cartItems.obs;
+
+  void saveCartLocally() {
+    print(jsonEncode(_cartItems.toString()));
+    // MyPref.userCart.val = jsonEncode(_cartItems.toString());
+  }
+
+  void restoreCart() {
+    print(MyPref.userCart.val);
+    //  _cartItems = jsonDecode(MyPref.userCart.val);
+    update();
+  }
 
   void addItem(MyProducts product, int quantity) {
     final remQuantity = product.remaining ?? 0;
@@ -179,7 +193,9 @@ class HomeController extends GetxController {
         duration: const Duration(seconds: 2),
       );
     }
+
     update();
+    saveCartLocally();
   }
 
   void removeItem(String productId, MyProducts product) {
@@ -188,6 +204,8 @@ class HomeController extends GetxController {
       productsList.remove(product);
     }
     update();
+
+    saveCartLocally();
   }
 
   void cartItemIncrement(String productId) {
@@ -202,7 +220,9 @@ class HomeController extends GetxController {
         );
       });
     }
+
     update();
+    saveCartLocally();
   }
 
   int get subTotalPrice {
@@ -223,6 +243,8 @@ class HomeController extends GetxController {
               ));
     }
     update();
+
+    saveCartLocally();
   }
 
   void clearCart() {
@@ -230,5 +252,7 @@ class HomeController extends GetxController {
     productsMap.clear();
     _cartItems.clear();
     update();
+
+    saveCartLocally();
   }
 }

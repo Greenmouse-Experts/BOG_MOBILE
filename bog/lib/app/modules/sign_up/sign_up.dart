@@ -1,3 +1,5 @@
+import 'dart:io' show Platform;
+
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -325,36 +327,40 @@ class SignUp extends GetView<AuthController> {
                                       bold: false,
                                     ),
                                     //  GoogleUserCircleAvatar(identity: GoogleIdentity()),
-                                    const OptionDivider(),
+                                    Platform.isIOS
+                                        ? const SizedBox()
+                                        : const OptionDivider(),
                                     SizedBox(height: Get.height * 0.01),
-                                    Padding(
-                                      padding: const EdgeInsets.all(1.0),
-                                      child: AppButton(
-                                        isElevated: true,
-                                        title: 'Sign up with Google',
-                                        trailingColor: Colors.pink,
-                                        borderRadius: 10,
-                                        bckgrndColor:
-                                            AppColors.backgroundVariant2,
-                                        bold: false,
-                                        hasIcon: true,
-                                        fontColor: Colors.black,
-                                        onPressed: () {
-                                          controller.handleSignUpGoogle();
-                                        },
-                                      ),
-                                    ),
+                                    Platform.isIOS
+                                        ? const SizedBox()
+                                        : Padding(
+                                            padding: const EdgeInsets.all(1.0),
+                                            child: AppButton(
+                                              isElevated: true,
+                                              title: 'Sign up with Google',
+                                              trailingColor: Colors.pink,
+                                              borderRadius: 10,
+                                              bckgrndColor:
+                                                  AppColors.backgroundVariant2,
+                                              bold: false,
+                                              hasIcon: true,
+                                              fontColor: Colors.black,
+                                              onPressed: () {
+                                                controller.handleSignUpGoogle();
+                                              },
+                                            ),
+                                          ),
                                     SizedBox(height: Get.height * 0.02),
-                                    AppButton(
-                                      title: 'Sign up with Apple',
-                                      isGoogle: false,
-                                      trailingColor: Colors.pink,
-                                      borderRadius: 10,
-                                      bckgrndColor: Colors.black,
-                                      hasIcon: true,
-                                      fontColor: AppColors.background,
-                                      onPressed: () {},
-                                    ),
+                                    // AppButton(
+                                    //   title: 'Sign up with Apple',
+                                    //   isGoogle: false,
+                                    //   trailingColor: Colors.pink,
+                                    //   borderRadius: 10,
+                                    //   bckgrndColor: Colors.black,
+                                    //   hasIcon: true,
+                                    //   fontColor: AppColors.background,
+                                    //   onPressed: () {},
+                                    // ),
                                   ],
                                 ),
                               ),

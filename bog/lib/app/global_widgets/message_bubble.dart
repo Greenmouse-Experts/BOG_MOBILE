@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../core/theme/theme.dart';
+
 class MessageBubble extends StatelessWidget {
   final String message;
   final bool isMe;
@@ -25,7 +27,7 @@ class MessageBubble extends StatelessWidget {
             maxWidth: 280,
           ),
           decoration: BoxDecoration(
-            color: isMe ? const Color(0xff9e20da) : Colors.pink,
+            color: isMe ? AppColors.primary : Colors.pink,
             borderRadius: BorderRadius.only(
                 topLeft: const Radius.circular(12),
                 topRight: const Radius.circular(12),

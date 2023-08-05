@@ -51,7 +51,6 @@ class _UpdateTaxDetailsState extends State<UpdateTaxDetails> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-         
           FutureBuilder<ApiResponse>(
               future: getTaxInfo,
               builder: (context, snapshot) {
@@ -74,7 +73,7 @@ class _UpdateTaxDetailsState extends State<UpdateTaxDetails> {
                           PageInput(
                             hint: '',
                             label: 'VAT Registration Number',
-                            keyboardType: TextInputType.number,
+                            keyboardType: TextInputType.text,
                             controller: vatRegNum,
                             validator: MinLengthValidator(1,
                                 errorText:
@@ -84,7 +83,7 @@ class _UpdateTaxDetailsState extends State<UpdateTaxDetails> {
                           PageInput(
                             hint: '',
                             label: 'TAX Identification Number',
-                            keyboardType: TextInputType.number,
+                            keyboardType: TextInputType.text,
                             controller: taxIdNum,
                             validator: MinLengthValidator(1,
                                 errorText: 'Enter a valid TIN Number'),

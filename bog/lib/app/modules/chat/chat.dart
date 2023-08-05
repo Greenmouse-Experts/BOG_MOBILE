@@ -63,7 +63,15 @@ class _ChatState extends State<Chat> with WidgetsBindingObserver {
 
   @override
   void dispose() {
+    closeSocket();
     super.dispose();
+  }
+
+  void closeSocket() {
+    if (socket == null) {
+      return;
+    }
+    socket!.disconnect();
   }
 
   void initSocket() {
@@ -79,10 +87,7 @@ class _ChatState extends State<Chat> with WidgetsBindingObserver {
         debugPrint('Connection established');
         socket!.emit('addNewUser', logInDetails.profile!.userId!);
 
-        socket!.on('getOnlineUsers', (data) {
-          print('onliners');
-          print(data);
-        });
+        socket!.on('getOnlineUsers', (data) {});
 
         socket!.emit('getUserConversations ');
 
@@ -91,23 +96,17 @@ class _ChatState extends State<Chat> with WidgetsBindingObserver {
         //   print(data);
         // });
 
-        socket!.on('getUserNotifications', (data) {
-          print('user notifications');
-          print(data);
-        });
+        socket!.on('getUserNotifications', (data) {});
 
         socket!.on('getUserConversations', (data) {
-          print('les chats');
-          print(data);
+          print('object');
         });
 
         socket!.on('sentMessage', (data) {
-          print('new message');
-          print(data);
           setState(() {
             _chats.add(MessageModel.fromJson(data));
           });
-          print(_chats.length);
+
           //  update();
         });
 
@@ -116,9 +115,6 @@ class _ChatState extends State<Chat> with WidgetsBindingObserver {
         // // });
 
         socket!.on('getChatMessagesApi', (data) {
-          print(data);
-          print('new message wanne');
-
           // _chatMessagesStreamController.add(data);
         });
       });
@@ -146,8 +142,6 @@ class _ChatState extends State<Chat> with WidgetsBindingObserver {
       "message": _messageController.text,
       "conversationId": "73dc0f9e-7da7-42a7-b2c9-dd1ecf922c69"
     });
-
-    print('message sent successfully');
 
     _messageController.clear();
   }

@@ -11,6 +11,7 @@ import '../controllers/home_controller.dart';
 import '../data/model/log_in_model.dart';
 import '../data/providers/my_pref.dart';
 
+import '../modules/chat/load_chats.dart';
 import '../modules/meetings/meeting.dart';
 import '../modules/orders/my_orders.dart';
 // import '../modules/reviews/reviews.dart';
@@ -189,15 +190,20 @@ class _AppDrawerState extends State<AppDrawer> {
                             },
                             imageAsset: "assets/images/four1.png",
                             showArrow: true),
-                        // _TextButton(
-                        //     text: "Chat",
-                        //     onPressed: () {
-                        //       Get.back();
+                        _TextButton(
+                            text: "Chat",
+                            onPressed: () {
+                              Get.back();
 
-                        //       Get.to(() => const LoadChats());
-                        //     },
-                        //     imageAsset: "assets/images/chat-sas.png",
-                        //     showArrow: true),
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                    builder: (context) => const LoadChats()),
+                              );
+
+                              //   Get.to(() => const LoadChats());
+                            },
+                            imageAsset: "assets/images/chat-sas.png",
+                            showArrow: true),
                         // if (controller.currentType != "Client" &&
                         //     controller.currentType != "Corporate Client")
                         //   _TextButton(

@@ -31,6 +31,7 @@ class PageInput extends StatefulWidget {
     this.isReferral = false,
     this.showInfo = true,
     this.textWidth = 0.8,
+    this.autofillHints,
     this.isFilePicker = false,
     this.borderSide = const BorderSide(
       width: 1,
@@ -52,6 +53,7 @@ class PageInput extends StatefulWidget {
   final bool obscureText;
   final bool readOnly;
   final bool isCompulsory;
+  final Iterable<String>? autofillHints;
   final bool isPhoneNumber;
   final bool isReferral;
   final bool showInfo;
@@ -106,10 +108,10 @@ class _PageInputState extends State<PageInput> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               SizedBox(
-               // width: Get.width,
+                // width: Get.width,
                 child: Text(
                   widget.label,
-                //  maxLines: 2,
+                  //  maxLines: 2,
                   style: AppTextStyle.bodyText2.copyWith(
                     fontWeight:
                         widget.boldLabel! ? FontWeight.w600 : FontWeight.w500,
@@ -165,6 +167,7 @@ class _PageInputState extends State<PageInput> {
                 keyboardType: widget.keyboardType,
                 controller: widget.controller,
                 validator: widget.validator,
+                autofillHints: widget.autofillHints,
                 obscureText: widget.obscureText,
                 autovalidateMode: widget.autovalidateMode,
                 readOnly: widget.readOnly,

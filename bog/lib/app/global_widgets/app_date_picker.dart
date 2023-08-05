@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -75,7 +74,7 @@ class _AppDatePickerState extends State<AppDatePicker> {
             DateTime? pickedDate = await showDatePicker(
                 context: context,
                 initialDate: DateTime.now(),
-                firstDate: DateTime(2000),
+                firstDate: DateTime(1900),
                 lastDate: DateTime(2101));
 
             if (pickedDate != null) {

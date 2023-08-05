@@ -43,6 +43,7 @@ class _HomeTabState extends State<HomeTab> {
   void initState() {
     final controller = Get.find<HomeController>();
     //   Get.put(HomeController(UserRepository(Api())));
+    controller.restoreCart();
     var logInDetails =
         UserDetailsModel.fromJson(jsonDecode(MyPref.userDetails.val));
     getNotifications = controller.userRepo

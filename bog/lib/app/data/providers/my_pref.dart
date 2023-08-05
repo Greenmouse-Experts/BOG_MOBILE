@@ -15,6 +15,8 @@ class MyPref {
       ReadWriteValue('setSubscribeOverlay', false, _box);
   static final userDetails = ReadWriteValue('userDetails', '', _box);
 
+  static final userCart = ReadWriteValue('userCart', '', _box);
+
   static Future<void> clearBoxes() async {
     await _box().erase();
   }

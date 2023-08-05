@@ -42,28 +42,17 @@ class AppChat extends GetxController {
 
       socket!.onConnect((_) {
         debugPrint('Connection established');
-        socket!.on('getUserChatMessages', (data) {
-          print('object');
-          print(data);
-        });
+        socket!.on('getUserChatMessages', (data) {});
 
-        socket!.on('getUserChatMessages', (data) {
-          print('les chats');
-          print(data.toString());
-        });
+        socket!.on('getUserChatMessages', (data) {});
 
         socket!.on('sentMessage', (data) {
-          print('new message');
-          print(data);
           _chats.add(MessageModel.fromJson(data));
-          print(_chats.length);
+
           update();
         });
 
         socket!.on('getChatMessagesApi', (data) {
-          print(data);
-          print('new message');
-
           _chatMessagesStreamController.add(data);
         });
       });
@@ -95,7 +84,7 @@ class AppChat extends GetxController {
     // print(message);
     // print(senderId);
     // print(receiverId);
-    print(senderId);
+    // print(senderId);
     socket!.emit('send_message',
         {"senderId": senderId, "recieverId": receiverId, "message": message});
     socket!.emit('getUserChatMessages',

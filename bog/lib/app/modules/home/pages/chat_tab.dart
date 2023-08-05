@@ -565,25 +565,6 @@ class _ChatTabState extends State<ChatTab> {
               ],
             ),
           ),
-          // floatingActionButton: FloatingActionButton(
-          //   onPressed: () {
-          //     showChatOptions(_admins);
-          //   },
-          //   backgroundColor: AppColors.primary,
-          //   child: Stack(
-          //     children: [
-          //       SizedBox(
-          //         width: Get.width * 0.05,
-          //         height: Get.width * 0.05,
-          //         child: Icon(
-          //           Icons.add,
-          //           color: Colors.white,
-          //           size: Get.width * 0.05,
-          //         ),
-          //       ),
-          //     ],
-          //   ),
-          // ),
         ),
       );
     });
