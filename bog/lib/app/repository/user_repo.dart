@@ -1,5 +1,9 @@
+import 'package:get/get.dart';
+
 import '../data/providers/api.dart';
 import '../data/providers/api_response.dart';
+import '../global_widgets/overlays.dart';
+import '../modules/sign_in/sign_in.dart';
 
 class UserRepository {
   final Api api;
@@ -51,6 +55,20 @@ class UserRepository {
 
   Future<ApiResponse> getData(String url, {hasHeader = true}) async {
     final response = await api.getData(url, hasHeader: hasHeader);
+    if (response.message == 'Token is not valid') {
+      // AppOverlay.
+      AppOverlay.showInfoDialog(
+        title: 'Session Expired',
+        isDismissible: false,
+        content: 'Your session is expired, Kindly relogin to continue',
+        buttonText: 'Login',
+        onPressed: () {
+          // final controller = Get.find<HomeController>();
+          // controller.dispose();
+          Get.offAll(const SignIn());
+        },
+      );
+    }
     return response;
   }
 

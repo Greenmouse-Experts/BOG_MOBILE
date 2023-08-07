@@ -344,6 +344,7 @@ class AppOverlay {
       String? content,
       Widget? contentReplacement,
       bool? doubleFunction,
+      bool? isDismissible,
       Function()? onPressed,
       String? buttonText}) {
     showDialog(
@@ -369,7 +370,9 @@ class AppOverlay {
                 ),
                 child: Column(
                   children: [
-                    getCloseButton(),
+                    isDismissible == false
+                        ? const SizedBox()
+                        : getCloseButton(),
                     Text(
                       title,
                       textAlign: TextAlign.center,

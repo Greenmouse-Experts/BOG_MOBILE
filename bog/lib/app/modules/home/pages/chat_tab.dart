@@ -1,7 +1,5 @@
 // import 'dart:convert';
 
-import 'package:bog/app/data/model/admin_model.dart';
-import 'package:bog/app/modules/chat/chat.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:get/get.dart';
@@ -11,6 +9,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_styles.dart';
 import '../../../controllers/home_controller.dart';
 
+import '../../../data/model/admin_model.dart';
 import '../../../data/model/announcement_model.dart';
 // import '../../../data/model/log_in_model.dart';
 import '../../../data/providers/api_response.dart';
@@ -20,6 +19,7 @@ import '../../../global_widgets/app_loader.dart';
 import '../../../global_widgets/global_widgets.dart';
 import '../../../global_widgets/pdf_page_viewer.dart';
 import '../../../global_widgets/photo_view_page.dart';
+import '../../chat/chat.dart';
 
 class ChatTab extends StatefulWidget {
   const ChatTab({Key? key}) : super(key: key);

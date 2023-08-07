@@ -1,11 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
-import 'package:bog/app/data/providers/api.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
 
 import '../data/model/message_model.dart';
+import '../data/providers/api.dart';
 
 class AppChat extends GetxController {
   io.Socket? socket;

@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:bog/app/global_widgets/new_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_file_downloader/flutter_file_downloader.dart';
@@ -18,6 +17,7 @@ import '../../global_widgets/app_base_view.dart';
 import '../../global_widgets/app_loader.dart';
 import '../../global_widgets/bottom_widget.dart';
 import '../../global_widgets/global_widgets.dart';
+import '../../global_widgets/new_app_bar.dart';
 import '../../global_widgets/order_details_builder.dart';
 import 'pdf_page.dart';
 

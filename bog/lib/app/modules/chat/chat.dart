@@ -1,13 +1,9 @@
 import 'dart:convert';
 // import 'dart:io';
 
-import 'package:bog/app/controllers/chat_controller.dart';
-import 'package:bog/app/global_widgets/message_bubble.dart';
 // import 'package:bog/app/global_widgets/app_loader.dart';
 
 import 'package:socket_io_client/socket_io_client.dart' as io;
-
-import 'package:bog/app/global_widgets/new_app_bar.dart';
 
 // import 'package:socket_io_client/socket_io_client.dart' as io;
 import 'package:flutter/material.dart';
@@ -17,6 +13,7 @@ import 'package:get/get.dart';
 // import 'package:socket_io_client/socket_io_client.dart' as io;
 
 import '../../../core/theme/app_colors.dart';
+import '../../controllers/chat_controller.dart';
 import '../../data/model/message_model.dart';
 import '../../data/model/user_details_model.dart';
 // import '../../data/providers/api.dart';
@@ -25,6 +22,8 @@ import '../../data/providers/api.dart';
 import '../../data/providers/my_pref.dart';
 // import '../../global_widgets/app_avatar.dart';
 import '../../global_widgets/app_input.dart';
+import '../../global_widgets/message_bubble.dart';
+import '../../global_widgets/new_app_bar.dart';
 
 class Chat extends StatefulWidget {
   final String name;
@@ -99,7 +98,7 @@ class _ChatState extends State<Chat> with WidgetsBindingObserver {
         socket!.on('getUserNotifications', (data) {});
 
         socket!.on('getUserConversations', (data) {
-          print('object');
+          //print('object');
         });
 
         socket!.on('sentMessage', (data) {

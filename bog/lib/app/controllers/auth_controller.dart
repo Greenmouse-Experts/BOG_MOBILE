@@ -452,11 +452,26 @@ class AuthController extends GetxController {
         AppOverlay.showInfoDialog(
           title: response.isSuccessful ? 'Success' : 'Failure',
           content: response.message,
-          buttonText: "Continue",
-          onPressed: () {
+          buttonText: response.message == 'Please Verify account'
+              ? 'Verify'
+              : "Continue",
+          onPressed: () async {
             if (response.isSuccessful) {
             } else {
-              Get.back();
+              if (response.message == 'Please Verify account') {
+                final response = await userRepo.postData('/user/resend-token',
+                    {"email": email.text, "platform": "mobile"});
+                if (response.isSuccessful) {
+                  Get.toNamed(VerifySignUpOTP.route);
+                } else {
+                  AppOverlay.showInfoDialog(
+                      title: 'Error',
+                      content: response.message,
+                      buttonText: 'Continue');
+                }
+              } else {
+                Get.back();
+              }
             }
           },
         );

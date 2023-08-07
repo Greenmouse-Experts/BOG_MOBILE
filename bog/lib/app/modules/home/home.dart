@@ -71,6 +71,8 @@ class _HomeState extends State<Home> {
         .getData('/kyc/user-kyc/${logInDetails.id}?userType=$type');
     final newRes = await controller.userRepo.getData('/user/me?userType=$type');
 
+    // print(newRes.message);
+
     final userDetails = UserDetailsModel.fromJson(newRes.user);
     final kyc = GenKyc.fromJson(res.data);
     MyPref.genKyc.val = jsonEncode(kyc);

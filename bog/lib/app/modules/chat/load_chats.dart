@@ -1,7 +1,5 @@
 import 'dart:convert';
 
-import 'package:bog/app/data/model/user_chhat_model.dart';
-import 'package:bog/app/global_widgets/new_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
@@ -11,11 +9,13 @@ import '../../controllers/chat_controller.dart';
 import '../../controllers/home_controller.dart';
 import '../../data/model/admin_model.dart';
 import '../../data/model/log_in_model.dart';
+import '../../data/model/user_chhat_model.dart';
 import '../../data/model/user_details_model.dart';
 import '../../data/providers/api.dart';
 import '../../data/providers/api_response.dart';
 import '../../data/providers/my_pref.dart';
 import '../../global_widgets/app_loader.dart';
+import '../../global_widgets/new_app_bar.dart';
 import 'chat.dart';
 
 class LoadChats extends StatefulWidget {
@@ -157,7 +157,7 @@ class _LoadChatsState extends State<LoadChats> {
         socket!.emit('addNewUser', logInDetails.profile!.userId!);
 
         socket!.on('getOnlineUsers', (data) {
-          print(data);
+          // print(data);
         });
 
         socket!.emit(
@@ -171,7 +171,7 @@ class _LoadChatsState extends State<LoadChats> {
         socket!.on('getUserNotifications', (data) {});
 
         socket!.on('getUserConversations', (data) {
-          print('object basss');
+          // print('object basss');
           debugPrint(jsonEncode(data));
           // print('na gere');
           //if (mounted) {

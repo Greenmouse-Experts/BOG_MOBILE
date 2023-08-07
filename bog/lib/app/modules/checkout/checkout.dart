@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:csc_picker/csc_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_paystack/flutter_paystack.dart';
@@ -47,6 +48,8 @@ class _CheckoutState extends State<Checkout> {
   var formKey1 = GlobalKey<FormState>();
   var formKey2 = GlobalKey<FormState>();
   var formKey3 = GlobalKey<FormState>();
+
+  final GlobalKey<CSCPickerState> _cscPickerKey = GlobalKey();
 
   bool addInsurance = true;
 
@@ -354,104 +357,140 @@ class _CheckoutState extends State<Checkout> {
                                             SizedBox(
                                               height: width * 0.06,
                                             ),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Padding(
-                                                  padding: EdgeInsets.only(
-                                                      left: width * 0.04,
-                                                      right: width * 0.04),
-                                                  child: SizedBox(
-                                                    width: width * 0.4,
-                                                    child: PageInput(
-                                                      textWidth: 0.35,
-                                                      hint: "Enter City",
-                                                      label: "City",
-                                                      controller: city,
-                                                      validator: (value) {
-                                                        if (value!.isEmpty) {
-                                                          return "Please enter your city";
-                                                        }
-                                                        return null;
-                                                      },
-                                                    ),
-                                                  ),
-                                                ),
-                                                Padding(
-                                                  padding: EdgeInsets.only(
-                                                      left: width * 0.04,
-                                                      right: width * 0.04),
-                                                  child: SizedBox(
-                                                    width: width * 0.4,
-                                                    child: PageInput(
-                                                      textWidth: 0.35,
-                                                      hint:
-                                                          "Enter State/Province",
-                                                      label: "State/Province",
-                                                      controller: state,
-                                                      validator: (value) {
-                                                        if (value!.isEmpty) {
-                                                          return "Please enter your state/province";
-                                                        }
-                                                        return null;
-                                                      },
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
+                                            Padding(
+                                              padding: EdgeInsets.only(
+                                                  left: width * 0.04,
+                                                  right: width * 0.04),
+                                              child: CSCPicker(
+                                                key: _cscPickerKey,
+                                                showStates: true,
+                                                showCities: true,
+                                                flagState: CountryFlag.DISABLE,
+                                                countrySearchPlaceholder:
+                                                    "Country",
+                                                stateSearchPlaceholder: "State",
+                                                citySearchPlaceholder: "City",
+                                                onCountryChanged: (val) {
+                                                  country.text = val;
+                                                },
+                                                onCityChanged: (val) {
+                                                  if (val != null) {
+                                                    city.text = val;
+                                                  }
+                                                },
+                                                onStateChanged: (val) {
+                                                  if (val != null) {
+                                                    state.text = val
+                                                        .split('State')
+                                                        .first;
+                                                  }
+                                                },
+
+                                                ///labels for dropdown
+                                                countryDropdownLabel: "Country",
+                                                stateDropdownLabel: "State",
+                                                cityDropdownLabel: "City",
+                                              ),
                                             ),
+
+                                            // Row(
+                                            //   mainAxisAlignment:
+                                            //       MainAxisAlignment
+                                            //           .spaceBetween,
+                                            //   children: [
+                                            //     Padding(
+                                            //       padding: EdgeInsets.only(
+                                            //           left: width * 0.04,
+                                            //           right: width * 0.04),
+                                            //       child: SizedBox(
+                                            //         width: width * 0.4,
+                                            //         child: PageInput(
+                                            //           textWidth: 0.35,
+                                            //           hint: "Enter City",
+                                            //           label: "City",
+                                            //           controller: city,
+                                            //           validator: (value) {
+                                            //             if (value!.isEmpty) {
+                                            //               return "Please enter your city";
+                                            //             }
+                                            //             return null;
+                                            //           },
+                                            //         ),
+                                            //       ),
+                                            //     ),
+                                            //     Padding(
+                                            //       padding: EdgeInsets.only(
+                                            //           left: width * 0.04,
+                                            //           right: width * 0.04),
+                                            //       child: SizedBox(
+                                            //         width: width * 0.4,
+                                            //         child: PageInput(
+                                            //           textWidth: 0.35,
+                                            //           hint:
+                                            //               "Enter State/Province",
+                                            //           label: "State/Province",
+                                            //           controller: state,
+                                            //           validator: (value) {
+                                            //             if (value!.isEmpty) {
+                                            //               return "Please enter your state/province";
+                                            //             }
+                                            //             return null;
+                                            //           },
+                                            //         ),
+                                            //       ),
+                                            //     ),
+                                            //   ],
+                                            // ),
                                             SizedBox(
                                               height: width * 0.06,
                                             ),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Padding(
-                                                  padding: EdgeInsets.only(
-                                                      left: width * 0.04,
-                                                      right: width * 0.04),
-                                                  child: SizedBox(
-                                                    width: width * 0.4,
-                                                    child: PageInput(
-                                                      textWidth: 0.35,
-                                                      hint: "Enter Postal Code",
-                                                      label: "Postal Code",
-                                                      controller: zip,
-                                                      validator: (value) {
-                                                        if (value!.isEmpty) {
-                                                          return "Please enter your postal code";
-                                                        }
-                                                        return null;
-                                                      },
-                                                    ),
-                                                  ),
+                                            // Row(
+                                            //   mainAxisAlignment:
+                                            //       MainAxisAlignment
+                                            //           .spaceBetween,
+                                            //   children: [
+                                            Padding(
+                                              padding: EdgeInsets.only(
+                                                  left: width * 0.04,
+                                                  right: width * 0.04),
+                                              child: SizedBox(
+                                                // width: width * 0.4,
+                                                child: PageInput(
+                                                  textWidth: 0.35,
+                                                  hint: "Enter Postal Code",
+                                                  label: "Postal Code",
+                                                  controller: zip,
+                                                  validator: (value) {
+                                                    if (value!.isEmpty) {
+                                                      return "Please enter your postal code";
+                                                    }
+                                                    return null;
+                                                  },
                                                 ),
-                                                Padding(
-                                                  padding: EdgeInsets.only(
-                                                      left: width * 0.04,
-                                                      right: width * 0.04),
-                                                  child: SizedBox(
-                                                    width: width * 0.4,
-                                                    child: PageInput(
-                                                      hint: "Enter Country",
-                                                      label: "Country",
-                                                      textWidth: 0.35,
-                                                      controller: country,
-                                                      validator: (value) {
-                                                        if (value!.isEmpty) {
-                                                          return "Please enter your country";
-                                                        }
-                                                        return null;
-                                                      },
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
+                                              ),
                                             ),
+                                            // Padding(
+                                            //   padding: EdgeInsets.only(
+                                            //       left: width * 0.04,
+                                            //       right: width * 0.04),
+                                            //   child: SizedBox(
+                                            //     width: width * 0.4,
+                                            //     child: PageInput(
+                                            //       hint: "Enter Country",
+                                            //       label: "Country",
+                                            //       textWidth: 0.35,
+                                            //       controller: country,
+                                            //       validator: (value) {
+                                            //         if (value!.isEmpty) {
+                                            //           return "Please enter your country";
+                                            //         }
+                                            //         return null;
+                                            //       },
+                                            //     ),
+                                            //   ),
+                                            // ),
+                                            //   ],
+                                            // ),
                                             SizedBox(
                                               height: width * 0.1,
                                             ),
@@ -478,6 +517,18 @@ class _CheckoutState extends State<Checkout> {
                                               child: AppButton(
                                                 title: "Proceed to Payment",
                                                 onPressed: () {
+                                                  // if (_cscPickerKey.currentState!.)
+                                                  if (country.text.isEmpty ||
+                                                      state.text.isEmpty ||
+                                                      city.text.isEmpty) {
+                                                    Get.snackbar('Error',
+                                                        'You must select a country, state and city to proceed',
+                                                        backgroundColor:
+                                                            Colors.red,
+                                                        colorText: AppColors
+                                                            .backgroundVariant1);
+                                                    return;
+                                                  }
                                                   if (deliveryNearestAddress ==
                                                       null) {
                                                     Get.snackbar('Error',
@@ -488,6 +539,7 @@ class _CheckoutState extends State<Checkout> {
                                                             .backgroundVariant1);
                                                     return;
                                                   }
+
                                                   if (formKey.currentState!
                                                       .validate()) {
                                                     pageController.animateToPage(

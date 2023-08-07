@@ -23,8 +23,11 @@ import '../app/modules/verify_otp/verify_otp.dart';
 class AppPages {
   AppPages._();
 
-  static String initial =
-      MyPref.firstTimeUser.val ? OnboardingPage.route : SignIn.route;
+  static String initial = MyPref.firstTimeUser.val
+      ? OnboardingPage.route
+      : MyPref.authToken.val.isEmpty
+          ? SignIn.route
+          : Home.route;
 
   static final routes = [
     GetPage(name: OnboardingPage.route, page: () => const OnboardingPage()),

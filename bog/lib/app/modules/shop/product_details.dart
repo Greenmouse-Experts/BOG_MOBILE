@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:bog/app/global_widgets/overlays.dart';
 import 'package:feather_icons/feather_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -23,6 +22,7 @@ import '../../global_widgets/bottom_widget.dart';
 import '../../global_widgets/image_slider.dart';
 import '../../global_widgets/item_counter.dart';
 import '../../global_widgets/new_app_bar.dart';
+import '../../global_widgets/overlays.dart';
 
 class ProductDetails extends StatefulWidget {
   final String productId;

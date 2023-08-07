@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_styles.dart';
+import '../controllers/home_controller.dart';
 import '../modules/sign_in/sign_in.dart';
 
 class ConfirmLogout extends StatelessWidget {
@@ -31,7 +32,8 @@ class ConfirmLogout extends StatelessWidget {
             )),
         TextButton(
             onPressed: () async {
-       
+              final controller = Get.find<HomeController>();
+              controller.signOut();
               Get.offAll(() => const SignIn());
             },
             child: Text(

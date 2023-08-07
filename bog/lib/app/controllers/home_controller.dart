@@ -43,6 +43,14 @@ class HomeController extends GetxController {
     update();
   }
 
+  void signOut() {
+    MyPref.userId.val = '';
+    MyPref.authToken.val = '';
+    MyPref.logInDetail.val = '';
+    MyPref.userDetail.val = '';
+    MyPref.userDetails.val = '';
+  }
+
   updateNewUser(String userType, {bool updatePages = true}) {
     if (userType == "Client" || userType == "Corporate Client") {
       //Group 46942.png
@@ -122,7 +130,7 @@ class HomeController extends GetxController {
 
   bool isBuyNow = false;
   MyProducts? myProducts;
-  RxInt get cartLength => productsList.length.obs;
+  RxInt get cartLength => _cartItems.length.obs;
 
   List<MyProducts> productsList = [];
   Map<String, int> productsMap = {};
@@ -130,14 +138,81 @@ class HomeController extends GetxController {
   Map<String, CartModel> _cartItems = {};
   RxMap<String, CartModel> get cartItems => _cartItems.obs;
 
+  String stringIntMapToJson(Map<String, int> map) {
+    Map<String, dynamic> jsonMap = {};
+    map.forEach((key, value) {
+      jsonMap[key] = value;
+    });
+    return json.encode(jsonMap);
+  }
+
+// Convert JSON string back to Map<String, int>
+  Map<String, int> stringIntMapFromJson(String jsonString) {
+    Map<String, dynamic> jsonMap = json.decode(jsonString);
+    Map<String, int> map = {};
+    jsonMap.forEach((key, value) {
+      map[key] = value as int;
+    });
+    return map;
+  }
+
+  String productListToJson(List<MyProducts> productList) {
+    List<Map<String, dynamic>> jsonList =
+        productList.map((product) => product.toJson()).toList();
+    return json.encode(jsonList);
+  }
+
+// Convert JSON string back to List<MyProducts>
+  List<MyProducts> productListFromJson(String jsonString) {
+    List<dynamic> jsonList = json.decode(jsonString);
+    List<MyProducts> productList =
+        jsonList.map((json) => MyProducts.fromJson(json)).toList();
+    return productList;
+  }
+
+  String cartMapToJson(Map<String, CartModel> cartMap) {
+    Map<String, dynamic> jsonMap = {};
+    cartMap.forEach((key, value) {
+      jsonMap[key] = {
+        'product': value.product.toJson(),
+        'quantity': value.quantity,
+      };
+    });
+    return json.encode(jsonMap);
+  }
+
+  Map<String, CartModel> cartMapFromJson(String jsonString) {
+    Map<String, dynamic> jsonMap = json.decode(jsonString);
+    Map<String, CartModel> cartMap = {};
+    jsonMap.forEach((key, value) {
+      cartMap[key] = CartModel(
+        product: MyProducts.fromJson(value['product']),
+        quantity: value['quantity'],
+      );
+    });
+    return cartMap;
+  }
+
   void saveCartLocally() {
-    print(jsonEncode(_cartItems.toString()));
-    // MyPref.userCart.val = jsonEncode(_cartItems.toString());
+    // print(cartMapToJson(_cartItems));
+
+    MyPref.userCart.val = cartMapToJson(_cartItems);
+    MyPref.userCartProducts.val = productListToJson(productsList);
+    MyPref.productMap.val = stringIntMapToJson(productsMap);
+    // print(cartMapFromJson(MyPref.userCart.val));
   }
 
   void restoreCart() {
-    print(MyPref.userCart.val);
-    //  _cartItems = jsonDecode(MyPref.userCart.val);
+    if (MyPref.userCart.val.isNotEmpty) {
+      _cartItems = cartMapFromJson(MyPref.userCart.val);
+    }
+    if (MyPref.productMap.val.isNotEmpty) {
+      productsMap = stringIntMapFromJson(MyPref.productMap.val);
+    }
+    if (MyPref.userCartProducts.val.isNotEmpty) {
+      productsList = productListFromJson(MyPref.userCartProducts.val);
+    }
+
     update();
   }
 

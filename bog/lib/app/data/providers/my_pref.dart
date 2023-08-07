@@ -16,6 +16,8 @@ class MyPref {
   static final userDetails = ReadWriteValue('userDetails', '', _box);
 
   static final userCart = ReadWriteValue('userCart', '', _box);
+  static final userCartProducts = ReadWriteValue('userCartProducts', '', _box);
+  static final productMap = ReadWriteValue('productMap', '', _box);
 
   static Future<void> clearBoxes() async {
     await _box().erase();
