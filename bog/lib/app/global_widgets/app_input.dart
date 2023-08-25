@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:intl_phone_field/phone_number.dart';
 // import 'package:get/get_core/src/get_main.dart';
 import '../../core/theme/theme.dart';
 
@@ -27,6 +28,8 @@ class AppInput extends StatefulWidget {
     this.readOnly = false,
     this.maxLines = 1,
     this.validator,
+    this.phoneController,
+    this.onPhoneChanged,
     this.autofillHints,
     this.isPhoneNumber = false,
     this.autovalidateMode,
@@ -48,6 +51,7 @@ class AppInput extends StatefulWidget {
   final bool? isPhoneNumber;
   final EdgeInsetsGeometry? contentPadding;
   final Color filledColor;
+  final TextEditingController? phoneController;
   final Widget? suffixIcon;
   final Widget? prefexIcon;
   final TextInputType keyboardType;
@@ -63,6 +67,7 @@ class AppInput extends StatefulWidget {
   final String? Function(String?)? validator;
   final AutovalidateMode? autovalidateMode;
   final String? initalValue;
+  final Function(PhoneNumber)? onPhoneChanged;
 
   @override
   State<AppInput> createState() => _AppInputState();
@@ -75,6 +80,11 @@ class _AppInputState extends State<AppInput> {
   void initState() {
     obscureText = widget.obscureText;
     super.initState();
+    if (widget.controller != null) {
+      if (widget.controller!.text.isNotEmpty) {
+        if (widget.isPhoneNumber == true) {}
+      }
+    }
   }
 
   void _onObscureText() {
@@ -114,7 +124,7 @@ class _AppInputState extends State<AppInput> {
         ),
         widget.isPhoneNumber!
             ? IntlPhoneField(
-                initialCountryCode: 'NG',
+                //   initialCountryCode: 'NG',
                 initialValue: widget.initalValue,
                 obscureText: obscureText,
                 readOnly: widget.readOnly,
@@ -123,6 +133,7 @@ class _AppInputState extends State<AppInput> {
                 controller: widget.controller,
                 focusNode: widget.focusNode,
                 keyboardType: widget.keyboardType,
+                onChanged: widget.onPhoneChanged,
                 style: AppTextStyle.bodyText2.copyWith(
                   fontWeight: widget.borderSide == BorderSide.none
                       ? FontWeight.w600

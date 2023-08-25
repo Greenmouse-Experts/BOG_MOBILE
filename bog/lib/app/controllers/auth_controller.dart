@@ -30,6 +30,7 @@ class AuthController extends GetxController {
   TextEditingController lName = TextEditingController();
   TextEditingController fullName = TextEditingController();
   TextEditingController companyName = TextEditingController();
+  TextEditingController secondPhone = TextEditingController();
   TextEditingController phone = TextEditingController();
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
@@ -200,6 +201,7 @@ class AuthController extends GetxController {
       var message = "";
       var buttonMessage = "";
       ApiResponse response = await userRepo.signup(_signupServiceSupplier);
+
       if (response.message == "This Email is already in Use") {
         message = "This Email is already in Use, Please Login";
         buttonMessage = "Login";
@@ -235,7 +237,7 @@ class AuthController extends GetxController {
 
   Future<void> handleSignUpGoogle() async {
     try {
-      //   await _googleSignIn.signOut();
+      await _googleSignIn.signOut();
 
       final response = await _googleSignIn.signIn();
 
@@ -374,7 +376,7 @@ class AuthController extends GetxController {
         'lname': lName.text,
         'name': "${fName.text} ${lName.text}",
         'email': email.text,
-        'phone': phone.text,
+        'phone': secondPhone.text,
         'company_name': companyName.text,
         'password': password.text,
         'serviceTypeId': serviceSelected.text,
@@ -387,7 +389,7 @@ class AuthController extends GetxController {
         'lname': lName.text,
         'name': "${fName.text} ${lName.text}",
         'email': email.text,
-        'phone': phone.text,
+        'phone': secondPhone.text,
         'password': password.text,
         "userType": "private_client",
         "platform": "mobile"
@@ -398,7 +400,7 @@ class AuthController extends GetxController {
         'lname': lName.text,
         'name': "${fName.text} ${lName.text}",
         'email': email.text,
-        'phone': phone.text,
+        'phone': secondPhone.text,
         'company_name': companyName.text,
         'password': password.text,
         "userType": "corporate_client",
@@ -410,7 +412,7 @@ class AuthController extends GetxController {
         'lname': lName.text,
         'name': "${fName.text} ${lName.text}",
         'email': email.text,
-        'phone': phone.text,
+        'phone': secondPhone.text,
         'company_name': companyName.text,
         'password': password.text,
         "userType": "vendor",

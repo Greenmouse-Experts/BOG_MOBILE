@@ -4,6 +4,7 @@ import 'package:dart_countries/dart_countries.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl_phone_field/phone_number.dart';
 
 import '../../core/theme/theme.dart';
 import 'app_input.dart';
@@ -32,26 +33,33 @@ class PageInput extends StatefulWidget {
     this.showInfo = true,
     this.textWidth = 0.8,
     this.autofillHints,
+    this.isMultiple = false,
     this.isFilePicker = false,
     this.borderSide = const BorderSide(
       width: 1,
       color: Color(0xFF828282),
     ),
     this.onchanged,
+    this.onMultipleFilesPicked,
+    this.phoneController,
+    this.onPhoneChanged,
     this.onFilePicked,
     this.boldLabel = false,
   }) : super(key: key);
 
   final String hint;
   final String label;
+  final bool isMultiple;
   final AutovalidateMode? autovalidateMode;
   final Widget? prefix;
   final double textWidth;
   final TextInputType keyboardType;
   final Widget? suffix;
+  final TextEditingController? phoneController;
   final TextEditingController? controller;
   final bool obscureText;
   final bool readOnly;
+  final Function(PhoneNumber)? onPhoneChanged;
   final bool isCompulsory;
   final Iterable<String>? autofillHints;
   final bool isPhoneNumber;
@@ -64,6 +72,7 @@ class PageInput extends StatefulWidget {
   final List<DropdownMenuItem<dynamic>>? dropDownItems;
   final Function(dynamic)? onDropdownChanged;
   final Function(File)? onFilePicked;
+  final Function(List<File>)? onMultipleFilesPicked;
   final Function? onchanged;
   final String? initialValue;
   final bool? boldLabel;
@@ -164,6 +173,9 @@ class _PageInputState extends State<PageInput> {
                   child: AppInput(
                 hintText: widget.hint,
                 isPhoneNumber: true,
+                phoneController: widget.phoneController,
+                initalValue: widget.initialValue,
+                onPhoneChanged: widget.onPhoneChanged,
                 keyboardType: widget.keyboardType,
                 controller: widget.controller,
                 validator: widget.validator,
@@ -225,6 +237,7 @@ class _PageInputState extends State<PageInput> {
         if ((!widget.isPhoneNumber && !showText) || widget.obscureText)
           AppInput(
             initalValue: widget.initialValue,
+            onPhoneChanged: widget.onPhoneChanged,
             onChanged: (p0) {
               if (widget.onchanged != null) {
                 widget.onchanged!(p0);
@@ -245,16 +258,28 @@ class _PageInputState extends State<PageInput> {
                 ? widget.prefix
                 : InkWell(
                     onTap: () async {
-                      FilePickerResult? result =
-                          await FilePicker.platform.pickFiles();
+                      FilePickerResult? result = await FilePicker.platform
+                          .pickFiles(allowMultiple: widget.isMultiple);
                       if (result != null) {
-                        File file = File(result.files.single.path.toString());
+                        List<File> file = result.paths
+                            .map((path) => File(path.toString()))
+                            .toList();
+                        // File(result.files.single.path.toString());
                         if (widget.controller != null) {
-                          widget.controller!.text = file.path.split('/').last;
+                          if (file.length > 1) {
+                            widget.controller!.text = "${file.length} files";
+                          } else {
+                            widget.controller!.text =
+                                file[0].path.split('/').last;
+                          }
+                        }
+
+                        if (widget.onMultipleFilesPicked != null) {
+                          widget.onMultipleFilesPicked!(file);
                         }
 
                         if (widget.onFilePicked != null) {
-                          widget.onFilePicked!(file);
+                          widget.onFilePicked!(file[0]);
                         }
                       }
                     },

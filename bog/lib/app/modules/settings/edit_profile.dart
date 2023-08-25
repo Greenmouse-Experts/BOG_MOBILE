@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:dio/dio.dart' as dio;
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:get/get.dart';
+import 'package:intl_phone_field/countries.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_styles.dart';
@@ -42,16 +43,39 @@ class _EditProfileState extends State<EditProfile> {
 
   TextEditingController email = TextEditingController();
   TextEditingController phoneNumber = TextEditingController();
+  TextEditingController secondPhone = TextEditingController();
   TextEditingController address = TextEditingController();
   TextEditingController state = TextEditingController();
   TextEditingController city = TextEditingController();
 
+  String? initialNumber;
+
+  String removeCountryCode(String phoneNumber, String countryCode) {
+    if (phoneNumber.startsWith(countryCode)) {
+      return phoneNumber.substring(countryCode.length);
+    } else {
+      return phoneNumber; // Country code not found, return the original number
+    }
+  }
+
   @override
   void initState() {
+    var unformattedPhone = logInDetails.phone ?? "";
+    initialNumber = unformattedPhone;
+    if (unformattedPhone.startsWith("+")) {
+      unformattedPhone = unformattedPhone.substring(1);
+    }
+    const countryList = countries;
+    final selectedCountry = countries.firstWhere(
+        (country) => unformattedPhone.startsWith(country.dialCode),
+        orElse: () => countryList.first);
+
+    final formattedPhone =
+        removeCountryCode(unformattedPhone, selectedCountry.dialCode);
     firstName.text = logInDetails.fname ?? '';
     lastName.text = logInDetails.lname ?? '';
     email.text = logInDetails.email ?? '';
-    phoneNumber.text = logInDetails.phone ?? '';
+    phoneNumber.text = formattedPhone;
     address.text = logInDetails.address ?? '';
     state.text = logInDetails.state ?? '';
     city.text = logInDetails.city ?? '';
@@ -190,6 +214,10 @@ class _EditProfileState extends State<EditProfile> {
                             PageInput(
                               hint: '',
                               label: 'Phone Number',
+                              initialValue: initialNumber,
+                              onPhoneChanged: (p0) {
+                                secondPhone.text = p0.completeNumber;
+                              },
                               validator: Validator.phoneNumValidation,
                               isCompulsory: true,
                               isPhoneNumber: true,
@@ -244,7 +272,7 @@ class _EditProfileState extends State<EditProfile> {
                                       ? {
                                           'fname': firstName.text,
                                           "lname": lastName.text,
-                                          "phone": phoneNumber.text,
+                                          "phone": secondPhone.text,
                                           "address": address.text,
                                           "state": state.text,
                                           "city": city.text,
@@ -252,7 +280,7 @@ class _EditProfileState extends State<EditProfile> {
                                       : {
                                           'fname': firstName.text,
                                           "lname": lastName.text,
-                                          "phone": phoneNumber.text,
+                                          "phone": secondPhone.text,
                                           "address": address.text,
                                           "state": state.text,
                                           "city": city.text,

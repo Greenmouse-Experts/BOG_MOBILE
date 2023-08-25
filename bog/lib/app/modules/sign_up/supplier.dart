@@ -120,6 +120,10 @@ class SupplierSignUp extends GetView<AuthController> {
                                 label: 'Phone Number',
                                 validator: Validator.phoneNumValidation,
                                 isCompulsory: true,
+                                onPhoneChanged: (val) {
+                                  controller.secondPhone.text =
+                                      val.completeNumber;
+                                },
                                 isPhoneNumber: true,
                                 keyboardType: TextInputType.phone,
                                 controller: controller.phone,

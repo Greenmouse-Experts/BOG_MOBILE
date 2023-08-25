@@ -27,6 +27,8 @@ class SignUp extends GetView<AuthController> {
     GlobalKey<FormState> formKey = GlobalKey<FormState>();
     GlobalKey<FormState> formKey1 = GlobalKey<FormState>();
 
+    // var phoneNumber = "";
+
     // final GoogleSignInAccount? user = _currentUser;
 
     return Scaffold(
@@ -165,6 +167,10 @@ class SignUp extends GetView<AuthController> {
                                       label: 'Phone Number',
                                       validator: Validator.phoneNumValidation,
                                       isCompulsory: true,
+                                      onPhoneChanged: (val) {
+                                        controller.secondPhone.text =
+                                            val.completeNumber;
+                                      },
                                       isPhoneNumber: true,
                                       keyboardType: TextInputType.phone,
                                       controller: controller.phone,
@@ -393,6 +399,10 @@ class SignUp extends GetView<AuthController> {
                                       isCompulsory: true,
                                       keyboardType: TextInputType.phone,
                                       isPhoneNumber: true,
+                                      onPhoneChanged: (val) {
+                                        controller.secondPhone.text =
+                                            val.completeNumber;
+                                      },
                                       controller: controller.phone,
                                     ),
                                     SizedBox(height: Get.height * 0.025),

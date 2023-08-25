@@ -153,6 +153,10 @@ class _ServiceProviderSignUpState extends State<ServiceProviderSignUp> {
                                           label: 'Phone Number',
                                           validator:
                                               Validator.phoneNumValidation,
+                                          onPhoneChanged: (val) {
+                                            controller.secondPhone.text =
+                                                val.completeNumber;
+                                          },
                                           isCompulsory: true,
                                           isPhoneNumber: true,
                                           keyboardType: TextInputType.phone,

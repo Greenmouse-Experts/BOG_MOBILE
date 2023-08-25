@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:intl_phone_field/countries.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_styles.dart';
@@ -22,12 +23,37 @@ class ProfileInfo extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
+    String removeCountryCode(String phoneNumber, String countryCode) {
+      if (phoneNumber.startsWith(countryCode)) {
+        return phoneNumber.substring(countryCode.length);
+      } else {
+        return phoneNumber; // Country code not found, return the original number
+      }
+    }
+
     var width = Get.width;
     final Size size = MediaQuery.of(context).size;
     double multiplier = 25 * size.height * 0.01;
 
+    const countryList = countries;
+
     var logInDetails =
         UserDetailsModel.fromJson(jsonDecode(MyPref.userDetails.val));
+
+    //
+    var unformattedPhone = logInDetails.phone ?? "";
+    var initalNumber = unformattedPhone;
+    if (unformattedPhone.startsWith("+")) {
+      unformattedPhone = unformattedPhone.substring(1);
+    }
+
+    final selectedCountry = countries.firstWhere(
+        (country) => unformattedPhone.startsWith(country.dialCode),
+        orElse: () => countryList.first);
+
+    final formattedPhone =
+        removeCountryCode(unformattedPhone, selectedCountry.dialCode);
+
     TextEditingController firstName =
         TextEditingController(text: logInDetails.fname);
     TextEditingController lastName =
@@ -35,7 +61,7 @@ class ProfileInfo extends GetView<HomeController> {
     TextEditingController email =
         TextEditingController(text: logInDetails.email);
     TextEditingController phoneNumber =
-        TextEditingController(text: logInDetails.phone);
+        TextEditingController(text: formattedPhone);
     TextEditingController address =
         TextEditingController(text: logInDetails.address);
     TextEditingController state =
@@ -218,6 +244,7 @@ class ProfileInfo extends GetView<HomeController> {
                             ),
                             PageInput(
                               hint: '',
+                              initialValue: initalNumber,
                               label: 'Phone Number',
                               isCompulsory: false,
                               readOnly: true,

@@ -37,6 +37,18 @@ class _AddProjectState extends State<AddProject> {
   var pageController = PageController();
   var formKey = GlobalKey<FormState>();
 
+  Future<List<MultipartFile>> getParts(List<File> pickedFiles) async {
+    List<MultipartFile> response = [];
+
+    for (var x in pickedFiles) {
+      response.add(
+        await dio.MultipartFile.fromFile(x.path,
+            filename: x.path.split('/').last) as MultipartFile,
+      );
+    }
+    return response;
+  }
+
   var nameController = TextEditingController();
   var productController = TextEditingController();
   var priceController = TextEditingController();
@@ -53,6 +65,8 @@ class _AddProjectState extends State<AddProject> {
   late Future<ApiResponse> createProd;
 
   File? pickedFile;
+
+  List<File>? pickedFiles;
 
   @override
   void initState() {
@@ -215,9 +229,12 @@ class _AddProjectState extends State<AddProject> {
                                         }
                                         return null;
                                       },
-                                      onFilePicked: (file) {
-                                        pickedFile = file;
+                                      onMultipleFilesPicked: (p0) {
+                                        pickedFiles = p0;
                                       },
+                                      // onFilePicked: (file) {
+                                      //   pickedFile = file;
+                                      // },
                                       isFilePicker: true,
                                     ),
                                   ),
@@ -267,7 +284,7 @@ class _AddProjectState extends State<AddProject> {
                                           Map<String, dynamic> bodyForEdit = {};
 
                                           if (widget.myProduct != null) {
-                                            bodyForEdit = pickedFile == null
+                                            bodyForEdit = pickedFiles == null
                                                 ? {
                                                     "categoryId": widget
                                                             .myProduct!
@@ -505,15 +522,18 @@ class _AddProjectState extends State<AddProject> {
                                     hint: "Pick a photo to upload",
                                     label: "Upload Product Photo",
                                     controller: fileController,
+                                    onMultipleFilesPicked: (p0) {
+                                      pickedFiles = p0;
+                                    },
                                     validator: (value) {
                                       if (value!.isEmpty) {
                                         return "Please pick a picture to upload";
                                       }
                                       return null;
                                     },
-                                    onFilePicked: (file) {
-                                      pickedFile = file;
-                                    },
+                                    // onFilePicked: (file) {
+                                    //   pickedFile = file;
+                                    // },
                                     isFilePicker: true,
                                   ),
                                 ),
