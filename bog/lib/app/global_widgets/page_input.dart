@@ -43,6 +43,7 @@ class PageInput extends StatefulWidget {
     this.onMultipleFilesPicked,
     this.phoneController,
     this.onPhoneChanged,
+    this.pickImages,
     this.onFilePicked,
     this.boldLabel = false,
   }) : super(key: key);
@@ -52,6 +53,7 @@ class PageInput extends StatefulWidget {
   final bool isMultiple;
   final AutovalidateMode? autovalidateMode;
   final Widget? prefix;
+  final bool? pickImages;
   final double textWidth;
   final TextInputType keyboardType;
   final Widget? suffix;
@@ -259,7 +261,11 @@ class _PageInputState extends State<PageInput> {
                 : InkWell(
                     onTap: () async {
                       FilePickerResult? result = await FilePicker.platform
-                          .pickFiles(allowMultiple: widget.isMultiple);
+                          .pickFiles(
+                              allowMultiple: widget.isMultiple,
+                              type: widget.pickImages == true
+                                  ? FileType.image
+                                  : FileType.any);
                       if (result != null) {
                         List<File> file = result.paths
                             .map((path) => File(path.toString()))

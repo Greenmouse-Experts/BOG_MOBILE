@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:bog/app/global_widgets/overlays.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -14,6 +15,7 @@ import '../../../global_widgets/confirm_logout.dart';
 import '../../settings/profile_info.dart';
 import '../../settings/update_password.dart';
 import '../../settings/view_kyc.dart';
+import '../../sign_in/sign_in.dart';
 import '../../subscription/subscription_view.dart';
 
 class ProfileTab extends StatelessWidget {
@@ -29,6 +31,9 @@ class ProfileTab extends StatelessWidget {
 
     final Uri about = Uri.parse('https://bog-project-new.netlify.app/about');
     final Uri terms = Uri.parse('https://bog-project-new.netlify.app/terms');
+
+    final userDetails =
+        UserDetailsModel.fromJson(jsonDecode(MyPref.userDetails.val));
 
     launchURL(Uri url) async {
       if (await canLaunchUrl(url)) {
@@ -151,23 +156,26 @@ class ProfileTab extends StatelessWidget {
                   ),
                 if (controller.currentType == "Product Partner" ||
                     controller.currentType == "Service Partner")
-                  _TextButton(
-                    text: "Subscribe",
-                    useIcon: true,
-                    onPressed: () {
-                      final userDetails = UserDetailsModel.fromJson(
-                          jsonDecode(MyPref.userDetails.val));
-                      if (userDetails.profile!.hasActiveSubscription == true) {
-                        Get.snackbar(
-                            'Error', 'You already have an active subscription',
-                            backgroundColor: Colors.red,
-                            colorText: AppColors.background);
-                      } else {
-                        Get.to(() => const SubscriptionScreen());
-                      }
-                    },
-                    imageAsset: "assets/images/sales.png",
-                  ),
+                  userDetails.profile!.hasActiveSubscription == true
+                      ? const SizedBox()
+                      : _TextButton(
+                          text: "Subscribe",
+                          useIcon: true,
+                          onPressed: () {
+                            final userDetails = UserDetailsModel.fromJson(
+                                jsonDecode(MyPref.userDetails.val));
+                            if (userDetails.profile!.hasActiveSubscription ==
+                                true) {
+                              Get.snackbar('Error',
+                                  'You already have an active subscription',
+                                  backgroundColor: Colors.red,
+                                  colorText: AppColors.background);
+                            } else {
+                              Get.to(() => const SubscriptionScreen());
+                            }
+                          },
+                          imageAsset: "assets/images/sales.png",
+                        ),
                 const SizedBox(
                   height: kToolbarHeight / 3,
                 ),
@@ -214,6 +222,34 @@ class ProfileTab extends StatelessWidget {
                   imageAsset: "assets/images/log_out.png",
                   showArrow: false,
                 ),
+                _TextButton(
+                    text: "Delete Account",
+                    onPressed: () {
+                      AppOverlay.showInfoDialog(
+                          title: "Delete Account",
+                          content:
+                              "Are you sure you want to delete your account?",
+                          doubleFunction: true,
+                          buttonText: "Delete",
+                          onPressed: () async {
+                            final controller = Get.find<HomeController>();
+                            final response = await controller.userRepo
+                                .deleteData('/user/delete');
+                            if (response.isSuccessful) {
+                              Get.offAll(() => const SignIn());
+                            } else {
+                              Get.back();
+                              Get.snackbar(
+                                  "Error",
+                                  response.message ??
+                                      "An unknown error occured",
+                                  backgroundColor: Colors.red,
+                                  colorText: Colors.white);
+                            }
+                          });
+                    },
+                    imageAsset: "assets/images/Group 47403.png",
+                    showArrow: false),
               ],
             ),
           ],

@@ -1274,7 +1274,7 @@ class OrderRequestItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => Get.to(() => const OrderProgressPage()),
+      // onTap: () => Get.to(() => const OrderProgressPage()),
       child: Container(
         margin: EdgeInsets.only(
             left: Get.width * 0.03,
@@ -1387,16 +1387,16 @@ class OrderRequestItem extends StatelessWidget {
                               : Colors.black),
                 ),
                 const Spacer(),
-                IconButton(
-                    onPressed: () {
-                      AppOverlay.showInfoDialog(
-                          title: 'Accept Delivery',
-                          doubleFunction: true,
-                          content:
-                              'Do you want to accept responsibility for delivering this product?',
-                          buttonText: 'Accept');
-                    },
-                    icon: const Icon(Icons.more_vert_outlined)),
+                // // IconButton(
+                // //     onPressed: () {
+                // //       AppOverlay.showInfoDialog(
+                // //           title: 'Accept Delivery',
+                // //           doubleFunction: true,
+                // //           content:
+                // //               'Do you want to accept responsibility for delivering this product?',
+                // //           buttonText: 'Accept');
+                // //     },
+                // //     icon: const Icon(Icons.more_vert_outlined)),
               ],
             )
           ],

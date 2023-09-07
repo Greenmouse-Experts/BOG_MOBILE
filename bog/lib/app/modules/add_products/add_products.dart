@@ -223,6 +223,7 @@ class _AddProjectState extends State<AddProject> {
                                       hint: "Pick a photo to upload",
                                       label: "Upload Product Photo",
                                       controller: fileController,
+                                      pickImages: true,
                                       validator: (value) {
                                         if (value!.isEmpty) {
                                           return "Please pick a picture to upload";
@@ -246,7 +247,7 @@ class _AddProjectState extends State<AddProject> {
                                         left: width * 0.05,
                                         right: width * 0.05),
                                     child: PageInput(
-                                      readOnly: true,
+                                      //  readOnly: true,
                                       hint: 'Input a unit type, e.g bags',
                                       label: 'Unit of Measurement',
                                       controller: unitController,
@@ -525,6 +526,7 @@ class _AddProjectState extends State<AddProject> {
                                     onMultipleFilesPicked: (p0) {
                                       pickedFiles = p0;
                                     },
+                                    pickImages: true,
                                     validator: (value) {
                                       if (value!.isEmpty) {
                                         return "Please pick a picture to upload";

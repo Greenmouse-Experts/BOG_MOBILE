@@ -104,8 +104,8 @@ class _ChatTabState extends State<ChatTab> {
                               ),
                             );
                           }),
-                      SizedBox(),
-                      SizedBox()
+                      const SizedBox(),
+                      const SizedBox()
                     ]),
                   )
                 ],

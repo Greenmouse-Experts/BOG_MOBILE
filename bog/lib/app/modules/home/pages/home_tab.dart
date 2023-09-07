@@ -49,8 +49,8 @@ class _HomeTabState extends State<HomeTab> {
 
     var logInDetails =
         UserDetailsModel.fromJson(jsonDecode(MyPref.userDetails.val));
-    getNotifications = controller.userRepo
-        .getData('/notifications/user/${logInDetails.profile!.id}');
+    getNotifications = controller.userRepo.getData(
+        '/notifications/user/${logInDetails.profile!.id}?userType=${logInDetails.profile?.userType}');
 
     super.initState();
   }
@@ -888,7 +888,7 @@ class ProductPartnerHomeWidget extends StatelessWidget {
                     //       .copyWith(color: AppColors.white),
                     // ),
                     const SizedBox(height: 10),
-                    Row(
+                    const Row(
                       children: [
                         // ElevatedButton(
                         //   onPressed: () {},
@@ -901,22 +901,22 @@ class ProductPartnerHomeWidget extends StatelessWidget {
                         //         color: AppColors.blackShade.withOpacity(0.8)),
                         //   ),
                         // ),
-                        const Spacer(),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Validity Date',
-                              style: AppTextStyle.caption
-                                  .copyWith(color: AppColors.white),
-                            ),
-                            Text(
-                              durationToWeeks(duration),
-                              style: AppTextStyle.caption
-                                  .copyWith(color: AppColors.white),
-                            )
-                          ],
-                        )
+                        Spacer(),
+                        // Column(
+                        //   crossAxisAlignment: CrossAxisAlignment.start,
+                        //   children: [
+                        //     Text(
+                        //       'Validity Date',
+                        //       style: AppTextStyle.caption
+                        //           .copyWith(color: AppColors.white),
+                        //     ),
+                        //     Text(
+                        //       durationToWeeks(duration),
+                        //       style: AppTextStyle.caption
+                        //           .copyWith(color: AppColors.white),
+                        //     )
+                        //   ],
+                        // )
                       ],
                     )
                   ],
@@ -1212,7 +1212,7 @@ class SPHomeWidget extends StatelessWidget {
                     //       .copyWith(color: AppColors.white),
                     // ),
                     SizedBox(height: Get.height * 0.01),
-                    Row(
+                    const Row(
                       children: [
                         // ElevatedButton(
                         //   onPressed: () {},
@@ -1225,22 +1225,22 @@ class SPHomeWidget extends StatelessWidget {
                         //         color: AppColors.blackShade.withOpacity(0.8)),
                         //   ),
                         // ),
-                        const Spacer(),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Validity Date',
-                              style: AppTextStyle.caption
-                                  .copyWith(color: AppColors.white),
-                            ),
-                            Text(
-                              durationToWeeks(duration),
-                              style: AppTextStyle.caption
-                                  .copyWith(color: AppColors.white),
-                            )
-                          ],
-                        )
+                        Spacer(),
+                        // Column(
+                        //   crossAxisAlignment: CrossAxisAlignment.start,
+                        //   children: [
+                        //     Text(
+                        //       'Validity Date',
+                        //       style: AppTextStyle.caption
+                        //           .copyWith(color: AppColors.white),
+                        //     ),
+                        //     Text(
+                        //       durationToWeeks(duration),
+                        //       style: AppTextStyle.caption
+                        //           .copyWith(color: AppColors.white),
+                        //     )
+                        //   ],
+                        // )
                       ],
                     )
                   ],
