@@ -11,6 +11,7 @@ class MyPref {
   static final bankListDetail = ReadWriteValue('bankListDeatail', '', _box);
   static final genKyc = ReadWriteValue('genKyc', '', _box);
   static final setOverlay = ReadWriteValue('setOverlay', false, _box);
+  static final refreshToken = ReadWriteValue('refreshToken', '', _box);
   static final setSubscribeOverlay =
       ReadWriteValue('setSubscribeOverlay', false, _box);
   static final userDetails = ReadWriteValue('userDetails', '', _box);

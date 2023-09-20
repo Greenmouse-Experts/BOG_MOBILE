@@ -55,6 +55,7 @@ class UserRepository {
 
   Future<ApiResponse> getData(String url, {hasHeader = true}) async {
     final response = await api.getData(url, hasHeader: hasHeader);
+
     if (response.message == 'Token is not valid') {
       // AppOverlay.
       AppOverlay.showInfoDialog(

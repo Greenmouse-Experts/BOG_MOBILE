@@ -15,7 +15,6 @@ import '../../../global_widgets/global_widgets.dart';
 import '../../add_products/add_products.dart';
 import '../../checkout/checkout.dart';
 import '../../meetings/meeting.dart';
-import '../../orders/order_progress.dart';
 import '../../project_details/view_form.dart';
 import '../../shop/shop.dart';
 
@@ -580,6 +579,7 @@ class _CartTabState extends State<CartTab> {
                                               : isReview
                                                   ? review[index]
                                                   : drafts[index];
+
                                       return ProductItem(
                                         title: prod.name,
                                         status: prod.status,
@@ -1161,9 +1161,8 @@ class ProductItem extends StatelessWidget {
                 children: [
                   PopupMenuButton(
                       color: Colors.white,
-                      child: Icon(Icons.more_vert_outlined,
-                          color: AppColors.ashColor,
-                          size: Get.textScaleFactor * 30),
+                      child: const Icon(Icons.more_vert_outlined,
+                          color: AppColors.ashColor, size: 30),
                       itemBuilder: (context) {
                         return [
                           if (status == 'draft')

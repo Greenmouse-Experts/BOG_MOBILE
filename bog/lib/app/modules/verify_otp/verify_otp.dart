@@ -65,7 +65,7 @@ class VerifyOTP extends GetView<AuthController> {
                   length: 4,
                   width: MediaQuery.of(context).size.width,
                   fieldWidth: Get.width * 0.1,
-                  style:  TextStyle(fontSize:  Get.textScaleFactor * 17),
+                  style: const TextStyle(fontSize: 17),
                   textFieldAlignment: MainAxisAlignment.spaceAround,
                   fieldStyle: FieldStyle.underline,
                   onCompleted: (pin) {},

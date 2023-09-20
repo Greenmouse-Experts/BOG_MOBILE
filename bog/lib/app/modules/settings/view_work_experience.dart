@@ -23,16 +23,12 @@ class WorkExperience extends StatefulWidget {
 }
 
 class _WorkExperienceState extends State<WorkExperience> {
-
-
-
   @override
   Widget build(BuildContext context) {
-
     final controller = Get.find<HomeController>();
     final userType =
         controller.currentType == 'Product Partner' ? 'vendor' : 'professional';
-  
+
     final getWorkExperiences = controller.userRepo
         .getData('/kyc-work-experience/fetch?userType=$userType');
     return AppBaseView(
@@ -125,10 +121,17 @@ class _WorkExperienceState extends State<WorkExperience> {
                       AppButton(
                         title: 'Add new work experience',
                         onPressed: () async {
-                          await Get.to(() => UpdateWorkExperience(
-                              kycScore: widget.kycScore,
-                              kycTotal: widget.kycTotal,
-                              isNewWork: true));
+                          if (experience.length < 6) {
+                            await Get.to(() => UpdateWorkExperience(
+                                kycScore: widget.kycScore,
+                                kycTotal: widget.kycTotal,
+                                isNewWork: true));
+                          } else {
+                            Get.snackbar("Error",
+                                "You can't add more than 5 working experiences",
+                                colorText: Colors.white,
+                                backgroundColor: Colors.red);
+                          }
                         },
                       )
                     ],

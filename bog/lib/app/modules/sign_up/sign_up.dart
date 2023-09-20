@@ -4,6 +4,7 @@ import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/theme/app_colors.dart';
 
@@ -65,7 +66,7 @@ class SignUp extends GetView<AuthController> {
                     style: AppTextStyle.headline4.copyWith(
                       color: Colors.black,
                       fontWeight: FontWeight.w500,
-                      fontSize: Get.textScaleFactor * 18,
+                      fontSize: 18,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -80,7 +81,7 @@ class SignUp extends GetView<AuthController> {
                     style: AppTextStyle.headline4.copyWith(
                         color: Colors.black.withOpacity(.5),
                         fontWeight: FontWeight.normal,
-                        fontSize: Get.textScaleFactor * 14),
+                        fontSize: 14),
                   ),
                 ),
                 SizedBox(height: Get.height * 0.04),
@@ -104,7 +105,7 @@ class SignUp extends GetView<AuthController> {
                                   ? Colors.white
                                   : const Color(0xff2F2F2F),
                               fontWeight: FontWeight.w300,
-                              fontSize: Get.textScaleFactor * 14,
+                              fontSize: 14,
                             ),
                           ),
                         );
@@ -284,9 +285,7 @@ class SignUp extends GetView<AuthController> {
                                                         .withOpacity(.5),
                                                     fontWeight:
                                                         FontWeight.normal,
-                                                    fontSize:
-                                                        Get.textScaleFactor *
-                                                            14,
+                                                    fontSize: 14,
                                                   ),
                                                 ),
                                                 TextSpan(
@@ -298,13 +297,21 @@ class SignUp extends GetView<AuthController> {
                                                       color: AppColors.primary,
                                                       fontWeight:
                                                           FontWeight.normal,
-                                                      fontSize:
-                                                          Get.textScaleFactor *
-                                                              14,
+                                                      fontSize: 14,
                                                     ),
                                                     recognizer:
                                                         TapGestureRecognizer()
-                                                          ..onTap = () {}),
+                                                          ..onTap = () async {
+                                                            if (await canLaunchUrl(
+                                                                Uri.parse(
+                                                                    'https://buildonthego.com/terms'))) {
+                                                              await launchUrl(
+                                                                  Uri.parse(
+                                                                      'https://buildonthego.com/terms'));
+                                                            } else {
+                                                              throw 'Could not launch url';
+                                                            }
+                                                          }),
                                               ],
                                             ),
                                           ),
@@ -514,9 +521,7 @@ class SignUp extends GetView<AuthController> {
                                                         .withOpacity(.5),
                                                     fontWeight:
                                                         FontWeight.normal,
-                                                    fontSize:
-                                                        Get.textScaleFactor *
-                                                            14,
+                                                    fontSize: 14,
                                                   ),
                                                 ),
                                                 TextSpan(
@@ -528,13 +533,21 @@ class SignUp extends GetView<AuthController> {
                                                       color: AppColors.primary,
                                                       fontWeight:
                                                           FontWeight.normal,
-                                                      fontSize:
-                                                          Get.textScaleFactor *
-                                                              14,
+                                                      fontSize: 14,
                                                     ),
                                                     recognizer:
                                                         TapGestureRecognizer()
-                                                          ..onTap = () {}),
+                                                          ..onTap = () async {
+                                                            if (await canLaunchUrl(
+                                                                Uri.parse(
+                                                                    'https://buildonthego.com/terms'))) {
+                                                              await launchUrl(
+                                                                  Uri.parse(
+                                                                      'https://buildonthego.com/terms'));
+                                                            } else {
+                                                              throw 'Could not launch url';
+                                                            }
+                                                          }),
                                               ],
                                             ),
                                           ),

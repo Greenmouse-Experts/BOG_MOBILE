@@ -42,7 +42,7 @@ class Interests extends StatelessWidget {
                     style: AppTextStyle.headline4.copyWith(
                       color: Colors.white,
                       fontWeight: FontWeight.normal,
-                      fontSize: Get.textScaleFactor * 16,
+                      fontSize: 16,
                     ),
                   ),
                 ),
@@ -66,7 +66,7 @@ class Interests extends StatelessWidget {
             style: AppTextStyle.headline4.copyWith(
               color: Colors.black,
               fontWeight: FontWeight.bold,
-              fontSize: Get.textScaleFactor * 18,
+              fontSize: 18,
             ),
             textAlign: TextAlign.center,
           ),
@@ -105,7 +105,7 @@ class Interests extends StatelessWidget {
                         style: AppTextStyle.headline4.copyWith(
                           color: Colors.black,
                           fontWeight: FontWeight.normal,
-                          fontSize: Get.textScaleFactor * 16,
+                          fontSize: 16,
                         ),
                       ),
                       SizedBox(
@@ -116,7 +116,7 @@ class Interests extends StatelessWidget {
                         style: AppTextStyle.headline4.copyWith(
                           color: Colors.black,
                           fontWeight: FontWeight.normal,
-                          fontSize: Get.textScaleFactor * 16,
+                          fontSize: 16,
                         ),
                       ),
                     ],
@@ -152,7 +152,7 @@ class Interests extends StatelessWidget {
                         style: AppTextStyle.headline4.copyWith(
                           color: Colors.black,
                           fontWeight: FontWeight.normal,
-                          fontSize:Get.textScaleFactor *  25,
+                          fontSize: 25,
                         ),
                       ),
                       SizedBox(
@@ -163,7 +163,7 @@ class Interests extends StatelessWidget {
                         style: AppTextStyle.headline4.copyWith(
                           color: Colors.black,
                           fontWeight: FontWeight.normal,
-                          fontSize: Get.textScaleFactor * 16,
+                          fontSize: 16,
                         ),
                       ),
                     ],
@@ -207,7 +207,7 @@ class Interests extends StatelessWidget {
                         style: AppTextStyle.headline4.copyWith(
                           color: Colors.black,
                           fontWeight: FontWeight.normal,
-                          fontSize:Get.textScaleFactor *  25,
+                          fontSize: 25,
                         ),
                       ),
                       SizedBox(
@@ -218,7 +218,7 @@ class Interests extends StatelessWidget {
                         style: AppTextStyle.headline4.copyWith(
                           color: Colors.black,
                           fontWeight: FontWeight.normal,
-                          fontSize: Get.textScaleFactor * 16,
+                          fontSize: 16,
                         ),
                       ),
                     ],
@@ -254,7 +254,7 @@ class Interests extends StatelessWidget {
                         style: AppTextStyle.headline4.copyWith(
                           color: Colors.black,
                           fontWeight: FontWeight.normal,
-                          fontSize: Get.textScaleFactor * 25,
+                          fontSize: 25,
                         ),
                       ),
                       SizedBox(
@@ -265,7 +265,7 @@ class Interests extends StatelessWidget {
                         style: AppTextStyle.headline4.copyWith(
                           color: Colors.black,
                           fontWeight: FontWeight.normal,
-                          fontSize:Get.textScaleFactor *  16,
+                          fontSize: 16,
                         ),
                       ),
                     ],
@@ -309,7 +309,7 @@ class Interests extends StatelessWidget {
                         style: AppTextStyle.headline4.copyWith(
                           color: Colors.black,
                           fontWeight: FontWeight.normal,
-                          fontSize:Get.textScaleFactor *  25,
+                          fontSize: 25,
                         ),
                       ),
                       SizedBox(
@@ -320,7 +320,7 @@ class Interests extends StatelessWidget {
                         style: AppTextStyle.headline4.copyWith(
                           color: Colors.black,
                           fontWeight: FontWeight.normal,
-                          fontSize: Get.textScaleFactor * 16,
+                          fontSize: 16,
                         ),
                       ),
                     ],
@@ -355,7 +355,7 @@ class Interests extends StatelessWidget {
                         style: AppTextStyle.headline4.copyWith(
                           color: Colors.black,
                           fontWeight: FontWeight.normal,
-                          fontSize: Get.textScaleFactor * 23,
+                          fontSize: 23,
                         ),
                       ),
                       SizedBox(
@@ -366,7 +366,7 @@ class Interests extends StatelessWidget {
                         style: AppTextStyle.headline4.copyWith(
                           color: Colors.black,
                           fontWeight: FontWeight.normal,
-                          fontSize:  Get.textScaleFactor * 16,
+                          fontSize: 16,
                         ),
                         textAlign: TextAlign.center,
                       ),

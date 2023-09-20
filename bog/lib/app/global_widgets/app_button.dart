@@ -98,9 +98,7 @@ class _AppButtonState extends State<AppButton> {
                             textAlign: TextAlign.center,
                             style: Get.theme.textTheme.bodyLarge!.copyWith(
                                 color: widget.fontColor,
-                                fontSize: widget.fontSize *
-                                    Get.textScaleFactor *
-                                    0.90,
+                                fontSize: widget.fontSize * 0.90,
                                 fontWeight: widget.bold
                                     ? FontWeight.w500
                                     : FontWeight.w300),
@@ -110,9 +108,7 @@ class _AppButtonState extends State<AppButton> {
                             textAlign: TextAlign.center,
                             style: Get.theme.textTheme.bodyLarge!.copyWith(
                                 color: widget.trailingColor,
-                                fontSize: widget.fontSize *
-                                    Get.textScaleFactor *
-                                    0.90,
+                                fontSize: widget.fontSize * 0.90,
                                 fontWeight: widget.bold
                                     ? FontWeight.w500
                                     : FontWeight.w300),
@@ -127,8 +123,7 @@ class _AppButtonState extends State<AppButton> {
                         child: Opacity(
                           opacity: !loading ? 0 : 1,
                           child: SizedBox.square(
-                            dimension:
-                                widget.fontSize * Get.textScaleFactor * 0.9,
+                            dimension: widget.fontSize * 0.9,
                             child: CircularProgressIndicator(
                               color: widget.fontColor,
                               strokeWidth: 1.5,
@@ -234,9 +229,7 @@ class _AppButton2State extends State<AppButton2> {
                             textAlign: TextAlign.center,
                             style: Get.theme.textTheme.bodyLarge!.copyWith(
                                 color: widget.fontColor,
-                                fontSize: widget.fontSize *
-                                    Get.textScaleFactor *
-                                    0.90,
+                                fontSize: widget.fontSize * 0.90,
                                 fontWeight: widget.bold
                                     ? FontWeight.w500
                                     : FontWeight.w300),
@@ -246,9 +239,7 @@ class _AppButton2State extends State<AppButton2> {
                             textAlign: TextAlign.center,
                             style: Get.theme.textTheme.bodyLarge!.copyWith(
                                 color: widget.trailingColor,
-                                fontSize: widget.fontSize *
-                                    Get.textScaleFactor *
-                                    0.90,
+                                fontSize: widget.fontSize * 0.90,
                                 fontWeight: widget.bold
                                     ? FontWeight.w500
                                     : FontWeight.w300),
@@ -263,8 +254,7 @@ class _AppButton2State extends State<AppButton2> {
                         child: Opacity(
                           opacity: !loading ? 0 : 1,
                           child: SizedBox.square(
-                            dimension:
-                                widget.fontSize * Get.textScaleFactor * 0.9,
+                            dimension: widget.fontSize * 0.9,
                             child: CircularProgressIndicator(
                               color: widget.fontColor,
                               strokeWidth: 1.5,
@@ -324,7 +314,7 @@ class AppOutlineButton extends StatelessWidget {
         textAlign: TextAlign.center,
         style: Get.theme.textTheme.bodyLarge!.copyWith(
           color: fontColor,
-          fontSize: fontSize * Get.textScaleFactor * 0.9,
+          fontSize: fontSize * 0.9,
         ),
       ),
     );

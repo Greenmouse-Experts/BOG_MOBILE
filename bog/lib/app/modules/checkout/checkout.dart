@@ -1081,9 +1081,10 @@ class _CheckoutState extends State<Checkout> {
                                                             cost: controller
                                                                 .subTotalPrice,
                                                             deliveryFee:
-                                                                deliveryNearestAddress!
-                                                                        .charge ??
-                                                                    5000,
+                                                                (deliveryNearestAddress!
+                                                                            .charge ??
+                                                                        5000)
+                                                                    .round(),
                                                             email: logInDetails
                                                                 .email!,
                                                             controller:

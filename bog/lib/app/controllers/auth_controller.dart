@@ -101,15 +101,21 @@ class AuthController extends GetxController {
       }
       AppOverlay.showInfoDialog(
         title: response.isSuccessful ? 'Success' : 'Failure',
-        content: response.message,
+        content: response.exists == true
+            ? "New Account Profile Created Successfully\nProceed to login, your recently created profile has been included in your profile collection"
+            : response.message,
         buttonText: buttonMessage,
         onPressed: () {
           if (response.message == "This Email is already in Use") {
             Get.toNamed(SignIn.route);
           } else {
             if (response.isSuccessful) {
-              Get.toNamed(VerifySignUpOTP.route);
-              startTimer();
+              if (response.exists == true) {
+                Get.toNamed(SignIn.route);
+              } else {
+                Get.toNamed(VerifySignUpOTP.route);
+                startTimer();
+              }
             } else {
               Get.back();
             }
@@ -124,13 +130,20 @@ class AuthController extends GetxController {
       var message = "";
       var buttonMessage = "";
       ApiResponse response = await userRepo.signup(_signupServiceClient);
+
       if (response.message == "This Email is already in Use") {
         message = "This Email is already in Use, Please Login";
         buttonMessage = "Login";
       } else {
         if (response.isSuccessful) {
-          message =
-              "Account created successfully, Check your email for otp verification";
+          if (response.exists == true) {
+            message =
+                "New Account Profile Created Successfully\nProceed to login, your recently created profile has been included in your profile collection";
+          } else {
+            message =
+                "Account created successfully, Check your email for otp verification";
+          }
+
           buttonMessage = "Continue";
         } else {
           //    message = "An error occurred, Please try again";
@@ -147,8 +160,12 @@ class AuthController extends GetxController {
             Get.toNamed(SignIn.route);
           } else {
             if (response.isSuccessful) {
-              Get.toNamed(VerifySignUpOTP.route);
-              startTimer();
+              if (response.exists == true) {
+                Get.toNamed(SignIn.route);
+              } else {
+                Get.toNamed(VerifySignUpOTP.route);
+                startTimer();
+              }
             } else {
               Get.back();
             }
@@ -168,8 +185,13 @@ class AuthController extends GetxController {
         buttonMessage = "Login";
       } else {
         if (response.isSuccessful) {
-          message =
-              "Account created successfully, Check your email for otp verification";
+          if (response.exists == true) {
+            message =
+                "New Account Profile Created Successfully\nProceed to login, your recently created profile has been included in your profile collection";
+          } else {
+            message =
+                "Account created successfully, Check your email for otp verification";
+          }
           buttonMessage = "Continue";
         } else {
           message = "An error occurred, Please try again";
@@ -185,8 +207,12 @@ class AuthController extends GetxController {
             Get.toNamed(SignIn.route);
           } else {
             if (response.isSuccessful) {
-              Get.toNamed(VerifySignUpOTP.route);
-              startTimer();
+              if (response.exists == true) {
+                Get.toNamed(SignIn.route);
+              } else {
+                Get.toNamed(VerifySignUpOTP.route);
+                startTimer();
+              }
             } else {
               Get.back();
             }
@@ -207,14 +233,21 @@ class AuthController extends GetxController {
         buttonMessage = "Login";
       } else {
         if (response.isSuccessful) {
-          message =
-              "Account created successfully, Check your email for otp verification";
+          if (response.exists == true) {
+            message =
+                "New Account Profile Created Successfully\nProceed to login, your recently created profile has been included in your profile collection";
+          } else {
+            message =
+                "Account created successfully, Check your email for otp verification";
+          }
+
           buttonMessage = "Continue";
         } else {
           message = "An error occurred, Please try again";
           buttonMessage = "Ok";
         }
       }
+
       AppOverlay.showInfoDialog(
         title: response.isSuccessful ? 'Success' : 'Failure',
         content: message,
@@ -224,8 +257,12 @@ class AuthController extends GetxController {
             Get.toNamed(SignIn.route);
           } else {
             if (response.isSuccessful) {
-              Get.toNamed(VerifySignUpOTP.route);
-              startTimer();
+              if (response.exists == true) {
+                Get.toNamed(SignIn.route);
+              } else {
+                Get.toNamed(VerifySignUpOTP.route);
+                startTimer();
+              }
             } else {
               Get.back();
             }
@@ -429,6 +466,7 @@ class AuthController extends GetxController {
         var token = response.token;
         MyPref.logInDetail.val = jsonEncode(response.user);
         MyPref.authToken.val = token.toString();
+        MyPref.refreshToken.val = response.refreshToken.toString();
         ApiResponse bankListResponse = await userRepo.getBanks();
 
         final newRes = await userRepo

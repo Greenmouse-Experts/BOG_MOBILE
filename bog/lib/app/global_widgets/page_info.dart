@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_styles.dart';
@@ -32,7 +31,7 @@ class PageInfo extends StatelessWidget {
           textAlign: TextAlign.justify,
           style: AppTextStyle.bodyText2.copyWith(
             height: 1.6,
-            fontSize: fontSize! * Get.textScaleFactor * 0.9,
+            fontSize: fontSize! * 0.9,
             color: subtitleisRed ? AppColors.bostonUniRed : null,
           ),
         ),

@@ -21,6 +21,9 @@ class OrgInfoModel {
     this.othersOperations,
     this.createdAt,
     this.updatedAt,
+    this.complexityOfProjects,
+    this.costOfProjects,
+    this.noOfStaff,
     this.deletedAt,
   });
 
@@ -35,6 +38,9 @@ class OrgInfoModel {
   int? directorPhone;
   String? directorEmail;
   int? contactPhone;
+  String? complexityOfProjects;
+  String? costOfProjects;
+  String? noOfStaff;
   String? contactEmail;
   String? othersOperations;
   DateTime? createdAt;
@@ -50,6 +56,9 @@ class OrgInfoModel {
         id: json["id"],
         userType: json["userType"],
         userId: json["userId"],
+        complexityOfProjects: json["complexity_of_projects_completed"],
+        costOfProjects: json["cost_of_projects_completed"],
+        noOfStaff: json["no_of_staff"],
         organisationType: json["organisation_type"],
         others: json["others"],
         incorporationDate: json["Incorporation_date"] == null
@@ -77,6 +86,9 @@ class OrgInfoModel {
         "userId": userId,
         "organisation_type": organisationType,
         "others": others,
+        "complexity_of_projects_completed": complexityOfProjects,
+        "cost_of_projects_completed": costOfProjects,
+        "no_of_staff": noOfStaff,
         "Incorporation_date": incorporationDate?.toIso8601String(),
         "director_fullname": directorFullname,
         "director_designation": directorDesignation,

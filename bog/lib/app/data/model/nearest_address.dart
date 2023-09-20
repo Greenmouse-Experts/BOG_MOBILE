@@ -32,7 +32,7 @@ class NearestAddress {
   dynamic longitude;
   dynamic latitude;
   String? zipcode;
-  int? charge;
+  num? charge;
   dynamic deliveryType;
   String? deliveryTime;
   bool? status;
@@ -47,27 +47,24 @@ class NearestAddress {
   String toRawJson() => json.encode(toJson());
 
   factory NearestAddress.fromJson(Map<String, dynamic> json) => NearestAddress(
-        id: json["id"],
-        title: json["title"],
-        address: json["address"],
-        state: json["state"],
-        country: json["country"],
-        longitude: json["longitude"],
-        latitude: json["latitude"],
-        zipcode: json["zipcode"],
-        charge: json["charge"],
-        deliveryType: json["delivery_type"],
-        deliveryTime: json["delivery_time"],
-        status: json["status"],
-        createdAt: json["createdAt"] == null
-            ? null
-            : DateTime.parse(json["createdAt"]),
-        updatedAt: json["updatedAt"] == null
-            ? null
-            : DateTime.parse(json["updatedAt"]),
-        deletedAt: json["deletedAt"],
-        insurancecharge: json["insurancecharge"]
-      );
+      id: json["id"],
+      title: json["title"],
+      address: json["address"],
+      state: json["state"],
+      country: json["country"],
+      longitude: json["longitude"],
+      latitude: json["latitude"],
+      zipcode: json["zipcode"],
+      charge: json["charge"],
+      deliveryType: json["delivery_type"],
+      deliveryTime: json["delivery_time"],
+      status: json["status"],
+      createdAt:
+          json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
+      updatedAt:
+          json["updatedAt"] == null ? null : DateTime.parse(json["updatedAt"]),
+      deletedAt: json["deletedAt"],
+      insurancecharge: json["insurancecharge"]);
 
   Map<String, dynamic> toJson() => {
         "id": id,
@@ -85,6 +82,6 @@ class NearestAddress {
         "createdAt": createdAt?.toIso8601String(),
         "updatedAt": updatedAt?.toIso8601String(),
         "deletedAt": deletedAt,
-        "insurancecharge" : insurancecharge
+        "insurancecharge": insurancecharge
       };
 }

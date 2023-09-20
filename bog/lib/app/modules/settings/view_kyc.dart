@@ -126,16 +126,17 @@ class _KYCPageState extends State<KYCPage> {
                                       ));
                                   setState(() {});
                                 }),
-                            _TextButton(
-                                iconData: Icons.work,
-                                text: 'Work/Job Execution Experience',
-                                onPressed: () async {
-                                  await Get.to(() => WorkExperience(
-                                        kycScore: kycScoreMap,
-                                        kycTotal: kycTotalMap,
-                                      ));
-                                  setState(() {});
-                                }),
+                            if (userType == 'professional')
+                              _TextButton(
+                                  iconData: Icons.work,
+                                  text: 'Work/Job Execution Experience',
+                                  onPressed: () async {
+                                    await Get.to(() => WorkExperience(
+                                          kycScore: kycScoreMap,
+                                          kycTotal: kycTotalMap,
+                                        ));
+                                    setState(() {});
+                                  }),
                             _TextButton(
                                 iconData: Icons.money,
                                 text: 'Financial Data',
@@ -208,16 +209,17 @@ class _KYCPageState extends State<KYCPage> {
                                       ));
                                   setState(() {});
                                 }),
-                            _TextButton(
-                                iconData: Icons.work,
-                                text: 'Work/Job Execution Experience',
-                                onPressed: () async {
-                                  await Get.to(() => WorkExperience(
-                                        kycScore: kycScoreMap,
-                                        kycTotal: kycTotalMap,
-                                      ));
-                                  setState(() {});
-                                }),
+                            if (userType == 'professional')
+                              _TextButton(
+                                  iconData: Icons.work,
+                                  text: 'Work/Job Execution Experience',
+                                  onPressed: () async {
+                                    await Get.to(() => WorkExperience(
+                                          kycScore: kycScoreMap,
+                                          kycTotal: kycTotalMap,
+                                        ));
+                                    setState(() {});
+                                  }),
                             if (userType == 'vendor')
                               _TextButton(
                                   iconData: Icons.category,

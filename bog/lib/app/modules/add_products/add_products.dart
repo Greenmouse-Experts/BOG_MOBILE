@@ -220,10 +220,11 @@ class _AddProjectState extends State<AddProject> {
                                         left: width * 0.05,
                                         right: width * 0.05),
                                     child: PageInput(
-                                      hint: "Pick a photo to upload",
-                                      label: "Upload Product Photo",
+                                      hint: "Pick images to upload",
+                                      label: "Upload Product Photos",
                                       controller: fileController,
                                       pickImages: true,
+                                      isMultiple: true,
                                       validator: (value) {
                                         if (value!.isEmpty) {
                                           return "Please pick a picture to upload";
@@ -283,6 +284,19 @@ class _AddProjectState extends State<AddProject> {
                                       onPressed: () async {
                                         if (formKey.currentState!.validate()) {
                                           Map<String, dynamic> bodyForEdit = {};
+                                          List<dio.MultipartFile> files = [];
+
+                                          if (pickedFiles != null) {
+                                            for (var filePath in pickedFiles!) {
+                                              files.add(await dio.MultipartFile
+                                                  .fromFile(
+                                                filePath.path,
+                                                filename: filePath.path
+                                                    .split('/')
+                                                    .last,
+                                              ));
+                                            }
+                                          }
 
                                           if (widget.myProduct != null) {
                                             bodyForEdit = pickedFiles == null
@@ -313,17 +327,7 @@ class _AddProjectState extends State<AddProject> {
                                                     "name": nameController.text,
                                                     "price":
                                                         priceController.text,
-                                                    "photos": [
-                                                      await dio.MultipartFile
-                                                          .fromFile(
-                                                              pickedFile!.path,
-                                                              filename:
-                                                                  pickedFile!
-                                                                      .path
-                                                                      .split(
-                                                                          '/')
-                                                                      .last),
-                                                    ],
+                                                    "photos": files,
                                                     "quantity":
                                                         quantityController.text,
                                                     "unit": unitController.text,
@@ -337,7 +341,7 @@ class _AddProjectState extends State<AddProject> {
                                                   };
                                           }
 
-                                          var body = pickedFile == null
+                                          var body = pickedFiles == null
                                               ? {
                                                   "categoryId": selectedCategory
                                                       .id
@@ -357,15 +361,7 @@ class _AddProjectState extends State<AddProject> {
                                                       .toString(),
                                                   "name": nameController.text,
                                                   "price": priceController.text,
-                                                  "photos": [
-                                                    await dio.MultipartFile
-                                                        .fromFile(
-                                                            pickedFile!.path,
-                                                            filename:
-                                                                pickedFile!.path
-                                                                    .split('/')
-                                                                    .last),
-                                                  ],
+                                                  "photos": files,
                                                   "quantity":
                                                       quantityController.text,
                                                   "unit": unitController.text,
@@ -520,8 +516,9 @@ class _AddProjectState extends State<AddProject> {
                                   padding: EdgeInsets.only(
                                       left: width * 0.05, right: width * 0.05),
                                   child: PageInput(
-                                    hint: "Pick a photo to upload",
-                                    label: "Upload Product Photo",
+                                    hint: "Pick images to upload",
+                                    label: "Upload Product Photos",
+                                    isMultiple: true,
                                     controller: fileController,
                                     onMultipleFilesPicked: (p0) {
                                       pickedFiles = p0;

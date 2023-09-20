@@ -63,7 +63,7 @@ class Multiplexor extends StatelessWidget {
                           style: AppTextStyle.headline4.copyWith(
                               color: Colors.black,
                               fontWeight: FontWeight.w500,
-                              fontSize: Get.textScaleFactor * 24),
+                              fontSize: 24),
                         ),
                         SizedBox(
                           height: Get.height * 0.018,
@@ -118,9 +118,7 @@ class Multiplexor extends StatelessWidget {
                                         style: AppTextStyle.headline4.copyWith(
                                           color: Colors.black,
                                           fontWeight: FontWeight.w500,
-                                          fontSize: Get.width < 300
-                                              ? Get.textScaleFactor * 16
-                                              : Get.textScaleFactor * 20,
+                                          fontSize: Get.width < 300 ? 16 : 20,
                                         ),
                                       ),
                                       const SizedBox(
@@ -131,9 +129,7 @@ class Multiplexor extends StatelessWidget {
                                         style: AppTextStyle.headline4.copyWith(
                                           color: Colors.black,
                                           fontWeight: FontWeight.normal,
-                                          fontSize: Get.width < 300
-                                              ? Get.textScaleFactor * 11
-                                              : Get.textScaleFactor * 14,
+                                          fontSize: Get.width < 300 ? 11 : 14,
                                         ),
                                       ),
                                     ],
@@ -186,9 +182,7 @@ class Multiplexor extends StatelessWidget {
                                         style: AppTextStyle.headline4.copyWith(
                                           color: Colors.black,
                                           fontWeight: FontWeight.w500,
-                                          fontSize: Get.width < 300
-                                              ? Get.textScaleFactor * 16
-                                              : Get.textScaleFactor * 20,
+                                          fontSize: Get.width < 300 ? 16 : 20,
                                         ),
                                       ),
                                       const SizedBox(
@@ -199,9 +193,7 @@ class Multiplexor extends StatelessWidget {
                                         style: AppTextStyle.headline4.copyWith(
                                           color: Colors.black,
                                           fontWeight: FontWeight.normal,
-                                          fontSize: Get.width < 300
-                                              ? Get.textScaleFactor * 11
-                                              : Get.textScaleFactor * 14,
+                                          fontSize: Get.width < 300 ? 11 : 14,
                                         ),
                                       ),
                                     ],
@@ -254,9 +246,7 @@ class Multiplexor extends StatelessWidget {
                                         style: AppTextStyle.headline4.copyWith(
                                           color: Colors.black,
                                           fontWeight: FontWeight.w500,
-                                          fontSize: Get.width < 300
-                                              ? Get.textScaleFactor * 16
-                                              : Get.textScaleFactor * 20,
+                                          fontSize: Get.width < 300 ? 16 : 20,
                                         ),
                                       ),
                                       const SizedBox(
@@ -267,9 +257,7 @@ class Multiplexor extends StatelessWidget {
                                         style: AppTextStyle.headline4.copyWith(
                                           color: Colors.black,
                                           fontWeight: FontWeight.normal,
-                                          fontSize: Get.width < 300
-                                              ? Get.textScaleFactor * 11
-                                              : Get.textScaleFactor * 14,
+                                          fontSize: Get.width < 300 ? 11 : 14,
                                         ),
                                       ),
                                     ],

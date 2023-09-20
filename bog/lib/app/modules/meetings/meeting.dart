@@ -397,12 +397,10 @@ class _MeetingsState extends State<Meetings> with TickerProviderStateMixin {
                                                       .meetingInfo!.password ??
                                                   '');
                                         },
-                                        child: Text(
+                                        child: const Text(
                                           'Meeting Info',
                                           style: TextStyle(
-                                              color: Colors.grey,
-                                              fontSize:
-                                                  Get.textScaleFactor * 12),
+                                              color: Colors.grey, fontSize: 12),
                                         )),
                                   ),
                                 if (!isPending)
@@ -415,12 +413,10 @@ class _MeetingsState extends State<Meetings> with TickerProviderStateMixin {
                                                       .meetingInfo!.joinUrl ??
                                                   ''));
                                         },
-                                        child: Text(
+                                        child: const Text(
                                           'Meeting Link',
                                           style: TextStyle(
-                                              color: Colors.grey,
-                                              fontSize:
-                                                  Get.textScaleFactor * 12),
+                                              color: Colors.grey, fontSize: 12),
                                         )),
                                   ),
                               ];
@@ -801,12 +797,10 @@ class _NewMeetingsState extends State<NewMeetings>
                                                       .meetingInfo!.password ??
                                                   '');
                                         },
-                                        child: Text(
+                                        child: const Text(
                                           'Meeting Info',
                                           style: TextStyle(
-                                              color: Colors.grey,
-                                              fontSize:
-                                                  Get.textScaleFactor * 12),
+                                              color: Colors.grey, fontSize: 12),
                                         )),
                                   ),
                                 if (!isPending)
@@ -819,12 +813,10 @@ class _NewMeetingsState extends State<NewMeetings>
                                                       .meetingInfo!.joinUrl ??
                                                   ''));
                                         },
-                                        child: Text(
+                                        child: const Text(
                                           'Meeting Link',
                                           style: TextStyle(
-                                              color: Colors.grey,
-                                              fontSize:
-                                                  Get.textScaleFactor * 12),
+                                              color: Colors.grey, fontSize: 12),
                                         )),
                                   ),
                               ];

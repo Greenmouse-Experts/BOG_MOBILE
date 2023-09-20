@@ -64,7 +64,7 @@ class ForgotPassword extends GetView<AuthController> {
                           style: AppTextStyle.headline4.copyWith(
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
-                            fontSize:  Get.textScaleFactor * 20,
+                            fontSize: 20,
                           ),
                         ),
                         SizedBox(height: Get.height * 0.02),

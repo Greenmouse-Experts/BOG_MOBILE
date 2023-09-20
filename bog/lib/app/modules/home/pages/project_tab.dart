@@ -73,6 +73,7 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
         controller.userRepo.getData("/projects/my-request/?userType=$userType");
     getServiceProjects = controller.userRepo
         .getData("/projects/service-request?userType=professional");
+
     getAvailableProjects = controller.userRepo
         .getData("/projects/dispatched-projects/${logInDetails.profile!.id}");
     getOrderRequests = controller.userRepo.getData('/orders/order-request');
@@ -780,6 +781,8 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
                                           serviceProjects.any((myProject) =>
                                               element.project!.projectSlug ==
                                               myProject.projectSlug));
+                                      availableProjects.removeWhere(
+                                          (element) => element.hasBid == true);
 
                                       return SizedBox(
                                         height: Get.height * 0.735,
@@ -893,9 +896,9 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
                                                                               onApiChange();
                                                                             },
                                                                             child:
-                                                                                Text(
+                                                                                const Text(
                                                                               'View Details',
-                                                                              style: TextStyle(color: Colors.grey, fontSize: Get.textScaleFactor * 12),
+                                                                              style: TextStyle(color: Colors.grey, fontSize: 12),
                                                                             ),
                                                                           ),
                                                                         ),
@@ -931,9 +934,9 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
                                                                                   });
                                                                             },
                                                                             child:
-                                                                                Text(
+                                                                                const Text(
                                                                               'Update Details',
-                                                                              style: TextStyle(color: Colors.grey, fontSize: Get.textScaleFactor * 12),
+                                                                              style: TextStyle(color: Colors.grey, fontSize: 12),
                                                                             ),
                                                                           ),
                                                                         )

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_styles.dart';
@@ -110,8 +109,7 @@ class _DateButtonState<T> extends State<DateButton<T>> {
                   ? Text(
                       field.errorText!,
                       style: TextStyle(
-                          color: Colors.redAccent.shade700,
-                          fontSize: Get.textScaleFactor * 12),
+                          color: Colors.redAccent.shade700, fontSize: 12),
                     )
                   : const SizedBox.shrink(),
             ],

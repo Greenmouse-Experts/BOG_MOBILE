@@ -16,6 +16,7 @@ class HttpApiResponse {
   dynamic accounts;
   dynamic user;
   dynamic status;
+  bool? exists;
   final bool isSuccessful;
   String? message;
   String? token;
@@ -27,6 +28,7 @@ class HttpApiResponse {
       this.order,
       this.accounts,
       this.projects,
+      this.exists,
       this.status,
       required this.isSuccessful,
       this.token,
@@ -41,6 +43,7 @@ class HttpApiResponse {
         data: json['data'],
         projects: json['projects'],
         user: json['user'],
+        exists: json['exists'],
         token: json['token'],
         status: json['status'],
         accounts: json['accounts'],
@@ -56,6 +59,7 @@ class HttpApiResponse {
         data: jsonD['data'],
         projects: jsonD['projects'],
         user: jsonD['user'],
+        exists: jsonD['exists'],
         status: jsonD['status'],
         token: jsonD['token'],
         accounts: jsonD['accounts'],
@@ -83,7 +87,9 @@ class ApiResponse {
   dynamic reviews;
   final bool isSuccessful;
   String? message;
+  bool? exists;
   String? token;
+  String? refreshToken;
 
   ApiResponse(
       {this.code,
@@ -93,8 +99,10 @@ class ApiResponse {
       this.accounts,
       this.projects,
       this.status,
+      this.exists,
       this.reviews,
       this.users,
+      this.refreshToken,
       required this.isSuccessful,
       this.token,
       this.user});
@@ -107,6 +115,8 @@ class ApiResponse {
         reviews: json['reviews'],
         isSuccessful: json['success'] ?? false,
         data: json['data'],
+        exists: json['exists'],
+        refreshToken: json['refresh_token'],
         users: json['users'],
         projects: json['projects'],
         user: json['user'],
@@ -124,6 +134,8 @@ class ApiResponse {
         isSuccessful: jsonD['success'] ?? false,
         data: jsonD['data'],
         users: jsonD['users'],
+        refreshToken: jsonD['refresh_token'],
+        exists: jsonD['exists'],
         reviews: jsonD['reviews'],
         projects: jsonD['projects'],
         user: jsonD['user'],

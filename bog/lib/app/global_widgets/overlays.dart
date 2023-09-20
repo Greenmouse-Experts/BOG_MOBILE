@@ -123,7 +123,7 @@ class AppOverlay {
                                 textAlign: TextAlign.center,
                                 style: Get.textTheme.bodyLarge!.copyWith(
                                     fontWeight: FontWeight.w600,
-                                    fontSize: 17 * Get.textScaleFactor * 0.90,
+                                    fontSize: 17 * 0.90,
                                     color: Colors.black),
                               ),
                               const SizedBox(height: 11),
@@ -230,8 +230,7 @@ class AppOverlay {
                                       'Your Review',
                                       style: Get.textTheme.bodyLarge!.copyWith(
                                           fontWeight: FontWeight.w600,
-                                          fontSize:
-                                              17 * Get.textScaleFactor * 0.90,
+                                          fontSize: 17 * 0.90,
                                           color: Colors.black),
                                       textAlign: TextAlign.center,
                                     ),
@@ -378,7 +377,7 @@ class AppOverlay {
                       textAlign: TextAlign.center,
                       style: Get.textTheme.bodyLarge!.copyWith(
                           fontWeight: FontWeight.w600,
-                          fontSize: 17 * Get.textScaleFactor * 0.90,
+                          fontSize: 17 * 0.90,
                           color: Colors.black),
                     ),
                     const SizedBox(height: 11),
@@ -466,7 +465,7 @@ class AppOverlay {
                       textAlign: TextAlign.center,
                       style: Get.textTheme.bodyLarge!.copyWith(
                           fontWeight: FontWeight.w600,
-                          fontSize: 17 * Get.textScaleFactor * 0.90,
+                          fontSize: 17 * 0.90,
                           color: Colors.black),
                     ),
                     const SizedBox(height: 11),
@@ -645,7 +644,7 @@ class AppOverlay {
                                   'Project Interest Form',
                                   style: Get.textTheme.bodyLarge!.copyWith(
                                       fontWeight: FontWeight.w600,
-                                      fontSize: 17 * Get.textScaleFactor * 0.90,
+                                      fontSize: 17 * 0.90,
                                       color: Colors.black),
                                   textAlign: TextAlign.center,
                                 ),
@@ -891,7 +890,7 @@ class AppOverlay {
                               textAlign: TextAlign.center,
                               style: Get.textTheme.bodyLarge!.copyWith(
                                   fontWeight: FontWeight.w600,
-                                  fontSize: 17 * Get.textScaleFactor * 0.90,
+                                  fontSize: 17 * 0.90,
                                   color: Colors.black),
                             ),
                             const SizedBox(height: 11),
@@ -1062,7 +1061,7 @@ class AppOverlay {
                         textAlign: TextAlign.center,
                         style: Get.textTheme.bodyLarge!.copyWith(
                             fontWeight: FontWeight.w600,
-                            fontSize: 17 * Get.textScaleFactor * 0.90,
+                            fontSize: 17 * 0.90,
                             color: Colors.black),
                       ),
                       const SizedBox(height: 11),
@@ -1213,7 +1212,7 @@ class AppOverlay {
                       textAlign: TextAlign.center,
                       style: Get.textTheme.bodyLarge!.copyWith(
                           fontWeight: FontWeight.w600,
-                          fontSize: 17 * Get.textScaleFactor * 0.90,
+                          fontSize: 17 * 0.90,
                           color: Colors.black),
                     ),
                     const SizedBox(height: 11),
@@ -1436,7 +1435,7 @@ class AppOverlay {
                                 textAlign: TextAlign.center,
                                 style: Get.textTheme.bodyLarge!.copyWith(
                                     fontWeight: FontWeight.w600,
-                                    fontSize: 17 * Get.textScaleFactor * 0.90,
+                                    fontSize: 17 * 0.90,
                                     color: Colors.black),
                               ),
                             ),
@@ -1568,7 +1567,7 @@ class AppOverlay {
                                 textAlign: TextAlign.center,
                                 style: Get.textTheme.bodyLarge!.copyWith(
                                     fontWeight: FontWeight.w600,
-                                    fontSize: 17 * Get.textScaleFactor * 0.90,
+                                    fontSize: 17 * 0.90,
                                     color: Colors.black),
                               ),
                             ),

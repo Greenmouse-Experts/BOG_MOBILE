@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -65,7 +64,7 @@ class VerifySignUpOTP extends GetView<AuthController> {
                           style: AppTextStyle.headline4.copyWith(
                             color: Colors.black,
                             fontWeight: FontWeight.w500,
-                            fontSize: Get.textScaleFactor * 24,
+                            fontSize: 24,
                           ),
                           textAlign: TextAlign.center,
                         ),
@@ -77,15 +76,15 @@ class VerifySignUpOTP extends GetView<AuthController> {
                           style: AppTextStyle.headline4.copyWith(
                               color: Colors.black.withOpacity(.5),
                               fontWeight: FontWeight.normal,
-                              fontSize: Get.textScaleFactor * 16),
+                              fontSize: 16),
                         ),
                         SizedBox(height: Get.height * 0.04),
                         OTPTextField(
                           length: 6,
                           width: MediaQuery.of(context).size.width,
                           fieldWidth: Get.width * 0.1,
-                          style: TextStyle(
-                            fontSize: Get.textScaleFactor * 17,
+                          style: const TextStyle(
+                            fontSize: 17,
                             color: Colors.black,
                           ),
                           textFieldAlignment: MainAxisAlignment.spaceBetween,
@@ -111,7 +110,7 @@ class VerifySignUpOTP extends GetView<AuthController> {
                         ),
                         AppButton(
                           title: 'Resend Link',
-                          trailingTitle: "${controller.time} min",
+                          trailingTitle: "${controller.time} sec",
                           bckgrndColor: Colors.white,
                           fontColor: Colors.black,
                           trailingColor: AppColors.blue,

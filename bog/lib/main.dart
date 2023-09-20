@@ -34,6 +34,13 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       initialRoute: AppPages.initial,
       getPages: AppPages.routes,
+      builder: (context, child) {
+        final mediaQueryData = MediaQuery.of(context);
+        final scale = mediaQueryData.textScaleFactor.clamp(1.0, 1.1);
+        return MediaQuery(
+            data: MediaQuery.of(context).copyWith(textScaleFactor: scale),
+            child: child!);
+      },
     );
   }
 }

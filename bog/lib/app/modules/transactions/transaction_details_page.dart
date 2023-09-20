@@ -85,7 +85,7 @@ class TransactionDetailsPage extends StatelessWidget {
                                 Text(
                                   'Transaction Details',
                                   style: AppTextStyle.subtitle1.copyWith(
-                                      fontSize: Get.textScaleFactor * 16,
+                                      fontSize: 16,
                                       color: Colors.black,
                                       fontWeight: FontWeight.w600),
                                 ),
@@ -132,7 +132,7 @@ class TransactionDetailsPage extends StatelessWidget {
                                 Text(
                                   'User Details',
                                   style: AppTextStyle.subtitle1.copyWith(
-                                      fontSize: Get.textScaleFactor * 16,
+                                      fontSize: 16,
                                       color: Colors.black,
                                       fontWeight: FontWeight.w600),
                                 ),

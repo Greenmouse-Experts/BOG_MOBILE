@@ -9,6 +9,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_styles.dart';
 import '../../../controllers/home_controller.dart';
 
+import '../../../data/model/available_projects_model.dart';
 import '../../../data/model/my_products.dart';
 import '../../../data/model/notifications_model.dart';
 import '../../../data/model/order_request_model.dart';
@@ -131,7 +132,7 @@ class _HomeTabState extends State<HomeTab> {
                                               AppTextStyle.subtitle1.copyWith(
                                             color: Colors.black,
                                             fontSize: Get.width > 600
-                                                ? Get.textScaleFactor * 35
+                                                ? 35
                                                 : Get.width * 0.05,
                                           ),
                                         ),
@@ -380,9 +381,7 @@ class _HomeTabState extends State<HomeTab> {
                                                           color: Colors.black,
                                                           fontWeight:
                                                               FontWeight.w400,
-                                                          fontSize:
-                                                              Get.textScaleFactor *
-                                                                  19,
+                                                          fontSize: 19,
                                                         ),
                                                       ),
                                                       const SizedBox(
@@ -396,9 +395,7 @@ class _HomeTabState extends State<HomeTab> {
                                                           color: Colors.black,
                                                           fontWeight:
                                                               FontWeight.normal,
-                                                          fontSize:
-                                                              Get.textScaleFactor *
-                                                                  14,
+                                                          fontSize: 14,
                                                         ),
                                                       ),
                                                     ],
@@ -468,9 +465,7 @@ class _HomeTabState extends State<HomeTab> {
                                                           color: Colors.black,
                                                           fontWeight:
                                                               FontWeight.w400,
-                                                          fontSize:
-                                                              Get.textScaleFactor *
-                                                                  19,
+                                                          fontSize: 19,
                                                         ),
                                                       ),
                                                       const SizedBox(
@@ -484,9 +479,7 @@ class _HomeTabState extends State<HomeTab> {
                                                           color: Colors.black,
                                                           fontWeight:
                                                               FontWeight.normal,
-                                                          fontSize:
-                                                              Get.textScaleFactor *
-                                                                  14,
+                                                          fontSize: 14,
                                                         ),
                                                       ),
                                                     ],
@@ -576,8 +569,18 @@ class _HomeTabState extends State<HomeTab> {
                                                         'completed')
                                                     .toList()
                                                     .length;
+                                            final List<AvailableProjectsModel>
+                                                lestProjects = [];
+                                            for (var element in response2) {
+                                              lestProjects.add(
+                                                  AvailableProjectsModel
+                                                      .fromJson(element));
+                                            }
+                                            lestProjects.removeWhere(
+                                                (element) =>
+                                                    element.hasBid == true);
                                             final availableProjects =
-                                                response2.length;
+                                                lestProjects.length;
 
                                             final newdataMap = <String, double>{
                                               "Approved Projects":
@@ -881,14 +884,14 @@ class ProductPartnerHomeWidget extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    PriceSwitcher(isVerified: isVerified),
+                    PriceSwitcher(isVerified: isVerified, isSp: false),
                     // Text(
                     //   'Total Earnings',
                     //   style: AppTextStyle.caption2
                     //       .copyWith(color: AppColors.white),
                     // ),
                     const SizedBox(height: 10),
-                    const Row(
+                    Row(
                       children: [
                         // ElevatedButton(
                         //   onPressed: () {},
@@ -901,22 +904,22 @@ class ProductPartnerHomeWidget extends StatelessWidget {
                         //         color: AppColors.blackShade.withOpacity(0.8)),
                         //   ),
                         // ),
-                        Spacer(),
-                        // Column(
-                        //   crossAxisAlignment: CrossAxisAlignment.start,
-                        //   children: [
-                        //     Text(
-                        //       'Validity Date',
-                        //       style: AppTextStyle.caption
-                        //           .copyWith(color: AppColors.white),
-                        //     ),
-                        //     Text(
-                        //       durationToWeeks(duration),
-                        //       style: AppTextStyle.caption
-                        //           .copyWith(color: AppColors.white),
-                        //     )
-                        //   ],
-                        // )
+                        const Spacer(),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Validity Date',
+                              style: AppTextStyle.caption
+                                  .copyWith(color: AppColors.white),
+                            ),
+                            Text(
+                              durationToWeeks(duration),
+                              style: AppTextStyle.caption
+                                  .copyWith(color: AppColors.white),
+                            )
+                          ],
+                        )
                       ],
                     )
                   ],
@@ -1098,9 +1101,11 @@ class ProductPartnerHomeWidget extends StatelessWidget {
 
 class PriceSwitcher extends StatefulWidget {
   final bool isVerified;
+  final bool isSp;
   const PriceSwitcher({
     super.key,
     required this.isVerified,
+    required this.isSp,
   });
 
   @override
@@ -1109,24 +1114,33 @@ class PriceSwitcher extends StatefulWidget {
 
 class _PriceSwitcherState extends State<PriceSwitcher> {
   bool showPrice = false;
+  var logInDetails =
+      UserDetailsModel.fromJson(jsonDecode(MyPref.userDetails.val));
+
   @override
   Widget build(BuildContext context) {
+    final rating = logInDetails.profile?.rating ?? 0;
     return Row(
       children: [
-        Text(showPrice ? 'NGN 3,180,000' : '******',
-            textAlign: TextAlign.center,
-            style: AppTextStyle.mid1.copyWith(color: AppColors.white)),
-        IconButton(
-            onPressed: () {
-              setState(() {
-                showPrice = !showPrice;
-              });
-            },
-            icon: Icon(
-              Icons.visibility,
-              size: 15 * Get.textScaleFactor,
-              color: AppColors.white,
-            )),
+        if (widget.isSp)
+          Text(
+            widget.isVerified ? " $rating/5 Score Rating" : "",
+            style: AppTextStyle.headline4,
+          ),
+        // Text(showPrice ? 'NGN 3,180,000' : '******',
+        //     textAlign: TextAlign.center,
+        //     style: AppTextStyle.mid1.copyWith(color: AppColors.white)),
+        // IconButton(
+        //     onPressed: () {
+        //       setState(() {
+        //         showPrice = !showPrice;
+        //       });
+        //     },
+        //     icon: Icon(
+        //       Icons.visibility,
+        //       size: 15 * Get.textScaleFactor,
+        //       color: AppColors.white,
+        //     )),
         const Spacer(),
         widget.isVerified
             ? Image.asset('assets/icons/verified.png')
@@ -1205,14 +1219,14 @@ class SPHomeWidget extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    PriceSwitcher(isVerified: isVerified),
+                    PriceSwitcher(isVerified: isVerified, isSp: true),
                     // Text(
                     //   'Total Earnings',
                     //   style: AppTextStyle.caption2
                     //       .copyWith(color: AppColors.white),
                     // ),
                     SizedBox(height: Get.height * 0.01),
-                    const Row(
+                    Row(
                       children: [
                         // ElevatedButton(
                         //   onPressed: () {},
@@ -1225,22 +1239,22 @@ class SPHomeWidget extends StatelessWidget {
                         //         color: AppColors.blackShade.withOpacity(0.8)),
                         //   ),
                         // ),
-                        Spacer(),
-                        // Column(
-                        //   crossAxisAlignment: CrossAxisAlignment.start,
-                        //   children: [
-                        //     Text(
-                        //       'Validity Date',
-                        //       style: AppTextStyle.caption
-                        //           .copyWith(color: AppColors.white),
-                        //     ),
-                        //     Text(
-                        //       durationToWeeks(duration),
-                        //       style: AppTextStyle.caption
-                        //           .copyWith(color: AppColors.white),
-                        //     )
-                        //   ],
-                        // )
+                        const Spacer(),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Validity Date',
+                              style: AppTextStyle.caption
+                                  .copyWith(color: AppColors.white),
+                            ),
+                            Text(
+                              durationToWeeks(duration),
+                              style: AppTextStyle.caption
+                                  .copyWith(color: AppColors.white),
+                            )
+                          ],
+                        )
                       ],
                     )
                   ],

@@ -7,6 +7,7 @@ import 'page_dropdown.dart';
 class AppDropDownButton extends StatefulWidget {
   final List<String> options;
   final String label;
+  final String? value;
   final Function? action;
   final Function? onChanged;
   final int? position;
@@ -15,6 +16,7 @@ class AppDropDownButton extends StatefulWidget {
       {super.key,
       required this.options,
       required this.label,
+      this.value,
       this.action,
       this.position,
       this.onChanged});
@@ -28,7 +30,12 @@ class _AppDropDownButtonState extends State<AppDropDownButton> {
 
   @override
   void initState() {
-    option = widget.options[0];
+    if (widget.value == null) {
+      option = widget.options[0];
+    } else {
+      option = widget.value!;
+    }
+
     super.initState();
   }
 

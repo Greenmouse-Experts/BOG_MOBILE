@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -68,7 +70,7 @@ class SignIn extends GetView<AuthController> {
                               style: AppTextStyle.headline4.copyWith(
                                 color: Colors.black,
                                 fontWeight: FontWeight.w500,
-                                fontSize: Get.textScaleFactor * 24,
+                                fontSize: 24,
                               ),
                               textAlign: TextAlign.center,
                             ),
@@ -80,7 +82,7 @@ class SignIn extends GetView<AuthController> {
                               style: AppTextStyle.headline4.copyWith(
                                   color: Colors.black.withOpacity(.5),
                                   fontWeight: FontWeight.normal,
-                                  fontSize: Get.textScaleFactor * 16),
+                                  fontSize: 16),
                             ),
                             SizedBox(height: Get.height * 0.035),
                             PageInput(
@@ -126,6 +128,21 @@ class SignIn extends GetView<AuthController> {
                                   await controller.signIn(formKey),
                               borderRadius: 10,
                             ),
+                            Platform.isAndroid
+                                ? AppButton(
+                                    isElevated: true,
+                                    title: 'Sign in with Google',
+                                    trailingColor: Colors.pink,
+                                    borderRadius: 10,
+                                    bckgrndColor: AppColors.backgroundVariant2,
+                                    bold: false,
+                                    hasIcon: true,
+                                    fontColor: Colors.black,
+                                    onPressed: () {
+                                      controller.handleSignUpGoogle();
+                                    },
+                                  )
+                                : const SizedBox(),
                             AppButton(
                               title: 'Don\'t have an account? ',
                               trailingTitle: "Sign Up",

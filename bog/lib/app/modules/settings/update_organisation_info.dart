@@ -8,9 +8,9 @@ import 'package:intl/intl.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/validator.dart';
 import '../../controllers/home_controller.dart';
+import '../../data/model/general_info_model.dart';
 import '../../data/model/log_in_model.dart';
 import '../../data/model/org_info_model.dart';
-import '../../data/providers/api.dart';
 import '../../data/providers/api_response.dart';
 import '../../data/providers/my_pref.dart';
 import '../../global_widgets/app_base_view.dart';
@@ -32,6 +32,7 @@ class UpdateOrganisationInfo extends StatefulWidget {
 
 class _UpdateOrganisationInfoState extends State<UpdateOrganisationInfo> {
   late Future<ApiResponse> getOrganizationInfo;
+  late Future<ApiResponse> getGenrealInfo;
   final _formKey = GlobalKey<FormState>();
 
   TextEditingController directorsName = TextEditingController();
@@ -43,17 +44,48 @@ class _UpdateOrganisationInfoState extends State<UpdateOrganisationInfo> {
   TextEditingController dateOfIncorporation = TextEditingController();
   TextEditingController otherOperations = TextEditingController();
   TextEditingController otherSpecify = TextEditingController();
+  TextEditingController complexity = TextEditingController();
+  TextEditingController costOfProject = TextEditingController();
+  TextEditingController noOfStaff = TextEditingController();
+  late TextEditingController roleCoontroller;
 
   late String userType;
   String orgType = '';
 
+  final List<String> numberOfStaff = [
+    "1-10",
+    "11-50",
+    "51-100",
+    "101-200",
+    "Over 200"
+  ];
+
+  final List<String> costOfProjects = [
+    "Less than 50 million",
+    "50-100 million",
+    "200-500 million",
+    "Over 500 million"
+  ];
+
+  final List<String> complexityOfProjects = [
+    "<2 Storey",
+    "2 - 5 Storey",
+    "5 - 10 Storey",
+    "Over 10 Storey",
+    "Roads, Bridges etc"
+  ];
+
   @override
   void initState() {
     final controller = Get.find<HomeController>();
+
+    roleCoontroller = controller.roleCoontroller;
     userType =
         controller.currentType == 'Product Partner' ? 'vendor' : 'professional';
     getOrganizationInfo = controller.userRepo
         .getData('/kyc-organisation-info/fetch?userType=$userType');
+    getGenrealInfo = controller.userRepo
+        .getData('/kyc-general-info/fetch?userType=$userType');
     super.initState();
   }
 
@@ -76,12 +108,20 @@ class _UpdateOrganisationInfoState extends State<UpdateOrganisationInfo> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              FutureBuilder<ApiResponse>(
-                  future: getOrganizationInfo,
+              FutureBuilder<List<ApiResponse>>(
+                  future: Future.wait([getOrganizationInfo, getGenrealInfo]),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.done &&
-                        snapshot.data!.isSuccessful) {
-                      if (snapshot.data!.data == null) {
+                        snapshot.data![0].isSuccessful &&
+                        snapshot.data![1].isSuccessful) {
+                      if (snapshot.data![0].data == null) {
+                        final response1 = snapshot.data![1].data;
+                        final genData = GeneralInfoModel.fromJson(response1);
+
+                        if (genData.role != null) {
+                          roleCoontroller.text = genData.role ?? "";
+                        }
+
                         return Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
                           child: Form(
@@ -115,6 +155,33 @@ class _UpdateOrganisationInfoState extends State<UpdateOrganisationInfo> {
                                   },
                                 ),
                                 const SizedBox(height: 10),
+                                if (userType == "professional")
+                                  Column(
+                                    children: [
+                                      AppDropDownButton(
+                                          onChanged: (String value) {
+                                            noOfStaff.text = value;
+                                          },
+                                          options: numberOfStaff,
+                                          label: "No of Staff(s)"),
+                                      const SizedBox(height: 10),
+                                      AppDropDownButton(
+                                          onChanged: (String value) {
+                                            costOfProject.text = value;
+                                          },
+                                          options: costOfProjects,
+                                          label: "Cost of Projects Completed"),
+                                      const SizedBox(height: 10),
+                                      AppDropDownButton(
+                                          onChanged: (String value) {
+                                            complexity.text = value;
+                                          },
+                                          options: complexityOfProjects,
+                                          label:
+                                              "Complexity of Projects Completed"),
+                                      const SizedBox(height: 10),
+                                    ],
+                                  ),
                                 PageInput(
                                   hint: 'Full Name',
                                   label: 'Directors Full Name',
@@ -188,6 +255,8 @@ class _UpdateOrganisationInfoState extends State<UpdateOrganisationInfo> {
                                     }
 
                                     if (_formKey.currentState!.validate()) {
+                                      final controller =
+                                          Get.find<HomeController>();
                                       final newOrgInfo = {
                                         "organisation_type": orgType,
                                         "others": otherSpecify.text,
@@ -196,7 +265,13 @@ class _UpdateOrganisationInfoState extends State<UpdateOrganisationInfo> {
                                         "director_fullname": directorsName.text,
                                         "director_designation":
                                             directorDesignation.text,
+                                        "complexity_of_projects_completed":
+                                            complexity.text,
+                                        "cost_of_projects_completed":
+                                            costOfProject.text,
+                                        "no_of_staff": noOfStaff.text,
                                         "director_phone": directorPhone.text,
+                                        "role": roleCoontroller.text,
                                         "director_email": directorEmail.text,
                                         "contact_phone": contactPhone.text,
                                         "contact_email": contactEmail.text,
@@ -209,17 +284,18 @@ class _UpdateOrganisationInfoState extends State<UpdateOrganisationInfo> {
 
                                       kycScore['orgInfo'] = 9;
 
-                                      final controller =
-                                          Get.find<HomeController>();
                                       final updateAccount = await controller
                                           .userRepo
                                           .patchData('/user/update-account', {
                                         "kycScore": jsonEncode(kycScore),
                                         "kycTotal": jsonEncode(widget.kycTotal)
                                       });
-                                      final res = await HttpClient.post(
-                                          '/kyc-organisation-info/create',
-                                          newOrgInfo);
+
+                                      final res = await controller.userRepo
+                                          .postData(
+                                              '/kyc-organisation-info/create',
+                                              newOrgInfo);
+
                                       if (res.isSuccessful &&
                                           updateAccount.isSuccessful) {
                                         MyPref.setOverlay.val = false;
@@ -241,8 +317,15 @@ class _UpdateOrganisationInfoState extends State<UpdateOrganisationInfo> {
                           ),
                         );
                       }
-                      final response = snapshot.data!.data;
+                      final response = snapshot.data![0].data;
                       final orgData = OrgInfoModel.fromJson(response);
+
+                      final response1 = snapshot.data![1].data;
+                      final genData = GeneralInfoModel.fromJson(response1);
+
+                      if (genData.role != null) {
+                        roleCoontroller.text = genData.role ?? "";
+                      }
 
                       directorsName.text = orgData.directorFullname ?? '';
                       directorDesignation.text =
@@ -252,6 +335,11 @@ class _UpdateOrganisationInfoState extends State<UpdateOrganisationInfo> {
                       contactPhone.text = orgData.contactPhone.toString();
                       contactEmail.text = orgData.contactEmail ?? '';
                       otherOperations.text = orgData.othersOperations ?? '';
+                      complexity.text = orgData.complexityOfProjects ??
+                          complexityOfProjects[0];
+                      costOfProject.text =
+                          orgData.costOfProjects ?? costOfProjects[0];
+                      noOfStaff.text = orgData.noOfStaff ?? numberOfStaff[0];
 
                       return Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -292,6 +380,36 @@ class _UpdateOrganisationInfoState extends State<UpdateOrganisationInfo> {
                                 },
                               ),
                               const SizedBox(height: 10),
+                              if (userType == "professional")
+                                Column(
+                                  children: [
+                                    AppDropDownButton(
+                                        onChanged: (String value) {
+                                          noOfStaff.text = value;
+                                        },
+                                        options: numberOfStaff,
+                                        value: noOfStaff.text,
+                                        label: "No of Staff(s)"),
+                                    const SizedBox(height: 10),
+                                    AppDropDownButton(
+                                        onChanged: (String value) {
+                                          costOfProject.text = value;
+                                        },
+                                        value: costOfProject.text,
+                                        options: costOfProjects,
+                                        label: "Cost of Projects Completed"),
+                                    const SizedBox(height: 10),
+                                    AppDropDownButton(
+                                        onChanged: (String value) {
+                                          complexity.text = value;
+                                        },
+                                        value: complexity.text,
+                                        options: complexityOfProjects,
+                                        label:
+                                            "Complexity of Projects Completed"),
+                                    const SizedBox(height: 10),
+                                  ],
+                                ),
                               PageInput(
                                 hint: 'Full Name',
                                 label: 'Directors Full Name',
@@ -359,6 +477,7 @@ class _UpdateOrganisationInfoState extends State<UpdateOrganisationInfo> {
                                         colorText: AppColors.background);
                                     return;
                                   }
+                                  final controller = Get.find<HomeController>();
 
                                   if (_formKey.currentState!.validate()) {
                                     final newOrgInfo = {
@@ -367,30 +486,37 @@ class _UpdateOrganisationInfoState extends State<UpdateOrganisationInfo> {
                                       "Incorporation_date":
                                           dateOfIncorporation.text,
                                       "director_fullname": directorsName.text,
+                                      "complexity_of_projects_completed":
+                                          complexity.text,
+                                      "cost_of_projects_completed":
+                                          costOfProject.text,
+                                      "no_of_staff": noOfStaff.text,
+                                      "director_phone": directorPhone.text,
+                                      "role": roleCoontroller.text,
                                       "director_designation":
                                           directorDesignation.text,
-                                      "director_phone": directorPhone.text,
                                       "director_email": directorEmail.text,
                                       "contact_phone": contactPhone.text,
                                       "contact_email": contactEmail.text,
                                       "others_operations": otherOperations.text,
                                       "userType": userType,
+                                      "userId": logInDetails.profile!.id,
                                       "id": logInDetails.profile!.id
                                     };
                                     final kycScore = widget.kycScore;
 
                                     kycScore['orgInfo'] = 9;
-                                    final controller =
-                                        Get.find<HomeController>();
+
                                     final updateAccount = await controller
                                         .userRepo
                                         .patchData('/user/update-account', {
                                       "kycScore": jsonEncode(kycScore),
                                       "kycTotal": jsonEncode(widget.kycTotal)
                                     });
-                                    final res = await HttpClient.post(
-                                        '/kyc-organisation-info/create',
-                                        newOrgInfo);
+                                    final res = await controller.userRepo
+                                        .postData(
+                                            '/kyc-organisation-info/create',
+                                            newOrgInfo);
                                     if (res.isSuccessful &&
                                         updateAccount.isSuccessful) {
                                       MyPref.setOverlay.val = false;

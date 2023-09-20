@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/theme/app_colors.dart';
 
@@ -60,7 +61,7 @@ class SupplierSignUp extends GetView<AuthController> {
                       style: AppTextStyle.headline4.copyWith(
                         color: Colors.black,
                         fontWeight: FontWeight.w500,
-                        fontSize: Get.textScaleFactor * 24,
+                        fontSize: 24,
                       ),
                       textAlign: TextAlign.center,
                     ),
@@ -76,7 +77,7 @@ class SupplierSignUp extends GetView<AuthController> {
                       style: AppTextStyle.headline4.copyWith(
                           color: Colors.black.withOpacity(.5),
                           fontWeight: FontWeight.normal,
-                          fontSize: Get.textScaleFactor * 16),
+                          fontSize: 16),
                     ),
                   ),
                   SizedBox(height: Get.height * 0.04),
@@ -229,8 +230,7 @@ class SupplierSignUp extends GetView<AuthController> {
                                               color:
                                                   Colors.black.withOpacity(.5),
                                               fontWeight: FontWeight.normal,
-                                              fontSize:
-                                                  Get.textScaleFactor * 14,
+                                              fontSize: 14,
                                             ),
                                           ),
                                           TextSpan(
@@ -240,11 +240,18 @@ class SupplierSignUp extends GetView<AuthController> {
                                                   .copyWith(
                                                 color: AppColors.primary,
                                                 fontWeight: FontWeight.normal,
-                                                fontSize:
-                                                    Get.textScaleFactor * 14,
+                                                fontSize: 14,
                                               ),
                                               recognizer: TapGestureRecognizer()
-                                                ..onTap = () {}),
+                                                ..onTap = () async {
+                                                  if (await canLaunchUrl(Uri.parse(
+                                                      'https://buildonthego.com/terms'))) {
+                                                    await launchUrl(Uri.parse(
+                                                        'https://buildonthego.com/terms'));
+                                                  } else {
+                                                    throw 'Could not launch url';
+                                                  }
+                                                }),
                                         ],
                                       ),
                                     ),

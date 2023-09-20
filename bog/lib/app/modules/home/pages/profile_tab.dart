@@ -29,8 +29,8 @@ class ProfileTab extends StatelessWidget {
     var logInDetails =
         UserDetailsModel.fromJson(jsonDecode(MyPref.userDetails.val));
 
-    final Uri about = Uri.parse('https://bog-project-new.netlify.app/about');
-    final Uri terms = Uri.parse('https://bog-project-new.netlify.app/terms');
+    final Uri about = Uri.parse('https://buildonthego.com/about');
+    final Uri terms = Uri.parse('https://buildonthego.com/terms');
 
     final userDetails =
         UserDetailsModel.fromJson(jsonDecode(MyPref.userDetails.val));

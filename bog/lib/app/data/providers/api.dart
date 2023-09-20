@@ -9,12 +9,13 @@ import 'api_response.dart';
 import 'my_pref.dart';
 
 class HttpClient {
-  static const String baseUrl = 'https://bog.greenmouseproperties.com/api';
+  static const String baseUrl = 'https://api.buildonthego.com/api';
 
   static Future<HttpApiResponse> post(String path, dynamic body) async {
     final url = Uri.parse('$baseUrl$path');
 
     final client = http.Client();
+
     try {
       final response = await client.post(
         url,
@@ -59,6 +60,27 @@ class Api {
     receiveTimeout: const Duration(seconds: 30),
   ));
 
+  Future<ApiResponse> getRefreshToken() async {
+    try {
+      var head = {
+        'Authorization': MyPref.refreshToken.val,
+      };
+      var response = await http.get(Uri.parse('$baseUrl/user/refresh-token'),
+          headers: head);
+      final resp =
+          ApiResponse.responseFromBody(response.body, response.statusCode);
+      MyPref.authToken.val = resp.token.toString();
+      MyPref.refreshToken.val = resp.refreshToken.toString();
+      return ApiResponse.responseFromBody(response.body, response.statusCode);
+    } catch (e) {
+      return ApiResponse(
+        data: null,
+        isSuccessful: false,
+        message: e.toString(),
+      );
+    }
+  }
+
   Future<ApiResponse> postData(
     String url, {
     bool hasHeader = false,
@@ -79,7 +101,17 @@ class Api {
       // print(request.data);
       return ApiResponse.response(request);
     } on DioError catch (e) {
-      return e.toApiError(cancelToken: token);
+      if (e.response?.statusCode == 401) {
+        final refreshResponse = await getRefreshToken();
+        if (refreshResponse.isSuccessful) {
+          final newResponse = await postData(url, hasHeader: true, body: body);
+          return newResponse;
+        } else {
+          return refreshResponse;
+        }
+      } else {
+        return e.toApiError(cancelToken: token);
+      }
     } on SocketException {
       return ApiResponse(
         data: null,
@@ -113,7 +145,17 @@ class Api {
 
       return ApiResponse.response(request);
     } on DioError catch (e) {
-      return e.toApiError(cancelToken: token);
+      if (e.response?.statusCode == 401) {
+        final refreshResponse = await getRefreshToken();
+        if (refreshResponse.isSuccessful) {
+          final newResponse = await uploadData(url, body: body);
+          return newResponse;
+        } else {
+          return refreshResponse;
+        }
+      } else {
+        return e.toApiError(cancelToken: token);
+      }
     } on SocketException {
       return ApiResponse(
         data: null,
@@ -145,7 +187,17 @@ class Api {
       );
       return ApiResponse.response(request);
     } on DioError catch (e) {
-      return e.toApiError(cancelToken: token);
+      if (e.response?.statusCode == 401) {
+        final refreshResponse = await getRefreshToken();
+        if (refreshResponse.isSuccessful) {
+          final newResponse = await deleteData(url, hasHeader: true);
+          return newResponse;
+        } else {
+          return refreshResponse;
+        }
+      } else {
+        return e.toApiError(cancelToken: token);
+      }
     } on SocketException {
       return ApiResponse(
         data: null,
@@ -180,7 +232,17 @@ class Api {
 
       return ApiResponse.response(request);
     } on DioError catch (e) {
-      return e.toApiError(cancelToken: token);
+      if (e.response?.statusCode == 401) {
+        final refreshResponse = await getRefreshToken();
+        if (refreshResponse.isSuccessful) {
+          final newResponse = await putData(url, hasHeader: true, body: body);
+          return newResponse;
+        } else {
+          return refreshResponse;
+        }
+      } else {
+        return e.toApiError(cancelToken: token);
+      }
     } on SocketException {
       return ApiResponse(
         data: null,
@@ -216,7 +278,17 @@ class Api {
 
       return ApiResponse.response(request);
     } on DioError catch (e) {
-      return e.toApiError(cancelToken: token);
+      if (e.response?.statusCode == 401) {
+        final refreshResponse = await getRefreshToken();
+        if (refreshResponse.isSuccessful) {
+          final newResponse = await patchData(url, hasHeader: true, body: body);
+          return newResponse;
+        } else {
+          return refreshResponse;
+        }
+      } else {
+        return e.toApiError(cancelToken: token);
+      }
     } on SocketException {
       return ApiResponse(
         data: null,
@@ -263,12 +335,34 @@ class Api {
       var head = {
         'Authorization': MyPref.authToken.val,
       };
-      var response = await http.get(Uri.parse(baseUrl + url),
-          headers: hasHeader ? head : null);
-      return ApiResponse.responseFromBody(response.body, response.statusCode);
+
+      final response = await _client.request(
+        url,
+        data: "",
+        cancelToken: token,
+        options: Options(method: 'GET', headers: hasHeader ? head : null),
+      );
+
+      return ApiResponse.response(response);
+
+      // var response = await http.get(Uri.parse(baseUrl + url),
+      //     headers: hasHeader ? head : null);
+      // final responses =
+      //     ApiResponse.responseFromBody(response.body, response.statusCode);
+      // return ApiResponse.responseFromBody(response.body, response.statusCode);
       //return ApiResponse.response(request);
     } on DioError catch (e) {
-      return e.toApiError(cancelToken: token);
+      if (e.response?.statusCode == 401) {
+        final refreshResponse = await getRefreshToken();
+        if (refreshResponse.isSuccessful) {
+          final newResponse = await getData(url, hasHeader: true);
+          return newResponse;
+        } else {
+          return refreshResponse;
+        }
+      } else {
+        return e.toApiError(cancelToken: token);
+      }
     } on SocketException {
       return ApiResponse(
         data: null,
