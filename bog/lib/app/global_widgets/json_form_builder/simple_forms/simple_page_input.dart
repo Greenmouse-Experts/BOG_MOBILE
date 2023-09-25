@@ -284,7 +284,9 @@ class _PageInputState extends State<SimplePageInput> {
                       style: AppTextStyle.bodyText2.copyWith(
                         fontWeight: FontWeight.w400,
                         color: Colors.black,
-                        fontSize: Get.width > 600 ? Get.width * 0.025 : Get.width * 0.035,
+                        fontSize: Get.width > 600
+                            ? Get.width * 0.025
+                            : Get.width * 0.035,
                       ),
                     ),
                   ),

@@ -781,8 +781,9 @@ class _ProjectTabState extends State<ProjectTab> with TickerProviderStateMixin {
                                           serviceProjects.any((myProject) =>
                                               element.project!.projectSlug ==
                                               myProject.projectSlug));
-                                      availableProjects.removeWhere(
-                                          (element) => element.hasBid == true);
+                                      availableProjects.removeWhere((element) =>
+                                          element.project?.status !=
+                                          "dispatched");
 
                                       return SizedBox(
                                         height: Get.height * 0.735,

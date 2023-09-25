@@ -444,21 +444,21 @@ class _UploadDocumentsState extends State<UploadDocuments> {
                                     file: operationPhoto1!.file!,
                                     title: 'Operational Area Photo',
                                     id: operationPhoto1!.id!),
-                            const SizedBox(height: 15),
-                            vendorsController.text.isEmpty
-                                ? PageInput(
-                                    onFilePicked: (file) {
-                                      passportOfVendorsFile = file;
-                                    },
-                                    controller: vendorsController,
-                                    hint: '',
-                                    label:
-                                        "Passport of vendors and all directors",
-                                    isFilePicker: true)
-                                : DocButton(
-                                    file: passportOfVendors1!.file!,
-                                    title: 'Vendors Passport Photo',
-                                    id: passportOfVendors1!.id!),
+                            //  const SizedBox(height: 15),
+                            // vendorsController.text.isEmpty
+                            //     ? PageInput(
+                            //         onFilePicked: (file) {
+                            //           passportOfVendorsFile = file;
+                            //         },
+                            //         controller: vendorsController,
+                            //         hint: '',
+                            //         label:
+                            //             "Passport of vendors and all directors",
+                            //         isFilePicker: true)
+                            //     : DocButton(
+                            //         file: passportOfVendors1!.file!,
+                            //         title: 'Vendors Passport Photo',
+                            //         id: passportOfVendors1!.id!),
                             const SizedBox(height: 25),
                             AppButton(
                               title: 'Submit',

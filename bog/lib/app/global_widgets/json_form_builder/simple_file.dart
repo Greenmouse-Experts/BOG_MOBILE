@@ -45,15 +45,18 @@ class _SimpleFileState extends State<SimpleFile> {
     return PageInput(
       hint: 'Pick a text',
       label: item['label'],
+      isCompulsory: item['required'] == true,
       boldLabel: true,
       isFilePicker: true,
       controller: fileController,
-      validator: (value) {
-        if (value!.isEmpty) {
-          return "Please pick a picture to upload";
-        }
-        return null;
-      },
+      validator: item['required'] == true
+          ? (value) {
+              if (value!.isEmpty) {
+                return "Please pick a picture to upload";
+              }
+              return null;
+            }
+          : null,
       onFilePicked: (file) async {
         pickedFile = file;
 

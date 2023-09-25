@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_styles.dart';
@@ -54,13 +55,27 @@ class _SimpleRadioState extends State<SimpleRadio> {
   Widget build(BuildContext context) {
     List<Widget> radios = [];
 
+    Widget required = const SizedBox.shrink();
+    if (item["required"] == true) {
+      required = const Text("*", style: TextStyle(color: Colors.red));
+    }
+
     if (Fun.labelHidden(item)) {
-      radios.add(Text(
-        item['label'],
-        style: AppTextStyle.bodyText2.copyWith(
-          fontWeight: FontWeight.w600,
-          color: Colors.black,
-        ),
+      radios.add(Row(
+        children: [
+          SizedBox(
+            width: Get.width * 0.8,
+            child: Text(
+              item['label'],
+              style: AppTextStyle.bodyText2.copyWith(
+                fontWeight: FontWeight.w600,
+                color: Colors.black,
+              ),
+            ),
+          ),
+          const SizedBox(width: 5),
+          required
+        ],
       ));
     }
     //  radioValue = item['_values'][0]['value'];

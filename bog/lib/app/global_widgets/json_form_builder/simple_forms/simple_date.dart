@@ -1,8 +1,6 @@
-
 import 'package:flutter/material.dart';
 
 import '../../app_date_picker.dart';
-
 
 class SimpleDate extends StatefulWidget {
   const SimpleDate({
@@ -42,6 +40,7 @@ class _SimpleDateState extends State<SimpleDate> {
       onChanged: (value) {
         widget.onChange(widget.position, value);
       },
+      isRequired: item["required"],
       boldLabel: true,
       label: item['label'],
     );

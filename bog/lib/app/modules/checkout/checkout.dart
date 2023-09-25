@@ -629,6 +629,7 @@ class _CheckoutState extends State<Checkout> {
                                                                   productReviews
                                                                       .length;
                                                       return CartItem(
+                                                        prod: product,
                                                         isCheckOut: true,
                                                         rating: reviewAverage,
                                                         deleteItem: () {
@@ -642,7 +643,8 @@ class _CheckoutState extends State<Checkout> {
                                                         itemDecrement: () {
                                                           controller
                                                               .cartItemDecrement(
-                                                                  product.id!);
+                                                                  product.id!,
+                                                                  product);
                                                         },
                                                         itemIncrement: () {
                                                           controller

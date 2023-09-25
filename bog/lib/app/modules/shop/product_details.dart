@@ -64,7 +64,7 @@ class _ProductDetailsState extends State<ProductDetails>
   @override
   Widget build(BuildContext context) {
     final available =
-        (widget.prod.remaining ?? 0) <= 0 ? 0 : widget.prod.remaining ?? 0;
+        (widget.prod.minQty ?? 1) <= 1 ? 1 : widget.prod.minQty ?? 1;
     var width = Get.width;
     final Size size = MediaQuery.of(context).size;
     double multiplier = 25 * size.height * 0.01;
@@ -75,7 +75,7 @@ class _ProductDetailsState extends State<ProductDetails>
         ? controller.cartItems.values
             .firstWhere((element) => element.product.id == product.id)
             .quantity
-        : 1;
+        : available;
 
     final productReviews = product.review;
 
@@ -276,9 +276,10 @@ class _ProductDetailsState extends State<ProductDetails>
                                                   product.id!);
                                             },
                                             maxCount: product.remaining ?? 0,
+                                            prod: product,
                                             itemDecrement: () {
                                               controller.cartItemDecrement(
-                                                  product.id!);
+                                                  product.id!, product);
                                             },
                                             initialCount: controller.cartItems
                                                     .containsKey(product.id)
@@ -287,7 +288,7 @@ class _ProductDetailsState extends State<ProductDetails>
                                                         element.product.id ==
                                                         product.id)
                                                     .quantity
-                                                : 1,
+                                                : available,
                                             onCountChanged: (count) {
                                               if (count == 0) {
                                                 currentQuantity = 1;
@@ -308,7 +309,7 @@ class _ProductDetailsState extends State<ProductDetails>
                                     left: Get.width * 0.03,
                                     right: Get.width * 0.03),
                                 child: Text(
-                                  'Quantity Available : $available',
+                                  'Minimum Order Quantity: $available',
                                   style: AppTextStyle.bodyText2,
                                 ),
                               ),
@@ -525,6 +526,13 @@ class _ProductDetailsState extends State<ProductDetails>
                                         ? 'Proceed to Checkout'
                                         : 'Add To Cart',
                                     onPressed: () {
+                                      if (currentQuantity < available) {
+                                        Get.snackbar("Error",
+                                            "You can't order less than the minimum order quantity",
+                                            backgroundColor: Colors.red,
+                                            colorText: Colors.white);
+                                        return;
+                                      }
                                       if (controller.cartItems.keys
                                           .contains(product.id)) {
                                         Get.back();

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:pie_chart/pie_chart.dart' as pie_chart;
 import 'package:badges/badges.dart' as badges;
@@ -56,6 +57,11 @@ class _HomeTabState extends State<HomeTab> {
     super.initState();
   }
 
+  final sliderImages = [
+    "assets/activity/Frame 7.png",
+    "assets/activity/Frame 25.png",
+    "assets/activity/Frame 26.png"
+  ];
   @override
   Widget build(BuildContext context) {
     //   Get.put(HomeController(UserRepository(Api())));
@@ -167,17 +173,30 @@ class _HomeTabState extends State<HomeTab> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Container(
-                                  height: Get.height * 0.18,
-                                  width: Get.width * 0.95,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(10.0),
-                                    image: const DecorationImage(
-                                      image: AssetImage(
-                                          "assets/images/Frame 466380.png"),
-                                      fit: BoxFit.cover,
-                                    ),
+                                CarouselSlider.builder(
+                                  itemCount: 3,
+                                  itemBuilder: (context, index, i) {
+                                    return Container(
+                                      height: Get.height * 0.18,
+                                      width: Get.width * 0.95,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                        image: DecorationImage(
+                                          image:
+                                              AssetImage(sliderImages[index]),
+                                          //  fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  options: CarouselOptions(
+                                    height: Get.height * 0.18,
+                                    viewportFraction: 1,
+                                    enableInfiniteScroll: false,
+                                    enlargeCenterPage: true,
+                                    autoPlay: true,
                                   ),
                                 ),
                               ],
@@ -188,21 +207,21 @@ class _HomeTabState extends State<HomeTab> {
                           SizedBox(
                             height: Get.height * 0.01,
                           ),
-                        if (controller.currentType == "Client" ||
-                            controller.currentType == "Corporate Client")
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                width: Get.width * 0.018,
-                                height: Get.width * 0.018,
-                                decoration: BoxDecoration(
-                                  color: AppColors.primary,
-                                  borderRadius: BorderRadius.circular(100.0),
-                                ),
-                              ),
-                            ],
-                          ),
+                        // if (controller.currentType == "Client" ||
+                        //     controller.currentType == "Corporate Client")
+                        //   Row(
+                        //     mainAxisAlignment: MainAxisAlignment.center,
+                        //     children: [
+                        //       Container(
+                        //         width: Get.width * 0.018,
+                        //         height: Get.width * 0.018,
+                        //         decoration: BoxDecoration(
+                        //           color: AppColors.primary,
+                        //           borderRadius: BorderRadius.circular(100.0),
+                        //         ),
+                        //       ),
+                        //     ],
+                        //   ),
                         Expanded(
                           child: SingleChildScrollView(
                             child: Column(
@@ -578,7 +597,8 @@ class _HomeTabState extends State<HomeTab> {
                                             }
                                             lestProjects.removeWhere(
                                                 (element) =>
-                                                    element.hasBid == true);
+                                                    element.project?.status !=
+                                                    "dispatched");
                                             final availableProjects =
                                                 lestProjects.length;
 

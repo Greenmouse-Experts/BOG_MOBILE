@@ -167,6 +167,7 @@ class _PrimarySwitchWidgetState extends State<PrimarySwitchWidget> {
                     });
                     if (widget.sendType == 'vendor' ||
                         widget.sendType == 'professional') {
+                      final oldUser = controller.currentType;
                       controller.currentType = widget.newCurrentType;
                       controller.update();
                       controller.updateNewUser(widget.newCurrentType);
@@ -180,7 +181,19 @@ class _PrimarySwitchWidgetState extends State<PrimarySwitchWidget> {
                           var logInInfo = LogInModel.fromJson(response.user);
 
                           MyPref.logInDetail.val = jsonEncode(logInInfo);
-                          controller.currentBottomNavPage.value = 0;
+
+                          if ((oldUser == 'Product Partner' ||
+                              oldUser == 'Service Partner')) {
+                            if (MyPref.setOverlay.val == true) {
+                              MyPref.setOverlay.val = false;
+                              Get.back();
+                            }
+                            if (MyPref.setSubscribeOverlay.val == true) {
+                              MyPref.setSubscribeOverlay.val = false;
+                              Get.back();
+                            }
+                          }
+                          controller.currentBottomNavPage.value = 4;
                           controller.updateNewUser(controller.currentType);
                           controller.update(['home']);
                           Get.back();
@@ -193,6 +206,7 @@ class _PrimarySwitchWidgetState extends State<PrimarySwitchWidget> {
                       // var kyc = GenKyc.fromJson(jsonDecode(MyPref.genKyc.val));
                       final oldUser = controller.currentType;
                       controller.currentType = widget.newCurrentType;
+                      //       print(controller.currentType);
                       controller.update();
                       controller.updateNewUser(widget.newCurrentType);
                       var body = {
@@ -207,12 +221,17 @@ class _PrimarySwitchWidgetState extends State<PrimarySwitchWidget> {
                           MyPref.logInDetail.val = jsonEncode(logInInfo);
 
                           if ((oldUser == 'Product Partner' ||
-                                  oldUser == 'Service Partner') &&
-                              (MyPref.setOverlay.val == true ||
-                                  MyPref.setSubscribeOverlay.val == true)) {
-                            Get.back();
+                              oldUser == 'Service Partner')) {
+                            if (MyPref.setOverlay.val == true) {
+                              MyPref.setOverlay.val = false;
+                              Get.back();
+                            }
+                            if (MyPref.setSubscribeOverlay.val == true) {
+                              MyPref.setSubscribeOverlay.val = false;
+                              Get.back();
+                            }
                           }
-                          controller.currentBottomNavPage.value = 0;
+                          controller.currentBottomNavPage.value = 4;
                           controller.updateNewUser(controller.currentType);
                           controller.update(['home']);
                           Get.back();

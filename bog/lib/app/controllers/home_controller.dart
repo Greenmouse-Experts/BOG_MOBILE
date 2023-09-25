@@ -5,6 +5,7 @@ import 'package:feather_icons/feather_icons.dart';
 import 'package:get/get.dart';
 
 import '../data/model/cart_model.dart';
+import '../data/model/log_in_model.dart';
 import '../data/model/my_products.dart';
 import '../data/providers/my_pref.dart';
 import '../modules/home/pages/cart_tab.dart';
@@ -139,6 +140,15 @@ class HomeController extends GetxController {
 
   Map<String, CartModel> _cartItems = {};
   RxMap<String, CartModel> get cartItems => _cartItems.obs;
+
+  Future<void> getUser(String type) async {
+    final response = await userRepo.getData("/user/me?userType=$type");
+    if (response.isSuccessful) {
+      var logInInfo = LogInModel.fromJson(response.user);
+      response.user = logInInfo;
+      MyPref.logInDetail.val = jsonEncode(response.user);
+    }
+  }
 
   String stringIntMapToJson(Map<String, int> map) {
     Map<String, dynamic> jsonMap = {};
@@ -310,14 +320,24 @@ class HomeController extends GetxController {
     return total;
   }
 
-  void cartItemDecrement(String productId) {
+  void cartItemDecrement(String productId, MyProducts product) {
     if (_cartItems.containsKey(productId)) {
-      _cartItems.update(
-          productId,
-          (existingCartItem) => CartModel(
-                product: existingCartItem.product,
-                quantity: existingCartItem.quantity - 1,
-              ));
+      _cartItems.update(productId, (existingCartItem) {
+        if (existingCartItem.quantity <=
+            (existingCartItem.product.minQty ?? 1)) {
+          Get.snackbar("Error",
+              "You can't order less than the minimum order quantity of this product",
+              backgroundColor: Colors.red, colorText: Colors.white);
+          return CartModel(
+            product: existingCartItem.product,
+            quantity: existingCartItem.quantity,
+          );
+        }
+        return CartModel(
+          product: existingCartItem.product,
+          quantity: existingCartItem.quantity - 1,
+        );
+      });
     }
     update();
 

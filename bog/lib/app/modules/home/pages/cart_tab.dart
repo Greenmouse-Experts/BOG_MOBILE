@@ -184,6 +184,7 @@ class _CartTabState extends State<CartTab> {
                                           ? 0.0
                                           : sum / productReviews.length;
                                       return CartItem(
+                                        prod: product,
                                         isCheckOut: false,
                                         rating: reviewAverage,
                                         deleteItem: () {
@@ -192,8 +193,17 @@ class _CartTabState extends State<CartTab> {
                                         },
                                         maxcount: product.remaining ?? 0,
                                         itemDecrement: () {
-                                          controller
-                                              .cartItemDecrement(product.id!);
+                                          if (controller.cartItems[product.id!]!
+                                                  .quantity <=
+                                              (product.minQty ?? 1)) {
+                                            Get.snackbar("Error",
+                                                "You can't order less than the minimum order quantity of this product",
+                                                backgroundColor: Colors.red,
+                                                colorText: Colors.white);
+                                          } else {
+                                            controller.cartItemDecrement(
+                                                product.id!, product);
+                                          }
                                         },
                                         itemIncrement: () {
                                           controller
@@ -206,8 +216,7 @@ class _CartTabState extends State<CartTab> {
                                                 "https://www.woolha.com/media/2020/03/eevee.png",
                                         price: "N ${product.price}",
                                         quantity: controller
-                                            .cartItems[product.id.toString()]!
-                                            .quantity,
+                                            .cartItems[product.id!]!.quantity,
                                         quantityChanged: (value) {
                                           controller.productsMap[
                                               product.id.toString()] = value;
@@ -715,6 +724,7 @@ class CartItem extends StatelessWidget {
       this.price = "N 115,000",
       this.quantity = 1,
       this.quantityChanged,
+      required this.prod,
       required this.itemIncrement,
       required this.itemDecrement,
       required this.deleteItem,
@@ -727,6 +737,7 @@ class CartItem extends StatelessWidget {
   final String title;
   final String subTitle;
   final String price;
+  final MyProducts prod;
   final int quantity;
   final int maxcount;
   final double rating;
@@ -836,6 +847,7 @@ class CartItem extends StatelessWidget {
                 isCheckOut
                     ? Text('Quantity: $quantity')
                     : ItemCounter(
+                        prod: prod,
                         itemDecrement: () {
                           itemDecrement();
                         },

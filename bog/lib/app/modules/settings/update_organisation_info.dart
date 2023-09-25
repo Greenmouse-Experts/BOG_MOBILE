@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:intl_phone_field/countries.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/validator.dart';
@@ -35,11 +36,24 @@ class _UpdateOrganisationInfoState extends State<UpdateOrganisationInfo> {
   late Future<ApiResponse> getGenrealInfo;
   final _formKey = GlobalKey<FormState>();
 
+  String? initialNumber;
+  String? initialNumber2;
+
+  String removeCountryCode(String phoneNumber, String countryCode) {
+    if (phoneNumber.startsWith(countryCode)) {
+      return phoneNumber.substring(countryCode.length);
+    } else {
+      return phoneNumber; // Country code not found, return the original number
+    }
+  }
+
   TextEditingController directorsName = TextEditingController();
   TextEditingController directorDesignation = TextEditingController();
   TextEditingController directorPhone = TextEditingController();
+  TextEditingController directorsPhone = TextEditingController();
   TextEditingController directorEmail = TextEditingController();
   TextEditingController contactPhone = TextEditingController();
+  TextEditingController contactPhones = TextEditingController();
   TextEditingController contactEmail = TextEditingController();
   TextEditingController dateOfIncorporation = TextEditingController();
   TextEditingController otherOperations = TextEditingController();
@@ -203,6 +217,9 @@ class _UpdateOrganisationInfoState extends State<UpdateOrganisationInfo> {
                                     label: 'Directors Phone Number',
                                     keyboardType: TextInputType.phone,
                                     controller: directorPhone,
+                                    onPhoneChanged: (p0) {
+                                      directorsPhone.text = p0.completeNumber;
+                                    },
                                     isPhoneNumber: true,
                                     autovalidateMode:
                                         AutovalidateMode.onUserInteraction,
@@ -221,6 +238,9 @@ class _UpdateOrganisationInfoState extends State<UpdateOrganisationInfo> {
                                     hint: '',
                                     label: 'Contact Person Phone Number',
                                     keyboardType: TextInputType.phone,
+                                    onPhoneChanged: (p0) {
+                                      contactPhones.text = p0.completeNumber;
+                                    },
                                     autovalidateMode:
                                         AutovalidateMode.onUserInteraction,
                                     controller: contactPhone,
@@ -270,10 +290,10 @@ class _UpdateOrganisationInfoState extends State<UpdateOrganisationInfo> {
                                         "cost_of_projects_completed":
                                             costOfProject.text,
                                         "no_of_staff": noOfStaff.text,
-                                        "director_phone": directorPhone.text,
+                                        "director_phone": directorsPhone.text,
                                         "role": roleCoontroller.text,
                                         "director_email": directorEmail.text,
-                                        "contact_phone": contactPhone.text,
+                                        "contact_phone": contactPhones.text,
                                         "contact_email": contactEmail.text,
                                         "others_operations":
                                             otherOperations.text,
@@ -327,12 +347,50 @@ class _UpdateOrganisationInfoState extends State<UpdateOrganisationInfo> {
                         roleCoontroller.text = genData.role ?? "";
                       }
 
+                      var unformattedPhone = orgData.directorPhone.toString();
+                      var unformattedPhone2 = orgData.contactPhone.toString();
+
+                      initialNumber = unformattedPhone;
+                      initialNumber2 = unformattedPhone2;
+
+                      if (initialNumber != null) {
+                        if (!initialNumber!.startsWith("+")) {
+                          initialNumber = "+$initialNumber";
+                        }
+                      }
+
+                      if (initialNumber2 != null) {
+                        if (!initialNumber2!.startsWith("+")) {
+                          initialNumber2 = "+$initialNumber2";
+                        }
+                      }
+
+                      if (unformattedPhone.startsWith("+")) {
+                        unformattedPhone = unformattedPhone.substring(1);
+                      }
+                      if (unformattedPhone2.startsWith("+")) {
+                        unformattedPhone2 = unformattedPhone2.substring(1);
+                      }
+                      const countryList = countries;
+                      final selectedCountry = countries.firstWhere(
+                          (country) =>
+                              unformattedPhone.startsWith(country.dialCode),
+                          orElse: () => countryList.first);
+                      final selectedCountry2 = countries.firstWhere(
+                          (country) =>
+                              unformattedPhone2.startsWith(country.dialCode),
+                          orElse: () => countryList.first);
+
                       directorsName.text = orgData.directorFullname ?? '';
                       directorDesignation.text =
                           orgData.directorDesignation ?? '';
-                      directorPhone.text = orgData.directorPhone.toString();
+                      directorPhone.text = removeCountryCode(
+                          unformattedPhone, selectedCountry.dialCode);
+                      directorsPhone.text = unformattedPhone;
                       directorEmail.text = orgData.directorEmail ?? '';
-                      contactPhone.text = orgData.contactPhone.toString();
+                      contactPhone.text = removeCountryCode(
+                          unformattedPhone2, selectedCountry2.dialCode);
+                      contactPhones.text = unformattedPhone2;
                       contactEmail.text = orgData.contactEmail ?? '';
                       otherOperations.text = orgData.othersOperations ?? '';
                       complexity.text = orgData.complexityOfProjects ??
@@ -431,6 +489,9 @@ class _UpdateOrganisationInfoState extends State<UpdateOrganisationInfo> {
                                   label: 'Directors Phone Number',
                                   keyboardType: TextInputType.phone,
                                   controller: directorPhone,
+                                  onPhoneChanged: (p0) {
+                                    directorsPhone.text = p0.completeNumber;
+                                  },
                                   isPhoneNumber: true,
                                   validator: Validator.phoneNumValidation),
                               const SizedBox(height: 10),
@@ -447,6 +508,9 @@ class _UpdateOrganisationInfoState extends State<UpdateOrganisationInfo> {
                                   hint: '',
                                   label: 'Contact Person Phone Number',
                                   keyboardType: TextInputType.phone,
+                                  onPhoneChanged: (p0) {
+                                    contactPhones.text = p0.completeNumber;
+                                  },
                                   controller: contactPhone,
                                   isPhoneNumber: true,
                                   validator: Validator.phoneNumValidation),
@@ -491,12 +555,12 @@ class _UpdateOrganisationInfoState extends State<UpdateOrganisationInfo> {
                                       "cost_of_projects_completed":
                                           costOfProject.text,
                                       "no_of_staff": noOfStaff.text,
-                                      "director_phone": directorPhone.text,
+                                      "director_phone": directorsPhone.text,
                                       "role": roleCoontroller.text,
                                       "director_designation":
                                           directorDesignation.text,
                                       "director_email": directorEmail.text,
-                                      "contact_phone": contactPhone.text,
+                                      "contact_phone": contactPhones.text,
                                       "contact_email": contactEmail.text,
                                       "others_operations": otherOperations.text,
                                       "userType": userType,

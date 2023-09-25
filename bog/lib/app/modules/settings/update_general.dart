@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl_phone_field/countries.dart';
 
 import '../../../core/theme/theme.dart';
 import '../../../core/utils/validator.dart';
@@ -61,6 +62,7 @@ class _UpdateGeneralInfoState extends State<UpdateGeneralInfo> {
   final _formKey = GlobalKey<FormState>();
 
   String? initialNumber;
+  String? initialNumber2;
   String? certOption;
 
   String removeCountryCode(String phoneNumber, String countryCode) {
@@ -141,7 +143,9 @@ class _UpdateGeneralInfoState extends State<UpdateGeneralInfo> {
   TextEditingController emailController = TextEditingController();
   TextEditingController typeOfRegController = TextEditingController();
   TextEditingController officeTelController = TextEditingController();
+  TextEditingController officeTelControllers = TextEditingController();
   TextEditingController officeTelController2 = TextEditingController();
+  TextEditingController officeTelControllers2 = TextEditingController();
   TextEditingController regNumController = TextEditingController();
   TextEditingController busAddressController = TextEditingController();
   TextEditingController otherAddressController = TextEditingController();
@@ -236,11 +240,52 @@ class _UpdateGeneralInfoState extends State<UpdateGeneralInfo> {
                             typeOfRegController.text = genData.regType ?? '';
                             yearsController.text =
                                 genData.yearsOfExperience ?? "";
-                            officeTelController.text =
+                            var unformattedPhone =
                                 genData.contactNumber.toString();
+                            var unformattedPhone2 =
+                                genData.contactNumber2.toString();
+
+                            initialNumber = unformattedPhone;
+                            initialNumber2 = unformattedPhone2;
+
+                            if (initialNumber != null) {
+                              if (!initialNumber!.startsWith("+")) {
+                                initialNumber = "+$initialNumber";
+                              }
+                            }
+
+                            if (initialNumber2 != null) {
+                              if (!initialNumber2!.startsWith("+")) {
+                                initialNumber2 = "+$initialNumber2";
+                              }
+                            }
+
+                            if (unformattedPhone.startsWith("+")) {
+                              unformattedPhone = unformattedPhone.substring(1);
+                            }
+                            if (unformattedPhone2.startsWith("+")) {
+                              unformattedPhone2 =
+                                  unformattedPhone2.substring(1);
+                            }
+                            const countryList = countries;
+                            final selectedCountry = countries.firstWhere(
+                                (country) => unformattedPhone
+                                    .startsWith(country.dialCode),
+                                orElse: () => countryList.first);
+                            final selectedCountry2 = countries.firstWhere(
+                                (country) => unformattedPhone2
+                                    .startsWith(country.dialCode),
+                                orElse: () => countryList.first);
+                            officeTelController.text = removeCountryCode(
+                                unformattedPhone, selectedCountry.dialCode);
+
+                            officeTelControllers.text = unformattedPhone;
+
                             otherEmail.text = genData.operationalEmail ?? "";
-                            officeTelController2.text =
-                                genData.contactNumber2 ?? "";
+                            officeTelController2.text = removeCountryCode(
+                                unformattedPhone2, selectedCountry2.dialCode);
+
+                            officeTelControllers2.text = unformattedPhone2;
                             certOption = genData.certificationOfPersonnel;
                             certificationController.text =
                                 genData.certificationOfPersonnel ?? "";
@@ -266,6 +311,7 @@ class _UpdateGeneralInfoState extends State<UpdateGeneralInfo> {
                                   PageInput(
                                     hint: '',
                                     label: 'Name of Organization',
+                                    readOnly: true,
                                     validator: MinLengthValidator(3,
                                         errorText:
                                             'Enter a Valid Organization Name'),
@@ -275,6 +321,7 @@ class _UpdateGeneralInfoState extends State<UpdateGeneralInfo> {
                                   PageInput(
                                     hint: '',
                                     label: 'Email Address',
+                                    readOnly: true,
                                     controller: emailController,
                                     //    initialValue: orgData.emailAddress,
                                     validator: EmailValidator(
@@ -294,7 +341,12 @@ class _UpdateGeneralInfoState extends State<UpdateGeneralInfo> {
                                   PageInput(
                                     hint: '',
                                     label: 'Office Telephone',
+                                    initialValue: initialNumber,
                                     controller: officeTelController,
+                                    onPhoneChanged: (val) {
+                                      officeTelControllers.text =
+                                          val.completeNumber;
+                                    },
                                     keyboardType: TextInputType.phone,
                                     isPhoneNumber: true,
                                     validator: Validator.phoneNumValidation,
@@ -445,9 +497,15 @@ class _UpdateGeneralInfoState extends State<UpdateGeneralInfo> {
                                   PageInput(
                                     hint: '',
                                     label: 'Other Telephone',
+                                    initialValue: initialNumber2,
                                     controller: officeTelController2,
                                     keyboardType: TextInputType.phone,
+                                    onPhoneChanged: (val) {
+                                      officeTelControllers2.text =
+                                          val.completeNumber;
+                                    },
                                     isPhoneNumber: true,
+                                    isCompulsory: false,
                                   ),
                                   const SizedBox(height: 10),
                                   PageInput(
@@ -470,7 +528,7 @@ class _UpdateGeneralInfoState extends State<UpdateGeneralInfo> {
                                           "role": convertToUnderscoreCase(
                                               roleCoontroller.text),
                                           "contact_number": int.parse(
-                                              officeTelController.text),
+                                              officeTelControllers.text),
                                           "reg_type": newRegType,
                                           "registration_number":
                                               int.parse(regNumController.text),
@@ -484,7 +542,7 @@ class _UpdateGeneralInfoState extends State<UpdateGeneralInfo> {
                                           "id": logInDetails.profile!.id,
                                           "userType": userType,
                                           "contact_number_2":
-                                              officeTelController2.text,
+                                              officeTelControllers2.text,
                                           "operational_email_tel":
                                               otherEmail.text,
                                         };

@@ -514,6 +514,8 @@ class MyProducts {
     this.creator,
     this.review,
     this.category,
+    this.minQty,
+    this.maxQty,
     this.productImage,
     this.orderTotal,
     this.inStock,
@@ -527,6 +529,8 @@ class MyProducts {
   String? categoryId;
   String? creatorId;
   String? price;
+  int? minQty;
+  int? maxQty;
   String? quantity;
   dynamic weight;
   String? unit;
@@ -565,6 +569,8 @@ class MyProducts {
         quantity: json["quantity"],
         weight: json["weight"],
         unit: json["unit"],
+        minQty: json["min_qty"],
+        maxQty: json["max_qty"],
         image: json["image"],
         showInShop: json["showInShop"],
         status: json["status"],
@@ -602,6 +608,8 @@ class MyProducts {
         "price": price,
         "quantity": quantity,
         "weight": weight,
+        "min_qty": minQty,
+        "max_qty": maxQty,
         "unit": unit,
         "image": image,
         "showInShop": showInShop,

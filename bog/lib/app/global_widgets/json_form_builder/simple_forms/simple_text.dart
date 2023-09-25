@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:form_field_validator/form_field_validator.dart';
 
 import '../../../../core/theme/theme.dart';
 import '../helpers/function.dart';
@@ -40,6 +39,18 @@ class _SimpleTextsState extends State<SimpleTexts> {
     return null;
   }
 
+  bool isNumeric(String? input) {
+    if (input == null) {
+      return false;
+    }
+    try {
+      double.parse(input);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -54,6 +65,11 @@ class _SimpleTextsState extends State<SimpleTexts> {
       borderSide: const BorderSide()
           .copyWith(color: const Color(0xFF828282).withOpacity(.3)),
     );
+
+    Widget required = const SizedBox.shrink();
+    if (item["required"] == true) {
+      required = const Text("*", style: TextStyle(color: Colors.red));
+    }
     Widget label = const SizedBox.shrink();
     if (Fun.labelHidden(item)) {
       label = SizedBox(
@@ -70,7 +86,9 @@ class _SimpleTextsState extends State<SimpleTexts> {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        label,
+        Row(
+          children: [label, const SizedBox(width: 5), required],
+        ),
         const SizedBox(height: 5),
         if (item['inputType'] == 'number')
           TextFormField(
@@ -81,7 +99,16 @@ class _SimpleTextsState extends State<SimpleTexts> {
                 focusedBorder: outlineInputBorder,
                 enabledBorder: outlineInputBorder),
             controller: null,
-            validator: MinLengthValidator(1, errorText: 'Enter a valid number'),
+            validator: item["required"] == true
+                ? (val) {
+                    if (!isNumeric(val)) {
+                      return 'Please enter a valid number';
+                    }
+                    return null;
+                  }
+                : null,
+
+            //    item["required"] == true ?  MinLengthValidator(1, errorText: 'Enter a valid number') : null,
             keyboardType: TextInputType.number,
             onChanged: (value) {
               widget.onChange(widget.position, value);
@@ -97,7 +124,14 @@ class _SimpleTextsState extends State<SimpleTexts> {
                 enabledBorder: outlineInputBorder),
             controller: null,
             maxLines: item['inputType'] == 'textarea' ? 5 : 1,
-            validator: MinLengthValidator(3, errorText: 'Enter a valid text'),
+            validator: item["required"] == true
+                ? (value) {
+                    if (value == null || value.isEmpty || value.length < 3) {
+                      return 'Please enter at least 3 characters';
+                    }
+                    return null;
+                  }
+                : null, // MinLengthValidator(3, errorText: 'Enter a valid text'),
             onChanged: (value) {
               widget.onChange(widget.position, value);
             },

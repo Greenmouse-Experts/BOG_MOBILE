@@ -57,7 +57,7 @@ class _CreateState extends State<Create> {
     AppOverlay.showInfoDialog(
         title: 'Select Service Type',
         content: service,
-        buttonText: 'Request $service',
+        buttonText: 'Request',
         onPressed: onTap);
   }
 

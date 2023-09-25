@@ -55,6 +55,8 @@ class _AddProjectState extends State<AddProject> {
   var fileController = TextEditingController();
   var unitController = TextEditingController();
   var quantityController = TextEditingController();
+  var minController = TextEditingController();
+  var maxController = TextEditingController();
 
   var locationController = TextEditingController();
   var lgaController = TextEditingController(text: 'Eti Osa');
@@ -85,6 +87,12 @@ class _AddProjectState extends State<AddProject> {
       unitController.text = myProduct.unit ?? '';
       quantityController.text = myProduct.quantity ?? '';
       fileController.text = myProduct.image ?? '';
+      if (myProduct.minQty != null) {
+        minController.text = myProduct.minQty.toString();
+      }
+      if (myProduct.maxQty != null) {
+        maxController.text = myProduct.maxQty.toString();
+      }
     }
   }
 
@@ -279,6 +287,38 @@ class _AddProjectState extends State<AddProject> {
                                     padding: EdgeInsets.only(
                                         left: width * 0.05,
                                         right: width * 0.05),
+                                    child: PageInput(
+                                      hint: 'Enter minimum order quantity',
+                                      label: 'Minimum Order Quantity',
+                                      controller: minController,
+                                      keyboardType: TextInputType.number,
+                                      validator: MinLengthValidator(1,
+                                          errorText: 'Minimum quantity is 1'),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: Get.height * 0.01,
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                        left: width * 0.05,
+                                        right: width * 0.05),
+                                    child: PageInput(
+                                      hint: 'Enter maximum order quantity',
+                                      label: 'Maximum Order Quantity',
+                                      controller: maxController,
+                                      keyboardType: TextInputType.number,
+                                      validator: MinLengthValidator(1,
+                                          errorText: 'Minimum quantity is 1'),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: Get.height * 0.01,
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                        left: width * 0.05,
+                                        right: width * 0.05),
                                     child: AppButton(
                                       title: "Submit Product",
                                       onPressed: () async {
@@ -317,7 +357,11 @@ class _AddProjectState extends State<AddProject> {
                                                     "description":
                                                         productController.text,
                                                     "productId":
-                                                        widget.myProduct!.id
+                                                        widget.myProduct!.id,
+                                                    "min_qty":
+                                                        minController.text,
+                                                    "max_qty":
+                                                        maxController.text
                                                   }
                                                 : {
                                                     "categoryId": widget
@@ -337,7 +381,11 @@ class _AddProjectState extends State<AddProject> {
                                                     "description":
                                                         productController.text,
                                                     "productId":
-                                                        widget.myProduct!.id
+                                                        widget.myProduct!.id,
+                                                    "min_qty":
+                                                        minController.text,
+                                                    "max_qty":
+                                                        maxController.text
                                                   };
                                           }
 
@@ -354,6 +402,8 @@ class _AddProjectState extends State<AddProject> {
                                                   "status": "draft",
                                                   "description":
                                                       productController.text,
+                                                  "min_qty": minController.text,
+                                                  "max_qty": maxController.text
                                                 }
                                               : {
                                                   "categoryId": selectedCategory
@@ -368,6 +418,8 @@ class _AddProjectState extends State<AddProject> {
                                                   "status": "draft",
                                                   "description":
                                                       productController.text,
+                                                  "min_qty": minController.text,
+                                                  "max_qty": maxController.text
                                                 };
 
                                           var formData =
@@ -571,6 +623,36 @@ class _AddProjectState extends State<AddProject> {
                                 Padding(
                                   padding: EdgeInsets.only(
                                       left: width * 0.05, right: width * 0.05),
+                                  child: PageInput(
+                                    hint: 'Enter minimum order quantity',
+                                    label: 'Minimum Order Quantity',
+                                    controller: minController,
+                                    keyboardType: TextInputType.number,
+                                    validator: MinLengthValidator(1,
+                                        errorText: 'Minimum quantity is 1'),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: Get.height * 0.01,
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                      left: width * 0.05, right: width * 0.05),
+                                  child: PageInput(
+                                    hint: 'Enter maximum order quantity',
+                                    label: 'Maximum Order Quantity',
+                                    controller: maxController,
+                                    keyboardType: TextInputType.number,
+                                    validator: MinLengthValidator(1,
+                                        errorText: 'Minimum quantity is 1'),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: Get.height * 0.01,
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                      left: width * 0.05, right: width * 0.05),
                                   child: AppButton(
                                     title: "Submit Product",
                                     onPressed: () async {
@@ -591,7 +673,9 @@ class _AddProjectState extends State<AddProject> {
                                                   "description":
                                                       productController.text,
                                                   "productId":
-                                                      widget.myProduct!.id
+                                                      widget.myProduct!.id,
+                                                  "min_qty": minController.text,
+                                                  "max_qty": maxController.text
                                                 }
                                               : {
                                                   "categoryId": widget
@@ -616,7 +700,9 @@ class _AddProjectState extends State<AddProject> {
                                                   "description":
                                                       productController.text,
                                                   "productId":
-                                                      widget.myProduct!.id
+                                                      widget.myProduct!.id,
+                                                  "min_qty": minController.text,
+                                                  "max_qty": maxController.text
                                                 };
                                         }
 
@@ -633,6 +719,8 @@ class _AddProjectState extends State<AddProject> {
                                                 "status": "draft",
                                                 "description":
                                                     productController.text,
+                                                "min_qty": minController.text,
+                                                "max_qty": maxController.text
                                               }
                                             : {
                                                 "categoryId": selectedCategory
@@ -655,6 +743,8 @@ class _AddProjectState extends State<AddProject> {
                                                 "status": "draft",
                                                 "description":
                                                     productController.text,
+                                                "min_qty": minController.text,
+                                                "max_qty": maxController.text
                                               };
 
                                         var formData =

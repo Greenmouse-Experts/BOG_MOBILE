@@ -26,6 +26,7 @@ class _JsonFormState extends State<JsonForm> {
   @override
   void initState() {
     final controller = Get.find<HomeController>();
+
     formBuilder =
         controller.userRepo.getData('/service/form-builder/${widget.id}');
     super.initState();

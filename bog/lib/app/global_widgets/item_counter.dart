@@ -1,7 +1,9 @@
 import 'package:feather_icons/feather_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../core/theme/app_colors.dart';
+import '../data/model/my_products.dart';
 
 class ItemCounter extends StatefulWidget {
   const ItemCounter(
@@ -10,11 +12,13 @@ class ItemCounter extends StatefulWidget {
       this.initialCount,
       required this.maxCount,
       required this.itemIncrement,
+      required this.prod,
       required this.itemDecrement})
       : super(key: key);
 
   final int? initialCount;
   final int maxCount;
+  final MyProducts prod;
   final VoidCallback itemIncrement;
   final VoidCallback itemDecrement;
   final Function(int count)? onCountChanged;
@@ -41,7 +45,11 @@ class _ItemCounterState extends State<ItemCounter> {
           hasBorder: true,
           onPressed: () {
             setState(() {
-              if (count > 1) {
+              if (count <= (widget.prod.minQty ?? 1)) {
+                Get.snackbar("Error",
+                    "You can't order less than the minimum order quantity of this product",
+                    backgroundColor: Colors.red, colorText: Colors.white);
+              } else if (count > 1) {
                 count--;
                 widget.itemDecrement();
                 if (widget.onCountChanged != null) {

@@ -90,11 +90,11 @@ class _KYCPageState extends State<KYCPage> {
                       ? Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Your Kyc Score : $kycNewPoint %'),
-                            const SizedBox(height: 15),
-                            const LinearProgressIndicator(
-                              value: 0,
-                            ),
+                            // Text('Your Kyc Score : $kycNewPoint %'),
+                            // const SizedBox(height: 15),
+                            // const LinearProgressIndicator(
+                            //   value: 0,
+                            // ),
                             const SizedBox(height: 15),
                             _TextButton(
                                 iconData: Icons.info,
@@ -162,8 +162,8 @@ class _KYCPageState extends State<KYCPage> {
                       : Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                                'Your Kyc Score : ${kycNewPoint.toStringAsFixed(0)} %'),
+                            // Text(
+                            //     'Your Kyc Score : ${kycNewPoint.toStringAsFixed(0)} %'),
                             const SizedBox(height: 15),
                             TweenAnimationBuilder(
                               tween: Tween<double>(begin: 0, end: kycNewPoint),

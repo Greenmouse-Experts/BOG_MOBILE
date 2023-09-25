@@ -57,12 +57,19 @@ class _SimpleListCheckbox extends State<SimpleListCheckbox> {
   Widget build(BuildContext context) {
     List<Widget> checkboxes = [];
     if (Fun.labelHidden(item)) {
-      checkboxes.add(Text(
-        item['label'],
-        style: AppTextStyle.bodyText2.copyWith(
-          fontWeight: FontWeight.w600,
-          color: Colors.black,
-        ),
+      checkboxes.add(Row(
+        children: [
+          Text(
+            item['label'],
+            style: AppTextStyle.bodyText2.copyWith(
+              fontWeight: FontWeight.w600,
+              color: Colors.black,
+            ),
+          ),
+          const SizedBox(width: 5),
+          if (item["required"] == true)
+            const Text("*", style: TextStyle(color: Colors.red))
+        ],
       ));
     }
     for (var i = 0; i < item['_values'].length; i++) {

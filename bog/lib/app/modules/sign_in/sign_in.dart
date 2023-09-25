@@ -129,18 +129,24 @@ class SignIn extends GetView<AuthController> {
                               borderRadius: 10,
                             ),
                             Platform.isAndroid
-                                ? AppButton(
-                                    isElevated: true,
-                                    title: 'Sign in with Google',
-                                    trailingColor: Colors.pink,
-                                    borderRadius: 10,
-                                    bckgrndColor: AppColors.backgroundVariant2,
-                                    bold: false,
-                                    hasIcon: true,
-                                    fontColor: Colors.black,
-                                    onPressed: () {
-                                      controller.handleSignUpGoogle();
-                                    },
+                                ? Column(
+                                    children: [
+                                      SizedBox(height: Get.height * 0.02),
+                                      AppButton(
+                                        isElevated: true,
+                                        title: 'Sign in with Google',
+                                        trailingColor: Colors.pink,
+                                        borderRadius: 10,
+                                        bckgrndColor:
+                                            AppColors.backgroundVariant2,
+                                        bold: false,
+                                        hasIcon: true,
+                                        fontColor: Colors.black,
+                                        onPressed: () {
+                                          controller.handleSignUpGoogle();
+                                        },
+                                      ),
+                                    ],
                                   )
                                 : const SizedBox(),
                             AppButton(

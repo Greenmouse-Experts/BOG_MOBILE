@@ -11,6 +11,7 @@ import '../../data/providers/api.dart';
 import '../../data/providers/my_pref.dart';
 import '../../global_widgets/app_base_view.dart';
 import '../../global_widgets/app_drawer.dart';
+import '../../global_widgets/app_loader.dart';
 import '../../global_widgets/bottom_widget.dart';
 import '../../global_widgets/global_widgets.dart';
 import '../../repository/user_repo.dart';
@@ -27,6 +28,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  late Future<void> getUser;
   @override
   void initState() {
     Get.put(HomeController(UserRepository(Api())));
@@ -35,6 +37,7 @@ class _HomeState extends State<Home> {
     var logInDetails = LogInModel.fromJson(jsonDecode(MyPref.logInDetail.val));
     var homeController = Get.find<HomeController>();
     var type = logInDetails.userType;
+    getUser = homeController.getUser(type.toString());
     if (type == "private_client") {
       homeController.currentType = "Client";
       homeController.update();
@@ -112,33 +115,42 @@ class _HomeState extends State<Home> {
         child: GetBuilder<HomeController>(
             id: 'home',
             builder: (controller) {
-              return Scaffold(
-                body: SizedBox(
-                  width: Get.width,
-                  child: controller.currentBottomNavPage.value == 4 ||
-                          controller.currentBottomNavPage.value == 0
-                      ? SingleChildScrollView(
-                          child: Column(
-                            children: [
-                              controller
-                                  .pages[controller.currentBottomNavPage.value],
-                            ],
-                          ),
-                        )
-                      : Column(
-                          children: [
-                            controller
-                                .pages[controller.currentBottomNavPage.value],
-                          ],
-                        ),
-                ),
-                bottomNavigationBar: HomeBottomWidget(
-                  controller: controller,
-                  isHome: true,
-                  doubleNavigate: false,
-                ),
-                drawer: const AppDrawer(),
-              );
+              return FutureBuilder(
+                  future: getUser,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Scaffold(
+                        body: Center(child: AppLoader()),
+                      );
+                    }
+                    return Scaffold(
+                      body: SizedBox(
+                        width: Get.width,
+                        child: controller.currentBottomNavPage.value == 4 ||
+                                controller.currentBottomNavPage.value == 0
+                            ? SingleChildScrollView(
+                                child: Column(
+                                  children: [
+                                    controller.pages[
+                                        controller.currentBottomNavPage.value],
+                                  ],
+                                ),
+                              )
+                            : Column(
+                                children: [
+                                  controller.pages[
+                                      controller.currentBottomNavPage.value],
+                                ],
+                              ),
+                      ),
+                      bottomNavigationBar: HomeBottomWidget(
+                        controller: controller,
+                        isHome: true,
+                        doubleNavigate: false,
+                      ),
+                      drawer: const AppDrawer(),
+                    );
+                  });
             }),
       ),
     );

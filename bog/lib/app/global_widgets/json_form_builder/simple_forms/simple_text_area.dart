@@ -46,6 +46,7 @@ class _SimpleTextAreaState extends State<SimpleTextArea> {
     return PageInput(
       hint: item['value'] ?? '',
       boldLabel: true,
+      isCompulsory: item["required"] == true,
       label: item['label'],
       isTextArea: true,
     );

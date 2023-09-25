@@ -49,6 +49,11 @@ class _SimpleSelectsState extends State<SimpleSelects> {
     final theOptions = item['_values'] as List<dynamic>;
     final options = <String>[];
 
+    Widget required = const SizedBox.shrink();
+    if (item["required"] == true) {
+      required = const Text("*", style: TextStyle(color: Colors.red));
+    }
+
     for (var element in theOptions) {
       options.add(element['value'].toString());
     }
@@ -65,7 +70,9 @@ class _SimpleSelectsState extends State<SimpleSelects> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        label,
+        Row(
+          children: [label, const SizedBox(width: 5), required],
+        ),
         const SizedBox(height: 5),
         PageDropButton(
           label: '',

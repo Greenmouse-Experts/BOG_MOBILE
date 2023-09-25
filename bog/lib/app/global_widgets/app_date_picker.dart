@@ -10,10 +10,12 @@ class AppDatePicker extends StatefulWidget {
   final bool? boldLabel;
   final Function onChanged;
   final String? initialDate;
+  final bool? isRequired;
   const AppDatePicker(
       {super.key,
       required this.label,
       required this.onChanged,
+      this.isRequired,
       this.initialDate = '',
       this.boldLabel = false});
 
@@ -42,12 +44,20 @@ class _AppDatePickerState extends State<AppDatePicker> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          widget.label,
-          style: AppTextStyle.bodyText2.copyWith(
-            fontWeight: widget.boldLabel! ? FontWeight.w600 : FontWeight.w500,
-            color: Colors.black,
-          ),
+        Row(
+          children: [
+            Text(
+              widget.label,
+              style: AppTextStyle.bodyText2.copyWith(
+                fontWeight:
+                    widget.boldLabel! ? FontWeight.w600 : FontWeight.w500,
+                color: Colors.black,
+              ),
+            ),
+            const SizedBox(width: 5),
+            if (widget.isRequired == true)
+              const Text("*", style: TextStyle(color: Colors.red))
+          ],
         ),
         const SizedBox(height: 5),
         TextFormField(

@@ -165,8 +165,10 @@ class _UpdateFinancialDetailsState extends State<UpdateFinancialDetails> {
                                 label: 'Type of Account',
                                 option1: typeOfAccountController.text,
                                 onchanged: (val) {
-                                  typeOfAccountController.text =
-                                      val.toString().toLowerCase();
+                                  setState(() {
+                                    typeOfAccountController.text =
+                                        val.toString().toLowerCase();
+                                  });
                                 }),
                             const SizedBox(height: 10),
                             PageInput(
@@ -177,13 +179,12 @@ class _UpdateFinancialDetailsState extends State<UpdateFinancialDetails> {
                                 validator: MinLengthValidator(1,
                                     errorText: 'Enter current overdraft')),
                             const SizedBox(height: 10),
-                            PageInput(
-                              hint: '',
-                              label: 'Level of current Overdraft Facility',
-                              controller: overdraftController,
-                              validator: MinLengthValidator(1,
-                                  errorText: 'Enter current overdraft'),
-                            ),
+                            if (typeOfAccountController.text == "current")
+                              PageInput(
+                                hint: '',
+                                label: 'Level of current Overdraft Facility',
+                                controller: overdraftController,
+                              ),
                             const SizedBox(height: 12),
                             AppButton(
                               title: 'Submit',

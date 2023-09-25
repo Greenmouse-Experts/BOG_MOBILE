@@ -227,7 +227,7 @@ class KycGeneralInfo {
   String? userId;
   String? organisationName;
   String? emailAddress;
-  int? contactNumber;
+  String? contactNumber;
   String? regType;
   int? registrationNumber;
   String? businessAddress;

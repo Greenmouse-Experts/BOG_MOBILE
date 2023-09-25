@@ -119,7 +119,7 @@ class _PageInputState extends State<PageInput> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               SizedBox(
-                // width: Get.width,
+                width: Get.width * 0.8,
                 child: Text(
                   widget.label,
                   //  maxLines: 2,
@@ -135,7 +135,7 @@ class _PageInputState extends State<PageInput> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 5.0),
                   child: Text(
-                    "",
+                    "*",
                     style: AppTextStyle.bodyText2.copyWith(
                       fontWeight: FontWeight.w600,
                       color: Colors.red,
